@@ -28,7 +28,7 @@ include("inc.php");
 if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
  {
   if (isset($_GET['id'])) $id = $_GET['id']; else $id = "";
-  header("location: login.php?referer=forum_entry.php&id=".$id);
+  header("location: ".$settings['forum_address']."login.php?referer=forum_entry.php&id=".$id);
   die("<a href=\"login.php?referer=forum_entry.php&id=".$id."\">further...</a>");
  }
 
@@ -60,7 +60,7 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
       {
        if(is_array($category_ids) && !in_array($entrydata['category'], $category_ids))
         {
-         header("location: forum.php");
+         header("location: ".$settings['forum_address']."forum.php");
          die();
         }
       }
@@ -84,9 +84,9 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
       if ($entrydata["show_signature"]==1) $signature = $userdata["signature"];
      }
    }
-   else { header("location: forum.php"); die(); }
+   else { header("location: ".$settings['forum_address']."forum.php"); die(); }
   }
- else { header("location: forum.php"); die(); }
+ else { header("location: ".$settings['forum_address']."forum.php"); die(); }
 
  // thread-data:
  $Thread = $entrydata["tid"];
@@ -194,5 +194,5 @@ else
 <?php
 echo $footer;
 }
-else { header("location: login.php?msg=noaccess"); die("<a href=\"login.php?msg=noaccess\">further...</a>"); }
+else { header("location: ".$settings['forum_address']."login.php?msg=noaccess"); die("<a href=\"login.php?msg=noaccess\">further...</a>"); }
 ?>

@@ -28,7 +28,7 @@ include("inc.php");
 if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
  {
   if (isset($_GET['id'])) $id = $_GET['id']; else $id = "";
-  header("location: login.php?referer=mix_entry.php&id=".$id);
+  header("location: ".$settings['forum_address']."login.php?referer=mix_entry.php&id=".$id);
   die("<a href=\"login.php?referer=mix_entry.php&id=".$id."\">further...</a>");
  }
 
@@ -149,24 +149,24 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
  if (empty($category)) $category="all";
  if (empty($descasc)) $descasc="DESC";
 
- if( isset($id) ) {  // Wenn $id ¸bergeben wurde..
+ if( isset($id) ) {  // Wenn $id √ºbergeben wurde..
   $id = (int) $id;   // ... $id erst mal zu einem Integer machen ..
-  if( $id > 0 )      // ... und schauen ob es grˆﬂer als 0 ist ..
+  if( $id > 0 )      // ... und schauen ob es gr√∂√üer als 0 ist ..
    {
     $result=mysql_query("SELECT tid, pid, subject, category FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
     if(!$result) die($lang['db_error']);
-    if(mysql_num_rows($result) > 0) {  // ¸berpr¸fen ob ein Eintrag mit dieser id in der Datenbank ist
+    if(mysql_num_rows($result) > 0) {  // √ºberpr√ºfen ob ein Eintrag mit dieser id in der Datenbank ist
     $entrydata = mysql_fetch_array($result); // Und ggbf. aus der Datenbank holen
 
     // Look if id correct:
-    if ($entrydata['pid'] != 0) header("location: ".basename($_SERVER['PHP_SELF'])."?id=".$entrydata['tid']."&page=".$page."&category=".$category."&order=".$order."&descasc=".$descasc."#p".$id);
+    if ($entrydata['pid'] != 0) header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?id=".$entrydata['tid']."&page=".$page."&category=".$category."&order=".$order."&descasc=".$descasc."#p".$id);
 
      // category of this posting accessible by user?
      if (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin"))
       {
        if(is_array($category_ids) && !in_array($entrydata['category'], $category_ids))
         {
-         header("location: mix.php");
+         header("location: ".$settings['forum_address']."mix.php");
          die();
         }
       }
@@ -179,7 +179,7 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
  }
 
  if(!isset($entrydata)) {
-  header("Location: mix.php");
+  header("Location: ".$settings['forum_address']."mix.php");
   exit();
  }
 
@@ -191,10 +191,10 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
   // Ergebnisse einlesen
  while($tmp = mysql_fetch_array($result)) {  // Ergebnis holen
   $parent_array[$tmp["id"]] = $tmp;          // Ergebnis im Array ablegen
-  $child_array[$tmp["pid"]][] =  $tmp["id"]; // Vorw‰rtsbez¸ge konstruieren
+  $child_array[$tmp["pid"]][] =  $tmp["id"]; // Vorw√§rtsbez√ºge konstruieren
  }
 
- mysql_free_result($result); // Aufr‰umen
+ mysql_free_result($result); // Aufr√§umen
 
 $wo = $entrydata["subject"];
 $subnav_1 = '<a class="textlink" href="mix.php?page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_overview_linkname'].'</a>';

@@ -46,7 +46,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
   mysql_free_result($lock_result);
   if ($lock_result_array['user_lock'] > 0)
    {
-    header("location: user.php");
+    header("location: ".$settings['forum_address']."user.php");
     die("<a href=\"user.php\">further...</a>");
    }
  }
@@ -65,12 +65,12 @@ if (isset($_GET['lock']) && isset($_SESSION[$settings['session_prefix'].'user_id
  if (empty($descasc)) $descasc = "DESC";
  if (isset($_GET['view']))
   {
-   if ($view=="board") header("location: board_entry.php?id=".$field['tid']."&page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category);
-   else header("location: mix_entry.php?id=".$field['tid']."&page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category);
+   if ($view=="board") header("location: ".$settings['forum_address']."board_entry.php?id=".$field['tid']."&page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category);
+   else header("location: ".$settings['forum_address']."mix_entry.php?id=".$field['tid']."&page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category);
   }
  else
   {
-   header("location: forum_entry.php?id=".$id."&page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category);
+   header("location: ".$settings['forum_address']."forum_entry.php?id=".$id."&page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category);
   }
 }
 
@@ -79,17 +79,17 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
 if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['session_prefix'].'user_name']) || $settings['entries_by_users_only'] != 1)
 {
  $categories = get_categories();
- if ($categories == "not accessible") { header("location: index.php"); die("<a href=\"index.php\">further...</a>"); }
+ if ($categories == "not accessible") { header("location: ".$settings['forum_address']."index.php"); die("<a href=\"index.php\">further...</a>"); }
 
-    unset($errors);  // Array für Fehlermeldungen
+    unset($errors);  // Array fÃ¼r Fehlermeldungen
     unset($Thread);
     if (empty($descasc)) $descasc="DESC";
     $edit_authorization = 0; // erst mal sicherheitshalber keine Berechtigung zum Editieren von Postings
-    $delete_authorization = 0; // erst mal sicherheitshalber keine Berechtigung zum Löschen von Postings
+    $delete_authorization = 0; // erst mal sicherheitshalber keine Berechtigung zum LÃ¶schen von Postings
 
     if (empty($action)) $action = "new";
 
-    // Falls editiert oder gelöscht werden soll, schauen, ob der User dazu berechtigt ist:
+    // Falls editiert oder gelÃ¶scht werden soll, schauen, ob der User dazu berechtigt ist:
     if ($action=="edit" || $action == "delete" || $action == "delete ok")
      {
       $user_id_result = mysql_query("SELECT user_id FROM ".$db_settings['forum_table']." WHERE id = '".$id."' LIMIT 1", $connid);
@@ -111,7 +111,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
           $edit_authorization = 1;
           $delete_authorization = 1;
          }
-        // Moderator darf alles außer Postings von Admins editieren/löschen:
+        // Moderator darf alles auÃŸer Postings von Admins editieren/lÃ¶schen:
         elseif ($_SESSION[$settings['session_prefix'].'user_type'] == "mod")
          {
           if ($user_result_array["user_type"] != "admin")
@@ -120,7 +120,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
            $delete_authorization = 1;
           }
          }
-        // User darf (falls aktiviert) nur seine eigenen Postings editieren/löschen:
+        // User darf (falls aktiviert) nur seine eigenen Postings editieren/lÃ¶schen:
         elseif ($_SESSION[$settings['session_prefix'].'user_type'] == "user")
          {
           // Schauen, ob es sich um einen eigenen Eintrag handelt:
@@ -136,7 +136,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
         $edit_authorization = 0;
         $delete_authorization = 0;
        }
-     } // Ende Überprüfung der Berechtigung
+     } // Ende ÃœberprÃ¼fung der Berechtigung
 
  // wenn das Formular noch nicht abgeschickt wurde:
  if (empty($form))
@@ -262,10 +262,10 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
 
          if(isset($view))
           {
-           if ($view=='board') { header("location: board.php".$qs); die("<a href=\"board.php".$qs."\">further...</a>"); }
-           else { header("location: mix.php".$qs); die("<a href=\"mix.php".$qs."\">further...</a>"); }
+           if ($view=='board') { header("location: ".$settings['forum_address']."board.php".$qs); die("<a href=\"board.php".$qs."\">further...</a>"); }
+           else { header("location: ".$settings['forum_address']."mix.php".$qs); die("<a href=\"mix.php".$qs."\">further...</a>"); }
           }
-         else { header("location: forum.php".$qs); die("<a href=\"forum.php".$qs."\">further...</a>"); }
+         else { header("location: ".$settings['forum_address']."forum.php".$qs); die("<a href=\"forum.php".$qs."\">further...</a>"); }
         }
        else $show = "no authorization";
      break;
@@ -339,7 +339,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
         list($uniqid_count) = mysql_fetch_row($uniqid_result);
         mysql_free_result($uniqid_result);
         if ($uniqid_count > 0)
-          { header("location: index.php"); die("<a href=\"index.php\">further...</a>"); }
+          { header("location: ".$settings['forum_address']."index.php"); die("<a href=\"index.php\">further...</a>"); }
 
         // check for not accepted words:
         $result=mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1", $connid);
@@ -373,7 +373,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
             $errors[] = $lang['error_name_reserved'];
            }
          }
-        if (isset($email) && $email != "" and !preg_match("/^[^@]+@.+\.\D{2,5}$/", $email)) // Überprüfung ob die Email-Adresse das Format name@domain.tld hat
+        if (isset($email) && $email != "" and !preg_match("/^[^@]+@.+\.\D{2,5}$/", $email)) // ÃœberprÃ¼fung ob die Email-Adresse das Format name@domain.tld hat
          $errors[] = $lang['error_email_wrong'];
         //if(isset($hp) && $hp != "" and !preg_match("[hier fehlt noch die Reg-Ex]", $hp))
         //  $errors[] = $lang['error_hp_wrong'];
@@ -444,7 +444,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
             if($id == 0) // Jetzt die Thread-id des neuen Threads korrekt setzen
             if(!mysql_query("UPDATE ".$db_settings['forum_table']." SET tid=id, time=time WHERE id = LAST_INSERT_id()", $connid))
             die($lang['db_error']);
-            // wann auf Thread als letztes geantwortet wurde aktualisieren (für Board-Ansicht):
+            // wann auf Thread als letztes geantwortet wurde aktualisieren (fÃ¼r Board-Ansicht):
             if($id != 0) { if(!mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=NOW() WHERE tid=".$Thread, $connid))
             die($lang['db_error']); }
             // letzten Eintrag ermitteln (um darauf umzuleiten):
@@ -536,7 +536,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                }
                mysql_free_result($en_result);
 
-              // Cookies setzen, falls gewünscht und Funktion aktiv:
+              // Cookies setzen, falls gewÃ¼nscht und Funktion aktiv:
               if ($settings['remember_userdata'] == 1)
                {
                 if (isset($setcookie) && $setcookie==1)
@@ -548,7 +548,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                  }
                }
 
-             // für Weiterleitung:
+             // fÃ¼r Weiterleitung:
              $further_tid = $neu["tid"];
              $further_id = $neu["id"];
              $refer = 1;
@@ -594,9 +594,9 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
      if (isset($page) && isset($order) && isset($category) && isset($descasc)) { $qs="&page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category; }
      elseif (isset($category)) { $qs="&category=".$category; }
      else $qs = "";
-     if (isset($view) && $view=="board") { header("location: board_entry.php?id=".$further_tid.$qs); die("<a href=\"board_entry.php?id=".$further_tid.$qs."\">further...</a>"); }
-     elseif (isset($view) && $view=="mix") { header("location: mix_entry.php?id=".$further_id.$qs); die("<a href=\"mix_entry.php?id=".$further_tid.$qs."\">further...</a>"); }
-     else { header("location: forum_entry.php?id=".$further_id.$qs); die("<a href=\"forum_entry.php?id=".$further_id.$qs."\">further...</a>"); }
+     if (isset($view) && $view=="board") { header("location: ".$settings['forum_address']."board_entry.php?id=".$further_tid.$qs); die("<a href=\"board_entry.php?id=".$further_tid.$qs."\">further...</a>"); }
+     elseif (isset($view) && $view=="mix") { header("location: ".$settings['forum_address']."mix_entry.php?id=".$further_id.$qs); die("<a href=\"mix_entry.php?id=".$further_tid.$qs."\">further...</a>"); }
+     else { header("location: ".$settings['forum_address']."forum_entry.php?id=".$further_id.$qs); die("<a href=\"forum_entry.php?id=".$further_id.$qs."\">further...</a>"); }
      exit(); // Skript beenden
     }
 
@@ -685,7 +685,7 @@ switch ($show)
      if($settings['captcha_type']==1) $_SESSION['captcha_session'] = $captcha->generate_code();
      else $_SESSION['captcha_session'] = $captcha->generate_math_captcha();
     }
-    // Überschrift:
+    // Ãœberschrift:
     switch ($action)
      {
       case "new":
@@ -856,7 +856,7 @@ switch ($show)
     <td style="width:100px;">&nbsp;</td><td>&nbsp;</td>
    </tr>
    <?php
-   // Formularfelder für unbekannte User bzw. wenn Posting unbekannter User editiert wird:
+   // Formularfelder fÃ¼r unbekannte User bzw. wenn Posting unbekannter User editiert wird:
    if (!isset($_SESSION[$settings['session_prefix'].'user_id']) or $action == "edit" && $p_user_id == 0)
    {
    ?>
@@ -1031,7 +1031,7 @@ switch ($show)
 
 echo $footer;
 }
-else { header("location: login.php?msg=noentry"); die("<a href=\"login.php?msg=noentry\">further...</a>"); }
+else { header("location: ".$settings['forum_address']."login.php?msg=noentry"); die("<a href=\"login.php?msg=noentry\">further...</a>"); }
 }
-else { header("location: login.php?msg=noaccess"); die("<a href=\"login.php?msg=noaccess\">further...</a>"); }
+else { header("location: ".$settings['forum_address']."login.php?msg=noaccess"); die("<a href=\"login.php?msg=noaccess\">further...</a>"); }
 ?>

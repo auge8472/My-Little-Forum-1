@@ -27,7 +27,7 @@ include("inc.php");
 
 if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
  {
-  header("location: login.php?referer=mix.php");
+  header("location: ".$settings['forum_address']."login.php?referer=mix.php");
   die("<a href=\"login.php?referer=mix.php\">further...</a>");
  }
 
@@ -48,7 +48,7 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
     ?>" href="mix_entry.php?id=<?php echo $parent_array[$id]["tid"]; if ($page != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC") echo '&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc; ?>#p<?php echo $parent_array[$id]["id"]; ?>" title="<?php echo htmlspecialchars(stripslashes($parent_array[$id]["name"])); echo ", ".strftime($lang['time_format'],$parent_array[$id]["Uhrzeit"]); ?>"><?php echo htmlspecialchars(stripslashes($parent_array[$id]["subject"])); ?></a><?php
    }
 
-  // Anfang der Schleife über alle Kinder ...
+  // Anfang der Schleife Ã¼ber alle Kinder ...
   if(isset($child_array[$id]) && is_array($child_array[$id])) {
     foreach($child_array[$id] as $kind) {
       mix_tree($kind, $aktuellerEintrag, $tiefe+1);
@@ -171,7 +171,7 @@ if($thread_count > 0 && isset($result))
          while($tmp = mysql_fetch_array($thread_result))
           {                                           // Ergebnis holen
            $parent_array[ $tmp["id"] ] = $tmp;          // Ergebnis im Array ablegen
-           $child_array[ $tmp["pid"] ][] =  $tmp["id"]; // Vorwärtsbezüge konstruieren
+           $child_array[ $tmp["pid"] ][] =  $tmp["id"]; // VorwÃ¤rtsbezÃ¼ge konstruieren
           }
       mix_tree($zeile["tid"]);
       mysql_free_result($thread_result); ?></td>
@@ -208,5 +208,5 @@ if($thread_count > 0 && isset($result))
 echo $footer;
 
 }
-else { header("location: login.php?msg=noaccess"); die("<a href=\"login.php?msg=noaccess\">further...</a>"); }
+else { header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."login.php?msg=noaccess"); die("<a href=\"login.php?msg=noaccess\">further...</a>"); }
 ?>

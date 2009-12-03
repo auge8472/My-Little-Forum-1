@@ -46,7 +46,7 @@ elseif (empty($_SESSION[$settings['session_prefix'].'user_id']) && isset($userna
  }
 elseif (empty($_SESSION[$settings['session_prefix'].'user_id']) && isset($username) && isset($userpw) && ($username == ""  || $userpw == ""))
  {
-  header("location: ".basename($_SERVER['PHP_SELF'])."?msg=login_failed"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=login_failed\">further...</a>");
+  header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?msg=login_failed"); die("<a href=\"".$_SERVER['SCRIPT_NAME']."?msg=login_failed\">further...</a>");
  }
 elseif (empty($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
  {
@@ -77,8 +77,8 @@ switch ($action)
       {
        if (trim($feld["activate_code"]) != '')
         {
-         header("location: ".basename($_SERVER['PHP_SELF'])."?msg=account_not_activated");
-         die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=account_not_activated\">further...</a>");
+         header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?msg=account_not_activated");
+         die("<a href=\"".$_SERVER['SCRIPT_NAME']."?msg=account_not_activated\">further...</a>");
         }
 
        if (isset($_POST['autologin_checked']) && isset($settings['autologin']) && $settings['autologin'] == 1)
@@ -109,11 +109,11 @@ switch ($action)
         }
        header("location: index.php"); die("<a href=\"index.php\">further...</a>");
       }
-     else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=login_failed"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=login_failed\">further...</a>"); }
+     else { header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?msg=login_failed"); die("<a href=\"".$_SERVER['SCRIPT_NAME']."?msg=login_failed\">further...</a>"); }
     }
-   else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=login_failed"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=login_failed\">further...</a>"); }
+   else { header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?msg=login_failed"); die("<a href=\"".$_SERVER['SCRIPT_NAME']."?msg=login_failed\">further...</a>"); }
    }
-   else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=login_failed"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=login_failed\">further...</a>"); }
+   else { header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?msg=login_failed"); die("<a href=\"".$_SERVER['SCRIPT_NAME']."?msg=login_failed\">further...</a>"); }
   break;
 
   case "auto_login":
@@ -156,8 +156,8 @@ switch ($action)
      else setcookie("auto_login","",0);
    if (isset($_GET['referer']) && isset($_GET['id'])) header("location: ".$_GET['referer']."?id=".$_GET['id']);
    elseif (isset($_GET['referer'])) header("location: ".$_GET['referer']);
-   else header("location: ".basename($_SERVER['PHP_SELF']));
-   die("<a href=\"".basename($_SERVER['PHP_SELF'])."\">further...</a>");
+   else header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']);
+   die("<a href=\"".$_SERVER['SCRIPT_NAME']."\">further...</a>");
   break;
 
   case "logout":
@@ -168,7 +168,7 @@ switch ($action)
     {
      @mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE ip = 'uid_".$user_id."'", $connid);
     }
-   header("location: index.php"); die("<a href=\"index.php\">further...</a>");
+   header("location: ".$settings['forum_address']."index.php"); die("<a href=\"index.php\">further...</a>");
   break;
 
   case "pw_forgotten_ok":
@@ -198,7 +198,7 @@ switch ($action)
        {
         if (@mail($pwf_mailto, $lang['pwf_activating_email_sj'], $lang['pwf_activating_email_txt'], $header,$settings['mail_parameter']))
          {
-          header("location: ".basename($_SERVER['PHP_SELF'])."?msg=mail_sent"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=mail_sent\">further...</a>");
+          header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?msg=mail_sent"); die("<a href=\"".$_SERVER['SCRIPT_NAME']."?msg=mail_sent\">further...</a>");
          }
         else die($lang['mail_error']);
        }
@@ -206,14 +206,14 @@ switch ($action)
        {
         if (@mail($pwf_mailto, $lang['pwf_activating_email_sj'], $lang['pwf_activating_email_txt'], $header))
          {
-          header("location: ".basename($_SERVER['PHP_SELF'])."?msg=mail_sent"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=mail_sent\">further...</a>");
+          header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?msg=mail_sent"); die("<a href=\"".$_SERVER['SCRIPT_NAME']."?msg=mail_sent\">further...</a>");
          }
         else die($lang['mail_error']);
        }
      }
-    else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pwf_failed"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pwf_failed\">further...</a>"); }
+    else { header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?msg=pwf_failed"); die("<a href=\"".$_SERVER['SCRIPT_NAME']."?msg=pwf_failed\">further...</a>"); }
    }
-   else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pwf_failed"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pwf_failed\">further...</a>"); }
+   else { header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?msg=pwf_failed"); die("<a href=\"".$_SERVER['SCRIPT_NAME']."?msg=pwf_failed\">further...</a>"); }
 
   break;
 
@@ -249,8 +249,8 @@ switch ($action)
        {
         if (@mail($new_pw_mailto, $lang['new_pw_email_sj'], $lang['new_pw_email_txt'], $header,$settings['mail_parameter']))
          {
-          header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pw_sent");
-          die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pw_sent\">further...</a>");
+          header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?msg=pw_sent");
+          die("<a href=\"".$_SERVER['SCRIPT_NAME']."?msg=pw_sent\">further...</a>");
          }
         else die($lang['mail_error']);
        }
@@ -258,20 +258,20 @@ switch ($action)
        {
         if (@mail($new_pw_mailto, $lang['new_pw_email_sj'], $lang['new_pw_email_txt'], $header))
          {
-          header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pw_sent");
-          die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pw_sent\">further...</a>");
+          header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?msg=pw_sent");
+          die("<a href=\"".$_SERVER['SCRIPT_NAME']."?msg=pw_sent\">further...</a>");
          }
         else die($lang['mail_error']);
        }
      }
     else
      {
-      header("location: ".basename($_SERVER['PHP_SELF'])."?msg=code_invalid");
-      die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=code_invalid\">further...</a>");
+      header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?msg=code_invalid");
+      die("<a href=\"".$_SERVER['SCRIPT_NAME']."?msg=code_invalid\">further...</a>");
      }
    }
-   else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=code_invalid"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=code_invalid\">further...</a>"); }
-
+   else { header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?msg=code_invalid");
+   die("<a href=\"".$_SERVER['SCRIPT_NAME']."?msg=code_invalid\">further...</a>"); }
   break;
  }
 

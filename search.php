@@ -28,7 +28,7 @@ $$key = $value;
 
 include("inc.php");
 
- function snav($page, $suchergebnisse, $count, $search, $ao, $category)  // Seiten-Navigation für suche.php
+ function snav($page, $suchergebnisse, $count, $search, $ao, $category)  // Seiten-Navigation fÃ¼r suche.php
   {
    global $lang;
    $output = "&nbsp;";
@@ -91,7 +91,7 @@ include("inc.php");
 
  if ($settings['access_for_users_only'] == 1 && !isset($_SESSION[$settings['session_prefix'].'user_id']))
   {
-   header("location: login.php?msg=noaccess");
+   header("location: ".$settings['forum_address']."login.php?msg=noaccess");
    die("<a href=\"login.php?msg=noaccess\">further...</a>");
   }
 

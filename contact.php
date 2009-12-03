@@ -48,8 +48,8 @@ if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha
   $captcha = new captcha();
  }
 
-if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($uid)) { header("location: index.php"); die("<a href=\"index.php\">further...</a>"); }
-if (empty($id) && empty($uid) && empty($forum_contact)) { header("location: contact.php?forum_contact=true"); die("<a href=\"contact.php?forum_contact=true\">further...</a>"); }
+if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($uid)) { header("location: ".$settings['forum_address']."index.php"); die("<a href=\"index.php\">further...</a>"); }
+if (empty($id) && empty($uid) && empty($forum_contact)) { header("location: ".$settings['forum_address']."contact.php?forum_contact=true"); die("<a href=\"contact.php?forum_contact=true\">further...</a>"); }
 
 if (isset($id) || isset($uid) || isset($forum_contact))
  {
@@ -100,13 +100,13 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 
   if (isset($_POST["form_submitted"]))
    {
-    // übergebene Variablen ermitteln:
+    // Ã¼bergebene Variablen ermitteln:
     $sender_name = stripslashes(trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_name']))));
     $sender_email = stripslashes(trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_email']))));
     $subject = trim(stripslashes($_POST['subject']));
     $text = $_POST['text'];
 
-    // Überprüfungen der Daten:
+    // ÃœberprÃ¼fungen der Daten:
     unset($errors);
     if ($sender_name == "") $errors[] = $lang['error_no_name'];
     if ($sender_email == "") $errors[] = $lang['error_no_email'];
@@ -169,7 +169,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
        {
         if(@mail($mailto, $mail_subject, $mail_text, $header)) $sent = true; else $errors[] = $lang['error_meilserv'];
        }
-      // Bestätigung:
+      // BestÃ¤tigung:
       if (isset($sent))
       {
        $lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['conf_email_txt']);

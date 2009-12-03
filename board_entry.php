@@ -64,7 +64,7 @@ function nav_b($be_page, $entries_per_page, $entry_count, $id, $da, $nr, $page, 
 if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
  {
   if (isset($_GET['id'])) $id = $_GET['id']; else $id = "";
-  header("location: login.php?referer=board_entry.php&id=".$id);
+  header("location: ".$settings['forum_address']."login.php?referer=board_entry.php&id=".$id);
   die("<a href=\"login.php?referer=board_entry.php&id=".$id."\">further...</a>");
  }
 
@@ -95,14 +95,14 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
      mysql_free_result($result_t);
 
      // Look if id correct:
-     if ($thread['pid'] != 0) header("location: ".basename($_SERVER['PHP_SELF'])."?id=".$thread['tid']."&page=".$page."&category=".$category."&order=".$order."&descasc=".$descasc."#p".$id);
+     if ($thread['pid'] != 0) header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?id=".$thread['tid']."&page=".$page."&category=".$category."&order=".$order."&descasc=".$descasc."#p".$id);
 
      // category of this posting accessible by user?
      if (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin"))
       {
        if(is_array($category_ids) && !in_array($thread['category'], $category_ids))
         {
-         header("location: board.php");
+         header("location: ".$settings['forum_address']."board.php");
          die();
         }
       }
@@ -138,9 +138,9 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
      if(!$result or !$result_t) die($lang['db_error']);
     }
   }
-  else { header("location: board.php"); }
+  else { header("location: ".$settings['forum_address']."board.php"); }
 
-if (empty($thread)) header("location: board.php");
+if (empty($thread)) header("location: ".$settings['forum_address']."board.php");
 
 $wo = $thread["subject"];
 $subnav_1 = '<a class="textlink" href="board.php?page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'" title="'.$lang['back_to_board_linktitle'].'">'.$lang['back_to_board_linkname'].'</a>';
@@ -310,5 +310,5 @@ echo $header;
 
 echo $footer;
 }
-else { header("location: login.php?msg=noaccess"); die("<a href=\"login.php?msg=noaccess\">further...</a>"); }
+else { header("location: ".$settings['forum_address']."login.php?msg=noaccess"); die("<a href=\"login.php?msg=noaccess\">further...</a>"); }
 ?>

@@ -90,7 +90,7 @@ function category_accession()
   if (isset($category_accession)) return $category_accession; else return false;
  }
 
-function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category, $action="") // Seiten-Navigation für forum.php, board.php und mix.php
+function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category, $action="") // Seiten-Navigation fÃ¼r forum.php, board.php und mix.php
   {
    global $lang, $select_submit_button;
    $output = "";

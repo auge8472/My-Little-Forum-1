@@ -23,14 +23,14 @@ include("inc.php");
 
 if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
  {
-  if (isset($_GET['id'])) header("location: login.php?referer=user.php&id=".$_GET['id']);
-  else header("location: login.php?referer=user.php");
+  if (isset($_GET['id'])) header("location: ".$settings['forum_address']."login.php?referer=user.php&id=".$_GET['id']);
+  else header("location: ".$settings['forum_address']."login.php?referer=user.php");
   die("<a href=\"login.php?referer=user.php\">further...</a>");
  }
 
 if (!isset($_SESSION[$settings['session_prefix'].'user_id']))
  {
-  header("location: login.php");
+  header("location: ".$settings['forum_address']."login.php");
   die("<a href=\"login.php\">further...</a>");
  }
 
@@ -131,7 +131,7 @@ if(isset($_POST['change_email_submit']))
       if(empty($errors))
        {
         @mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_email='".mysql_escape_string($new_email)."', last_login=last_login, registered=registered, activate_code = '".mysql_escape_string($activate_code)."' WHERE user_id='".$user_id."'", $connid) or die($lang['db_error']);
-        header("location: login.php"); die("<a href=\"login.php\">further...</a>");
+        header("location: ".$settings['forum_address']."login.php"); die("<a href=\"login.php\">further...</a>");
        }
       else $action="email";
      }
@@ -203,7 +203,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
       $_SESSION[$settings['session_prefix'].'user_view'] = $user_view;
       $_SESSION[$settings['session_prefix'].'user_time_difference'] = $user_time_difference;
 
-      header("location: user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
+      header("location: ".$settings['forum_address']."user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
      }
     else $action="edit";
    break;
@@ -228,13 +228,13 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     if (empty($errors))
      {
       $pw_update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_pw='".md5($new_pw)."', last_login=last_login, registered=registered WHERE user_id='".$user_id."'", $connid);
-      header("location: user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
+      header("location: ".$settings['forum_address']."user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
      }
     else $action="pw";
    break;
    /* self-delete of user:
    case "delete submited":
-    // Überprüfungen:
+    // ÃœberprÃ¼fungen:
     $pw_result = mysql_query("SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = '".$user_id."' LIMIT 1", $connid);
     if (!$pw_result) die($lang['db_error']);
     $field = mysql_fetch_array($pw_result);
@@ -250,7 +250,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
       $delete_result = mysql_query("DELETE FROM ".$db_settings['userdata_table']." WHERE user_id='".$user_id."' LIMIT 1", $connid);
       $update_result = mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, user_id='0', email_notify='0' WHERE user_id = '".$user_id."'", $connid);
       session_destroy();
-      header("location: index.php"); die("<a href=\"index.php\">further...</a>");
+      header("location: ".$settings['forum_address']."index.php"); die("<a href=\"index.php\">further...</a>");
      }
     else $action="delete";
    break;
@@ -316,7 +316,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
 
       if (empty($errors))
        {
-        header("location: user.php?id=".$_POST['recipient_id']);
+        header("location: ".$settings['forum_address']."user.php?id=".$_POST['recipient_id']);
         die("<a href=\"user.php?id=".$_POST['recipient_id']."\">further...</a>");
        }
       else { $id = $_POST['recipient_id']; $action="personal_message"; }
@@ -327,7 +327,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
  }
 else
  {
-  header("location: index.php"); die("<a href=\"index.php\">further...</a>");
+  header("location: ".$settings['forum_address']."index.php"); die("<a href=\"index.php\">further...</a>");
  }
 
 $wo = $lang['user_area_title'];

@@ -89,14 +89,14 @@ if(isset($_GET['id']) && isset($_GET['key']) && trim($_GET['key'])!='')
          }
        }
 
-      header("location: login.php?msg=user_activated");
+      header("location: ".$settings['forum_address']."login.php?msg=user_activated");
       exit();
      }
     else $errors[] = true;
    }
   if(isset($errors))
    {
-    header("location: register.php?action=activation_failed");
+    header("location: ".$settings['forum_address']."register.php?action=activation_failed");
     die();
    }
  }
@@ -219,7 +219,7 @@ if(isset($_POST['register_submit']))
        if(@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header)) $sent = true;
       }
 
-     // Best‰tigung anzeigen:
+     // Best√§tigung anzeigen:
      $action = "registered";
     }
    else

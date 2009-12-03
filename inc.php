@@ -36,7 +36,7 @@ if(basename($_SERVER['PHP_SELF'])!='login.php' && basename($_SERVER['PHP_SELF'])
     session_destroy();
     setcookie("auto_login","",0);
    }
-  header("location: info.php?info=1");
+  header("location: ".$settings['forum_address']."info.php?info=1");
   die("<a href=\"info.php?info=1\">further...</a>");
  }
 
@@ -68,7 +68,7 @@ if(isset($_SESSION[$settings['session_prefix'].'user_name']))
      {
       session_destroy();
       setcookie("auto_login","",0);
-      header("location: login.php?msg=user_banned");
+      header("location: ".$settings['forum_address']."login.php?msg=user_banned");
       die($lang['user_banned']);
      }
    }
