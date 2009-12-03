@@ -105,10 +105,10 @@ if(isset($_POST['register_submit']))
  {
   if($settings['register_by_admin_only']  == 0 || isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
   {
-  $new_user_name = trim($_POST['new_user_name']);
-  $new_user_email = trim($_POST['new_user_email']);
-  $reg_pw = $_POST['reg_pw'];
-  $reg_pw_conf = $_POST['reg_pw_conf'];
+  $new_user_name = (!empty($_POST['new_user_name'])) ? trim($_POST['new_user_name']) : "";
+  $new_user_email = (!empty($_POST['new_user_email'])) ? trim($_POST['new_user_email']) : "";
+  $reg_pw = (!empty($_POST['reg_pw'])) ? $_POST['reg_pw'] : "";
+  $reg_pw_conf = (!empty($_POST['reg_pw_conf'])) ? $_POST['reg_pw_conf'] : "";
 
   // form complete?
   if ($new_user_name=='' || $new_user_email=='' || $reg_pw=='' || $reg_pw_conf=='') $errors[] = $lang['error_form_uncompl'];
