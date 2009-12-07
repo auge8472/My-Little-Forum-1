@@ -95,7 +95,7 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
      mysql_free_result($result_t);
 
      // Look if id correct:
-     if ($thread['pid'] != 0) header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."?id=".$thread['tid']."&page=".$page."&category=".$category."&order=".$order."&descasc=".$descasc."#p".$id);
+     if ($thread['pid'] != 0) header("location: ".$settings['forum_address'].basename($_SERVER['SCRIPT_NAME'])."?id=".$thread['tid']."&page=".$page."&category=".$category."&order=".$order."&descasc=".$descasc."#p".$id);
 
      // category of this posting accessible by user?
      if (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin"))

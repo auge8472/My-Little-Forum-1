@@ -208,5 +208,5 @@ if($thread_count > 0 && isset($result))
 echo $footer;
 
 }
-else { header("location: ".$settings['forum_address'].$_SERVER['SCRIPT_NAME']."login.php?msg=noaccess"); die("<a href=\"login.php?msg=noaccess\">further...</a>"); }
+else { header("location: ".$settings['forum_address']."login.php?msg=noaccess"); die("<a href=\"login.php?msg=noaccess\">further...</a>"); }
 ?>
