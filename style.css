@@ -156,6 +156,8 @@ ul.thread              { margin: 0px 0px 17px 0px; padding: 0px 0px 0px 0px; lis
 ul.reply               { margin: 0px; padding: 0px 0px 0px 30px; list-style-type:none; }
 ul.deep-reply          { margin: 0px; padding: 0px 0px 0px 0px; list-style-type:none; }
 li                     { line-height: 17px; }
+ul.thread ul ul { border-left: 3px solid #C0C0C0; }
+ul.thread ul li:last-child>ul { border-left:none; }
 
 #deletecookie          { color:#000; background:#fff; margin:0px; padding:10px; font-family:verdana, arial, sans-serif; }
 #deletecookie h1       { font-size:18px; color:#000000; font-weight:bold; }
