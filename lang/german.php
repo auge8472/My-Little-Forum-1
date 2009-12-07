@@ -1,6 +1,6 @@
 <?php
 $lang['language'] =                    "de";
-$lang['charset'] =                     "ISO-8859-1";
+$lang['charset'] =                     "utf-8";
 $lang['additional_language_file'] =    "german_add.php";
 $lang['locale'] =                      array("de","de_DE@euro","deu");
 $lang['time_format'] =                 "%d.%m.%Y, %H:%M";
