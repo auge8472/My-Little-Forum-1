@@ -59,7 +59,7 @@ $settings['profile_maxlength'] = 5000;
 $settings['signature_maxlength'] = 255;
 $settings['text_word_maxlength'] = 70;
 $settings['signature_separator'] = "---<br />";
-$settings['quote_symbol'] = "»";
+$settings['quote_symbol'] = "Â»";
 $settings['count_users_online'] = 1;
 $settings['last_reply_link'] = 0;
 $settings['time_difference'] = 0;
@@ -69,19 +69,19 @@ $settings['upload_max_img_height'] = 600;
 $settings['mail_parameter'] = "";
 $settings['forum_disabled'] = 0;
 $settings['session_prefix'] = "mlf_";
-$settings['version'] = '1.7.4';
+$settings['version'] = '1.7.6';
 $settings['captcha_posting'] = 0;
 $settings['captcha_contact'] = 0;
 $settings['captcha_register'] = 0;
 $settings['captcha_type'] = 0;
 
 $smilies = array(
-array('smile.gif', ':-)', ':)', '', '', '', ''),
-array('wink.gif', ';-)', ';)', '', '', '', ''),
-array('tongue.gif', ':-P', ':P', '', '', '', ''),
-array('biggrin.gif', ':-D', ':D', '', '', '', ''),
-array('neutral.gif', ':-|', ':|', '', '', '', ''),
-array('frown.gif', ':-(', ':(', '', '', '', ''),
+array('smile.gif', ':-)', '', '', '', '', ''),
+array('wink.gif', ';-)', '', '', '', '', ''),
+array('tongue.gif', ':-P', '', '', '', '', ''),
+array('biggrin.gif', ':-D', '', '', '', '', ''),
+array('neutral.gif', ':-|', '', '', '', '', ''),
+array('frown.gif', ':-(', '', '', '', '', ''),
 array('yes.gif', ':yes:', '', '', '', '', ''),
 array('no.gif', ':no:', '', '', '', '', ''),
 array('ok.gif', ':ok:', '', '', '', '', ''),
@@ -274,7 +274,7 @@ function update16to17()
   @mysql_query("INSERT INTO ".$db_settings['settings_table']." (name, value) VALUES ('captcha_contact','".$settings['captcha_contact']."')", $connid) or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysql_error($connid).")";
   @mysql_query("INSERT INTO ".$db_settings['settings_table']." (name, value) VALUES ('captcha_register','".$settings['captcha_register']."')", $connid) or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysql_error($connid).")";
   @mysql_query("INSERT INTO ".$db_settings['settings_table']." (name, value) VALUES ('captcha_type','".$settings['captcha_type']."')", $connid) or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysql_error($connid).")";
-  @mysql_query("UPDATE ".$db_settings['settings_table']." SET value='1.7' WHERE name = 'version'", $connid) or $errors[] = $lang_add['update_error']. " (MySQL: ".mysql_error($connid).")";
+  @mysql_query("UPDATE ".$db_settings['settings_table']." SET value='1.7.6' WHERE name = 'version'", $connid) or $errors[] = $lang_add['update_error']. " (MySQL: ".mysql_error($connid).")";
   if(isset($errors)) return $errors; else return false;
  }
 
@@ -500,7 +500,7 @@ if (isset($_POST['form_submitted']))
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title><?php echo $settings['forum_name']." - ".$lang_add['install_title']; ?></title>
 <style type="text/css">
 <!--
