@@ -263,6 +263,7 @@ function zitat($string)
   $connid = @mysql_connect($host, $user, $pw);  // Datenbankverbindung herstellen
   if(!$connid) die($lang['db_error']);
   mysql_select_db($db, $connid) or die($lang['db_error']);
+  mysql_query("SET NAMES utf8",$connid) or die($lang['db_error']);
   return $connid;
  }
 
