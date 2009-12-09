@@ -104,6 +104,10 @@ array('wink2.gif', ':wink:', '', '', '', '', ''),
 array('flower.gif', ':flower:', '', '', '', '', ''),
 );
 
+# Lists all versions wich can be updated.
+# Update the list in the case of a new version 1.x!
+$updateVersions = array("1.3","1.4","1.5","1.6");
+
 // update functions:
 function update13to14() {
 global $db_settings, $settings, $connid, $lang_add;
@@ -157,7 +161,7 @@ if(!$categories_result) die($comment_lang['db_error']);
 $i=1;
 while ($data = mysql_fetch_array($categories_result))
 	{
-	@mysql_query("INSERT INTO ".$db_settings['category_table']." (category_order, category, accession) VALUES (".$i.", '".mysql_real_escape_string($data['category'])."',0)", $connid) or $errors[] = $lang_add['db_insert_settings_error']." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query("INSERT INTO ".$db_settings['category_table']." (category_order, category, accession) VALUES (".intval($i).", '".mysql_real_escape_string($data['category'])."',0)", $connid) or $errors[] = $lang_add['db_insert_settings_error']." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	$i++;
 	}
 
@@ -273,7 +277,7 @@ if(empty($errors))
 		if(!$category_result) die($lang['db_error']);
 		while($data = mysql_fetch_array($category_result))
 			{
-			@mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, category_int=".intval($data['id'])." WHERE category = '".mysql_escape_string($data["category"])."'", $connid) or $errors[] = $lang_add['db_update_error']. " (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+			@mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, category_int=".intval($data['id'])." WHERE category = '".mysql_real_escape_string($data["category"])."'", $connid) or $errors[] = $lang_add['db_update_error']. " (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 			if(isset($errors)) break;
 			}
 		mysql_free_result($category_result);
@@ -290,7 +294,18 @@ if(empty($errors))
 // create smilies table:
 if(empty($errors))
 	{
-	@mysql_query("CREATE TABLE ".$db_settings['smilies_table']." (id int(11) NOT NULL auto_increment, order_id int(11) NOT NULL default '0', file varchar(100) NOT NULL, code_1 varchar(50) NOT NULL, code_2 varchar(50) NOT NULL, code_3 varchar(50) NOT NULL, code_4 varchar(50) NOT NULL, code_5 varchar(50) NOT NULL, title varchar(255) NOT NULL, PRIMARY KEY (id))", $connid) or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	$createSmileyTable = "CREATE TABLE ".$db_settings['smilies_table']." (
+	id int(11) NOT NULL auto_increment,
+	order_id int(11) NOT NULL default '0',
+	file varchar(100) NOT NULL,
+	code_1 varchar(50) NOT NULL,
+	code_2 varchar(50) NOT NULL,
+	code_3 varchar(50) NOT NULL,
+	code_4 varchar(50) NOT NULL,
+	code_5 varchar(50) NOT NULL,
+	title varchar(255) NOT NULL,
+	PRIMARY KEY (id))";
+	@mysql_query($createSmileyTable, $connid) or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	}
 // insert smilies:
 if(empty($errors))
@@ -331,7 +346,7 @@ mysql_free_result($settings_result);
 if($settings_count != 1)
 	{
 	@mysql_query("INSERT INTO ".$db_settings['settings_table']." (name, value) VALUES ('session_prefix','mlf_')", $connid) or $errors[] = $lang_add['db_insert_settings_error']." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
-	}
+	}db_alter_table_error
 
 $settings_result = mysql_query("SELECT value FROM ".$db_settings['settings_table']." WHERE name = 'users_per_page' LIMIT 1", $connid) or die(mysql_error());
 if(!$settings_result) die($lang['db_error']);
@@ -362,6 +377,171 @@ global $db_settings, $settings, $connid, $lang_add;
 return (isset($errors)) ? $errors : false;
 # if(isset($errors)) return $errors; else return false;
 } # End: update16to17
+
+function update17() {
+global $db_settings, $settings, $connid, $lang_add;
+
+# Alter settings table, set text rows and table to utf8, numeral rows to unsigned
+$alterTable["settings1"] = "ALTER TABLE ".$db_settings['settings_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+$alterTable["settings2"] = "ALTER TABLE ".$db_settings['settings_table']."
+CHANGE name name VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE value value VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
+# Alter banlist table, set text rows and table to utf8, numeral rows to unsigned
+$alterTable["banlist1"] = "ALTER TABLE ".$db_settings['banlists_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+$alterTable["banlist2"] = "ALTER TABLE ".$db_settings['banlists_table']."
+CHANGE name name VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE list list TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
+# Alter smilies table, set text rows and table to utf8, numeral rows to unsigned
+$alterTable["smilies1"] = "ALTER TABLE ".$db_settings['smilies_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+$alterTable["smilies2"]	= "ALTER TABLE ".$db_settings['smilies_table']."
+CHANGE id id INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT,
+CHANGE order_id order_id INT( 11 ) UNSIGNED NOT NULL DEFAULT '0',
+CHANGE file file VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE code_1 code_1 VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE code_2 code_2 VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE code_3 code_3 VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE code_4 code_4 VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE code_5 code_5 VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE title title VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
+$alterTable["smilies3"] = "UPDATE ".$db_settings['smilies_table']." SET
+code_2 = ''";
+# Alter user online table, set text rows and table to utf8, numeral rows to unsigned
+$alterTable["uonline1"] = "ALTER TABLE ".$db_settings['useronline_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+$alterTable["uonline2"] = "ALTER TABLE ".$db_settings['useronline_table']."
+CHANGE ip ip CHAR( 15 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE time time INT( 14 ) UNSIGNED NOT NULL DEFAULT '0',
+CHANGE user_id user_id INT( 11 ) UNSIGNED NULL DEFAULT '0'";
+# Alter user data table, set text rows and table to utf8, numeral rows to unsigned
+$alterTable["userdat1"] = "ALTER TABLE ".$db_settings['userdata_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+$alterTable["userdat2"] = "ALTER TABLE ".$db_settings['userdata_table']."
+CHANGE user_id user_id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+CHANGE user_type user_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE user_name user_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE user_real_name user_real_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE user_pw user_pw VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE user_email user_email VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE hide_email hide_email TINYINT(4) UNSIGNED NULL DEFAULT '0',
+CHANGE user_hp user_hp VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE user_place user_place VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE signature signature VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE profile profile TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE logins logins INT(11) UNSIGNED NOT NULL DEFAULT '0',
+CHANGE user_ip user_ip VARCHAR(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE user_view user_view VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE new_posting_notify new_posting_notify TINYINT(4) UNSIGNED NULL DEFAULT '0',
+CHANGE new_user_notify new_user_notify TINYINT(4) UNSIGNED NULL DEFAULT '0',
+CHANGE personal_messages personal_messages TINYINT(4) UNSIGNED NULL DEFAULT '0',
+CHANGE user_lock user_lock TINYINT(4) UNSIGNED NULL DEFAULT '0',
+CHANGE pwf_code pwf_code VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE activate_code activate_code VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
+# Alter posting table, set text rows and table to utf8, numeral rows to unsigned
+$alterTable["posting1"] = "ALTER TABLE ".$db_settings['forum_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+$alterTable["posting2"] = "ALTER TABLE ".$db_settings['forum_table']."
+CHANGE id id INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT,
+CHANGE pid pid INT( 11 ) UNSIGNED NOT NULL DEFAULT '0',
+CHANGE tid tid INT( 11 ) UNSIGNED NOT NULL DEFAULT '0',
+CHANGE uniqid uniqid VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE edited_by edited_by VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE user_id user_id INT( 11 ) UNSIGNED NULL DEFAULT '0',
+CHANGE name name VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE subject subject VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE category category INT( 11 ) UNSIGNED NOT NULL DEFAULT '0',
+CHANGE email email VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE hp hp VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE place place VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE ip ip VARCHAR( 15 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE text text TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE show_signature show_signature TINYINT( 4 ) UNSIGNED NULL DEFAULT '0',
+CHANGE email_notify email_notify TINYINT( 4 ) UNSIGNED NULL DEFAULT '0',
+CHANGE marked marked TINYINT( 4 ) UNSIGNED NULL DEFAULT '0',
+CHANGE locked locked TINYINT( 4 ) UNSIGNED NULL DEFAULT '0',
+CHANGE fixed fixed TINYINT( 4 ) UNSIGNED NULL DEFAULT '0',
+CHANGE views views INT( 11 ) UNSIGNED NULL DEFAULT '0'";
+# Alter category table, set text rows and table to utf8, numeral rows to unsigned
+$alterTable["category1"] = "ALTER TABLE ".$db_settings['category_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+$alterTable["category2"] = "ALTER TABLE ".$db_settings['category_table']."
+CHANGE id id INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT,
+CHANGE category_order category_order INT( 11 ) UNSIGNED NOT NULL,
+CHANGE category category VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE description description VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE accession accession TINYINT( 4 ) UNSIGNED NOT NULL DEFAULT '0'";
+
+# alter settings table (part 1)
+@mysql_query($alterTable["settings1"], $connid) or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+# alter settings table (part 2)
+if (empty($errors))
+	{
+	@mysql_query($alterTable["settings2"], $connid) or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+# alter banlist table (part 1)
+if (empty($errors))
+	{
+	@mysql_query($alterTable["banlist1"], $connid) or $errors[] = str_replace("[table]",$db_settings['banlists_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+# alter banlist table (part 2)
+if (empty($errors))
+	{
+	@mysql_query($alterTable["banlist2"], $connid) or $errors[] = str_replace("[table]",$db_settings['banlists_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+# alter smilies table (part 1)
+if (empty($errors))
+	{
+	@mysql_query($alterTable["smilies1"], $connid) or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+# alter smilies table (part 2)
+if (empty($errors))
+	{
+	@mysql_query($alterTable["smilies2"], $connid) or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+# alter smilies table (part 3)
+if (empty($errors) and (!empty($_POST["DeleteSmilies"]) and $_POST["DeleteSmilies"]=="delete"))
+	{
+	@mysql_query($alterTable["smilies3"], $connid) or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+# alter user online table (part 1)
+if (empty($errors))
+	{
+	@mysql_query($alterTable["uonline1"], $connid) or $errors[] = str_replace("[table]",$db_settings['useronline_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+# alter user online table (part 2)
+if (empty($errors))
+	{
+	@mysql_query($alterTable["uonline2"], $connid) or $errors[] = str_replace("[table]",$db_settings['useronline_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+# alter user data table (part 1)
+if (empty($errors))
+	{
+	@mysql_query($alterTable["userdat1"], $connid) or $errors[] = str_replace("[table]",$db_settings['userdata_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+# alter user data table (part 2)
+if (empty($errors))
+	{
+	@mysql_query($alterTable["userdat2"], $connid) or $errors[] = str_replace("[table]",$db_settings['userdata_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+# alter posting data table (part 1)
+if (empty($errors))
+	{
+	@mysql_query($alterTable["userdat1"], $connid) or $errors[] = str_replace("[table]",$db_settings['forum_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+# alter posting data table (part 2)
+if (empty($errors))
+	{
+	@mysql_query($alterTable["userdat2"], $connid) or $errors[] = str_replace("[table]",$db_settings['forum_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+# alter category data table (part 1)
+if (empty($errors))
+	{
+	@mysql_query($alterTable["userdat1"], $connid) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+# alter category data table (part 2)
+if (empty($errors))
+	{
+	@mysql_query($alterTable["userdat2"], $connid) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+
+return (isset($errors)) ? $errors : false;
+# if(isset($errors)) return $errors; else return false;
+} # End: update17
 
 $table_prefix = 'forum_';
 
@@ -716,6 +896,8 @@ if (isset($_POST['form_submitted']))
 					if($errors==false) unset($errors);
 					if(empty($errors)) $errors = update16to17();
 					if($errors==false) unset($errors);
+					if(empty($errors)) $errors = update17();
+					if($errors==false) unset($errors);
 				break;
 				default:
 					$errors[] = $lang_add['version_not_supported'];
@@ -726,6 +908,260 @@ if (isset($_POST['form_submitted']))
 		}
 	} # End: if (isset($_POST['form_submitted']))
 
+# Generierung der Ausgabe
+$output  = "";
+
+if (empty($installed))
+	{
+	if (empty($language))
+		{
+		$handle=opendir('./lang/');
+		while ($file = readdir($handle))
+			{
+			if (strrchr($file, ".")==".php" && strrchr($file, "_")!="_add.php")
+				{
+				$languageFile[] = $file;
+				}
+			}
+		closedir($handle);
+		$output .= '<h2>'.$lang_add['language_file_inst'].'</h2>';
+		$output .= '<form action="install.php" method="post">';
+		$output .= '<select>';
+		foreach ($languageFile as $langFile)
+			{
+			$output .= '<option value="'.$langFile.'"';
+			$output .= ($settings['language_file'] ==$file) ? ' selected="selected"' : '';
+			$output .= '>'.ucfirst(str_replace(".php","",$file)).'</option>';
+			}
+		$output .= '</select>';
+		$output .= '<input type="submit" value="'.$lang['submit_button_ok'].'" /></p>';
+		$output .= '</form>';
+		}
+	else if (empty($installation_mode))
+		{
+		$output .= '<h2>'.$lang_add['installation_mode_inst'].'</h2>';
+		$output .= '<form action="install.php" method="post"><div>';
+		$output .= '<input type="hidden" name="language" value="'.$language.'" />';
+		$output .= '<p><input type="radio" name="installation_mode" value="installation" checked="checked" />';
+		$output .= $lang_add['installation_mode_installation'].'<br />';
+		$output .= '<input type="radio" name="installation_mode" value="update" />'.$lang_add['installation_mode_update'].'</p>';
+		$output .= '<p><input type="submit" value="'.$lang['submit_button_ok'].'" /></p>';
+		$output .= '</div></form>';
+		}
+	else
+		{
+		switch($installation_mode)
+			{
+			case 'installation':
+				$output .= '<h2>'.$lang_add['installation_instructions'].'</h2>';
+      		if(isset($errors))
+					{
+         		$output .= '<h3>'.$lang['error_headline'].'</h3>';
+         		$output .= '<ul>';
+         		foreach($errors as $error)
+         			{
+         			$output .= '<li>'.$error.'</li>';
+         			}
+        	 		$output .= '</ul>';
+					}
+				$output .= '<form action="install.php" method="post">';
+				$output .= '<fieldset>';
+				$output .= '<legend>'.$lang_add['inst_basic_settings'].'</legend>';
+				$output .= '<p>'.$lang_add['inst_main_settings_d'].'</p>';
+				$output .= '<table class="admintab">';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['forum_name'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['forum_name_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="text" name="forum_name" value="';
+				$output .= (isset($_POST['forum_name'])) ? htmlspecialchars($_POST['forum_name']) : $settings['forum_name'];
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['forum_address'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['forum_address_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="text" name="forum_address" value="';
+				$output .= (isset($_POST['forum_address'])) ? htmlspecialchars($_POST['forum_address']) : ($settings['forum_address'] != "") ? $settings['forum_address'] : "http://".$_SERVER['SERVER_NAME'].str_replace("install.php","",$_SERVER['SCRIPT_NAME']);
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['forum_email'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['forum_email_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="text" name="forum_email" value="';
+				$output .= (isset($_POST['forum_email'])) ? htmlspecialchars($_POST['forum_email']) : "@";
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '</table>';
+				$output .= '</fieldset>';
+				$output .= '<fieldset>';
+				$output .= '<legend>'.$lang_add['inst_admin_settings'].'</legend>';
+				$output .= '<p>'.$lang_add['inst_admin_settings_d'].'</p>';
+				$output .= '<table class="admintab">';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_admin_name'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['inst_admin_name_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="text" name="admin_name" value="';
+				$output .= (isset($_POST['admin_name'])) ? htmlspecialchars($_POST['admin_name']) : '';
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_admin_email'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['inst_admin_email_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="text" name="admin_email" value="';
+				$output .= (isset($_POST['admin_email'])) ? htmlspecialchars($_POST['admin_email']) : "@";
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_admin_pw'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['inst_admin_pw_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="password" name="admin_pw" value="" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_admin_pw_conf'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['inst_admin_pw_conf_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="text" name="admin_pw_conf" value="" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '</table>';
+				$output .= '</fieldset>';
+				$output .= '<fieldset>';
+				$output .= '<legend>'.$lang_add['inst_db_settings'].'</legend>';
+				$output .= '<p>'.$lang_add['inst_db_settings_d'].'</p>';
+				$output .= '<ul>';
+				$output .= '<li><input type="checkbox" name="create_database" value="true"';
+				$output .= (isset($_POST['create_database'])) ? ' checked="checked"' : '';
+				$output .= '>'.$lang_add['create_database'].'</li>';
+				$output .= '<li><input type="checkbox" name="dont_overwrite_settings" value="true"';
+				$output .= (isset($_POST['dont_overwrite_settings'])) ? ' checked="checked"' : '';
+				$output .= '>'.$lang_add['dont_overwrite_settings'].'</li>';
+				$output .= '</ul>';
+				$output .= '<table class="admintab">';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_db_host'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['inst_db_host_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="text" name="host" value="';
+				$output .= (isset($_POST['host'])) ? htmlspecialchars($_POST['host']) : $db_settings['host'];
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_db_name'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['inst_db_name_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="text" name="db" value="';
+				$output .= (isset($_POST['db'])) ? htmlspecialchars($_POST['db']) : $db_settings['db'];
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_db_user'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['inst_db_user_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="text" name="user" value="';
+				$output .= (isset($_POST['user'])) ? htmlspecialchars($_POST['user']) : $db_settings['user'];
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_db_pw'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['inst_db_pw_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="password" name="pw" value="';
+				$output .= (isset($_POST['pw'])) ? htmlspecialchars($_POST['pw']) : '';
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_table_prefix'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['inst_table_prefix_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="text" name="table_prefix" value="';
+				$output .= (isset($_POST['table_prefix'])) ? htmlspecialchars($_POST['table_prefix']) : $table_prefix;
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '</table>';
+				$output .= '</fieldset>';
+				$output .= '<p><input type="submit" name="form_submitted" value="'.$lang_add['forum_install_ok'].'" /></p>';
+				$output .= '<input type="hidden" name="language" value="'.$language.'" />';
+				$output .= '<input type="hidden" name="installation_mode" value="installation" />';
+				$output .= '</form>';
+			break;
+			case 'update':
+				$output .= '<h2>'.$lang_add['update_instructions'].'</h2>';
+      		if(isset($errors))
+					{
+         		$output .= '<h3>'.$lang['error_headline'].'</h3>';
+         		$output .= '<ul>';
+         		foreach($errors as $error)
+         			{
+         			$output .= '<li>'.$error.'</li>';
+         			}
+        	 		$output .= '</ul>';
+					}
+				$output .= '<form action="install.php" method="post">';
+				if(isset($select_version) and isset($old_version))
+					{
+					$output .= '<h3>'.$lang_add['select_version'].'</h3>';
+					$output .= '<select name="old_version" size="1">';
+					foreach ($updateVersion as $updatable)
+						{
+						$output .= '<option value="'.$updatable.'"'
+						$output .= (if ($updateVersion == $updatable)) ? ' selected="selected"' : '';
+						$output .= '>'.$updatable.'</option>';
+						}
+					$output .= '</select>';
+					}
+				$output .= '<h3>'.$lang_add['select_version'].'</h3>';
+				$output .= '<p><input type="checkbox" name="DeleteSmilies" value="delete" selected="selected" />'.$lang_add["delete_2char_smilies"].'<br /><span>'.$lang_add['delete_2char_smilies_d'].'</span></p>';
+				$output .= '<fieldset>';
+				$output .= '<legend>'.$lang_add['inst_db_settings'].'</legend>';
+				$output .= '<ul>';
+				$output .= '<li><input type="checkbox" name="dont_overwrite_settings" value="true"';
+				$output .= (isset($_POST['dont_overwrite_settings'])) ? ' checked="checked"' : '';
+				$output .= '>'.$lang_add['dont_overwrite_settings'].'</li>';
+				$output .= '</ul>';
+				$output .= '<table class="admintab">';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_db_host'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['inst_db_host_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="text" name="host" value="';
+				$output .= (isset($_POST['host'])) ? htmlspecialchars($_POST['host']) : $db_settings['host'];
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_db_name'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['inst_db_name_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="text" name="db" value="';
+				$output .= (isset($_POST['db'])) ? htmlspecialchars($_POST['db']) : $db_settings['db'];
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_db_user'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['inst_db_user_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="text" name="user" value="';
+				$output .= (isset($_POST['user'])) ? htmlspecialchars($_POST['user']) : $db_settings['user'];
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_db_pw'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['inst_db_pw_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="password" name="pw" value="';
+				$output .= (isset($_POST['pw'])) ? htmlspecialchars($_POST['pw']) : '';
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '<tr>';
+				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_table_prefix'].'</b><br />';
+				$output .= '<span class="small">'.$lang_add['inst_table_prefix_d'].'</span></td>';
+				$output .= '<td class="admintab-r"><input type="text" name="table_prefix" value="';
+				$output .= (isset($_POST['table_prefix'])) ? htmlspecialchars($_POST['table_prefix']) : $table_prefix;
+				$output .= '" size="40" /></td>';
+				$output .= '</tr>';
+				$output .= '</table>';
+				$output .= '</fieldset>';
+				$output .= '<p><input type="submit" name="form_submitted" value="'.$lang_add['forum_update_ok'].'" /></p>';
+				$output .= '<input type="hidden" name="language" value="'.$language.'" />';
+				$output .= '<input type="hidden" name="installation_mode" value="update" />';
+				$output .= '</form>';
+			break;
+			}
+		}
+	}
+else
+	{
+	$output .= '<p class="caution" style="background-image:url(http://www.mylittlehomepage.net/mylittleforum/install/x.gif);">'.$lang_add['installation_complete'].'</p>
+	<p>'.$lang_add['installation_complete_exp'].'</p>
+	<p><a href="index.php">'.$lang_add['installation_complete_link'].'</a></p>';
+	}
 
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -754,162 +1190,8 @@ a:active            { color: #ff0000; text-decoration: none; }
 </head>
 <body>
 <div>
-<h1><?php echo $lang_add['install_title']; ?></h1><?php
-
-if(empty($installed))
-	{
-	if(empty($language))
-		{
-		?><p><?php echo $lang_add['language_file_inst']; ?></p>
-		<form action="install.php" method="post">
-		<p><select name="language" size="1"><?php $handle=opendir('./lang/'); while ($file = readdir($handle)) { if (strrchr($file, ".")==".php" && strrchr($file, "_")!="_add.php") { ?><option value="<?php echo $file; ?>"<?php if ($settings['language_file'] ==$file) echo " selected=\"selected\""; ?>><?php echo ucfirst(str_replace(".php","",$file)); ?></option><?php } } closedir($handle); ?></select>
-    <input type="submit" value="<?php echo $lang['submit_button_ok']; ?>" /></p>
-    </form><?php
-		}
-	else if(empty($installation_mode))
-		{
-    ?><p><?php echo $lang_add['installation_mode_inst']; ?></p>
-    <form action="install.php" method="post"><div>
-    <input type="hidden" name="language" value="<?php echo $language; ?>" />
-    <p><input type="radio" name="installation_mode" value="installation" checked="checked" /><?php echo $lang_add['installation_mode_installation']; ?><br />
-    <input type="radio" name="installation_mode" value="update" /><?php echo $lang_add['installation_mode_update']; ?></p>
-    <p><input type="submit" value="<?php echo $lang['submit_button_ok']; ?>" /></p>
-    </div></form><?php
-		}
-	else
-		{
-		switch($installation_mode)
-			{
-			case 'installation':
-       ?><p><?php echo $lang_add['installation_instructions']; ?></p><br /><?php
-       if(isset($errors))
-			{
-         ?><p class="caution" style="margin-top: 10px;"><?php echo $lang['error_headline']; ?><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><p>&nbsp;</p><?php
-			}
-       ?><form action="install.php" method="post">
-       <table class="admintab" border="0" cellpadding="5" cellspacing="1">
-       <tr>
-       <td class="admintab-hl" colspan="2"><h2><?php echo $lang_add['inst_basic_settings']; ?></h2><p><?php echo $lang_add['inst_main_settings_d']; ?></p></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['forum_name']; ?></b><br /><span class="small"><?php echo $lang_add['forum_name_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="forum_name" value="<?php if (isset($_POST['forum_name'])) echo stripslashes($_POST['forum_name']); else echo $settings['forum_name']; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['forum_address']; ?></b><br /><span class="small"><?php echo $lang_add['forum_address_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="forum_address" value="<?php if (isset($_POST['forum_address'])) echo $_POST['forum_address']; else { if ($settings['forum_address'] != "") echo $settings['forum_address']; else echo "http://".$_SERVER['SERVER_NAME'].str_replace("install.php","",$_SERVER['SCRIPT_NAME']); } ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['forum_email']; ?></b><br /><span class="small"><?php echo $lang_add['forum_email_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="forum_email" value="<?php if (isset($_POST['forum_email'])) echo $_POST['forum_email']; else echo "@"; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-hl" colspan="2"><h2><?php echo $lang_add['inst_admin_settings']; ?></h2><p><?php echo $lang_add['inst_admin_settings_d']; ?></p></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['inst_admin_name']; ?></b><br /><span class="small"><?php echo $lang_add['inst_admin_name_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="admin_name" value="<?php if (isset($_POST['admin_name'])) echo $_POST['admin_name']; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['inst_admin_email']; ?></b><br /><span class="small"><?php echo $lang_add['inst_admin_email_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="admin_email" value="<?php if (isset($_POST['admin_email'])) echo $_POST['admin_email']; else echo "@"; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['inst_admin_pw']; ?></b><br /><span class="small"><?php echo $lang_add['inst_admin_pw_d']; ?></span></td>
-       <td class="admintab-r"><input type="password" name="admin_pw" value="<?php if (isset($_POST['admin_pw'])) echo $_POST['admin_pw']; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['inst_admin_pw_conf']; ?></b><br /><span class="small"><?php echo $lang_add['inst_admin_pw_conf_d']; ?></span></td>
-       <td class="admintab-r"><input type="password" name="admin_pw_conf" value="<?php if (isset($_POST['admin_pw_conf'])) echo $_POST['admin_pw_conf']; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-hl" colspan="2"><h2><?php echo $lang_add['inst_db_settings']; ?></h2><p><?php echo $lang_add['inst_db_settings_d']; ?><br />
-       <input type="checkbox" name="create_database" value="true"<?php if (isset($_POST['create_database'])) echo ' checked="checked"'; ?>> <?php echo $lang_add['create_database']; ?><br />
-       <input type="checkbox" name="dont_overwrite_settings" value="true"<?php if (isset($_POST['dont_overwrite_settings'])) echo ' checked="checked"'; ?>> <?php echo $lang_add['dont_overwrite_settings']; ?></p></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['inst_db_host']; ?></b><br /><span class="small"><?php echo $lang_add['inst_db_host_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="host" value="<?php if (isset($_POST['host'])) echo $_POST['host']; else echo $db_settings['host']; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['inst_db_name']; ?></b><br /><span class="small"><?php echo $lang_add['inst_db_name_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="db" value="<?php if (isset($_POST['db'])) echo $_POST['db']; else echo $db_settings['db']; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['inst_db_user']; ?></b><br /><span class="small"><?php echo $lang_add['inst_db_user_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="user" value="<?php if (isset($_POST['user'])) echo $_POST['user']; else echo $db_settings['user']; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['inst_db_pw']; ?></b><br /><span class="small"><?php echo $lang_add['inst_db_pw_d']; ?></span></td>
-       <td class="admintab-r"><input type="password" name="pw" value="<?php if (isset($_POST['pw'])) echo $_POST['pw']; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['inst_table_prefix']; ?></b><br /><span class="small"><?php echo $lang_add['inst_table_prefix_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="table_prefix" value="<?php if (isset($_POST['table_prefix'])) echo $_POST['table_prefix']; else echo $table_prefix; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-hl" colspan="2"><input type="submit" name="form_submitted" value="<?php echo $lang_add['forum_install_ok']; ?>" /><input type="hidden" name="language" value="<?php echo $language; ?>" /><input type="hidden" name="installation_mode" value="installation" /></td>
-       </tr>
-       </table>
-       </form><?php
-			break;
-			case 'update':
-       ?><p><?php echo $lang_add['update_instructions']; ?></p><br /><?php
-			if(isset($errors))
-				{
-         ?><p class="caution" style="margin-top: 10px;"><?php echo $lang['error_headline']; ?><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><p>&nbsp;</p><?php
-				}
-       ?><form action="install.php" method="post"><?php
-				if(isset($select_version))
-					{
-         ?><p><?php echo $lang_add['select_version']; ?>
-         <select name="old_version" size="1">
-         <option value="1.3">1.3</option>
-         <option value="1.4">1.4</option>
-         <option value="1.5" selected="selected">1.5</option>
-         </select></p><?php
-					}
-       ?><table class="admintab" border="0" cellpadding="5" cellspacing="1">
-       <tr>
-       <td class="admintab-hl" colspan="2"><h2><?php echo $lang_add['inst_db_settings']; ?></h2>
-       <p><input type="checkbox" name="dont_overwrite_settings" value="true"<?php if (isset($_POST['dont_overwrite_settings'])) echo ' checked="checked"'; ?>> <?php echo $lang_add['dont_overwrite_settings']; ?></p></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['inst_db_host']; ?></b><br /><span class="small"><?php echo $lang_add['inst_db_host_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="host" value="<?php if (isset($_POST['host'])) echo $_POST['host']; else echo $db_settings['host']; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['inst_db_name']; ?></b><br /><span class="small"><?php echo $lang_add['inst_db_name_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="db" value="<?php if (isset($_POST['db'])) echo $_POST['db']; else echo $db_settings['db']; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['inst_db_user']; ?></b><br /><span class="small"><?php echo $lang_add['inst_db_user_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="user" value="<?php if (isset($_POST['user'])) echo $_POST['user']; else echo $db_settings['user']; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['inst_db_pw']; ?></b><br /><span class="small"><?php echo $lang_add['inst_db_pw_d']; ?></span></td>
-       <td class="admintab-r"><input type="password" name="pw" value="<?php if (isset($_POST['pw'])) echo $_POST['pw']; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-l"><b><?php echo $lang_add['inst_table_prefix']; ?></b><br /><span class="small"><?php echo $lang_add['inst_table_prefix_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="table_prefix" value="<?php if (isset($_POST['table_prefix'])) echo $_POST['table_prefix']; else echo $table_prefix; ?>" size="40" /></td>
-       </tr>
-       <tr>
-       <td class="admintab-hl" colspan="2"><input type="submit" name="form_submitted" value="<?php echo $lang_add['forum_update_ok']; ?>" /><input type="hidden" name="language" value="<?php echo $language; ?>" /><input type="hidden" name="installation_mode" value="update" /></td>
-       </tr>
-       </table>
-       </form><?php
-			break;
-			}
-		}
-	}
-else
-	{
-	?><p class="caution" style="background-image:url(http://www.mylittlehomepage.net/mylittleforum/install/x.gif);"><?php echo $lang_add['installation_complete']; ?></p>
-  <p><?php echo $lang_add['installation_complete_exp']; ?></p>
-  <p><a href="index.php"><?php echo $lang_add['installation_complete_link']; ?></a></p>
-<?php
-	}
-?></div>
+<h1><?php echo $lang_add['install_title']; ?></h1>
+<?php echo $output; ?>
+</div>
 </body>
 </html>
