@@ -42,6 +42,7 @@ $settings['count_views'] = 0;
 $settings['provide_rssfeed'] = 0;
 $settings['autologin'] = 1;
 $settings['admin_mod_highlight'] = 0;
+$settings['user_highlight'] = 0;
 $settings['topics_per_page'] = 40;
 $settings['users_per_page'] = 40;
 $settings['answers_per_topic'] = 50;

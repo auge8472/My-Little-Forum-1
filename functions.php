@@ -282,25 +282,43 @@ else @mysql_query("INSERT INTO ".$db_settings['useronline_table']." SET time='".
 #return $user_online;
 } # End: user_online
 
- // displays the thread tree:
+
+
+/**
+ * displays the thread tree
+ *
+ * @param int $id
+ * @param int $aktuellerEinrag
+ * @param int $tiefe
+ */
 function thread_tree($id, $aktuellerEintrag = 0, $tiefe = 0) {
 global $settings, $lang, $parent_array, $child_array, $page, $category, $order, $db_settings, $connid, $last_visit, $categories, $category_accession;
 
-// highlighting of admins and mods:
-$mark_admin = false; $mark_mod = false;
-if ($settings['admin_mod_highlight'] == 1 && $parent_array[$id]["user_id"] > 0)
+// highlighting of admins, mods and users:
+$mark_admin = false; $mark_mod = false; $mark_user = false;
+if (($settings['admin_mod_highlight'] == 1 or $settings['user_highlight'] == 1) && $parent_array[$id]["user_id"] > 0)
 	{
 	$userdata_result=mysql_query("SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = '".$parent_array[$id]["user_id"]."'", $connid);
 	if (!$userdata_result) die($lang['db_error']);
 	$userdata = mysql_fetch_assoc($userdata_result);
 	mysql_free_result($userdata_result);
-	if ($userdata['user_type'] == "admin") $mark_admin = true;
-	else if ($userdata['user_type'] == "mod") $mark_mod = true;
+	if ($settings['admin_mod_highlight'] == 1)
+		{
+		if ($userdata['user_type'] == "admin") $mark_admin = true;
+		else if ($userdata['user_type'] == "mod") $mark_mod = true;
+		}
+	if ($settings['user_highlight'] == 1)
+		{
+		if ($userdata['user_type'] == "user") $mark_user = true;
+		}
 	}
 
-if ($mark_admin==true) $name = "<span class=\"admin-highlight\">".htmlspecialchars(stripslashes($parent_array[$id]["name"]))."</span>";
-else if ($mark_mod==true) $name = "<span class=\"mod-highlight\">".htmlspecialchars(stripslashes($parent_array[$id]["name"]))."</span>";
-else $name=htmlspecialchars(stripslashes($parent_array[$id]["name"]));
+$name  = '<span class="';
+if ($mark_admin==true) $name .= 'admin-highlight';
+else if ($mark_mod==true) $name .= 'mod-highlight';
+else if ($mark_user==true) $name .= 'user-highlight';
+$name .= '">'.htmlspecialchars(stripslashes($parent_array[$id]["name"])).'</span>';
+else $name = htmlspecialchars(stripslashes($parent_array[$id]["name"]));
 
 if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1)
 	{
@@ -401,6 +419,12 @@ if(isset($child_array[$id]) && is_array($child_array[$id]))
   ?></li><?php
 } # End: thread_tree
 
+
+
+/**
+ * replaces the template placeholders with the computed contents
+ * 
+ */
 function parse_template() {
 global $settings, $lang, $header, $footer, $wo, $ao, $topnav, $subnav_1, $subnav_2, $footer_info_dump, $search, $show_postings, $counter;
 
@@ -475,5 +499,5 @@ $template = str_replace("{RSS-FEED-BUTTON}",$rss_feed_button,$template);
 $template_parts = explode("{CONTENT}",$template);
 $header = (isset($template_parts[0])) ? $template_parts[0] : "";
 $footer = (isset($template_parts[1])) ? $template_parts[1] : "";
-}
+} # End: parse_template
 ?>
