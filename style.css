@@ -70,8 +70,8 @@ p.postingforma         { margin: 3px 0px 0px 0px; }
 .marked-threads-board  { margin:10px 1px 0px 1px; font-size:11px; }
 
 .admin-highlight       { color: #c00; }
-.mod-highlight         { color: #0d6; }
-.user-highlight        { color: #06d; }
+.mod-highlight         { color: #0d4; }
+.user-highlight        { color: #04d; }
 
 /* quoted text: */
 .citation              { color: #6f6f6f; font-style: italic; }
