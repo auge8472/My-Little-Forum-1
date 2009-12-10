@@ -7,16 +7,18 @@ include("inc.php");
 <meta http-equiv="content-type" content="text/html; charset=<?php echo $lang['charset']; ?>" />
 </head>
 <body>
+<div>
 <?php
 $result = mysql_query("SELECT file, code_1, title FROM ".$db_settings['smilies_table']." ORDER BY order_id ASC", $connid);
 while ($data = mysql_fetch_array($result))
 	{
 	echo '<a href="#" title="'.$lang['smiley_title'].'" onclick="opener.insert(\'';
-	echo stripslashes($data['code_1']).'\'); window.close();">';
+	echo htmlspecialchars($data['code_1']).'\'); window.close();">';
 	echo '<img style="margin: 0px 10px 10px 0px; border: 0px;" src="img/smilies/';
-	echo stripslashes($data['file']).'" alt="'.stripslashes($data['code_1']).'" /></a>'."\n";
+	echo htmlspecialchars($data['file']).'" alt="'.htmlspecialchars($data['code_1']).'" /></a>'."\n";
 	}
 mysql_free_result($result);
 ?>
+</div>
 </body>
 </html>
