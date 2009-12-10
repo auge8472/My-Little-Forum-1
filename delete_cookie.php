@@ -18,6 +18,8 @@ $wo = $lang['del_cookie_title'];
 </head>
 <body id="deletecookie">
 <h1><?php echo $lang['del_cookie_title']; ?></h1>
-<?php if ($cookies_set == true) { ?><p><?php echo $lang['del_cookie']; ?></p><?php } else { ?><p><?php echo $lang['no_cookie_set']; ?></p><?php }
-?></body>
+<p>
+<?php echo ($cookies_set == true) ? $lang['del_cookie'] : $lang['no_cookie_set']; ?>
+</p>
+</body>
 </html>
