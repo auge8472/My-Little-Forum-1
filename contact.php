@@ -183,7 +183,8 @@ if (isset($id) || isset($uid) || isset($forum_contact))
        $conf_header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
        $conf_header .= "X-Mailer: PHP/" . phpversion(). "\n";
        $conf_header .= "X-Sender-IP: $ip\n";
-       $conf_header .= "Content-Type: text/plain";
+       $conf_header .= "Content-Type: text/plain charset=UTF-8;\n";
+       $conf_header .= "Content-Transfer-Encoding: 8bit\n";
        if($settings['mail_parameter']!='')
         {
          @mail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt'], $conf_header, $settings['mail_parameter']);
