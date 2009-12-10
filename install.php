@@ -166,8 +166,8 @@ while ($data = mysql_fetch_array($categories_result))
 	$i++;
 	}
 
-return (isset($errors)) ? $errors : false;
-# if(isset($errors)) return $errors; else return false;
+$return = (isset($errors)) ? $errors : false;
+return $return;
 } # End: update13to14
 
 
@@ -200,8 +200,8 @@ if($settings_count != 1)
 @mysql_query("DELETE FROM ".$db_settings['settings_table']." WHERE name = 'thread_indent'", $connid) or $errors[] = $lang_add['db_delete_entry_error']." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 @mysql_query("DELETE FROM ".$db_settings['settings_table']." WHERE name = 'max_thread_indent'", $connid) or $errors[] = $lang_add['db_delete_entry_error']." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 
-return (isset($errors)) ? $errors : false;
-# if(isset($errors)) return $errors; else return false;
+$return = (isset($errors)) ? $errors : false;
+return $return;
 } # End: update14to15
 
 
@@ -328,8 +328,8 @@ if (empty($errors))
 	@mysql_query("INSERT INTO ".$db_settings['banlists_table']." VALUES ('words', '')", $connid) or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['db_insert_settings_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	}
 
-return (isset($errors)) ? $errors : false;
-# if(isset($errors)) return $errors; else return false;
+$return = (isset($errors)) ? $errors : false;
+return $return;
 } # End: update15to16
 
 
@@ -359,8 +359,8 @@ if($settings_count != 1)
 	@mysql_query("INSERT INTO ".$db_settings['settings_table']." (name, value) VALUES ('users_per_page','40')", $connid) or $errors[] = $lang_add['db_insert_settings_error']." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	}
 
-return (isset($errors)) ? $errors : false;
-# if(isset($errors)) return $errors; else return false;
+$return = (isset($errors)) ? $errors : false;
+return $return;
 } # End: update16
 
 
@@ -374,8 +374,8 @@ global $db_settings, $settings, $connid, $lang_add;
 @mysql_query("INSERT INTO ".$db_settings['settings_table']." (name, value) VALUES ('captcha_type','".mysql_real_escape_string($settings['captcha_type'])."')", $connid) or $errors[] = $lang_add['db_insert_settings_error']." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 @mysql_query("UPDATE ".$db_settings['settings_table']." SET value='1.7.6' WHERE name = 'version'", $connid) or $errors[] = $lang_add['db_update_error']. " (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 
-return (isset($errors)) ? $errors : false;
-# if(isset($errors)) return $errors; else return false;
+$return = (isset($errors)) ? $errors : false;
+return $return;
 } # End: update16to17
 
 function update17() {
@@ -545,8 +545,8 @@ if (empty($errors))
 	@mysql_query("UPDATE ".$db_settings['settings_table']." SET value='1.7.7' WHERE name = 'version'", $connid) or $errors[] = $lang_add['db_update_error']. " (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	}
 
-return (isset($errors)) ? $errors : false;
-# if(isset($errors)) return $errors; else return false;
+$return = (isset($errors)) ? $errors : false;
+return $return;
 } # End: update17
 
 $table_prefix = 'forum_';
