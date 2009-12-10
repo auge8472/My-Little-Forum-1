@@ -101,10 +101,10 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
 $subnav_1 = '<a class="textlink" href="posting.php?view=mix&amp;category='.$category.'" title="'.$lang['new_entry_linktitle'].'">'.$lang['new_entry_linkname'].'</a>';
 $subnav_2 = '';
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $subnav_2 .= '<a href="index.php?update=1&amp;view=mix&amp;category='.$category.'"><img src="img/update.gif" alt="" title="'.$lang['update_time_linktitle'].'" width="9" height="9" onmouseover="this.src=\'img/update_mo.gif\';" onmouseout="this.src=\'img/update.gif\';" /></a>';
-if ($settings['thread_view'] == 1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php" title="'.$lang['thread_view_linktitle'].'"><img src="img/thread.gif" alt="" width="12" height="9" title="'.$lang['thread_view_linktitle'].' />'.$lang['thread_view_linkname'].'</a></span>';
-elseif ($settings['thread_view'] == 1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?category='.$category.'" title="'.$lang['thread_view_linktitle'].'"><img src="img/thread.gif" alt="" width="12" height="9" title="'.$lang['thread_view_linktitle'].' />'.$lang['thread_view_linkname'].'</a></span>';
-if ($settings['board_view']==1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php" title="'.$lang['board_view_linktitle'].'"><img src="img/board.gif" alt="" width="12" height="9" title="'.$lang['board_view_linktitle'].'" />'.$lang['board_view_linkname'].'</a></span>';
-elseif ($settings['board_view']==1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php?category='.$category.'" title="'.$lang['board_view_linktitle'].'"><img src="img/board.gif" alt="" width="12" height="9" title="'.$lang['board_view_linktitle'].'" />'.$lang['board_view_linkname'].'</a></span>';
+if ($settings['thread_view'] == 1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php" title="'.$lang['thread_view_linktitle'].'"><img src="img/thread.gif" alt="'.$lang['thread_view_linkname'].'" width="12" height="9" title="'.$lang['thread_view_linktitle'].'" />'.$lang['thread_view_linkname'].'</a></span>';
+elseif ($settings['thread_view'] == 1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?category='.$category.'" title="'.$lang['thread_view_linktitle'].'"><img src="img/thread.gif" alt="'.$lang['thread_view_linkname'].'" width="12" height="9" title="'.$lang['thread_view_linktitle'].'" />'.$lang['thread_view_linkname'].'</a></span>';
+if ($settings['board_view']==1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php" title="'.$lang['board_view_linktitle'].'"><img src="img/board.gif" alt="'.$lang['board_view_linkname'].'" width="12" height="9" title="'.$lang['board_view_linktitle'].'" />'.$lang['board_view_linkname'].'</a></span>';
+elseif ($settings['board_view']==1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php?category='.$category.'" title="'.$lang['board_view_linktitle'].'"><img src="img/board.gif" alt="'.$lang['board_view_linkname'].'" width="12" height="9" title="'.$lang['board_view_linktitle'].'" />'.$lang['board_view_linkname'].'</a></span>';
 $subnav_2 .= nav($page, $settings['topics_per_page'], $thread_count, $order, $descasc, $category);
 $categories = get_categories();
 if ($categories!=false && $categories != "not accessible")
@@ -201,8 +201,8 @@ if($thread_count > 0 && isset($result))
      }
      else
      {
-      if ($category!=0) echo "<p>".$lang['no_messages_in_category']."</p><p>&nbsp;</p>";
-      else echo "<p>".$lang['no_messages']."</p><p>&nbsp;</p>";
+      if ($category!=0) echo "<p>".$lang['no_messages_in_category']."</p>";
+      else echo "<p>".$lang['no_messages']."</p>";
      }
 
 echo $footer;
