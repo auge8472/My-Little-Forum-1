@@ -408,7 +408,7 @@ code_2 = ''";
 # Alter user online table, set text rows and table to utf8, numeral rows to unsigned
 $alterTable["uonline1"] = "ALTER TABLE ".$db_settings['useronline_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 $alterTable["uonline2"] = "ALTER TABLE ".$db_settings['useronline_table']."
-CHANGE ip ip CHAR( 15 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE ip ip VARCHAR( 39 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE time time INT( 14 ) UNSIGNED NOT NULL DEFAULT '0',
 CHANGE user_id user_id INT( 11 ) UNSIGNED NULL DEFAULT '0'";
 # Alter user data table, set text rows and table to utf8, numeral rows to unsigned
@@ -426,7 +426,7 @@ CHANGE user_place user_place VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_genera
 CHANGE signature signature VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE profile profile TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE logins logins INT(11) UNSIGNED NOT NULL DEFAULT '0',
-CHANGE user_ip user_ip VARCHAR(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE user_ip user_ip VARCHAR(39) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE user_view user_view VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE new_posting_notify new_posting_notify TINYINT(4) UNSIGNED NULL DEFAULT '0',
 CHANGE new_user_notify new_user_notify TINYINT(4) UNSIGNED NULL DEFAULT '0',
@@ -449,7 +449,7 @@ CHANGE category category INT( 11 ) UNSIGNED NOT NULL DEFAULT '0',
 CHANGE email email VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE hp hp VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE place place VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE ip ip VARCHAR( 15 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE ip ip VARCHAR( 39 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE text text TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE show_signature show_signature TINYINT( 4 ) UNSIGNED NULL DEFAULT '0',
 CHANGE email_notify email_notify TINYINT( 4 ) UNSIGNED NULL DEFAULT '0',
@@ -655,7 +655,7 @@ if (isset($_POST['form_submitted']))
 			email varchar(255) NOT NULL default '',
 			hp varchar(255) NOT NULL default '',
 			place varchar(255) NOT NULL default '',
-			ip varchar(15) NOT NULL default '',
+			ip varchar(39) NOT NULL default '',
 			text text NOT NULL,
 			show_signature tinyint(4) unsigned default '0',
 			email_notify tinyint(4) unsigned default '0',
@@ -664,7 +664,6 @@ if (isset($_POST['form_submitted']))
 			fixed tinyint(4) unsigned default '0',
 			views int(11) unsigned default '0',
 			PRIMARY KEY (id),
-			UNIQUE KEY id (id),
 			KEY tid (tid),
 			KEY category (category),
 			KEY pid (pid),
@@ -695,7 +694,7 @@ if (isset($_POST['form_submitted']))
 			logins int(11) unsigned NOT NULL default '0',
 			last_login timestamp(14) NOT NULL,
 			last_logout timestamp(14) NOT NULL,
-			user_ip varchar(15) NOT NULL default '',
+			user_ip varchar(39) NOT NULL default '',
 			registered timestamp(14) NOT NULL,
 			user_view varchar(255) NOT NULL default '',
 			new_posting_notify tinyint(4) unsigned default '0',
