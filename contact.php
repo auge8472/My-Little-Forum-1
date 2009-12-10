@@ -160,7 +160,8 @@ if (isset($id) || isset($uid) || isset($forum_contact))
       $header .= "Reply-To: ".$sender_name." <".$sender_email.">\n";
       $header .= "X-Mailer: PHP/" . phpversion(). "\n";
       $header .= "X-Sender-IP: $ip\n";
-      $header .= "Content-Type: text/plain";
+      $header .= "Content-Type: text/plain charset=UTF-8;\n";
+      $header .= "Content-Transfer-Encoding: 8bit\n";
       if($settings['mail_parameter']!='')
        {
         if(@mail($mailto, $mail_subject, $mail_text, $header, $settings['mail_parameter'])) $sent = true; else $errors[] = $lang['error_meilserv'];
