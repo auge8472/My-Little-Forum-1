@@ -313,12 +313,27 @@ if (($settings['admin_mod_highlight'] == 1 or $settings['user_highlight'] == 1) 
 		}
 	}
 
-$name  = '<span class="';
-if ($mark_admin==true) $name .= 'admin-highlight';
-else if ($mark_mod==true) $name .= 'mod-highlight';
-else if ($mark_user==true) $name .= 'user-highlight';
-$name .= '">'.htmlspecialchars(stripslashes($parent_array[$id]["name"])).'</span>';
-else $name = htmlspecialchars(stripslashes($parent_array[$id]["name"]));
+if ($mark_admin==true or $mark_mod==true or $mark_user==true)
+	{
+	$name  = '<span class="';
+	if ($mark_admin==true)
+		{
+		$name .= 'admin-highlight';
+		}
+	else if ($mark_mod==true)
+		{
+		$name .= 'mod-highlight';
+		}
+	else if ($mark_user==true)
+		{
+		$name .= 'user-highlight';
+		}
+	$name .= '">'.htmlspecialchars(stripslashes($parent_array[$id]["name"])).'</span>';
+	}
+else
+	{
+	$name = htmlspecialchars(stripslashes($parent_array[$id]["name"]));
+	}
 
 if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1)
 	{
