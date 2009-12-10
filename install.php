@@ -69,7 +69,7 @@ $settings['upload_max_img_height'] = 600;
 $settings['mail_parameter'] = "";
 $settings['forum_disabled'] = 0;
 $settings['session_prefix'] = "mlf_";
-$settings['version'] = '1.7.6';
+$settings['version'] = '1.7.7';
 $settings['captcha_posting'] = 0;
 $settings['captcha_contact'] = 0;
 $settings['captcha_register'] = 0;
@@ -198,7 +198,6 @@ if($settings_count != 1)
 @mysql_query("INSERT INTO ".$db_settings['settings_table']." (name, value) VALUES ('edit_period','180')", $connid) or $errors[] = $lang_add['db_insert_settings_error']." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 @mysql_query("DELETE FROM ".$db_settings['settings_table']." WHERE name = 'thread_indent'", $connid) or $errors[] = $lang_add['db_delete_entry_error']." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 @mysql_query("DELETE FROM ".$db_settings['settings_table']." WHERE name = 'max_thread_indent'", $connid) or $errors[] = $lang_add['db_delete_entry_error']." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
-#@mysql_query("UPDATE ".$db_settings['settings_table']." SET value='".$settings['language_file']."' WHERE name = 'language_file'", $connid) or $errors[] = $lang_add['update_error']. " (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 
 return (isset($errors)) ? $errors : false;
 # if(isset($errors)) return $errors; else return false;
@@ -539,6 +538,12 @@ if (empty($errors))
 	@mysql_query($alterTable["userdat2"], $connid) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	}
 
+# set value 1.7.7 for version string
+if (empty($errors))
+	{
+	@mysql_query("UPDATE ".$db_settings['settings_table']." SET value='1.7.7' WHERE name = 'version'", $connid) or $errors[] = $lang_add['db_update_error']. " (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+
 return (isset($errors)) ? $errors : false;
 # if(isset($errors)) return $errors; else return false;
 } # End: update17
@@ -766,6 +771,7 @@ if (isset($_POST['form_submitted']))
 				name = '".mysql_real_escape_string($key)."',
 				value = '".mysql_real_escape_string($val)."'";
 				@mysql_query($fillSetting, $connid) or $errors[] = str_replace("[setting]",$setting,$lang_add['db_insert_settings_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+				# empty $fillSetting for the next loop
 				$fillSetting = "";
 				}
 			// update posted settings:
@@ -799,6 +805,7 @@ if (isset($_POST['form_submitted']))
 				code_5 = '".mysql_real_escape_string($smiley[5])."',
 				title = '".mysql_real_escape_string($smiley[6])."'";
 				@mysql_query($fillSmiley, $connid) or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['db_insert_settings_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+				# empty $fillSmiley for the next loop
 				$fillSmiley = "";
 				$order_id++;
 				}
@@ -814,6 +821,7 @@ if (isset($_POST['form_submitted']))
 				name = ".mysql_real_escape_string($val).",
 				list = ''";
 				@mysql_query($fillBanlist, $connid) or $errors[] = str_replace("[setting]",$db_settings['banlists_table'],$lang_add['db_insert_settings_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+				# empty $fillBanlist for the next loop
 				$fillBanlist = "";
 				}
 			}
@@ -896,6 +904,10 @@ if (isset($_POST['form_submitted']))
 					if(empty($errors)) $errors = update16to17();
 					if($errors==false) unset($errors);
 					if(empty($errors)) $errors = update17();
+					if($errors==false) unset($errors);
+				break;
+				case 1.7:
+					$errors = update17();
 					if($errors==false) unset($errors);
 				break;
 				default:
