@@ -488,7 +488,8 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                  //$header .= "Reply-To: <".$forum_email.">\n";
                  $header .= "X-Mailer: Php/" . phpversion(). "\n";
                  $header .= "X-Sender-ip: $ip\n";
-                 $header .= "Content-Type: text/plain";
+                 $header .= "Content-Type: text/plain charset=UTF-8;\n";
+                 $header .= "Content-Transfer-Encoding: 8bit\n";
                  $an = $parent["name"]." <".$parent["email"].">";
                  if($settings['mail_parameter']!='')
                   {
@@ -517,7 +518,8 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
                $header .= "X-Mailer: Php/" . phpversion(). "\n";
                $header .= "X-Sender-ip: $ip\n";
-               $header .= "Content-Type: text/plain";
+               $header .= "Content-Type: text/plain charset=UTF-8;\n";
+               $header .= "Content-Transfer-Encoding: 8bit\n";
                // Schauen, wer eine E-Mail-Benachrichtigung will:
                $en_result=mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_posting_notify='1'", $connid);
                if(!$en_result) die($lang['db_error']);
