@@ -160,7 +160,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
       $header .= "Reply-To: ".$sender_name." <".$sender_email.">\n";
       $header .= "X-Mailer: PHP/" . phpversion(). "\n";
       $header .= "X-Sender-IP: $ip\n";
-      $header .= "Content-Type: text/plain charset=UTF-8;\n";
+      $header .= "Content-Type: text/plain; charset=UTF-8\n";
       $header .= "Content-Transfer-Encoding: 8bit\n";
       if($settings['mail_parameter']!='')
        {
@@ -183,7 +183,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
        $conf_header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
        $conf_header .= "X-Mailer: PHP/" . phpversion(). "\n";
        $conf_header .= "X-Sender-IP: $ip\n";
-       $conf_header .= "Content-Type: text/plain charset=UTF-8;\n";
+       $conf_header .= "Content-Type: text/plain; charset=UTF-8\n";
        $conf_header .= "Content-Transfer-Encoding: 8bit\n";
        if($settings['mail_parameter']!='')
         {

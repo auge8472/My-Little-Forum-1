@@ -488,7 +488,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                  //$header .= "Reply-To: <".$forum_email.">\n";
                  $header .= "X-Mailer: Php/" . phpversion(). "\n";
                  $header .= "X-Sender-ip: $ip\n";
-                 $header .= "Content-Type: text/plain charset=UTF-8;\n";
+                 $header .= "Content-Type: text/plain; charset=UTF-8\n";
                  $header .= "Content-Transfer-Encoding: 8bit\n";
                  $an = $parent["name"]." <".$parent["email"].">";
                  if($settings['mail_parameter']!='')
