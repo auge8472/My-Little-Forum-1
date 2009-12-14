@@ -29,7 +29,7 @@ if (isset($_POST['uid'])) $uid = $_POST['uid'];
 if (isset($_GET['view'])) $view = $_GET['view'];
 if (isset($_GET['page'])) $page = $_GET['page'];
 if (isset($_GET['order'])) $order = $_GET['order'];
-if (isset($_GET['category'])) $category = stripslashes(urldecode($_GET['category']));
+if (isset($_GET['category'])) $category = urldecode($_GET['category']);
 if (isset($_GET['descasc'])) $descasc = $_GET['descasc'];
 if (isset($_GET['forum_contact'])) $forum_contact = htmlspecialchars($_GET['forum_contact']);
 if (isset($_POST['forum_contact'])) $forum_contact = $_POST['forum_contact'];
@@ -108,21 +108,21 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 	if (isset($_POST["form_submitted"]))
 		{
 		// übergebene Variablen ermitteln:
-		$sender_name = stripslashes(trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_name']))));
-		$sender_email = stripslashes(trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_email']))));
-		$subject = trim(stripslashes($_POST['subject']));
+		$sender_name = trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_name'])));
+		$sender_email = trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_email'])));
+		$subject = trim($_POST['subject']);
 		$text = $_POST['text'];
 
 		// Überprüfungen der Daten:
 		unset($errors);
 		if ($sender_name == "") $errors[] = $lang['error_no_name'];
 		if ($sender_email == "") $errors[] = $lang['error_no_email'];
-		if ($sender_email != "" and !preg_match("/^[^@]+@.+\.\D{2,5}$/", $sender_email)) $errors[] = $lang['error_email_wrong'];
+		if ($sender_email != "" and !preg_match("/^[^@]+@.+\.\D{2,}$/", $sender_email)) $errors[] = $lang['error_email_wrong'];
 		if ($text == "") $errors[] = $lang['error_no_text'];
 
 		// check for not accepted words:
 		$result = mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1", $connid);
-		if(!$result) die($lang['db_error']);
+		if (!$result) die($lang['db_error']);
 		$data = mysql_fetch_assoc($result);
 		mysql_free_result($result);
 		if (trim($data['list']) != '')
@@ -130,7 +130,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 			$not_accepted_words = explode(',',trim($data['list']));
 			foreach ($not_accepted_words as $not_accepted_word)
 				{
-				if($not_accepted_word!='' && (preg_match("/".$not_accepted_word."/i",$sender_name) || preg_match("/".$not_accepted_word."/i",$sender_email) || preg_match("/".$not_accepted_word."/i",$subject) || preg_match("/".$not_accepted_word."/i",$text)))
+				if ($not_accepted_word!='' && (preg_match("/".$not_accepted_word."/i",$sender_name) || preg_match("/".$not_accepted_word."/i",$sender_email) || preg_match("/".$not_accepted_word."/i",$subject) || preg_match("/".$not_accepted_word."/i",$text)))
 					{
 					$errors[] = $lang['err_mail_not_accepted_word'];
 					break;
@@ -150,7 +150,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 					}
 				else
 					{
-					if($captcha->check_math_captcha($_SESSION['captcha_session'][2],$_POST['captcha_code'])!=TRUE) $errors[] = $lang['captcha_code_invalid'];
+					if ($captcha->check_math_captcha($_SESSION['captcha_session'][2],$_POST['captcha_code'])!=TRUE) $errors[] = $lang['captcha_code_invalid'];
 					}
 				}
 			}
@@ -169,7 +169,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 				}
 			$mailto = $name." <".$email.">";
 			$ip = $_SERVER["REMOTE_ADDR"];
-			$mail_text = stripslashes($text);
+			$mail_text = $text;
 			$mail_text .= "\n\n".str_replace("[forum_address]", $settings['forum_address'], $lang['msg_add']);
 			$header  = "From: ".$sender_name." <".$sender_email.">\n";
 			$header .= "Reply-To: ".$sender_name." <".$sender_email.">\n";
@@ -211,7 +211,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 $subnav_1 = '';
 if (isset($uid))
 	{
-	$subnav_1 .= '<a class="textlink" href="user.php?id='.$uid.'">'.$lang['back_linkname'].'</a>';
+	$subnav_1 .= '<a class="textlink" href="user.php?id='.intval($uid).'">'.$lang['back_linkname'].'</a>';
 	}
 else if (isset($forum_contact))
 	{
@@ -225,7 +225,7 @@ else
 	{
 	if (empty($view))
 		{
-		$subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.str_replace("[name]", htmlspecialchars(stripslashes($field["name"])), $lang['back_to_posting_linkname']).'</a>';
+		$subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.str_replace("[name]", htmlspecialchars($field["name"]), $lang['back_to_posting_linkname']).'</a>';
 		}
 	else
 		{
@@ -312,24 +312,24 @@ if (isset($id) || isset($uid) || isset($forum_contact))
     <tr>
     <td><b><?php echo $lang['name_marking_msg']; ?></b></td>
     <td><input type="text" name="sender_name" value="<?php
-		echo (isset($sender_name)) ? htmlspecialchars(stripslashes($sender_name)) : "";
+		echo (isset($sender_name)) ? htmlspecialchars($sender_name) : "";
 		?>" size="40" /></td>
     </tr>
     <tr>
     <td><b><?php echo $lang['email_marking_msg']; ?></b></td>
     <td><input type="text" name="sender_email" value="<?php
-		echo (isset($sender_email)) ? htmlspecialchars(stripslashes($sender_email)) : "";
+		echo (isset($sender_email)) ? htmlspecialchars($sender_email) : "";
 		?>" size="40" /></td>
     </tr>
     <tr>
     <td><b><?php echo $lang['subject_marking']; ?></b></td>
     <td><input type="text" name="subject" value="<?php
-		echo (isset($subject)) ? htmlspecialchars(stripslashes($subject)) : "";
+		echo (isset($subject)) ? htmlspecialchars($subject) : "";
 		?>" size="40" /></td>
     </tr>
     <tr>
     <td colspan="2"><textarea name="text" cols="60" rows="15"><?php
-		echo (isset($text)) ? htmlspecialchars(stripslashes($text)) : "";
+		echo (isset($text)) ? htmlspecialchars($text) : "";
 		?></textarea></td>
     </tr><?php
 		if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_contact']==1)
