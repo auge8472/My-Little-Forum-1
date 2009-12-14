@@ -968,13 +968,7 @@ if (empty($installed))
 				$output .= '<h2>'.$lang_add['installation_instructions'].'</h2>';
       		if(isset($errors))
 					{
-         		$output .= '<h3>'.$lang['error_headline'].'</h3>';
-         		$output .= '<ul>';
-         		foreach($errors as $error)
-         			{
-         			$output .= '<li>'.$error.'</li>';
-         			}
-        	 		$output .= '</ul>';
+         		$output .= errorMessages($errors);
 					}
 				$output .= '<form action="install.php" method="post">';
 				$output .= '<fieldset>';
@@ -1092,13 +1086,7 @@ if (empty($installed))
 				$output .= '<h2>'.$lang_add['update_instructions'].'</h2>';
       		if(isset($errors))
 					{
-         		$output .= '<h3>'.$lang['error_headline'].'</h3>';
-         		$output .= '<ul>';
-         		foreach($errors as $error)
-         			{
-         			$output .= '<li>'.$error.'</li>';
-         			}
-        	 		$output .= '</ul>';
+         		$output .= errorMessages($errors);
 					}
 				$output .= '<form action="install.php" method="post">';
 				if(isset($select_version) and isset($old_version))
