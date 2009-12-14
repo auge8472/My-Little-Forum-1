@@ -19,6 +19,25 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. #
 ###############################################################################
 
+
+#
+# Entferne bei aktivem magic_quotes_gpc die Slashes in den uebergebenen Werten
+# siehe: http://php.net/manual/en/security.magicquotes.disabling.html
+#
+/**
+ * disables magic_quotes from given variables of different types
+ *
+ * @param variable [$value]
+ * @return variable [$value]
+ * @since 1.7.7
+ * @link http://php.net/manual/en/security.magicquotes.disabling.html
+ */
+function stripslashes_deep($value) {
+$value = is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value);
+return $value;
+} # Ende: stripslashes_deep
+
+
 function get_settings() {
 global $lang, $connid, $db_settings, $settings;
 
@@ -127,6 +146,25 @@ if ($entry_count > $entries_per_page)
 	}
 return $output;
 } # End: nav
+
+
+/**
+ * amend the protocol to a given link
+ * @param string $link
+ * @return string $link
+ */
+function amendProtocol($link) {
+
+if (substr($pr_hp,0,7) != "http://"
+	&& substr($pr_hp,0,8) != "https://"
+	&& substr($pr_hp,0,6) != "ftp://"
+	&& substr($pr_hp,0,9) != "gopher://"
+	&& substr($pr_hp,0,7) != "news://")
+	{
+	$pr_hp = "http://".$pr_hp;
+	}
+return $link;
+} # End: amendProtocol
 
 // makes URLs clickable:
 function make_link($string) {
@@ -281,6 +319,25 @@ else @mysql_query("INSERT INTO ".$db_settings['useronline_table']." SET time='".
 #list($user_online) = @mysql_fetch_row(@mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table'], $connid));
 #return $user_online;
 } # End: user_online
+
+
+
+/**
+ * displays the error messages
+ *
+ * @param array $errors
+ * @return string $messages
+ */
+function errorMessages($error) {
+$r  = "<h3>".$lang['error_headline']."</h3>\n";
+$r .= "<ul>\n";
+foreach ($error as $err)
+	{
+	$r .= " <li>".htmlspecialchars($err)."</li>\n";
+	}
+$r .= "</ul>\n";
+return $r;
+} # End: errorMessages
 
 
 
