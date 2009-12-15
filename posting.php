@@ -870,14 +870,14 @@ if (($settings['access_for_users_only'] == 1
 								$emailbody = stripslashes($emailbody);
 #								$emailbody = str_replace(htmlspecialchars($settings['quote_symbol']), ">", $emailbody);
 								$emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
-								$header  = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
+								$header  = "From: ".mb_encode_mimeheader($settings['forum_name'],"UTF-8")." <".$settings['forum_email'].">\n";
 								#$header .= "Reply-To: $name <$absender>\n";
 								#$header .= "Reply-To: <".$forum_email.">\n";
 								$header .= "X-Mailer: Php/" . phpversion(). "\n";
 								$header .= "X-Sender-ip: $ip\n";
 								$header .= "Content-Type: text/plain; charset=UTF-8\n";
 								$header .= "Content-Transfer-Encoding: 8bit\n";
-								$an = $parent["name"]." <".$parent["email"].">";
+								$an = mb_encode_mimeheader($parent["name"],"UTF-8")." <".$parent["email"].">";
 								if ($settings['mail_parameter']!='')
 									{
 									if (@mail($an, $lang['email_subject'], $emailbody, $header,$settings['mail_parameter']))
@@ -924,7 +924,7 @@ if (($settings['access_for_users_only'] == 1
 						$emailbody = stripslashes($emailbody);
 #						$emailbody = str_replace(htmlspecialchars($settings['quote_symbol']), ">", $emailbody);
 						$emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
-						$header  = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
+						$header  = "From: ".mb_encode_mimeheader($settings['forum_name'],"UTF-8")." <".$settings['forum_email'].">\n";
 						$header .= "X-Mailer: Php/" . phpversion(). "\n";
 						$header .= "X-Sender-ip: $ip\n";
 						$header .= "Content-Type: text/plain charset=UTF-8;\n";
@@ -936,7 +936,7 @@ if (($settings['access_for_users_only'] == 1
 						while ($admin_array = mysql_fetch_assoc($en_result))
 							{
 							$ind_emailbody = str_replace("[admin]", $admin_array['user_name'], $emailbody);
-							$an = $admin_array['user_name']." <".$admin_array['user_email'].">";
+							$an = mb_encode_mimeheader($admin_array['user_name'],"UTF-8")." <".$admin_array['user_email'].">";
 							if ($settings['mail_parameter']!='')
 								{
 								if (@mail($an, $adminSubject, $ind_emailbody, $header, $settings['mail_parameter']))
