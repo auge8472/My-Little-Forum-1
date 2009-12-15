@@ -81,7 +81,8 @@ p.postingforma         { margin: 3px 0px 0px 0px; }
 
 .userdata              { margin: 0px; padding: 0px; font-family: verdana, arial, sans-serif; font-size: 13px; line-height: 19px; color: black; }
 .online                { font-size: 11px; color: red; }
-.code                  { font-family: courier-new, courier; font-size: 13px; color: #000080; }
+pre                    { width: 80%; background: #fff; border:3px double #000080; overflow:auto; padding: 10px; }
+code                   { font-family: monospace; font-size: 13px; color: #000080; }
 
 /* categories: */
 .category              { color: #000080; font-size: 11px; font-weight: normal; }

@@ -19,6 +19,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. #
 ###############################################################################
 
+require_once("function.tab2space.php");
 
 #
 # Entferne bei aktivem magic_quotes_gpc die Slashes in den uebergebenen Werten
@@ -220,10 +221,18 @@ return $pre."<a href=\"".$url."\">".$shortened_url."</a>";
 } # End: shorten_link
 
 function parse_code($string) {
-if(basename($_SERVER['PHP_SELF'])=='board_entry.php' || basename($_SERVER['PHP_SELF'])=='mix_entry.php') $p_class='postingboard'; else $p_class='posting';
+if (basename($_SERVER['PHP_SELF'])=='board_entry.php' || basename($_SERVER['PHP_SELF'])=='mix_entry.php')
+	{
+	$p_class='postingboard';
+	}
+else
+	{
+	$p_class='posting';
+	}
 $string = $string[1];
 $string = str_replace('<br />','',$string);
-$string = '</p><pre><span class="code">'.$string.'</span></pre><p class="'.$p_class.'">';
+$string = '</p><pre><code>'.$string.'</code></pre><p class="'.$p_class.'">';
+
 return $string;
 } # End: parse_code
 
