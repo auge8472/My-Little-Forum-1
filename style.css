@@ -45,7 +45,7 @@ input.searchfield      { font-size: 11px; width: 130px; }
 #bottom div.right      { margin: 0px; padding: 7px 20px 10px 0px; text-align: right; }
 
 .postingheadline       { margin: 0px 0px 2px 0px; padding: 0px; font-family: verdana, arial, sans-serif; font-size: 18px; font-weight: bold; }
-.posting               { margin: 0px 0px 0px 0px; padding: 0px; font-family: verdana, arial, sans-serif; font-size: 13px; line-height: 19px; color: black; max-width: 750px; }
+.posting               { margin: 0px 0px 0px 0px; padding: 0px; font-family: monospace; font-size: 13px; line-height: 19px; color: black; max-width: 750px; }
 .author                { margin-top: 1px; font-family: verdana, arial, sans-serif; font-size: 13px; line-height: 19px; color: black; font-style: italic; }
 .postingbottom         { clear:both; margin:25px 0px 0px 0px; padding: 0px 0px 0px 0px; }
 .postinganswer         { float: left; }
@@ -74,14 +74,14 @@ p.postingforma         { margin: 3px 0px 0px 0px; }
 .user-highlight        { color: #04a; }
 
 /* quoted text: */
-.citation              { color: #6f6f6f; font-style: italic; }
+.citation              { color: #6d6d6d; font-style: italic; }
 
 /* signatures: */
 .signature             { margin: 10px 0px 0px 0px; padding:0px; font-family: verdana, arial, sans-serif; font-size: 11px; line-height: 16px; color: #808080; font-weight: normal; max-width: 750px; }
 
 .userdata              { margin: 0px; padding: 0px; font-family: verdana, arial, sans-serif; font-size: 13px; line-height: 19px; color: black; }
 .online                { font-size: 11px; color: red; }
-pre                    { width: 80%; background: #fff; border:3px double #000080; overflow:auto; padding: 10px; }
+pre                    { width: 80%; background: #fff; overflow:auto; }
 code                   { font-family: monospace; font-size: 13px; color: #000080; }
 
 /* categories: */
