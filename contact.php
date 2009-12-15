@@ -19,7 +19,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. #
 ###############################################################################
 
-include("inc.php");
+include_once("inc.php");
 
 
 if (isset($_GET['id'])) $id = $_GET['id'];
@@ -271,7 +271,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 			}
 
 		?>
-    <form method="post" action="<?php echo $_SERVER["SCRIPT_NAME"]; ?>">
+    <form method="post" action="<?php echo $_SERVER["SCRIPT_NAME"]; ?>" accept-charset="UTF-8">
 		<?php
 		if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_contact']==1)
 			{
