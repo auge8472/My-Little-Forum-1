@@ -338,6 +338,8 @@ else @mysql_query("INSERT INTO ".$db_settings['useronline_table']." SET time='".
  * @return string $messages
  */
 function errorMessages($error) {
+global $lang;
+
 $r  = "<h3>".$lang['error_headline']."</h3>\n";
 $r .= "<ul>\n";
 foreach ($error as $err)
@@ -384,15 +386,15 @@ if ($mark_admin==true or $mark_mod==true or $mark_user==true)
 	$name  = '<span class="';
 	if ($mark_admin==true)
 		{
-		$name .= 'admin-highlight';
+		$name .= 'admin-highlight" title="Administrator';
 		}
 	else if ($mark_mod==true)
 		{
-		$name .= 'mod-highlight';
+		$name .= 'mod-highlight" title="Moderator';
 		}
 	else if ($mark_user==true)
 		{
-		$name .= 'user-highlight';
+		$name .= 'user-highlight" title="registrierter Benutzer';
 		}
 	$name .= '">'.htmlspecialchars(stripslashes($parent_array[$id]["name"])).'</span>';
 	}
