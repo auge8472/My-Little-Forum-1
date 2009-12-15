@@ -162,17 +162,18 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 			$headerTemplate .= "Content-Type: text/plain; charset=UTF-8\n";
 			$headerTemplate .= "Content-Transfer-Encoding: 8bit\n";
 			$mail_subject = ($_POST['subject'] != "") ? $subject : $lang['email_no_subject'];
+			$mail_subject = mb_encode_mimeheader($mail_subject,"UTF-8");
 			if (isset($forum_contact))
 				{
 				$name = $settings['forum_name'];
 				$email = $settings['forum_email'];
 				}
-			$mailto = $name." <".$email.">";
+			$mailto = mb_encode_mimeheader($name,"UTF-8")." <".$email.">";
 			$ip = $_SERVER["REMOTE_ADDR"];
 			$mail_text = $text;
 			$mail_text .= "\n\n".str_replace("[forum_address]", $settings['forum_address'], $lang['msg_add']);
-			$header  = "From: ".$sender_name." <".$sender_email.">\n";
-			$header .= "Reply-To: ".$sender_name." <".$sender_email.">\n";
+			$header  = "From: ".mb_encode_mimeheader($sender_name,"UTF-8")." <".$sender_email.">\n";
+			$header .= "Reply-To: ".mb_encode_mimeheader($sender_name,"UTF-8")." <".$sender_email.">\n";
 			$header .= $headerTemplate;
 			if ($settings['mail_parameter']!='')
 				{
@@ -190,17 +191,18 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 				$lang['conf_email_txt'] = str_replace("[recipient_name]", $name, $lang['conf_email_txt']);
 				$lang['conf_email_txt'] = str_replace("[subject]", $mail_subject, $lang['conf_email_txt']);
 				$lang['conf_email_txt'] .= "\n\n".stripslashes($text);
-				$conf_mailto = $sender_name." <".$sender_email.">";
+				$conf_mailto = mb_encode_mimeheader($sender_name,"UTF-8")." <".$sender_email.">";
 				$ip = $_SERVER["REMOTE_ADDR"];
-				$conf_header  = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
+				$conf_header  = "From: ".mb_encode_mimeheader($settings['forum_name'],"UTF-8")." <".$settings['forum_email'].">\n";
 				$conf_header .= $headerTemplate;
+				$confSubject = mb_encode_mimeheader($lang['conf_sj'],"UTF-8");
 				if ($settings['mail_parameter']!='')
 					{
-					@mail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt'], $conf_header, $settings['mail_parameter']);
+					@mail($conf_mailto, $confSubject, $lang['conf_email_txt'], $conf_header, $settings['mail_parameter']);
 					}
 				else
 					{
-					@mail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt'], $conf_header);
+					@mail($conf_mailto, $confSubject, $lang['conf_email_txt'], $conf_header);
 					}
 				}
 			}
