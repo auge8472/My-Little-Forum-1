@@ -929,6 +929,7 @@ if (($settings['access_for_users_only'] == 1
 						$header .= "X-Sender-ip: $ip\n";
 						$header .= "Content-Type: text/plain charset=UTF-8;\n";
 						$header .= "Content-Transfer-Encoding: 8bit\n";
+						$adminSubject = mb_encode_mimeheader(str_replace("[subject]", stripslashes($subject), $lang['admin_email_subject']),"UTF-8");
 						// Schauen, wer eine E-Mail-Benachrichtigung will:
 						$en_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_posting_notify='1'", $connid);
 						if (!$en_result) die($lang['db_error']);
@@ -938,14 +939,14 @@ if (($settings['access_for_users_only'] == 1
 							$an = $admin_array['user_name']." <".$admin_array['user_email'].">";
 							if ($settings['mail_parameter']!='')
 								{
-								if (@mail($an, str_replace("[subject]", stripslashes($subject), $lang['admin_email_subject']), $ind_emailbody, $header, $settings['mail_parameter']))
+								if (@mail($an, $adminSubject, $ind_emailbody, $header, $settings['mail_parameter']))
 									{
 									$sent2 = "ok";
 									}
 								}
 							else
 								{
-								if(@mail($an, str_replace("[subject]", stripslashes($subject), $lang['admin_email_subject']), $ind_emailbody, $header))
+								if(@mail($an, $adminSubject, $ind_emailbody, $header))
 									{
 									$sent2 = "ok";
 									}
@@ -1256,7 +1257,7 @@ if (($settings['access_for_users_only'] == 1
 					}
 
 				# error messages, if present:
-				if(isset($errors))
+				if (isset($errors))
 					{
 					echo errorMessages($errors);
 					}
@@ -1471,7 +1472,7 @@ if (($settings['access_for_users_only'] == 1
 						}
 					} # if (isset($preview) && empty($errors))
 		# Ende Vorschau
-				echo '<form action="posting.php" method="post" id="entryform">';
+				echo '<form action="posting.php" method="post" id="entryform" accept-charset="UTF-8">';
 				if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_posting']==1)
 					{
 					echo '<input type="hidden" name="'.session_name().'" value="'.session_id().'" />'."\n";
@@ -1741,7 +1742,7 @@ if (($settings['access_for_users_only'] == 1
 				echo ($field["pid"]==0) ? '<br />'.$lang['delete_whole_thread'] : '';
 				echo '</p>'."\n";
 				echo '<p><b>'.htmlspecialchars($field["subject"]).'</b>&nbsp;'.$lang['thread_info'].'</p>'."\n";
-				echo '<form action="posting.php" method="post">'."\n";
+				echo '<form action="posting.php" method="post" accept-charset="UTF-8">'."\n";
 				echo '<input type="hidden" name="action" value="delete ok" />'."\n";
 				echo '<input type="hidden" name="id" value="'.intval($id).'" />'."\n";
 				if (isset($view))
