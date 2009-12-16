@@ -102,7 +102,7 @@ $lang['mark_threads'] =                "mark threads...";
 // forum_entry.php:
 $lang['back_to_forum_linkname'] =      "Back to the forum";
 $lang['back_to_forum_linktitle'] =     "Back to the forum index page";
-$lang['forum_author_marking'] =        "posted by <b>[name]</b>[email_hp], [place, ][time]";
+$lang['forum_author_marking'] =        "posted by <b>[name]</b>[email_hp] - [place, ][time]";
 $lang['forum_edited_marking'] =        "(edited by [name] on [time])";
 $lang['forum_answer_linkname'] =       "Post reply";
 $lang['forum_answer_linktitle'] =      "Reply to this message";

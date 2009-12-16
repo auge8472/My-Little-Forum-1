@@ -98,7 +98,7 @@ $lang['mark_threads'] =                "Threads markieren...";
 // forum_entry.php:
 $lang['back_to_forum_linkname'] =      "zurück zum Forum";
 $lang['back_to_forum_linktitle'] =     "zur Forums-Übersicht";
-$lang['forum_author_marking'] =        "verfasst von <b>[name]</b>[email_hp], [place, ][time]";
+$lang['forum_author_marking'] =        "verfasst von <b>[name]</b>[email_hp] - [place, ][time]";
 $lang['forum_edited_marking'] =        "(editiert von [name], [time])";
 $lang['forum_answer_linkname'] =       "antworten";
 $lang['forum_answer_linktitle'] =      "auf dieses Posting antworten";
