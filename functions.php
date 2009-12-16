@@ -154,17 +154,17 @@ return $output;
  * @param string $link
  * @return string $link
  */
-function amendProtocol($link) {
+function amendProtocol($hp) {
 
-if (substr($pr_hp,0,7) != "http://"
-	&& substr($pr_hp,0,8) != "https://"
-	&& substr($pr_hp,0,6) != "ftp://"
-	&& substr($pr_hp,0,9) != "gopher://"
-	&& substr($pr_hp,0,7) != "news://")
+if (substr($hp,0,7) != "http://"
+	&& substr($hp,0,8) != "https://"
+	&& substr($hp,0,6) != "ftp://"
+	&& substr($hp,0,9) != "gopher://"
+	&& substr($hp,0,7) != "news://")
 	{
-	$pr_hp = "http://".$pr_hp;
+	$hp = "http://".$hp;
 	}
-return $link;
+return $hp;
 } # End: amendProtocol
 
 // makes URLs clickable:
@@ -381,7 +381,7 @@ if (($settings['admin_mod_highlight'] == 1 or $settings['user_highlight'] == 1) 
 		}
 	}
 
-if ($mark_admin==true or $mark_mod==true or $mark_user==true)
+if ($mark_admin===true or $mark_mod===true or $mark_user===true)
 	{
 	$name  = '<span class="';
 	if ($mark_admin==true)
@@ -396,16 +396,16 @@ if ($mark_admin==true or $mark_mod==true or $mark_user==true)
 		{
 		$name .= 'user-highlight" title="registrierter Benutzer';
 		}
-	$name .= '">'.htmlspecialchars(stripslashes($parent_array[$id]["name"])).'</span>';
+	$name .= '">'.htmlspecialchars($parent_array[$id]["name"]).'</span>';
 	}
 else
 	{
-	$name = htmlspecialchars(stripslashes($parent_array[$id]["name"]));
+	$name = htmlspecialchars($parent_array[$id]["name"]);
 	}
 
 if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1)
 	{
-	$sult = str_replace("[name]", htmlspecialchars(stripslashes($parent_array[$id]["name"])), $lang['show_userdata_linktitle']);
+	$sult = str_replace("[name]", htmlspecialchars($parent_array[$id]["name"]), $lang['show_userdata_linktitle']);
 	$thread_info_a = str_replace("[name]", $name."<a href=\"user.php?id=".$parent_array[$id]["user_id"]."\" title=\"".$sult."\"><img src=\"img/registered.gif\" alt=\"(R)\" width=\"10\" height=\"10\" /></a>", $lang['thread_info']);
 	}
 else if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1)
@@ -418,11 +418,11 @@ $thread_info_b = str_replace("[time]", strftime($lang['time_format'],$parent_arr
   ?><li><?php
 if ($id == $aktuellerEintrag && $parent_array[$id]["pid"]==0)
 	{
-    ?><span class="actthread"><?php echo htmlspecialchars(stripslashes($parent_array[$id]["subject"])); ?></span><?php
+    ?><span class="actthread"><?php echo htmlspecialchars($parent_array[$id]["subject"]); ?></span><?php
 	}
 else if ($id == $aktuellerEintrag && $parent_array[$id]["pid"]!=0)
 	{
-    ?><span class="actreply"><?php echo htmlspecialchars(stripslashes($parent_array[$id]["subject"])); ?></span><?php
+    ?><span class="actreply"><?php echo htmlspecialchars($parent_array[$id]["subject"]); ?></span><?php
 	}
 else
 	{
@@ -444,8 +444,8 @@ else
 		echo 'reply';
 		}
 	?>" href="forum_entry.php?id=<?php echo $parent_array[$id]['id'];
-	if ($page != 0 || $category != 0 || $order != 'time') echo '&amp;page='.$page.'&amp;category='.urlencode(stripslashes($category)).'&amp;order='.$order; ?>"><?php
-	echo htmlspecialchars(stripslashes($parent_array[$id]["subject"]));
+	if ($page != 0 || $category != 0 || $order != 'time') echo '&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order; ?>"><?php
+	echo htmlspecialchars($parent_array[$id]["subject"]);
 	?></a><?php
 	}
 
