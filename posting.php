@@ -250,7 +250,7 @@ if (($settings['access_for_users_only'] == 1
 							$p_category = $field["category"];
 							$text = $field["text"];
 							$aname = $field["name"];
-							$text = stripslashes($text);
+							$text = $text;
 							# Zitatzeichen an den Anfang jeder Zeile stellen:
 							$text = preg_replace("/^/m", $settings['quote_symbol']." ", $text);
 #							$text = addslashes($text);
@@ -921,7 +921,7 @@ if (($settings['access_for_users_only'] == 1
 							}
 						$emailbody = str_replace("[posting_address]", $adminPostAddress, $emailbody);
 						$emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
-						$emailbody = stripslashes($emailbody);
+						$emailbody = $emailbody;
 #						$emailbody = str_replace(htmlspecialchars($settings['quote_symbol']), ">", $emailbody);
 						$emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
 						$header  = "From: ".mb_encode_mimeheader($settings['forum_name'],"UTF-8")." <".$settings['forum_email'].">\n";
@@ -1736,7 +1736,7 @@ if (($settings['access_for_users_only'] == 1
 			break;
 			# End: switch ($show)->case "no authorization"
 			case "delete form":
-				$lang['thread_info'] = str_replace("[name]", htmlspecialchars(stripslashes($field["name"])), $lang['thread_info']);
+				$lang['thread_info'] = str_replace("[name]", htmlspecialchars($field["name"]), $lang['thread_info']);
 				$lang['thread_info'] = str_replace("[time]", strftime($lang['time_format'],$field["tp_time"]), $lang['thread_info']);
 				echo '<h2>'.$lang['delete_marking'].'</h2>'."\n";
 				echo '<p>'.$lang['delete_posting_sure'];
