@@ -186,7 +186,8 @@ $lang['error_not_accepted_word'] =     "das Posting enthält mindestens ein nich
 // E-Mail-Texte
 $lang['email_subject'] =               "Antwort auf Posting";
 $lang['email_text'] =                  "Hallo [recipient],\n[name] hat auf das Posting geantwortet:\n\nBetreff: [subject]\n\n[text]\n\nLink zum Eintrag: [posting_address]\n\n\n--- ursprüngliches Posting: ---\n\nBetreff: [original_subject]\n\n[original_text]";
-$lang['admin_email_subject'] =         "neuer Eintrag im Forum: [subject]";
+#$lang['admin_email_subject'] =         "neuer Eintrag im Forum: [subject]";
+$lang['admin_email_subject'] =         "neuer Eintrag im Forum";
 $lang['admin_email_text'] =            "Neuer Eintrag von [name]\n\nBetreff: [subject]\n\n[text]\n\nLink zum Eintrag: [posting_address]";
 $lang['admin_email_text_reply'] =      "Anwort von [name]\n\nBetreff: [subject]\n\n[text]\n\nLink zum Eintrag: [posting_address]";
 

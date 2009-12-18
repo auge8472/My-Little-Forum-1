@@ -929,7 +929,8 @@ if (($settings['access_for_users_only'] == 1
 						$header .= "X-Sender-ip: $ip\n";
 						$header .= "Content-Type: text/plain charset=UTF-8;\n";
 						$header .= "Content-Transfer-Encoding: 8bit\n";
-						$adminSubject = mb_encode_mimeheader(str_replace("[subject]", stripslashes($subject), $lang['admin_email_subject']),"UTF-8");
+						$adminSubject = mb_encode_mimeheader($lang['admin_email_subject'],"UTF-8");
+#						$adminSubject = mb_encode_mimeheader(str_replace("[subject]", stripslashes($subject), $lang['admin_email_subject']),"UTF-8");
 						// Schauen, wer eine E-Mail-Benachrichtigung will:
 						$en_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_posting_notify='1'", $connid);
 						if (!$en_result) die($lang['db_error']);
