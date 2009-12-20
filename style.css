@@ -107,8 +107,8 @@ div.preview            { font-family: verdana, arial, helvetica, sans-serif; fon
 
 table.normaltab        { width: 100%; border: 1px solid #bacbdf; }
 table.normaltab th     { font-family: verdana, arial, sans-serif; vertical-align: top; font-size: 13px; font-weight: bold; text-align:left; color: #000000; background:#d2ddea; background-image:url(img/bg_th.gif); background-repeat: repeat-x; background-position: bottom; }
-table.normaltab td.a   { font-family: verdana, arial, sans-serif; vertical-align: top; font-size: 13px; font-weight: normal; color: #000000; background: #f5f5f5; }
-table.normaltab td.b   { font-family: verdana, arial, sans-serif; vertical-align: top; font-size: 13px; font-weight: normal; color: #000000; background: #f9f9f9; }
+table.normaltab tr.a   { font-family: verdana, arial, sans-serif; vertical-align: top; font-size: 13px; font-weight: normal; color: #000000; background: #f5f5f5; }
+table.normaltab tr.b   { font-family: verdana, arial, sans-serif; vertical-align: top; font-size: 13px; font-weight: normal; color: #000000; background: #f9f9f9; }
 table.normaltab td.c   { width:150px; font-family: verdana, arial, sans-serif; vertical-align: top; font-size: 13px; font-weight: normal; color: #000000; background: #d2ddea; background-image:url(img/bg_author.gif); background-repeat: repeat-y; background-position: right; }
 table.normaltab td.d   { font-family: verdana, arial, sans-serif; vertical-align: top; font-size: 13px; font-weight: normal; color: #000000; background: #f5f5f5; }
 
