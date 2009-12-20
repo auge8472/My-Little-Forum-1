@@ -118,11 +118,7 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
       ?></ul><?php
       mysql_free_result($thread_result);
     }
-
-    if(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=='admin')
-     {
-      ?><p class="marked-threads"><img src="img/marked.gif" alt="[x]" width="9" height="9" /> <?php echo $lang['marked_threads_actions']; ?> <a href="admin.php?action=delete_marked_threads"><?php echo $lang['delete_marked_threads']; ?></a> - <a href="admin.php?action=lock_marked_threads"><?php echo $lang['lock_marked_threads']; ?></a> - <a href="admin.php?action=unlock_marked_threads"><?php echo $lang['unlock_marked_threads']; ?></a> - <a href="admin.php?action=unmark"><?php echo $lang['unmark_threads']; ?></a> - <a href="admin.php?action=invert_markings"><?php echo $lang['invert_markings']; ?></a> - <a href="admin.php?action=mark_threads"><?php echo $lang['mark_threads']; ?></a></p><?php
-     }
+    echo outputManipulateMarked();
    }
   else
    {

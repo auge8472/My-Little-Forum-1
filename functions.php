@@ -19,7 +19,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. #
 ###############################################################################
 
-require_once("function.tab2space.php");
+#require_once("function.tab2space.php");
+require_once('functions/funcs.output.php');
 
 #
 # Entferne bei aktivem magic_quotes_gpc die Slashes in den uebergebenen Werten

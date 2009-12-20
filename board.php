@@ -468,25 +468,7 @@ if($settings['access_for_users_only']  == 1
 			} # End: while ()
 		echo "\n".'</table>'."\n";
 		mysql_free_result($result);
-		if(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=='admin')
-			{
-			echo '<p class="marked-threads-board">'."\n";
-			echo '<img src="img/marked.gif" alt="[x]" width="9" height="9" /> ';
-			echo $lang['marked_threads_actions']."\n";
-			echo '<a href="admin.php?action=delete_marked_threads&amp;refer=board">';
-			echo $lang['delete_marked_threads'].'</a> - '."\n";
-			echo '<a href="admin.php?action=lock_marked_threads&amp;refer=board">';
-			echo $lang['lock_marked_threads'].'</a> - '."\n";
-			echo '<a href="admin.php?action=unlock_marked_threads&amp;refer=board">';
-			echo $lang['unlock_marked_threads'].'</a> - '."\n";
-			echo '<a href="admin.php?action=unmark&amp;refer=board">';
-			echo $lang['unmark_threads'].'</a> - '."\n";
-			echo '<a href="admin.php?action=invert_markings&amp;refer=board">';
-			echo $lang['invert_markings'].'</a> - '."\n";
-			echo '<a href="admin.php?action=mark_threads&amp;refer=board">';
-			echo $lang['mark_threads'].'</a>'."\n";
-			echo '</p>'."\n";
-			}
+		echo outputManipulateMarked('board');
 		} # End: if ($thread_count > 0 && isset($result))
 	else
 		{
