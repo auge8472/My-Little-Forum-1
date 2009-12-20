@@ -875,7 +875,7 @@ if (($settings['access_for_users_only'] == 1
 								#$header .= "Reply-To: <".$forum_email.">\n";
 								$header .= "X-Mailer: Php/" . phpversion(). "\n";
 								$header .= "X-Sender-ip: $ip\n";
-								$header .= "Content-Type: text/plain; charset=UTF-8\n";
+								$header .= "Content-Type: text/plain; charset=UTF-8; format=flowed\n";
 								$header .= "Content-Transfer-Encoding: 8bit\n";
 								$an = mb_encode_mimeheader($parent["name"],"UTF-8")." <".$parent["email"].">";
 								if ($settings['mail_parameter']!='')
@@ -927,7 +927,7 @@ if (($settings['access_for_users_only'] == 1
 						$header  = "From: ".mb_encode_mimeheader($settings['forum_name'],"UTF-8")." <".$settings['forum_email'].">\n";
 						$header .= "X-Mailer: Php/" . phpversion(). "\n";
 						$header .= "X-Sender-ip: $ip\n";
-						$header .= "Content-Type: text/plain charset=UTF-8;\n";
+						$header .= "Content-Type: text/plain; charset=UTF-8; format=flowed\n";
 						$header .= "Content-Transfer-Encoding: 8bit\n";
 						$adminSubject = mb_encode_mimeheader($lang['admin_email_subject'],"UTF-8");
 #						$adminSubject = mb_encode_mimeheader(str_replace("[subject]", stripslashes($subject), $lang['admin_email_subject']),"UTF-8");
