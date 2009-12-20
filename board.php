@@ -61,6 +61,7 @@ if($settings['access_for_users_only']  == 1
 	$ul = $page * $settings['topics_per_page'];
 
 	# database request
+	# no categories defined
 	if ($categories == false)
 		{
 		$threadsNoCatsQuery = "SELECT
