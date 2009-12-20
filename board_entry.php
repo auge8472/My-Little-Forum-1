@@ -570,7 +570,7 @@ if ($settings['access_for_users_only'] == 1
 				}
 			else if ($mark_user===true)
 				{
-				echo '<span class="mod-highlight" title="registrierter Benutzer">';
+				echo '<span class="user-highlight" title="registrierter Benutzer">';
 				}
 			echo '<b>'.htmlspecialchars($entrydata["name"]).'</b>';
 			if ($settings['show_registered'] ==1)
