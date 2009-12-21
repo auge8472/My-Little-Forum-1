@@ -4,6 +4,7 @@ $lang['charset'] =                     "utf-8";
 $lang['additional_language_file'] =    "german_add.php";
 $lang['locale'] =                      array("de","de_DE@euro","deu");
 $lang['time_format'] =                 "%d.%m.%Y, %H:%M";
+$lang['time_format_sql'] =             "%d.%m.%Y, %H:%i";
 $lang['yes'] =                         "ja";
 $lang['no'] =                          "nein";
 $lang['error_headline'] =              "Fehler:";

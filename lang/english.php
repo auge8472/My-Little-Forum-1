@@ -4,10 +4,11 @@
 // "\n" stands for line feed in some strings
 
 $lang['language'] =                    "en";
-$lang['charset'] =                     "ISO-8859-1";
+$lang['charset'] =                     "UTF-8";
 $lang['additional_language_file'] =    "english_add.php";
 $lang['locale'] =                      array("en", "en_EN@euro", "eng");
 $lang['time_format'] =                 "%d.%m.%Y, %H:%M";
+$lang['time_format_sql'] =             "%d.%m.$Y, %H:%i"
 $lang['yes'] =                         "yes";
 $lang['no'] =                          "no";
 $lang['error_headline'] =              "Error:";
