@@ -219,33 +219,7 @@ if ($settings['access_for_users_only'] == 1
 		}
 	$subnav_2 .= nav($page, $settings['topics_per_page'], $thread_count, $order, $descasc, $category);
 	$categories = get_categories();
-	if ($categories!=false && $categories != "not accessible")
-		{
-		$subnav_2 .= '&nbsp;&nbsp;<form method="get" action="mix.php" title="'.$lang['choose_category_formtitle'].'"><div style="display: inline;"><select class="kat" size="1" name="category" onchange="this.form.submit();">';
-		if (isset($category) && $category==0)
-			{
-			$subnav_2 .= '<option value="0" selected="selected">'.$lang['show_all_categories'].'</option>';
-			}
-		else
-			{
-			$subnav_2 .= '<option value="0">'.$lang['show_all_categories'].'</option>';
-			}
-		while(list($key, $val) = each($categories))
-			{
-			if($key!=0)
-				{
-				if($key==$category)
-					{
-					$subnav_2 .= '<option value="'.$key.'" selected="selected">'.$val.'</option>';
-					}
-				else
-					{
-					$subnav_2 .= '<option value="'.$key.'">'.$val.'</option>';
-					}
-				}
-			}
-		$subnav_2 .= '</select><noscript> <input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></noscript></div></form>';
-		}
+	$subnav_2 .= outputCategoriesList($categories, $category);
 
 	parse_template();
 	echo $header;

@@ -11,7 +11,8 @@
  * generates the list of functions
  * to manipulate marked threads
  *
- * @param 
+ * @param string $refer
+ * @return string $output
  */
 function outputManipulateMarked($refer='') {
 global $settings,$lang;
@@ -37,6 +38,35 @@ if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 	$r .= '<a href="admin.php?action=mark_threads'.$ref.'">';
 	$r .= $lang['mark_threads'].'</a>'."\n";
 	$r .= '</p>'."\n";
+	}
+
+return $r;
+} # End: outputManipulateMarked
+
+
+
+function outputCategoriesList($categories, $category) {
+global $lang;
+
+$r = '';
+
+if($categories != false && $categories != "not accessible")
+	{
+	$r .= '&nbsp;&nbsp;<form method="get" action="forum.php" title="'.$lang['choose_category_formtitle'].'" style="display: inline;">'."\n";
+	$r .= '<select class="kat" size="1" name="category" onchange="this.form.submit();">'."\n";
+	$r .= '<option value="0"';
+	$r .= (isset($category) && $category==0) ? ' selected="selected"' : '';
+	$r .= '>'.$lang['show_all_categories'].'</option>'."\n";
+	while(list($key, $val) = each($categories))
+		{
+		if($key!=0)
+			{
+			$r .= '<option value="'.$key.'"';
+			$r .= ($key==$category) ? ' selected="selected"' : '';
+			$r .= '>'.$val.'</option>'."\n";
+			}
+		}
+	$r .= '</select>'."\n".'<noscript> <input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></noscript></form>'."\n";
 	}
 
 return $r;

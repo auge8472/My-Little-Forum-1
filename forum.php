@@ -123,23 +123,7 @@ if ($settings['access_for_users_only'] == 1
 		}
 	$subnav_2 .= nav($page, (int)$settings['topics_per_page'], $thread_count, $order, $descasc, $category);
 
-	if($categories!=false)
-		{
-		$subnav_2 .= '&nbsp;&nbsp;<form method="get" action="forum.php" title="'.$lang['choose_category_formtitle'].'"><div style="display: inline;"><select class="kat" size="1" name="category" onchange="this.form.submit();">';
-		$subnav_2 .= '<option value="0"';
-		$subnav_2 .= (isset($category) && $category==0) ? ' selected="selected"' : '';
-		$subnav_2 .= '>'.$lang['show_all_categories'].'</option>'."\n";
-		while(list($key, $val) = each($categories))
-			{
-			if($key!=0)
-				{
-				$subnav_2 .= '<option value="'.$key.'"';
-				$subnav_2 .= ($key==$category) ? ' selected="selected"' : '';
-				$subnav_2 .= '>'.$val.'</option>';
-				}
-			}
-		$subnav_2 .= '</select><noscript> <input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></noscript></div></form>'."\n";
-		}
+	$subnav_2 .= outputCategoriesList($categories, $category);
 
 	parse_template();
 	echo $header;
