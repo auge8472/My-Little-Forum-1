@@ -59,7 +59,7 @@ $r = '';
 
 if($categories != false && $categories != "not accessible")
 	{
-	$r .= '&nbsp;&nbsp;<form method="get" action="forum.php" title="'.$lang['choose_category_formtitle'].'" style="display: inline;">'."\n";
+	$r .= '&nbsp;&nbsp;<form method="get" action="'.$_SERVER['SCRIPT_NAME'].'" title="'.$lang['choose_category_formtitle'].'" style="display: inline;">'."\n";
 	$r .= '<select class="kat" size="1" name="category" onchange="this.form.submit();">'."\n";
 	$r .= '<option value="0"';
 	$r .= (isset($category) && $category==0) ? ' selected="selected"' : '';
