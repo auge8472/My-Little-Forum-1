@@ -135,6 +135,10 @@ if ($settings['access_for_users_only'] == 1
 					{
 					$mark_mod = true;
 					}
+				else if ($userdata["user_type"] == "user" && $settings['user_highlight'] == 1)
+					{
+					$mark_user = true;
+					}
 				if ($entrydata["show_signature"]==1)
 					{
 					$signature = $userdata["signature"];
@@ -210,9 +214,9 @@ if ($settings['access_for_users_only'] == 1
 		}
 	if ($entrydata["hp"]!="")
 		{
-		$entrydata["hp"] = amendProtocol($entrydata["hp"]);
+		$entrydata["hp"] = amendProtocol($entrydata["hp"]);	
+		$email_hp .= '<a href="'.$entrydata["hp"].'" title="'.htmlspecialchars($entrydata["hp"]).'"><img src="img/homepage.gif" alt="'.$lang['homepage_alt'].'" width="13" height="13" /></a>';
 		}
-	$email_hp .= '<a href="'.$entrydata["hp"].'" title="'.htmlspecialchars($entrydata["hp"]).'"><img src="img/homepage.gif" alt="'.$lang['homepage_alt'].'" width="13" height="13" /></a>';
 	if (($entrydata["email"]!="" && $entrydata["hide_email"] != 1) && $entrydata["hp"]!="") 
 		{
 		$email_hp .= "&nbsp;";
