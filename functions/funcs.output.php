@@ -45,6 +45,13 @@ return $r;
 
 
 
+/**
+ * generates the form for categories
+ *
+ * @param array $categories
+ * @param integer $category
+ * @return string $output
+ */
 function outputCategoriesList($categories, $category) {
 global $lang;
 
