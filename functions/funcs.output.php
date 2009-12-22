@@ -16,6 +16,7 @@
  */
 function outputManipulateMarked($refer='') {
 global $settings,$lang;
+
 $r  = '';
 
 if (isset($_SESSION[$settings['session_prefix'].'user_type'])
@@ -77,6 +78,27 @@ if($categories != false && $categories != "not accessible")
 	}
 
 return $r;
-}
+} # End: outputCategoriesList
+
+
+
+/**
+ * generates the link to the posting form in top- and subnavigation
+ *
+ * @param integer $category
+ * @param string $view (optional)
+ * @return string $output
+ */
+function outputPostingLink($category,$view="forum") {
+global $lang;
+
+$r = '';
+
+$r .= '<a class="textlink" href="posting.php?view='.$view;
+$r .= !empty($category) ? '&amp;category='.$category : '';
+$r .= '" title="'.$lang['new_entry_linktitle'].'">'.$lang['new_entry_linkname'].'</a>';
+
+return $r;
+} # End: outputPostingLink
 
 ?>

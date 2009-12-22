@@ -195,7 +195,7 @@ if ($settings['access_for_users_only'] == 1
 		mysql_free_result($pid_result);
 		}
 
-	$subnav_1 = '<a class="textlink" href="posting.php?view=mix&amp;category='.$category.'" title="'.$lang['new_entry_linktitle'].'">'.$lang['new_entry_linkname'].'</a>';
+	$subnav_1 = outputPostingLink($category,"mix");
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{

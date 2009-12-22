@@ -140,7 +140,7 @@ if($settings['access_for_users_only']  == 1
 
 	$category = stripslashes($category);
 
-	$subnav_1 = '<a class="textlink" href="posting.php?view=board&amp;category='.$category.'" title="'.$lang['new_entry_linktitle'].'">'.$lang['new_entry_linkname'].'</a>';
+	$subnav_1 = outputPostingLink($category,"board");
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
