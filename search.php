@@ -19,6 +19,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. #
 ###############################################################################
 
+include("inc.php");
+
 if(count($_GET) > 0)
 foreach($_GET as $key => $value)
 $$key = $value;
@@ -26,26 +28,24 @@ if(count($_POST) > 0)
 foreach($_POST as $key => $value)
 $$key = $value;
 
-include("inc.php");
-
 // Seiten-Navigation für suche.php
 function snav($page, $suchergebnisse, $count, $search, $ao, $category) {global $lang;
 $output = '';if ($count > $suchergebnisse)
 	{	$new_index_before = $page - 1;	$new_index_after = $page + 1;	$site_count = ceil($count / $suchergebnisse);	if ($new_index_before >= 0)
 		{
-		$output .= '<a href="'.basename($_SERVER["SCRIPT_NAME"]).'?search='.$search;
+		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?search='.$search;
 		$output .= '&amp;category='.$category.'&amp;ao='.$ao.'&amp;page='.$new_index_before;
 		$output .= '" title="'.$lang['previous_page_linktitle'].'"><b>&laquo;</b></a>&nbsp;';
 		}
 
 	if ($page == 3)
 		{
-		$output .= '<a href="'.basename($_SERVER["SCRIPT_NAME"]).'?search='.$search;
+		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?search='.$search;
 		$output .= '&amp;category='.$category.'&amp;ao='.$ao.'&amp;page=0"><b>1</b></a>&nbsp;';
 		}
 	else if ($page > 3)
 		{
-		$output .= '<a href="'.basename($_SERVER["SCRIPT_NAME"]).'?search='.$search;
+		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?search='.$search;
 		$output .= '&amp;category='.$category.'&amp;ao='.$ao.'&amp;page=0">';
 		$output .= '<b>1</b></a>&nbsp;<b>...</b>&nbsp;';
 		}
@@ -57,7 +57,7 @@ function snav($page, $suchergebnisse, $count, $search, $ao, $category) {global 
 			{
 			if ($page != $pagen_nr)
 				{
-				$output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='.$search;
+				$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?search='.$search;
 				$output .= '&amp;category='.$category.'&amp;ao='.$ao.'&amp;page=';
 				$output .= $pagen_nr.'"><b>'.($pagen_nr+1).'</b></a>&nbsp;';
 				}
@@ -70,7 +70,7 @@ function snav($page, $suchergebnisse, $count, $search, $ao, $category) {global 
 
 	if ($new_index_after < $site_count)
 		{
-		$output .= '<a href="'.basename($_SERVER["SCRIPT_NAME"]).'?search='.$search;
+		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?search='.$search;
 		$output .= '&amp;category='.$category.'&amp;ao='.$ao.'&amp;page='.$new_index_after;
 		$output .= '" title="'.$lang['next_page_linktitle'].'"><b>&raquo;</b></a>';
  		}
@@ -88,7 +88,7 @@ if ($count > $how_many_per_page)
 	{
 	if (($page-1) >= 0)
 		{
-		$output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?show_postings='.$show_postings;
+		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?show_postings='.$show_postings;
 		$output .= '&amp;page='.($page-1).'" title="'.$lang['previous_page_linktitle'];
 		$output .= '"><b>&laquo;</b></a>&nbsp;';
 		}
@@ -100,7 +100,7 @@ if ($count > $how_many_per_page)
 		}
 	else
 		{
-		$output .= '<a href="'.basename($_SERVER["SCRIPT_NAME"]).'?show_postings=';
+		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?show_postings=';
 		$output .= $show_postings.'&amp;page=0"><b>1</b></a>&nbsp;';
 		}
 
@@ -114,14 +114,14 @@ if ($count > $how_many_per_page)
 				}
 			else
 				{
-				$output .= '<a href="'.basename($_SERVER["SCRIPT_NAME"]).'?show_postings=';
+				$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?show_postings=';
 				$output .= $show_postings.'&amp;page='.($x-1).'"><b>'.$x.'</b></a>&nbsp;';
 				}
 			}
 		}
 	if (($page+1) < $page_count)
 		{
-		$output .= '<a href="'.basename($_SERVER["SCRIPT_NAME"]).'?show_postings=';
+		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?show_postings=';
 		$output .= $show_postings.'&amp;page='.($page+1).'" title="';
 		$output .= $lang['next_page_linktitle'].'"><b>&raquo;</b></a>';
 		}
@@ -177,10 +177,6 @@ tid,
 UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
 subject,
 name,
-email,
-hp,
-place,
-text,
 category
 FROM ".$db_settings['forum_table']."
 WHERE ".$search_string;
@@ -216,15 +212,15 @@ if (isset($search) && empty($show_postings))
 	{
 	if ($search != "" && $ao=="phrase")
 		{
-		$subnav_1 .= $lang['phrase']." <b>".htmlspecialchars(stripslashes($search))."</b>";
+		$subnav_1 .= $lang['phrase']." <b>".htmlspecialchars($search)."</b>";
 		}
 	else if ($search != "" && count($search_array) == 1)
 		{
-		$subnav_1 .= $lang['search_term']." <b>".htmlspecialchars(stripslashes($search_anz))."</b>";
+		$subnav_1 .= $lang['search_term']." <b>".htmlspecialchars($search_anz)."</b>";
 		}
 	else if ($search != "" && count($search_array) > 1)
 		{
-		$subnav_1 .= $lang['search_term']." <b>".htmlspecialchars(stripslashes($search_anz))."</b>";
+		$subnav_1 .= $lang['search_term']." <b>".htmlspecialchars($search_anz)."</b>";
 		}
 	else
 		{
@@ -259,8 +255,8 @@ else if (isset($show_postings) && empty($search))
 	if (!$user_name_result) die($lang['db_error']);
 	$field = mysql_fetch_array($user_name_result);
 	mysql_free_result($user_name_result);
-	$lang['show_userdata_linktitle'] = str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['show_userdata_linktitle']);
-	$lang['postings_by_user'] = str_replace('[name]', '<a href="user.php?id='.$show_postings.'" title="'.$lang['show_userdata_linktitle'].'">'.htmlspecialchars(stripslashes($field["user_name"])).'</a>', $lang['postings_by_user']);
+	$lang['show_userdata_linktitle'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['show_userdata_linktitle']);
+	$lang['postings_by_user'] = str_replace('[name]', '<a href="user.php?id='.$show_postings.'" title="'.$lang['show_userdata_linktitle'].'">'.htmlspecialchars($field["user_name"]).'</a>', $lang['postings_by_user']);
 	$subnav_1 .= '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['postings_by_user'].'</b>';
 	}
 
@@ -277,7 +273,7 @@ echo $header;
 
 if (isset($search))
 	{
-	$search_match = htmlspecialchars(stripslashes($search));
+	$search_match = htmlspecialchars($search);
 	}
 else
 	{
@@ -312,10 +308,18 @@ if (isset($search) && empty($show_postings))
 		?></select> <?php
 		}
 ?><input type="submit" name="" value="<?php echo $lang['search_submit']; ?>" /><br />
-<input type="radio" name="ao" value="and"<?php if ($ao == "and") echo 'checked="checked"'; ?> /><?php echo $lang['search_and']; ?>&nbsp;<input type="radio" class="search-radio" name="ao" value="or"<?php if ($ao == "or") echo 'checked="checked"'; ?> /><?php echo $lang['search_or']; ?>&nbsp;<input type="radio" class="search-radio" name="ao" value="phrase"<?php if ($ao == "phrase") echo 'checked="checked"'; ?> /><?php echo $lang['search_phrase']; ?></div></form>
+<input type="radio" name="ao" value="and"<?php if ($ao == "and") echo ' checked="checked"'; ?> /><?php echo $lang['search_and']; ?>&nbsp;<input type="radio" class="search-radio" name="ao" value="or"<?php if ($ao == "or") echo ' checked="checked"'; ?> /><?php echo $lang['search_or']; ?>&nbsp;<input type="radio" class="search-radio" name="ao" value="phrase"<?php if ($ao == "phrase") echo ' checked="checked"'; ?> /><?php echo $lang['search_phrase']; ?></div></form>
 <?php
 	}
-
+/*
+if (!empty($result))
+	{
+	while ($res = mysql_fetch_assoc($result))
+		{
+		echo "<pre>".print_r($res,true)."</pre>\n";
+		}
+	}
+*/
 if ($count == 0 && $search != "")
 	{
 	echo '<p class="caution">';
@@ -340,55 +344,58 @@ if ($count == 0 && $search != "")
 
 if (isset($search) && $search != "" || isset($show_postings) && $show_postings !="")
 	{
+	echo "<ul id=\"searchresults\">\n";
 	$i=0;
-	while ($entrydata = mysql_fetch_array($result))
+	while ($entrydata = mysql_fetch_assoc($result))
 		{
-		$search_author_info_x = str_replace("[name]", htmlspecialchars(stripslashes($entrydata["name"])), $lang['search_author_info']);
-		}
-	$search_author_info_x = str_replace("[time]", strftime($lang['time_format'],$entrydata["Uhrzeit"]), $search_author_info_x);
-	?><p class="searchresults"><a class="<?php if ($entrydata["pid"] == 0) echo "thread"; else echo "reply-search"; ?>" href="<?php
-	if (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="board")
-		{
-		echo 'board_entry.php?id='.$entrydata["tid"].'#p'.$entrydata["id"];
-		}
-	else if (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="thread")
-		{
-		echo 'forum_entry.php?id='.$entrydata["id"];
-		}
-	else if (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="mix")
-		{
-		echo 'mix_entry.php?id='.$entrydata["tid"].'#p'.$entrydata["id"];
-		}
-	else if (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="board")
-		{
-		echo 'board_entry.php?id='.$entrydata["tid"].'#p'.$entrydata["id"];
-		}
-	else if (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="thread")
-		{
-		echo 'forum_entry.php?id='.$entrydata["id"];
-		}
-	else if (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="mix")
-		{
-		echo 'mix_entry.php?id="'.$entrydata["tid"].'#p'.$entrydata["id"];
-		}
-	else if (isset($standard) && $standard=="board")
-		{
-		echo 'board_entry.php?id='.$entrydata["tid"].'#p'.$entrydata["id"];
-		}
-	else if (isset($standard) && $standard=="mix")
-		{
-		echo 'mix_entry.php?id='.$entrydata["tid"].'#p'.$entrydata["id"];
-		}
-	else
-		{
-		echo "forum_entry.php?id=".$entrydata["id"]; ?>"><?php echo htmlspecialchars(stripslashes($entrydata["subject"])); ?></a> <?php
+		$search_author_info_x = str_replace("[name]", htmlspecialchars($entrydata["name"]), $lang['search_author_info']);
+		$search_author_info_x = str_replace("[time]", strftime($lang['time_format'],$entrydata["Uhrzeit"]), $search_author_info_x);
+		?><li><a class="<?php echo ($entrydata['pid'] == 0) ? 'thread' : 'reply-search'; ?>" href="<?php
+		if (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=='board')
+			{
+			echo 'board_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
+			}
+		else if (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=='thread')
+			{
+			echo 'forum_entry.php?id='.$entrydata['id'];
+			}
+		else if (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=='mix')
+			{
+			echo 'mix_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
+			}
+		else if (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=='board')
+			{
+			echo 'board_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
+			}
+		else if (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=='thread')
+			{
+			echo 'forum_entry.php?id='.$entrydata['id'];
+			}
+		else if (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=='mix')
+			{
+			echo 'mix_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
+			}
+		else if (isset($standard) && $standard=='board')
+			{
+			echo 'board_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
+			}
+		else if (isset($standard) && $standard=='mix')
+			{
+			echo 'mix_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
+			}
+		else
+			{
+			echo 'forum_entry.php?id='.$entrydata['id'];
+			}
+		echo '">'.htmlspecialchars($entrydata['subject']).'</a> ';
 		echo $search_author_info_x;
 		if (isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='')
 			{
-			echo ' <span class="category">('.$categories[$entrydata["category"]].')</span>'; ?></p><?php
+			echo ' <span class="category">('.$categories[$entrydata["category"]].')</span>';
 			}
+		echo '</li>'."\n";
 		}
+	echo "</ul>\n";
 	}
+echo $footer;
 ?>
-<br />
-<?php echo $footer; ?>
