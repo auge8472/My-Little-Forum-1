@@ -352,7 +352,7 @@ if ($settings['access_for_users_only'] == 1
 		if ($thread["hp"]!="")
 			{
 			$thread["hp"] = amendProtocol($thread["hp"]);
-			echo "<a href=\"".$thread["hp"]."\" title=\"".htmlspecialchars(stripslashes($thread["hp"]))."\"><img src=\"img/homepage.gif\" alt=\"".$lang['homepage_alt']."\" width=\"13\" height=\"13\" /></a>";
+			echo "<a href=\"".$thread["hp"]."\" title=\"".htmlspecialchars($thread["hp"])."\"><img src=\"img/homepage.gif\" alt=\"".$lang['homepage_alt']."\" width=\"13\" height=\"13\" /></a>";
 			}
 		if (($thread["email"]!="" && $thread["hide_email"] != 1) && $thread["hp"]!="")
 			{
@@ -379,6 +379,7 @@ if ($settings['access_for_users_only'] == 1
 			{
 			echo htmlspecialchars($thread["place"]).", <br />";
 			}
+		echo 'Posting:&nbsp;<span class="id">#&nbsp;'.$thread['id'].'</span><br />';
 		echo strftime($lang['time_format'],$thread["Uhrzeit"]);
 		if ($thread["edited_diff"] > 0
 		&& $thread["edited_diff"] > $thread["time"]
@@ -513,7 +514,7 @@ if ($settings['access_for_users_only'] == 1
 		echo '</tr>';
 		}
 	$i=0;
-	while ($entrydata = mysql_fetch_array($result))
+	while ($entrydata = mysql_fetch_assoc($result))
 		{
 		unset($signature);
 		$mark_admin = false;
@@ -549,7 +550,7 @@ if ($settings['access_for_users_only'] == 1
 
 		# Posting heraussuchen, auf das geantwortet wurde:
 		$result_a = mysql_query("SELECT name FROM ".$db_settings['forum_table']." WHERE id = ".$entrydata["pid"], $connid);
-		$posting_a = mysql_fetch_array($result_a);
+		$posting_a = mysql_fetch_assoc($result_a);
 		mysql_free_result($result_a);
 
 		echo '<tr>'."\n";
@@ -659,6 +660,7 @@ if ($settings['access_for_users_only'] == 1
 			echo htmlspecialchars($entrydata["place"]);
 			echo ', <br />';
 			}
+		echo 'Posting:&nbsp;<span class="id">#&nbsp;'.$entrydata['id'].'</span><br />';
 		echo strftime($lang['time_format'],$entrydata["Uhrzeit"]);
 		if ($entrydata["edited_diff"] > 0
 		&& $entrydata["edited_diff"] > $entrydata["time"]
@@ -749,7 +751,8 @@ if ($settings['access_for_users_only'] == 1
 				{
 				$ftext = smilies($ftext);
 				}
-			echo '<p class="postingboard">'.$ftext.'</p>';
+			echo '<pre>'.print_r($entrydata,true).'</pre>'."\n";
+			echo '<p class="postingboard">'.$ftext.'</p>'."\n";
 			}
 		if (isset($signature) && $signature != "")
 			{
@@ -767,7 +770,7 @@ if ($settings['access_for_users_only'] == 1
 				{
 				$signature = smilies($signature);
 				}
-			echo '<p class="signature">'.$settings['signature_separator'].$signature.'</p>';
+			echo '<p class="signature">'.$settings['signature_separator'].$signature.'</p>'."\n";
 			}
 		echo '</td>'."\n";
 		echo '</tr>'."\n";
