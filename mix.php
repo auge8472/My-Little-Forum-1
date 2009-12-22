@@ -66,7 +66,7 @@ if ($parent_array[$id]["pid"]!=0)
 		echo '&amp;order='.$order.'&amp;descasc='.$descasc;
 		}
 	echo '#p'.$parent_array[$id]["id"].'" title="'.htmlspecialchars($parent_array[$id]["name"]);
-	echo ", ".strftime($lang['time_format'],$parent_array[$id]["Uhrzeit"]).'">'.htmlspecialchars($parent_array[$id]["subject"]).'</a>';
+	echo ", ".strftime($lang['time_format'],$parent_array[$id]["Uhrzeit"]).'">'.htmlspecialchars($parent_array[$id]["subject"]).'</a> (<span class="id">#&nbsp;'.$parent_array[$id]["id"].'</span>)';
 	}
 
 // Anfang der Schleife über alle Kinder ...
