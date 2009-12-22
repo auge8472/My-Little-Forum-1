@@ -254,7 +254,7 @@ if($settings['access_for_users_only']  == 1
 			mysql_free_result($pid_resultc);
 
 			# data for link to last reply:
-			if ($settings['last_reply_link'] == 1)
+			if ($settings['last_reply_link'] == 1 or $settings['last_reply_name'] == 1)
 				{
 				$last_answer_result = mysql_query("SELECT name, id FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"]." ORDER BY time DESC LIMIT 1", $connid);
 				$last_answer = mysql_fetch_array($last_answer_result);
@@ -416,6 +416,10 @@ if($settings['access_for_users_only']  == 1
 					echo '#p'.$last_answer['id'].'" title="'.str_replace("[name]", $last_answer['name'], $lang['last_reply_lt']).'">';
 					}
 				echo strftime($lang['time_format'],$zeile["la_time"]);
+				if ($settings['last_reply_name'] == 1)
+					{
+					echo (!empty($last_answer['name'])) ? ' ('.$last_answer['name'].')' : '';
+					}
 				if ($settings['last_reply_link']==1)
 					{
 					echo '</a>';

@@ -63,6 +63,7 @@ $settings['signature_separator'] = "---<br />";
 $settings['quote_symbol'] = "»";
 $settings['count_users_online'] = 1;
 $settings['last_reply_link'] = 0;
+$settings['last_reply_name'] = 1;
 $settings['time_difference'] = 0;
 $settings['upload_max_img_size'] = 60;
 $settings['upload_max_img_width'] = 600;
@@ -465,6 +466,12 @@ CHANGE category_order category_order INT( 11 ) UNSIGNED NOT NULL,
 CHANGE category category VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE description description VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE accession accession TINYINT( 4 ) UNSIGNED NOT NULL DEFAULT '0'";
+$newSetting["reply_name"] = "INSERT INTO ".$db_settings['settings_table']." SET
+name = 'last_reply_name',
+value = 1";
+$newSetting["user_highlight"] = "INSERT INTO ".$db_settings['settings_table']." SET
+name = 'user_highlight',
+value = 1";
 
 # alter settings table (part 1)
 @mysql_query($alterTable["settings1"], $connid) or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
@@ -538,6 +545,14 @@ if (empty($errors))
 	{
 	@mysql_query($alterTable["userdat2"], $connid) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	}
+# insert new settings
+if (empty($errors))
+	{
+	foreach ($newSetting as $Set)
+		{
+		@mysql_query($Set, $connid) or $errors[] = $lang_add['db_insert_settings_error']." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+		}
+	}
 
 # set value 1.7.7 for version string
 if (empty($errors))
@@ -551,13 +566,13 @@ return $return;
 
 $table_prefix = 'forum_';
 
-if(isset($_POST['language']))
+if (isset($_POST['language']))
 	{
 	$language = $_POST['language'];
 	$settings['language_file'] = $language;
 	}
 
-if(isset($_POST['installation_mode'])) $installation_mode = $_POST['installation_mode'];
+if (isset($_POST['installation_mode'])) $installation_mode = $_POST['installation_mode'];
 
 include("lang/".$settings['language_file'] );
 include("lang/".$lang['additional_language_file']);
