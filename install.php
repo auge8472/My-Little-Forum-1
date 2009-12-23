@@ -15,6 +15,7 @@ $settings['thread_view'] = 1;
 $settings['board_view'] = 1;
 $settings['mix_view'] = 0;
 $settings['show_registered'] = 0;
+$settings['show_posting_id'] = 0;
 $settings['remember_userstandard'] = 1;
 $settings['remember_userdata'] = 1;
 $settings['remember_last_visit'] = 1;
@@ -472,6 +473,9 @@ value = 1";
 $newSetting["user_highlight"] = "INSERT INTO ".$db_settings['settings_table']." SET
 name = 'user_highlight',
 value = 1";
+$newSetting["show_posting_id"] = "INSERT INTO ".$db_settings['settings_table']." SET
+name = 'show_posting_id',
+value = 0";
 
 # alter settings table (part 1)
 @mysql_query($alterTable["settings1"], $connid) or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
