@@ -73,6 +73,10 @@ p.postingforma         { margin: 3px 0px 0px 0px; }
 .admin-highlight       { color: #b00; }
 .mod-highlight         { color: #0a4; }
 .user-highlight        { color: #04a; }
+.username              { color: #000; }
+
+.admin-highlight,.mod-highlight,.user-highlight { cursor: help; }
+.admin-highlight,.mod-highlight,.user-highlight,.username { font-weight: bold; }
 
 /* quoted text: */
 .citation              { color: #6d6d6d; font-style: italic; }

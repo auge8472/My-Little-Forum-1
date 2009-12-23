@@ -100,7 +100,7 @@ echo ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix_topic']/$settings
 echo 'px;">'."\n";
 echo '<table class="mix-entry">'."\n".'<tr>'."\n";
 echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
-echo outputAuthorsName($mark, $entrydata, $page, $order, 'mix', $category);
+echo outputAuthorInfo($mark, $entrydata, $page, $order, 'mix', $category);
 
 if ($settings['user_edit'] == 1
 && isset($_SESSION[$settings['session_prefix'].'user_id'])
@@ -210,8 +210,6 @@ if (isset($signature) && $signature != "")
 	}
 
 echo '</td>'."\n".'</tr>'."\n".'</table>'."\n";
-
-unset($mark);
 
 if(isset($child_array[$id]) && is_array($child_array[$id]))
 	{

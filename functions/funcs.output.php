@@ -101,4 +101,165 @@ $r .= '" title="'.$lang['new_entry_linktitle'].'">'.$lang['new_entry_linkname'].
 return $r;
 } # End: outputPostingLink
 
+
+
+/**
+ * generates posting authr name string
+ *
+ *
+ */
+function outputAuthorInfo($mark, $entry, $page, $order, $view, $category=0) {
+global $lang, $settings;
+
+$r = '';
+$email_hp = '';
+$place_c = '';
+$place = '';
+$editor = '';
+$regimg = '';
+$author = '';
+$linktitle = '';
+$entryIP = '';
+$entryedit = '';
+$entryID = '';
+$answer = '';
+
+# whole string template
+$authorstring = $lang['forum_author_marking'];
+# editors template
+$editstring = $lang['forum_edited_marking'];
+# generate setting to show contact link if not present
+$entry["hide_email"] = empty($entry["hide_email"]) ? 0 : $entry["hide_email"];
+# generate string for posting ID
+$entryID .= ($settings['show_posting_id'] == 1) ? '<span class="xsmall">Posting:&nbsp;#&nbsp;'.$entry['id'].'</span>' : '';
+# generate string for name of the answered author
+if (!empty($entry['answer']))
+	{
+	$answer .= '<br /><span class="xsmall">@&nbsp;'.htmlspecialchars($entry['answer']).'</span>';
+	}
+# generate HTML cource code for userdata (hp, email, location)
+if ($entry["email"]!="" && $entry["hide_email"] != 1 or $entry["hp"]!="")
+	{
+	$email_hp .= " ";
+	}
+if ($entry["hp"]!="")
+	{
+	$email_hp .= '<a href="'.amendProtocol($entry["hp"]).'" title="';
+	$email_hp .= htmlspecialchars($entry["hp"]).'"><img src="img/homepage.gif" ';
+	$email_hp .= 'alt="'.$lang['homepage_alt'].'" width="13" height="13" /></a>';
+	}
+if (($entry["email"]!="" && $entry["hide_email"] != 1) && $entry["hp"]!="") 
+	{
+	$email_hp .= "&nbsp;";
+	}
+if ($entry["email"]!="" && $entry["hide_email"] != 1)
+	{
+	$email_hp .= '<a href="contact.php?id='.$entry["id"];
+	$email_hp .= !empty($page) ? '&amp;page='.$page : '';
+	$email_hp .= !empty($order) ? '&amp;order='.$order : '';
+	$email_hp .= !empty($category) ? '&amp;category='.intval($category) : '';
+	$email_hp .= '" title="'.str_replace("[name]", htmlspecialchars($entry["name"]), $lang['email_to_user_linktitle']).'"><img src="img/email.gif" alt="'.$lang['email_alt'].'" width="13" height="10" /></a>';
+	}
+if ($entrydata["place"] != "")
+	{
+	$place_c .= htmlspecialchars($entrydata["place"]).", ";
+	$place .= htmlspecialchars($entrydata["place"]);
+	}
+# generate HTML source code of authors name
+if ($mark['admin']===true or $mark['mod']===true or $mark['user']===true)
+	{
+	$name = '<span class="';
+	if ($mark['admin']==true)
+		{
+		$name .= 'admin-highlight" title="'.$lang['ud_admin'];
+		}
+	else if ($mark['mod']==true)
+		{
+		$name .= 'mod-highlight" title="'.$lang['ud_mod'];
+		}
+	else if ($mark['user']===true)
+		{
+		$name .= 'user-highlight" title="'.$lang['ud_user'];
+		}
+	$name .= '">';
+	}
+else
+	{
+	$name = '<span class="username">';
+	}
+$name .= htmlspecialchars($entry["name"]).'</span>';
+
+# generate image for registered users
+if ($settings['show_registered'] ==1)
+	{
+	$regimg .= '<img src="img/registered.gif" alt="(R)" width="10" height="10" title="'.$lang['registered_user_title'].'" />';
+	}
+
+if (isset($_SESSION[$settings['session_prefix'].'user_id'])
+	and $entry['user_id'] > 0)
+	{
+	$linktitle = str_replace("[name]", htmlspecialchars($entry["name"]), $lang['show_userdata_linktitle']);
+	$author .= '<a class="userlink" href="user.php?id='.$entry["user_id"].'" title="'.$linktitle.'">'.$name.$regimg.'</a>';
+	}
+else
+	{
+	$author .= $name.$regimg;
+	}
+if (isset($_SESSION[$settings['session_prefix'].'user_id'])
+	&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin" ||
+	isset($_SESSION[$settings['session_prefix'].'user_id'])
+	&& $_SESSION[$settings['session_prefix'].'user_type'] == "mod")
+	{
+	$entryIP = '<span class="xsmall">'.$entry['ip'].'</span>';
+	}
+
+$authorstring = str_replace("[name]", $author, $authorstring);
+$authorstring = str_replace("[email_hp]", $email_hp, $authorstring);
+$authorstring = str_replace("[place, ]", $place_c, $authorstring);
+$authorstring = str_replace("[place]", $place, $authorstring);
+$authorstring = str_replace("[time]", strftime($lang['time_format'],$entry["p_time"]), $authorstring);
+
+if ($entry["edited_diff"] > 0
+	&& $entry["edited_diff"] > $entry["time"]
+	&& $settings['show_if_edited'] == 1)
+	{
+	$editstring = str_replace("[name]", htmlspecialchars($entry["edited_by"]), $editstring);
+	$editstring = str_replace("[time]", strftime($lang['time_format'],$entry["e_time"]), $editstring);
+	$entryedit .= '<br /><span class="xsmall">'.$editstring.'</span>';
+	}
+
+#$r .= "<pre>".print_r($mark,true)."</pre>";
+
+if ($view=='forum')
+	{
+	if (!empty($entryID))
+		{
+		$entryID = ' - '.$entryID;
+		}
+	$r .= '<p class="author">'.$authorstring.'&nbsp;'.$entryIP.$entryID.$entryedit.'</p>'."\n";
+	}
+else if ($view=='board' or $view=='mix')
+	{
+	if (!empty($place))
+		{
+		$place = '<br />'.$place;
+		}
+	if (!empty($entryID))
+		{
+		$entryID = '<br /><br />'.$entryID;
+		}
+	$r .= $author.'<br /><br />'.$email_hp.$place.'<br />'.strftime($lang['time_format'],$entry["p_time"]).$entryedit.'<br /><br />'.$entryIP.$entryID.$answer;
+	}
+else
+	{
+	if (!empty($entryID))
+		{
+		$entryID = ' - '.$entryID;
+		}
+	$r .= '<p class="author">'.$authorstring.'&nbsp;'.$entryIP.$entryID.$entryedit.'</p>'."\n";
+	}
+
+return $r;
+} # End: outputAuthorInfo
+
 ?>

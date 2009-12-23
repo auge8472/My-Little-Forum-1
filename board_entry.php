@@ -126,9 +126,9 @@ if ($settings['access_for_users_only'] == 1
 			tid,
 			pid,
 			user_id,
-			UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
+			UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS p_time,
 			UNIX_TIMESTAMP(time) AS time,
-			UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_Uhrzeit,
+			UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_time,
 			UNIX_TIMESTAMP(edited - INTERVAL ".$settings['edit_delay']." MINUTE) AS edited_diff,
 			edited_by,
 			user_id,
@@ -171,9 +171,9 @@ if ($settings['access_for_users_only'] == 1
 				mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=".$id, $connid);
 				}
 
-			$mark_admin = false;
-			$mark_mod = false;
-			$mark_user = false;
+			$mark['admin'] = false;
+			$mark['mod'] = false;
+			$mark['user'] = false;
 			if ($thread["user_id"] > 0)
 				{
 				$userdataByIdQuery = "SELECT
@@ -196,15 +196,15 @@ if ($settings['access_for_users_only'] == 1
 				$thread["hp"] = $userdata["user_hp"];
 				if ($userdata["user_type"] == "admin" && $settings['admin_mod_highlight'] == 1)
 					{
-					$mark_admin = true;
+					$mark['admin'] = true;
 					}
 				else if ($userdata["user_type"] == "mod" && $settings['admin_mod_highlight'] == 1)
 					{
-					$mark_mod = true;
+					$mark['mod'] = true;
 					}
 				else if ($userdata["user_type"] == "user" && $settings['user_highlight'] == 1)
 					{
-					$mark_user = true;
+					$mark['user'] = true;
 					}
 				if ($thread["show_signature"]==1)
 					{
@@ -216,12 +216,11 @@ if ($settings['access_for_users_only'] == 1
 			tid,
 			pid,
 			user_id,
-			UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
+			UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS p_time,
 			UNIX_TIMESTAMP(time) AS time,
-			UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_Uhrzeit,
+			UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_time,
 			UNIX_TIMESTAMP(edited - INTERVAL ".$settings['edit_delay']." MINUTE) AS edited_diff,
 			edited_by,
-			user_id,
 			name,
 			email,
 			subject,
@@ -282,120 +281,7 @@ if ($settings['access_for_users_only'] == 1
 		echo '<tr>'."\n";
 		echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
 		// wenn eingelogged und Posting von einem angemeldeten User stammt, dann Link zu dessen Userdaten:
-		if (isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $thread["user_id"] > 0)
-			{
-			$show_userdata_linktitle_x = str_replace("[name]", htmlspecialchars($thread["name"]), $lang['show_userdata_linktitle']);
-			echo '<a class="userlink" name="p'.$thread["id"].'" href="user.php?id=';
-			echo $thread["user_id"].'" title="'.$show_userdata_linktitle_x.'">';
-			if ($mark_admin===true)
-				{
-				echo '<span class="admin-highlight" title="Administrator">';
-				}
-			else if ($mark_mod===true)
-				{
-				echo '<span class="mod-highlight" title="Moderator">';
-				}
-			else if ($mark_user===true)
-				{
-				echo '<span class="user-highlight" title="registrierter Benutzer">';
-				}
-			echo '<b>'.htmlspecialchars($thread["name"]).'</b>';
-			if ($settings['show_registered'] ==1)
-				{
-				echo '<img src="img/registered.gif" alt="(R)" width="10" height="10" title="';
-				echo $lang['registered_user_title'].'" />';
-				}
-			if ($mark_admin===true || $mark_mod===true || $mark_user===true)
-				{
-				echo '</span>';
-				}
-			echo '</a><br />';
-			}
-		// ansonsten nur den Namen anzeigen:
-		else
-			{
-			echo '<a id="p'.$thread["id"];'">';
-			if ($mark_admin===true)
-				{
-				echo '<span class="admin-highlight" title="Administrator">';
-				}
-			else if ($mark_mod===true)
-				{
-				echo '<span class="mod-highlight" title="Moderator">';
-				}
-			else if ($mark_user===true)
-				{
-				echo '<span class="user-highlight" title="registrierter Benutzer">';
-				}
-			echo '<b>'.htmlspecialchars($thread["name"]).'</b>';
-			if ($thread["user_id"] > 0 && $settings['show_registered'] ==1)
-				{
-				echo '<img src="img/registered.gif" alt="(R)" width="10" height="10" title="';
-				echo $lang['registered_user_title'].'" />';
-				}
-			echo '</a>';
-			if ($mark_admin===true || $mark_mod===true || $mark_user===true)
-				{
-				echo '</span>';
-				}
-			echo '<br />';
-			}
-		if (empty($thread["hide_email"]))
-			{
-			$thread["hide_email"] = 0;
-			}
-		if (($thread["email"]!="" && $thread["hide_email"] != 1) or $thread["hp"]!="")
-			{
-			echo "<br />";
-			}
-		if ($thread["hp"]!="")
-			{
-			$thread["hp"] = amendProtocol($thread["hp"]);
-			echo "<a href=\"".$thread["hp"]."\" title=\"".htmlspecialchars($thread["hp"])."\"><img src=\"img/homepage.gif\" alt=\"".$lang['homepage_alt']."\" width=\"13\" height=\"13\" /></a>";
-			}
-		if (($thread["email"]!="" && $thread["hide_email"] != 1) && $thread["hp"]!="")
-			{
-			echo "&nbsp;";
-			}
-		if ($thread["email"]!=""
-		&& $thread["hide_email"] != 1
-		&& isset($page)
-		&& isset($order)
-		&& isset($category))
-			{
-			echo '<a href="contact.php?id='.$thread["id"].'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;view=board"><img src="img/email.gif" alt="'.$lang['email_alt'].'" title="'.str_replace("[name]", htmlspecialchars($thread["name"]), $lang['email_to_user_linktitle']).'" width="13" height="10" /></a>';
-			}
-		else if ($thread["email"]!="" && $thread["hide_email"] != 1)
-			{
-			echo '<a href="contact.php?id='.$thread.'&amp;view=board"><img src="img/email.gif" alt="'.$lang['email_alt'].'" width="13" height="10" title="'.str_replace("[name]", htmlspecialchars($thread["name"]), $lang['email_to_user_linktitle']).'" /></a>';
-			}
-		if (($thread["email"]!="" && $thread["hide_email"] != 1) or $thread["hp"]!="")
-			{
-			echo "<br />";
-			}
-		echo "<br />";
-		if ($thread["place"]!="")
-			{
-			echo htmlspecialchars($thread["place"]).", <br />";
-			}
-		echo 'Posting:&nbsp;<span class="id">#&nbsp;'.$thread['id'].'</span><br />';
-		echo strftime($lang['time_format'],$thread["Uhrzeit"]);
-		if ($thread["edited_diff"] > 0
-		&& $thread["edited_diff"] > $thread["time"]
-		&& $settings['show_if_edited'] == 1)
-			{
-			$board_em = str_replace("[name]", htmlspecialchars($thread["edited_by"]), $lang['board_edited_marking']);
-			$board_em = str_replace("[time]", strftime($lang['time_format'],$thread["e_Uhrzeit"]), $board_em);
-			echo '<br /><span class="xsmall">'.$board_em.'</span>';
-			}
-		if (isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $_SESSION[$settings['session_prefix']."user_type"] == "admin"
-		|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $_SESSION[$settings['session_prefix']."user_type"] == "mod")
-			{
-			echo '<br /><br /><span class="xsmall">'.$thread['ip'].'</span>';
-			}
+		echo outputAuthorInfo($mark, $thread, $page, $order, 'board', $category);
 		if ($settings['user_edit'] == 1
 		&& isset($_SESSION[$settings['session_prefix'].'user_id'])
 		&& $thread["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]
@@ -517,9 +403,9 @@ if ($settings['access_for_users_only'] == 1
 	while ($entrydata = mysql_fetch_assoc($result))
 		{
 		unset($signature);
-		$mark_admin = false;
-		$mark_mod = false;
-		$mark_user = false;
+		$mark['admin'] = false;
+		$mark['mod'] = false;
+		$mark['user'] = false;
 		if ($entrydata["user_id"] > 0)
 			{
 			$userdata_result=mysql_query("SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$entrydata["user_id"]."'", $connid);
@@ -532,15 +418,15 @@ if ($settings['access_for_users_only'] == 1
 			$entrydata["hp"] = $userdata["user_hp"];
 			if ($userdata["user_type"] == "admin" && $settings['admin_mod_highlight'] == 1)
 				{
-				$mark_admin = true;
+				$mark['admin'] = true;
 				}
 			else if ($userdata["user_type"] == "mod" && $settings['admin_mod_highlight'] == 1)
 				{
-				$mark_mod = true;
+				$mark['mod'] = true;
 				}
 			else if ($userdata["user_type"] == "user" && $settings['user_highlight'] == 1)
 				{
-				$mark_user = true;
+				$mark['user'] = true;
 				}
 			if ($entrydata["show_signature"]==1)
 				{
@@ -552,131 +438,12 @@ if ($settings['access_for_users_only'] == 1
 		$result_a = mysql_query("SELECT name FROM ".$db_settings['forum_table']." WHERE id = ".$entrydata["pid"], $connid);
 		$posting_a = mysql_fetch_assoc($result_a);
 		mysql_free_result($result_a);
+		$entrydata['answer'] = $posting_a['name'];
 
 		echo '<tr>'."\n";
 		echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
 		# wenn eingelogged und Posting von einem angemeldeten User stammt, dann Link zu dessen Userdaten:
-		if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $entrydata["user_id"] > 0)
-			{
-			$show_userdata_linktitle_x = str_replace("[name]", htmlspecialchars($entrydata["name"]), $lang['show_userdata_linktitle']);
-			echo '<a id="p'.$entrydata["id"].'" href="user.php?id='.$entrydata["user_id"];
-			echo '" title="'.$show_userdata_linktitle_x.'">';
-			if ($mark_admin===true)
-				{
-				echo '<span class="admin-highlight" title="Administrator">';
-				}
-			else if ($mark_mod===true)
-				{
-				echo '<span class="mod-highlight" title="Moderator">';
-				}
-			else if ($mark_user===true)
-				{
-				echo '<span class="user-highlight" title="registrierter Benutzer">';
-				}
-			echo '<b>'.htmlspecialchars($entrydata["name"]).'</b>';
-			if ($settings['show_registered'] ==1)
-				{
-				echo '<img src="img/registered.gif" alt="(R)" width="10" height="10" title="';
-				echo $lang['registered_user_title'].'" />';
-				}
-			if ($mark_admin===true || $mark_mod===true || $mark_user===true)
-				{
-				echo '</span>';
-				}
-			echo '</a><br />';
-			}
-		# ansonsten nur den Namen anzeigen:
-		else
-			{
-			echo '<a id="p'.$entrydata["id"].'">';
-			if ($mark_admin===true)
-				{
-				echo '<span class="admin-highlight" title="Administrator">';
-				}
-			else if ($mark_mod===true)
-				{
-				echo '<span class="mod-highlight" title="Moderator">';
-				}
-			else if ($mark_user===true)
-				{
-				echo '<span class="user-highlight" title="registrierter Benutzer">';
-				}
-			echo '<b>'.htmlspecialchars($entrydata["name"]).'</b>';
-			if ($entrydata["user_id"] > 0 && $settings['show_registered'] ==1)
-				{
-				echo '<img src="img/registered.gif" alt="(R)" width="10" height="10" title="';
-				echo $lang['registered_user_title'].'" />';
-				}
-			echo '</a>';
-			if ($mark_admin===true || $mark_mod===true || $mark_user===true)
-				{
-				echo '</span>';
-				}
-			echo '<br />';
-			}
-
-		if (empty($entrydata["hide_email"]))
-			{
-			$entrydata["hide_email"] = 0;
-			}
-		if (($entrydata["email"]!="" && $entrydata["hide_email"] != 1) or $entrydata["hp"]!="")
-			{
-			echo "<br />";
-			}
-		if ($entrydata["hp"]!='')
-			{
-			$entrydata["hp"] = amendProtocol($entrydata["hp"]); 
-			echo '<a href="'.$entrydata["hp"].'" title="'.htmlspecialchars($entrydata["hp"]).'">';
-			echo '<img src="img/homepage.gif" alt="'.$lang['homepage_alt'].'" width="13" height="13" /></a>';
-			}
-		if (($entrydata["email"]!="" && $entrydata["hide_email"] != 1) && $entrydata["hp"]!="")
-			{
-			echo "&nbsp;";
-			}
-		if ($entrydata["email"]!=''
-		&& $entrydata["hide_email"] != 1
-		&& isset($page)
-		&& isset($order)
-		&& isset($category))
-			{
-			echo '<a href="contact.php?id='.$entrydata["id"].'&amp;page='.$page.'&amp;category=';
-			echo $category.'&amp;order='.$order.'&amp;view=board"><img src="img/email.gif" alt="';
-			echo $lang['email_alt'].'" title="'.str_replace("[name]", htmlspecialchars($entrydata["name"]), $lang['email_to_user_linktitle']);
-			echo '" width="13" height="10" /></a>';
-			}
-		else if ($entrydata["email"]!='' && $entrydata["hide_email"] != 1)
-			{
-			echo '<a href="contact.php?id='.$entrydata["id"].'&amp;view=board" title="';
-			echo str_replace("[name]", htmlspecialchars($entrydata["name"]), $lang['email_to_user_linktitle']);
-			echo '"><img src="img/email.gif" alt="'.$lang['email_alt'].'" width="13" height="10" /></a>';
-			}
-		if (($entrydata["email"]!='' && $entrydata["hide_email"] != 1) or $entrydata["hp"]!='')
-			{
-			echo '<br />';
-			}
-		echo '<br />';
-		if ($entrydata["place"]!='')
-			{
-			echo htmlspecialchars($entrydata["place"]);
-			echo ', <br />';
-			}
-		echo 'Posting:&nbsp;<span class="id">#&nbsp;'.$entrydata['id'].'</span><br />';
-		echo strftime($lang['time_format'],$entrydata["Uhrzeit"]);
-		if ($entrydata["edited_diff"] > 0
-		&& $entrydata["edited_diff"] > $entrydata["time"]
-		&& $settings['show_if_edited'] == 1)
-			{
-			$board_em = str_replace("[name]", htmlspecialchars($entrydata["edited_by"]), $lang['board_edited_marking']);
-			$board_em = str_replace("[time]", strftime($lang['time_format'],$entrydata["e_Uhrzeit"]), $board_em);
-			echo '<br /><span class="xsmall">'.$board_em.'</span>';
-			}
-		if (isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $_SESSION[$settings['session_prefix']."user_type"] == "admin")
-			{
-			echo '<br /><br /><span class="xsmall">'.$entrydata['ip'].'</span>';
-			}
-		echo '<span class="xsmall"><br /><br />@ '.htmlspecialchars($posting_a["name"]).'</span>';
-
+		echo outputAuthorInfo($mark, $entrydata, $page, $order, 'board', $category);
 		if ($settings['user_edit'] == 1
 		&& isset($_SESSION[$settings['session_prefix'].'user_id'])
 		&& $entrydata["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]
@@ -751,7 +518,6 @@ if ($settings['access_for_users_only'] == 1
 				{
 				$ftext = smilies($ftext);
 				}
-			echo '<pre>'.print_r($entrydata,true).'</pre>'."\n";
 			echo '<p class="postingboard">'.$ftext.'</p>'."\n";
 			}
 		if (isset($signature) && $signature != "")

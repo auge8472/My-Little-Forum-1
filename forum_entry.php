@@ -104,9 +104,9 @@ if ($settings['access_for_users_only'] == 1
 				{
 				mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE id=".intval($id), $connid);
 				}
-			$mark_admin = false;
-			$mark_mod = false;
-			$mark_user = false;
+			$mark['admin'] = false;
+			$mark['mod'] = false;
+			$mark['user'] = false;
 			if ($entrydata["user_id"] > 0)
 				{
 				$userDataQuery = "SELECT
@@ -129,15 +129,15 @@ if ($settings['access_for_users_only'] == 1
 				$entrydata["hp"] = $userdata["user_hp"];
 				if ($userdata["user_type"] == "admin" && $settings['admin_mod_highlight'] == 1)
 					{
-					$mark_admin = true;
+					$mark['admin'] = true;
 					}
 				else if ($userdata["user_type"] == "mod" && $settings['admin_mod_highlight'] == 1)
 					{
-					$mark_mod = true;
+					$mark['mod'] = true;
 					}
 				else if ($userdata["user_type"] == "user" && $settings['user_highlight'] == 1)
 					{
-					$mark_user = true;
+					$mark['user'] = true;
 					}
 				if ($entrydata["show_signature"]==1)
 					{
@@ -181,7 +181,7 @@ if ($settings['access_for_users_only'] == 1
 		$child_array[$tmp["pid"]][] =  $tmp["id"];
 		}
 	mysql_free_result($result);
-	$category = stripslashes($category);
+	$category = $category;
 	$wo = $entrydata["subject"];
 	$subnav_1 = '<a class="textlink" href="forum.php?page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'" title="'.$lang['back_to_forum_linktitle'].'">'.$lang['back_to_forum_linkname'].'</a>';
 	$subnav_2 = "";
@@ -202,109 +202,7 @@ if ($settings['access_for_users_only'] == 1
 		echo ' <span class="category">('.$categories[$entrydata["category"]].')</span>';
 		}
 	echo '</h2>'."\n";
-
-	$email_hp = ""; $place = ""; $place_c = "";
-	if (empty($entrydata["hide_email"]))
-		{
-		$entrydata["hide_email"]=0;
-		}
-	if ($entrydata["email"]!="" && $entrydata["hide_email"] != 1 or $entrydata["hp"]!="")
-		{
-		$email_hp = " ";
-		}
-	if ($entrydata["hp"]!="")
-		{
-		$entrydata["hp"] = amendProtocol($entrydata["hp"]);	
-		$email_hp .= '<a href="'.$entrydata["hp"].'" title="'.htmlspecialchars($entrydata["hp"]).'"><img src="img/homepage.gif" alt="'.$lang['homepage_alt'].'" width="13" height="13" /></a>';
-		}
-	if (($entrydata["email"]!="" && $entrydata["hide_email"] != 1) && $entrydata["hp"]!="") 
-		{
-		$email_hp .= "&nbsp;";
-		}
-
-	if ($entrydata["email"]!="" && $entrydata["hide_email"] != 1 && isset($page) && isset($order) && isset($category))
-		{
-		$email_hp .= '<a href="contact.php?id='.$entrydata["id"].'&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'"><img src="img/email.gif" alt="'.$lang['email_alt'].'" title="'.str_replace("[name]", htmlspecialchars($entrydata["name"]), $lang['email_to_user_linktitle']).'" width="13" height="10" /></a>';
-		}
-	else if ($entrydata["email"]!="" && $entrydata["hide_email"] != 1)
-		{
-		$email_hp .= '<a href="contact.php?id='.$entrydata["id"].'" title="'.str_replace("[name]", htmlspecialchars($entrydata["name"]), $lang['email_to_user_linktitle']).'"><img src="img/email.gif" alt="'.$lang['email_alt'].'" width="16" height="16" /></a>';
-		}
-	if ($entrydata["place"] != "")
-		{
-		$place_c = htmlspecialchars($entrydata["place"]).", ";
-		$place = htmlspecialchars($entrydata["place"]);
-		}
-
-	if ($mark_admin===true or $mark_mod===true or $mark_user===true)
-		{
-		$name = '<span class="';
-		if ($mark_admin==true)
-			{
-			$name .= 'admin-highlight" title="Administrator';
-			}
-		else if ($mark_mod==true)
-			{
-			$name .= 'mod-highlight" title="Moderator';
-			}
-		else if ($mark_user===true)
-			{
-			$name .= 'user-highlight" title="registrierter Benutzer';
-			}
-		$name .= '">'.htmlspecialchars($entrydata["name"]).'</span>';
-		}
-	else
-		{
-		$name = htmlspecialchars($entrydata["name"]);
-		}
-	if (isset($_SESSION[$settings['session_prefix'].'user_id'])
-	&& $entrydata["user_id"] > 0
-	&& $settings['show_registered'] ==1)
-		{
-		$lang['show_userdata_linktitle'] = str_replace("[name]", htmlspecialchars($entrydata["name"]), $lang['show_userdata_linktitle']);
-		$lang['forum_author_marking'] = str_replace("[name]", '<a href="user.php?id='.$entrydata["user_id"].'" title="'.$lang['show_userdata_linktitle'].'"><b>'.$name.'</b><img src="img/registered.gif" alt="(R)" width="10" height="10" title="'.$lang['registered_user_title'].'" /></a>', $lang['forum_author_marking']);
-		}
-	else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
-	&& $entrydata["user_id"] > 0
-	&& $settings['show_registered'] !=1)
-		{
-		$lang['show_userdata_linktitle'] = str_replace("[name]", htmlspecialchars($entrydata["name"]), $lang['show_userdata_linktitle']);
-		$lang['forum_author_marking'] = str_replace("[name]", '<a href="user.php?id='.$entrydata["user_id"].'" title="'.$lang['show_userdata_linktitle'].'"><b>'.$name.'</b></a>', $lang['forum_author_marking']);
-		}
-	else if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
-	&& $entrydata["user_id"] > 0
-	&& $settings['show_registered'] ==1)
-		{
-		$lang['forum_author_marking'] = str_replace("[name]", $name.'<img src="img/registered.gif" alt="(R)" width="10" height="10" title="'.$lang['registered_user_title'].'" />', $lang['forum_author_marking']);
-		}
-	else
-		{
-		$lang['forum_author_marking'] = str_replace("[name]", $name, $lang['forum_author_marking']);
-		}
-	$lang['forum_author_marking'] = str_replace("[email_hp]", $email_hp, $lang['forum_author_marking']);
-	$lang['forum_author_marking'] = str_replace("[place, ]", $place_c, $lang['forum_author_marking']);
-	$lang['forum_author_marking'] = str_replace("[place]", $place, $lang['forum_author_marking']);
-	$lang['forum_author_marking'] = str_replace("[time]", strftime($lang['time_format'],$entrydata["p_time"]), $lang['forum_author_marking']);
-	$lang['forum_edited_marking'] = str_replace("[name]", htmlspecialchars($entrydata["edited_by"]), $lang['forum_edited_marking']);
-	$lang['forum_edited_marking'] = str_replace("[time]", strftime($lang['time_format'],$entrydata["e_time"]), $lang['forum_edited_marking']);
-	echo '<p class="author">'.$lang['forum_author_marking'];
-
-	if (isset($_SESSION[$settings['session_prefix'].'user_id'])
-	&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin" ||
-	isset($_SESSION[$settings['session_prefix'].'user_id'])
-	&& $_SESSION[$settings['session_prefix'].'user_type'] == "mod")
-		{
-		echo '&nbsp;<span class="xsmall">'.$entrydata['ip'].'</span>';
-		}
-
-	if ($entrydata["edited_diff"] > 0
-	&& $entrydata["edited_diff"] > $entrydata["time"]
-	&& $settings['show_if_edited'] == 1)
-		{
-		echo '<br /><span class="xsmall">'.$lang['forum_edited_marking'].'</span>';
-		}
-	echo '</p>'."\n";
-
+	echo outputAuthorInfo($mark, $entrydata, $page, $order, 'forum', $category);
 	if ($entrydata["text"]=="")
 		{
 		echo $lang['no_text'];
