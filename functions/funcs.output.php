@@ -156,21 +156,21 @@ if ($entry["email"]!="" && $entry["hide_email"] != 1)
 	$email_hp .= !empty($page) ? '&amp;page='.$page : '';
 	$email_hp .= !empty($order) ? '&amp;order='.$order : '';
 	$email_hp .= !empty($category) ? '&amp;category='.intval($category) : '';
-	$email_hp .= '" title="'.str_replace("[name]", htmlspecialchars($entry["name"]), $lang['email_to_user_linktitle']).'"><img src="img/email.gif" alt="'.$lang['email_alt'].'" width="13" height="10" /></a>';
+	$email_hp .= '" title="'.str_replace("[name]", htmlspecialchars($entry['name']), $lang['email_to_user_linktitle']).'"><img src="img/email.gif" alt="'.$lang['email_alt'].'" width="13" height="10" /></a>';
 	}
 if ($entrydata["place"] != "")
 	{
-	$place_c .= htmlspecialchars($entrydata["place"]).", ";
-	$place .= htmlspecialchars($entrydata["place"]);
+	$place_c .= htmlspecialchars($entry["place"]).", ";
+	$place .= htmlspecialchars($entry["place"]);
 	}
 # generate HTML source code of authors name
-$name = outputAuthorsName($entry["name"], $mark, $entry["user_id"]);
+$name = outputAuthorsName($entry['name'], $mark, $entry['user_id']);
 
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	and $entry['user_id'] > 0)
 	{
 	$linktitle = str_replace("[name]", htmlspecialchars($entry["name"]), $lang['show_userdata_linktitle']);
-	$name .= '<a class="userlink" href="user.php?id='.$entry["user_id"].'" title="'.$linktitle.'">'.$name.'</a>';
+	$uname .= '<a class="userlink" href="user.php?id='.$entry["user_id"].'" title="'.$linktitle.'">'.$name.'</a>';
 	}
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin" ||
@@ -195,7 +195,7 @@ if ($entry["edited_diff"] > 0
 
 if ($view=='forum')
 	{
-	$authorstring = str_replace("[name]", $name, $authorstring);
+	$authorstring = str_replace("[name]", $uname, $authorstring);
 	$authorstring = str_replace("[email_hp]", $email_hp, $authorstring);
 	$authorstring = str_replace("[place, ]", $place_c, $authorstring);
 	$authorstring = str_replace("[place]", $place, $authorstring);
@@ -216,7 +216,7 @@ else if ($view=='board' or $view=='mix')
 		{
 		$entryID = '<br /><br />'.$entryID;
 		}
-	$r .= $name.'<br /><br />'.$email_hp.$place.'<br />'.strftime($lang['time_format'],$entry["p_time"]).$entryedit.'<br /><br />'.$entryIP.$entryID.$answer;
+	$r .= $uname.'<br /><br />'.$email_hp.$place.'<br />'.strftime($lang['time_format'],$entry["p_time"]).$entryedit.'<br /><br />'.$entryIP.$entryID.$answer;
 	}
 else
 	{
@@ -241,8 +241,8 @@ return $r;
  * @param integer $user_id
  * @return string $output
  */
-function outputAuthorsName($name, $mark, $user_id=0) {
-global $setting, $lang;
+function outputAuthorsName($username, $mark, $user_id=0) {
+global $settings, $lang;
 
 $r = '';
 $name = '';
@@ -269,7 +269,7 @@ else
 	{
 	$name .= '<span class="username">';
 	}
-$name .= htmlspecialchars($entry["name"]).'</span>';
+$name .= htmlspecialchars($username).'</span>';
 
 # generate image for registered users
 if ($settings['show_registered'] ==1
@@ -279,7 +279,7 @@ if ($settings['show_registered'] ==1
 	$regimg .= '<img src="img/registered.gif" alt="(R)" width="10" height="10" title="'.$lang['registered_user_title'].'" />';
 	}
 
-$r = $name.$regimg;
+$r .= $name.$regimg;
 
 return $r;
 } # End: outputAuthorsName
