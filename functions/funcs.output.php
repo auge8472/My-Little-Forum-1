@@ -116,8 +116,6 @@ $email_hp = '';
 $place_c = '';
 $place = '';
 $editor = '';
-$regimg = '';
-$author = '';
 $linktitle = '';
 $entryIP = '';
 $entryedit = '';
@@ -166,44 +164,13 @@ if ($entrydata["place"] != "")
 	$place .= htmlspecialchars($entrydata["place"]);
 	}
 # generate HTML source code of authors name
-if ($mark['admin']===true or $mark['mod']===true or $mark['user']===true)
-	{
-	$name = '<span class="';
-	if ($mark['admin']==true)
-		{
-		$name .= 'admin-highlight" title="'.$lang['ud_admin'];
-		}
-	else if ($mark['mod']==true)
-		{
-		$name .= 'mod-highlight" title="'.$lang['ud_mod'];
-		}
-	else if ($mark['user']===true)
-		{
-		$name .= 'user-highlight" title="'.$lang['ud_user'];
-		}
-	$name .= '">';
-	}
-else
-	{
-	$name = '<span class="username">';
-	}
-$name .= htmlspecialchars($entry["name"]).'</span>';
-
-# generate image for registered users
-if ($settings['show_registered'] ==1)
-	{
-	$regimg .= '<img src="img/registered.gif" alt="(R)" width="10" height="10" title="'.$lang['registered_user_title'].'" />';
-	}
+$name = outputAuthorsName($entry["name"], $mark, $entry["user_id"]);
 
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	and $entry['user_id'] > 0)
 	{
 	$linktitle = str_replace("[name]", htmlspecialchars($entry["name"]), $lang['show_userdata_linktitle']);
-	$author .= '<a class="userlink" href="user.php?id='.$entry["user_id"].'" title="'.$linktitle.'">'.$name.$regimg.'</a>';
-	}
-else
-	{
-	$author .= $name.$regimg;
+	$name .= '<a class="userlink" href="user.php?id='.$entry["user_id"].'" title="'.$linktitle.'">'.$name.'</a>';
 	}
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin" ||
@@ -213,11 +180,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	$entryIP = '<span class="xsmall">'.$entry['ip'].'</span>';
 	}
 
-$authorstring = str_replace("[name]", $author, $authorstring);
-$authorstring = str_replace("[email_hp]", $email_hp, $authorstring);
-$authorstring = str_replace("[place, ]", $place_c, $authorstring);
-$authorstring = str_replace("[place]", $place, $authorstring);
-$authorstring = str_replace("[time]", strftime($lang['time_format'],$entry["p_time"]), $authorstring);
+
 
 if ($entry["edited_diff"] > 0
 	&& $entry["edited_diff"] > $entry["time"]
@@ -232,6 +195,11 @@ if ($entry["edited_diff"] > 0
 
 if ($view=='forum')
 	{
+	$authorstring = str_replace("[name]", $name, $authorstring);
+	$authorstring = str_replace("[email_hp]", $email_hp, $authorstring);
+	$authorstring = str_replace("[place, ]", $place_c, $authorstring);
+	$authorstring = str_replace("[place]", $place, $authorstring);
+	$authorstring = str_replace("[time]", strftime($lang['time_format'],$entry["p_time"]), $authorstring);
 	if (!empty($entryID))
 		{
 		$entryID = ' - '.$entryID;
@@ -248,7 +216,7 @@ else if ($view=='board' or $view=='mix')
 		{
 		$entryID = '<br /><br />'.$entryID;
 		}
-	$r .= $author.'<br /><br />'.$email_hp.$place.'<br />'.strftime($lang['time_format'],$entry["p_time"]).$entryedit.'<br /><br />'.$entryIP.$entryID.$answer;
+	$r .= $name.'<br /><br />'.$email_hp.$place.'<br />'.strftime($lang['time_format'],$entry["p_time"]).$entryedit.'<br /><br />'.$entryIP.$entryID.$answer;
 	}
 else
 	{
@@ -256,10 +224,64 @@ else
 		{
 		$entryID = ' - '.$entryID;
 		}
-	$r .= '<p class="author">'.$authorstring.'&nbsp;'.$entryIP.$entryID.$entryedit.'</p>'."\n";
+#	$r .= $name.$entryID;
+	$r .= $name;
 	}
 
 return $r;
 } # End: outputAuthorInfo
+
+
+
+/**
+ * generates the name part of the authors information
+ *
+ * @param string $name
+ * @param array $mark
+ * @param integer $user_id
+ * @return string $output
+ */
+function outputAuthorsName($name, $mark, $user_id=0) {
+global $setting, $lang;
+
+$r = '';
+$name = '';
+$regimg = '';
+
+if ($mark['admin']===true or $mark['mod']===true or $mark['user']===true)
+	{
+	$name .= '<span class="';
+	if ($mark['admin']==true)
+		{
+		$name .= 'admin-highlight" title="'.$lang['ud_admin'];
+		}
+	else if ($mark['mod']==true)
+		{
+		$name .= 'mod-highlight" title="'.$lang['ud_mod'];
+		}
+	else if ($mark['user']===true)
+		{
+		$name .= 'user-highlight" title="'.$lang['ud_user'];
+		}
+	$name .= '">';
+	}
+else
+	{
+	$name .= '<span class="username">';
+	}
+$name .= htmlspecialchars($entry["name"]).'</span>';
+
+# generate image for registered users
+if ($settings['show_registered'] ==1
+	and isset($_SESSION[$settings['session_prefix'].'user_id'])
+	and $user_id > 0)
+	{
+	$regimg .= '<img src="img/registered.gif" alt="(R)" width="10" height="10" title="'.$lang['registered_user_title'].'" />';
+	}
+
+$r = $name.$regimg;
+
+return $r;
+} # End: outputAuthorsName
 
 ?>
