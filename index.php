@@ -21,41 +21,98 @@
 
 include("inc.php");
 
- if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
-  {
-   header("location: ".$settings['forum_address']."login.php?referer=index.php");
-   die("<a href=\"login.php?referer=index.php\">further...</a>");
-  }
+if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
+&& isset($_COOKIE['auto_login'])
+&& isset($settings['autologin'])
+&& $settings['autologin'] == 1)
+	{
+	header("location: ".$settings['forum_address']."login.php?referer=index.php");
+	die("<a href=\"login.php?referer=index.php\">further...</a>");
+	}
 
- if (isset($_GET['update']) && isset($_SESSION[$settings['session_prefix'].'newtime']))
-  {
-   $_SESSION[$settings['session_prefix'].'newtime'] = time();
-   $update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET last_login=last_login, last_logout=NOW(), registered=registered WHERE user_id='".$_SESSION[$settings['session_prefix'].'user_id']."'", $connid);
+if (isset($_GET['category']))
+	{
+	$qs = "?category=".inval($_GET['category']);
+	}
+else
+	{
+	$qs = "";
+	}
 
-   if (isset($_GET['category'])) $qs = "?category=".urlencode(stripslashes($_GET['category'])); else $qs = "";
-   if (empty($_GET['view'])) { header("location: ".$settings['forum_address']."forum.php".$qs); die("<a href=\"forum.php".$qs."\">further...</a>"); }
-   elseif (isset($_GET['view']) && $_GET['view']=="board") { header("location: ".$settings['forum_address']."board.php".$qs); die("<a href=\"board.php".$qs."\">further...</a>"); }
-   elseif (isset($_GET['view']) && $_GET['view']=="mix") { header("location: ".$settings['forum_address']."mix.php".$qs); die("<a href=\"mix.php".$qs."\">further...</a>"); }
-  }
+if (isset($_GET['update']) && isset($_SESSION[$settings['session_prefix'].'newtime']))
+	{
+	$_SESSION[$settings['session_prefix'].'newtime'] = time();
+	$update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET last_login=last_login, last_logout=NOW(), registered=registered WHERE user_id='".$_SESSION[$settings['session_prefix'].'user_id']."'", $connid);
+	if (empty($_GET['view']))
+		{
+		header("location: ".$settings['forum_address']."forum.php".$qs);
+		die("<a href=\"forum.php".$qs."\">further...</a>");
+		}
+	else if (isset($_GET['view']) && $_GET['view']=="board")
+		{
+		header("location: ".$settings['forum_address']."board.php".$qs);
+		die("<a href=\"board.php".$qs."\">further...</a>");
+		}
+	else if (isset($_GET['view']) && $_GET['view']=="mix")
+		{
+		header("location: ".$settings['forum_address']."mix.php".$qs);
+		die("<a href=\"mix.php".$qs."\">further...</a>");
+		}
+	}
 
- if (isset($_GET['category'])) $qs = "?category=".$_GET['category']; else $qs = "";
+if (isset($_SESSION[$settings['session_prefix'].'user_view']))
+	{
+	if ($_SESSION[$settings['session_prefix'].'user_view'] == "board")
+		{
+		header("location: ".$settings['forum_address']."board.php".$qs);
+		die("<a href=\"board.php\">further...</a>");
+		}
+	else if ($_SESSION[$settings['session_prefix'].'user_view'] == "mix")
+		{
+		header("location: ".$settings['forum_address']."mix.php".$qs);
+		die("<a href=\"mix.php\">further...</a>");
+		}
+	else
+		{
+		header("location: ".$settings['forum_address']."forum.php".$qs);
+		die("<a href=\"forum.php\">further...</a>");
+		}
+	}
+else if (isset($_COOKIE['user_view']))
+	{
+	if ($_COOKIE['user_view'] == "board")
+		{
+		header("location: ".$settings['forum_address']."board.php".$qs);
+		die("<a href=\"board.php\">further...</a>");
+		}
+	else if ($_COOKIE['user_view'] == "mix")
+		{
+		header("location: ".$settings['forum_address']."mix.php".$qs);
+		die("<a href=\"mix.php\">further...</a>");
+		}
+	else
+		{
+		header("location: ".$settings['forum_address']."forum.php".$qs);
+		die("<a href=\"forum.php\">further...</a>");
+		}
+	}
+else
+	{
+	if ($settings['standard'] == "board")
+		{
+		header("location: ".$settings['forum_address']."board.php".$qs);
+		die("<a href=\"board.php\">further...</a>");
+		}
+	else if ($settings['standard'] == "mix")
+		{
+		header("location: ".$settings['forum_address']."mix.php".$qs);
+		die("<a href=\"mix.php\">further...</a>");
+		}
+	else
+		{
+		header("location: ".$settings['forum_address']."forum.php".$qs);
+		die("<a href=\"forum.php\">further...</a>");
+		}
+	}
 
- if (isset($_SESSION[$settings['session_prefix'].'user_view']))
-  {
-   if ($_SESSION[$settings['session_prefix'].'user_view'] == "board") { header("location: ".$settings['forum_address']."board.php".$qs); die("<a href=\"board.php\">further...</a>"); }
-   elseif ($_SESSION[$settings['session_prefix'].'user_view'] == "mix") { header("location: ".$settings['forum_address']."mix.php".$qs); die("<a href=\"mix.php\">further...</a>"); }
-   else { header("location: ".$settings['forum_address']."forum.php".$qs); die("<a href=\"forum.php\">further...</a>"); }
-  }
- elseif (isset($_COOKIE['user_view']))
-  {
-   if ($_COOKIE['user_view'] == "board") { header("location: ".$settings['forum_address']."board.php".$qs); die("<a href=\"board.php\">further...</a>"); }
-   elseif ($_COOKIE['user_view'] == "mix") { header("location: ".$settings['forum_address']."mix.php".$qs); die("<a href=\"mix.php\">further...</a>"); }
-   else { header("location: ".$settings['forum_address']."forum.php".$qs); die("<a href=\"forum.php\">further...</a>"); }
-  }
- else
-  {
-   if ($settings['standard'] == "board") { header("location: ".$settings['forum_address']."board.php".$qs); die("<a href=\"board.php\">further...</a>"); }
-   elseif ($settings['standard'] == "mix") { header("location: ".$settings['forum_address']."mix.php".$qs); die("<a href=\"mix.php\">further...</a>"); }
-   else { header("location: ".$settings['forum_address']."forum.php".$qs); die("<a href=\"forum.php\">further...</a>"); }
-  }
 ?>
