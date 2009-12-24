@@ -160,8 +160,8 @@ if ($entry["email"]!="" && $entry["hide_email"] != 1)
 	}
 if ($entrydata["place"] != "")
 	{
-	$place_c .= htmlspecialchars($entry["place"]).", ";
-	$place .= htmlspecialchars($entry["place"]);
+	$place_c .= htmlspecialchars($entry['place']).", ";
+	$place .= htmlspecialchars($entry['place']);
 	}
 # generate HTML source code of authors name
 $name = outputAuthorsName($entry['name'], $mark, $entry['user_id']);
@@ -169,9 +169,14 @@ $name = outputAuthorsName($entry['name'], $mark, $entry['user_id']);
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	and $entry['user_id'] > 0)
 	{
-	$linktitle = str_replace("[name]", htmlspecialchars($entry["name"]), $lang['show_userdata_linktitle']);
+	$linktitle = str_replace("[name]", htmlspecialchars($entry['name']), $lang['show_userdata_linktitle']);
 	$uname .= '<a class="userlink" href="user.php?id='.$entry["user_id"].'" title="'.$linktitle.'">'.$name.'</a>';
 	}
+else
+	{
+	$uname = $name;
+	}
+
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin" ||
 	isset($_SESSION[$settings['session_prefix'].'user_id'])
@@ -179,8 +184,6 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	{
 	$entryIP = '<span class="xsmall">'.$entry['ip'].'</span>';
 	}
-
-
 
 if ($entry["edited_diff"] > 0
 	&& $entry["edited_diff"] > $entry["time"]
@@ -190,8 +193,6 @@ if ($entry["edited_diff"] > 0
 	$editstring = str_replace("[time]", strftime($lang['time_format'],$entry["e_time"]), $editstring);
 	$entryedit .= '<br /><span class="xsmall">'.$editstring.'</span>';
 	}
-
-#$r .= "<pre>".print_r($mark,true)."</pre>";
 
 if ($view=='forum')
 	{
@@ -245,12 +246,11 @@ function outputAuthorsName($username, $mark, $user_id=0) {
 global $settings, $lang;
 
 $r = '';
-$name = '';
+$name = '<span class="';
 $regimg = '';
 
 if ($mark['admin']===true or $mark['mod']===true or $mark['user']===true)
 	{
-	$name .= '<span class="';
 	if ($mark['admin']==true)
 		{
 		$name .= 'admin-highlight" title="'.$lang['ud_admin'];
@@ -263,13 +263,12 @@ if ($mark['admin']===true or $mark['mod']===true or $mark['user']===true)
 		{
 		$name .= 'user-highlight" title="'.$lang['ud_user'];
 		}
-	$name .= '">';
 	}
 else
 	{
-	$name .= '<span class="username">';
+	$name .= 'username';
 	}
-$name .= htmlspecialchars($username).'</span>';
+$name .= '">'.htmlspecialchars($username).'</span>';
 
 # generate image for registered users
 if ($settings['show_registered'] ==1
