@@ -364,7 +364,7 @@ function thread_tree($id, $aktuellerEintrag = 0, $tiefe = 0) {
 global $settings, $lang, $parent_array, $child_array, $page, $category, $order, $db_settings, $connid, $last_visit, $categories, $category_accession;
 
 // highlighting of admins, mods and users:
-$mark_admin = false; $mark_mod = false; $mark_user = false;
+$mark['admin'] = false; $mark['mod'] = false; $mark['user'] = false;
 if (($settings['admin_mod_highlight'] == 1 or $settings['user_highlight'] == 1) && $parent_array[$id]["user_id"] > 0)
 	{
 	$userdata_result=mysql_query("SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = '".$parent_array[$id]["user_id"]."'", $connid);
@@ -373,45 +373,21 @@ if (($settings['admin_mod_highlight'] == 1 or $settings['user_highlight'] == 1) 
 	mysql_free_result($userdata_result);
 	if ($settings['admin_mod_highlight'] == 1)
 		{
-		if ($userdata['user_type'] == "admin") $mark_admin = true;
-		else if ($userdata['user_type'] == "mod") $mark_mod = true;
+		if ($userdata['user_type'] == "admin") $mark['admin'] = true;
+		else if ($userdata['user_type'] == "mod") $mark['mod'] = true;
 		}
 	if ($settings['user_highlight'] == 1)
 		{
-		if ($userdata['user_type'] == "user") $mark_user = true;
+		if ($userdata['user_type'] == "user") $mark['user'] = true;
 		}
 	}
 
-if ($mark_admin===true or $mark_mod===true or $mark_user===true)
-	{
-	$name  = '<span class="';
-	if ($mark_admin==true)
-		{
-		$name .= 'admin-highlight" title="Administrator';
-		}
-	else if ($mark_mod==true)
-		{
-		$name .= 'mod-highlight" title="Moderator';
-		}
-	else if ($mark_user==true)
-		{
-		$name .= 'user-highlight" title="registrierter Benutzer';
-		}
-	$name .= '">'.htmlspecialchars($parent_array[$id]["name"]).'</span>';
-	}
-else
-	{
-	$name = htmlspecialchars($parent_array[$id]["name"]);
-	}
+$name = outputAuthorsName($parent_array[$id]["name"], $mark, $parent_array[$id]['user_id']);
 
 if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1)
 	{
 	$sult = str_replace("[name]", htmlspecialchars($parent_array[$id]["name"]), $lang['show_userdata_linktitle']);
-	$thread_info_a = str_replace("[name]", $name."<a href=\"user.php?id=".$parent_array[$id]["user_id"]."\" title=\"".$sult."\"><img src=\"img/registered.gif\" alt=\"(R)\" width=\"10\" height=\"10\" /></a>", $lang['thread_info']);
-	}
-else if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1)
-	{
-	$thread_info_a = str_replace("[name]", $name."<img src=\"img/registered.gif\" alt=\"(R)\" width=\"10\" height=\"10\" title=\"".$lang['registered_user_title']."\" />", $lang['thread_info']);
+	$thread_info_a = str_replace("[name]", '<a href="user.php?id='.$parent_array[$id]["user_id"].'" title="'.$sult.'">'.$name.'</a>', $lang['thread_info']);
 	}
 else $thread_info_a = str_replace("[name]", $name, $lang['thread_info']);
 

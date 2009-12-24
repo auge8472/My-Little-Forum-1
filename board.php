@@ -262,9 +262,9 @@ if($settings['access_for_users_only']  == 1
 				}
 
 			# highlight user, mods and admins:
-			$mark_admin = false;
-			$mark_mod = false;
-			$mark_user = false;
+			$mark['admin'] = false;
+			$mark['mod'] = false;
+			$mark['user'] = false;
 			if (($settings['admin_mod_highlight'] == 1
 			or $settings['user-highlight'] == 1)
 			&& $zeile["user_id"] > 0)
@@ -275,15 +275,15 @@ if($settings['access_for_users_only']  == 1
 				mysql_free_result($userdata_result);
 				if ($userdata['user_type'] == "admin")
 					{
-					$mark_admin = true;
+					$mark['admin'] = true;
 					}
 				else if ($userdata['user_type'] == "mod")
 					{
-					$mark_mod = true;
+					$mark['mod'] = true;
 					}
 				else if ($userdata['user_type'] == "user")
 					{
-					$mark_user = true;
+					$mark['user'] = true;
 					}
 				}
 			$rowClass = ($i % 2 == 0) ? "a" : "b";
@@ -375,29 +375,7 @@ if($settings['access_for_users_only']  == 1
 				$sult = str_replace("[name]", htmlspecialchars($zeile["name"]), $lang['show_userdata_linktitle']);
 				echo '<a href="user.php?id='.$zeile["user_id"].'" title="'.$sult.'">';
 				}
-			echo '<span class="small">';
-			if ($mark_admin===true)
-				{
-				echo '<span class="admin-highlight" title="Administrator">';
-				}
-			else if ($mark_mod===true)
-				{
-				echo '<span class="mod-highlight" title="Moderator">';
-				}
-			else if ($mark_user===true)
-				{
-				echo '<span class="user-highlight" title="registrierter Benutzer">';
-				}
-			echo htmlspecialchars($zeile["name"]);
-			if ($mark_admin===true || $mark_mod==="true" || $mark_user===true)
-				{
-				echo '</span>';
-				}
-			echo '</span>';
-			if ($zeile["user_id"] > 0 && $settings['show_registered'] ==1)
-				{
-				echo '<img src="img/registered.gif" alt="(R)" width="10" height="10" title="'.$lang['registered_user_title'].'" />';
-				}
+			echo outputAuthorsName($zeile["name"], $mark, $zeile["user_id"]);
 			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
 				{
 				echo '</a>';

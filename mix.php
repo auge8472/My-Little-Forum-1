@@ -317,6 +317,32 @@ if ($settings['access_for_users_only'] == 1
 				$last_answer = mysql_fetch_array($last_answer_result);
 				mysql_free_result($last_answer_result);
 				}
+
+			# highlight user, mods and admins:
+			$mark['admin'] = false;
+			$mark['mod'] = false;
+			$mark['user'] = false;
+			if (($settings['admin_mod_highlight'] == 1
+			or $settings['user-highlight'] == 1)
+			&& $zeile["user_id"] > 0)
+				{
+				$userdata_result=mysql_query("SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = '".$zeile["user_id"]."'", $connid);
+				if (!$userdata_result) die($lang['db_error']);
+				$userdata = mysql_fetch_array($userdata_result);
+				mysql_free_result($userdata_result);
+				if ($userdata['user_type'] == "admin")
+					{
+					$mark['admin'] = true;
+					}
+				else if ($userdata['user_type'] == "mod")
+					{
+					$mark['mod'] = true;
+					}
+				else if ($userdata['user_type'] == "user")
+					{
+					$mark['user'] = true;
+					}
+				}
 			$rowClass = ($i % 2 == 0) ? "a" : "b";
 			echo '<tr class="'.$rowClass.'">'."\n";
 			echo '<td>'."\n";
@@ -428,12 +454,7 @@ if ($settings['access_for_users_only'] == 1
 				$sult = str_replace("[name]", htmlspecialchars($zeile["name"]), $lang['show_userdata_linktitle']);
 				echo '<a href="user.php?id='.$zeile["user_id"].'" title="'.$sult.'">';
 				}
-			echo '<span class="small">'.htmlspecialchars($zeile["name"]).'</span>';
-			if ($zeile["user_id"] > 0 && $settings['show_registered'] ==1)
-				{
-				echo '<img src="img/registered.gif" alt="(R)" width="10" height="10"';
-				echo ' title="'.$lang['registered_user_title'].'" />';
-				}
+			echo outputAuthorsName($zeile["name"], $mark, $zeile["user_id"]);
 			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
 				{
 				echo '</a>';
