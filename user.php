@@ -21,18 +21,22 @@
 
 include("inc.php");
 
-if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
- {
-  if (isset($_GET['id'])) header("location: ".$settings['forum_address']."login.php?referer=user.php&id=".$_GET['id']);
-  else header("location: ".$settings['forum_address']."login.php?referer=user.php");
-  die("<a href=\"login.php?referer=user.php\">further...</a>");
- }
+if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
+&& isset($_COOKIE['auto_login'])
+&& isset($settings['autologin'])
+&& $settings['autologin'] == 1)
+	{
+	$header  = 'location: '.$settings['forum_address'].'login.php?referer=user.php';
+	$header .= (isset($_GET['id'])) ? '&id='.$_GET['id'] : '';
+	header($header);
+	die('<a href="login.php?referer=user.php">further...</a>');
+	}
 
 if (!isset($_SESSION[$settings['session_prefix'].'user_id']))
- {
-  header("location: ".$settings['forum_address']."login.php");
-  die("<a href=\"login.php\">further...</a>");
- }
+	{
+	header('location: '.$settings['forum_address'].'login.php');
+	die('<a href="login.php">further...</a>');
+	}
 
 // import vars:
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $user_id = $_SESSION[$settings['session_prefix'].'user_id'];
@@ -69,700 +73,954 @@ if (empty($category)) $category = "all";
 unset($errors);
 
 // Check if user locked:
-$lock_result = mysql_query("SELECT user_lock FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_SESSION[$settings['session_prefix'].'user_id'])." LIMIT 1", $connid);
+$lockedUserQuery = "SELECT
+user_lock
+FROM ".$db_settings['userdata_table']."
+WHERE user_id = ".intval($_SESSION[$settings['session_prefix'].'user_id'])."
+LIMIT 1";
+$lock_result = mysql_query($lockedUserQuery, $connid);
 if (!$lock_result) die($lang['db_error']);
-$lock_result_array = mysql_fetch_array($lock_result);
+$lock_result_array = mysql_fetch_assoc($lock_result);
 mysql_free_result($lock_result);
 if ($lock_result_array['user_lock'] > 0) $action = "locked";
 
-if (isset($_GET['user_lock']) && isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
- {
-  $lock_result = mysql_query("SELECT user_lock, user_type FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_GET['user_lock'])." LIMIT 1", $connid);
-  if (!$lock_result) die($lang['db_error']);
-  $field = mysql_fetch_array($lock_result);
-  mysql_free_result($lock_result);
-  if ($field['user_type'] == "user")
-   {
-    if ($field['user_lock'] == 0) $new_lock = 1; else $new_lock = 0;
-    $update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_lock='".$new_lock."', last_login=last_login, registered=registered WHERE user_id='".$_GET['user_lock']."' LIMIT 1", $connid);
-   }
-  $action="show users";
- }
+if (isset($_GET['user_lock'])
+&& isset($_SESSION[$settings['session_prefix'].'user_type'])
+&& ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
+|| $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
+	{
+	$lock_result = mysql_query("SELECT user_lock, user_type FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_GET['user_lock'])." LIMIT 1", $connid);
+	if (!$lock_result) die($lang['db_error']);
+	$field = mysql_fetch_array($lock_result);
+	mysql_free_result($lock_result);
+	if ($field['user_type'] == "user")
+		{
+		if ($field['user_lock'] == 0) $new_lock = 1;
+		else $new_lock = 0;
+		$update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_lock='".$new_lock."', last_login=last_login, registered=registered WHERE user_id='".$_GET['user_lock']."' LIMIT 1", $connid);
+		}
+	$action="show users";
+	}
 
-if(isset($_POST['change_email_submit']))
- {
-    $new_email = trim($_POST['new_email']);
-    $pw_new_email = $_POST['pw_new_email'];
-    // Check data:
-    $email_result = mysql_query("SELECT user_id, user_name, user_pw, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
-    if (!$email_result) die($lang['db_error']);
-    $field = mysql_fetch_array($email_result);
-    mysql_free_result($email_result);
-    if ($pw_new_email=='' || $new_email=='') $errors[] = $lang['error_form_uncompl'];
-    if (empty($errors))
-     {
-      if (strlen($new_email) > $settings['email_maxlength']) $errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
-      if ($new_email == $field["user_email"]) $errors[] = $lang['error_email_equal'];
-      if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $new_email)) $errors[] = $lang['error_email_wrong'];
-      if ($field["user_pw"] != md5(trim($pw_new_email))) $errors[] = $lang['pw_wrong'];
-     }
-    if (empty($errors))
-     {
-      $activate_code = md5(uniqid(rand()));
-      // send mail with activation key:
-      $ip = $_SERVER["REMOTE_ADDR"];
-      $lang['new_user_email_txt'] = str_replace("[name]", $field['user_name'], $lang['change_email_txt']);
-      #$lang['new_user_email_txt'] = str_replace("[password]", $new_user_pw, $lang['new_user_email_txt']);
-      $lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$field['user_id']."&key=".$activate_code, $lang['new_user_email_txt']);
-      $lang['new_user_email_txt'] = stripslashes($lang['new_user_email_txt']);
-      $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
-      $header .= "X-Mailer: Php/" . phpversion(). "\n";
-      $header .= "X-Sender-ip: $ip\n";
-      $header .= "Content-Type: text/plain";
-      $new_user_mailto = $field['user_name']." <".$new_email.">";
-      if($settings['mail_parameter']!='')
-       {
-        @mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header, $settings['mail_parameter']) or $errors[] = $lang['error_meilserv'];
-       }
-      else
-       {
-        @mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header) or $errors[] = $lang['error_meilserv'];
-       }
-      if(empty($errors))
-       {
-        @mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_email='".mysql_escape_string($new_email)."', last_login=last_login, registered=registered, activate_code = '".mysql_escape_string($activate_code)."' WHERE user_id='".$user_id."'", $connid) or die($lang['db_error']);
-        header("location: ".$settings['forum_address']."login.php"); die("<a href=\"login.php\">further...</a>");
-       }
-      else $action="email";
-     }
-    else $action="email";
- }
+if (isset($_POST['change_email_submit']))
+	{
+	$new_email = trim($_POST['new_email']);
+	$pw_new_email = $_POST['pw_new_email'];
+	# Check data:
+	$email_result = mysql_query("SELECT user_id, user_name, user_pw, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+	if (!$email_result) die($lang['db_error']);
+	$field = mysql_fetch_assoc($email_result);
+	mysql_free_result($email_result);
+	if ($pw_new_email=='' || $new_email=='')
+		{
+		$errors[] = $lang['error_form_uncompl'];
+		}
+	if (empty($errors))
+		{
+		if (mb_strlen($new_email) > $settings['email_maxlength'])
+			{
+			$errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
+			}
+		if ($new_email == $field["user_email"])
+			{
+			$errors[] = $lang['error_email_equal'];
+			}
+		if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $new_email))
+			{
+			$errors[] = $lang['error_email_wrong'];
+			}
+		if ($field["user_pw"] != md5(trim($pw_new_email)))
+			{
+			$errors[] = $lang['pw_wrong'];
+			}
+		}
+	if (empty($errors))
+		{
+		$activate_code = md5(uniqid(rand()));
+		# send mail with activation key:
+		$ip = $_SERVER["REMOTE_ADDR"];
+		$lang['new_user_email_txt'] = str_replace("[name]", $field['user_name'], $lang['change_email_txt']);
+		$lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$field['user_id']."&key=".$activate_code, $lang['new_user_email_txt']);
+		$lang['new_user_email_txt'] = stripslashes($lang['new_user_email_txt']);
+		$header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
+		$header .= "X-Mailer: Php/" . phpversion(). "\n";
+		$header .= "X-Sender-ip: $ip\n";
+		$header .= "Content-Type: text/plain";
+		$new_user_mailto = $field['user_name']." <".$new_email.">";
+		if($settings['mail_parameter']!='')
+			{
+			@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header, $settings['mail_parameter']) or $errors[] = $lang['error_meilserv'];
+			}
+		else
+			{
+			@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header) or $errors[] = $lang['error_meilserv'];
+			}
+		if(empty($errors))
+			{
+			@mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_email='".mysql_escape_string($new_email)."', last_login=last_login, registered=registered, activate_code = '".mysql_escape_string($activate_code)."' WHERE user_id='".$user_id."'", $connid) or die($lang['db_error']);
+			header("location: ".$settings['forum_address']."login.php");
+			die("<a href=\"login.php\">further...</a>");
+			}
+		else $action="email";
+		}
+	else $action="email";
+	}
 
 if (isset($_SESSION[$settings['session_prefix'].'user_id']) && empty($action))
- {
-  if (isset($id)) $action = "get userdata";
-  else $action = "show users";
- }
-elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action))
- {
-  switch ($action) // Aktionen vor der Ausgabe von HTML
-  {
-   case "edit submited":
-    // Check the posted data:
-    $user_real_name = trim($user_real_name);
-    $user_hp = trim($user_hp);
-    $user_place = trim($user_place);
-    $profile = trim($profile);
-    $signature = trim($signature);
-    #if (isset($user_hp) && substr($user_hp,0,7) == "http://") $user_hp = substr($user_hp,7);
-    if (empty($user_view) or $user_view == "") $user_view = $standard;
-    if (empty($new_posting_notify)) $new_posting_notify = 0;
-    if (empty($new_user_notify)) $new_user_notify = 0;
-    #if (isset($user_hp) && $user_hp != "" && !ereg(".",$user_hp)) $errors[] = $lang['error_hp_wrong'];
-    if (strlen($user_real_name) > $settings['name_maxlength']) $errors[] = $lang['user_real_name'] . " " .$lang['error_input_too_long'];
-    if (strlen($user_hp) > $settings['hp_maxlength']) $errors[] = $lang['user_hp'] . " " .$lang['error_input_too_long'];
-    if (strlen($user_place) > $settings['place_maxlength']) $errors[] = $lang['user_place'] . " " .$lang['error_input_too_long'];
-    if (strlen($profile) > $settings['profile_maxlength'])
-     {
-      $lang['err_prof_too_long'] = str_replace("[length]", strlen($profile), $lang['err_prof_too_long']);
-      $lang['err_prof_too_long'] = str_replace("[maxlength]", $settings['profile_maxlength'], $lang['err_prof_too_long']);
-      $errors[] = $lang['err_prof_too_long'];
-     }
-    if (strlen($signature) > $settings['signature_maxlength'])
-     {
-      $lang['err_sig_too_long'] = str_replace("[length]", strlen($signature), $lang['err_sig_too_long']);
-      $lang['err_sig_too_long'] = str_replace("[maxlength]", $settings['signature_maxlength'], $lang['err_sig_too_long']);
-      $errors[] = $lang['err_sig_too_long'];
-     }
+	{
+	if (isset($id)) $action = "get userdata";
+	else $action = "show users";
+	}
+else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action))
+	{
+	# Aktionen vor der Ausgabe von HTML
+	switch ($action)
+		{
+		case "edit submited":
+			# Check the posted data:
+			$user_real_name = trim($user_real_name);
+			$user_hp = trim($user_hp);
+			$user_place = trim($user_place);
+			$profile = trim($profile);
+			$signature = trim($signature);
+			#if (isset($user_hp) && substr($user_hp,0,7) == "http://") $user_hp = substr($user_hp,7);
+			if (empty($user_view) or $user_view == "") $user_view = $standard;
+			if (empty($new_posting_notify)) $new_posting_notify = 0;
+			if (empty($new_user_notify)) $new_user_notify = 0;
+			#if (isset($user_hp) && $user_hp != "" && !ereg(".",$user_hp)) $errors[] = $lang['error_hp_wrong'];
+			if (mb_strlen($user_real_name) > $settings['name_maxlength']) $errors[] = $lang['user_real_name'] . " " .$lang['error_input_too_long'];
+			if (mb_strlen($user_hp) > $settings['hp_maxlength']) $errors[] = $lang['user_hp'] . " " .$lang['error_input_too_long'];
+			if (mb_strlen($user_place) > $settings['place_maxlength']) $errors[] = $lang['user_place'] . " " .$lang['error_input_too_long'];
+			if (mb_strlen($profile) > $settings['profile_maxlength'])
+				{
+				$lang['err_prof_too_long'] = str_replace("[length]", mb_strlen($profile), $lang['err_prof_too_long']);
+				$lang['err_prof_too_long'] = str_replace("[maxlength]", $settings['profile_maxlength'], $lang['err_prof_too_long']);
+				$errors[] = $lang['err_prof_too_long'];
+				}
+			if (mb_strlen($signature) > $settings['signature_maxlength'])
+				{
+				$lang['err_sig_too_long'] = str_replace("[length]", mb_strlen($signature), $lang['err_sig_too_long']);
+				$lang['err_sig_too_long'] = str_replace("[maxlength]", $settings['signature_maxlength'], $lang['err_sig_too_long']);
+				$errors[] = $lang['err_sig_too_long'];
+				}
 
-     $text_arr = explode(" ",$user_real_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-     $error_nwtl = str_replace("[word]", htmlspecialchars(stripslashes(substr($text_arr[$i],0,$settings['name_word_maxlength'])))."...", $lang['error_name_word_too_long']);
-     $errors[] = $error_nwtl; } }
-     $text_arr = explode(" ",$user_place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
-     $error_pwtl = str_replace("[word]", htmlspecialchars(stripslashes(substr($text_arr[$i],0,$settings['place_word_maxlength'])))."...", $lang['error_place_word_too_long']);
-     $errors[] = $error_pwtl; } }
-     $text_arr = str_replace("\n", " ", $profile);
-     if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
-     if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
-     $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-     $error_twtl = str_replace("[word]", htmlspecialchars(stripslashes(substr($text_arr[$i],0,$settings['text_word_maxlength'])))."...", $lang['err_prof_word_too_long']);
-     $errors[] = $error_twtl; } }
-     $text_arr = str_replace("\n", " ", $signature);
-     if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
-     if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
-     $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-     $error_twtl = str_replace("[word]", htmlspecialchars(stripslashes(substr($text_arr[$i],0,$settings['text_word_maxlength'])))."...", $lang['err_sig_word_too_long']);
-     $errors[] = $error_twtl; } }
-    // End of checking
+			$text_arr = explode(" ",$user_real_name);
+			for ($i=0; $i<count($text_arr); $i++)
+				{
+				trim($text_arr[$i]);
+				$laenge = mb_strlen($text_arr[$i]);
+				if ($laenge > $settings['name_word_maxlength'])
+					{
+					$error_nwtl = str_replace("[word]", htmlspecialchars(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
+					$errors[] = $error_nwtl;
+					}
+				}
+			$text_arr = explode(" ",$user_place);
+			for ($i=0; $i<count($text_arr); $i++)
+				{
+				trim($text_arr[$i]);
+				$laenge = mb_strlen($text_arr[$i]);
+				if ($laenge > $settings['place_word_maxlength'])
+					{
+					$error_pwtl = str_replace("[word]", htmlspecialchars(substr($text_arr[$i],0,$settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
+					$errors[] = $error_pwtl;
+					}
+				}
+			$text_arr = str_replace("\n", " ", $profile);
+			if ($settings['bbcode'] == 1)
+				{
+				$text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr);
+				}
+			if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1)
+				{
+				$text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr);
+				$text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr);
+				$text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr);
+				}
+			$text_arr = explode(" ",$text_arr);
+			for ($i=0; $i<count($text_arr); $i++)
+				{
+				trim($text_arr[$i]);
+				$laenge = mb_strlen($text_arr[$i]);
+				if ($laenge > $settings['text_word_maxlength'])
+					{
+					$error_twtl = str_replace("[word]", htmlspecialchars(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['err_prof_word_too_long']);
+					$errors[] = $error_twtl;
+					}
+				}
+			$text_arr = str_replace("\n", " ", $signature);
+			if ($settings['bbcode'] == 1)
+				{
+				$text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr);
+				}
+			if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1)
+				{
+				$text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr);
+				$text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr);
+				$text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr);
+				}
+			$text_arr = explode(" ",$text_arr);
+			for ($i=0; $i<count($text_arr); $i++)
+				{
+				trim($text_arr[$i]);
+				$laenge = strlen($text_arr[$i]);
+				if ($laenge > $settings['text_word_maxlength'])
+					{
+					$error_twtl = str_replace("[word]", htmlspecialchars(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['err_sig_word_too_long']);
+					$errors[] = $error_twtl;
+					}
+				}
+			# End of checking
+			#if (isset($hp) && substr($hp,0,7) == "http://") { $hp = substr($hp,7); }
+			if (empty($hide_email)) $hide_email = 0;
+			if (empty($errors))
+				{
+				$updateUserData = "UPDATE ".$db_settings['userdata_table']." SET
+				user_real_name='".mysql_real_escape_string($user_real_name)."',
+				hide_email='".$hide_email."',
+				user_hp='".mysql_real_escape_string($user_hp)."',
+				user_place='".mysql_real_escape_string($user_place)."',
+				profile='".mysql_real_escape_string($profile)."',
+				signature='".mysql_real_escape_string($signature)."',
+				last_login=last_login,
+				registered=registered,
+				user_view='".$user_view."',
+				new_posting_notify='".$new_posting_notify."',
+				new_user_notify='".$new_user_notify."',
+				personal_messages='".$personal_messages."',
+				time_difference='".$user_time_difference."'
+				WHERE user_id='".intval($user_id)."'
+				LIMIT 1";
+				$update_result = mysql_query($updateUserData, $connid);
+				$_SESSION[$settings['session_prefix'].'user_view'] = $user_view;
+				$_SESSION[$settings['session_prefix'].'user_time_difference'] = $user_time_difference;
+				header("location: ".$settings['forum_address']."user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']);
+				die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
+				}
+			else $action="edit";
+		break;
+		case "pw submited":
+			$pw_result = mysql_query("SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+			if (!$pw_result) die($lang['db_error']);
+			$field = mysql_fetch_assoc($pw_result);
+			mysql_free_result($pw_result);
 
-    #if (isset($hp) && substr($hp,0,7) == "http://") { $hp = substr($hp,7); }
-    if (empty($hide_email)) $hide_email = 0;
-    if (empty($errors))
-     {
-      $update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_real_name='".mysql_escape_string($user_real_name)."', hide_email='".$hide_email."', user_hp='".mysql_escape_string($user_hp)."', user_place='".mysql_escape_string($user_place)."', profile='".mysql_escape_string($profile)."', signature='".mysql_escape_string($signature)."', last_login=last_login, registered=registered, user_view='".$user_view."', new_posting_notify='".$new_posting_notify."', new_user_notify='".$new_user_notify."', personal_messages='".$personal_messages."', time_difference='".$user_time_difference."' WHERE user_id='".$user_id."' LIMIT 1", $connid);
-      $_SESSION[$settings['session_prefix'].'user_view'] = $user_view;
-      $_SESSION[$settings['session_prefix'].'user_time_difference'] = $user_time_difference;
+			trim($old_pw);
+			trim($new_pw);
+			trim($new_pw_conf);
 
-      header("location: ".$settings['forum_address']."user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
-     }
-    else $action="edit";
-   break;
+			if ($old_pw=="" or $new_pw=="" or $new_pw_conf =="")
+				{
+				$errors[] = $lang['error_form_uncompl'];
+				}
+			else
+				{
+				if ($field["user_pw"] != md5($old_pw))
+					{
+					$errors[] = $lang['error_old_pw_wrong'];
+					}
+				if ($new_pw_conf != $new_pw)
+					{
+					$errors[] = $lang['error_pw_conf_wrong'];
+					}
+				}
+			# Update, if no errors:
+			if (empty($errors))
+				{
+				$pw_update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_pw='".md5($new_pw)."', last_login=last_login, registered=registered WHERE user_id='".$user_id."'", $connid);
+				header("location: ".$settings['forum_address']."user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']);
+				die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
+				}
+			else $action="pw";
+		break;
+		case "pm_sent":
+			$pms_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+			if (!$pms_result) die($lang['db_error']);
+			$sender = mysql_fetch_assoc($pms_result);
+			mysql_free_result($pms_result);
 
-   case "pw submited":
-    $pw_result = mysql_query("SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
-    if (!$pw_result) die($lang['db_error']);
-    $field = mysql_fetch_array($pw_result);
-    mysql_free_result($pw_result);
+			$pmr_result = mysql_query("SELECT user_name, user_email, personal_messages FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_POST['recipient_id'])." LIMIT 1", $connid);
+			if (!$pmr_result) die($lang['db_error']);
+			$recipient = mysql_fetch_assoc($pmr_result);
+			mysql_free_result($pmr_result);
 
-    trim($old_pw);
-    trim($new_pw);
-    trim($new_pw_conf);
+			if ($_POST['pm_text'] == "")
+				{
+				$errors[] = $lang['error_pers_msg_no_text'];
+				}
+			if ($recipient['personal_messages'] == "")
+				{
+				$errors[] = $lang['error_pers_msg_deactivated'];
+				}
 
-    if ($old_pw=="" or $new_pw=="" or $new_pw_conf =="") $errors[] = $lang['error_form_uncompl'];
-    else
-     {
-      if ($field["user_pw"] != md5($old_pw)) $errors[] = $lang['error_old_pw_wrong'];
-      if ($new_pw_conf != $new_pw) $errors[] = $lang['error_pw_conf_wrong'];
-     }
-    // Update, if no errors:
-    if (empty($errors))
-     {
-      $pw_update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_pw='".md5($new_pw)."', last_login=last_login, registered=registered WHERE user_id='".$user_id."'", $connid);
-      header("location: ".$settings['forum_address']."user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
-     }
-    else $action="pw";
-   break;
-   /* self-delete of user:
-   case "delete submited":
-    // Überprüfungen:
-    $pw_result = mysql_query("SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = '".$user_id."' LIMIT 1", $connid);
-    if (!$pw_result) die($lang['db_error']);
-    $field = mysql_fetch_array($pw_result);
-    mysql_free_result($pw_result);
-    if ($pw_delete=="") $errors[] = $lang['error_form_uncompl'];
-    else
-     {
-      if ($field["user_pw"] != md5(trim($pw_delete))) $errors[] = $lang['pw_wrong'];
-     }
-    // DB-Update, falls keine Fehler:
-    if (empty($errors))
-     {
-      $delete_result = mysql_query("DELETE FROM ".$db_settings['userdata_table']." WHERE user_id='".$user_id."' LIMIT 1", $connid);
-      $update_result = mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, user_id='0', email_notify='0' WHERE user_id = '".$user_id."'", $connid);
-      session_destroy();
-      header("location: ".$settings['forum_address']."index.php"); die("<a href=\"index.php\">further...</a>");
-     }
-    else $action="delete";
-   break;
-   */
+			if (empty($errors))
+				{
+				$lang['pers_msg_mail_add'] = str_replace("[forum_address]", $settings['forum_address'], $lang['pers_msg_mail_add']);
+				$ip = $_SERVER["REMOTE_ADDR"];
+				$mail_subject = $_POST['pm_subject'];
+				$mail_text  = $_POST['pm_text'];
+				$mail_text .= "\n\n".$lang['pers_msg_mail_add'];
+				$header  = "From: ".$sender['user_name']." <".$sender['user_email'].">\n";
+				$header .= "Reply-To: ".$sender['user_name']." <".$sender['user_email'].">\n";
+				$header .= "X-Mailer: PHP/" . phpversion(). "\n";
+				$header .= "X-Sender-IP: $ip\n";
+				$header .= "Content-Type: text/plain";
+				if ($settings['mail_parameter']!='')
+					{
+					if (!@mail($recipient['user_name']." <".$recipient['user_email'].">", $mail_subject, $mail_text, $header, $settings['mail_parameter']))
+						{
+						$errors[] = $lang['error_meilserv'];
+						}
+					}
+				else
+					{
+					if (!@mail($recipient['user_name']." <".$recipient['user_email'].">", $mail_subject, $mail_text, $header))
+						{
+						$errors[] = $lang['error_meilserv'];
+						}
+					}
 
-   case "pm_sent":
-    $pms_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
-    if (!$pms_result) die($lang['db_error']);
-    $sender = mysql_fetch_array($pms_result);
-    mysql_free_result($pms_result);
+				if(empty($errors))
+					{
+					$lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['conf_email_txt']);
+					$lang['conf_email_txt'] = str_replace("[sender_name]", $sender['user_name'], $lang['conf_email_txt']);
+					$lang['conf_email_txt'] = str_replace("[recipient_name]", $recipient['user_name'], $lang['conf_email_txt']);
+					$lang['conf_email_txt'] = str_replace("[subject]", $_POST['pm_subject'], $lang['conf_email_txt']);
+					$lang['conf_email_txt'] .= "\n\n".stripslashes($_POST['pm_text']);
+					$conf_mailto = $sender['user_name']." <".$sender['user_email'].">";
+					$ip = $_SERVER["REMOTE_ADDR"];
+					$conf_header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
+					$conf_header .= "X-Mailer: PHP/" . phpversion(). "\n";
+					$conf_header .= "X-Sender-IP: $ip\n";
+					$conf_header .= "Content-Type: text/plain";
+					if ($settings['mail_parameter']!='')
+						{
+						@mail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt'], $conf_header, $settings['mail_parameter']);
+						}
+					else
+						{
+						@mail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt'], $conf_header);
+						}
+					}
 
-    $pmr_result = mysql_query("SELECT user_name, user_email, personal_messages FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_POST['recipient_id'])." LIMIT 1", $connid);
-    if (!$pmr_result) die($lang['db_error']);
-    $recipient = mysql_fetch_array($pmr_result);
-    mysql_free_result($pmr_result);
-
-    if ($_POST['pm_text'] == "") $errors[] = $lang['error_pers_msg_no_text'];
-    if ($recipient['personal_messages'] == "") $errors[] = $lang['error_pers_msg_deactivated'];
-
-    if (empty($errors))
-     {
-      $lang['pers_msg_mail_add'] = str_replace("[forum_address]", $settings['forum_address'], $lang['pers_msg_mail_add']);
-      $ip = $_SERVER["REMOTE_ADDR"];
-      $mail_subject = stripslashes($_POST['pm_subject']);
-      $mail_text = stripslashes($_POST['pm_text']);
-      $mail_text .= "\n\n".$lang['pers_msg_mail_add'];
-      $header= "From: ".$sender['user_name']." <".$sender['user_email'].">\n";
-      $header .= "Reply-To: ".$sender['user_name']." <".$sender['user_email'].">\n";
-      $header .= "X-Mailer: PHP/" . phpversion(). "\n";
-      $header .= "X-Sender-IP: $ip\n";
-      $header .= "Content-Type: text/plain";
-      if($settings['mail_parameter']!='')
-       {
-        if(!@mail($recipient['user_name']." <".$recipient['user_email'].">", $mail_subject, $mail_text, $header, $settings['mail_parameter'])) { $errors[] = $lang['error_meilserv']; }
-       }
-      else
-       {
-        if(!@mail($recipient['user_name']." <".$recipient['user_email'].">", $mail_subject, $mail_text, $header)) { $errors[] = $lang['error_meilserv']; }
-       }
-
-      if(empty($errors))
-      {
-       $lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['conf_email_txt']);
-       $lang['conf_email_txt'] = str_replace("[sender_name]", $sender['user_name'], $lang['conf_email_txt']);
-       $lang['conf_email_txt'] = str_replace("[recipient_name]", $recipient['user_name'], $lang['conf_email_txt']);
-       $lang['conf_email_txt'] = str_replace("[subject]", $_POST['pm_subject'], $lang['conf_email_txt']);
-       $lang['conf_email_txt'] .= "\n\n".stripslashes($_POST['pm_text']);
-       $conf_mailto = $sender['user_name']." <".$sender['user_email'].">";
-       $ip = $_SERVER["REMOTE_ADDR"];
-       $conf_header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
-       $conf_header .= "X-Mailer: PHP/" . phpversion(). "\n";
-       $conf_header .= "X-Sender-IP: $ip\n";
-       $conf_header .= "Content-Type: text/plain";
-       if($settings['mail_parameter']!='')
-        {
-         @mail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt'], $conf_header, $settings['mail_parameter']);
-        }
-       else
-        {
-         @mail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt'], $conf_header);
-        }
-      }
-
-      if (empty($errors))
-       {
-        header("location: ".$settings['forum_address']."user.php?id=".$_POST['recipient_id']);
-        die("<a href=\"user.php?id=".$_POST['recipient_id']."\">further...</a>");
-       }
-      else { $id = $_POST['recipient_id']; $action="personal_message"; }
-     }
-    else { $id = $_POST['recipient_id']; $action="personal_message"; }
-    break;
-  }
- }
+				if (empty($errors))
+					{
+					header("location: ".$settings['forum_address']."user.php?id=".$_POST['recipient_id']);
+					die("<a href=\"user.php?id=".$_POST['recipient_id']."\">further...</a>");
+					}
+				else
+					{
+					$id = $_POST['recipient_id'];
+					$action="personal_message";
+					}
+				}
+			else
+				{
+				$id = $_POST['recipient_id'];
+				$action="personal_message";
+				}
+		break;
+		}
+	}
 else
- {
-  header("location: ".$settings['forum_address']."index.php"); die("<a href=\"index.php\">further...</a>");
- }
+	{
+	header("location: ".$settings['forum_address']."index.php");
+	die("<a href=\"index.php\">further...</a>");
+	}
 
 $wo = $lang['user_area_title'];
 
 if ($action == "show users")
- {
-  if (empty($descasc)) $descasc="ASC";
-  if (empty($order)) $order="user_name";
-  $topnav = '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['reg_users_hl'].'</b>';
-  if (isset($_GET['letter']) && $_GET['letter']!="") $pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table']." WHERE user_name LIKE '".$_GET['letter']."%'", $connid);
-  else $pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
-  list($thread_count) = mysql_fetch_row($pid_result);
-  mysql_free_result($pid_result);
-  $abs_pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
-  list($abs_thread_count) = mysql_fetch_row($abs_pid_result);
-  mysql_free_result($abs_pid_result);
-  $lang['num_reg_users'] = str_replace("[number]", $abs_thread_count, $lang['num_reg_users']);
-  if (isset($_GET['letter']) && $_GET['letter'] == "A") $la = ' selected="selected"'; else $la = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "B") $lb = ' selected="selected"'; else $lb = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "C") $lc = ' selected="selected"'; else $lc = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "D") $ld = ' selected="selected"'; else $ld = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "E") $le = ' selected="selected"'; else $le = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "F") $lf = ' selected="selected"'; else $lf = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "G") $lg = ' selected="selected"'; else $lg = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "H") $lh = ' selected="selected"'; else $lh = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "I") $li = ' selected="selected"'; else $li = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "J") $lj = ' selected="selected"'; else $lj = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "K") $lk = ' selected="selected"'; else $lk = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "L") $ll = ' selected="selected"'; else $ll = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "M") $lm = ' selected="selected"'; else $lm = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "N") $ln = ' selected="selected"'; else $ln = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "O") $lo = ' selected="selected"'; else $lo = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "P") $lp = ' selected="selected"'; else $lp = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "Q") $lq = ' selected="selected"'; else $lq = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "R") $lr = ' selected="selected"'; else $lr = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "S") $ls = ' selected="selected"'; else $ls = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "T") $lt = ' selected="selected"'; else $lt = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "U") $lu = ' selected="selected"'; else $lu = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "V") $lv = ' selected="selected"'; else $lv = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "W") $lw = ' selected="selected"'; else $lw = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "X") $lx = ' selected="selected"'; else $lx = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "Y") $ly = ' selected="selected"'; else $ly = '';
-  if (isset($_GET['letter']) && $_GET['letter'] == "Z") $lz = ' selected="selected"'; else $lz = '';
-  $subnav_2 = $lang['num_reg_users'] . '&nbsp;&nbsp;<form action="'.basename($_SERVER["PHP_SELF"]).'" method="get" title=""><div style="display: inline;"><select class="kat" size="1" name="letter" onchange="this.form.submit();">
-  <option value="">A-Z</option>
-  <option value="A"'.$la.'>A</option>
-  <option value="B"'.$lb.'>B</option>
-  <option value="C"'.$lc.'>C</option>
-  <option value="D"'.$ld.'>D</option>
-  <option value="E"'.$le.'>E</option>
-  <option value="F"'.$lf.'>F</option>
-  <option value="G"'.$lg.'>G</option>
-  <option value="H"'.$lh.'>H</option>
-  <option value="I"'.$li.'>I</option>
-  <option value="J"'.$lj.'>J</option>
-  <option value="K"'.$lk.'>K</option>
-  <option value="L"'.$ll.'>L</option>
-  <option value="M"'.$lm.'>M</option>
-  <option value="N"'.$ln.'>N</option>
-  <option value="O"'.$lo.'>O</option>
-  <option value="P"'.$lp.'>P</option>
-  <option value="Q"'.$lq.'>Q</option>
-  <option value="R"'.$lr.'>R</option>
-  <option value="S"'.$ls.'>S</option>
-  <option value="T"'.$lt.'>T</option>
-  <option value="U"'.$lu.'>U</option>
-  <option value="V"'.$lv.'>V</option>
-  <option value="W"'.$lw.'>W</option>
-  <option value="X"'.$lx.'>X</option>
-  <option value="Y"'.$ly.'>Y</option>
-  <option value="Z"'.$lz.'>Z</option>
-  </select>&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></div></form>' . nav($page, $settings['users_per_page'], $thread_count, $order, $descasc, $category);
- }
-else $topnav = '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['user_area_title'].'</b>';
+	{
+	if (empty($descasc)) $descasc="ASC";
+	if (empty($order)) $order="user_name";
+	$topnav = '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['reg_users_hl'].'</b>';
+
+	if (isset($_GET['letter']) && $_GET['letter']!="")
+		{
+		$pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table']." WHERE user_name LIKE '".$_GET['letter']."%'", $connid);
+		}
+	else
+		{
+		$pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
+		}
+	list($thread_count) = mysql_fetch_row($pid_result);
+	mysql_free_result($pid_result);
+
+	$abs_pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
+	list($abs_thread_count) = mysql_fetch_row($abs_pid_result);
+	mysql_free_result($abs_pid_result);
+
+	$lang['num_reg_users'] = str_replace("[number]", $abs_thread_count, $lang['num_reg_users']);
+
+	$alphabet = range('A', 'Z');
+	$subnav_2 = $lang['num_reg_users'] . '&nbsp;&nbsp;<form action="'.basename($_SERVER["PHP_SELF"]).'" method="get" style="display: inline;"><select class="kat" size="1" name="letter" onchange="this.form.submit();">'."\n";
+	$subnav_2 .= '<option value="">A-Z</option>'."\n";
+	foreach ($alphabet as $letter)
+		{
+		$subnav_2 .= '<option value="'.$letter.'"';
+		$subnav_2 .= (isset($_GET['letter']) && $_GET['letter'] == $letter) ? ' selected="selected"' : '';
+		$subnav_2 .= '>'.$letter.'</option>'."\n";
+		}
+	$subnav_2 .= '</select>&nbsp;<input type="image" name="" value=""';
+	$subnav_2 .= ' src="img/submit.gif" alt="&raquo;" /></div></form>'."\n";
+	$subnav_2 .= nav($page, $settings['users_per_page'], $thread_count, $order, $descasc, $category);
+	}
+else
+	{
+	$topnav = '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['user_area_title'].'</b>';
+	}
 
 parse_template();
 echo $header;
+
 switch ($action)
- {
-  case "get userdata":
-   if (empty($id)) $id = $user_id;
-   else $result = mysql_query("SELECT user_id, user_type, user_name, user_real_name, user_email, hide_email, user_hp, user_place, logins, signature, profile, UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS since_date, UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS login_date FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($id), $connid);
-   if (!$result) die($lang['db_error']);
-   $field = mysql_fetch_array($result);
-   mysql_free_result($result);
-   // count postings:
-   $count_postings_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE user_id = ".intval($id), $connid);
-   list($postings_count) = mysql_fetch_row($count_postings_result);
-   mysql_free_result($count_postings_result);
+	{
+	case "get userdata":
+		if (empty($id))
+			{
+			$id = $user_id;
+			}
+		else
+			{
+			$result = mysql_query("SELECT user_id, user_type, user_name, user_real_name, user_email, hide_email, user_hp, user_place, logins, signature, profile, UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS since_date, UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS login_date FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($id), $connid);
+			}
+		if (!$result) die($lang['db_error']);
+		$field = mysql_fetch_assoc($result);
+		mysql_free_result($result);
 
-   if ($field["user_name"] != "")
-   {
-   $lang['user_info_hl'] = str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['user_info_hl']);
-   ?>
-   <h2><?php echo $lang['user_info_hl']; ?></h2>
-   <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
-    <tr>
-     <td class="c"><p class="userdata"><strong><?php echo $lang['username_marking']; ?></strong></p></td>
-     <td class="d"><p class="userdata"><?php echo htmlspecialchars(stripslashes($field["user_name"])); if ($field["user_type"]=="admin") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_admin'].")</span>"; elseif ($field["user_type"]=="mod") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_mod'].")</span>";?></p></td>
-    </tr>
-    <?php if ($field["user_real_name"]!="")
-     { ?><tr>
-      <td class='c'><p class='userdata'><strong><?php echo $lang['user_real_name']; ?></strong></p></td>
-      <td class='d'><p class='userdata'><?php echo htmlspecialchars(stripslashes($field['user_real_name'])); ?></p></td>
-    </tr>
-     <?php
-    } ?>
-    <?php if ($field["hide_email"]!=1)
-     { ?><tr>
-      <td class='c'><p class='userdata'><strong><?php echo $lang['user_email_marking']; ?></strong></p></td>
-      <td class='d'><p class='userdata'><?php echo "<a href='contact.php?uid=".$field['user_id']."'><img src='img/email.gif' alt='".$lang['email_alt']."' title='".str_replace('[name]', htmlspecialchars(stripslashes($field['user_name'])), $lang['email_to_user_linktitle'])."' width='13' height='10' /></a></p></td>"; ?>
-    </tr>
-     <?php
-    } ?>
-    <?php if ($field["user_hp"]!="")
-     { ?><tr>
-      <td class='c'><p class='userdata'><strong><?php echo $lang['user_hp']; ?></strong></p></td>
-      <td class='d'><p class='userdata'><?php if (substr($field['user_hp'],0,7) != 'http://' && substr($field['user_hp'],0,8) != 'https://' && substr($field['user_hp'],0,6) != 'ftp://' && substr($field['user_hp'],0,9) != 'gopher://' && substr($field['user_hp'],0,7) != 'news://') $field['user_hp'] = 'http://'.$field['user_hp']; ?><?php echo "<a href='".$field['user_hp']."'><img src='img/homepage.gif' alt='".$lang['homepage_alt']."' title='".htmlspecialchars(stripslashes($field['user_hp']))."' width='13' height='13' /></a></p></td>"; ?>
-    </tr>
-     <?php
-    } ?>
-    <?php if ($field["user_place"]!=="")
-     { ?><tr>
-      <td class='c'><p class='userdata'><strong><?php echo $lang['user_place']; ?></strong></p></td>
-      <td class='d'><p class='userdata'><?php echo htmlspecialchars(stripslashes($field['user_place'])); ?></p></td>
-    </tr>
-     <?php
-    } ?><tr>
-     <td class="c"><p class="userdata"><strong><?php echo $lang['user_since']; ?></strong></p></td>
-       <?php $days_registered = round((time() - $field["since_date"])/86400);
-       if($days_registered<1) $days_registered=1; ?>
-     <td class='d'><p class="userdata"><?php echo strftime($lang['time_format'],$field['since_date'])." (".$days_registered." days ago)"; ?></p></td>
-    </tr>
-    <tr>
-     <td class='c'><p class="userdata"><strong><?php echo 'Last login:'; ?></strong></p></td>
-     <td class='d'><p class="userdata"><?php echo strftime($lang['time_format'],$field["login_date"]);
-      echo " (".$field['logins']." logins; ".round($field['logins']/$days_registered,2)." per day)"; ?></p></td>
-    </tr>
-    <tr>
-     <td class='c'><p class="userdata"><strong><?php echo $lang['user_postings']; ?></strong></p></td>
-     <td class='d'><p class="userdata"><?php echo $postings_count; if ($postings_count > 0) { ?><?php echo " (".round($postings_count*100/$posting_count,1)."%; ".round($postings_count/$days_registered,2)." per day)"?>&nbsp;&nbsp;<span class="small">[ <a href="search.php?show_postings=<?php echo $field["user_id"]; ?>"><?php echo $lang['show_postings_ln']; ?></a> ]</span><?php } ?></p></td>
-    </tr>
-    <?php if ($field["profile"]!=="")
-     { ?><tr>
-      <td class='c'><p class='userdata'><strong><?php echo $lang['user_profile']; ?></strong></p></td>
-      <td class='d'><p class='userdata'><?php $ftext=$field['profile'];
-      $ftext = htmlspecialchars(stripslashes($ftext));
-      $ftext = nl2br($ftext);
-      $ftext = zitat($ftext);
-      if ($settings['autolink'] == 1) $ftext = make_link($ftext);
-      if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
-      if ($settings['smilies'] == 1) $ftext = smilies($ftext);
-      echo $ftext; ?></p></td>
-    </tr>
-     <?php
-    } ?>
-    <?php if ($field["signature"]!=="")
-     { ?><tr>
-     <td class='c'><p class='userdata'><strong><?php echo $lang['user_signature']; ?></strong></p></td>
-     <td class='d'><p class='signature' style='margin: 0px;'><?php $ftext=$field['signature'];
-      $ftext = htmlspecialchars(stripslashes($ftext));
-      $ftext = nl2br($ftext);
-      $ftext = zitat($ftext);
-      if ($settings['autolink'] == 1) $ftext = make_link($ftext);
-      if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
-      if ($settings['smilies'] == 1) $ftext = smilies($ftext);
-      echo $ftext; ?></p></td>
-    </tr>
-     <?php
-    } ?></table>
-   <?php
-   if ($user_id == $id)
-    { ?>
-     <p><br /><a class="textlink" href="user.php?action=edit"><?php echo $lang['edit_userdata_ln']; ?></a><br />
-     <a class="textlink" href="user.php?action=pw"><?php echo $lang['edit_pw_ln']; ?></a></p>
-     <!--<a class="textlink" href="user.php?action=delete"><?php echo $lang['delete_account_ln']; ?></a>-->
-     <?php
-    }
-   else
-    if ($field["hide_email"]!=1) {
-      {
-       $lang['pers_msg_ln'] = str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['pers_msg_ln']);
-       ?><p><br />
-       <a class="textlink" href="user.php?action=personal_message&amp;id=<?php echo $id; ?>"><?php echo $lang['pers_msg_ln']; ?></a></p>
-       <?php
-      }
-    }
-   } else echo "<p class=\"caution\">".$lang['user_doesnt_exist']."</p><p>&nbsp;</p>";
-  break;
+		# count postings:
+		$count_postings_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE user_id = ".intval($id), $connid);
+		list($postings_count) = mysql_fetch_row($count_postings_result);
+		mysql_free_result($count_postings_result);
 
-  case "show users":
-   if (empty($page)) $page = 0;
-   if (empty($order)) $order="user_name";
-   if (empty($descasc)) $descasc="ASC";
-   $ul = $page * $settings['users_per_page'];
-   if (isset($_GET['letter'])) $result = mysql_query("SELECT user_id, user_name, user_type, user_email, hide_email, user_hp, user_lock FROM ".$db_settings['userdata_table']." WHERE user_name LIKE '".$_GET['letter']."%' ORDER BY ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['users_per_page'], $connid);
-   else $result = mysql_query("SELECT user_id, user_name, user_type, user_email, hide_email, user_hp, user_lock FROM ".$db_settings['userdata_table']." ORDER BY ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['users_per_page'], $connid);
-   if (!$result) die($lang['db_error']);
+		if ($field["user_name"] != "")
+			{
+			$lang['user_info_hl'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['user_info_hl']);
+			echo '<h2>'.$lang['user_info_hl'].'</h2>'."\n";
+			echo '<table class="normaltab">'."\n";
+			echo '<tr>'."\n";
+			echo '<td class="c"><strong>'.$lang['username_marking'].'</strong></td>'."\n";
+			echo '<td class="d">'.htmlspecialchars($field["user_name"]);
+			if ($field["user_type"]=="admin") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_admin'].")</span>";
+			else if ($field["user_type"]=="mod") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_mod'].")</span>";
+			echo '</td>'."\n";
+			echo '</tr>';
+			if ($field["user_real_name"]!="")
+				{
+				echo '<tr>'."\n";
+				echo '<td class="c"><strong>'.$lang['user_real_name'].'</strong></td>'."\n";
+				echo '<td class="d">'.htmlspecialchars($field['user_real_name']).'</td>'."\n";
+				echo '</tr>';
+				}
+			if ($field["hide_email"]!=1)
+				{
+				echo '<tr>'."\n";
+				echo '<td class="c"><strong>'.$lang['user_email_marking'].'</strong></td>'."\n";
+				echo '<td class="d"><a href="contact.php?uid='.$field['user_id'].'">';
+				echo '<img src="img/email.gif" alt="'.$lang['email_alt'].'" title="';
+				echo str_replace('[name]', htmlspecialchars($field['user_name']), $lang['email_to_user_linktitle']);
+				echo '" width="13" height="10" /></a></td>'."\n";
+				echo '</tr>';
+				}
+			if ($field["user_hp"]!="")
+				{
+				$field['user_hp'] = amendProtocol($field['user_hp']);
+				echo '<tr>'."\n";
+				echo '<td class="c"><strong>'.$lang['user_hp'].'</strong></td>'."\n";
+				echo '<td class="d">';
+				echo '<a href="'.$field['user_hp'].'"><img src="img/homepage.gif" alt="';
+				echo $lang['homepage_alt'].'" title="'.htmlspecialchars($field['user_hp']);
+				echo '" width="13" height="13" /></a></td>'."\n";
+				echo '</tr>';
+				}
+			if ($field["user_place"]!=="")
+				{
+				echo '<tr>'."\n";
+				echo '<td class="c"><strong>'.$lang['user_place'].'</strong></td>'."\n";
+				echo '<td class="d">'.htmlspecialchars($field['user_place']).'</td>'."\n";
+				echo '</tr>';
+				}
+			$days_registered = round((time() - $field["since_date"])/86400);
+			if ($days_registered<1) $days_registered=1;
+			$lang['user_last_login_text'] = str_replace('[logins]',$field['logins'],$lang['user_last_login_text']);
+			$lang['user_last_login_text'] = str_replace('[log-per-day]',round($field['logins']/$days_registered,2),$lang['user_last_login_text']);
+			echo '<tr>'."\n";
+			echo '<td class="c"><strong>'.$lang['user_since'].'</strong></td>'."\n";
+			echo '<td class="d">'.strftime($lang['time_format'],$field['since_date']).' ('.$days_registered.' days ago)</td>'."\n";
+			echo '</tr><tr>'."\n";
+			echo '<td class="c"><strong>'.$lang['user_last_login'].'</strong></td>'."\n";
+			echo '<td class="d">'.strftime($lang['time_format'],$field["login_date"]);
+			echo $lang['user_last_login_text'].'</td>'."\n";
+			echo '</tr><tr>'."\n";
+			echo '<td class="c"><strong>'.$lang['user_postings'].'</strong></td>'."\n";
+			echo '<td class="d">'.$postings_count;
+			if ($postings_count > 0)
+				{
+				echo ' ('.round($postings_count*100/$posting_count,1).'%; ';
+				echo round($postings_count/$days_registered,2).' per day)&nbsp;&nbsp;';
+				echo '<span class="small">[ <a href="search.php?show_postings='.$field["user_id"];
+				echo '">'.$lang['show_postings_ln'].'</a> ]</span>';
+				}
+			echo '</td>'."\n";
+			echo '</tr>';
+			if ($field["profile"]!=="")
+				{
+				$ftext=$field['profile'];
+				$ftext = htmlspecialchars($ftext);
+				$ftext = nl2br($ftext);
+				$ftext = zitat($ftext);
+				if ($settings['autolink'] == 1) $ftext = make_link($ftext);
+				if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
+				if ($settings['smilies'] == 1) $ftext = smilies($ftext);
+				echo '<tr>'."\n";
+				echo '<td class="c"><strong>'.$lang['user_profile'].'</strong></td>'."\n";
+				echo '<td class="d">'.$ftext.'</td>'."\n";
+				echo '</tr>';
+				}
+			if ($field["signature"]!=="")
+				{
+				$ftext=$field['signature'];
+				$ftext = htmlspecialchars($ftext);
+				$ftext = nl2br($ftext);
+				$ftext = zitat($ftext);
+				if ($settings['autolink'] == 1) $ftext = make_link($ftext);
+				if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
+				if ($settings['smilies'] == 1) $ftext = smilies($ftext);
+				echo '<tr>'."\n";
+				echo '<td class="c"><strong>'.$lang['user_signature'].'</strong></td>'."\n";
+				echo '<td class="d"><p class="signature">'.$ftext.'</p></td>'."\n";
+				echo '</tr>';
+				}
+			echo '</table>'."\n";
+			if ($user_id == $id)
+				{
+				echo '<ul class="linklist">'."\n";
+				echo '<li><a class="textlink" href="user.php?action=edit">';
+				echo $lang['edit_userdata_ln'].'</a></li>'."\n";
+				echo '<li><a class="textlink" href="user.php?action=pw">';
+				echo $lang['edit_pw_ln'].'</a></li>'."\n";
+				echo '</ul>'."\n";
+				}
+			else
+				{
+				$lang['pers_msg_ln'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['pers_msg_ln']);
+				echo '<p><a class="textlink" href="user.php?action=personal_message&amp;id=';
+				echo $id.'">'.$lang['pers_msg_ln'].'</a></p>'."\n";
+				}
+			}
+		else
+			{
+			echo '<p class="caution">'.$lang['user_doesnt_exist'].'</p>'."\n";
+			}
+	break;
+	case "show users":
+		if (empty($page)) $page = 0;
+		if (empty($order)) $order="user_name";
+		if (empty($descasc)) $descasc="ASC";
+		$ul = $page * $settings['users_per_page'];
+		$allUserQuery  = "SELECT
+		user_id,
+		user_name,
+		user_type,
+		user_email,
+		hide_email,
+		user_hp,
+		user_lock
+		FROM ".$db_settings['userdata_table'];
+		if (isset($_GET['letter']))
+			{
+			$allUserQuery .= "
+			WHERE user_name LIKE '".$_GET['letter']."%'";
+			}
+		$allUserQuery .= "
+		ORDER BY ".$order." ".$descasc."
+		LIMIT ".$ul.", ".$settings['users_per_page'];
+		$result = mysql_query($allUserQuery, $connid);
+		if (!$result) die($lang['db_error']);
 
-   // Schauen, wer online ist:
-   if ($settings['count_users_online'] == 1)
-    {
-     $useronline_result = mysql_query("SELECT user_id FROM ".$db_settings['useronline_table'], $connid);
-     if (!$useronline_result) die($lang['db_error']);
-     while ($uid_field = mysql_fetch_array($useronline_result))
-      {
-       $useronline_array[] = $uid_field['user_id'];
-      }
-     mysql_free_result($useronline_result);
-    }
+		# Schauen, wer online ist:
+		if ($settings['count_users_online'] == 1)
+			{
+			$useronline_result = mysql_query("SELECT user_id FROM ".$db_settings['useronline_table'], $connid);
+			if (!$useronline_result) die($lang['db_error']);
+			while ($uid_field = mysql_fetch_array($useronline_result))
+				{
+				$useronline_array[] = $uid_field['user_id'];
+				}
+			mysql_free_result($useronline_result);
+			}
+		if ($thread_count > 0)
+			{
+			echo '<table class="normaltab">'."\n";
+			echo '<tr>'."\n";
+			echo '<th><a href="user.php?action=show+users&amp;order=user_name&amp;descasc=';
+			echo ($descasc=="ASC" && $order=="user_name") ? 'DESC' : 'ASC';
+			echo '&amp;ul='.$ul.'" title="'.$lang['order_linktitle'].'">'.$lang['userlist_name'].'</a>';
+			if ($order=="user_name" && $descasc=="ASC")
+				{
+				echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
+				}
+			else if ($order=="user_name" && $descasc=="DESC")
+				{
+				echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0">';
+				}
+			echo '</th>'."\n";
+			echo '<th><a href="user.php?action=show+users&amp;order=user_type&amp;descasc=';
+			echo ($descasc=="ASC" && $order=="user_type") ? 'DESC' : 'ASC';
+			echo '&amp;ul='.$ul.'" title="'.$lang['order_linktitle'].'">'.$lang['userlist_type'].'</a>';
+			if ($order=="user_type" && $descasc=="ASC")
+				{
+				echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
+				}
+			else if ($order=="user_type" && $descasc=="DESC")
+				{
+				echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0">';
+				}
+			echo '</th>'."\n";
+			echo '<th>'.$lang['userlist_email'].'</th>'."\n";
+			echo '<th>'.$lang['userlist_hp'].'</th>'."\n";
+			if ($settings['count_users_online'] == 1)
+				{
+				echo '<th>'.$lang['userlist_online'].'</th>'."\n";
+				}
+			if (isset($_SESSION[$settings['session_prefix'].'user_type'])
+			&& ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
+			|| $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
+				{
+				echo '<th>'.$lang['lock'].'</th>'."\n";
+				}
+			echo '</tr>';
+			$i=0;
+			while ($field = mysql_fetch_array($result))
+				{
+				$rowClass = ($i % 2 == 0) ? "a" : "b";
+				echo '<tr class="'.$rowClass.'">'."\n";
+				echo '<td><a href="user.php?id='.$field['user_id'].'" title="';
+				echo str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['show_userdata_linktitle']);
+				echo '"><b>'.htmlspecialchars($field['user_name']).'</b></a></td>'."\n";
+				echo '<td><span class="small">';
+				if ($field["user_type"] == "admin") echo $lang['ud_admin'];
+				elseif ($field["user_type"] == "mod") echo $lang['ud_mod'];
+				else echo $lang['ud_user'];
+				echo '</span></td>'."\n";
+				echo '<td><span class="small">';
+				if ($field["hide_email"]!=1)
+					{
+					echo '<a href="contact.php?uid='.$field['user_id'].'"><img src="img/email.gif"';
+					echo ' alt="'.$lang['email_alt'].'" title="';
+					echo str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['email_to_user_linktitle']);
+					echo '" width="13" height="10" /></a>';
+					}
+				else echo "&nbsp;";
+				echo '</span></td>'."\n";
+				echo '<td><span class="small">';
+				if ($field["user_hp"] != '')
+					{
+					$field["user_hp"] = amendProtocol($field["user_hp"]);
+					echo '<a href="'.$field["user_hp"].'"><img src="img/homepage.gif" alt="';
+					echo $lang['homepage_alt'].'" title="';
+					echo htmlspecialchars($field["user_hp"]).'" width="13" height="13" /></a>'."\n";
+					}
+				else echo "&nbsp;";
+				echo '</span></td>'."\n";
+				if ($settings['count_users_online'] == 1)
+					{
+					echo '<td><span class="online">';
+					if ($settings['count_users_online'] == 1
+					&& in_array($field['user_id'], $useronline_array))
+						{
+						echo $lang['online'];
+						}
+					else echo "&nbsp;";
+					echo '</span></td>'."\n";
+					}
+				if (isset($_SESSION[$settings['session_prefix'].'user_type'])
+				&& ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
+				|| $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
+					{
+					echo '<td>'."\n";
+					if ($field["user_type"]=="user")
+						{
+						if ($field["user_lock"] == 0)
+							{
+							echo '<span class="small"><a href="user.php?user_lock='.$field["user_id"];
+							echo '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;page='.$page;
+							echo '" title="'.str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['lock_user_lt']);
+							echo '">'.$lang['unlocked'].'</a></span>'."\n";
+							}
+						else
+							{
+							echo '<span class="small"><a style="color: red;" href="user.php?user_lock=';
+							echo $field["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
+							echo '&amp;page='.$page.'" title="'.str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['unlock_user_lt']);
+							echo '">'.$lang['locked'].'</a></span>';
+							}
+						}
+					else echo "&nbsp;";
+					echo '</td>'."\n";
+					}
+				echo '</tr>';
+				$i++;
+				}
+			echo "\n".'</table>'."\n";
+			}
+		else
+			{
+			echo '<p><i>'.$lang['no_users'].'</i></p>'."\n";
+			}
+	break;
+	case "edit":
+		$singleUserDataQuery = "SELECT
+		user_name,
+		user_real_name,
+		user_email,
+		hide_email,
+		user_hp,
+		user_place,
+		signature,
+		profile,
+		user_view,
+		new_posting_notify,
+		new_user_notify,
+		personal_messages,
+		time_difference
+		FROM ".$db_settings['userdata_table']."
+		WHERE user_id = ".intval($user_id);
+		$result = mysql_query($singleUserDataQuery, $connid);
+		if (!$result) die($lang['db_error']);
+		$field = mysql_fetch_array($result);
+		mysql_free_result($result);
 
-    if ($thread_count > 0)
-     {
-      ?><table class="normaltab" border="0" cellpadding="5" cellspacing="1">
-      <tr>
-      <th><a href="user.php?action=show+users&amp;order=user_name&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_name") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo $ul; ?>" title="<?php echo $lang['order_linktitle']; ?>"><?php echo $lang['userlist_name']; ?></a><?php if ($order=="user_name" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_name" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
-      <th><a href="user.php?action=show+users&amp;order=user_type&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_type") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo $ul; ?>" title="<?php echo $lang['order_linktitle']; ?>"><?php echo $lang['userlist_type']; ?></a><?php if ($order=="user_type" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_type" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
-      <th><?php echo $lang['userlist_email']; ?></th>
-      <th><?php echo $lang['userlist_hp']; ?></th>
-      <?php if ($settings['count_users_online'] == 1) { ?><th><?php echo $lang['userlist_online']; ?></th><?php }
-      if (isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod")) { ?><th><?php echo $lang['lock']; ?></th> <?php } ?>
-      </tr>
-      <?php
-      $i=0;
-      while ($field = mysql_fetch_array($result))
-       {
-        ?><tr>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo $field['user_id']; ?>" title="<?php echo str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['show_userdata_linktitle']); ?>"><b><?php echo htmlspecialchars(stripslashes($field['user_name'])); ?></b></a></td>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_type"] == "admin") echo $lang['ud_admin']; elseif ($field["user_type"] == "mod") echo $lang['ud_mod']; else echo $lang['ud_user']; ?></span></td>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo $field['user_id']; ?>"><img src="img/email.gif" alt="'<?php echo $lang['email_alt']; ?>" title="<?php echo str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "&nbsp;"; ?></span></td>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_hp"]!="") { if (substr($field["user_hp"],0,7) != "http://" && substr($field["user_hp"],0,8) != "https://" && substr($field["user_hp"],0,6) != "ftp://" && substr($field["user_hp"],0,9) != "gopher://" && substr($field["user_hp"],0,7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo htmlspecialchars(stripslashes($field["user_hp"])); ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlspecialchars(stripslashes($field["user_hp"])); ?>" width="13" height="13" /></a><?php } else echo "&nbsp;" ?></span></td>
-        <?php if ($settings['count_users_online'] == 1) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="online"><?php if ($settings['count_users_online'] == 1 && in_array($field['user_id'], $useronline_array)) { echo $lang['online']; } else echo "&nbsp;"; ?></span></td><?php }
-        if (isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod")) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($field["user_type"]=="user") { if ($field["user_lock"] == 0) { ?><span class="small"><a href="user.php?user_lock=<?php echo $field["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;page=<?php echo $page; ?>" title="<?php echo str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['lock_user_lt']); ?>"><?php echo $lang['unlocked']; ?></a></span><?php } else { ?><span class="small"><a style="color: red;" href="user.php?user_lock=<?php echo $field["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;page=<?php echo $page; ?>" title="<?php echo str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['unlock_user_lt']); ?>"><?php echo $lang['locked']; ?></a></span><?php } } else echo "&nbsp;"; ?></td><?php } ?>
-        </tr>
-        <?php $i++;
-       }
-      ?></table><?php
-     }
-    else
-     {
-      ?><p><i><?php echo $lang['no_users']; ?></i></p><?php
-     }
-  break;
+		if (empty($userdata_submit))
+			{
+			$hide_email = $field["hide_email"];
+			$user_real_name = $field["user_real_name"];
+			$user_hp = $field["user_hp"];
+			$user_place = $field["user_place"];
+			$profile = $field["profile"];
+			$signature = $field["signature"];
+			$user_view = $field["user_view"];
+			$user_time_difference = $field["time_difference"];
+			$new_posting_notify = $field["new_posting_notify"];
+			$new_user_notify = $field["new_user_notify"];
+			$personal_messages = $field["personal_messages"];
+			}
+		$lang['edit_userdata_hl'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['edit_userdata_hl']);
+		echo '<h2>'.$lang['edit_userdata_hl'].'</h2>'."\n";
+		if (isset($errors))
+			{
+			echo errorMessages($errors);
+			}
+		echo '<form action="user.php" method="post">'."\n";
+		echo '<input type="hidden" name="action" value="edit submited">'."\n";
+		echo '<table class="normaltab">'."\n".'<tr>'."\n";
+		echo '<td class="c"><b>'.$lang['username_marking'].'</b></td>'."\n";
+		echo '<td class="d">'.htmlspecialchars($field["user_name"]).'</td>'."\n";
+		echo '</tr><tr>'."\n";
+		echo '<td class="c"><b>'.$lang['user_email_marking'].'</b></td>'."\n";
+		echo '<td class="d">'.htmlspecialchars($field["user_email"]);
+		echo '&nbsp;&nbsp;<span class="small">[ <a class="sln" href="user.php?';
+		echo 'action=email">'.$lang['edit_email_ln'].'</a> ]</span></td>'."\n";
+		echo '</tr><tr>'."\n";
+		echo '<td class="c"><b>'.$lang['user_show_email'].'</b><br /><span class="small">';
+		echo $lang['user_show_email_exp'].'</span></td>'."\n";
+		echo '<td class="d"><input type="radio" name="hide_email" value="0"';
+		echo ($hide_email=="0") ? ' checked="checked"' : '';
+		echo '>'.$lang['yes'].'<br /><input type="radio" name="hide_email" value="1"';
+		echo ($hide_email=="1") ? ' checked="checked"' : '';
+		echo '>'.$lang['no'].'</td>'."\n";
+		echo '</tr><tr>'."\n";
+		echo '<td class="c"><b>'.$lang['user_real_name'].'</b><br /><span class="small">';
+		echo $lang['optional_marking'].'</span></td>'."\n";
+		echo '<td class="d"><input type="text" size="40" name="user_real_name" value="';
+		echo htmlspecialchars($user_real_name).'" maxlength="';
+		echo $settings['name_maxlength'].'"></td>'."\n";
+		echo '</tr><tr>'."\n";
+		echo '<td class="c"><b>'.$lang['user_hp'].'</b><br /><span class="small">';
+		echo $lang['optional_marking'].'</span></td>'."\n";
+		echo '<td class="d"><input type="text" size="40" name="user_hp" value="';
+		echo htmlspecialchars($user_hp).'" maxlength="';
+		echo $settings['hp_maxlength'].'"></td>'."\n";
+		echo '</tr><tr>'."\n";
+		echo '<td class="c"><b>'.$lang['user_place'].'</b><br /><span class="small">';
+		echo $lang['optional_marking'].'</span></td>'."\n";
+		echo '<td class="d"><input type="text" size="40" name="user_place" value="';
+		echo htmlspecialchars($user_place).'" maxlength="';
+		echo $settings['place_maxlength'].'"></td>'."\n";
+		echo '</tr><tr>'."\n";
+		echo '<td class="c"><b>'.$lang['user_profile'].'</b><br /><span class="small">';
+		echo $lang['user_profile_exp'].'<br />'.$lang['optional_marking'].'</span></td>'."\n";
+		echo '<td class="d"><textarea cols="65" rows="10" name="profile">';
+		echo htmlspecialchars($profile).'</textarea></td>'."\n";
+		echo '</tr><tr>'."\n";
+		echo '<td class="c"><b>'.$lang['user_signature'].'</b><br /><span class="small">';
+		echo $lang['user_sig_exp'].'<br />'.$lang['optional_marking'].'</span></td>'."\n";
+		echo '<td class="d"><textarea cols="65" rows="4" name="signature">';
+		echo htmlspecialchars($signature).'</textarea></td>'."\n";
+		echo '</tr>';
+		if ($settings['thread_view'] != 0
+		&& $settings['board_view'] != 0
+		|| $settings['board_view'] != 0
+		&& $settings['mix_view'] != 0
+		|| $settings['thread_view'] != 0
+		&& $settings['mix_view'] != 0)
+			{
+			echo '<tr>'."\n";
+			echo '<td class="c"><b>'.$lang['user_standard_view'].'</b></td>'."\n";
+			echo '<td class="d">'."\n";
+			if ($settings['thread_view'] == 1)
+				{
+				echo '<input type="radio" name="user_view" value="thread"';
+				echo ($user_view=="thread") ? ' checked="checked"' : '';
+				echo '>'.$lang['thread_view_linkname'].'<br />'."\n";
+				}
+			if ($settings['board_view'] == 1)
+				{
+				echo '<input type="radio" name="user_view" value="board"';
+				echo ($user_view=="board") ? ' checked="checked"' : '';
+				echo '>&nbsp;'.$lang['board_view_linkname'].'<br />'."\n";
+				}
+			if ($settings['mix_view'] == 1)
+				{
+				echo '<input type="radio" name="user_view" value="mix"';
+				echo ($user_view=="mix") ? ' checked="checked"' : '';
+				echo '>&nbsp;'.$lang['mix_view_linkname']."\n";
+				}
+			echo '</td>'."\n";
+			echo '</tr>'."\n";
+			}
+		echo '<tr>'."\n";
+		echo '<td class="c"><b>'.$lang['user_pers_msg'].'</b><br />';
+		echo '<span class="small">'.$lang['user_pers_msg_exp'].'</span></td>'."\n";
+		echo '<td class="d"><input type="radio" name="personal_messages" value="1"';
+		echo ($personal_messages=="1") ? ' checked="checked"' : '';
+		echo '>'.$lang['user_pers_msg_act'].'<br />'."\n";
+		echo '<input type="radio" name="personal_messages" value="0"';
+		echo ($personal_messages=="0") ? ' checked="checked"' : '';
+		echo '>'.$lang['user_pers_msg_deact'].'</td>'."\n";
+		echo '</tr><tr>'."\n";
+		echo '<td class="c"><b>'.$lang['user_time_diff'].'</b><br />';
+		echo '<span class="small">'.$lang['user_time_diff_exp'].'</span></td>'."\n";
+		echo '<td class="d"><select name="user_time_difference" size="1">'."\n";
+		for ($h = -24; $h <= 24; $h++)
+			{
+			echo '<option value="'.$h.'"';
+			echo ($user_time_difference==$h) ? ' selected="selected"' : '';
+			echo '>'.$h.'</option>'."\n";
+			}
+		echo '</select></td>'."\n".'</tr>';
+		if ($user_type=="admin" || $user_type=="mod")
+			{
+			echo '<tr>'."\n";
+			echo '<td class="c"><b>'.$lang['admin_mod_notif'].'</b><br />';
+			echo '<span class="small">'.$lang['admin_mod_notif_exp'].'</span></td>'."\n";
+			echo '<td class="d"><input type="checkbox" name="new_posting_notify" value="1"';
+			echo ($new_posting_notify=="1") ? ' checked="checked"' : '';
+			echo '>'.$lang['admin_mod_notif_np'].'<br />';
+			echo '<input type="checkbox" name="new_user_notify" value="1"';
+			echo ($new_user_notify=="1") ? ' checked="checked"' : '';
+			echo '>'.$lang['admin_mod_notif_nu'].'</td>'."\n".'</tr>';
+			}
+		echo '<tr>'."\n";
+		echo '<td class="c">&nbsp;</td>'."\n";
+		echo '<td class="d"><input type="submit" name="userdata_submit" value="';
+		echo $lang['userdata_subm_button'].'" />&nbsp;';
+		echo '<input type="reset" value="'.$lang['reset_button'].'" /></td>'."\n";
+		echo '</tr>'."\n".'</table>'."\n".'</form>'."\n";
+		if ($settings['bbcode'] == 1)
+			{
+			echo '<p class="xsmall">'.$lang['bbcode_marking_user'];
+			if ($settings['bbcode_img']==1)
+				{
+				echo '<br />'.$lang['bbcode_img_marking_user'];
+				}
+			echo '</p>'."\n";
+			}
+	break;
+	case "pw":
+		echo '<h2>'.$lang['change_pw_hl'].'</h2>'."\n";
+		if (isset($errors))
+			{
+			echo errorMessages($errors);
+			}
+		echo '<form action="user.php" method="post">'."\n";
+		echo '<input type="hidden" name="action" value="pw submited">'."\n";
+		echo '<p><b>'.$lang['old_pw'].'</b><br />'."\n";
+		echo '<input type="password" size="25" name="old_pw" maxlength="50"></p>'."\n";
+		echo '<p><b>'.$lang['new_pw'].'</b><br />'."\n";
+		echo '<input type="password" size="25" name="new_pw" maxlength="50"></p>'."\n";
+		echo '<p><b>'.$lang['new_pw_conf'].'</b><br />'."\n";
+		echo '<input type="password" size="25" name="new_pw_conf" maxlength="50"></p>'."\n";
+		echo '<p><input type="submit" name="pw_submit" value="';
+		echo $lang['new_pw_subm_button'].'" title="'.$lang['new_pw_subm_button_title'].'"></p>'."\n";
+		echo '</form>'."\n";
+	break;
+	case "email":
+		echo '<h2>'.$lang['change_email_hl'].'</h2>'."\n";
+		echo '<p class="caution">'.$lang['caution'].'</p>'."\n";
+		echo '<p class="normal">'.$lang['change_email_exp'].'</p>'."\n";
+		if (isset($errors))
+			{
+			echo errorMessages($errors);
+			}
+		echo '<form action="user.php" method="post">'."\n";
+		echo '<p><b>'.$lang['new_email'].'</b><br />'."\n";
+		echo '<input type="text" size="25" name="new_email" value="';
+		echo (isset($new_email)) ? htmlspecialchars($new_email) : '';
+		echo '" maxlength="'.$settings['email_maxlength'].'"></p>'."\n";
+		echo '<p><b>'.$lang['password_marking'].'</b><br />'."\n";
+		echo '<input type="password" size="25" name="pw_new_email" maxlength="50"></p>'."\n";
+		echo '<p><input type="submit" name="change_email_submit" value="';
+		echo $lang['submit_button_ok'].'"></p>'."\n";
+		echo '</form>'."\n";
+	break;	case "personal_message":
+		$pma_result = mysql_query("SELECT user_name, personal_messages FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($id)." LIMIT 1", $connid);
+		if (!$pma_result) die($lang['db_error']);
+		$field = mysql_fetch_assoc($pma_result);
+		mysql_free_result($pma_result);
 
-  case "edit":
-   $result = mysql_query("SELECT user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, user_view, new_posting_notify, new_user_notify, personal_messages, time_difference FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id), $connid);
-   if (!$result) die($lang['db_error']);
-   $field = mysql_fetch_array($result);
-   mysql_free_result($result);
-
-   if (empty($userdata_submit))
-    {
-     $hide_email = $field["hide_email"];
-     $user_real_name = $field["user_real_name"];
-     $user_hp = $field["user_hp"];
-     $user_place = $field["user_place"];
-     $profile = $field["profile"];
-     $signature = $field["signature"];
-     $user_view = $field["user_view"];
-     $user_time_difference = $field["time_difference"];
-     $new_posting_notify = $field["new_posting_notify"];
-     $new_user_notify = $field["new_user_notify"];
-     $personal_messages = $field["personal_messages"];
-    }
-
-   $lang['edit_userdata_hl'] = str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['edit_userdata_hl']);
-   ?>
-   <h2><?php echo $lang['edit_userdata_hl']; ?></h2>
-   <?php
-   if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php }
-   ?>
-   <form action="user.php" method="post">
-   <input type="hidden" name="action" value="edit submited">
-   <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
-    <tr>
-     <td class="c"><b><?php echo $lang['username_marking']; ?></b></td>
-     <td class="d"><?php echo htmlspecialchars(stripslashes($field["user_name"])); ?></td>
-    </tr>
-    <tr>
-     <td class="c"><b><?php echo $lang['user_email_marking']; ?></b></td>
-     <td class="d"><?php echo htmlspecialchars(stripslashes($field["user_email"])); ?>&nbsp;&nbsp;<span class="small">[ <a class="sln" href="user.php?action=email"><?php echo $lang['edit_email_ln']; ?></a> ]</span></td>
-    </tr>
-    <tr>
-     <td class="c"><b><?php echo $lang['user_show_email']; ?></b><br /><span class="small"><?php echo $lang['user_show_email_exp']; ?></span></td>
-     <td class="d"><input type="radio" name="hide_email" value="0"<?php if ($hide_email=="0") echo " checked"; ?>><?php echo $lang['yes']; ?><br /><input type="radio" name="hide_email" value="1"<?php if ($hide_email=="1") echo " checked"; ?>><?php echo $lang['no']; ?></td>
-    </tr>
-    <tr>
-     <td class="c"><b><?php echo $lang['user_real_name']; ?></b><br /><span class="small"><?php echo $lang['optional_marking']; ?></span></td>
-     <td class="d"><input type="text" size="40" name="user_real_name" value="<?php echo htmlspecialchars(stripslashes($user_real_name)); ?>" maxlength="<?php echo $settings['name_maxlength'] ?>"></td>
-    </tr>
-    <tr>
-     <td class="c"><b><?php echo $lang['user_hp']; ?></b><br /><span class="small"><?php echo $lang['optional_marking']; ?></span></td>
-     <td class="d"><input type="text" size="40" name="user_hp" value="<?php echo htmlspecialchars(stripslashes($user_hp)); ?>" maxlength="<?php echo $settings['hp_maxlength'] ?>"></td>
-    </tr>
-    <tr>
-     <td class="c"><b><?php echo $lang['user_place']; ?></b><br /><span class="small"><?php echo $lang['optional_marking']; ?></span></td>
-     <td class="d"><input type="text" size="40" name="user_place" value="<?php echo htmlspecialchars(stripslashes($user_place)); ?>" maxlength="<?php echo $settings['place_maxlength'] ?>"></td>
-    </tr>
-    <tr>
-     <td class="c"><b><?php echo $lang['user_profile']; ?></b><br /><span class="small"><?php echo $lang['user_profile_exp'] . "<br />" . $lang['optional_marking']; ?></span></td>
-     <td class="d"><textarea cols="65" rows="10" name="profile"><?php echo htmlspecialchars(stripslashes($profile)); ?></textarea></td>
-    </tr>
-    <tr>
-     <td class="c"><b><?php echo $lang['user_signature']; ?></b><br /><span class="small"><?php echo $lang['user_sig_exp'] . "<br />" . $lang['optional_marking']; ?></span></td>
-     <td class="d"><textarea cols="65" rows="4" name="signature"><?php echo htmlspecialchars(stripslashes($signature)); ?></textarea></td>
-    </tr>
-    <?php if ($settings['thread_view'] != 0 && $settings['board_view'] != 0 || $settings['board_view'] != 0 && $settings['mix_view'] != 0 || $settings['thread_view'] != 0 && $settings['mix_view'] != 0)
-    { ?>
-    <tr>
-     <td class="c"><b><?php echo $lang['user_standard_view']; ?></b></td>
-     <td class="d"><?php
-                       if ($settings['thread_view'] == 1) { ?><input type="radio" name="user_view" value="thread"<?php if ($user_view=="thread") echo ' checked="checked"'; ?>><?php echo $lang['thread_view_linkname']; ?><br /><?php }
-                       if ($settings['board_view'] == 1) { ?><input type="radio" name="user_view" value="board"<?php if ($user_view=="board") echo ' checked="checked"'; ?>>&nbsp;<?php echo $lang['board_view_linkname']; ?><br /><?php }
-                       if ($settings['mix_view'] == 1) { ?><input type="radio" name="user_view" value="mix"<?php if ($user_view=="mix") echo ' checked="checked"'; ?>>&nbsp;<?php echo $lang['mix_view_linkname']; ?><?php } ?></td>
-    </tr>
-    <?php } ?>
-    <tr>
-     <td class="c"><b><?php echo $lang['user_pers_msg']; ?></b><br /><span class="small"><?php echo $lang['user_pers_msg_exp']; ?></span></td>
-     <td class="d"><input type="radio" name="personal_messages" value="1"<?php if ($personal_messages=="1") echo " checked"; ?>><?php echo $lang['user_pers_msg_act']; ?><br /><input type="radio" name="personal_messages" value="0"<?php if ($personal_messages=="0") echo " checked"; ?>><?php echo $lang['user_pers_msg_deact']; ?></td>
-    </tr>
-    <tr>
-     <td class="c"><b><?php echo $lang['user_time_diff']; ?></b><br /><span class="small"><?php echo $lang['user_time_diff_exp']; ?></span></td>
-     <td class="d"><select name="user_time_difference" size="1"><?php for ($h = -24; $h <= 24; $h++) { ?><option value="<?php echo $h; ?>"<?php if ($user_time_difference==$h) echo ' selected="selected"'; ?>><?php echo $h; ?></option><?php } ?></select></td>
-    </tr>
-    <?php if ($user_type=="admin" || $user_type=="mod")
-    { ?>
-    <tr>
-     <td class="c"><b><?php echo $lang['admin_mod_notif']; ?></b><br /><span class="small"><?php echo $lang['admin_mod_notif_exp']; ?></span></td>
-     <td class="d"><input type="checkbox" name="new_posting_notify" value="1"<?php if ($new_posting_notify=="1") echo " checked"; ?>><?php echo $lang['admin_mod_notif_np']; ?><br />
-     <input type="checkbox" name="new_user_notify" value="1"<?php if ($new_user_notify=="1") echo " checked"; ?>><?php echo $lang['admin_mod_notif_nu']; ?></td>
-    </tr>
-    <?php } ?>
-    <tr>
-     <td class="c">&nbsp;</td>
-     <td class="d"><input type="submit" name="userdata_submit" value="<?php echo $lang['userdata_subm_button']; ?>" />&nbsp;<input type="reset" value="<?php echo $lang['reset_button']; ?>" /></td>
-    </tr>
-   </table>
-   </form>
-   <?php if($settings['bbcode'] == 1) { ?>
-   <br />
-   <p class="xsmall"><?php echo $lang['bbcode_marking_user'];
-   if ($settings['bbcode_img']==1) { ?><?php echo '<br />'.$lang['bbcode_img_marking_user']; ?><?php } ?></p>
-   <?php
-   }
-  break;
-
-  case "pw":
-   ?>
-   <h2><?php echo $lang['change_pw_hl']; ?></h2>
-   <?php if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php } ?>
-   <form action="user.php" method="post">
-   <input type="hidden" name="action" value="pw submited">
-   <b><?php echo $lang['old_pw']; ?></b><br />
-   <input type="password" size="25" name="old_pw" maxlength="50"><br /><br />
-   <b><?php echo $lang['new_pw']; ?></b><br />
-   <input type="password" size="25" name="new_pw" maxlength="50"><br /><br />
-   <b><?php echo $lang['new_pw_conf']; ?></b><br />
-   <input type="password" size="25" name="new_pw_conf" maxlength="50"><br /><br />
-   <input type="submit" name="pw_submit" value="<?php echo $lang['new_pw_subm_button']; ?>" title="<?php echo $lang['new_pw_subm_button_title']; ?>">
-   </form>
-   <p>&nbsp;</p>
-   <?php
-  break;
-
-  case "email":
-   ?>
-   <h2><?php echo $lang['change_email_hl']; ?></h2>
-   <p class="caution"><?php echo $lang['caution']; ?></p>
-   <p class="normal"><?php echo $lang['change_email_exp']; ?></p>
-   <?php if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php } ?>
-   <form action="user.php" method="post"><div>
-   <p><b><?php echo $lang['new_email']; ?></b><br />
-   <input type="text" size="25" name="new_email" value="<?php if (isset($new_email)) echo htmlspecialchars(stripslashes($new_email)); ?>" maxlength="<?php echo $settings['email_maxlength']; ?>"></p>
-   <p><b><?php echo $lang['password_marking']; ?></b><br />
-   <input type="password" size="25" name="pw_new_email" maxlength="50"></p>
-   <p><input type="submit" name="change_email_submit" value="<?php echo $lang['submit_button_ok']; ?>"></p>
-   </div></form>
-   <?php
-  break;
-
-  /*
-  case "delete":
-   if(isset($errors))
-    {
-     ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php
-    }
-   ?><h2 class="caution"><?php echo $lang['caution']; ?></h2>
-   <p><?php echo $lang['user_del_conf']; ?></p>
-   <form action="user.php" method="post"><div>
-   <input type="hidden" name="action" value="delete submited">
-   <b><?php echo $lang['password_marking']; ?></b><br />
-   <input type="password" size="25" name="pw_delete" maxlength="50"><br /><br />
-   <input type="submit" name="user_delete_submit" value="<?php echo $lang['user_del_subm_b']; ?>" />
-   </div></form>
-   <p>&nbsp;</p>
-   <?php
-  break;
-  */
-
-  case "personal_message":
-   $pma_result = mysql_query("SELECT user_name, personal_messages FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($id)." LIMIT 1", $connid);
-   if (!$pma_result) die($lang['db_error']);
-   $field = mysql_fetch_array($pma_result);
-   mysql_free_result($pma_result);
-
-   $lang['pers_msg_hl'] = str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['pers_msg_hl']);
-   ?><h2><?php echo $lang['pers_msg_hl']; ?></h2><?php
-
-   if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php }
-
-   if ($field["personal_messages"] == 1)
-    {
-     ?><form action="<?php echo basename($_SERVER["PHP_SELF"]); ?>" method="post"><div style="margin-top: 20px;">
-     <input type="hidden" name="action" value="pm_sent" />
-     <input type="hidden" name="recipient_id" value="<?php echo $id; ?>" />
-     <b><?php echo $lang['pers_msg_sj']; ?></b><br />
-     <input class="fs" type="text" name="pm_subject" value="<?php if (isset($_POST['pm_subject'])) echo htmlspecialchars(stripslashes($_POST['pm_subject'])); else echo ""; ?>" size="50" /><br /><br />
-     <b><?php echo $lang['pers_msg_txt']; ?></b><br />
-     <textarea name="pm_text" cols="60" rows="15"><?php if (isset($_POST['pm_text'])) echo htmlspecialchars(stripslashes($_POST['pm_text'])); else echo ""; ?></textarea><br /><br />
-     <input type="submit" name="pm_ok" value="<?php echo $lang['pers_msg_subm_button']; ?>" /><br /><br />
-     </div></form><?php
-    }
-   else
-    {
-     $lang['pers_msg_deactivated'] = str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['pers_msg_deactivated']);
-     echo $lang['pers_msg_deactivated'] . "<p>&nbsp;</p>";
-    }
-   break;
-
+		$lang['pers_msg_hl'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['pers_msg_hl']);
+		echo '<h2>'.$lang['pers_msg_hl'].'</h2>'."\n";
+		if (isset($errors))
+			{
+			echo errorMessages($errors);
+			}
+		if ($field["personal_messages"] == 1)
+			{
+			echo '<form action="'.$_SERVER["SCRIPT_NAME"].'" method="post">'."\n";
+			echo '<input type="hidden" name="action" value="pm_sent" />'."\n";
+			echo '<input type="hidden" name="recipient_id" value="'.intval($id).'" />'."\n";
+			echo '<b>'.$lang['pers_msg_sj'].'</b><br />'."\n";
+			echo '<input class="fs" type="text" name="pm_subject" value="';
+			echo (isset($_POST['pm_subject'])) ? htmlspecialchars($_POST['pm_subject']) : '';
+			echo '" size="50" />'."\n";
+			echo '<b>'.$lang['pers_msg_txt'].'</b><br />'."\n";
+			echo '<textarea name="pm_text" cols="60" rows="15">';
+			echo (isset($_POST['pm_text'])) ? htmlspecialchars($_POST['pm_text']) : '';
+			echo '</textarea>'."\n";
+			echo '<input type="submit" name="pm_ok" value="'.$lang['pers_msg_subm_button'].'" />';
+			echo '</form>'."\n";
+			}
+		else
+			{
+			$lang['pers_msg_deactivated'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['pers_msg_deactivated']);
+			echo $lang['pers_msg_deactivated'];
+			}
+	break;
    case "locked":
-    ?><h2 class="caution"><?php echo $lang['user_locked_hl']; ?></h2>
-    <p><?php echo str_replace("[name]", htmlspecialchars(stripslashes($user_name)), $lang['usr_locked_txt']); ?></p>
-    <p>&nbsp;</p><?php
-   break;
- }
+		echo '<h2 class="caution">'.$lang['user_locked_hl'].'</h2>'."\n";
+		echo '<p>'.str_replace("[name]", htmlspecialchars($user_name), $lang['usr_locked_txt']).'</p>'."\n";
+	break;
+	}
 
 echo $footer;
 ?>

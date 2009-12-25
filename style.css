@@ -57,6 +57,9 @@ p.postingforma         { margin: 3px 0px 0px 0px; }
 #searchresults         { margin: 15px 0px; padding: 0; list-style-type: none; }
 #searchresults li      { margin: 10px 0; padding: 0; }
 
+.linklist              { margin: 15px 0px; padding: 0; list-style-type: none; }
+.linklist li           { margin: 10px 0; padding: 0; }
+
 .actthread             { padding-left: 18px; color: #ff0000; font-weight: bold; background-image:url(img/topic.gif); background-repeat:no-repeat; background-position: top left; }
 .actreply              { padding-left: 16px; color: #ff0000; font-weight: bold; background-image:url(img/reply.gif); background-repeat:no-repeat; background-position: top left; }
 
