@@ -66,18 +66,19 @@ if (isset($_GET['id']) && isset($_GET['key']) && trim($_GET['key'])!='')
 			$lang['new_user_notif_txt'] = str_replace("[name]", $data['user_name'], $lang['new_user_notif_txt']);
 			$lang['new_user_notif_txt'] = str_replace("[email]", $data['user_email'], $lang['new_user_notif_txt']);
 			$lang['new_user_notif_txt'] = str_replace("[user_link]", $settings['forum_address']."user.php?id=".$user_id, $lang['new_user_notif_txt']);
-			$lang['new_user_notif_txt'] = stripslashes($lang['new_user_notif_txt']);
-			$header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
+			$lang['new_user_notif_txt'] = $lang['new_user_notif_txt'];
+			$header = "From: ".mb_encode_mimeheader($settings['forum_name'],'UTF-8')." <".$settings['forum_email'].">\n";
 			$header .= "X-Mailer: Php/" . phpversion(). "\n";
 			$header .= "X-Sender-ip: $ip\n";
-			$header .= "Content-Type: text/plain";
+			$header .= "Content-Type: text/plain; charset=UTF-8; format=flowed\n";
+			$header .= "Content-Transfer-Encoding: 8bit\n";
 			# Schauen, wer eine E-Mail-Benachrichtigung will:
 			$admin_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_user_notify='1'", $connid);
 			if (!$admin_result) die($lang['db_error']);
 			while ($admin_array = mysql_fetch_assoc($admin_result))
 				{
 				$ind_reg_emailbody = str_replace("[admin]", $admin_array['user_name'], $lang['new_user_notif_txt']);
-				$admin_mailto = $admin_array['user_name']." <".$admin_array['user_email'].">";
+				$admin_mailto = mb_encode_mimeheader($admin_array['user_name'],'UTF-8')." <".$admin_array['user_email'].">";
 				if ($settings['mail_parameter']!='')
 					{
 					if (@mail($admin_mailto, $lang['new_user_notif_sj'], $ind_reg_emailbody, $header, $settings['mail_parameter']))
@@ -133,12 +134,12 @@ if (isset($_POST['register_submit']))
 				$errors[] = $lang['reg_pw_conf_wrong'];
 				}
 			# name too long?
-			if (strlen($new_user_name) > $settings['name_maxlength'])
+			if (mb_strlen($new_user_name) > $settings['name_maxlength'])
 				{
 				$errors[] = $lang['name_marking'] . " " .$lang['error_input_too_long'];
 				}
 			# e-mail address too long?
-			if (strlen($new_user_email) > $settings['email_maxlength'])
+			if (mb_strlen($new_user_email) > $settings['email_maxlength'])
 				{
 				$errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
 				}
@@ -147,10 +148,10 @@ if (isset($_POST['register_submit']))
 			for ($i=0; $i<count($text_arr); $i++)
 				{
 				trim($text_arr[$i]);
-				$laenge = strlen($text_arr[$i]);
+				$laenge = mb_strlen($text_arr[$i]);
 				if ($laenge > $settings['name_word_maxlength'])
 					{
-					$error_nwtl = str_replace("[word]", htmlspecialchars(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
+					$error_nwtl = str_replace("[word]", htmlspecialchars(mb_substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
 					$errors[] = $error_nwtl;
 					}
 				}
@@ -159,7 +160,7 @@ if (isset($_POST['register_submit']))
 			if (!$name_result) die($lang['db_error']);
 			$field = mysql_fetch_assoc($name_result);
 			mysql_free_result($name_result);
-			if (strtolower($field["user_name"]) == strtolower($new_user_name) && $new_user_name != "")
+			if (mb_strtolower($field["user_name"]) == mb_strtolower($new_user_name) && $new_user_name != "")
 				{
 				$lang['error_name_reserved'] = str_replace("[name]", htmlspecialchars($new_user_name), $lang['error_name_reserved']);
 				$errors[] = $lang['error_name_reserved'];
@@ -169,7 +170,7 @@ if (isset($_POST['register_submit']))
 			if (!$email_result) die($lang['db_error']);
 			$field = mysql_fetch_assoc($email_result);
 			mysql_free_result($email_result);
-			if (strtolower($field["user_email"]) == strtolower($new_user_email) && $new_user_email != "")
+			if (mb_strtolower($field["user_email"]) == mb_strtolower($new_user_email) && $new_user_email != "")
 				{
 				$errors[] = str_replace("[e-mail]", htmlspecialchars($new_user_email), $lang['error_email_reserved']);
 				}
@@ -232,10 +233,10 @@ if (isset($_POST['register_submit']))
 			$new_user_type = "user";
 			$encoded_new_user_pw = md5($reg_pw);
 			$activate_code = md5(uniqid(rand()));
-			@mysql_query("INSERT INTO ".$db_settings['userdata_table']." (user_type, user_name, user_pw, user_email, hide_email, profile, last_login, last_logout, user_ip, registered, user_view, personal_messages, activate_code) VALUES ('".mysql_escape_string($new_user_type)."','".mysql_escape_string($new_user_name)."','".mysql_escape_string($encoded_new_user_pw)."','".mysql_escape_string($new_user_email)."','1','',NOW(),NOW(),'".mysql_escape_string($_SERVER["REMOTE_ADDR"])."',NOW(),'".mysql_escape_string($settings['standard'])."','1', '".mysql_escape_string($activate_code)."')", $connid) or die($lang['db_error']);
+			@mysql_query("INSERT INTO ".$db_settings['userdata_table']." (user_type, user_name, user_pw, user_email, hide_email, profile, last_login, last_logout, user_ip, registered, user_view, personal_messages, activate_code) VALUES ('".mysql_real_escape_string($new_user_type)."','".mysql_real_escape_string($new_user_name)."','".mysql_real_escape_string($encoded_new_user_pw)."','".mysql_real_escape_string($new_user_email)."','1','',NOW(),NOW(),'".mysql_real_escape_string($_SERVER["REMOTE_ADDR"])."',NOW(),'".mysql_real_escape_string($settings['standard'])."','1', '".mysql_real_escape_string($activate_code)."')", $connid) or die($lang['db_error']);
 
 			# get new user ID:
-			$new_user_id_result = mysql_query("SELECT user_id FROM ".$db_settings['userdata_table']." WHERE user_name = '".mysql_escape_string($new_user_name)."' LIMIT 1", $connid);
+			$new_user_id_result = mysql_query("SELECT user_id FROM ".$db_settings['userdata_table']." WHERE user_name = '".mysql_real_escape_string($new_user_name)."' LIMIT 1", $connid);
 			if (!$new_user_id_result) die($lang['db_error']);
 			$field = mysql_fetch_assoc($new_user_id_result);
 			$new_user_id = $field['user_id'];
@@ -245,12 +246,13 @@ if (isset($_POST['register_submit']))
 			$ip = $_SERVER["REMOTE_ADDR"];
 			$lang['new_user_email_txt'] = str_replace("[name]", $new_user_name, $lang['new_user_email_txt']);
 			$lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$new_user_id."&key=".$activate_code, $lang['new_user_email_txt']);
-			$lang['new_user_email_txt'] = stripslashes($lang['new_user_email_txt']);
-			$header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
+			$lang['new_user_email_txt'] = $lang['new_user_email_txt'];
+			$header = "From: ".mb_encode_mimeheader($settings['forum_name'],'UTF-8')." <".$settings['forum_email'].">\n";
 			$header .= "X-Mailer: Php/" . phpversion(). "\n";
 			$header .= "X-Sender-ip: $ip\n";
-			$header .= "Content-Type: text/plain";
-			$new_user_mailto = $new_user_name." <".$new_user_email.">";
+			$header .= "Content-Type: text/plain; charset=UTF-8; format=flowed\n";
+			$header .= "Content-Transfer-Encoding: 8bit\n";
+			$new_user_mailto = mb_encode_mimeheader($new_user_name,'UTF-8')." <".$new_user_email.">";
 			if ($settings['mail_parameter']!='')
 				{
 				if (@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header, $settings['mail_parameter']))
