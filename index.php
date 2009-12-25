@@ -32,7 +32,7 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 
 if (isset($_GET['category']))
 	{
-	$qs = "?category=".inval($_GET['category']);
+	$qs = "?category=".intval($_GET['category']);
 	}
 else
 	{
