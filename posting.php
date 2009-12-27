@@ -65,11 +65,9 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 	} # End: if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 
 if (isset($_GET['lock'])
-&& isset($_SESSION[$settings['session_prefix'].'user_id'])
-&& $_SESSION[$settings['session_prefix']."user_type"] == "admin"
-|| isset($_GET['lock'])
-&& isset($_SESSION[$settings['session_prefix'].'user_id'])
-&& $_SESSION[$settings['session_prefix']."user_type"] == "mod")
+and isset($_SESSION[$settings['session_prefix'].'user_id'])
+and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
+or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
 	{
 	$lockQuery = "SELECT
 	tid,
@@ -96,19 +94,15 @@ if (isset($_GET['lock'])
 	if (empty($descasc)) $descasc = "DESC";
 	if (isset($_GET['view']))
 		{
-		if ($view=="board")
-			{
-			header("location: ".$settings['forum_address']."board_entry.php?id=".$field['tid']."&page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category);
-			}
-		else
-			{
-			header("location: ".$settings['forum_address']."mix_entry.php?id=".$field['tid']."&page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category);
-			}
+		$header_href = ($view=="board") ? 'board_entry.php' : 'mix_entry.php';
+		$header_id = '?id='.$field['tid'];
 		}
 	else
 		{
-		header("location: ".$settings['forum_address']."forum_entry.php?id=".$id."&page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category);
+		$header_href = 'forum_entry.php';
+		$header_id = '?id='.$id;
 		}
+	header('location: '.$settings['forum_address'].$header_href.$header_id.'&page='.$page.'&order='.$order.'&descasc='.$descasc.'&category='.$category);
 	} # if (isset($_GET['lock']) ...)
 
 if (($settings['access_for_users_only'] == 1
@@ -122,8 +116,8 @@ if (($settings['access_for_users_only'] == 1
 		$categories = get_categories();
 		if ($categories == "not accessible")
 			{
-			header("location: ".$settings['forum_address']."index.php");
-			die("<a href=\"index.php\">further...</a>");
+			header('location: '.$settings['forum_address'].'index.php');
+			die('<a href="index.php">further...</a>');
 			}
 
 		# delete array for error messages
@@ -253,7 +247,6 @@ if (($settings['access_for_users_only'] == 1
 							$text = $text;
 							# Zitatzeichen an den Anfang jeder Zeile stellen:
 							$text = preg_replace("/^/m", $settings['quote_symbol']." ", $text);
-#							$text = addslashes($text);
 							}
 						mysql_free_result($result);
 
@@ -440,22 +433,14 @@ if (($settings['access_for_users_only'] == 1
 
 						if(isset($view))
 							{
-							if ($view=='board')
-								{
-								header("location: ".$settings['forum_address']."board.php".$qs);
-								die("<a href=\"board.php".$qs."\">further...</a>");
-								}
-							else
-								{
-								header("location: ".$settings['forum_address']."mix.php".$qs);
-								die("<a href=\"mix.php".$qs."\">further...</a>");
-								}
+							$header_href = ($view=='board') ? 'board.php' : 'mix.php';
 							}
 						else
 							{
-							header("location: ".$settings['forum_address']."forum.php".$qs);
-							die("<a href=\"forum.php".$qs."\">further...</a>");
+							$header_href = 'forum.php';
 							}
+						header('location: '.$settings['forum_address'].$header_href.$qs);
+						die('<a href="'.$header_href.$qs.'">further...</a>');
 						}
 					else
 						{
@@ -609,7 +594,7 @@ if (($settings['access_for_users_only'] == 1
 				$field = mysql_fetch_assoc($result);
 				mysql_free_result($result);
 
-				if ($name != "" and strtolower($field["user_name"]) == strtolower($name))
+				if ($name != "" and mb_strtolower($field["user_name"]) == mb_strtolower($name))
 					{
 					$lang['error_name_reserved'] = str_replace("[name]", htmlspecialchars($name), $lang['error_name_reserved']);
 					$errors[] = $lang['error_name_reserved'];
@@ -815,6 +800,19 @@ if (($settings['access_for_users_only'] == 1
 						# Schauen, ob eine E-Mail-Benachrichtigung versendet werden soll:
 						if ($settings['email_notification'] == 1)
 							{
+							$PostAddress  = $settings['forum_address'];
+							if ($settings['standard'] == "board")
+								{
+								$PostAddress .= "board_entry.php?id=".$neu["tid"]."#p".$neu["id"];
+								}
+							else if ($settings['standard'] == "mix")
+								{
+								$PostAddress .= "mix_entry.php?id=".$neu["tid"]."#p".$neu["id"];
+								}
+							else
+								{
+								$PostAddress .= "forum_entry.php?id=".$neu["id"];
+								}
 							$emailUserQuery = "SELECT
 							user_id,
 							name,
@@ -851,18 +849,6 @@ if (($settings['access_for_users_only'] == 1
 								$emailbody = str_replace("[name]", $name, $emailbody);
 								$emailbody = str_replace("[subject]", $subject, $emailbody);
 								$emailbody = str_replace("[text]", $mail_text, $emailbody);
-								if ($settings['standard'] == "board")
-									{
-									$PostAddress = $settings['forum_address']."board_entry.php?id=".$neu["tid"]."#p".$neu["id"];
-									}
-								else if ($settings['standard'] == "mix")
-									{
-									$PostAddress = $settings['forum_address']."mix_entry.php?id=".$neu["tid"]."#p".$neu["id"];
-									}
-								else
-									{
-									$PostAddress = $settings['forum_address']."forum_entry.php?id=".$neu["id"];
-									}
 								$emailbody = str_replace("[posting_address]", $PostAddress, $emailbody);
 								$emailbody = str_replace("[original_subject]", $parent["subject"], $emailbody);
 								$emailbody = str_replace("[original_text]", $parent["text"], $emailbody);
@@ -907,19 +893,7 @@ if (($settings['access_for_users_only'] == 1
 							}
 						$emailbody = str_replace("[subject]", $subject, $emailbody);
 						$emailbody = str_replace("[text]", $mail_text, $emailbody);
-						if ($settings['standard'] == "board")
-							{
-							$adminPostAddress = $settings['forum_address']."board_entry.php?id=".$neu["tid"]."#p".$neu["id"];
-							}
-						else if ($settings['standard'] == "mix")
-							{
-							$adminPostAddress = $settings['forum_address']."mix_entry.php?id=".$neu["tid"]."#p".$neu["id"];
-							}
-						else
-							{
-							$adminPostAddress = $settings['forum_address']."forum_entry.php?id=".$neu["id"];
-							}
-						$emailbody = str_replace("[posting_address]", $adminPostAddress, $emailbody);
+						$emailbody = str_replace("[posting_address]", $PostAddress, $emailbody);
 						$emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
 						$emailbody = $emailbody;
 #						$emailbody = str_replace(htmlspecialchars($settings['quote_symbol']), ">", $emailbody);
@@ -1090,21 +1064,18 @@ if (($settings['access_for_users_only'] == 1
 					{
 					$qs = "";
 					}
-				if (isset($view) && $view=="board")
+				if (!empty($view))
 					{
-					header("location: ".$settings['forum_address']."board_entry.php?id=".$further_tid.$qs);
-					die("<a href=\"board_entry.php?id=".$further_tid.$qs."\">further...</a>");
-					}
-				else if (isset($view) && $view=="mix")
-					{
-					header("location: ".$settings['forum_address']."mix_entry.php?id=".$further_id.$qs);
-					die("<a href=\"mix_entry.php?id=".$further_tid.$qs."\">further...</a>");
+					$header_href = ($view=='board') ? 'board_entry.php' : 'mix_entry.php';
+					$further = $further_tid;
 					}
 				else
 					{
-					header("location: ".$settings['forum_address']."forum_entry.php?id=".$further_id.$qs);
-					die("<a href=\"forum_entry.php?id=".$further_id.$qs."\">further...</a>");
+					$header_href = 'forum_entry.php';
+					$further = $further_id;
 					}
+				header('location: '.$settings['forum_address'].$header_href.'?id='.$further.$qs);
+				die('<a href="'.$header_href.'?id='.$further.$qs.'">further...</a>');
 				exit(); # Skript beenden
 				}
 			} # Ende "if (isset(form))"
@@ -1124,102 +1095,62 @@ if (($settings['access_for_users_only'] == 1
 
 		if (isset($aname))
 			{
-			$lang['back_to_posting_linkname'] = str_replace("[name]", htmlspecialchars(stripslashes($aname)), $lang['back_to_posting_linkname']);
-			$lang['answer_on_posting_marking'] = str_replace("[name]", htmlspecialchars(stripslashes($aname)), $lang['answer_on_posting_marking']);
+			$lang['back_to_posting_linkname'] = str_replace("[name]", htmlspecialchars($aname), $lang['back_to_posting_linkname']);
+			$lang['answer_on_posting_marking'] = str_replace("[name]", htmlspecialchars($aname), $lang['answer_on_posting_marking']);
 			}
 
 		$subnav_1 = '';
 		if ($action == "new" && $id != 0 || $action == "edit" || $action == "delete")
 			{
-			if (empty($view))
+			if (!empty($view))
 				{
-				if (isset($page) && isset($order) && isset($category) && isset($descasc))
-					{
-					if (isset($aname))
-						{
-						$subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_posting_linkname'].'</a>';
-						}
-					else
-						{
-						$subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_linkname'].'</a>';
-						}
-					}
-				else
-					{
-					if (isset($aname))
-						{
-						$subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;descasc='.$descasc.'">'.$lang['back_to_posting_linkname'].'</a>';
-						}
-					else
-						{
-						$subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;descasc='.$descasc.'">'.$lang['back_linkname'].'</a>';
-						}
-					}
+				$subnav1_href1 = ($view=="board") ? 'board_entry.php' : 'mix_entry.php';
 				}
 			else
 				{
-				if ($view=="board")
+				$subnav1_href1 = 'forum_entry.php';
+				}
+			if (isset($page) && isset($order) && isset($category))
+				{
+				$subnav1_query1 = '&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order;
+				}
+			else
+				{
+				$subnav1_query1 = '';
+				}
+			if (!empty($view))
+				{
+				$subnav_1 .= '<a class="textlink" href="'.$subnav1_href1.'?id='.$thema;
+				$subnav_1 .= $subnav_query1.'&amp;descasc='.$descasc;
+				$subnav_1 .= '">'.$lang['back_to_topic_linkname'].'</a>';
+				}
+			else
+				{
+				$subnav_1 .= '<a class="textlink" href="'.$subnav1_href1.'?id='.$id;
+				$subnav_1 .= $subnav1_query1.'&amp;descasc='.$descasc.'">';
+				if (isset($aname))
 					{
-					if (isset($page) && isset($order) && isset($category) && isset($descasc))
-						{
-						$subnav_1 .= '<a class="textlink" href="board_entry.php?id='.$thema.'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_topic_linkname'].'</a>';
-						}
-					else
-						{
-						$subnav_1 .= '<a class="textlink" href="board_entry.php?id='.$thema.'&amp;descasc='.$descasc.'">'.$lang['back_to_topic_linkname'].'</a>';
-						}
+					$subnav_1 .= $lang['back_to_posting_linkname'].'</a>';
 					}
 				else
 					{
-					if (isset($page) && isset($order) && isset($category) && isset($descasc))
-						{
-						$subnav_1 .= '<a class="textlink" href="mix_entry.php?id='.$thema.'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_topic_linkname'].'</a>';
-						}
-					else
-						{
-						$subnav_1 .= '<a class="textlink" href="mix_entry.php?id='.$thema.'&amp;descasc='.$descasc.'">'.$lang['back_to_topic_linkname'].'</a>';
-						}
+					$subnav_1 .= $lang['back_linkname'].'</a>';
 					}
 				}
 			}
 		else if ($action == "new" && $id == 0)
 			{
-			if (empty($view))
+			if (!empty($view))
 				{
-				if (isset($category))
-					{
-					$subnav_1 .= '<a class="textlink" href="forum.php?category='.$category.'">'.$lang['back_to_overview_linkname'].'</a>';
-					}
-				else
-					{
-					$subnav_1 .= '<a class="textlink" href="forum.php">'.$lang['back_to_overview_linkname'].'</a>';
-					}
+				$subnav1_href2 = ($view=="board") ? 'board.php' : 'mix.php';
 				}
-			else if (isset($view))
+			else
 				{
-				if ($view=="board")
-					{
-					if (isset($category))
-						{
-						$subnav_1 .= '<a class="textlink" href="board.php?category='.$category.'">'.$lang['back_to_overview_linkname'].'</a>';
-						}
-					else
-						{
-						$subnav_1 .= '<a class="textlink" href="board.php">'.$lang['back_to_overview_linkname'].'</a>';
-						}
-					}
-				else
-					{
-					if (isset($category))
-						{
-						$subnav_1 .= '<a class="textlink" href="mix.php?category='.$category.'">'.$lang['back_to_overview_linkname'].'</a>';
-						}
-					else
-						{
-						$subnav_1 .= '<a class="textlink" href="mix.php">'.$lang['back_to_overview_linkname'].'</a>';
-						}
-					}
+				$subnav1_href2 = 'forum.php';
 				}
+			$subnav_1 .= '<a class="textlink" href="'.$subnav1_href2;
+			$subnav_1 .= (isset($category)) ? '?category='.$category : '';
+			$subnav_1 .= '">'.$lang['back_to_overview_linkname'].'</a>';
 			}
 
 		parse_template();
@@ -1307,20 +1238,13 @@ if (($settings['access_for_users_only'] == 1
 					echo '<p class="caution">'.$lang['preview_headline'].'</p>'."\n";
 					if (isset($view))
 						{
-						echo '<table class="normaltab">';
-						echo '<tr>';
-						echo '<td class="autorcell" rowspan="2" valign="top">';
+						echo '<table class="normaltab">'."\n";
+						echo '<tr>'."\n";
+						echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
 						echo '<b>'.htmlspecialchars($pr_name).'</b><br />';
 						if ($pr_hp != "")
 							{
-							if (substr($pr_hp,0,7) != "http://"
-							&& substr($pr_hp,0,8) != "https://"
-							&& substr($pr_hp,0,6) != "ftp://"
-							&& substr($pr_hp,0,9) != "gopher://"
-							&& substr($pr_hp,0,7) != "news://")
-								{
-								$pr_hp = "http://".$pr_hp;
-								}
+							$pr_hp = amendProtocol($pr_hp);
 							echo '<a href="'.$pr_hp.'"><img src="img/homepage.gif" alt="'.$lang['homepage_alt'].'" width="13" height="13" /></a>';
 							} # End: if ($pr_hp != "")
 						if (($pr_email != ""  && $hide_email != 1) && $pr_hp != "")
@@ -1341,8 +1265,8 @@ if (($settings['access_for_users_only'] == 1
 							echo htmlspecialchars($pr_place); echo ", <br />";
 							}
 						echo strftime($lang['time_format'],$pr_time);
-						echo '<div class="autorcellwidth">&nbsp;</div></td>';
-						echo '<td class="titlecell"><h2>'.htmlspecialchars($subject).'</h2></td>';
+						echo '<div class="autorcellwidth">&nbsp;</div></td>'."\n";
+						echo '<td class="titlecell"><h2>'.htmlspecialchars($subject).'</h2></td>'."\n";
 						echo '</tr><tr>';
 						echo '<td class="postingcell" valign="top">';
 						if ($text == "")
@@ -1473,7 +1397,7 @@ if (($settings['access_for_users_only'] == 1
 						}
 					} # if (isset($preview) && empty($errors))
 		# Ende Vorschau
-				echo '<form action="posting.php" method="post" id="entryform" accept-charset="UTF-8">';
+				echo '<form action="posting.php" method="post" id="entryform" accept-charset="UTF-8">'."\n";
 				if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_posting']==1)
 					{
 					echo '<input type="hidden" name="'.session_name().'" value="'.session_id().'" />'."\n";
@@ -1481,7 +1405,7 @@ if (($settings['access_for_users_only'] == 1
 				echo '<input type="hidden" name="form" value="true" />'."\n";
 				echo '<input type="hidden" name="id" value="'.intval($id).'" />'."\n";
 				echo ($action == "edit") ? '<input type="hidden" name="pid" value="'.intval($pid).'" />'."\n" : '';
-				echo '<input type="hidden" name="uniqid" value="'.uniqid("").'" />';
+				echo '<input type="hidden" name="uniqid" value="'.uniqid("").'" />'."\n";
 				echo '<input type="hidden" name="action" value="'.htmlspecialchars($action).'" />'."\n";
 				echo (isset($p_user_id)) ? '<input type="hidden" name="p_user_id" value="'.$p_user_id.'" />'."\n" : '';
 				echo (isset($aname)) ? '<input type="hidden" name="aname" value="'.htmlspecialchars($aname).'" />'."\n" : '';
@@ -1501,7 +1425,7 @@ if (($settings['access_for_users_only'] == 1
 					echo '<td><b>'.$lang['name_marking'].'</b></td>'."\n";
 					echo '<td><input type="text" size="40" name="name" value="';
 					echo (isset($name)) ? htmlspecialchars($name) : '';
-					echo '" maxlength="'.$settings['name_maxlength'].'" /></td>';
+					echo '" maxlength="'.$settings['name_maxlength'].'" /></td>'."\n";
 					echo '</tr><tr>'."\n";
 					echo '<td><b>'.$lang['email_marking'].'</b></td>'."\n";
 					echo '<td><input type="text" size="40" name="email" value="';
@@ -1646,7 +1570,7 @@ if (($settings['access_for_users_only'] == 1
 						{
 						if($i % 2 == 0)
 							{
-							?><br /><?php
+							echo '<br />';
 							}
 						echo '<span class="small"><a href="javascript:more_smilies()" title="'.$lang['more_smilies_linktitle'].'">'.$lang['more_smilies_linkname'].'</a></span>'."\n";
 						}
@@ -1746,26 +1670,11 @@ if (($settings['access_for_users_only'] == 1
 				echo '<form action="posting.php" method="post" accept-charset="UTF-8">'."\n";
 				echo '<input type="hidden" name="action" value="delete ok" />'."\n";
 				echo '<input type="hidden" name="id" value="'.intval($id).'" />'."\n";
-				if (isset($view))
-					{
-					echo '<input type="hidden" name="view" value="'.$view.'" />'."\n";
-					}
-				if (isset($page))
-					{
-					echo '<input type="hidden" name="page" value="'.$page.'" />'."\n";
-					}
-				if (isset($order))
-					{
-					echo '<input type="hidden" name="order" value="'.$order.'" />'."\n";
-					}
-				if (isset($descasc))
-					{
-					echo '<input type="hidden" name="descasc" value="'.$descasc.'" />'."\n";
-					}
-				if (isset($category))
-					{
-					echo '<input type="hidden" name="category" value="'.$category.'" />'."\n";
-					}
+				echo (isset($view)) ? '<input type="hidden" name="view" value="'.$view.'" />'."\n" : '';
+				echo (isset($page)) ? '<input type="hidden" name="page" value="'.$page.'" />'."\n" : '';
+				echo (isset($order)) ? '<input type="hidden" name="order" value="'.$order.'" />'."\n" : '';
+				echo (isset($descasc)) ? '<input type="hidden" name="descasc" value="'.$descasc.'" />'."\n" : '';
+				echo (isset($category)) ? '<input type="hidden" name="category" value="'.$category.'" />'."\n" : '';
 				echo '<p><input type="submit" name="delete" value="'.$lang['delete_posting_ok'].'" /></p>'."\n";
 				echo '</form>'."\n";
 			break;
