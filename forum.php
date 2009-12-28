@@ -83,10 +83,10 @@ if ($settings['access_for_users_only'] == 1
 	# there are categories and only one category should be shown
 	else if (is_array($categories) && $category != 0 && in_array($category, $category_ids))
 		{
-		$result = mysql_query("SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE category = '".mysql_escape_string($category)."' AND pid = 0 ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page'], $connid);
+		$result = mysql_query("SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE category = '".mysql_real_escape_string($category)."' AND pid = 0 ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page'], $connid);
 		if(!$result) die($lang['db_error']);
 		# how many entries?
-		$pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '".mysql_escape_string($category)."'", $connid);
+		$pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '".mysql_real_escape_string($category)."'", $connid);
 		list($thread_count) = mysql_fetch_row($pid_result);
 		mysql_free_result($pid_result);
 		}
@@ -95,31 +95,40 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
-		$subnav_2 .= '<a href="index.php?update=1&amp;category='.urlencode($category).'"><img src="img/update.gif" alt="" title="'.$lang['update_time_linktitle'].'" width="9" height="9" onmouseover="this.src=\'img/update_mo.gif\';" onmouseout="this.src=\'img/update.gif\';" /></a>';
+		$subnav_2 .= '<a href="index.php?update=1&amp;category='.intval($category);
+		$subnav_2 .= '"><img src="img/update.gif" alt="" title="'.$lang['update_time_linktitle'];
+		$subnav_2 .= '" width="9" height="9" onmouseover="this.src=\'img/update_mo.gif\';"';
+		$subnav_2 .= ' onmouseout="this.src=\'img/update.gif\';" /></a>';
 		}
 	if ($order=="time")
 		{
-		$subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?order=last_answer&amp;category='.urlencode($category).'" title="'.$lang['order_linktitle_1'].'"><img src="img/order.gif" alt="" width="12" height="9" title="'.$lang['order_linktitle_1'].'" />'.$lang['order_linkname'].'</a></span>';
+		$subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?order=last_answer';
+		$subnav_2 .= '&amp;category='.intval($category).'" title="'.$lang['order_linktitle_1'];
+		$subnav_2 .= '"><img src="img/order.gif" alt="" width="12" height="9" title="';
+		$subnav_2 .= $lang['order_linktitle_1'].'" />'.$lang['order_linkname'].'</a></span>';
 		}
 	else
 		{
-		$subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?order=time&amp;category='.urlencode($category).'" title="'.$lang['order_linktitle_2'].'"><img src="img/order.gif" alt="" width="12" height="9" title="'.$lang['order_linktitle_2'].'" />'.$lang['order_linkname'].'</a></span>';
+		$subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?order=time&amp;category=';
+		$subnav_2 .= intval($category).'" title="'.$lang['order_linktitle_2'].'"><img src="';
+		$subnav_2 .= 'img/order.gif" alt="" width="12" height="9" title="';
+		$subnav_2 .= $lang['order_linktitle_2'].'" />'.$lang['order_linkname'].'</a></span>';
 		}
-	if ($settings['board_view'] == 1 && $category == 0)
+	if ($settings['board_view'] == 1)
 		{
-		$subnav_2 .= ' &nbsp;<span class="small"><a href="board.php" title="'.$lang['board_view_linktitle'].'"><img src="img/board.gif" alt="" width="12" height="9" title="'.$lang['board_view_linktitle'].'" />'.$lang['board_view_linkname'].'</a></span>';
+		$cat = ($category != 0) ? '?category='.intval($category) : '';
+		$subnav_2 .= ' &nbsp;<span class="small"><a href="board.php'.$cat;
+		$subnav_2 .= '" title="'.$lang['board_view_linktitle'].'"><img src="img/board.gif"';
+		$subnav_2 .= ' alt="'.$lang['board_view_linktitle'].'" width="12" height="9" title="';
+		$subnav_2 .= $lang['board_view_linktitle'].'" />'.$lang['board_view_linkname'].'</a></span>';
 		}
-	else if ($settings['board_view'] == 1 && $category != 0)
+	if ($settings['mix_view']==1)
 		{
-		$subnav_2 .= ' &nbsp;<span class="small"><a href="board.php?category='.urlencode($category).'" title="'.$lang['board_view_linktitle'].'"><img src="img/board.gif" alt="" width="12" height="9" title="'.$lang['board_view_linktitle'].'" />'.$lang['board_view_linkname'].'</a></span>';
-		}
-	if ($settings['mix_view']==1 && $category == 0)
-		{
-		$subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php" title="'.$lang['mix_view_linktitle'].'"><img src="img/mix.gif" alt="" width="12" height="9" title="'.$lang['mix_view_linktitle'].'" />'.$lang['mix_view_linkname'].'</a></span>';
-		}
-	else if ($settings['mix_view']==1 && $category != 0)
-		{
-		$subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php?category='.urlencode($category).'" title="'.$lang['mix_view_linktitle'].'"><img src="img/mix.gif" alt="" width="12" height="9" title="'.$lang['mix_view_linktitle'].'" />'.$lang['mix_view_linkname'].'</a></span>';
+		$cat = ($category != 0) ? '?category='.intval($category) : '';
+		$subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php'.$cat;
+		$subnav_2 .= '" title="'.$lang['mix_view_linktitle'].'"><img src="img/mix.gif"';
+		$subnav_2 .= ' alt="'.$lang['mix_view_linktitle'].'" width="12" height="9" title="';
+		$subnav_2 .= $lang['mix_view_linktitle'].'" />'.$lang['mix_view_linkname'].'</a></span>';
 		}
 	$subnav_2 .= nav($page, (int)$settings['topics_per_page'], $thread_count, $order, $descasc, $category);
 
