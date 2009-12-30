@@ -20,16 +20,16 @@
 ###############################################################################
 
 ini_set('arg_separator.output', '&amp;');
-mb_internal_encoding('UTF-8');
 header('Content-Type: text/html; charset=UTF-8');
 
 #ini_set("session.use_trans_sid","0");
 session_start();
 
+if(!defined('MB_CASE_LOWER')) require('/functions/funcs.mb_replacements.php');
 include("db_settings.php");
 include("functions.php");
 
-
+mb_internal_encoding('UTF-8');
 
 # for details see: http://de.php.net/manual/en/security.magicquotes.disabling.php
 if (get_magic_quotes_gpc())
