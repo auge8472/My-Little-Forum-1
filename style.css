@@ -26,6 +26,7 @@ font-weight: bold;
 p { margin-top: 0; }
 img { border: 0; }
 form { display: inline; }
+.inline-form { display: inline; }
 
 .normal {
 font-size: 1em;
