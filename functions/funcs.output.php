@@ -60,7 +60,7 @@ $r = '';
 
 if($categories != false && $categories != "not accessible")
 	{
-	$r .= '&nbsp;&nbsp;<form method="get" action="'.$_SERVER['SCRIPT_NAME'].'" title="'.$lang['choose_category_formtitle'].'" style="display: inline;">'."\n";
+	$r .= "\n".'<form method="get" action="'.$_SERVER['SCRIPT_NAME'].'" title="'.$lang['choose_category_formtitle'].'">'."\n".'<div class="inline-form">'."\n";
 	$r .= '<select class="kat" size="1" name="category" onchange="this.form.submit();">'."\n";
 	$r .= '<option value="0"';
 	$r .= (isset($category) && $category==0) ? ' selected="selected"' : '';
@@ -74,7 +74,7 @@ if($categories != false && $categories != "not accessible")
 			$r .= '>'.$val.'</option>'."\n";
 			}
 		}
-	$r .= '</select>'."\n".'<noscript> <input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></noscript></form>'."\n";
+	$r .= '</select>'."\n".'<noscript> <input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></noscript></div>'."\n".'</form>'."\n";
 	}
 
 return $r;
