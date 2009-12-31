@@ -97,7 +97,8 @@ if ($settings['access_for_users_only'] == 1
 		{
 		# onmouseover="this.src=\'img/update_mo.gif\';" onmouseout="this.src=\'img/update.gif\';"
 		$subnav_2 .= '<a href="index.php?update=1&amp;category='.intval($category).'"';
-		$subnav_2 .= ' class="update-postings">'.$lang['update_time_linkname'].'</a>';
+		$subnav_2 .= ' class="update-postings" title="'.$lang['update_time_linktitle'].'">';
+		$subnav_2 .= $lang['update_time_linkname'].'</a>';
 		}
 	if ($order=="time")
 		{

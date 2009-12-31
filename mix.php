@@ -200,7 +200,8 @@ if ($settings['access_for_users_only'] == 1
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
 		$subnav_2 .= '<a href="index.php?update=1&amp;view=mix&amp;category='.intval($category);
-		$subnav_2 .= '" class="update-postings">'.$lang['update_time_linkname'].'</a>';
+		$subnav_2 .= '" class="update-postings" title="'.$lang['update_time_linktitle'].'">';
+		$subnav_2 .= $lang['update_time_linkname'].'</a>';
 		}
 	if ($settings['thread_view'] == 1)
 		{
