@@ -522,6 +522,7 @@ else
 	{
 	$user_menu = '<a href="login.php" title="'.$lang['login_linktitle'].'">'.$lang['login_linkname'].'</a> | <a href="register.php" title="'.$lang['register_linktitle'].'">'.$lang['register_linkname'].'</a>';
 	}
+$user_menu .= ' | <a href="search.php" title="'.$lang['search_formtitle'].'">'.$lang['search_linkname'].'</a>';
 $template = str_replace("{USER-MENU}",$user_menu,$template);
 
 // Search:
