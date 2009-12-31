@@ -297,7 +297,9 @@ if ($settings['access_for_users_only'] == 1
 		}
 	mysql_free_result($result); // Aufräumen
 	$wo = $entrydata["subject"];
-	$subnav_1 = '<a class="textlink" href="mix.php?page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_overview_linkname'].'</a>';
+	$subnav_1  = '<a class="textlink" href="mix.php?page='.$page.'&amp;category='.$category;
+	$subnav_1 .= '&amp;order='.$order.'&amp;descasc='.$descasc.'">';
+	$subnav_1 .= $lang['back_to_overview_linkname'].'</a>';
 	$subnav_2 = "";
 	if ($settings['thread_view']==1)
 		{

@@ -253,7 +253,9 @@ if ($settings['access_for_users_only'] == 1
 		}
 
 	$wo = $thread["subject"];
-	$subnav_1 = '<a class="textlink" href="board.php?page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'" title="'.$lang['back_to_board_linktitle'].'">'.$lang['back_to_board_linkname'].'</a>';
+	$subnav_1  = '<a class="textlink" href="board.php?page='.$page.'&amp;category='.$category;
+	$subnav_1 .= '&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
+	$subnav_1 .= $lang['back_to_board_linktitle'].'">'.$lang['back_to_board_linkname'].'</a>';
 	$subnav_2 = '';
 	if ($da=="DESC")
 		{

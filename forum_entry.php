@@ -183,7 +183,9 @@ if ($settings['access_for_users_only'] == 1
 	mysql_free_result($result);
 	$category = $category;
 	$wo = $entrydata["subject"];
-	$subnav_1 = '<a class="textlink" href="forum.php?page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'" title="'.$lang['back_to_forum_linktitle'].'">'.$lang['back_to_forum_linkname'].'</a>';
+	$subnav_1  = '<a class="textlink" href="forum.php?page='.$page.'&amp;category=';
+	$subnav_1 .= intval($category).'&amp;order='.$order.'" title="';
+	$subnav_1 .= $lang['back_to_forum_linktitle'].'">'.$lang['back_to_forum_linkname'].'</a>';
 	$subnav_2 = "";
 	if ($settings['board_view']==1)
 		{
