@@ -95,7 +95,7 @@ mysql_free_result($result_a);
 
 $entrydata['answer'] = $posting_a['name'];
 
-echo '<div class="mixdivl" style="margin-left: ';
+echo '<div id="p'.intval($entrydata["id"]).'" class="mixdivl" style="margin-left: ';
 echo ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix_topic']/$settings['thread_indent_mix_topic'])) ? "0" : $settings['thread_indent_mix_topic'];
 echo 'px;">'."\n";
 echo '<table class="mix-entry">'."\n".'<tr>'."\n";
