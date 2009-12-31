@@ -91,7 +91,7 @@ if (isset($_GET['user_lock'])
 	{
 	$lock_result = mysql_query("SELECT user_lock, user_type FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_GET['user_lock'])." LIMIT 1", $connid);
 	if (!$lock_result) die($lang['db_error']);
-	$field = mysql_fetch_array($lock_result);
+	$field = mysql_fetch_assoc($lock_result);
 	mysql_free_result($lock_result);
 	if ($field['user_type'] == "user")
 		{
@@ -138,13 +138,12 @@ if (isset($_POST['change_email_submit']))
 		{
 		$activate_code = md5(uniqid(rand()));
 		# send mail with activation key:
-		$ip = $_SERVER["REMOTE_ADDR"];
 		$lang['new_user_email_txt'] = str_replace("[name]", $field['user_name'], $lang['change_email_txt']);
 		$lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$field['user_id']."&key=".$activate_code, $lang['new_user_email_txt']);
-		$lang['new_user_email_txt'] = stripslashes($lang['new_user_email_txt']);
+#		$lang['new_user_email_txt'] = stripslashes($lang['new_user_email_txt']);
 		$header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
 		$header .= "X-Mailer: Php/" . phpversion(). "\n";
-		$header .= "X-Sender-ip: $ip\n";
+		$header .= "X-Sender-ip: ".$_SERVER["REMOTE_ADDR"]."\n";
 		$header .= "Content-Type: text/plain";
 		$new_user_mailto = $field['user_name']." <".$new_email.">";
 		if($settings['mail_parameter']!='')
@@ -157,7 +156,13 @@ if (isset($_POST['change_email_submit']))
 			}
 		if(empty($errors))
 			{
-			@mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_email='".mysql_escape_string($new_email)."', last_login=last_login, registered=registered, activate_code = '".mysql_escape_string($activate_code)."' WHERE user_id='".$user_id."'", $connid) or die($lang['db_error']);
+			$updateUserEmailQuery = "UPDATE ".$db_settings['userdata_table']." SET
+			user_email='".mysql_real_escape_string($new_email)."',
+			last_login=last_login,
+			registered=registered,
+			activate_code = '".mysql_real_escape_string($activate_code)."'
+			WHERE user_id= ".intval($user_id);
+			@mysql_query($updateUserEmailQuery, $connid) or die($lang['db_error']);
 			header("location: ".$settings['forum_address']."login.php");
 			die("<a href=\"login.php\">further...</a>");
 			}
@@ -211,7 +216,7 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 				$laenge = mb_strlen($text_arr[$i]);
 				if ($laenge > $settings['name_word_maxlength'])
 					{
-					$error_nwtl = str_replace("[word]", htmlspecialchars(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
+					$error_nwtl = str_replace("[word]", htmlspecialchars(mb_substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
 					$errors[] = $error_nwtl;
 					}
 				}
@@ -222,7 +227,7 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 				$laenge = mb_strlen($text_arr[$i]);
 				if ($laenge > $settings['place_word_maxlength'])
 					{
-					$error_pwtl = str_replace("[word]", htmlspecialchars(substr($text_arr[$i],0,$settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
+					$error_pwtl = str_replace("[word]", htmlspecialchars(mb_substr($text_arr[$i],0,$settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
 					$errors[] = $error_pwtl;
 					}
 				}
@@ -279,7 +284,6 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 					}
 				}
 			# End of checking
-			#if (isset($hp) && substr($hp,0,7) == "http://") { $hp = substr($hp,7); }
 			if (empty($hide_email)) $hide_email = 0;
 			if (empty($errors))
 				{
@@ -335,7 +339,7 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 			# Update, if no errors:
 			if (empty($errors))
 				{
-				$pw_update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_pw='".md5($new_pw)."', last_login=last_login, registered=registered WHERE user_id='".$user_id."'", $connid);
+				$pw_update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_pw='".md5($new_pw)."', last_login=last_login, registered=registered WHERE user_id='".intval($user_id)."'", $connid);
 				header("location: ".$settings['forum_address']."user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']);
 				die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
 				}
@@ -491,7 +495,23 @@ switch ($action)
 			}
 		else
 			{
-			$result = mysql_query("SELECT user_id, user_type, user_name, user_real_name, user_email, hide_email, user_hp, user_place, logins, signature, profile, UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS since_date, UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS login_date FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($id), $connid);
+			$singleUserQuery = "SELECT
+			user_id,
+			user_type,
+			user_name,
+			user_real_name,
+			user_email,
+			hide_email,
+			user_hp,
+			user_place,
+			logins,
+			signature,
+			profile,
+			UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS since_date,
+			UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS login_date
+			FROM ".$db_settings['userdata_table']."
+			WHERE user_id = ".intval($id);
+			$result = mysql_query($singleUserQuery, $connid);
 			}
 		if (!$result) die($lang['db_error']);
 		$field = mysql_fetch_assoc($result);
@@ -652,7 +672,7 @@ switch ($action)
 			{
 			$useronline_result = mysql_query("SELECT user_id FROM ".$db_settings['useronline_table'], $connid);
 			if (!$useronline_result) die($lang['db_error']);
-			while ($uid_field = mysql_fetch_array($useronline_result))
+			while ($uid_field = mysql_fetch_assoc($useronline_result))
 				{
 				$useronline_array[] = $uid_field['user_id'];
 				}
@@ -661,7 +681,7 @@ switch ($action)
 		if ($thread_count > 0)
 			{
 			echo '<table class="normaltab">'."\n";
-			echo '<tr>'."\n";
+			echo '<tr class="titlerow">'."\n";
 			echo '<th><a href="user.php?action=show+users&amp;order=user_name&amp;descasc=';
 			echo ($descasc=="ASC" && $order=="user_name") ? 'DESC' : 'ASC';
 			echo '&amp;ul='.$ul.'" title="'.$lang['order_linktitle'].'">'.$lang['userlist_name'].'</a>';
@@ -797,7 +817,7 @@ switch ($action)
 		WHERE user_id = ".intval($user_id);
 		$result = mysql_query($singleUserDataQuery, $connid);
 		if (!$result) die($lang['db_error']);
-		$field = mysql_fetch_array($result);
+		$field = mysql_fetch_assoc($result);
 		mysql_free_result($result);
 
 		if (empty($userdata_submit))
