@@ -31,6 +31,11 @@ include("functions.php");
 
 mb_internal_encoding('UTF-8');
 
+# attitional headers (caching)
+if (mb_strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE')==false) { header('Cache-Control: public, max-age=900'); }
+$headerdate = gmdate('D, d M Y H:i:s',time()+60);
+header('Expires: '.$headerdate.' GMT');
+
 # for details see: http://de.php.net/manual/en/security.magicquotes.disabling.php
 if (get_magic_quotes_gpc())
 	{
