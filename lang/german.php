@@ -71,6 +71,7 @@ $lang['lock_linktitle'] =              "Thread sperren";
 $lang['unlock_linkname'] =             "entsperren";
 $lang['unlock_linktitle'] =            "Sperre für diesen Thread aufheben";
 $lang['update_time_linktitle'] =       "aktualisieren / alle Threads als gelesen markieren";
+$lang['update_time_linkname'] =        "Aktualisieren";
 $lang['back_linkname'] =               "zurück";
 $lang['order_linktitle'] =             "nach dieser Spalte sortieren";
 $lang['open_in_thread_linktitle'] =    "in Thread-Ansicht öffnen";

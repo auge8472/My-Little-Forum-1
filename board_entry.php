@@ -255,20 +255,35 @@ if ($settings['access_for_users_only'] == 1
 	$wo = $thread["subject"];
 	$subnav_1 = '<a class="textlink" href="board.php?page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'" title="'.$lang['back_to_board_linktitle'].'">'.$lang['back_to_board_linkname'].'</a>';
 	$subnav_2 = '';
-	if ($settings['thread_view']==1)
-		{
-		$subnav_2 .= '<span class="small"><a href="forum_entry.php?id='.$thread["tid"].'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category.'" title="'.$lang['thread_view_linktitle'].'"><img src="img/thread.gif" alt="" width="12" height="9" title="'.$lang['thread_view_linktitle'].'" />'.$lang['thread_view_linkname'].'</a></span>';
-		}
-	if ($settings['mix_view']==1)
-		{
-		$subnav_2 .= '&nbsp;&nbsp;<span class="small"><a href="mix_entry.php?id='.$thread["tid"].'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category.'" title="'.$lang['mix_view_linktitle'].'"><img src="img/mix.gif" alt="" width="12" height="9" title="'.$lang['mix_view_linktitle'].'" />'.$lang['mix_view_linkname'].'</a></span>';
-		}
 	if ($da=="DESC")
-		{$subnav_2 .= '&nbsp;&nbsp;<span class="small"><a href="board_entry.php?id='.$thread["tid"].'&amp;da=ASC&amp;page='.$page.'&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category.'" title="'.$lang['order_linktitle_3'].'"><img src="img/order.gif" alt="" width="12" height="9" title="'.$lang['order_linktitle_3'].'" />'.$lang['order_linkname'].'</a></span>';
+		{
+		$order_order = 'ASC';
+		$order_title = $lang['order_linktitle_3'];
+		$order_text  = $lang['order_linkname'];
 		}
 	else
 		{
-		$subnav_2 .= '&nbsp;&nbsp;<span class="small"><a href="board_entry.php?id='.$thread["tid"].'&amp;da=DESC&amp;page='.$page.'&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category.'" title="'.$lang['order_linktitle_4'].'"><img src="img/order.gif" alt="" width="12" height="9" title="'.$lang['order_linktitle_4'].'" />'.$lang['order_linkname'].'</a></span>';
+		$order_order = 'DESC';
+		$order_title = $lang['order_linktitle_4'];
+		$order_text  = $lang['order_linkname'];
+		}
+	$subnav_2 .= '&nbsp;<a href="board_entry.php?id='.$thread["tid"].'&amp;da=';
+	$subnav_2 .= $order_order.'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc=';
+	$subnav_2 .= $descasc.'&amp;category='.$category.'" class="order-postings" title="';
+	$subnav_2 .= $order_title.'">'.$order_text.'</a>';
+	if ($settings['thread_view']==1)
+		{
+		$subnav_2 .= '&nbsp;<a href="forum_entry.php?id='.$thread["tid"].'&amp;page='.$page;
+		$subnav_2 .= '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
+		$subnav_2 .= '" class="thread-view" title="'.$lang['thread_view_linktitle'].'">';
+		$subnav_2 .= $lang['thread_view_linkname'].'</a>';
+		}
+	if ($settings['mix_view']==1)
+		{
+		$subnav_2 .= '&nbsp;<a href="mix_entry.php?id='.$thread["tid"].'&amp;page='.$page;
+		$subnav_2 .= '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
+		$subnav_2 .= '" class="mix-view" title="'.$lang['mix_view_linktitle'].'">';
+		$subnav_2 .= $lang['mix_view_linkname'].'</a>';
 		}
 	$subnav_2 .= nav_b($be_page, $settings['answers_per_topic'], $thread_count, $thread["tid"], $da, 1, $page, $category, $order, $descasc);
 

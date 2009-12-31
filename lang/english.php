@@ -75,6 +75,7 @@ $lang['lock_linktitle'] =              "Lock this thread";
 $lang['unlock_linkname'] =             "Unlock";
 $lang['unlock_linktitle'] =            "Unlock this thread";
 $lang['update_time_linktitle'] =       "Refresh / mark all threads as read";
+$lang['update_time_linkname'] =        "Refresh";
 $lang['back_linkname'] =               "Back";
 $lang['order_linktitle'] =             "Sort by this column";
 $lang['open_in_thread_linktitle'] =    "Open in thread view";

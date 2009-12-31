@@ -187,11 +187,17 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_2 = "";
 	if ($settings['board_view']==1)
 		{
-		$subnav_2 .= '<span class="small"><a href="board_entry.php?id='.$entrydata["tid"].'&amp;page='.$page.'&amp;order='.$order.'&amp;category='.urlencode($category).'" title="'.$lang['board_view_linktitle'].'"><img src="img/board.gif" alt="" width="12" height="9" title="'.$lang['board_view_linktitle'].'" />'.$lang['board_view_linkname'].'</a></span>';
+		$subnav_2 .= '&nbsp;<a href="board_entry.php?id='.$entrydata["tid"].'&amp;page='.$page;
+		$subnav_2 .= '&amp;order='.$order.'&amp;category='.intval($category).'"';
+		$subnav_2 .= ' class="board-view" title="'.$lang['board_view_linktitle'].'">';
+		$subnav_2 .= $lang['board_view_linkname'].'</a>';
 		}
 	if ($settings['mix_view']==1)
 		{
-		$subnav_2 .= '&nbsp;&nbsp;<span class="small"><a href="mix_entry.php?id='.$entrydata["tid"].'&amp;page='.$page.'&amp;order='.$order.'&amp;category='.urlencode($category).'" title="'.$lang['mix_view_linktitle'].'"><img src="img/mix.gif" alt="" width="12" height="9" title="'.$lang['mix_view_linktitle'].'" />'.$lang['mix_view_linkname'].'</a></span>';
+		$subnav_2 .= '&nbsp;<a href="mix_entry.php?id='.$entrydata["tid"].'&amp;page='.$page;
+		$subnav_2 .= '&amp;order='.$order.'&amp;category='.intval($category).'"';
+		$subnav_2 .= ' class="mix-view" title="'.$lang['mix_view_linktitle'].'">';
+		$subnav_2 .= $lang['mix_view_linkname'].'</a>';
 		}
 
 	parse_template();

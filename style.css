@@ -4,21 +4,22 @@ padding: 0;
 }
 
 body {
-color: #000;
-background:#d2ddea;
 margin: 0;
 padding: 0;
+color: #000;
+background:#d2ddea;
 font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 100.01%;
 }
 
 h1 {
-font-size: 18px;
+font-size: 1.6em;
 font-weight: bold;
 }
 
 h2 {
 margin-top: 0;
-font-size: 16px
+font-size: 1.3em;
 font-weight: bold;
 }
 
@@ -27,8 +28,8 @@ img { border: 0; }
 form { display: inline; }
 
 .normal {
-font-size: 13px;
-line-height: 19px;
+font-size: 1em;
+line-height: 1.6em;
 max-width: 750px;
 }
 
@@ -69,12 +70,50 @@ text-decoration: none;
 background-image:url(img/link.gif);
 }
 
+/* links to different views*/
+a.board-view, a.mix-view, a.thread-view, a.order-postings, a.update-postings {
+font-size: 0.86em;
+padding: 0 5px 0 12px;
+background-repeat: no-repeat;
+background-position: left center;
+}
+a.board-view:link, a.board-view:visited {
+background-image:url(img/board.gif);
+}
+a.board-view:focus, a.board-view:hover {
+background-image:url(img/board_r.gif);
+}
+a.mix-view:link, a.mix-view:visited {
+background-image:url(img/mix.gif);
+}
+a.mix-view:focus, a.mix-view:hover {
+background-image:url(img/mix_r.gif);
+}
+a.thread-view:link, a.thread-view:visited {
+background-image:url(img/thread.gif);
+}
+a.thread-view:focus, a.thread-view:hover {
+background-image:url(img/thread_r.gif);
+}
+a.order-postings:link, a.order-postings:visited {
+background-image:url(img/order.gif);
+}
+a.order-postings:focus, a.order-postings:hover {
+background-image:url(img/order_r.gif);
+}
+a.update-postings:link, a.update-postings:visited {
+background-image:url(img/update.gif);
+}
+a.update-postings:focus, a.update-postings:hover {
+background-image:url(img/update_mo.gif);
+}
+
 /* template: */
 #top {
 margin:0;
 height: 70px;
-background-color:#d2ddea;
-font-size: 13px;
+background-color:#ecf2f8;
+font-size: 11px;
 background-image:url(img/bg_top.gif);
 background-repeat: repeat-x;
 }
@@ -88,13 +127,13 @@ float: left;
 #top div.left .home {
 margin:0 0 3px 0;
 padding:0;
-font-size:11px;
+font-size:1em;
 }
 
 #top div.left .index {
 margin:0;
 padding:0;
-font-size:13px;
+font-size:1em;
 }
 
 #top div.right {
@@ -105,7 +144,7 @@ text-align: right;
 
 p.usermenu {
 margin:0 0 13px 0;
-font-size: 11px;
+font-size: 1em;
 }
 
 #top h1 {
@@ -114,69 +153,47 @@ margin:0 0 3px 0;
 
 .search {
 display: inline;
-font-size: 11px;
+font-size: 0.86em;
 }
 
 input.searchfield {
-font-size: 11px;
+font-size: 0.86em;
 width: 130px;
 }
 
-#topnav {
+#topnav, #bottomnav {
 clear:both;
 margin: 0;
 padding: 0;
 height: 30px;
 color:#000;
 background:#f9f9f9;
-font-size: 13px;
+font-size: 1em;
 border-top: 1px solid #bacbdf;
 border-bottom: 1px solid #bacbdf;
 }
 
-#topnav div.left {
+#topnav div.left, #bottomnav div.left {
 margin: 0;
 padding: 7px 0 0 20px;
 float: left;
 }
-#topnav div.right {
+#topnav div.right, #bottomnav div.right {
 margin: 0;
-padding: 6px 20px 0 0;
+padding: 2px 20px 0 0;
 text-align: right;
 }
 
 #content {
-padding: 20px;
-font-size: 13px;
+padding: 2em;
+font-size: 1em;
 background:#fff;
 }
 
-#bottomnav {
-margin: 0;
-padding: 0;
-height: 30px;
-color:#000;
-background:#f9f9f9;
-font-size: 13px;
-border-top: 1px solid #bacbdf;
-border-bottom: 1px solid #bacbdf;
-}
-
-#bottomnav div.left {
-margin: 0;
-padding: 7px 0 0 20px;
-float: left;
-}
-#bottomnav div.right {
-margin: 0;
-padding: 6px 20px 0 0;
-text-align: right;
-}
-
 #bottom {
-height:45px;
-font-size: 11px;
-line-height:16px;
+height:4em;
+font-size: 0.86em;
+line-height:1.5em;
 margin: 0;
 padding: 0;
 color: #000;
@@ -197,10 +214,11 @@ padding: 7px 20px 10px 0;
 text-align: right;
 }
 
+/* Content */
 .postingheadline {
 margin: 0 0 2px 0;
 padding: 0;
-font-size: 18px;
+font-size: 1.4em;
 font-weight: bold;
 }
 
@@ -208,15 +226,15 @@ font-weight: bold;
 margin: 0;
 padding: 0;
 font-family: monospace;
-font-size: 13px;
-line-height: 19px;
+font-size: 1em;
+line-height: 1.6em;
 max-width: 750px;
 }
 
 .author {
 margin-top: 1px;
-font-size: 13px;
-line-height: 19px;
+font-size: 1em;
+line-height: 1.6em;
 font-style: italic;
 }
 
@@ -270,19 +288,19 @@ background-repeat:no-repeat;
 background-position: top left;
 }
 
-.thread { font-size: 13px; }
+.thread { font-size: 1em; }
 .thrbeg {
-font-size: 13px;
+font-size: 1em;
 font-weight: bold;
 }
 .aktuell {
-font-size: 13px;
+font-size: 1em;
 color: red;
 font-weight: bold;
 }
 .small { font-size: 11px; }
 .xsmall {
-font-size: 11px;
+font-size: 0.86em;
 color: #808080;
 font-weight: normal;
 }
@@ -300,11 +318,11 @@ height: 1px;
 }
 .marked-threads {
 margin:30px 0 0 0;
-font-size:11px;
+font-size: 0.86em;
 }
 .marked-threads-board {
 margin:10px 1px 0 1px;
-font-size:11px;
+font-size: 0.86em;
 }
 
 .admin-highlight { color: #b00; }
@@ -328,8 +346,8 @@ font-style: italic;
 .signature {
 margin: 10px 0 0 0;
 padding:0;
-font-size: 11px;
-line-height: 16px;
+font-size: 0.86em;
+line-height: 1.5em;
 color: #808080;
 font-weight: normal;
 max-width: 750px;
@@ -338,56 +356,56 @@ max-width: 750px;
 .userdata {
 margin: 0;
 padding: 0;
-font-size: 13px;
-line-height: 19px;
+font-size: 1em;
+line-height: 1.6em;
 }
 .online {
-font-size: 11px;
+font-size: 0.86em;
 color: red;
 }
 pre {
-width: 80%;
+width: 90%;
 background: #fff;
 overflow:auto;
 }
 code {
 font-family: monospace;
-font-size: 13px;
+font-size: 1em;
 color: #000080;
 }
 
 /* categories: */
 .category {
 color: #000080;
-font-size: 11px;
+font-size: 0.86em;
 font-weight: normal;
 }
 .category-regusers {
 color: #000080;
-font-size: 11px;
+font-size: 0.86em;
 font-weight: normal;
 background:#e7e7e7;
 }
 .category-adminmod {
 color: #000080;
-font-size: 11px;
+font-size: 0.86em;
 font-weight: normal;
 background:#d5d5d5;
 }
 .category-b {
 color: #00c;
-font-size: 11px;
+font-size: 0.86em;
 font-weight: normal;
 }
 .category-regusers-b {
 color: #00c;
-font-size: 11px;
+font-size: 0.86em;
 font-weight: normal;
 border-bottom: 1px dotted #00c;
 }
 .category-adminmod-b {
 color: #00c;
-font-size: 11px;
+font-size: 0.86em;
 font-weight: normal;
 border-bottom: 1px solid #00c;
 }
@@ -402,7 +420,7 @@ border: 1px solid #bacbdf;
 td.autorcell {
 width: 106px;
 padding: 5px 7px 5px 7px;
-font-size: 13px;
+font-size: 1em;
 color: #000;
 background:#d2ddea;
 background-image:url(img/bg_author.gif);
@@ -411,9 +429,9 @@ background-position: right;
 }
 td.titlecell {
 margin:0;
-padding:5px 10 5px 10;
-height:15px;
-font-size: 13px;
+padding:5px 10px;
+height:1.6em;
+font-size: 1em;
 color: #000;
 background: #d2ddea;
 background-image:url(img/bg_th.gif);
@@ -428,7 +446,7 @@ float: left;
 td.titlecell h2 {
 margin: 0;
 padding:0;
-font-size: 13px;
+font-size: 1em;
 color: #000;
 font-weight: bold;
 }
@@ -441,7 +459,7 @@ td.postingcell {
 margin:0;
 padding:10px 10px 15px 10px;
 width: 100%;
-font-size: 13px;
+font-size: 1em;
 color: #000;
 background:#f9f9f9;
 }
@@ -455,13 +473,13 @@ height: 1px;
 .postingboard {
 margin: 0;
 padding: 0;
-font-size: 13px;
-line-height: 19px;
+font-size: 1em;
+line-height: 1.6em;
 max-width: 750px;
 }
 
 div.preview {
-font-size: 13px;
+font-size: 1em;
 margin: 0;
 padding: 10px;
 color: #000;
@@ -480,7 +498,7 @@ border-bottom: 1px solid #bacbdf;
 }
 table.normaltab th {
 border-right: 1px solid #bacbdf;
-font-size: 13px;
+font-size: 1em;
 font-weight: bold;
 text-align:left;
 padding: 3px;
@@ -489,7 +507,7 @@ color: #000;
 table.normaltab td {
 border-right: 1px dotted #bacbdf;
 vertical-align: top;
-font-size: 13px;
+font-size: 1em;
 font-weight: normal;
 padding: 3px;
 color: #000;
@@ -503,7 +521,7 @@ table.normaltab tr.b   { background: #f9f9f9; }
 table.normaltab td.c   {
 width:150px;
 vertical-align: top;
-font-size: 13px;
+font-size: 1em;
 font-weight: normal;
 color: #000;
 background: #d2ddea;
@@ -513,14 +531,14 @@ background-position: right;
 }
 table.normaltab td.d {
 vertical-align: top;
-font-size: 13px;
+font-size: 1em;
 font-weight: normal;
 color: #000;
 background: #f5f5f5;
 }
 
 /* mix view: */
-.threadkl { font-size: 11px; }
+.threadkl { font-size: 0.86em; }
 div.mixdivl { }
 div.mixthread {
 background: #ffe8b7;
@@ -532,11 +550,11 @@ margin-bottom: 5px;
 padding: 5px;
 }
 
-select.kat { font-size: 11px; }
+select.kat { font-size: 0.86em; }
 
 input.bbcode-button {
 width: 45px;
-height: 20;
+height: 20px;
 font-size: 11px;
 font-weight: normal;
 margin: 0 0 5px 0;

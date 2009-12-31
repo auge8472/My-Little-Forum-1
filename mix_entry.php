@@ -301,11 +301,17 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_2 = "";
 	if ($settings['thread_view']==1)
 		{
-		$subnav_2 .= '<span class="small"><a href="forum_entry.php?id='.$entrydata["tid"].'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category.'" title="'.$lang['thread_view_linktitle'].'"><img src="img/thread.gif" alt="" width="12" height="9" title="'.$lang['thread_view_linktitle'].'" />'.$lang['thread_view_linkname'].'</a></span>';
+		$subnav_2 .= '&nbsp;<a href="forum_entry.php?id='.$entrydata["tid"].'&amp;page='.$page;
+		$subnav_2 .= '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
+		$subnav_2 .= '" class="thread-view" title="'.$lang['thread_view_linktitle'].'">';
+		$subnav_2 .= $lang['thread_view_linkname'].'</a>';
 		}
 	if ($settings['board_view']==1)
 		{
-		$subnav_2 .= '&nbsp;&nbsp;<span class="small"><a href="board_entry.php?id='.$entrydata["tid"].'&amp;page='.$page.'&amp;order='.$order.'&amp;category='.$category.'" title="'.$lang['board_view_linktitle'].'"><img src="img/board.gif" alt="" width="12" height="9" title="'.$lang['board_view_linktitle'].'" />'.$lang['board_view_linkname'].'</a></span>';
+		$subnav_2 .= '&nbsp;<a href="board_entry.php?id='.$entrydata["tid"].'&amp;page='.$page;
+		$subnav_2 .= '&amp;order='.$order.'&amp;category='.$category.'" class="board-view"';
+		$subnav_2 .= ' title="'.$lang['board_view_linktitle'].'">';
+		$subnav_2 .= $lang['board_view_linkname'].'</a></span>';
 		}
 
 	parse_template();

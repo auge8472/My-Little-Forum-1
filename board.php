@@ -145,25 +145,19 @@ if($settings['access_for_users_only']  == 1
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
 		$subnav_2 .= '<a href="index.php?update=1&amp;view=board&amp;category='.intval($category);
-		$subnav_2 .= '"><img src="img/update.gif" alt="" title="'.$lang['update_time_linktitle'];
-		$subnav_2 .= '" width="9" height="9" onmouseover="this.src=\'img/update_mo.gif\';"';
-		$subnav_2 .= ' onmouseout="this.src=\'img/update.gif\';" /></a>';
+		$subnav_2 .= '" class="update-postings">'.$lang['update_time_linkname'].'</a>';
 		}
 	if ($settings['thread_view'] == 1)
 		{
 		$cat = ($category != 0) ? '?category='.intval($category) : '';
-		$subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php'.$cat;
-		$subnav_2 .= '" title="'.$lang['thread_view_linktitle'].'"><img src="img/thread.gif"';
-		$subnav_2 .= ' alt="'.$lang['thread_view_linktitle'].'" width="12" height="9" title="';
-		$subnav_2 .= $lang['thread_view_linktitle'].'" />'.$lang['thread_view_linkname'].'</a></span>';
+		$subnav_2 .= '&nbsp;<a href="forum.php'.$cat.'" class="thread-view" title="';
+		$subnav_2 .= $lang['thread_view_linktitle'].'">'.$lang['thread_view_linkname'].'</a>';
 		}
 	if ($settings['mix_view']==1)
 		{
 		$cat = ($category != 0) ? '?category='.intval($category) : '';
-		$subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php'.$cat;
-		$subnav_2 .= '" title="'.$lang['mix_view_linktitle'].'"><img src="img/mix.gif"';
-		$subnav_2 .= ' alt="'.$lang['mix_view_linktitle'].'" width="12" height="9" title="';
-		$subnav_2 .= $lang['mix_view_linktitle'].'" />'.$lang['mix_view_linkname'].'</a></span>';
+		$subnav_2 .= '&nbsp;<a href="mix.php'.$cat.'" class="mix-view" title="';
+		$subnav_2 .= $lang['mix_view_linktitle'].'">'.$lang['mix_view_linkname'].'</a>';
 		}
 	$subnav_2 .= nav($page, $settings['topics_per_page'], $thread_count, $order, $descasc, $category);
 	$subnav_2 .= outputCategoriesList($categories, $category);
