@@ -74,7 +74,7 @@ if($categories != false && $categories != "not accessible")
 			$r .= '>'.$val.'</option>'."\n";
 			}
 		}
-	$r .= '</select>'."\n".'<noscript> <input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></noscript></div>'."\n".'</form>'."\n";
+	$r .= '</select>'."\n".'<noscript><p class="inline-form"> <input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></p></noscript></div>'."\n".'</form>'."\n";
 	}
 
 return $r;
@@ -122,7 +122,7 @@ $entryedit = '';
 $entryID = '';
 $answer = '';
 
-# whole string template
+# whole author string template
 $authorstring = $lang['forum_author_marking'];
 # editors template
 $editstring = $lang['forum_edited_marking'];
@@ -131,10 +131,7 @@ $entry["hide_email"] = empty($entry["hide_email"]) ? 0 : $entry["hide_email"];
 # generate string for posting ID
 $entryID .= ($settings['show_posting_id'] == 1) ? '<span class="xsmall">Posting:&nbsp;#&nbsp;'.$entry['id'].'</span>' : '';
 # generate string for name of the answered author
-if (!empty($entry['answer']))
-	{
-	$answer .= '<br /><span class="xsmall">@&nbsp;'.htmlspecialchars($entry['answer']).'</span>';
-	}
+$answer = (!empty($entry['answer'])) ? '<span class="xsmall">@&nbsp;'.htmlspecialchars($entry['answer']).'</span>' : '';
 # generate HTML cource code for userdata (hp, email, location)
 if ($entry["email"]!="" && $entry["hide_email"] != 1 or $entry["hp"]!="")
 	{
@@ -191,7 +188,7 @@ if ($entry["edited_diff"] > 0
 	{
 	$editstring = str_replace("[name]", htmlspecialchars($entry["edited_by"]), $editstring);
 	$editstring = str_replace("[time]", strftime($lang['time_format'],$entry["e_time"]), $editstring);
-	$entryedit .= '<br /><span class="xsmall">'.$editstring.'</span>';
+	$entryedit .= '<span class="xsmall">'.$editstring.'</span>';
 	}
 
 if ($view=='forum')
@@ -205,6 +202,10 @@ if ($view=='forum')
 		{
 		$entryID = ' - '.$entryID;
 		}
+	if (!empty($entryedit))
+		{
+		$entryedit = '<br />'.$entryedit;
+		}
 	$r .= '<p class="author">'.$authorstring.'&nbsp;'.$entryIP.$entryID.$entryedit.'</p>'."\n";
 	}
 else if ($view=='board' or $view=='mix')
@@ -217,7 +218,15 @@ else if ($view=='board' or $view=='mix')
 		{
 		$entryID = '<br /><br />'.$entryID;
 		}
-	$r .= $uname.'<br /><br />'.$email_hp.$place.'<br />'.strftime($lang['time_format'],$entry["p_time"]).$entryedit.'<br /><br />'.$entryIP.$entryID.$answer;
+	if (!empty($entryedit))
+		{
+		$entryedit = '<br />'.$entryedit;
+		}
+	if (!empty($answer))
+		{
+		$answer = '<br />'.$answer;
+		}
+	$r .= $uname.'<br />'."\n".$email_hp.$place.'<br /><br />'."\n".strftime($lang['time_format'],$entry["p_time"]).$entryedit.'<br /><br />'.$entryIP.$entryID.$answer."\n";
 	}
 else
 	{
@@ -283,4 +292,59 @@ $r .= $name.$regimg;
 return $r;
 } # End: outputAuthorsName
 
+
+
+/**
+ * generates the menu for editing of a posting
+ * @return string
+ */
+function outputPostingEditMenu($thread, $first = '') {
+global $settings, $lang;
+
+$r  = '';
+
+if (($settings['user_edit'] == 1
+	and (isset($_SESSION[$settings['session_prefix'].'user_id'])
+	and $thread["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]))
+	or (isset($_SESSION[$settings['session_prefix'].'user_id'])
+	and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
+	or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
+	{
+	$r .= "<ul class=\"menu\">\n";
+	$r .= '<li><a href="posting.php?action=edit&amp;id=';
+	$r .= $thread["id"].'&amp;view=board&amp;back='.$thread["tid"].'&amp;page='.$page;
+	$r .= '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
+	$r .= '" class="edit-posting" title="'.$lang['edit_linktitle'].'">';
+	$r .= $lang['edit_linkname'].'</a></li>'."\n";
+	if (($settings['user_delete'] == 1
+		and (isset($_SESSION[$settings['session_prefix'].'user_id'])
+		and $thread["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]))
+		or (isset($_SESSION[$settings['session_prefix'].'user_id'])
+		and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
+		or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
+		{
+		$r .= '<li><a href="posting.php?action=delete&amp;id=';
+		$r .= $thread["id"].'&amp;back='.$thread["tid"].'&amp;view=board&amp;page=';
+		$r .= $page.'&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category=';
+		$r .= $category.'" class="delete-posting" title="'.$lang['delete_linktitle'].'">';
+		$r .= $lang['delete_linkname'].'</a></li>'."\n";
+		}
+	if ((!empty($first) and $first==='opener')
+		and (isset($_SESSION[$settings['session_prefix'].'user_id'])
+		and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
+		or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
+		{
+		$r .= '<li><a href="posting.php?lock=true&amp;view=board&amp;id=';
+		$r .= $thread["id"].'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc=';
+		$r .= $descasc.'&amp;category='.$category.'" class="lock-posting" title="';
+		$r .= ($thread['locked'] == 0) ? $lang['lock_linktitle'] : $lang['unlock_linktitle'];
+		$r .= '">';
+		$r .= ($thread['locked'] == 0) ? $lang['lock_linkname'] : $lang['unlock_linkname'];
+		$r .= '</a></li>'."\n";
+		}
+	$r .= "</ul>\n";
+	}
+
+return $r;
+} # End: outputPostingEditMenu
 ?>
