@@ -155,9 +155,8 @@ if ($entry["email"]!="" && $entry["hide_email"] != 1)
 	$email_hp .= !empty($category) ? '&amp;category='.intval($category) : '';
 	$email_hp .= '" title="'.str_replace("[name]", htmlspecialchars($entry['name']), $lang['email_to_user_linktitle']).'"><img src="img/email.gif" alt="'.$lang['email_alt'].'" width="13" height="10" /></a>';
 	}
-if ($entrydata["place"] != "")
+if ($entry["place"] != "")
 	{
-	$place_c .= htmlspecialchars($entry['place']).", ";
 	$place .= htmlspecialchars($entry['place']);
 	}
 # generate HTML source code of authors name
@@ -195,38 +194,24 @@ if ($view=='forum')
 	{
 	$authorstring = str_replace("[name]", $uname, $authorstring);
 	$authorstring = str_replace("[email_hp]", $email_hp, $authorstring);
-	$authorstring = str_replace("[place, ]", $place_c, $authorstring);
+	$authorstring = str_replace("[place]", $place, $authorstring);
 	$authorstring = str_replace("[place]", $place, $authorstring);
 	$authorstring = str_replace("[time]", strftime($lang['time_format'],$entry["p_time"]), $authorstring);
-	if (!empty($entryID))
-		{
-		$entryID = ' - '.$entryID;
-		}
-	if (!empty($entryedit))
-		{
-		$entryedit = '<br />'.$entryedit;
-		}
+	$entryID = !empty($entryID) ? ' - '.$entryID : '';
+	$entryedit = (!empty($entryedit)) ? '<br />'.$entryedit : '';
 	$r .= '<p class="author">'.$authorstring.'&nbsp;'.$entryIP.$entryID.$entryedit.'</p>'."\n";
 	}
 else if ($view=='board' or $view=='mix')
 	{
-	if (!empty($place))
+	$place = (!empty($place)) ? '<br />'.$place : '';
+	$entryedit = (!empty($entryedit)) ? '<br />'.$entryedit : '';
+	if (!empty($entryIP) or !empty($entryID) or !empty($answer))
 		{
-		$place = '<br />'.$place;
+		$separator = '<br /><br />';
+		$entryID = (!empty($entryID)) ? '<br /><br />'.$entryID : '';
+		$answer = (!empty($answer)) ? '<br />'.$answer : '';
 		}
-	if (!empty($entryID))
-		{
-		$entryID = '<br /><br />'.$entryID;
-		}
-	if (!empty($entryedit))
-		{
-		$entryedit = '<br />'.$entryedit;
-		}
-	if (!empty($answer))
-		{
-		$answer = '<br />'.$answer;
-		}
-	$r .= $uname.'<br />'."\n".$email_hp.$place.'<br /><br />'."\n".strftime($lang['time_format'],$entry["p_time"]).$entryedit.'<br /><br />'.$entryIP.$entryID.$answer."\n";
+	$r .= $uname.'<br />'."\n".$email_hp.$place."\n".strftime($lang['time_format'],$entry["p_time"]).$entryedit.$separator.$entryIP.$answer.$entryID."\n";
 	}
 else
 	{
