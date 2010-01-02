@@ -554,7 +554,7 @@ border: 3px double #bacbdf;
 border-collapse: collapse;
 }
 table.normaltab .titlerow {
-background:#d2ddea url(img/bg_th.gif) repeat-x; bottom;
+background:#d2ddea url(img/bg_th.gif) repeat-x bottom;
 height: 1.8em;
 border-bottom: 1px solid #bacbdf;
 }
@@ -612,6 +612,13 @@ padding: 5px;
 }
 
 select.kat { font-size: 0.86em; }
+
+/* entry form */
+form#entryform {
+display: block;
+margin: 1em 0 0 0;
+padding: 0;
+}
 
 input.bbcode-button {
 width: 45px;
