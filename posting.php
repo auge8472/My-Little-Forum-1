@@ -657,40 +657,28 @@ if (($settings['access_for_users_only'] == 1
 				$lang['error_text_too_long'] = str_replace("[maxlength]", $settings['text_maxlength'], $lang['error_text_too_long']);
 				$errors[] = $lang['error_text_too_long'];
 				}
-			$text_arr = explode(" ",$name);
-			$countWordsName = count($text_arr);
-			for ($i=0;$i<$countWordsName;$i++)
+			$nameLength = processCountCharsInWords($name, $settings['name_word_maxlength'], $lang['error_name_word_too_long']);
+			if (!empty($nameLength) and is_array($nameLength))
 				{
-				trim($text_arr[$i]);
-				$laenge = mb_strlen($text_arr[$i]);
-				if ($laenge > $settings['name_word_maxlength'])
+				foreach ($nameLength as $message)
 					{
-					$error_nwtl = str_replace("[word]", htmlspecialchars(mb_substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
-					$errors[] = $error_nwtl;
+					$errors[] = $message;
 					}
 				}
-			$text_arr = explode(" ",$place);
-			$countWordsPlace = count($text_arr);
-			for ($i=0;$i<$countWordsPlace;$i++)
+			$placeLength = processCountCharsInWords($place, $settings['place_word_maxlength'], $lang['error_place_word_too_long']);
+			if (!empty($placeLength) and is_array($placeLength))
 				{
-				trim($text_arr[$i]);
-				$laenge = mb_strlen($text_arr[$i]);
-				if ($laenge > $settings['place_word_maxlength'])
+				foreach ($placeLength as $message)
 					{
-					$error_pwtl = str_replace("[word]", htmlspecialchars(mb_substr($text_arr[$i],0,$settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
-					$errors[] = $error_pwtl;
+					$errors[] = $message;
 					}
 				}
-			$text_arr = explode(" ",$subject);
-			$countWordsSubject = count($text_arr);
-			for ($i=0;$i<$countWordsSubject;$i++)
+			$subjectLength = processCountCharsInWords($subject, $settings['subject_word_maxlength'], $lang['error_subject_word_too_long']);
+			if (!empty($subjectLength) and is_array($subjectLength))
 				{
-				trim($text_arr[$i]);
-				$laenge = mb_strlen($text_arr[$i]);
-				if ($laenge > $settings['subject_word_maxlength'])
+				foreach ($subjectLength as $message)
 					{
-					$error_swtl = str_replace("[word]", htmlspecialchars(mb_substr($text_arr[$i],0,$settings['subject_word_maxlength']))."...", $lang['error_subject_word_too_long']);
-					$errors[] = $error_swtl;
+					$errors[] = $message;
 					}
 				}
 			$text_arr = str_replace("\n", " ", $text);
@@ -714,16 +702,12 @@ if (($settings['access_for_users_only'] == 1
 				{
 				$text_arr = text_check_link($text_arr);
 				}
-			$text_arr = explode(" ",$text_arr);
-			$countWordsText = count($text_arr);
-			for ($i=0;$i<$countWordsText;$i++)
+			$textLength = processCountCharsInWords($text_arr, $settings['text_word_maxlength'], $lang['error_text_word_too_long']);
+			if (!empty($textLength) and is_array($textLength))
 				{
-				trim($text_arr[$i]);
-				$laenge = mb_strlen($text_arr[$i]);
-				if ($laenge > $settings['text_word_maxlength'])
+				foreach ($textLength as $message)
 					{
-					$error_twtl = str_replace("[word]", htmlspecialchars(mb_substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['error_text_word_too_long']);
-					$errors[] = $error_twtl;
+					$errors[] = $message;
 					}
 				}
 
@@ -903,7 +887,7 @@ if (($settings['access_for_users_only'] == 1
 						$header .= "Content-Type: text/plain; charset=UTF-8; format=flowed\n";
 						$header .= "Content-Transfer-Encoding: 8bit\n";
 						$adminSubject = mb_encode_mimeheader($lang['admin_email_subject'],"UTF-8");
-#						$adminSubject = mb_encode_mimeheader(str_replace("[subject]", stripslashes($subject), $lang['admin_email_subject']),"UTF-8");
+#						$adminSubject = mb_encode_mimeheader(str_replace("[subject]", $subject, $lang['admin_email_subject']),"UTF-8");
 						// Schauen, wer eine E-Mail-Benachrichtigung will:
 						$en_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_posting_notify='1'", $connid);
 						if (!$en_result) die($lang['db_error']);
@@ -1174,17 +1158,17 @@ if (($settings['access_for_users_only'] == 1
 					{
 					if ($id == 0)
 						{
-						echo '<h2 class="postingform">'.$lang['new_entry_marking'].'</h2>'."\n";
+						echo '<h2>'.$lang['new_entry_marking'].'</h2>'."\n";
 						}
 					else
 						{
-						echo '<h2 class="postingform">'.$lang['answer_marking'].'</h2>'."\n";
+						echo '<h2>'.$lang['answer_marking'].'</h2>'."\n";
 						echo '<p class="postingforma">'.$lang['answer_on_posting_marking'].'</p>'."\n";
 						}
 					}
 				if ($action == "edit")
 					{
-					echo '<h2 class="postingform">'.$lang['edit_marking'].'</h2>'."\n";
+					echo '<h2>'.$lang['edit_marking'].'</h2>'."\n";
 					}
 
 				# error messages, if present:
@@ -1234,37 +1218,29 @@ if (($settings['access_for_users_only'] == 1
 					if (empty($pr_place)) $pr_place = $place;
 					# current time:
 					list($pr_time) = mysql_fetch_row(mysql_query("SELECT UNIX_TIMESTAMP(NOW() + INTERVAL ".$time_difference." HOUR)"));
-					echo '<p class="caution">'.$lang['preview_headline'].'</p>'."\n";
+					$mark['admin'] = false; $mark['mod'] = false; $mark['user'] = false;
+					$entry = array();
+					$entry['hide_email'] = $hide_email;
+					$entry['id'] = 0;
+					$entry['answer'] = '';
+					$entry["email"] = $pr_email;
+					$entry["hp"] = $pr_hp;
+					$entry['name'] = $pr_name;
+					$entry["place"] = $pr_place;
+					$entry['user_id'] = !empty($pr_id) ? $pr_id : 0;
+					$entry['ip'] = '127.0.0.1';
+					$entry["edited_diff"] = 0;
+					$entry["p_time"] = $pr_time;
+					$entry["edited_by"] = '';
+					$entry["e_time"] = '';
+					echo '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
 					if (isset($view))
 						{
 						echo '<table class="normaltab">'."\n";
 						echo '<tr>'."\n";
 						echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
-						echo '<b>'.htmlspecialchars($pr_name).'</b><br />';
-						if ($pr_hp != "")
-							{
-							$pr_hp = amendProtocol($pr_hp);
-							echo '<a href="'.$pr_hp.'"><img src="img/homepage.gif" alt="'.$lang['homepage_alt'].'" width="13" height="13" /></a>';
-							} # End: if ($pr_hp != "")
-						if (($pr_email != ""  && $hide_email != 1) && $pr_hp != "")
-							{
-							echo "&nbsp;";
-							}
-						if ($pr_email != "" && $hide_email != 1)
-							{
-							echo '<a href="contact.php"><img src="img/email.gif" alt="'.$lang['email_alt'].'" title="'.str_replace("[name]", htmlspecialchars($pr_name), $lang['email_to_user_linktitle']).'" width="13" height="10" /></a>';
-							}
-						if (($pr_email != "" && $hide_email != 1) or $pr_hp !="")
-							{
-							echo "<br />";
-							}
-						echo "<br />";
-						if ($pr_place != "")
-							{
-							echo htmlspecialchars($pr_place); echo ", <br />";
-							}
-						echo strftime($lang['time_format'],$pr_time);
-						echo '<div class="autorcellwidth">&nbsp;</div></td>'."\n";
+						echo outputAuthorInfo($mark, $entry, $page, $order, $view, $category);
+						echo '</td>'."\n";
 						echo '<td class="titlecell"><h2>'.htmlspecialchars($subject).'</h2></td>'."\n";
 						echo '</tr><tr>';
 						echo '<td class="postingcell" valign="top">';
@@ -1318,42 +1294,11 @@ if (($settings['access_for_users_only'] == 1
 						{
 						echo '<div class="preview">'."\n";
 						echo '<h2 class="postingheadline">'.htmlspecialchars($subject).'</h2>'."\n";
-						$email_hp = "";
-						$place_wc = "";
-						$place_c = "";
-						if (($pr_email != "" && $hide_email != 1) or $pr_hp != "")
-							{
-							$email_hp = " ";
-							}
-						if ($pr_hp != "")
-							{
-							$pr_hp = amendProtocol($pr_hp);
-							$email_hp .= '<a href="'.$pr_hp.'" title="'.htmlspecialchars($pr_hp).'"><img src="img/homepage.gif" alt="'.$lang['homepage_alt'].'" width="13" height="13" /></a>';
-							}
-						if ($pr_email != ""  && $hide_email != 1 && $pr_hp != "")
-							{
-							$email_hp .= " ";
-							}
-						if ($pr_email != "" && $hide_email != 1)
-							{
-							$email_hp .= '<a href="contact.php"><img src="img/email.gif" alt="'.$lang['email_alt'].'" title="';
-							$email_hp .= str_replace("[name]", htmlspecialchars($pr_name), $lang['email_to_user_linktitle']);
-							$email_hp .= '" width="13" height="10" /></a>';
-							}
-						if ($pr_place != "")
-							{
-							$place_c = htmlspecialchars($pr_place) . ", "; $place_wc = htmlspecialchars($pr_place);
-							}
-						$lang['forum_author_marking'] = str_replace("[name]", htmlspecialchars($pr_name), $lang['forum_author_marking']);
-						$lang['forum_author_marking'] = str_replace("[email_hp]", $email_hp, $lang['forum_author_marking']);
-						$lang['forum_author_marking'] = str_replace("[place, ]", $place_c, $lang['forum_author_marking']);
-						$lang['forum_author_marking'] = str_replace("[place]", $place_wc, $lang['forum_author_marking']);
-						$lang['forum_author_marking'] = str_replace("[time]", strftime($lang['time_format'],$pr_time), $lang['forum_author_marking']);
-						echo '<p class="author">'.$lang['forum_author_marking'].'</p>'."\n";
+						echo outputAuthorInfo($mark, $entry, $page, $order, 'forum', $category);
 						if ($text == "")
 							{
 							echo $lang['no_text'];
-							} # End: if ($text == "")
+							}
 						else
 							{
 							$pr_text = $text;
@@ -1395,7 +1340,7 @@ if (($settings['access_for_users_only'] == 1
 						echo '</div>'."\n";
 						}
 					} # if (isset($preview) && empty($errors))
-		# Ende Vorschau
+				# Ende Vorschau
 				echo '<form action="posting.php" method="post" id="entryform" accept-charset="UTF-8">'."\n";
 				if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_posting']==1)
 					{
@@ -1421,25 +1366,25 @@ if (($settings['access_for_users_only'] == 1
 				if (!isset($_SESSION[$settings['session_prefix'].'user_id']) or $action == "edit" && $p_user_id == 0)
 					{
 					echo '<tr>'."\n";
-					echo '<td><b>'.$lang['name_marking'].'</b></td>'."\n";
-					echo '<td><input type="text" size="40" name="name" value="';
+					echo '<td><label for="name">'.$lang['name_marking'].'</label"></td>'."\n";
+					echo '<td><input type="text" size="40" name="name" id="name" value="';
 					echo (isset($name)) ? htmlspecialchars($name) : '';
 					echo '" maxlength="'.$settings['name_maxlength'].'" /></td>'."\n";
 					echo '</tr><tr>'."\n";
-					echo '<td><b>'.$lang['email_marking'].'</b></td>'."\n";
-					echo '<td><input type="text" size="40" name="email" value="';
+					echo '<td><label for="email">'.$lang['email_marking'].'</label></td>'."\n";
+					echo '<td><input type="text" size="40" name="email" id="email" value="';
 					echo (isset($email)) ? htmlspecialchars($email) : '';
 					echo '" maxlength="'.$settings['email_maxlength'].'" />&nbsp;';
 					echo '<span class="xsmall">'.$lang['optional_marking'].'</span></td>'."\n";
 					echo '</tr><tr>'."\n";
-					echo '<td><b>'.$lang['hp_marking'].'</b></td>'."\n";
-					echo '<td><input type="text" size="40" name="hp" value="';
+					echo '<td><label for="hp">'.$lang['hp_marking'].'</label></td>'."\n";
+					echo '<td><input type="text" size="40" name="hp" id="hp" value="';
 					echo (isset($hp)) ? htmlspecialchars($hp) : '';
 					echo '" maxlength="'.$settings['hp_maxlength'].'&nbsp;';
 					echo '<span class="xsmall">'.$lang['optional_marking'].'</span></td>'."\n";
 					echo '</tr><tr>'."\n";
-					echo '<td><b>'.$lang['place_marking'].'</b></td>'."\n";
-					echo '<td><input type="text" size="40" name="place" value="';
+					echo '<td><label for="place">'.$lang['place_marking'].'</label></td>'."\n";
+					echo '<td><input type="text" size="40" name="place" id="place" value="';
 					echo (isset($place)) ? htmlspecialchars($place) : '';
 					echo '" maxlength="'.$settings['place_maxlength'].'" />&nbsp;';
 					echo '<span class="xsmall">'.$lang['optional_marking'].'</span></td>'."\n";
@@ -1466,8 +1411,8 @@ if (($settings['access_for_users_only'] == 1
 				if ($categories != false)
 					{
 					echo '<tr>'."\n";
-					echo '<td><b>'.$lang['category_marking'].'</b></td>'."\n";
-					echo '<td><select size="1" name="p_category">'."\n";
+					echo '<td><label for="p_category">'.$lang['category_marking'].'</label></td>'."\n";
+					echo '<td><select size="1" name="p_category" id="p_category">'."\n";
 					if (empty($id) || $id == 0 || $action=="edit" && isset($pid) && $pid == 0)
 						{
 						while (list($key, $val) = each($categories))
@@ -1501,12 +1446,12 @@ if (($settings['access_for_users_only'] == 1
 					echo '</tr>';
 					}
 				echo '<tr>'."\n";
-				echo '<td><b>'.$lang['subject_marking'].'</b></td>'."\n";
-				echo '<td><input type="text" size="50" name="subject" value="';
+				echo '<td><label for="subject">'.$lang['subject_marking'].'</label></td>'."\n";
+				echo '<td><input type="text" size="50" name="subject" id="subject" value="';
 				echo (isset($subject)) ? htmlspecialchars($subject) : '';
 				echo '" maxlength="'.$settings['subject_maxlength'].'" /></td>'."\n";
 				echo '</tr><tr>'."\n";
-				echo '<td colspan="2"><b>'.$lang['text_marking'].'</b>';
+				echo '<td colspan="2"><label for="text">'.$lang['text_marking'].'</label>';
 				if ($action == "new" && $id != 0)
 					{
 					echo '&nbsp;&nbsp;<span class="small">'.str_replace('[delete_link]','<a class="sln" href="javascript:clear();">'.$lang['delete_link'].'</a>',$lang['delete_quoted_text']).'</span>';
@@ -1516,12 +1461,12 @@ if (($settings['access_for_users_only'] == 1
 				echo '<td colspan="2">'."\n";
 				echo '<table class="normal" border="0" cellpadding="0" cellspacing="0">'."\n";
 				echo '<tr>'."\n".'<td valign="top">'."\n";
-				echo '<textarea cols="78" rows="20" name="text">';
+				echo '<textarea cols="78" rows="20" name="text" id="text">';
 				if (isset($text))
 					{
 					echo htmlspecialchars($text);
 					}
-				echo '</textarea></td>'."\n";
+				echo '</textarea><div></div></td>'."\n";
 				echo '<td id="buttonspace">';
 				if ($settings['bbcode'] == 1)
 					{
@@ -1583,17 +1528,19 @@ if (($settings['access_for_users_only'] == 1
 				&& $action=="edit" && $p_user_id > 0))
 					{
 					echo '<tr>'."\n";
-					echo '<td colspan="2"><input type="checkbox" name="show_signature" value="1"';
+					echo '<td colspan="2"><label for="show_signature"><input type="checkbox"';
+					echo ' name="show_signature" id="show_signature" value="1"';
 					echo (isset($show_signature) && $show_signature==1) ? 'checked="checked"' : '';
-					echo ' />&nbsp;'.$lang['show_signature_cbm'].'</td>'."\n";
+					echo ' />&nbsp;'.$lang['show_signature_cbm'].'</label></td>'."\n";
 					echo '</tr>';
 					}
 				if ($settings['email_notification'] == 1)
 					{
 					echo '<tr>'."\n";
-					echo '<td colspan="2"><input type="checkbox" name="email_notify" value="1"';
+					echo '<td colspan="2"><label for="email_notify"><input type="checkbox"';
+					echo ' name="email_notify" id="email_notify" value="1"';
 					echo (isset($email_notify) && $email_notify==1) ? 'checked="checked"' : '';
-					echo ' />&nbsp;'.$lang['email_notification_cbm'].'</td>'."\n";
+					echo ' />&nbsp;'.$lang['email_notification_cbm'].'</label></td>'."\n";
 					echo '</tr>';
 					}
 				else
@@ -1606,9 +1553,10 @@ if (($settings['access_for_users_only'] == 1
 				&& (empty($id) || $id == 0 || $action=="edit" && isset($pid) && $pid == 0))
 					{
 					echo '<tr>'."\n";
-					echo '<td colspan="2"><input type="checkbox" name="fixed" value="1"';
+					echo '<td colspan="2"><label for="fixed"><input type="checkbox"';
+					echo ' name="fixed" id="fixed" value="1"';
 					echo (isset($fixed) && $fixed==1) ? 'checked="checked"' : '';
-					echo ' />&nbsp;'.$lang['fix_thread'].'</td>'."\n";
+					echo ' />&nbsp;'.$lang['fix_thread'].'</label></td>'."\n";
 					echo '</tr>';
 					}
 				if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_posting']==1)
