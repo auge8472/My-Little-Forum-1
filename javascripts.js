@@ -113,6 +113,33 @@ function insert_link(form,field,link_text,link_target)
    }
   else insert('[link=http://www.domain.tld/]Link[/link]');
  }
+ 
+/**
+ * Diese Funktion fuegt die Buttons fuer die BB-Codes
+ * der textarea (#text) in das Formular ein.
+ *
+ * This function inserts the bb-code buttons
+ * for the textarea (#text) into the form.
+*/
+function auge_bbc_buttons(Buttons) {
+var o = Buttons.length;
+var x = o - 1;
+var output = $A();
+var j = 0;
+
+if (Buttons && o>0)
+	{
+	output[0] = "<p>";
+	for (var i=0;i<o;i++)
+		{
+		j = i + 1;
+		output[j] = "<input title=\"" + Buttons[i]['titel'] + "\" class=\"bb-button\" type=\"button\" value=\""+ Buttons[i]['text'] +"\" onClick=\"insert('"+ Buttons[i]['open'] +"','"+ Buttons[i]['close'] +"')\">";
+		}
+	j = j + 1;
+	output[j] = "</p>";
+	}
+$('bb-code-buttons').update(output.join(" "));
+}
 
 function clear()
  {
