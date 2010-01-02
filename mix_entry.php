@@ -90,9 +90,10 @@ if ($entrydata["user_id"] > 0)
 
 # Posting heraussuchen, auf das geantwortet wurde:
 $result_a = mysql_query("SELECT name FROM ".$db_settings['forum_table']." WHERE id = ".$parent_array[$id]["pid"], $connid);
-$posting_a = mysql_fetch_array($result_a);
+$posting_a = mysql_fetch_assoc($result_a);
 mysql_free_result($result_a);
 
+$opener = ($entrydata['pid'] == 0) ? 'opener' : '';
 $entrydata['answer'] = $posting_a['name'];
 
 echo '<div id="p'.intval($entrydata["id"]).'" class="mixdivl" style="margin-left: ';
@@ -101,53 +102,8 @@ echo 'px;">'."\n";
 echo '<table class="mix-entry">'."\n".'<tr>'."\n";
 echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
 echo outputAuthorInfo($mark, $entrydata, $page, $order, 'mix', $category);
-
-if ($settings['user_edit'] == 1
-&& isset($_SESSION[$settings['session_prefix'].'user_id'])
-&& $entrydata["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]
-|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-&& $_SESSION[$settings['session_prefix']."user_type"] == "admin"
-|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-&& $_SESSION[$settings['session_prefix']."user_type"] == "mod")
-	{
-	echo '<br /><br /><span class="small"><a href="posting.php?action=edit&amp;id=';
-	echo $entrydata["id"].'&amp;view=mix&amp;back='.$entrydata["tid"].'&amp;page=';
-	echo $page.'&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category=';
-	echo $category.'" title="'.$lang['edit_linktitle'].'"><img src="img/edit.gif" alt=""';
-	echo ' width="15" height="10" title="'.$lang['edit_linktitle'].'" />';
-	echo $lang['edit_linkname'].'</a></span>';
-	}
-if ($settings['user_delete'] == 1
-&& isset($_SESSION[$settings['session_prefix'].'user_id'])
-&& $entrydata["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]
-|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-&& $_SESSION[$settings['session_prefix']."user_type"] == "admin"
-|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-&& $_SESSION[$settings['session_prefix']."user_type"] == "mod")
-	{
-	echo '<br /><span class="small"><a href="posting.php?action=delete&amp;id=';
-	echo $entrydata["id"].'&amp;back='.$entrydata["tid"].'&amp;view=mix&amp;page='.$page;
-	echo '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
-	echo '" title="'.$lang['delete_linktitle'].'"><img src="img/delete.gif" alt="" width="12"';
-	echo ' height="9" title="'.$lang['delete_linktitle'].'" />'.$lang['delete_linkname'].'</a></span>';
-	}
-if (isset($_SESSION[$settings['session_prefix'].'user_id'])
-&& $_SESSION[$settings['session_prefix']."user_type"] == "admin"
-&& $entrydata['pid'] == 0
-|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-&& $_SESSION[$settings['session_prefix']."user_type"] == "mod"
-&& $entrydata['pid'] == 0)
-	{
-	echo '<br /><span class="small"><a href="posting.php?lock=true&amp;view=mix&amp;id=';
-	echo $entrydata["id"].'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc='.$descasc;
-	echo '&amp;category='.$category.'" title="';
-	echo ($entrydata['locked'] == 0) ? $lang['lock_linktitle'] : $lang['unlock_linktitle'];
-	echo '"><img src="img/lock.gif" alt="" width="12" height="12" title="';
-	echo ($entrydata['locked'] == 0) ? $lang['lock_linktitle'] : $lang['unlock_linktitle'];
-	echo '" />';
-	echo ($entrydata['locked'] == 0) ? $lang['lock_linkname'] : $lang['unlock_linkname'];
-	echo '</a></span>';
-	}
+# Menu for editing of the posting
+echo outputPostingEditMenu($thread, $opener);
 echo '<div class="autorcellwidth">&nbsp;</div></td>'."\n";
 echo '<td class="titlecell" valign="top"><div class="left"><h2>';
 echo htmlspecialchars($entrydata["subject"]);

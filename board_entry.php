@@ -38,7 +38,7 @@ if ($entry_count > $entries_per_page)
 	$site_count = ceil($entry_count / $entries_per_page);
 	if ($new_index_before >= 0)
 		{
-		$output .= '<a href="'.basename($_SERVER["SCRIPT_NAME"]).'?&amp;id='.$id.'&amp;be_page=';
+		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?&amp;id='.$id.'&amp;be_page=';
 		$output .= $new_index_before.'&amp;da='.$da.'&amp;page='.$page.'&amp;category=';
 		$output .= $category.'&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
 		$output .= $lang['previous_page_linktitle'].'"><img src="img/prev.gif" alt="&laquo;"';
@@ -51,7 +51,7 @@ if ($entry_count > $entries_per_page)
 		}
 	if ($new_index_after < $site_count)
 		{
-		$output .= '<a href="'.basename($_SERVER["SCRIPT_NAME"]).'?&amp;id='.$id.'&amp;be_page=';
+		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?&amp;id='.$id.'&amp;be_page=';
 		$output .= $new_index_after.'&amp;da='.$da.'&amp;page='.$page.'&amp;category='.$category;
 		$output .= '&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
 		$output .= $lang['next_page_linktitle'].'"><img src="img/next.gif" alt="&laquo;"';
@@ -59,7 +59,7 @@ if ($entry_count > $entries_per_page)
 		$output .= ' onmouseout="this.src=\'img/next.gif\';" /></a>';
 		}
 	$page_count = ceil($entry_count/$entries_per_page);
-	$output .= '&nbsp;&nbsp;<form method="get" action="'.basename($_SERVER["SCRIPT_NAME"]).'"';
+	$output .= '&nbsp;&nbsp;<form method="get" action="'.$_SERVER["SCRIPT_NAME"].'"';
 	$output .= ' title="'.$lang['choose_page_formtitle'].'">'."\n".'<div style="display: inline;">'."\n";
 	if (isset($id))
 		{
@@ -89,7 +89,7 @@ if ($entry_count > $entries_per_page)
 	$output .= '</select>'."\n".'&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" />'."\n".'</div>'."\n".'</form>'."\n";
 	}
 return $output;
-}
+} # End: nav_b
 
 if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 && isset($_COOKIE['auto_login'])
@@ -297,54 +297,11 @@ if ($settings['access_for_users_only'] == 1
 		{
 		echo '<tr>'."\n";
 		echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
-		// wenn eingelogged und Posting von einem angemeldeten User stammt, dann Link zu dessen Userdaten:
+		# wenn eingelogged und Posting von einem angemeldeten User stammt, dann Link zu dessen Userdaten:
 		echo outputAuthorInfo($mark, $thread, $page, $order, 'board', $category);
-		if ($settings['user_edit'] == 1
-		&& isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $thread["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]
-		|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $_SESSION[$settings['session_prefix']."user_type"] == "admin"
-		|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $_SESSION[$settings['session_prefix']."user_type"] == "mod")
-			{
-			echo '<br /><br /><span class="small"><a href="posting.php?action=edit&amp;id=';
-			echo $thread["id"].'&amp;view=board&amp;back='.$thread["tid"].'&amp;page='.$page;
-			echo '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
-			echo '" title="'.$lang['edit_linktitle'].'"><img src="img/edit.gif" alt="" width="15"';
-			echo ' height="10" title="'.$lang['edit_linktitle'].'" />';
-			echo $lang['edit_linkname'].'</a></span>';
-			}
-		if ($settings['user_delete'] == 1
-		&& isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $thread["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]
-		|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $_SESSION[$settings['session_prefix']."user_type"] == "admin"
-		|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $_SESSION[$settings['session_prefix']."user_type"] == "mod")
-			{
-			echo '<br /><span class="small"><a href="posting.php?action=delete&amp;id=';
-			echo $thread["id"].'&amp;back='.$thread["tid"].'&amp;view=board&amp;page=';
-			echo $page.'&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category=';
-			echo $category.'" title="'.$lang['delete_linktitle'].'"><img src="img/delete.gif"';
-			echo ' alt="" width="12" height="9" title="'.$lang['delete_linktitle'].'" />';
-			echo $lang['delete_linkname'].'</a></span>';
-			}
-		if (isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $_SESSION[$settings['session_prefix']."user_type"] == "admin"
-		|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $_SESSION[$settings['session_prefix']."user_type"] == "mod")
-			{
-			echo '<br /><span class="small"><a href="posting.php?lock=true&amp;view=board&amp;id=';
-			echo $thread["id"].'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc=';
-			echo $descasc.'&amp;category='.$category.'" title="';
-			echo ($thread['locked'] == 0) ? $lang['lock_linktitle'] : $lang['unlock_linktitle'];
-			echo '"><img src="img/lock.gif" alt="" width="12" height="12" title="';
-			echo ($thread['locked'] == 0) ? $lang['lock_linktitle'] : $lang['unlock_linktitle'];
-			echo '" />';
-			echo ($thread['locked'] == 0) ? $lang['lock_linkname'] : $lang['unlock_linkname'];
-			echo '</a></span>';
-			}
-		echo '<div class="autorcellwidth">&nbsp;</div></td>'."\n";
+		# Menu for editing of the posting
+		echo outputPostingEditMenu($thread, 'opener');
+		echo '</td>'."\n";
 		echo '<td class="titlecell" valign="top">'."\n".'<div class="left">';
 		echo '<h2>'.htmlspecialchars($thread["subject"]);
 		if(isset($categories[$thread["category"]]) && $categories[$thread["category"]]!='')
@@ -461,36 +418,8 @@ if ($settings['access_for_users_only'] == 1
 		echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
 		# wenn eingelogged und Posting von einem angemeldeten User stammt, dann Link zu dessen Userdaten:
 		echo outputAuthorInfo($mark, $entrydata, $page, $order, 'board', $category);
-		if ($settings['user_edit'] == 1
-		&& isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $entrydata["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]
-		|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $_SESSION[$settings['session_prefix']."user_type"] == "admin"
-		|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $_SESSION[$settings['session_prefix']."user_type"] == "mod")
-			{
-			echo '<br /><br /><span class="small"><a href="posting.php?action=edit&amp;id=';
-			echo $entrydata["id"].'&amp;view=board&amp;back='.$entrydata["tid"].'&amp;page=';
-			echo $page.'&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category=';
-			echo $category.'" title="'.$lang['edit_linktitle'].'"><img src="img/edit.gif"';
-			echo ' alt="" width="15" height="10" title="'.$lang['edit_linktitle'].'" />';
-			echo $lang['edit_linkname'].'</a></span>';
-			}
-		if ($settings['user_delete'] == 1
-		&& isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $entrydata["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]
-		|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $_SESSION[$settings['session_prefix']."user_type"] == "admin"
-		|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-		&& $_SESSION[$settings['session_prefix']."user_type"] == "mod")
-			{
-			echo '<br /><span class="small"><a href="posting.php?action=delete&amp;id=';
-			echo $entrydata["id"].'&amp;back='.$entrydata["tid"].'&amp;view=board&amp;page=';
-			echo $page.'&amp;order='.$order.'&amp;category='.$category.'" title="';
-			echo $lang['delete_linktitle'].'"><img src="img/delete.gif" alt="" width="12"';
-			echo ' height="9" title="'.$lang['delete_linktitle'].'">';
-			echo $lang['delete_linkname'].'</a></span>';
-			}
+		# Menu for editing of the posting
+		echo outputPostingEditMenu($thread);
 		echo '</td>'."\n";
 		echo '<td class="titlecell" valign="top">'."\n";
 		echo '<div class="left"><h2>'.htmlspecialchars($entrydata["subject"]).'</h2></div>'."\n";
