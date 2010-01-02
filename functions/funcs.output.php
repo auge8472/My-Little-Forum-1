@@ -294,7 +294,7 @@ return $r;
  * @return string
  */
 function outputPostingEditMenu($thread, $first = '') {
-global $settings, $lang;
+global $settings, $lang, $page, $order, $descasc, $category;
 
 $r  = '';
 
