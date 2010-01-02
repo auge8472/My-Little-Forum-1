@@ -314,6 +314,7 @@ background-image:url(img/lock_mo.png);
 }
 .postingedit .menu li {
 display: inline;
+padding: 0 5px 0 0;
 }
 
 .actthread {
