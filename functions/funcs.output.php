@@ -208,10 +208,20 @@ else if ($view=='board' or $view=='mix')
 	if (!empty($entryIP) or !empty($entryID) or !empty($answer))
 		{
 		$separator = '<br /><br />';
-		$entryID = (!empty($entryID)) ? '<br /><br />'.$entryID : '';
-		$answer = (!empty($answer)) ? '<br />'.$answer : '';
+		if (!empty($entryIP))
+			{
+			$entryID = (!empty($entryID)) ? '<br /><br />'.$entryID : '';
+			$answer = (!empty($answer)) ? '<br />'.$answer : '';
+			}
+		else
+			{
+			if (!empty($answer))
+				{
+				$entryID = (!empty($entryID)) ? '<br />'.$entryID : '';
+				}
+			}
 		}
-	$r .= $uname.'<br />'."\n".$email_hp.$place."\n".strftime($lang['time_format'],$entry["p_time"]).$entryedit.$separator.$entryIP.$answer.$entryID."\n";
+	$r .= $uname.'<br />'."\n".$email_hp.$place."\n<br />".strftime($lang['time_format'],$entry["p_time"]).$entryedit.$separator.$entryIP.$answer.$entryID."\n";
 	}
 else
 	{
