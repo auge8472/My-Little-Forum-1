@@ -431,7 +431,7 @@ if (($settings['access_for_users_only'] == 1
 							$qs = "";
 							}
 
-						if(isset($view))
+						if (isset($view))
 							{
 							$header_href = ($view=='board') ? 'board.php' : 'mix.php';
 							}
@@ -519,14 +519,13 @@ if (($settings['access_for_users_only'] == 1
 				}
 
 			# trim and complete data:
-			if (empty($email)) $email = "";
-			if (empty($hp)) $hp = "";
-			if (empty($place)) $place = "";
-			#if (empty($hide_email)) $hide_email = 0;
-			if (empty($show_signature)) $show_signature = 0;
-			if (empty($user_id)) $user_id = 0;
-			if (empty($email_notify)) $email_notify = 0;
-			if (empty($p_category)) $p_category = 0;
+			$email = empty($email) ? "" : $email;
+			$hp = empty($hp) ? "" : $hp;
+			$place = empty($place) ? "" : $place;
+			$show_signature = empty($show_signature) ? 0 : $show_signature;
+			$user_id = empty($user_id) ? 0 : $user_id;
+			$email_notify = empty($email_notify) ? 0 : $email_notify;
+			$p_category = empty($p_category) ? 0 : $p_category;
 			if (isset($name)) $name = trim($name);
 			if (isset($subject)) $subject = trim($subject);
 			if (isset($text)) $text = trim($text);
