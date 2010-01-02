@@ -614,10 +614,14 @@ padding: 5px;
 select.kat { font-size: 0.86em; }
 
 /* entry form */
-form#entryform {
+#entryform {
 display: block;
 margin: 1em 0 0 0;
 padding: 0;
+}
+#entryform label {
+font-weight: bold;
+cursor: pointer;
 }
 
 input.bbcode-button {
