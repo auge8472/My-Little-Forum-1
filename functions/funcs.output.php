@@ -299,12 +299,23 @@ function outputPostingEditMenu($thread, $view, $first = '') {
 global $settings, $lang, $page, $order, $descasc, $category;
 
 $r  = '';
+$period = false;
 
 $view = !empty($view) ? '&amp;view='.$view : '';
+if ($settings['user_edit']==1 and $settings['edit_period'] > 0)
+	{
+	$editPeriodEnd = $thread['time'] + ($settings['edit_period'] * 60);
+	$period = ($editPeriodEnd > time()) ? true : false;
+	}
+else if ($settings['user_edit']==1 and $settings['edit_period'] == 0)
+	{
+	$period = true;
+	}
 
 if (($settings['user_edit'] == 1
 	and (isset($_SESSION[$settings['session_prefix'].'user_id'])
-	and $thread["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]))
+	and $thread["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]
+	and $period === true))
 	or (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
 	or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
@@ -317,7 +328,8 @@ if (($settings['user_edit'] == 1
 	$r .= $lang['edit_linkname'].'</a></li>'."\n";
 	if (($settings['user_delete'] == 1
 		and (isset($_SESSION[$settings['session_prefix'].'user_id'])
-		and $thread["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]))
+		and $thread["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]
+		and $period === true))
 		or (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
 		or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
