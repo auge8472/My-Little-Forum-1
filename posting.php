@@ -1466,7 +1466,8 @@ if (($settings['access_for_users_only'] == 1
 					{
 					echo htmlspecialchars($text);
 					}
-				echo '</textarea><div></div></td>'."\n";
+				echo '</textarea><div id="bb-code-buttons">';
+				echo $lang['bbcode_marking_user'].'</div></td>'."\n";
 				echo '<td id="buttonspace">';
 				if ($settings['bbcode'] == 1)
 					{
