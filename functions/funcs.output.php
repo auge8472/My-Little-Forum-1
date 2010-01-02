@@ -91,13 +91,33 @@ return $r;
  * @param string $view (optional)
  * @return string $output
  */
-function outputPostingLink($category,$view="forum") {
+function outputPostingLink($category,$view='') {
 global $lang;
 
 $r = '';
 
-$r .= '<a class="textlink" href="posting.php?view='.$view;
-$r .= !empty($category) ? '&amp;category='.$category : '';
+$qs = '';
+
+$q1 = !empty($view) ? 'view='.$view : '';
+$q2 = !empty($category) ? 'category='.$category : '';
+
+if (!empty($view) or !empty($category))
+	{
+	$qs .= '?'.$q1;
+	if (!empty($q2))
+		{
+		if ($qs != '?')
+			{
+			$qs .= '&amp;'.$q2;
+			}
+		else
+			{
+			$qs .= $q2;
+			}
+		}
+	}
+
+$r .= '<a class="textlink" href="posting.php'.$qs;
 $r .= '" title="'.$lang['new_entry_linktitle'].'">'.$lang['new_entry_linkname'].'</a>';
 
 return $r;
