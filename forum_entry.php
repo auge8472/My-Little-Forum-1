@@ -259,7 +259,7 @@ if ($settings['access_for_users_only'] == 1
 	echo '</div>'."\n";
 	echo '<div class="postingedit">';
 	# Menu for editing of the posting
-	echo outputPostingEditMenu($thread, $opener);
+	echo outputPostingEditMenu($entrydata, '', $opener);
 	echo '</div>'."\n".'</div>'."\n";
 	echo '<hr class="entryline" />'."\n";
 	echo '<h3>'.$lang['whole_thread_marking'].'</h3>'."\n";

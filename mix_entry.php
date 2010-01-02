@@ -103,7 +103,7 @@ echo '<table class="mix-entry">'."\n".'<tr>'."\n";
 echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
 echo outputAuthorInfo($mark, $entrydata, $page, $order, 'mix', $category);
 # Menu for editing of the posting
-echo outputPostingEditMenu($thread, $opener);
+echo outputPostingEditMenu($entrydata, 'mix', $opener);
 echo '<div class="autorcellwidth">&nbsp;</div></td>'."\n";
 echo '<td class="titlecell" valign="top"><div class="left"><h2>';
 echo htmlspecialchars($entrydata["subject"]);

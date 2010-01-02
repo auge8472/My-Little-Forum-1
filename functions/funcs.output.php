@@ -293,10 +293,12 @@ return $r;
  * generates the menu for editing of a posting
  * @return string
  */
-function outputPostingEditMenu($thread, $first = '') {
+function outputPostingEditMenu($thread, $view, $first = '') {
 global $settings, $lang, $page, $order, $descasc, $category;
 
 $r  = '';
+
+$view = !empty($view) ? '&amp;view='.$view : '';
 
 if (($settings['user_edit'] == 1
 	and (isset($_SESSION[$settings['session_prefix'].'user_id'])
@@ -307,7 +309,7 @@ if (($settings['user_edit'] == 1
 	{
 	$r .= "<ul class=\"menu\">\n";
 	$r .= '<li><a href="posting.php?action=edit&amp;id=';
-	$r .= $thread["id"].'&amp;view=board&amp;back='.$thread["tid"].'&amp;page='.$page;
+	$r .= $thread["id"].$view.'&amp;back='.$thread["tid"].'&amp;page='.$page;
 	$r .= '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
 	$r .= '" class="edit-posting" title="'.$lang['edit_linktitle'].'">';
 	$r .= $lang['edit_linkname'].'</a></li>'."\n";
@@ -319,7 +321,7 @@ if (($settings['user_edit'] == 1
 		or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
 		{
 		$r .= '<li><a href="posting.php?action=delete&amp;id=';
-		$r .= $thread["id"].'&amp;back='.$thread["tid"].'&amp;view=board&amp;page=';
+		$r .= $thread["id"].'&amp;back='.$thread["tid"].$view.'&amp;page=';
 		$r .= $page.'&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category=';
 		$r .= $category.'" class="delete-posting" title="'.$lang['delete_linktitle'].'">';
 		$r .= $lang['delete_linkname'].'</a></li>'."\n";
@@ -329,7 +331,7 @@ if (($settings['user_edit'] == 1
 		and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
 		or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
 		{
-		$r .= '<li><a href="posting.php?lock=true&amp;view=board&amp;id=';
+		$r .= '<li><a href="posting.php?lock=true'.$view.'&amp;id=';
 		$r .= $thread["id"].'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc=';
 		$r .= $descasc.'&amp;category='.$category.'" class="lock-posting" title="';
 		$r .= ($thread['locked'] == 0) ? $lang['lock_linktitle'] : $lang['unlock_linktitle'];

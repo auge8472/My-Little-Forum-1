@@ -300,7 +300,7 @@ if ($settings['access_for_users_only'] == 1
 		# wenn eingelogged und Posting von einem angemeldeten User stammt, dann Link zu dessen Userdaten:
 		echo outputAuthorInfo($mark, $thread, $page, $order, 'board', $category);
 		# Menu for editing of the posting
-		echo outputPostingEditMenu($thread, 'opener');
+		echo outputPostingEditMenu($thread, 'board', 'opener');
 		echo '</td>'."\n";
 		echo '<td class="titlecell" valign="top">'."\n".'<div class="left">';
 		echo '<h2>'.htmlspecialchars($thread["subject"]);
@@ -419,7 +419,7 @@ if ($settings['access_for_users_only'] == 1
 		# wenn eingelogged und Posting von einem angemeldeten User stammt, dann Link zu dessen Userdaten:
 		echo outputAuthorInfo($mark, $entrydata, $page, $order, 'board', $category);
 		# Menu for editing of the posting
-		echo outputPostingEditMenu($thread);
+		echo outputPostingEditMenu($thread, 'board');
 		echo '</td>'."\n";
 		echo '<td class="titlecell" valign="top">'."\n";
 		echo '<div class="left"><h2>'.htmlspecialchars($entrydata["subject"]).'</h2></div>'."\n";
