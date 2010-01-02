@@ -13,7 +13,7 @@ font-size: 100.01%;
 }
 
 h1 {
-font-size: 1.6em;
+font-size: 1.5em;
 font-weight: bold;
 }
 
@@ -73,7 +73,6 @@ background-image:url(img/link.gif);
 
 /* links to different views*/
 a.board-view, a.mix-view, a.thread-view, a.order-postings, a.update-postings {
-font-size: 0.86em;
 padding: 0 5px 0 12px;
 background-repeat: no-repeat;
 background-position: left center;
@@ -114,7 +113,6 @@ background-image:url(img/update_mo.gif);
 margin:0;
 height: 70px;
 background-color:#ecf2f8;
-font-size: 11px;
 background-image:url(img/bg_top.gif);
 background-repeat: repeat-x;
 }
@@ -128,13 +126,13 @@ float: left;
 #top div.left .home {
 margin:0 0 3px 0;
 padding:0;
-font-size:1em;
+font-size: 0.86em;
 }
 
 #top div.left .index {
 margin:0;
 padding:0;
-font-size:1em;
+font-size: 0.86em;
 }
 
 #top div.right {
@@ -145,7 +143,7 @@ text-align: right;
 
 p.usermenu {
 margin:0 0 13px 0;
-font-size: 1em;
+font-size: 0.86em;
 }
 
 #top h1 {
@@ -154,11 +152,9 @@ margin:0 0 3px 0;
 
 .search {
 display: inline;
-font-size: 0.86em;
 }
 
 input.searchfield {
-font-size: 0.86em;
 width: 130px;
 }
 
@@ -166,22 +162,21 @@ width: 130px;
 clear:both;
 margin: 0;
 padding: 0;
-height: 30px;
 color:#000;
 background:#f9f9f9;
-font-size: 1em;
+font-size: 0.86em;
 border-top: 1px solid #bacbdf;
 border-bottom: 1px solid #bacbdf;
 }
 
 #topnav div.left, #bottomnav div.left {
-margin: 0;
-padding: 7px 0 0 20px;
+margin: 0.5em 0;
+padding: 0 0 0 20px;
 float: left;
 }
 #topnav div.right, #bottomnav div.right {
-margin: 0;
-padding: 2px 20px 0 0;
+margin: 0.5em 0;
+padding: 0 20px 0 0;
 text-align: right;
 }
 
@@ -219,7 +214,7 @@ text-align: right;
 .postingheadline {
 margin: 0 0 2px 0;
 padding: 0;
-font-size: 1.4em;
+font-size: 1.2em;
 font-weight: bold;
 }
 
@@ -272,6 +267,55 @@ margin: 5px 0;
 padding: 0;
 }
 
+ul.menu {
+list-style-type: none;
+font-size: 0.86em;
+margin: 15px 0 0 0;
+padding: 0;
+}
+.menu li {
+margin:0;
+padding:0;
+}
+.menu li a {
+background-repeat:no-repeat;
+background-position: center left;
+padding: 0 0 0 16px;
+}
+.menu a.edit-posting:link, .menu a.edit-posting:visited {
+color: #00c;
+text-decoration: none;
+background-image:url(img/edit.png);
+}
+.menu a.edit-posting:focus, .menu a.edit-posting:hover {
+color: #00f;
+text-decoration: underline;
+background-image:url(img/edit_mo.png);
+}
+.menu a.delete-posting:link, .menu a.delete-posting:visited {
+color: #00c;
+text-decoration: none;
+background-image:url(img/delete.png);
+}
+.menu a.delete-posting:focus, .menu a.delete-posting:hover {
+color: #00f;
+text-decoration: underline;
+background-image:url(img/delete_mo.png);
+}
+.menu a.lock-posting:link, .menu a.lock-posting:visited {
+color: #00c;
+text-decoration: none;
+background-image:url(img/lock.png);
+}
+.menu a.lock-posting:focus, .menu a.lock-posting:hover {
+color: #00f;
+text-decoration: underline;
+background-image:url(img/lock_mo.png);
+}
+.postingedit .menu li {
+display: inline;
+}
+
 .actthread {
 padding-left: 18px;
 color: #f00;
@@ -299,7 +343,7 @@ font-size: 1em;
 color: red;
 font-weight: bold;
 }
-.small { font-size: 11px; }
+.small { font-size: 0.86em; }
 .xsmall {
 font-size: 0.86em;
 color: #808080;
@@ -365,7 +409,6 @@ font-size: 0.86em;
 color: red;
 }
 pre {
-width: 90%;
 background: #fff;
 overflow:auto;
 }
@@ -412,21 +455,24 @@ border-bottom: 1px solid #00c;
 }
 
 table.board-entry {
-border: 1px solid #bacbdf;
+border: 3px double #bacbdf;
+border-collapse: collapse;
+margin: 0 auto;
 }
 table.mix-entry {
 margin-top:-1px;
 border: 1px solid #bacbdf;
 }
 td.autorcell {
-width: 106px;
+width: 10em;
 padding: 5px 7px 5px 7px;
-font-size: 1em;
 color: #000;
 background:#d2ddea;
 background-image:url(img/bg_author.gif);
 background-repeat: repeat-y;
 background-position: right;
+border-right: 1px dotted #bacbdf;
+border-bottom: 1px solid #bacbdf;
 }
 td.titlecell {
 margin:0;
@@ -438,6 +484,7 @@ background: #d2ddea;
 background-image:url(img/bg_th.gif);
 background-repeat: repeat-x;
 background-position: bottom;
+border-bottom: 1px solid #bacbdf;
 }
 td.titlecell .left {
 margin: 0;
@@ -459,24 +506,22 @@ text-align: right;
 td.postingcell {
 margin:0;
 padding:10px 10px 15px 10px;
-width: 100%;
+/*width: 100%;*/
 font-size: 1em;
 color: #000;
 background:#f9f9f9;
-}
-div.autorcellwidth {
-margin: 0;
-padding: 0;
-width: 106px;
-font-size: 1px;
-height: 1px;
+border-bottom: 1px solid #bacbdf;
 }
 .postingboard {
 margin: 0;
 padding: 0;
 font-size: 1em;
 line-height: 1.6em;
-max-width: 750px;
+min-width: 30em;
+max-width: 60em;
+}
+pre.postingboard {
+padding:5px;
 }
 
 div.preview {
