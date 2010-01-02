@@ -160,24 +160,30 @@ width: 130px;
 
 #topnav, #bottomnav {
 clear:both;
+position:relative;
 margin: 0;
 padding: 0;
+height:30px;
 color:#000;
 background:#f9f9f9;
-font-size: 0.86em;
+font-size: 13px;
 border-top: 1px solid #bacbdf;
 border-bottom: 1px solid #bacbdf;
 }
 
 #topnav div.left, #bottomnav div.left {
-margin: 0.5em 0;
+position:absolute;
+left:0;
+top:5px;
+margin: 0;
 padding: 0 0 0 20px;
-float: left;
+line-height:160%;
 }
 #topnav div.right, #bottomnav div.right {
-margin: 0.5em 0;
+margin: 5px 0;
 padding: 0 20px 0 0;
 text-align: right;
+line-height:160%;
 }
 
 #content {
@@ -363,11 +369,20 @@ border-bottom: 0;
 height: 1px;
 }
 .marked-threads {
-margin:30px 0 0 0;
+margin:1em 0 0 0;
+padding:0;
+}
+.marked-threads h2 {
+display: inline;
 font-size: 0.86em;
 }
-.marked-threads-board {
-margin:10px 1px 0 1px;
+.marked-threads ul {
+display: inline;
+padding: 0;
+}
+.marked-threads li {
+display: inline;
+padding: 0 0 0 6px;
 font-size: 0.86em;
 }
 
