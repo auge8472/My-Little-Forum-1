@@ -188,6 +188,17 @@ else
 	}
 mysql_free_result($count_result);
 
+
+$additionalJS = '';
+if ($settings['bbcode'] == 1)
+	{
+	$additionalJS .= "var auge_buttons = \$A();\n";
+	$additionalJS .= "auge_buttons[0] = new Hash({value:'i', text:'betont', titel:'Wird in den meisten Browsern kursiv dargestellt.'});\n";
+	$additionalJS .= "auge_buttons[1] = new Hash({value:'b', text:'stark betont', titel:'Wird in den meisten Browsern fett dargestellt.'});\n";
+	$additionalJS .= "auge_buttons[2] = new Hash({value:'img', text:'Bild', titel:'Ein Bild in das Posting einbinden.'});\n";
+	$additionalJS .= "auge_buttons[3] = new Hash({value:'code', text:'Code', titel:'Quellcode in das Posting einbinden.'});";
+	}
+
 $time_difference = (isset($settings['time_difference'])) ? $settings['time_difference'] : 0;
 
 if (isset($_SESSION[$settings['session_prefix'].'user_time_difference']))
