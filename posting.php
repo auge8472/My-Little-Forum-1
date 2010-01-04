@@ -1454,7 +1454,7 @@ if (($settings['access_for_users_only'] == 1
 				echo '<td colspan="2"><label for="text">'.$lang['text_marking'].'</label>';
 				if ($action == "new" && $id != 0)
 					{
-					echo '&nbsp;&nbsp;<span class="small">'.str_replace('[delete_link]','<a class="sln" href="javascript:clear();">'.$lang['delete_link'].'</a>',$lang['delete_quoted_text']).'</span>';
+					echo '&nbsp;&nbsp;<span id="delete-text" class="small">'.$lang['delete_quoted_text'].'</span>';
 					}
 				echo '</td>'."\n";
 				echo '</tr><tr>'."\n";
@@ -1469,27 +1469,6 @@ if (($settings['access_for_users_only'] == 1
 				echo '</textarea>'."\n".'<div id="bb-code-buttons">';
 				echo $lang['bbcode_marking_user'].'</div></td>'."\n";
 				echo '<td id="buttonspace">';
-				if ($settings['bbcode'] == 1)
-					{
-					echo '<input class="bbcode-button" style="font-weight: bold;" type="button" name="bold" value="';
-					echo $lang['bbcode_bold'].'" title="'.$lang['bbcode_bold_title'].'" onclick="bbcode(\'b\');" /><br />'."\n";
-					echo '<input class="bbcode-button" style="font-style: italic;" type="button" name="italic" value="';
-					echo $lang['bbcode_italic'].'" title="'.$lang['bbcode_italic_title'].'" onclick="bbcode(\'i\');" /><br />'."\n";
-					echo '<input class="bbcode-button" style="color: #0000ff; text-decoration: underline;" type="button" name="link2" value="';
-					echo $lang['bbcode_link'].'" title="'.$lang['bbcode_link_title'].'" onclick="';
-					echo "insert_link('entryform','text','".$lang['bbcode_link_linktext']."','".$lang['bbcode_link_url']."');\" /><br />\n";
-					if ($settings['bbcode_img']==1)
-						{
-						echo '<input class="bbcode-button" type="button" name="image" value="'.$lang['bbcode_image'].'"';
-						echo ' title="'.$lang['bbcode_image_title'].'" onclick="bbcode(\'img\');" /><br />'."\n";
-						if ($settings['upload_images']==1)
-							{
-							echo '<input class="bbcode-button" type="button" name="imgupload" value="';
-							echo $lang['upload_image'].'" title="'.$lang['upload_image_title'].'" onclick="upload();" /><br />'."\n";
-							}
-						}
-					echo '<br />'."\n";
-					}
 				if ($settings['smilies'] == 1)
 					{
 					$smiley_buttons = 6;
