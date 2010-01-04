@@ -776,7 +776,6 @@ if (($settings['access_for_users_only'] == 1
 						WHERE id = LAST_INSERT_ID()";
 						$result_neu = mysql_query($redirectQuery, $connid);
 						$neu = mysql_fetch_assoc($result_neu);
-						
 						$ip = $_SERVER["REMOTE_ADDR"];
 						$mail_text = unbbcode($text);
 
@@ -1051,6 +1050,7 @@ if (($settings['access_for_users_only'] == 1
 					{
 					$header_href = ($view=='board') ? 'board_entry.php' : 'mix_entry.php';
 					$further = $further_tid;
+					$qs .= '#p'.$further_id;
 					}
 				else
 					{

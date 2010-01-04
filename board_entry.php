@@ -295,7 +295,7 @@ if ($settings['access_for_users_only'] == 1
 	echo '<table class="board-entry">'."\n";
 	if ($be_page==0)
 		{
-		echo '<tr>'."\n";
+		echo '<tr id="p'.$thread['id'].'">'."\n";
 		echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
 		# wenn eingelogged und Posting von einem angemeldeten User stammt, dann Link zu dessen Userdaten:
 		echo outputAuthorInfo($mark, $thread, $page, $order, 'board', $category);
@@ -384,7 +384,7 @@ if ($settings['access_for_users_only'] == 1
 			{
 			$userdata_result=mysql_query("SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$entrydata["user_id"]."'", $connid);
 			if (!$userdata_result) die($lang['db_error']);
-			$userdata = mysql_fetch_array($userdata_result);
+			$userdata = mysql_fetch_assoc($userdata_result);
 			mysql_free_result($userdata_result);
 			$entrydata["email"] = $userdata["user_email"];
 			$entrydata["hide_email"] = $userdata["hide_email"];
@@ -414,12 +414,12 @@ if ($settings['access_for_users_only'] == 1
 		mysql_free_result($result_a);
 		$entrydata['answer'] = $posting_a['name'];
 
-		echo '<tr>'."\n";
+		echo '<tr id="p'.$entrydata['id'].'">'."\n";
 		echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
 		# wenn eingelogged und Posting von einem angemeldeten User stammt, dann Link zu dessen Userdaten:
 		echo outputAuthorInfo($mark, $entrydata, $page, $order, 'board', $category);
 		# Menu for editing of the posting
-		echo outputPostingEditMenu($thread, 'board');
+		echo outputPostingEditMenu($entrydata, 'board');
 		echo '</td>'."\n";
 		echo '<td class="titlecell" valign="top">'."\n";
 		echo '<div class="left"><h2>'.htmlspecialchars($entrydata["subject"]).'</h2></div>'."\n";
