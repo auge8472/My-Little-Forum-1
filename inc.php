@@ -193,11 +193,19 @@ $additionalJS = '';
 if ($settings['bbcode'] == 1)
 	{
 	$additionalJS .= "var auge_buttons = \$A();\n";
-	$additionalJS .= "auge_buttons[0] = new Hash({value:'i', text:'betont', titel:'Wird in den meisten Browsern kursiv dargestellt.'});\n";
-	$additionalJS .= "auge_buttons[1] = new Hash({value:'b', text:'stark betont', titel:'Wird in den meisten Browsern fett dargestellt.'});\n";
-	$additionalJS .= "auge_buttons[2] = new Hash({value:'img', text:'Bild', titel:'Ein Bild in das Posting einbinden.'});\n";
-	$additionalJS .= "auge_buttons[3] = new Hash({value:'code', text:'Code', titel:'Quellcode in das Posting einbinden.'});";
+	$additionalJS .= "auge_buttons[0] = new Hash({value:'i', text:'".$lang['bbcode_italic']."', titel:'".$lang['bbcode_italic_title'].".'});\n";
+	$additionalJS .= "auge_buttons[1] = new Hash({value:'b', text:'".$lang['bbcode_bold']."', titel:'".$lang['bbcode_bold_title']."'});\n";
+	$additionalJS .= "auge_buttons[2] = new Hash({value:'code', text:'".$lang['bbcode_code']."', titel:'".$lang['bbcode_code_title']."'});\n";
+	if ($settings['bbcode_img']==1)
+		{
+		$additionalJS .= "auge_buttons[3] = new Hash({value:'img', text:'".$lang['bbcode_image']."', titel:'".$lang['bbcode_image_title']."'});\n";
+		}
 	}
+if ($settings['upload_images']==1)
+	{
+	$additionalJS .= "\nvar auge_upload = \$H({text:'".$lang['upload_image']."', title:'".$lang['upload_image_title']."'});";
+	}
+$additionalJS .= "\nvar delete_text = '".$lang['delete_link']."';";
 
 $time_difference = (isset($settings['time_difference'])) ? $settings['time_difference'] : 0;
 
