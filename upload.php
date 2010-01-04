@@ -159,35 +159,58 @@ if(isset($_GET['uploaded_image_selected']))
 	$filename = $_GET['uploaded_image_selected'];
 	$action = 'uploaded';
 	}
-?><html>
+?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
 <head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title><?php echo $lang['upload_image_title']; ?></title>
 <style type="text/css">
 <!--
-body      { font-family:Verdana,Helvetica,sans-serif; color:#000; font-size:13px; background:#fff; margin:0px; padding:20px; }
-h1        { margin:0px 0px 20px 0px; font-size:18px; font-weight:bold; }
-.caution  { color:red; font-weight:bold; }
-a:link    { color:#00c; text-decoration:none; }
-a:visited { color:#00c; text-decoration:none; }
-a:hover   { color:#00f; text-decoration:underline; }
-a:active  { color:#f00; text-decoration:none; }
+body {
+font-family:Verdana,Helvetica,sans-serif;
+color:#000;
+font-size:13px;
+background:#fff;
+margin:0;
+padding:20px;
+}
+h1 {
+margin:0 0 20px 0;
+font-size:18px;
+font-weight:bold;
+}
+.caution {
+color:red;
+font-weight:bold;
+}
+a:link {
+color:#00c;
+text-decoration:none;
+}
+a:visited {
+color:#00c;
+text-decoration:none;
+}
+a:focus, a:hover {
+color:#00f;
+text-decoration:underline;
+}
 -->
 </style>
 </head>
 <body>
-
+<h1><?php $lang['upload_image_title']; ?></h1>
 <?php
 switch($action)
 	{
 	case 'upload':
-		echo '<h1>'.$lang['upload_image_title'].'</h1>';
 		if(isset($errors))
 			{
 			echo errorMessages($errors);
 			}
 		echo '<p>'.$lang['upload_exp'].'</p>'."\n";
-		echo '<form action="'.$_SERVER['SCRIPT_NAME'].'" method="post" enctype="multipart/form-data">'."\n";
-		echo '<input type="file" name="probe" />'."\n";
+		echo '<form action="'.$_SERVER['SCRIPT_NAME'].'" method="post" '."\n";
+		echo 'enctype="multipart/form-data"><input type="file" name="probe" />'."\n";
 		echo '<input type="submit" value="'.$lang['upload_subm_button'].'">'."\n";
 		echo '</form>'."\n";
 		echo '<p>[ <a href="'.$_SERVER['PHP_SELF'].'?action=show_uploaded_images">';
@@ -196,7 +219,6 @@ switch($action)
 	case 'uploaded':
 		if (isset($_FILES['probe']))
 			{
-			echo '<h1>'.$lang['upload_image_title'].'</h1>'."\n";
 			if(isset($image_manipulated))
 				{
 				echo '<p>'.$image_manipulated.'</p>'."\n";
