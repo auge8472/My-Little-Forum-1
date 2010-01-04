@@ -21,6 +21,7 @@
 
 #require_once("function.tab2space.php");
 require_once('functions/funcs.output.php');
+require_once('functions/funcs.processing.php');
 
 #
 # Entferne bei aktivem magic_quotes_gpc die Slashes in den uebergebenen Werten
@@ -40,18 +41,31 @@ return $value;
 } # Ende: stripslashes_deep
 
 
+
+/**
+ * reads the forum settings from the database
+ *
+ */
 function get_settings() {
 global $lang, $connid, $db_settings, $settings;
 
 $result = mysql_query("SELECT name, value FROM ".$db_settings['settings_table'], $connid);
-if(!$result) die($lang['db_error']);
-while ($line = mysql_fetch_array($result))
+if (!$result) die($lang['db_error']);
+while ($line = mysql_fetch_assoc($result))
 	{
 	$settings[$line['name']] = $line['value'];
 	}
 mysql_free_result($result);
 } # End: get_settings
 
+
+
+/**
+ * reads the category names and ids from the database
+ *
+ * @return array $categories
+ * @return bool false
+ */
 function get_categories() {
 global $lang, $settings, $connid, $db_settings;
 
@@ -63,20 +77,36 @@ if ($category_count > 0)
 	{
 	if (empty($_SESSION[$settings['session_prefix'].'user_id']))
 		{
-		$result = mysql_query("SELECT id, category FROM ".$db_settings['category_table']." WHERE accession = 0 ORDER BY category_order ASC", $connid);
+		$categoriesQuery = "SELECT
+		id,
+		category
+		FROM ".$db_settings['category_table']."
+		WHERE accession = 0
+		ORDER BY category_order ASC";
 		}
 	else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "user")
 		{
-		$result = mysql_query("SELECT id, category FROM ".$db_settings['category_table']." WHERE accession = 0 OR accession = 1 ORDER BY category_order ASC", $connid);
+		$categoriesQuery = "SELECT
+		id,
+		category
+		FROM ".$db_settings['category_table']."
+		WHERE accession = 0 OR accession = 1
+		ORDER BY category_order ASC";
 		}
 	else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "mod" || $_SESSION[$settings['session_prefix'].'user_type'] == "admin"))
 		{
-		$result = mysql_query("SELECT id, category FROM ".$db_settings['category_table']." WHERE accession = 0 OR accession = 1 OR accession = 2 ORDER BY category_order ASC", $connid);
+		$categoriesQuery = "SELECT
+		id,
+		category
+		FROM ".$db_settings['category_table']."
+		WHERE accession = 0 OR accession = 1 OR accession = 2
+		ORDER BY category_order ASC";
 		}
-	if(!$result) die($lang['db_error']);	$categories[0]='';
-	while ($line = mysql_fetch_array($result))
+	$result = mysql_query($categoriesQuery, $connid);
+	if (!$result) die($lang['db_error']);	$categories[0]='';
+	while ($line = mysql_fetch_assoc($result))
 		{
-		$categories[$line['id']] = stripslashes($line['category']);
+		$categories[$line['id']] = $line['category'];
 		}
 	mysql_free_result($result);
 	return $categories;
@@ -84,6 +114,15 @@ if ($category_count > 0)
 else return false;
 } # End: get_categories
 
+
+
+/**
+ * reads the categories ids from the categories list
+ *
+ * @param array $categories
+ * @return array $category_ids
+ * @return bool false
+ */
 function get_category_ids($categories) {
 if($categories!=false)
 	{
@@ -96,58 +135,100 @@ if($categories!=false)
 else return false;
 } # End: get_categories_ids
 
+
+
+/**
+ * lists the access rights to the categories
+ *
+ * @return array $category_accession
+ * @return bool false
+ */
 function category_accession() {
 global $settings, $lang, $connid, $db_settings;
 
 $result = mysql_query("SELECT id, accession FROM ".$db_settings['category_table'], $connid);
-while ($line = mysql_fetch_array($result))
+while ($line = mysql_fetch_assoc($result))
 	{
 	$category_accession[$line['id']] = $line['accession'];
 	}
 mysql_free_result($result);
-if (isset($category_accession)) return $category_accession; else return false;
+$r = isset($category_accession) ? $category_accession : false;
+
+return $r;
 } # End: category_accession
 
-// Seiten-Navigation für forum.php, board.php und mix.php
+
+
+/**
+ * Seiten-Navigation für forum.php, board.php und mix.php
+ *
+ * @param integer $page
+ * @param integer $entries_per_page
+ * @param integer $entry_count
+ * @param string $order
+ * @param string $descasc
+ * @param integer $category
+ * @param string $action (optional)
+ * @return string $output
+ */
 function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category, $action="") {
 global $lang, $select_submit_button;
 
 $output = "";
 if ($entry_count > $entries_per_page)
 	{
-	$output .= "&nbsp; ";
+	$output .= "&nbsp;";
 	$new_index_before = $page - 1;
 	$new_index_after = $page + 1;
 	$site_count = ceil($entry_count / $entries_per_page);
-	$ic = "";
-	if (isset($category)) $ic .= "&amp;category=".urlencode($category);
-	if (isset($action) && $action!="") $ic .= "&amp;action=".$action;
-	if (isset($_GET['letter'])) $ic .= "&amp;letter=".urlencode($_GET['letter']);
-	if ($new_index_before >= 0) $output .= "<a href=\"". basename($_SERVER["PHP_SELF"]) ."?page=".$new_index_before."&amp;order=".$order."&amp;descasc=".$descasc.$ic."\"><img src=\"img/prev.gif\" alt=\"&laquo;\" title=\"".$lang['previous_page_linktitle']."\" width=\"12\" height=\"9\" onmouseover=\"this.src='img/prev_mo.gif';\" onmouseout=\"this.src='img/prev.gif';\" /></a>&nbsp;";
-	//if ($new_index_before >= 0 && $new_index_after < $site_count) $output .= " ";
-	$page_count = ceil($entry_count/$entries_per_page);
-	$output .= '<form action="'.basename($_SERVER["PHP_SELF"]).'" method="get" title="'.$lang['choose_page_formtitle'].'"><div style="display: inline;">';
-	if (isset($order)) $output .= '<input type="hidden" name="order" value="'.$order.'" />';
-	if (isset($descasc)) $output .= '<input type="hidden" name="descasc" value="'.$descasc.'" />';
-	if (isset($category)) $output .= '<input type="hidden" name="category" value="'.$category.'" />';
-	if (isset($action) && $action!="") $output .= '<input type="hidden" name="action" value="'.$action.'" />';
-	if (isset($_GET['letter'])) $output .= '<input type="hidden" name="letter" value="'.$_GET['letter'].'" />';
-	$output .= '<select class="kat" size="1" name="page" onchange="this.form.submit();">';
-	if ($page == 0) $output .= '<option value="0" selected="selected">'.str_replace("[number]", "1", $lang['page_number']).'</option>';
-	else $output .= '<option value="0">'.str_replace("[number]", "1", $lang['page_number']).'</option>';
+	$ic = '';
+	$ic .= (isset($category)) ? '&amp;category='.intval($category) : '';
+	$ic .= (isset($action) && $action!="") ? '&amp;action='.$action : '';
+	$ic .= (isset($_GET['letter'])) ? '&amp;letter='.urlencode($_GET['letter']) : '';
+	if ($new_index_before >= 0)
+		{
+		#  onmouseover="this.src='img/prev_mo.gif';" onmouseout="this.src='img/prev.gif';"
+		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?page='.$new_index_before;
+		$output .= '&amp;order='.$order.'&amp;descasc='.$descasc.$ic.'">';
+		$output .= '<img src="img/prev.gif" alt="&laquo;" title="';
+		$output .= $lang['previous_page_linktitle'].'" width="12" height="9" /></a>&nbsp;';
+		}
+	# if ($new_index_before >= 0 && $new_index_after < $site_count) $output .= " ";
+	$page_count = ceil($entry_count / $entries_per_page);
+	$output .= '<form action="'.$_SERVER["SCRIPT_NAME"].'" method="get" title="';
+	$output .= $lang['choose_page_formtitle'].'"><div class="inline-form">'."\n";
+	$output .= isset($order) ? '<input type="hidden" name="order" value="'.$order.'" />' : '';
+	$output .= isset($descasc) ? '<input type="hidden" name="descasc" value="'.$descasc.'" />' : '';
+	$output .= isset($category) ? '<input type="hidden" name="category" value="'.$category.'" />' : '';
+	$output .= (isset($action) && $action!="") ? '<input type="hidden" name="action" value="'.$action.'" />' : '';
+	$output .= (isset($_GET['letter'])) ? '<input type="hidden" name="letter" value="'.urlencode($_GET['letter']).'" />' : '';
+	$output .= '<select class="kat" size="1" name="page" onchange="this.form.submit();">'."\n";
+	$output .= '<option value="0"';
+	$output .= ($page == 0) ? ' selected="selected"' : '';
+	$output .= '>'.str_replace("[number]", "1", $lang['page_number']).'</option>'."\n";
 	for($x=$page-9; $x<$page+10; $x++)
 		{
 		if ($x > 0 && $x < $page_count)
 			{
-			if ($page == $x) $output .= '<option value="'.$x.'" selected="selected">'.str_replace("[number]", $x+1, $lang['page_number']).'</option>';
-			else $output .= '<option value="'.$x.'">'.str_replace("[number]", $x+1, $lang['page_number']).'</option>';
+			$output .= '<option value="'.$x.'"';
+			$output .= ($page == $x) ? ' selected="selected"' : '';
+			$output .= '>'.str_replace("[number]", $x+1, $lang['page_number']).'</option>'."\n";
 			}
 		}
-	$output .= '</select><noscript>&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></noscript></div></form>';
-	if ($new_index_after < $site_count) $output .= "&nbsp;<a href=\"". basename($_SERVER["PHP_SELF"]) ."?page=" .$new_index_after ."&amp;order=".$order."&amp;descasc=".$descasc.$ic."\"><img src=\"img/next.gif\" alt=\"&raquo;\" title=\"".$lang['next_page_linktitle']."\" width=\"12\" height=\"9\" onmouseover=\"this.src='img/next_mo.gif';\" onmouseout=\"this.src='img/next.gif';\" /></a>";
+	$output .= '</select>'."\n".'<noscript>&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></noscript></div></form>'."\n";
+	if ($new_index_after < $site_count)
+		{
+		# onmouseover="this.src='img/next_mo.gif';" onmouseout="this.src='img/next.gif';"
+		$output .= '&nbsp;<a href="'.$_SERVER["SCRIPT_NAME"]."?page=".$new_index_after;
+		$output .= '&amp;order='.$order.'&amp;descasc='.$descasc.$ic.'">';
+		$output .= '<img src="img/next.gif" alt="&raquo;" title="';
+		$output .= $lang['next_page_linktitle'].'" width="12" height="9" /></a>';
+		}
 	}
+
 return $output;
 } # End: nav
+
 
 
 /**
@@ -165,12 +246,20 @@ if (substr($hp,0,7) != "http://"
 	{
 	$hp = "http://".$hp;
 	}
+
 return $hp;
 } # End: amendProtocol
 
-// makes URLs clickable:
+
+
+/**
+ * makes URLs clickable
+ *
+ * @param string
+ * @return string
+ */
 function make_link($string) {
-$string = ' ' . $string;
+$string = ' '.$string;
 $string = preg_replace_callback("#(^|[\n ])([\w]+?://.*?[^ \"\n\r\t<]*)#is", "shorten_link", $string);
 $string = preg_replace("#(^|[\n ])((www|ftp)\.[\w\-]+\.[\w\-.\~]+(?:/[^ \"\t\n\r<]*)?)#is", "\\1<a href=\"http://\\2\">\\2</a>", $string);
 $string = preg_replace("#(^|[\n ])([a-z0-9&\-_.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)#i", "\\1<a href=\"mailto:\\2@\\3\">\\2@\\3</a>", $string);
@@ -179,14 +268,30 @@ $string = substr($string, 1);
 return $string;
 } # End: make_link
 
-// function to hide the links from the checkings in posting.php
+
+
+/**
+ * function to hide the links from the checkings in posting.php
+ *
+ * @param string $string
+ * @return string $string
+ */
 function text_check_link($string) {
-$string = ' ' . $string;
+$string = ' '.$string;
 $string = preg_replace("#(^|[\n ])([\w]+?://.*?[^ \"\n\r\t<]*)#is", "", $string);
 $string = substr($string, 1);
+
 return $string;
 } # End: text_check_link
 
+
+
+/**
+ * replaces bb-codes in posting with HTML-source
+ *
+ * @param string $string
+ * @retrun string $string
+ */
 function bbcode($string) {
 global $settings;
 
@@ -200,29 +305,52 @@ $string = preg_replace("#\[url\]www\.(.+?)\[/url\]#is", "<a href=\"http://www.\\
 $string = preg_replace_callback("#\[url\](.+?)\[/url\]#is", "shorten_link", $string);
 $string = preg_replace("#\[url=(.+?)\](.+?)\[/url\]#is", "<a href=\"\\1\">\\2</a>", $string);
 $string = preg_replace_callback("#\[code\](.+?)\[/code\]#is", "parse_code", $string);
-$string = preg_replace("#\[msg\](.+?)\[/msg\]#is", "<a href=\"".basename($_SERVER['PHP_SELF'])."?id=\\1\">\\1</a>", $string);$string = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", "<a href=\"".basename($_SERVER['PHP_SELF'])."?id=\\1\">\\2</a>", $string);
+$string = preg_replace("#\[msg\](.+?)\[/msg\]#is", "<a href=\"".$_SERVER['SCRIPT_NAME']."?id=\\1\">\\1</a>", $string);$string = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", "<a href=\"".$_SERVER['SCRIPT_NAME']."?id=\\1\">\\2</a>", $string);
 if ($settings['bbcode_img'] == 1)
 	{
 	$string = preg_replace("#\[img\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"margin: 5px 0px 5px 0px\" />", $string);
 	$string = preg_replace("#\[img\|left\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"float: left; margin: 0px 5px 5px 0px\" />", $string);
 	$string = preg_replace("#\[img\|right\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"float: right; margin: 0px 0px 5px 5px\" />", $string);
 	}
-$string=str_replace('javascript','javascr***',$string);
+$string = str_replace('javascript','javascr***',$string);
+
 return $string;} # End: bbcode
 
+
+
+/**
+ * cuts the URL as link text(!) after $setting['text_word_maxlength']/2
+ *
+ * @param string $string
+ * @return string $string
+ */
 function shorten_link($string) {
 global $settings;
 
-if(count($string) == 2) { $pre = ""; $url = $string[1]; }
+if (count($string) == 2) { $pre = ""; $url = $string[1]; }
 else { $pre = $string[1]; $url = $string[2]; }
 
 $shortened_url = $url;
 if (strlen($url) > $settings['text_word_maxlength']) $shortened_url = substr($url, 0, ($settings['text_word_maxlength']/2)) . "..." . substr($url, - ($settings['text_word_maxlength']-3-$settings['text_word_maxlength']/2));
-return $pre."<a href=\"".$url."\">".$shortened_url."</a>";
+
+return $pre.'<a href="'.$url.'">'.htmlspecialchars($shortened_url).'</a>';
 } # End: shorten_link
 
+
+
+/**
+ * returns the HTML code for the output of posted source code
+ *
+ * @param string $string
+ * @return string $string
+ */
 function parse_code($string) {
+global $view;
 if (basename($_SERVER['PHP_SELF'])=='board_entry.php' || basename($_SERVER['PHP_SELF'])=='mix_entry.php')
+	{
+	$p_class='postingboard';
+	}
+else if (!empty($view) and ($view=='board' or $view=='mix'))
 	{
 	$p_class='postingboard';
 	}
@@ -232,17 +360,24 @@ else
 	}
 $string = $string[1];
 $string = str_replace('<br />','',$string);
-$string = '</p><pre><code>'.$string.'</code></pre><p class="'.$p_class.'">';
+$string = '</p>'."\n".'<pre class="'.$p_class.'"><code>'.$string.'</code></pre>'."\n".'<p class="'.$p_class.'">';
 
 return $string;
 } # End: parse_code
 
-// strips bb codes for e-mail texts:
+
+
+/**
+ * strips bb codes for e-mail texts:
+ *
+ * @param string $string
+ * @return string $string
+ */
 function unbbcode($string) {
 global $settings;
 
 $string = preg_replace("#\[b\](.+?)\[/b\]#is", "*\\1*", $string);
-$string = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $string);
+$string = preg_replace("#\[i\](.+?)\[/i\]#is", "/\\1/", $string);
 $string = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $string);
 $string = preg_replace("#\[link\]www\.(.+?)\[/link\]#is", "http://www.\\1", $string);
 $string = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $string);
@@ -262,67 +397,123 @@ if (isset($bbcode_img) && $settings['bbcode_img'] == 1)
 return $string;
 } # End: unbbcode
 
+
+
+/**
+ * replaces text smilies with smiley images
+ *
+ * @param string $string
+ * @return string $string
+ */
 function smilies($string) {
 global $connid, $db_settings;
 
 $result = mysql_query("SELECT file, code_1, code_2, code_3, code_4, code_5, title FROM ".$db_settings['smilies_table'], $connid);
-while($data = mysql_fetch_array($result))
+while($data = mysql_fetch_assoc($result))
 	{
-	if($data['title']!='') $title = ' title="'.stripslashes($data['title']).'"'; else $title='';
-	if($data['code_1']!='') $string = str_replace($data['code_1'], "<img src=\"img/smilies/".$data['file']."\" alt=\"".$data['code_1']."\"".$title." />", $string);
-	if($data['code_2']!='') $string = str_replace($data['code_2'], "<img src=\"img/smilies/".$data['file']."\" alt=\"".$data['code_2']."\"".$title." />", $string);
-	if($data['code_3']!='') $string = str_replace($data['code_3'], "<img src=\"img/smilies/".$data['file']."\" alt=\"".$data['code_3']."\"".$title." />", $string);
-	if($data['code_4']!='') $string = str_replace($data['code_4'], "<img src=\"img/smilies/".$data['file']."\" alt=\"".$data['code_4']."\"".$title." />", $string);
-	if($data['code_5']!='') $string = str_replace($data['code_5'], "<img src=\"img/smilies/".$data['file']."\" alt=\"".$data['code_5']."\"".$title." />", $string);
+	$title = ($data['title']!='') ? ' title="'.htmlspecialchars($data['title']).'"' : '';
+	$string = ($data['code_1']!='') ? str_replace($data['code_1'], '<img src="img/smilies'.$data['file'].'" alt="'.$data['code_1'].'"'.$title.' />', $string) : $string;
+	$string = ($data['code_2']!='') ? str_replace($data['code_2'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_2'].'"'.$title.' />', $string) : $string;
+	$string = ($data['code_3']!='') ? str_replace($data['code_3'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_3'].'"'.$title.' />', $string) : $string;
+	$string = ($data['code_4']!='') ? str_replace($data['code_4'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_4'].'"'.$title.' />', $string) : $string;
+	$string = ($data['code_5']!='') ? str_replace($data['code_5'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_5'].'"'.$title.' />', $string) : $string;
 	}
 mysql_free_result($result);
-return($string);
+
+return $string;
 } # End: smilies
 
+
+
+/**
+ * puts the quote symbol to the begin of a line
+ *
+ * @param string $string
+ * @return string $string
+ */
 function zitat($string) {
 global $settings;
 
 $string = preg_replace("/^".htmlspecialchars($settings['quote_symbol'])."\\s+(.*)/", "<span class=\"citation\">".htmlspecialchars($settings['quote_symbol'])." \\1</span>", $string);
 $string = preg_replace("/\\n".htmlspecialchars($settings['quote_symbol'])."\\s+(.*)/", "<span class=\"citation\">".htmlspecialchars($settings['quote_symbol'])." \\1</span>", $string);
 $string = preg_replace("/\\n ".htmlspecialchars($settings['quote_symbol'])."\\s+(.*)/", "<span class=\"citation\">".htmlspecialchars($settings['quote_symbol'])." \\1</span>", $string);
+
 return $string;
 } # End: zitat
 
+
+
+/**
+ * puts the quote symbol to the begin of a line for RSS-feeds
+ *
+ * @param string $string
+ * @return string $string
+ */
 function rss_quote($string) {
 global $settings;
 
 $string = preg_replace("/^".htmlspecialchars($settings['quote_symbol'])."\\s+(.*)/", "<i>".htmlspecialchars($settings['quote_symbol'])." \\1</i>", $string);
 $string = preg_replace("/\\n".htmlspecialchars($settings['quote_symbol'])."\\s+(.*)/", "<i>".htmlspecialchars($settings['quote_symbol'])." \\1</i>", $string);
 $string = preg_replace("/\\n ".htmlspecialchars($settings['quote_symbol'])."\\s+(.*)/", "<i>".htmlspecialchars($settings['quote_symbol'])." \\1</i>", $string);
+
 return $string;
 } # End: rss_quote
 
+
+
 /**
- * connects to the database:
+ * connects to the database
  *
+ * @param string $host
+ * @param string $user (username)
+ * @param string $pw (password)
+ * @param string $db (database name)
+ * @return ressource (of the database connection)
  */function connect_db($host,$user,$pw,$db) {
 global $lang;
 
-$connid = @mysql_connect($host, $user, $pw);  // Datenbankverbindung herstellen
+$connid = @mysql_connect($host, $user, $pw);
 if(!$connid) die($lang['db_error']);
+
 mysql_select_db($db, $connid) or die($lang['db_error']);
 mysql_query("SET NAMES utf8",$connid) or die($lang['db_error']);
+
 return $connid;
 } # End: connect_db
 
-// counts the users which are online:
+
+
+/**
+ * counts the users which are online
+ *
+ * @param integer $user_online_period (in minutes, optional)
+ * @return
+ */
 function user_online($user_online_period = 10) {
 global $connid, $db_settings, $settings;
 
-if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $user_id = $_SESSION[$settings['session_prefix'].'user_id']; else $user_id = 0;
+if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+	{
+	$user_id = $_SESSION[$settings['session_prefix'].'user_id'];
+	}
+else
+	{
+	$user_id = 0;
+	}
 $diff = time()-($user_online_period*60);
 
-if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $ip = "uid_".$_SESSION[$settings['session_prefix'].'user_id'];
-else $ip = $_SERVER['REMOTE_ADDR'];
+if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+	{
+	$ip = "uid_".$_SESSION[$settings['session_prefix'].'user_id'];
+	}
+else
+	{
+	$ip = $_SERVER['REMOTE_ADDR'];
+	}
 
 @mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE time < ".$diff, $connid);
 
-list($is_online) = @mysql_fetch_row(@mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE ip= '".$ip."'", $connid));
+list($is_online) = @mysql_fetch_row(@mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE ip= '".mysql_real_escape_string($ip)."'", $connid));
 if ($is_online > 0) @mysql_query("UPDATE ".$db_settings['useronline_table']." SET time='".time()."', user_id='".$user_id."' WHERE ip='".$ip."'", $connid);
 else @mysql_query("INSERT INTO ".$db_settings['useronline_table']." SET time='".time()."', ip='".$ip."', user_id='".$user_id."'", $connid);
 
@@ -392,19 +583,25 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id
 else $thread_info_a = str_replace("[name]", $name, $lang['thread_info']);
 
 $thread_info_b = str_replace("[time]", strftime($lang['time_format'],$parent_array[$id]["tp_time"]), $thread_info_a);
-  ?><li><?php
+
+echo '<li>';
 if ($id == $aktuellerEintrag && $parent_array[$id]["pid"]==0)
 	{
-    ?><span class="actthread"><?php echo htmlspecialchars($parent_array[$id]["subject"]); ?></span><?php
+	echo '<span class="actthread">'.htmlspecialchars($parent_array[$id]["subject"]).'</span>';
 	}
 else if ($id == $aktuellerEintrag && $parent_array[$id]["pid"]!=0)
 	{
-    ?><span class="actreply"><?php echo htmlspecialchars($parent_array[$id]["subject"]); ?></span><?php
+	echo '<span class="actreply">'.htmlspecialchars($parent_array[$id]["subject"]).'</span>';
 	}
 else
 	{
-    ?><a class="<?php
-	if ((($parent_array[$id]['pid']==0) && isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $parent_array[$id]['last_answer']) || (($parent_array[$id]['pid']==0) && empty($_SESSION[$settings['session_prefix'].'newtime']) && $parent_array[$id]['last_answer'] > $last_visit))
+	echo '<a class="';
+	if ((($parent_array[$id]['pid']==0)
+		&& isset($_SESSION[$settings['session_prefix'].'newtime'])
+		&& $_SESSION[$settings['session_prefix'].'newtime'] < $parent_array[$id]['last_answer'])
+		|| (($parent_array[$id]['pid']==0)
+		&& empty($_SESSION[$settings['session_prefix'].'newtime'])
+		&& $parent_array[$id]['last_answer'] > $last_visit))
 		{
 		echo 'threadnew';
 		}
@@ -412,7 +609,12 @@ else
 		{
 		echo 'thread';
 		}
-	else if ((($parent_array[$id]['pid']!=0) && isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $parent_array[$id]['time']) || (($parent_array[$id]['pid']!=0) && empty($_SESSION[$settings['session_prefix'].'newtime']) && $parent_array[$id]['time'] > $last_visit))
+	else if ((($parent_array[$id]['pid']!=0)
+		&& isset($_SESSION[$settings['session_prefix'].'newtime'])
+		&& $_SESSION[$settings['session_prefix'].'newtime'] < $parent_array[$id]['time'])
+		|| (($parent_array[$id]['pid']!=0)
+		&& empty($_SESSION[$settings['session_prefix'].'newtime'])
+		&& $parent_array[$id]['time'] > $last_visit))
 		{
 		echo 'replynew';
 		}
@@ -420,63 +622,98 @@ else
 		{
 		echo 'reply';
 		}
-	?>" href="forum_entry.php?id=<?php echo $parent_array[$id]['id'];
-	if ($page != 0 || $category != 0 || $order != 'time') echo '&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order; ?>"><?php
-	echo htmlspecialchars($parent_array[$id]["subject"]);
-	?></a><?php
+	echo '" href="forum_entry.php?id='.$parent_array[$id]['id'];
+	if ($page != 0 || $category != 0 || $order != 'time')
+		{
+		echo '&amp;page='.$page.'&amp;category='.intval($category).'&amp;order='.$order;
+		}
+	echo '">'.htmlspecialchars($parent_array[$id]["subject"]).'</a>';
 	}
 
 echo " ".$thread_info_b;
-if ($parent_array[$id]['pid']==0 && $category==0 && isset($categories[$parent_array[$id]['category']]) && $categories[$parent_array[$id]['category']]!='')
-	{ ?> <a title="<?php echo str_replace('[category]', $categories[$parent_array[$id]['category']], $lang['choose_category_linktitle']);
-	if (isset($category_accession[$parent_array[$id]['category']]) && $category_accession[$parent_array[$id]['category']] == 2) echo ' '.$lang['admin_mod_category'];
-	else if (isset($category_accession[$parent_array[$id]['category']]) && $category_accession[$parent_array[$id]["category"]] == 1) echo " ".$lang['registered_users_category']; ?>" href="forum.php?category=<?php echo $parent_array[$id]['category']; ?>"><span class="<?php
-	if (isset($category_accession[$parent_array[$id]['category']]) && $category_accession[$parent_array[$id]['category']] == 2) echo 'category-adminmod';
-	else if (isset($category_accession[$parent_array[$id]['category']]) && $category_accession[$parent_array[$id]['category']] == 1) echo 'category-regusers';
-	else echo 'category'; ?>">(<?php
-	echo $categories[$parent_array[$id]['category']]; ?>)</span></a><?php
+
+if ($parent_array[$id]['pid']==0
+	&& $category==0
+	&& isset($categories[$parent_array[$id]['category']])
+	&& $categories[$parent_array[$id]['category']]!='')
+	{
+	# Is it a admin/mods-only category?
+	if (isset($category_accession[$parent_array[$id]['category']])
+		&& $category_accession[$parent_array[$id]['category']] == 2)
+		{
+		$titleAdd = ' '.$lang['admin_mod_category'];
+		$catClassName = 'category-adminmod';
+		}
+	# Is it a registered users (including admins/mods) category?
+	else if (isset($category_accession[$parent_array[$id]['category']])
+		&& $category_accession[$parent_array[$id]["category"]] == 1)
+		{
+		$titleAdd = " ".$lang['registered_users_category'];
+		$catClassName = 'category-regusers';
+		}
+	else
+		{
+		$titleAdd = '';
+		$catClassName = 'category';
+		}
+	echo '&nbsp;<a title="'.str_replace('[category]', $categories[$parent_array[$id]['category']], $lang['choose_category_linktitle']).$titleAdd;
+	echo '" href="forum.php?category='.intval($parent_array[$id]['category']).'"><span class="';
+	echo $catClassName.'">('.$categories[$parent_array[$id]['category']].')</span></a>';
 	}
 
 if ($aktuellerEintrag == 0 && $parent_array[$id]["pid"]==0 && $parent_array[$id]["fixed"] == 1)
 	{
-		?> <img src="img/fixed.gif" width="9" height="9" title="<?php echo $lang['fixed']; ?>" alt="*" /><?php
+	echo ' <img src="img/fixed.gif" width="9" height="9" title="'.$lang['fixed'].'" alt="*" />';
 	}
 if ($parent_array[$id]["pid"]==0 && $settings['all_views_direct'] == 1)
 	{
-	echo " <span class=\"small\">";
+	echo '&nbsp;';
 	if ($settings['board_view']==1)
-		{ ?><a href="board_entry.php?id=<?php echo $parent_array[$id]['tid']; ?>"><img src="img/board_d.gif" alt="[Board]" title="<?php echo $lang['open_in_board_linktitle']; ?>" width="12" height="9" /></a><?php
-		}			
+		{
+		echo '<a href="board_entry.php?id='.$parent_array[$id]['tid'].'">';
+		echo '<img src="img/board_d.gif" alt="[Board]" title="';
+		echo $lang['open_in_board_linktitle'].'" width="12" height="9" /></a>';
+		}
 	if ($settings['mix_view'] == 1)
-		{ ?><a href="mix_entry.php?id=<?php echo $parent_array[$id]['tid']; ?>"><img src="img/mix_d.gif" alt="[Mix]" title="<?php echo $lang['open_in_mix_linktitle']; ?>" width="12" height="9" /></a><?php
+		{
+		echo '<a href="mix_entry.php?id='.$parent_array[$id]['tid'].'">';
+		echo '<img src="img/mix_d.gif" alt="[Mix]" title="';
+		echo $lang['open_in_mix_linktitle'].'" width="12" height="9" /></a>';
 		}
 	echo "</span>";
 	}
-if ($parent_array[$id]["pid"]==0 && isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
+
+if ($parent_array[$id]["pid"]==0
+	&& isset($_SESSION[$settings['session_prefix'].'user_type'])
+	&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
 	{
-      ?> <a href="admin.php?mark=<?php echo $parent_array[$id]["tid"]; ?>&amp;refer=<?php echo basename($_SERVER["PHP_SELF"]); ?>&amp;page=<?php echo $page; ?>&amp;category=<?php echo urlencode($category); ?>&amp;order=<?php echo $order; ?>"><?php
+	echo '<a href="admin.php?mark='.$parent_array[$id]["tid"].'&amp;refer=';
+	echo $_SERVER["SCRIPT_NAME"].'&amp;page='.$page.'&amp;category='.intval($category);
+	echo '&amp;order='.$order.'"><img src="';
 	if ($parent_array[$id]['marked']==1)
 		{
-		echo '<img src="img/marked.gif" alt="[x]" width="9" height="9" title="'.$lang['demark_linktitle'].'" />';
+		echo 'img/marked.gif" alt="[x]" title="'.$lang['demark_linktitle'].'"';
 		}
 	else
 		{
-		echo '<img src="img/mark.gif" alt="[-]" title="'.$lang['mark_linktitle'].'" width="9" height="9" />';
+		echo 'img/mark.gif" alt="[-]" title="'.$lang['mark_linktitle'].'"';
 		}
-   ?></a><?php
+	echo ' width="9" height="9" /></a>';
 	}
 
 // display all branches of the thread tree:
 if(isset($child_array[$id]) && is_array($child_array[$id]))
 	{
-    ?><ul class="<?php echo ($tiefe >= $settings['thread_depth_indent']) ? 'deep-reply' : 'reply'; ?>"><?php
+	echo '<ul class="';
+	echo ($tiefe >= $settings['thread_depth_indent']) ? 'deep-reply' : 'reply';
+	echo '">';
 	foreach ($child_array[$id] as $kind)
 		{
 		thread_tree($kind, $aktuellerEintrag, $tiefe+1);
 		}
-    ?></ul><?php
+	echo '</ul>';
 	}
-  ?></li><?php
+echo '</li>';
 } # End: thread_tree
 
 
@@ -486,7 +723,7 @@ if(isset($child_array[$id]) && is_array($child_array[$id]))
  * 
  */
 function parse_template() {
-global $settings, $lang, $header, $footer, $wo, $ao, $topnav, $subnav_1, $subnav_2, $footer_info_dump, $search, $show_postings, $counter;
+global $settings, $lang, $header, $additionalJS, $footer, $wo, $ao, $topnav, $subnav_1, $subnav_2, $footer_info_dump, $search, $show_postings, $counter;
 
 $template = implode("",file($settings['template']));
 
@@ -497,6 +734,7 @@ $template = str_replace("{LANGUAGE}",$lang['language'],$template);
 $template = str_replace("{CHARSET}",$lang['charset'],$template);
 $title = stripslashes($settings['forum_name']); if (isset($wo)) $title .= " - ". htmlspecialchars(stripslashes($wo));
 $template = str_replace("{TITLE}",$title,$template);
+$template = str_replace('{ADD-JS}',$additionalJS,$template);
 $template = str_replace("{FORUM-NAME}",stripslashes($settings['forum_name']),$template);
 $template = str_replace('{HOME-ADDRESS}',$settings['home_linkaddress'],$template);
 $template = str_replace('{HOME-LINK}',$settings['home_linkname'],$template);
@@ -526,10 +764,10 @@ $user_menu .= ' | <a href="search.php" title="'.$lang['search_formtitle'].'">'.$
 $template = str_replace("{USER-MENU}",$user_menu,$template);
 
 // Search:
-$search_dump = '<form action="search.php" method="get" title="'.$lang['search_formtitle'].'"><div class="search">'."\n";
-$search_dump .= '<label for="search">'.$lang['search_marking'].'</label>';
+$search_dump = "\n".'<form action="search.php" method="get" title="'.$lang['search_formtitle'].'"><div class="search">'."\n";
+$search_dump .= '<label for="search">'.$lang['search_marking'].'&nbsp;</label>';
 # if (isset($search)) $search_match = htmlspecialchars(stripslashes($search)); else $search_match = "";
-$search_dump .= '<span class="normal">&nbsp;</span><input class="searchfield" type="text" id="search" name="search" value="" size="20" /><span class="normal">&nbsp;</span><input type="image" name="" src="img/submit.gif" alt="&raquo;" /></div></form>'."\n";
+$search_dump .= '<input class="searchfield" type="text" id="search" name="search" value="" size="20" />&nbsp;<input type="image" name="" src="img/submit.gif" alt="&raquo;" /></div></form>'."\n";
 $template = str_replace("{SEARCH}",$search_dump,$template);
 
 // Sub navigation:
