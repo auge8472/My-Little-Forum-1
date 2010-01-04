@@ -129,14 +129,12 @@ var j = 0;
 
 if (Buttons && o>0)
 	{
-	output[0] = "<p>";
 	for (var i=0;i<o;i++)
 		{
 		j = i + 1;
-		output[j] = "<input title=\"" + Buttons[i]['titel'] + "\" class=\"bb-button\" type=\"button\" value=\""+ Buttons[i]['text'] +"\" onClick=\"insert('"+ Buttons[i]['open'] +"','"+ Buttons[i]['close'] +"')\">";
+		output[j] = "<input type=\"button\" value=\""+ Buttons[i].get('text') +"\" title=\"" + Buttons[i].get('titel') + "\" class=\"bb-button\" onClick=\"bbcode('"+ Buttons[i].get('value') +"')\">";
 		}
 	j = j + 1;
-	output[j] = "</p>";
 	}
 $('bb-code-buttons').update(output.join(" "));
 }
