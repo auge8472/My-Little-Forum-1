@@ -28,9 +28,9 @@ if (count($_GET) > 0)
 		}
 	}
 if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
-&& isset($_COOKIE['auto_login'])
-&& isset($settings['autologin'])
-&& $settings['autologin'] == 1)
+	&& isset($_COOKIE['auto_login'])
+	&& isset($settings['autologin'])
+	&& $settings['autologin'] == 1)
 	{
 	$id = isset($_GET['id']) ? 'id='.intval($_GET['id']) : '';
 	if (!empty($id))
@@ -42,8 +42,8 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 	die("<a href=\"login.php?referer=forum_entry.php".$did."\">further...</a>");
 	}
 if ($settings['access_for_users_only'] == 1
-&& isset($_SESSION[$settings['session_prefix'].'user_name'])
-|| $settings['access_for_users_only'] != 1)
+	&& isset($_SESSION[$settings['session_prefix'].'user_name'])
+	|| $settings['access_for_users_only'] != 1)
 	{
 	unset($entrydata);
 	unset($parent_array);
@@ -105,7 +105,8 @@ if ($settings['access_for_users_only'] == 1
 				}
 			if (isset($settings['count_views']) && $settings['count_views'] == 1)
 				{
-				mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE id=".intval($id), $connid);
+#				mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE id=".intval($id), $connid);
+				mysql_query("UPDATE ".$db_settings['forum_table']." SET views=views+1 WHERE id=".intval($id), $connid);
 				}
 			$mark['admin'] = false;
 			$mark['mod'] = false;
@@ -143,7 +144,7 @@ if ($settings['access_for_users_only'] == 1
 					{
 					$mark['user'] = true;
 					}
-				if ($entrydata["show_signature"]==1)
+				if ($entrydata["show_signature"] == 1)
 					{
 					$signature = $userdata["signature"];
 					}
@@ -175,11 +176,11 @@ if ($settings['access_for_users_only'] == 1
 	category,
 	marked
 	FROM ".$db_settings['forum_table']."
-	WHERE tid = ".$Thread."
+	WHERE tid = ".intval($Thread)."
 	ORDER BY time ASC";
 	$result = mysql_query($threadQuery, $connid);
-	if(!$result) die($lang['db_error']);
-	while($tmp = mysql_fetch_assoc($result))
+	if (!$result) die($lang['db_error']);
+	while ($tmp = mysql_fetch_assoc($result))
 		{
 		$parent_array[$tmp["id"]] = $tmp;
 		$child_array[$tmp["pid"]][] =  $tmp["id"];
