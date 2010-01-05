@@ -105,8 +105,7 @@ if ($settings['access_for_users_only'] == 1
 				}
 			if (isset($settings['count_views']) && $settings['count_views'] == 1)
 				{
-#				mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE id=".intval($id), $connid);
-				mysql_query("UPDATE ".$db_settings['forum_table']." SET views=views+1 WHERE id=".intval($id), $connid);
+				mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE id=".intval($id), $connid);
 				}
 			$mark['admin'] = false;
 			$mark['mod'] = false;

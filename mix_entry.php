@@ -239,8 +239,7 @@ if ($settings['access_for_users_only'] == 1
 				# count views:
 				if (isset($settings['count_views']) && $settings['count_views'] == 1)
 					{
-#					mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=".$id, $connid);
-					mysql_query("UPDATE ".$db_settings['forum_table']." SET views=views+1 WHERE tid=".intval($id), $connid);
+					mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=".$id, $connid);
 					}
 				}
 			}
