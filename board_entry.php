@@ -96,9 +96,14 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 && isset($settings['autologin'])
 && $settings['autologin'] == 1)
 	{
-	$id = (isset($_GET['id'])) ? $_GET['id'] : '';
-	header("location: ".$settings['forum_address']."login.php?referer=board_entry.php&id=".$id);
-	die("<a href=\"login.php?referer=board_entry.php&id=".$id."\">further...</a>");
+	$id = isset($_GET['id']) ? 'id='.intval($_GET['id']) : '';
+	if (!empty($id))
+		{
+		$lid = '&'.$id;
+		$did = '&amp;'.$id;
+		}
+	header("location: ".$settings['forum_address']."login.php?referer=board_entry.php".$lid);
+	die("<a href=\"login.php?referer=board_entry.php".$did."\">further...</a>");
 	}
 
 if ($settings['access_for_users_only'] == 1
@@ -106,11 +111,11 @@ if ($settings['access_for_users_only'] == 1
 || $settings['access_for_users_only'] != 1)
 	{
 	if (empty($page)) $page = 0;
-	if (empty($order)) $order="last_answer";
-	if (empty($descasc)) $descasc="DESC";
-	if (empty($category)) $category="all";
+	if (empty($order)) $order = "last_answer";
+	if (empty($descasc)) $descasc = "DESC";
+	$category = empty($category) ? 0 : intval($category);
 	if (empty($be_page)) $be_page = 0;
-	if (empty($da)) $da="ASC";
+	if (empty($da)) $da = "ASC";
 	$ul = $be_page * $settings['answers_per_topic'];
 
 	unset($entrydata);
@@ -311,12 +316,13 @@ if ($settings['access_for_users_only'] == 1
 		echo '</h2></div>'."\n".'<div class="right">';
 		if ($thread['locked'] == 0)
 			{
-			echo '<a class="textlink" href="posting.php?id='.$thread["id"];
-			if (isset($page) && isset($order) && isset($descasc) && isset($category))
-				{
-				echo '&amp;page='.$page.'&amp;category='.$category;
-				echo '&amp;order='.$order.'&amp;descasc='.$descasc;
-				}
+			$qs  = '';
+			$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
+			$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
+			$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
+			$qs .= !empty($category) ? '&amp;category='.intval($category) : '';
+			$qs .= !empty($be_page) ? '&amp;be_page='.intval($be_page) : '';
+			echo '<a class="textlink" href="posting.php?id='.$thread["id"].$qs;
 			echo '&amp;view=board" title="'.$lang['board_answer_linktitle'].'">';
 			echo $lang['board_answer_linkname'].'</a>';
 			}
@@ -426,12 +432,13 @@ if ($settings['access_for_users_only'] == 1
 		echo '<div class="right">'."\n";
 		if ($entrydata['locked'] == 0)
 			{
-			echo '<a class="textlink" href="posting.php?id='.$entrydata["id"];
-			if (isset($page) && isset($order) && isset($descasc) && isset($category))
-				{
-				echo '&amp;page='.$page.'&amp;category='.$category;
-				echo '&amp;order='.$order.'&amp;descasc='.$descasc;
-				}
+			$qs  = '';
+			$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
+			$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
+			$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
+			$qs .= !empty($category) ? '&amp;category='.intval($category) : '';
+			$qs .= !empty($be_page) ? '&amp;be_page='.intval($be_page) : '';
+			echo '<a class="textlink" href="posting.php?id='.$entrydata["id"].$qs;
 			echo '&amp;view=board" title="'.$lang['board_answer_linktitle'].'">';
 			echo $lang['board_answer_linkname'].'</a>';
 			}

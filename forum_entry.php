@@ -32,11 +32,14 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 && isset($settings['autologin'])
 && $settings['autologin'] == 1)
 	{
-	$id = (isset($_GET['id'])) ? intval($_GET['id']) : '';
-	$qstrg1 = (!empty($id)) ? '&id='.$id : '';
-	$qstrg2 = (!empty($id)) ? '&amp;id='.$id : '';
-	header("location: ".$settings['forum_address']."login.php?referer=forum_entry.php".$qstrg1);
-	die("<a href=\"login.php?referer=forum_entry.php".$qstrg2."\">further...</a>");
+	$id = isset($_GET['id']) ? 'id='.intval($_GET['id']) : '';
+	if (!empty($id))
+		{
+		$lid = '&'.$id;
+		$did = '&amp;'.$id;
+		}
+	header("location: ".$settings['forum_address']."login.php?referer=forum_entry.php".$lid);
+	die("<a href=\"login.php?referer=forum_entry.php".$did."\">further...</a>");
 	}
 if ($settings['access_for_users_only'] == 1
 && isset($_SESSION[$settings['session_prefix'].'user_name'])
@@ -182,7 +185,7 @@ if ($settings['access_for_users_only'] == 1
 		$child_array[$tmp["pid"]][] =  $tmp["id"];
 		}
 	mysql_free_result($result);
-	$category = $category;
+	$category = intval($category);
 	$wo = $entrydata["subject"];
 	$subnav_1  = '<a class="textlink" href="forum.php?page='.$page.'&amp;category=';
 	$subnav_1 .= intval($category).'&amp;order='.$order.'" title="';
@@ -242,11 +245,12 @@ if ($settings['access_for_users_only'] == 1
 
 	if ($entrydata['locked'] == 0)
 		{
-		echo '<a class="textlink" href="posting.php?id='.$id;
-		if (isset($page) && isset($order) && isset($category))
-			{
-			echo '&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order;
-			}
+		$qs  = '';
+		$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
+		$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
+		$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
+		$qs .= !empty($category) ? '&amp;category='.intval($category) : '';
+		echo '<a class="textlink" href="posting.php?id='.$id.$qs;
 		echo '" title="'.$lang['forum_answer_linktitle'].'">';
 		echo $lang['forum_answer_linkname'].'</a>';
 		}
