@@ -25,17 +25,28 @@ if (count($_GET) > 0)
 foreach ($_GET as $key => $value)
 $$key = $value;
 
-function nav_b($be_page, $entries_per_page, $entry_count, $id, $da, $nr, $page, $category, $order, $descasc) {
-global $lang, $page_navigation_pd_menu, $page_navigation_arrows, $select_submit_button;
+function nav_b($be_page, $entries_per_page, $entry_count, $id, $da, $page, $category, $order, $descasc) {
+global $lang, $select_submit_button;
 
 $output = '';
 
 if ($entry_count > $entries_per_page)
 	{
+	# entry_count
+	# $entries_per_page
+	# $be_page
+	# $id
+	# $da
+	# $page
+	# $category
+	# $order
+	# $descasc
+	# number of pages for the thread
+	$countPages = ceil($entry_count / $entries_per_page);
+	# start: output
 	$output .= '&nbsp;&nbsp;';
 	$new_index_before = $be_page - 1;
 	$new_index_after = $be_page + 1;
-	$site_count = ceil($entry_count / $entries_per_page);
 	if ($new_index_before >= 0)
 		{
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?&amp;id='.$id.'&amp;be_page=';
@@ -45,22 +56,22 @@ if ($entry_count > $entries_per_page)
 		$output .= 'width="12" height="9" onmouseover="this.src=\'img/prev_mo.gif\';"';
 		$output .= ' onmouseout="this.src=\'img/prev.gif\';" /></a>';
 		}
-	if ($new_index_before >= 0 && $new_index_after < $site_count)
+	if ($new_index_before >= 0 && $new_index_after < $countPages)
 		{
 		$output .= '&nbsp;';
 		}
-	if ($new_index_after < $site_count)
+	if ($new_index_after < $countPages)
 		{
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?&amp;id='.$id.'&amp;be_page=';
-		$output .= $new_index_after.'&amp;da='.$da.'&amp;page='.$page.'&amp;category='.$category;
-		$output .= '&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
+		$output .= $new_index_after.'&amp;da='.$da.'&amp;page='.$page.'&amp;category=';
+		$output .= $category.'&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
 		$output .= $lang['next_page_linktitle'].'"><img src="img/next.gif" alt="&laquo;"';
 		$output .= 'width="12" height="9" onmouseover="this.src=\'img/next_mo.gif\';"';
 		$output .= ' onmouseout="this.src=\'img/next.gif\';" /></a>';
 		}
-	$page_count = ceil($entry_count/$entries_per_page);
-	$output .= '&nbsp;&nbsp;<form method="get" action="'.$_SERVER["SCRIPT_NAME"].'"';
-	$output .= ' title="'.$lang['choose_page_formtitle'].'">'."\n".'<div style="display: inline;">'."\n";
+	$output .= '&nbsp;<form method="get" action="'.$_SERVER["SCRIPT_NAME"].'"';
+	$output .= ' title="'.$lang['choose_page_formtitle'].'">';
+	$output .= "\n".'<div class="inline-form">'."\n";
 	if (isset($id))
 		{
 		$output .= '<input type="hidden" name="id" value="'.$id.'">'."\n";
@@ -77,16 +88,13 @@ if ($entry_count > $entries_per_page)
 	$output .= '<option value="0"';
 	$output .= ($be_page == 0) ? ' selected="selected"' : '';
 	$output .= '>1</option>'."\n";
-	for ($x=$be_page-9; $x<$be_page+9; $x++)
+	for ($a = 1; $a < $countPages; $a++)
 		{
-		$output .= '<option value="'.$x.'"';
-		$output .= ($x > 0 && $x < $page_count-1) ? ' selected="selected"' : '';
-		$output .= '>'.($x+1).'</option>'."\n";
+		$output .= '<option value="'.$a.'"';
+		$output .= ($be_page == $a) ? ' selected="selected"' : '';
+		$output .= '>'.($a + 1).'</option>'."\n";
 		}
-	$output .= '<option value="'.($page_count-1).'"';
-	$output .= ($be_page+1 == $page_count) ? ' selected="selected"' : '';
-	$output .= '>'.$page_count.'</option>'."\n";
-	$output .= '</select>'."\n".'&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" />'."\n".'</div>'."\n".'</form>'."\n";
+	$output .= '</select>'."\n".'<noscript><p class="inline-form">&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></p></noscript>'."\n".'</div>'."\n".'</form>'."\n";
 	}
 return $output;
 } # End: nav_b
@@ -293,7 +301,7 @@ if ($settings['access_for_users_only'] == 1
 		$subnav_2 .= '" class="mix-view" title="'.$lang['mix_view_linktitle'].'">';
 		$subnav_2 .= $lang['mix_view_linkname'].'</a>';
 		}
-	$subnav_2 .= nav_b($be_page, $settings['answers_per_topic'], $thread_count, $thread["tid"], $da, 1, $page, $category, $order, $descasc);
+	$subnav_2 .= nav_b($be_page, $settings['answers_per_topic'], $thread_count, $thread["tid"], $da, $page, $category, $order, $descasc);
 
 	parse_template();
 	echo $header;
