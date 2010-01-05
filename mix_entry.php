@@ -21,8 +21,8 @@
 
 include("inc.php");
 
-if(count($_GET) > 0)
-foreach($_GET as $key => $value)
+if (count($_GET) > 0)
+foreach ($_GET as $key => $value)
 $$key = $value;
 
 function thread($id, $aktuellerEintrag = 0, $tiefe = 0) {
@@ -107,9 +107,9 @@ echo outputPostingEditMenu($entrydata, 'mix', $opener);
 echo '<div class="autorcellwidth">&nbsp;</div></td>'."\n";
 echo '<td class="titlecell" valign="top"><div class="left"><h2>';
 echo htmlspecialchars($entrydata["subject"]);
-if(isset($categories[$entrydata["category"]])
-&& $categories[$entrydata["category"]]!=''
-&& $entrydata["pid"]==0)
+if (isset($categories[$entrydata["category"]])
+	&& $categories[$entrydata["category"]]!=''
+	&& $entrydata["pid"]==0)
 	{
 	echo "&nbsp;<span class=\"category\">(".$categories[$entrydata["category"]].")</span>";
 	}
@@ -167,9 +167,9 @@ if (isset($signature) && $signature != "")
 
 echo '</td>'."\n".'</tr>'."\n".'</table>'."\n";
 
-if(isset($child_array[$id]) && is_array($child_array[$id]))
+if (isset($child_array[$id]) && is_array($child_array[$id]))
 	{
-	foreach($child_array[$id] as $kind)
+	foreach ($child_array[$id] as $kind)
 		{
 		thread($kind, $aktuellerEintrag, $tiefe+1);
 		}
@@ -178,9 +178,9 @@ echo '</div>'."\n";
 } # End: thread
 
 if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
-&& isset($_COOKIE['auto_login'])
-&& isset($settings['autologin'])
-&& $settings['autologin'] == 1)
+	&& isset($_COOKIE['auto_login'])
+	&& isset($settings['autologin'])
+	&& $settings['autologin'] == 1)
 	{
 	$id = isset($_GET['id']) ? 'id='.intval($_GET['id']) : '';
 	if (!empty($id))
@@ -193,8 +193,8 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 	}
 
 if ($settings['access_for_users_only'] == 1
-&& isset($_SESSION[$settings['session_prefix'].'user_name'])
-|| $settings['access_for_users_only'] != 1)
+	&& isset($_SESSION[$settings['session_prefix'].'user_name'])
+	|| $settings['access_for_users_only'] != 1)
 	{
 	# deinitialise unused variables
 	unset($entrydata);
@@ -203,7 +203,7 @@ if ($settings['access_for_users_only'] == 1
 
 	if (empty($page)) $page = 0;
 	if (empty($order)) $order = "last_answer";
-	if (empty($category)) $category = 0;
+	$category = empty($category) ? 0 : intval($category);
 	if (empty($descasc)) $descasc = "DESC";
 
 	if (isset($id))
@@ -211,47 +211,51 @@ if ($settings['access_for_users_only'] == 1
 		$id = (int) $id;   // ... $id erst mal zu einem Integer machen ..
 		if( $id > 0 )      // ... und schauen ob es größer als 0 ist ..
 			{
-			$result=mysql_query("SELECT tid, pid, subject, category FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
+			$result = mysql_query("SELECT tid, pid, subject, category FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
 			if (!$result) die($lang['db_error']);
+			# is an entry with this id present?
 			if (mysql_num_rows($result) > 0)
-				{  // überprüfen ob ein Eintrag mit dieser id in der Datenbank ist
-				$entrydata = mysql_fetch_array($result); // Und ggbf. aus der Datenbank holen
+				{
+				# Und ggf. aus der Datenbank holen
+				$entrydata = mysql_fetch_assoc($result);
 
-				// Look if id correct:
+				# Look if id correct:
 				if ($entrydata['pid'] != 0)
 					{
-					header("location: ".$settings['forum_address'].basename($_SERVER['SCRIPT_NAME'])."?id=".$entrydata['tid']."&page=".$page."&category=".$category."&order=".$order."&descasc=".$descasc."#p".$id);
+					# if not:
+					header("location: ".$settings['forum_address']."mix_entry.php?id=".intval($entrydata['tid'])."&page=".$page."&category=".$category."&order=".$order."&descasc=".$descasc."#p".intval($id));
 					}
 
-				// category of this posting accessible by user?
+				# category of this posting accessible by user?
 				if (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin"))
 					{
-					if(is_array($category_ids) && !in_array($entrydata['category'], $category_ids))
+					if (is_array($category_ids) && !in_array($entrydata['category'], $category_ids))
 						{
 						header("location: ".$settings['forum_address']."mix.php");
 						die();
 						}
 					}
 
-				// count views:
+				# count views:
 				if (isset($settings['count_views']) && $settings['count_views'] == 1)
 					{
-					mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=".$id, $connid);
+#					mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=".$id, $connid);
+					mysql_query("UPDATE ".$db_settings['forum_table']." SET views=views+1 WHERE tid=".intval($id), $connid);
 					}
 				}
 			}
 		}
-	if(!isset($entrydata))
+	if (!isset($entrydata))
 		{
 		header("Location: ".$settings['forum_address']."mix.php");
 		exit();
 		}
 	$thread = $entrydata["tid"];
 	$result = mysql_query("SELECT id, pid FROM ".$db_settings['forum_table']." WHERE tid = ".$thread." ORDER BY time ASC", $connid);
-	if(!$result) die($lang['db_error']);
+	if (!$result) die($lang['db_error']);
 
 	// Ergebnisse einlesen
-	while($tmp = mysql_fetch_array($result))
+	while ($tmp = mysql_fetch_assoc($result))
 		{  // Ergebnis holen
 		$parent_array[$tmp["id"]] = $tmp;          // Ergebnis im Array ablegen
 		$child_array[$tmp["pid"]][] =  $tmp["id"]; // Vorwärtsbezüge konstruieren
