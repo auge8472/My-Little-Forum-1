@@ -21,8 +21,8 @@
 
 include("inc.php");
 
-if(count($_GET) > 0)
-foreach($_GET as $key => $value)
+if (count($_GET) > 0)
+foreach ($_GET as $key => $value)
 $$key = $value;
 
 function nav_b($be_page, $entries_per_page, $entry_count, $id, $da, $nr, $page, $category, $order, $descasc) {
@@ -92,9 +92,9 @@ return $output;
 } # End: nav_b
 
 if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
-&& isset($_COOKIE['auto_login'])
-&& isset($settings['autologin'])
-&& $settings['autologin'] == 1)
+	&& isset($_COOKIE['auto_login'])
+	&& isset($settings['autologin'])
+	&& $settings['autologin'] == 1)
 	{
 	$id = isset($_GET['id']) ? 'id='.intval($_GET['id']) : '';
 	if (!empty($id))
@@ -107,8 +107,8 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 	}
 
 if ($settings['access_for_users_only'] == 1
-&& isset($_SESSION[$settings['session_prefix'].'user_name'])
-|| $settings['access_for_users_only'] != 1)
+	&& isset($_SESSION[$settings['session_prefix'].'user_name'])
+	|| $settings['access_for_users_only'] != 1)
 	{
 	if (empty($page)) $page = 0;
 	if (empty($order)) $order = "last_answer";
@@ -121,10 +121,10 @@ if ($settings['access_for_users_only'] == 1
 	unset($entrydata);
 	unset($thread);
 
-	if(isset($id))
+	if (isset($id))
 		{
 		$id = (int) $id;
-		if($id > 0)
+		if ($id > 0)
 			{
 			$firstPostingQuery = "SELECT
 			id,
@@ -156,7 +156,7 @@ if ($settings['access_for_users_only'] == 1
 			# Look if id correct:
 			if ($thread['pid'] != 0)
 				{
-				header("location: ".$settings['forum_address'].basename($_SERVER['SCRIPT_NAME'])."?id=".$thread['tid']."&page=".$page."&category=".$category."&order=".$order."&descasc=".$descasc."#p".$id);
+				header("location: ".$settings['forum_address']."board_entry.php?id=".$thread['tid']."&page=".$page."&category=".$category."&order=".$order."&descasc=".$descasc."#p".$id);
 				}
 
 			# category of this posting accessible by user?
@@ -170,10 +170,11 @@ if ($settings['access_for_users_only'] == 1
 					}
 				}
 
-			// count views:
+			# count views:
 			if (isset($settings['count_views']) && $settings['count_views'] == 1)
 				{
-				mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=".$id, $connid);
+#				mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=".$id, $connid);
+				mysql_query("UPDATE ".$db_settings['forum_table']." SET views=views+1 WHERE tid=".intval($id), $connid);
 				}
 
 			$mark['admin'] = false;
@@ -237,8 +238,8 @@ if ($settings['access_for_users_only'] == 1
 			locked,
 			ip
 			FROM ".$db_settings['forum_table']."
-			WHERE tid = ".$id." AND id != ".$id."
-			ORDER BY time ".$da."
+			WHERE tid = ".intval($id)." AND id != ".intval($id)."
+			ORDER BY time ".mysql_real_escape_string($da)."
 			LIMIT ".$ul.", ".$settings['answers_per_topic'];
 			$result = mysql_query($allPostingsQuery, $connid);
 			$result_c = mysql_query("SELECT tid FROM ".$db_settings['forum_table']." WHERE tid = ".$id." AND id != ".$id, $connid);
@@ -388,7 +389,17 @@ if ($settings['access_for_users_only'] == 1
 		$mark['user'] = false;
 		if ($entrydata["user_id"] > 0)
 			{
-			$userdata_result=mysql_query("SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$entrydata["user_id"]."'", $connid);
+			$userdataPerPostingQuery = "SELECT
+			user_name,
+			user_type,
+			user_email,
+			hide_email,
+			user_hp,
+			user_place,
+			signature
+			FROM ".$db_settings['userdata_table']."
+			WHERE user_id = ".intval($entrydata["user_id"]);
+			$userdata_result = mysql_query($userdataPerPostingQuery, $connid);
 			if (!$userdata_result) die($lang['db_error']);
 			$userdata = mysql_fetch_assoc($userdata_result);
 			mysql_free_result($userdata_result);
