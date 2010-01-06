@@ -151,9 +151,9 @@ $editstring = $lang['forum_edited_marking'];
 # generate setting to show contact link if not present
 $entry["hide_email"] = empty($entry["hide_email"]) ? 0 : $entry["hide_email"];
 # generate string for posting ID
-$entryID .= ($settings['show_posting_id'] == 1) ? '<span class="xsmall">Posting:&nbsp;#&nbsp;'.$entry['id'].'</span>' : '';
+$entryID .= ($settings['show_posting_id'] == 1) ? '<span class="postinginfo">Posting:&nbsp;#&nbsp;'.$entry['id'].'</span>' : '';
 # generate string for name of the answered author
-$answer = (!empty($entry['answer'])) ? '<span class="xsmall">@&nbsp;'.htmlspecialchars($entry['answer']).'</span>' : '';
+$answer = (!empty($entry['answer'])) ? '<span class="postinginfo">@&nbsp;'.htmlspecialchars($entry['answer']).'</span>' : '';
 # generate HTML cource code for userdata (hp, email, location)
 if ($entry["email"]!="" && $entry["hide_email"] != 1 or $entry["hp"]!="")
 	{
@@ -172,10 +172,12 @@ if (($entry["email"]!="" && $entry["hide_email"] != 1) && $entry["hp"]!="")
 if ($entry["email"]!="" && $entry["hide_email"] != 1)
 	{
 	$email_hp .= '<a href="contact.php?id='.$entry["id"];
-	$email_hp .= !empty($page) ? '&amp;page='.$page : '';
+	$email_hp .= !empty($page) ? '&amp;page='.intval($page) : '';
 	$email_hp .= !empty($order) ? '&amp;order='.$order : '';
 	$email_hp .= !empty($category) ? '&amp;category='.intval($category) : '';
-	$email_hp .= '" title="'.str_replace("[name]", htmlspecialchars($entry['name']), $lang['email_to_user_linktitle']).'"><img src="img/email.gif" alt="'.$lang['email_alt'].'" width="13" height="10" /></a>';
+	$email_hp .= '" rel="nofollow" title="';
+	$email_hp .= str_replace("[name]", htmlspecialchars($entry['name']), $lang['email_to_user_linktitle']).'">';
+	$email_hp .= '<img src="img/email.gif" alt="'.$lang['email_alt'].'" width="13" height="10" /></a>';
 	}
 if ($entry["place"] != "")
 	{
@@ -188,7 +190,8 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	and $entry['user_id'] > 0)
 	{
 	$linktitle = str_replace("[name]", htmlspecialchars($entry['name']), $lang['show_userdata_linktitle']);
-	$uname .= '<a class="userlink" href="user.php?id='.$entry["user_id"].'" title="'.$linktitle.'">'.$name.'</a>';
+	$uname .= '<a class="userlink" href="user.php?id='.$entry["user_id"].'"';
+	$uname .= ' rel="nofollow" title="'.$linktitle.'">'.$name.'</a>';
 	}
 else
 	{
@@ -200,7 +203,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	isset($_SESSION[$settings['session_prefix'].'user_id'])
 	&& $_SESSION[$settings['session_prefix'].'user_type'] == "mod")
 	{
-	$entryIP = '<span class="xsmall">'.$entry['ip'].'</span>';
+	$entryIP = '<span class="postinginfo">'.$entry['ip'].'</span>';
 	}
 
 if ($entry["edited_diff"] > 0
@@ -209,7 +212,7 @@ if ($entry["edited_diff"] > 0
 	{
 	$editstring = str_replace("[name]", htmlspecialchars($entry["edited_by"]), $editstring);
 	$editstring = str_replace("[time]", strftime($lang['time_format'],$entry["e_time"]), $editstring);
-	$entryedit .= '<span class="xsmall">'.$editstring.'</span>';
+	$entryedit .= '<span class="postinginfo">'.$editstring.'</span>';
 	}
 
 if ($view=='forum')

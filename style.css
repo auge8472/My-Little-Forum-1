@@ -351,7 +351,7 @@ color: red;
 font-weight: bold;
 }
 .small { font-size: 0.86em; }
-.xsmall {
+.postinginfo, .xsmall {
 font-size: 0.86em;
 color: #808080;
 font-weight: normal;
