@@ -77,6 +77,7 @@ $settings['captcha_posting'] = 0;
 $settings['captcha_contact'] = 0;
 $settings['captcha_register'] = 0;
 $settings['captcha_type'] = 0;
+$settings['user_control_refresh'] = 0;
 
 $smilies = array(
 array('smile.gif', ':-)', '', '', '', '', ''),
@@ -475,6 +476,9 @@ name = 'user_highlight',
 value = 1";
 $newSetting["show_posting_id"] = "INSERT INTO ".$db_settings['settings_table']." SET
 name = 'show_posting_id',
+value = 0";
+$newSetting["user_control_refresh"] = "INSERT INTO ".$db_settings['settings_table']." SET
+name = 'user_control_refresh',
 value = 0";
 
 # alter settings table (part 1)
