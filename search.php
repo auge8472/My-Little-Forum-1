@@ -147,7 +147,7 @@ unset($entrydata);
 if (substr($search, 1, 1) == "\"") $ao="phrase";
 
 $search = str_replace("\"", "", $search);
-$search = stripslashes($search);
+#$search = stripslashes($search);
 $search = trim($search);
 $search = mysql_real_escape_string($search);
 $search_array = explode(" ", $search);
@@ -253,7 +253,7 @@ else if (isset($show_postings) && empty($search))
 	{
 	$user_name_result = mysql_query("SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_id = '".$show_postings."' LIMIT 1", $connid);
 	if (!$user_name_result) die($lang['db_error']);
-	$field = mysql_fetch_array($user_name_result);
+	$field = mysql_fetch_assoc($user_name_result);
 	mysql_free_result($user_name_result);
 	$lang['show_userdata_linktitle'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['show_userdata_linktitle']);
 	$lang['postings_by_user'] = str_replace('[name]', '<a href="user.php?id='.$show_postings.'" title="'.$lang['show_userdata_linktitle'].'">'.htmlspecialchars($field["user_name"]).'</a>', $lang['postings_by_user']);
@@ -282,34 +282,36 @@ else
 
 if (isset($search) && empty($show_postings))
 	{
-	?><form action="search.php" method="get" title="<?php echo $lang['search_formtitle']; ?>"><div class="search">
-<input type="text" name="search" value="<?php echo $search_match; ?>" size="30" /><?php
+	echo '<form action="search.php" method="get" title="';
+	echo $lang['search_formtitle'].'"><div class="search">'."\n";
+	echo '<input type="text" name="search" value="'.htmlspecialchars($search_match).'" size="30" />'."\n";
 	if ($categories!=false)
 		{
-		?><select size="1" name="category"><?php
+		echo '<select size="1" name="category">'."\n";
   		echo '<option value="0"';
-		if (isset($category) && $category==0)
-			{
-			echo ' selected="selected"';
-			}
+		echo (isset($category) && $category==0) ? ' selected="selected"' : '';
 		echo '>'.$lang['show_all_categories'].'</option>'."\n";
-		while(list($key, $val) = each($categories))
+		while (list($key, $val) = each($categories))
 			{
-			if($key!=0)
+			if ($key!=0)
 				{
 				echo '<option value="'.$key.'"';
-				if($key==$category)
-					{
-					echo ' selected="selected"';
-					}
-				echo '>'.$val.'</option>';
+				echo ($key==$category) ? ' selected="selected"' : '';
+				echo '>'.$val.'</option>'."\n";
 				}
 			}
-		?></select> <?php
+		echo '</select>'."\n";
 		}
-?><input type="submit" name="" value="<?php echo $lang['search_submit']; ?>" /><br />
-<input type="radio" name="ao" value="and"<?php if ($ao == "and") echo ' checked="checked"'; ?> /><?php echo $lang['search_and']; ?>&nbsp;<input type="radio" class="search-radio" name="ao" value="or"<?php if ($ao == "or") echo ' checked="checked"'; ?> /><?php echo $lang['search_or']; ?>&nbsp;<input type="radio" class="search-radio" name="ao" value="phrase"<?php if ($ao == "phrase") echo ' checked="checked"'; ?> /><?php echo $lang['search_phrase']; ?></div></form>
-<?php
+	echo '<input type="submit" name="" value="'.$lang['search_submit'].'" /><br />'."\n";
+	echo '<input type="radio" name="ao" value="and"';
+	echo ($ao == "and") ? ' checked="checked"' : '';
+	echo ' />'.$lang['search_and'].'&nbsp;<input type="radio" class="search-radio"';
+	echo ' name="ao" value="or"';
+	echo ($ao == "or") ? ' checked="checked"' : '';
+	echo ' />'.$lang['search_or'].'&nbsp;<input type="radio" class="search-radio"';
+	echo ' name="ao" value="phrase"';
+	echo ($ao == "phrase") ? ' checked="checked"' : '';
+	echo ' />'.$lang['search_phrase'].'</div></form>'."\n";
 	}
 /*
 if (!empty($result))
@@ -350,20 +352,26 @@ if (isset($search) && $search != "" || isset($show_postings) && $show_postings !
 		{
 		$search_author_info_x = str_replace("[name]", htmlspecialchars($entrydata["name"]), $lang['search_author_info']);
 		$search_author_info_x = str_replace("[time]", strftime($lang['time_format'],$entrydata["Uhrzeit"]), $search_author_info_x);
-		?><li><a class="<?php echo ($entrydata['pid'] == 0) ? 'thread' : 'reply-search'; ?>" href="<?php
-		if (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=='board')
+		echo '<li><a class="';
+		echo ($entrydata['pid'] == 0) ? 'thread' : 'reply-search';
+		echo '" href="';
+		if (isset($_SESSION[$settings['session_prefix'].'user_view'])
+			&& $_SESSION[$settings['session_prefix'].'user_view']=='board')
 			{
 			echo 'board_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
 			}
-		else if (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=='thread')
+		else if (isset($_SESSION[$settings['session_prefix'].'user_view'])
+			&& $_SESSION[$settings['session_prefix'].'user_view']=='thread')
 			{
 			echo 'forum_entry.php?id='.$entrydata['id'];
 			}
-		else if (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=='mix')
+		else if (isset($_SESSION[$settings['session_prefix'].'user_view'])
+			&& $_SESSION[$settings['session_prefix'].'user_view']=='mix')
 			{
 			echo 'mix_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
 			}
-		else if (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=='board')
+		else if (isset($_COOKIE['user_view'])
+			&& $_COOKIE['user_view']=='board')
 			{
 			echo 'board_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
 			}
