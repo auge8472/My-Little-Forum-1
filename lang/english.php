@@ -326,6 +326,9 @@ $lang['locked'] =                      "blocked";
 $lang['lock_user_lt'] =                "Activate block on [name]";
 $lang['unlock_user_lt'] =              "Deactivate block on [name]";
 $lang['no_users'] =                    "- No users found -";
+$lang['edit_users_settings'] =         "Edit own forum settings";
+$lang['user_settings_hl'] =            "Forum settings for user [name]";
+$lang['submit_usersettings_button'] =  "Save own forum settings";
 
 // register.php:
 $lang['register_hl'] =                 "Register your account";

@@ -108,6 +108,10 @@ a.update-postings:focus, a.update-postings:hover {
 background-image:url(img/update_mo.gif);
 }
 
+/* general settings */
+.bold { font-weight: bold; }
+label { font-weight: bold; }
+
 /* template: */
 #top {
 margin:0;

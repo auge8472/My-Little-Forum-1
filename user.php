@@ -27,7 +27,7 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 && $settings['autologin'] == 1)
 	{
 	$header  = 'location: '.$settings['forum_address'].'login.php?referer=user.php';
-	$header .= (isset($_GET['id'])) ? '&id='.$_GET['id'] : '';
+	$header .= (isset($_GET['id'])) ? '&id='.intval($_GET['id']) : '';
 	header($header);
 	die('<a href="login.php?referer=user.php">further...</a>');
 	}
@@ -68,7 +68,7 @@ if (isset($_GET['descasc'])) $descasc = $_GET['descasc'];
 if (isset($_POST['user_time_difference'])) $user_time_difference = $_POST['user_time_difference'];
 
 if (empty($page)) $page = 0;
-if (empty($category)) $category = "all";
+$category = empty($category) ? 0 : intval($category);
 
 unset($errors);
 
@@ -100,6 +100,19 @@ if (isset($_GET['user_lock'])
 		$update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_lock='".$new_lock."', last_login=last_login, registered=registered WHERE user_id='".$_GET['user_lock']."' LIMIT 1", $connid);
 		}
 	$action="show users";
+	}
+
+# show form for own forum settings or redirect to user data of a given user-ID
+if ($action == "usersettings" or $action == 'submit usersettings')
+	{
+	if ($settings['user_control_refresh'] == 0 and $settings['user_control_css'] == 0)
+		{
+		if ((isset($id) and intval($id) > 0) or (isset($user_id) and intval($user_id) > 0))
+			{
+			$action = "get userdata";
+			}
+		else $action = "show users";
+		}
 	}
 
 if (isset($_POST['change_email_submit']))
@@ -432,6 +445,53 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 				$action="personal_message";
 				}
 		break;
+		case "submit usersettings":
+			foreach ($_POST['usersetting'] as $key=>$val)
+				{
+				$putUserForumSetting = "INSERT INTO ".$db_settings['usersettings_table']." SET
+				user_id = ".intval($user_id).",
+				name = '".mysql_real_escape_string($key)."',
+				value = '".mysql_real_escape_string($val)."'
+				ON DUPLICATE KEY UPDATE value = '".mysql_real_escape_string($val)."'";
+				@mysql_query($putUserForumSetting, $connid);
+				}
+			$action = "usersettings";
+#		break;
+		case "usersettings":
+			$singleUserQuery = "SELECT
+			user_id,
+			user_type,
+			user_name,
+			user_email
+			FROM ".$db_settings['userdata_table']."
+			WHERE user_id = ".intval($user_id);
+			$result = mysql_query($singleUserQuery, $connid);
+			if (!$result) die($lang['db_error']);
+			$field = mysql_fetch_assoc($result);
+			mysql_free_result($result);
+			$userSettingsQuery = "SELECT
+			name,
+			value,
+			type
+			FROM ".$db_settings['us_templates_table']."
+			ORDER BY name ASC";
+			$all_settings = mysql_query($userSettingsQuery, $connid);
+			if (!$all_settings) die($lang['db_error']);
+			$userOwnSettings = "SELECT
+			name,
+			value
+			FROM ".$db_settings['usersettings_table']."
+			WHERE user_id = ".intval($user_id)."
+			ORDER BY name ASC";
+			$own_settings = mysql_query($userOwnSettings, $connid);
+			if (!$own_settings) die($lang['db_error']);
+			$ownSet = array();
+			while ($row = mysql_fetch_assoc($own_settings))
+				{
+				$ownSet[] = $row;
+				}
+			mysql_free_result($own_settings);
+		break;
 		}
 	}
 else
@@ -486,34 +546,38 @@ else
 parse_template();
 echo $header;
 
+#echo "<h2>SESSION</h2>\n";
+#echo "<pre>".print_r($_SESSION, true)."</pre>\n";
+#echo "<h2>COOKIE</h2>\n";
+#echo "<pre>".print_r($_COOKIE, true)."</pre>\n";
+#echo "<h2>GET</h2>\n";
+#echo "<pre>".print_r($_GET, true)."</pre>\n";
+#echo "<h2>POST</h2>\n";
+#echo "<pre>".print_r($_POST, true)."</pre>\n";
+
 switch ($action)
 	{
 	case "get userdata":
-		if (empty($id))
-			{
-			$id = $user_id;
-			}
-		else
-			{
-			$singleUserQuery = "SELECT
-			user_id,
-			user_type,
-			user_name,
-			user_real_name,
-			user_email,
-			hide_email,
-			user_hp,
-			user_place,
-			logins,
-			signature,
-			profile,
-			UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS since_date,
-			UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS login_date
-			FROM ".$db_settings['userdata_table']."
-			WHERE user_id = ".intval($id);
-			$result = mysql_query($singleUserQuery, $connid);
-			}
-		if (!$result) die($lang['db_error']);
+		$id = (empty($id)) ? $user_id : $id;
+		
+		$singleUserQuery = "SELECT
+		user_id,
+		user_type,
+		user_name,
+		user_real_name,
+		user_email,
+		hide_email,
+		user_hp,
+		user_place,
+		logins,
+		signature,
+		profile,
+		UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS since_date,
+		UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS login_date
+		FROM ".$db_settings['userdata_table']."
+		WHERE user_id = ".intval($id);
+		$result = mysql_query($singleUserQuery, $connid);
+		if (!$result) die($lang['db_error']."<br />keine ID übergeben");
 		$field = mysql_fetch_assoc($result);
 		mysql_free_result($result);
 
@@ -626,6 +690,11 @@ switch ($action)
 				echo '<ul class="linklist">'."\n";
 				echo '<li><a class="textlink" href="user.php?action=edit">';
 				echo $lang['edit_userdata_ln'].'</a></li>'."\n";
+				if ($settings['user_control_refresh'] == 1 or $settings['user_control_css'] == 1)
+					{
+					echo '<li><a class="textlink" href="user.php?action=usersettings">';
+					echo $lang['edit_users_settings'].'</a></li>'."\n";
+					}
 				echo '<li><a class="textlink" href="user.php?action=pw">';
 				echo $lang['edit_pw_ln'].'</a></li>'."\n";
 				echo '</ul>'."\n";
@@ -633,13 +702,80 @@ switch ($action)
 			else
 				{
 				$lang['pers_msg_ln'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['pers_msg_ln']);
-				echo '<p><a class="textlink" href="user.php?action=personal_message&amp;id=';
-				echo $id.'">'.$lang['pers_msg_ln'].'</a></p>'."\n";
+				echo '<ul class="linklist">'."\n";
+				echo '<li><a class="textlink" href="user.php?action=personal_message&amp;id=';
+				echo $id.'">'.$lang['pers_msg_ln'].'</a></li>'."\n";
+				echo '</ul>'."\n";
 				}
 			}
 		else
 			{
 			echo '<p class="caution">'.$lang['user_doesnt_exist'].'</p>'."\n";
+			}
+	break;
+	case "usersettings":
+		if ($field["user_name"] != "")
+			{
+			$lang['user_settings_hl'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['user_settings_hl']);
+			echo '<h2>'.$lang['user_settings_hl'].'</h2>'."\n";
+			if (isset($errors))
+				{
+				echo errorMessages($errors);
+				}
+			echo '<form action="user.php" method="post">'."\n";
+			echo '<table class="normaltab">'."\n";
+			while ($allSet = mysql_fetch_assoc($all_settings))
+				{
+				if (($settings['user_control_refresh'] == 1
+					and $allSet['name']=='control_refresh')
+					or ($settings['user_control_css'] == 1
+					and mb_substr($allSet['name'], 0, 5) == 'mark_'))
+					{
+					if (!empty($ownSet))
+						{
+						foreach ($ownSet as $mySetting)
+							{
+							if ($mySetting['name'] == $allSet['name'])
+								{
+								$set = $mySetting['value'];
+								break;
+								}
+							}
+						}
+					echo '<tr>'."\n";
+					echo '<td class="c">';
+					echo ($allSet['type'] == 'string') ? '<label for="'.$allSet['name'].'">' : '<span class="bold">';
+					echo $allSet['name'];
+					echo ($allSet['type'] == 'string') ? '</label>' : '</span>';
+					echo '</td>'."\n";
+					echo '<td class="d">';
+					if ($allSet['type']=="string")
+						{
+						echo '<input type="text" name="usersetting['.$allSet['name'].']" value="';
+						echo (!empty($set)) ? htmlspecialchars($set) : htmlspecialchars($allSet['value']);
+						echo '" id="'.$allSet['name'].'" />'."\n";
+						}
+					else
+						{
+						echo '<input type="radio" name="usersetting['.$allSet['name'].']" value="false"';
+						echo (empty($set) or $set == 'false') ? ' checked="checked"' : '';
+						echo ' id="'.$allSet['name'].'-no" /><label for="'.$allSet['name'].'-no">';
+						echo $lang['no'].'</label>'."\n";
+						echo '<input type="radio" name="usersetting['.$allSet['name'].']" value="true"';
+						echo (!empty($set) and $set == 'true') ? ' checked="checked"' : '';
+						echo ' id="'.$allSet['name'].'-yes" /><label for="'.$allSet['name'].'-yes">';
+						echo $lang['yes'].'</label>'."\n";
+						}
+					echo '</td>'."\n";
+					echo '</tr>';
+					}
+				}
+			echo "\n".'</table>'."\n";
+			echo '<p><input type="hidden" name="action" value="submit usersettings" />';
+			echo '<input type="submit" name="us-submit" value="';
+			echo $lang['submit_usersettings_button'].'" /></p>';
+			echo '</form>'."\n";
+			mysql_free_result($all_settings);
 			}
 	break;
 	case "show users":
