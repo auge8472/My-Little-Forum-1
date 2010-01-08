@@ -29,9 +29,16 @@ foreach($_POST as $key => $value)
 $$key = $value;
 
 // Seiten-Navigation für suche.php
-function snav($page, $suchergebnisse, $count, $search, $ao, $category) {global $lang;
-$output = '';if ($count > $suchergebnisse)
-	{	$new_index_before = $page - 1;	$new_index_after = $page + 1;	$site_count = ceil($count / $suchergebnisse);	if ($new_index_before >= 0)
+function snav($page, $suchergebnisse, $count, $search, $ao, $category) {
+global $lang;
+
+$output = '';
+if ($count > $suchergebnisse)
+	{
+	$new_index_before = $page - 1;
+	$new_index_after = $page + 1;
+	$site_count = ceil($count / $suchergebnisse);
+	if ($new_index_before >= 0)
 		{
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?search='.$search;
 		$output .= '&amp;category='.$category.'&amp;ao='.$ao.'&amp;page='.$new_index_before;

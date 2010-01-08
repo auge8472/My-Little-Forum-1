@@ -725,7 +725,8 @@ if (($settings['access_for_users_only'] == 1
 					if ($captcha->check_math_captcha($_SESSION['captcha_session'][2],$_POST['captcha_code'])!=TRUE) $errors[] = $lang['captcha_code_invalid'];
 					}
 				}
-			# end check data
+			# end check data
+
 			if(empty($errors) && empty($preview) && isset($_POST['save_entry']))
 				{
 				switch ($action)

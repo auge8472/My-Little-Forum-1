@@ -243,12 +243,14 @@ if ($settings['access_for_users_only'] == 1
 					}
 				}
 			}
-		}
+		}
+
 	if (!isset($entrydata))
 		{
 		header("Location: ".$settings['forum_address']."mix.php");
 		exit();
-		}
+		}
+
 	$thread = $entrydata["tid"];
 	$result = mysql_query("SELECT id, pid FROM ".$db_settings['forum_table']." WHERE tid = ".$thread." ORDER BY time ASC", $connid);
 	if (!$result) die($lang['db_error']);
@@ -259,7 +261,8 @@ if ($settings['access_for_users_only'] == 1
 		$parent_array[$tmp["id"]] = $tmp;          // Ergebnis im Array ablegen
 		$child_array[$tmp["pid"]][] =  $tmp["id"]; // Vorwärtsbezüge konstruieren
 		}
-	mysql_free_result($result); // Aufräumen
+	mysql_free_result($result); // Aufräumen
+
 	$wo = $entrydata["subject"];
 	$subnav_1  = '<a class="textlink" href="mix.php?page='.$page.'&amp;category='.$category;
 	$subnav_1 .= '&amp;order='.$order.'&amp;descasc='.$descasc.'">';

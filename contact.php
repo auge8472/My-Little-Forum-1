@@ -70,7 +70,8 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 		if (!$ue_result) die($lang['db_error']);
 		$ue_field = mysql_fetch_assoc($ue_result);
 		mysql_free_result($ue_result);
-		$sender_name = $_SESSION[$settings['session_prefix'].'user_name'];		$sender_email = $ue_field['user_email'];
+		$sender_name = $_SESSION[$settings['session_prefix'].'user_name'];
+		$sender_email = $ue_field['user_email'];
 		}
 
 	if (isset($id))

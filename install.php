@@ -78,6 +78,7 @@ $settings['captcha_contact'] = 0;
 $settings['captcha_register'] = 0;
 $settings['captcha_type'] = 0;
 $settings['user_control_refresh'] = 0;
+$settings['user_control_css'] = 0;
 
 $smilies = array(
 array('smile.gif', ':-)', '', '', '', '', ''),
@@ -107,6 +108,8 @@ array('sleeping.gif', ':sleeping:', '', '', '', '', ''),
 array('wink2.gif', ':wink:', '', '', '', '', ''),
 array('flower.gif', ':flower:', '', '', '', '', ''),
 );
+
+$usersettings['control_refresh'] = 'false';
 
 # Lists all versions wich can be updated.
 # Update the list in the case of a new version 1.x!
@@ -468,6 +471,13 @@ CHANGE category_order category_order INT( 11 ) UNSIGNED NOT NULL,
 CHANGE category category VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE description description VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE accession accession TINYINT( 4 ) UNSIGNED NOT NULL DEFAULT '0'";
+$newTable["user_settings"] = "CREATE TABLE ".$db_settings['usersettings_table']." (
+id int(12) unsigned NOT NULL auto_increment,
+user_id int(12) unsigned NOT NULL,
+name varchar(60) NOT NULL default '',
+value varchar(40) NOT NULL default '',
+PRIMARY KEY  (id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1";
 $newSetting["reply_name"] = "INSERT INTO ".$db_settings['settings_table']." SET
 name = 'last_reply_name',
 value = 1";
@@ -553,6 +563,11 @@ if (empty($errors))
 	{
 	@mysql_query($alterTable["userdat2"], $connid) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	}
+# create new table for users own forum settings
+if (empty($errors))
+	{
+	$mysql_query($newTable["user_settings"], $connid) or $errors[] = str_replace("[table]",$db_settings['usersettings_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
 # insert new settings
 if (empty($errors))
 	{
@@ -624,6 +639,7 @@ if (isset($_POST['form_submitted']))
 		$db_settings['smilies_table'] = $_POST['table_prefix'].'smilies';
 		$db_settings['banlists_table'] = $_POST['table_prefix'].'banlists';
 		$db_settings['useronline_table'] = $_POST['table_prefix'].'useronline';
+		$db_settings['usersettings_table'] = $_POST['table_prefix'].'usersettings';
 		# content of db_settings.php
 		$fileSettingsContent  = "<?php\n";
 		$fileSettingsContent .= "\$db_settings['host'] = \"".$db_settings['host']."\";\n";
@@ -637,6 +653,7 @@ if (isset($_POST['form_submitted']))
 		$fileSettingsContent .= "\$db_settings['smilies_table'] = \"".$db_settings['smilies_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['banlists_table'] = \"".$db_settings['banlists_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['useronline_table'] = \"".$db_settings['useronline_table']."\";\n";
+		$fileSettingsContent .= "\$db_settings['usersettings_table'] = \"".$db_settings['usersettings_table']."\";\n";
 		$fileSettingsContent .= "?>";
 
 		$db_settings_file = @fopen("db_settings.php", "w") or $errors[] = str_replace("CHMOD",$chmod,$lang_add['no_writing_permission']);
@@ -759,6 +776,13 @@ if (isset($_POST['form_submitted']))
 			time int(14) unsigned NOT NULL default '0',
 			user_id int(11) unsigned default '0'
 			) ENGINE=MyISAM  DEFAULT CHARSET=utf8";
+			$table["usersettings"] = "CREATE TABLE IF NOT EXISTS ".$db_settings['usersettings_table']." (
+			id int(12) unsigned NOT NULL auto_increment,
+			user_id int(12) unsigned NOT NULL,
+			name varchar(60) NOT NULL default '',
+			value varchar(40) NOT NULL default '',
+			PRIMARY KEY  (id)
+			) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1";
 			@mysql_query($table["settings"], $connid) or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 			@mysql_query($table["postings"], $connid) or $errors[] = str_replace("[table]",$db_settings['forum_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 			@mysql_query($table["category"], $connid) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
@@ -766,6 +790,7 @@ if (isset($_POST['form_submitted']))
 			@mysql_query($table["smilies"], $connid) or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 			@mysql_query($table["banlists"], $connid) or $errors[] = str_replace("[table]",$db_settings['banlists_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 			@mysql_query($table["useronline"], $connid) or $errors[] = str_replace("[table]",$db_settings['useronline_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+			@mysql_query($table["usersettings"], $connid) or $errors = str_replace("[table]",$db_settings['usersettings_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 			}
 
 		// insert admin in userdata table:

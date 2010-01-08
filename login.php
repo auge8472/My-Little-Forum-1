@@ -61,7 +61,8 @@ else if (empty($_SESSION[$settings['session_prefix'].'user_id'])
 	&& isset($settings['autologin'])
 	&& $settings['autologin'] == 1)
 	{
-	$action = "auto_login";	}
+	$action = "auto_login";
+	}
 else if (empty($_SESSION[$settings['session_prefix'].'user_id'])
 	&& empty($action)
 	&& empty($_GET['activate']))

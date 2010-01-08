@@ -125,7 +125,8 @@ if ($category_count > 0)
 		ORDER BY category_order ASC";
 		}
 	$result = mysql_query($categoriesQuery, $connid);
-	if (!$result) die($lang['db_error']);	$categories[0]='';
+	if (!$result) die($lang['db_error']);
+	$categories[0]='';
 	while ($line = mysql_fetch_assoc($result))
 		{
 		$categories[$line['id']] = $line['category'];
@@ -327,7 +328,8 @@ $string = preg_replace("#\[url\]www\.(.+?)\[/url\]#is", "<a href=\"http://www.\\
 $string = preg_replace_callback("#\[url\](.+?)\[/url\]#is", "shorten_link", $string);
 $string = preg_replace("#\[url=(.+?)\](.+?)\[/url\]#is", "<a href=\"\\1\">\\2</a>", $string);
 $string = preg_replace_callback("#\[code\](.+?)\[/code\]#is", "parse_code", $string);
-$string = preg_replace("#\[msg\](.+?)\[/msg\]#is", "<a href=\"".$_SERVER['SCRIPT_NAME']."?id=\\1\">\\1</a>", $string);$string = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", "<a href=\"".$_SERVER['SCRIPT_NAME']."?id=\\1\">\\2</a>", $string);
+$string = preg_replace("#\[msg\](.+?)\[/msg\]#is", "<a href=\"".$_SERVER['SCRIPT_NAME']."?id=\\1\">\\1</a>", $string);
+$string = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", "<a href=\"".$_SERVER['SCRIPT_NAME']."?id=\\1\">\\2</a>", $string);
 if ($settings['bbcode_img'] == 1)
 	{
 	$string = preg_replace("#\[img\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"margin: 5px 0px 5px 0px\" />", $string);
@@ -336,7 +338,8 @@ if ($settings['bbcode_img'] == 1)
 	}
 $string = str_replace('javascript','javascr***',$string);
 
-return $string;} # End: bbcode
+return $string;
+} # End: bbcode
 
 
 
@@ -491,7 +494,8 @@ return $string;
  * @param string $pw (password)
  * @param string $db (database name)
  * @return ressource (of the database connection)
- */function connect_db($host,$user,$pw,$db) {
+ */
+function connect_db($host,$user,$pw,$db) {
 global $lang;
 
 $connid = @mysql_connect($host, $user, $pw);

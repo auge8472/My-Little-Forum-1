@@ -17,7 +17,8 @@
 # You should have received a copy of the GNU General Public License           #
 # along with this program; if not, write to the Free Software                 #
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. #
-###############################################################################
+###############################################################################
+
 include("inc.php");
 
 if (count($_GET) > 0)
@@ -26,7 +27,8 @@ if (count($_GET) > 0)
 		{
 		$$key = $value;
 		}
-	}
+	}
+
 if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 	&& isset($_COOKIE['auto_login'])
 	&& isset($settings['autologin'])
@@ -40,14 +42,16 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 		}
 	header("location: ".$settings['forum_address']."login.php?referer=forum_entry.php".$lid);
 	die("<a href=\"login.php?referer=forum_entry.php".$did."\">further...</a>");
-	}
+	}
+
 if ($settings['access_for_users_only'] == 1
 	&& isset($_SESSION[$settings['session_prefix'].'user_name'])
 	|| $settings['access_for_users_only'] != 1)
 	{
 	unset($entrydata);
 	unset($parent_array);
-	unset($child_array);
+	unset($child_array);
+
 	if (empty($page))
 		{
 		$page = 0;
@@ -159,7 +163,8 @@ if ($settings['access_for_users_only'] == 1
 		{
 		header("location: ".$settings['forum_address']."forum.php");
 		die();
-		}
+		}
+
 	# thread-data:
 	$Thread = $entrydata["tid"];
 	$threadQuery = "SELECT
@@ -184,8 +189,10 @@ if ($settings['access_for_users_only'] == 1
 		$parent_array[$tmp["id"]] = $tmp;
 		$child_array[$tmp["pid"]][] =  $tmp["id"];
 		}
-	mysql_free_result($result);
-	$category = intval($category);
+	mysql_free_result($result);
+
+	$category = intval($category);
+
 	$wo = $entrydata["subject"];
 	$subnav_1  = '<a class="textlink" href="forum.php?page='.$page.'&amp;category=';
 	$subnav_1 .= intval($category).'&amp;order='.$order.'" title="';

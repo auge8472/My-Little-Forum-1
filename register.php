@@ -252,7 +252,8 @@ if (isset($_POST['register_submit']))
 			$header .= "X-Sender-ip: $ip\n";
 			$header .= "Content-Type: text/plain; charset=UTF-8; format=flowed\n";
 			$header .= "Content-Transfer-Encoding: 8bit\n";
-			$new_user_mailto = mb_encode_mimeheader($new_user_name,'UTF-8')." <".$new_user_email.">";
+			$new_user_mailto = mb_encode_mimeheader($new_user_name,'UTF-8')." <".$new_user_email.">";
+
 			if ($settings['mail_parameter']!='')
 				{
 				if (@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header, $settings['mail_parameter']))

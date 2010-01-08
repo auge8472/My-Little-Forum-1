@@ -111,6 +111,11 @@ background-image:url(img/update_mo.gif);
 /* general settings */
 .bold { font-weight: bold; }
 label { font-weight: bold; }
+.current-page { font-weight: bold; }
+span.current-page {
+background:url(img/where.gif) no-repeat left center;
+padding-left: 10px;
+}
 
 /* template: */
 #top {

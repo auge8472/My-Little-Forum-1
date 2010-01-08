@@ -44,11 +44,15 @@ if (empty($error))
 
 if (empty($error)) return true;
 else return false;
-}
-$action = (isset($_GET['action'])) ? $_GET['action'] : 'upload';
+}
+
+
+$action = (isset($_GET['action'])) ? $_GET['action'] : 'upload';
+
 $lang['upload_exp'] = str_replace("[width]", $settings['upload_max_img_width'], $lang['upload_exp']);
 $lang['upload_exp'] = str_replace("[height]", $settings['upload_max_img_height'], $lang['upload_exp']);
-$lang['upload_exp'] = str_replace("[size]", $settings['upload_max_img_size'], $lang['upload_exp']);
+$lang['upload_exp'] = str_replace("[size]", $settings['upload_max_img_size'], $lang['upload_exp']);
+
 if (isset($_FILES['probe']) && $_FILES['probe']['size'] != 0 && !$_FILES['probe']['error'])
 	{
 	unset($errors);
@@ -146,19 +150,22 @@ if (isset($_FILES['probe']) && $_FILES['probe']['size'] != 0 && !$_FILES['probe'
 		$action = 'uploaded';
 		}
 	else $action = 'upload';
-	}
+	}
+
 if (empty($errors))
 	{
 	if (isset($_FILES['probe']['error']))
 		{
 		$errors[] = str_replace('[maximum_file_size]',ini_get('upload_max_filesize'),$lang['upload_error_2']);
 		}
-	}
+	}
+
 if(isset($_GET['uploaded_image_selected']))
 	{
 	$filename = $_GET['uploaded_image_selected'];
 	$action = 'uploaded';
-	}
+	}
+
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>

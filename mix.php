@@ -97,7 +97,8 @@ if ($settings['access_for_users_only'] == 1
 	&& !isset($_SESSION[$settings['session_prefix'].'newtime']))
 		{
 		setcookie("user_view","mix",time()+(3600*24*30));
-		}
+		}
+
 	unset($zeile);
 
 	if (empty($page)) $page = 0;
