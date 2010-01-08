@@ -51,6 +51,10 @@ $connid = connect_db($db_settings['host'], $db_settings['user'], $db_settings['p
 get_settings();
 include("lang/".$settings['language_file']);
 setlocale(LC_ALL, $lang['locale']);
+if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+	{
+	$MyOwnSettings = getMyOwnSettings($_SESSION[$settings['session_prefix'].'user_id']);
+	}
 
 if (basename($_SERVER['SCRIPT_NAME'])!='login.php'
 && basename($_SERVER['SCRIPT_NAME'])!='info.php'
@@ -190,6 +194,7 @@ mysql_free_result($count_result);
 
 
 $additionalJS = '';
+$additionalJS .= '<script type="text/javascript">'."\n";
 if ($settings['bbcode'] == 1)
 	{
 	$additionalJS .= "var auge_buttons = \$A();\n";
@@ -206,6 +211,11 @@ if ($settings['upload_images']==1)
 	$additionalJS .= "\nvar auge_upload = \$H({text:'".$lang['upload_image']."', title:'".$lang['upload_image_title']."'});";
 	}
 $additionalJS .= "\nvar delete_text = '".$lang['delete_link']."';";
+$additionalJS .= '</script>'."\n";
+if ($settings['user_control_refresh']==1 and $MyOwnSettings['control_refresh'] == 'true')
+	{
+	$additionalJS .= '<meta http-equiv="refresh" content="1200" />'."\n";
+	}
 
 $time_difference = (isset($settings['time_difference'])) ? $settings['time_difference'] : 0;
 

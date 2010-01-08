@@ -61,6 +61,28 @@ mysql_free_result($result);
 
 
 /**
+ * returns the list of own settings for a registred and logged user
+ *
+ * @param integer $user_id
+ * @return array $list 
+ */
+function getMyOwnSettings($user_id) {
+global $db_settings, $connid;
+
+$list = array();
+
+$result = mysql_query("SELECT name, value FROM ".$db_settings['usersettings_table']." WHERE user_id = ".intval($user_id), $connid);
+if (!$result) die($lang['db_error']);
+while ($line = mysql_fetch_assoc($result))
+	{
+	$list[$line['name']] = $line['value'];
+	}
+return $list;
+} # End: getMyOwnSettings
+
+
+
+/**
  * reads the category names and ids from the database
  *
  * @return array $categories
