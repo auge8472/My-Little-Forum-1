@@ -403,7 +403,7 @@ global $settings;
 
 $string = preg_replace("#\[b\](.+?)\[/b\]#is", "*\\1*", $string);
 $string = preg_replace("#\[i\](.+?)\[/i\]#is", "/\\1/", $string);
-$string = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $string);
+$string = preg_replace("#\[u\](.+?)\[/u\]#is", "_\\1_", $string);
 $string = preg_replace("#\[link\]www\.(.+?)\[/link\]#is", "http://www.\\1", $string);
 $string = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $string);
 $string = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2 --> \\1", $string);
