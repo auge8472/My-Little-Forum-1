@@ -42,8 +42,8 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']))
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $user_id = $_SESSION[$settings['session_prefix'].'user_id'];
 if (isset($_SESSION[$settings['session_prefix'].'user_type'])) $user_type = $_SESSION[$settings['session_prefix'].'user_type'];
 if (isset($_SESSION[$settings['session_prefix'].'user_name'])) $user_name = $_SESSION[$settings['session_prefix'].'user_name'];
-if (isset($_GET['action'])) $action = $_GET['action'];
 if (isset($_GET['id'])) $id = intval($_GET['id']);
+if (isset($_GET['action'])) $action = $_GET['action'];
 if (isset($_POST['action'])) $action = $_POST['action'];
 if (isset($_POST['userdata_submit'])) $userdata_submit = $_POST['userdata_submit'];
 if (isset($_POST['pw_submit'])) $pw_submit = $_POST['pw_submit'];
@@ -184,6 +184,23 @@ if (isset($_POST['change_email_submit']))
 	else $action="email";
 	}
 
+if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+	{
+	$uid = (!empty($id)) ? $id : $_SESSION[$settings['session_prefix'].'user_id'];
+	if (!empty($uid) and intval($uid) > 0)
+		{
+		$singleUserNameQuery = "SELECT
+		user_name
+		FROM ".$db_settings['userdata_table']."
+		WHERE user_id = ".intval($uid)."
+		LIMIT 1";
+		$userNameResult = @mysql_query($singleUserNameQuery, $connid) or die($lang['db_error']);
+		if (!$userNameResult) die($lang['db_error']);
+		$userName = mysql_fetch_assoc($userNameResult);
+		mysql_free_result($userNameResult);
+		}
+	}
+
 if (isset($_SESSION[$settings['session_prefix'].'user_id']) && empty($action))
 	{
 	if (isset($id)) $action = "get userdata";
@@ -194,6 +211,8 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 	# Aktionen vor der Ausgabe von HTML
 	switch ($action)
 		{
+		case "get userdata":
+		break;
 		case "edit submited":
 			# Check the posted data:
 			$user_real_name = trim($user_real_name);
@@ -296,7 +315,8 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 					$errors[] = $error_twtl;
 					}
 				}
-			# End of checking
+			# End of checking
+
 			if (empty($hide_email)) $hide_email = 0;
 			if (empty($errors))
 				{
@@ -461,8 +481,7 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 			$singleUserQuery = "SELECT
 			user_id,
 			user_type,
-			user_name,
-			user_email
+			user_name
 			FROM ".$db_settings['userdata_table']."
 			WHERE user_id = ".intval($user_id);
 			$result = mysql_query($singleUserQuery, $connid);
@@ -502,11 +521,79 @@ else
 
 $wo = $lang['user_area_title'];
 
+$topnav  = '<a class="textlink" href="';
+if (isset($view))
+	{
+	$topnav .= ($view == 'board') ? 'board.php' : 'mix.php';
+	}
+else
+	{
+	$topnav .= 'forum.php';
+	}
+$topnav .= '">'.$lang['back_to_overview_linkname'].'</a>&nbsp;';
+if (!empty($action))
+	{
+	if ($action == "show users")
+		{
+		$topnav .= '<span class="current-page">'.$lang['reg_users_hl'];
+		if (!empty($_GET['letter']))
+			{
+			$topnav .= ' ('.htmlspecialchars($_GET['letter']).')';
+			}
+		$topnav .= '</span>';
+		}
+	else
+		{
+		$topnav .= '<a class="textlink" href="user.php">'.$lang['reg_users_hl'].'</a>&nbsp;';
+		if ($action == "get userdata")
+			{
+			$lang['user_info_hl'] = str_replace("[name]", htmlspecialchars($userName["user_name"]), $lang['user_info_hl']);
+			$topnav .= '<span class="current-page">'.$lang['user_info_hl'].'</span>';
+			}
+		if ($action == "usersettings")
+			{
+			$lang['user_info_hl'] = str_replace("[name]", htmlspecialchars($userName["user_name"]), $lang['user_info_hl']);
+			$topnav .= '<a class="textlink" href="user.php';
+			$topnav .= '?id='.intval($uid);
+			$topnav .= '">'.$lang['user_info_hl'].'</a>&nbsp;';
+			$topnav .= '<span class="current-page">'.$lang['user_settings_link'].'</span>';
+			}
+		if ($action == "edit")
+			{
+			$lang['user_info_hl'] = str_replace("[name]", htmlspecialchars($userName["user_name"]), $lang['user_info_hl']);
+			$topnav .= '<a class="textlink" href="user.php';
+			$topnav .= '?id='.intval($uid);
+			$topnav .= '">'.$lang['user_info_hl'].'</a>&nbsp;';
+			$topnav .= '<span class="current-page">'.$lang['edit_userdata_ln'].'</span>';
+			}
+		if ($action == "pw")
+			{
+			$lang['user_info_hl'] = str_replace("[name]", htmlspecialchars($userName["user_name"]), $lang['user_info_hl']);
+			$topnav .= '<a class="textlink" href="user.php';
+			$topnav .= '?id='.intval($uid);
+			$topnav .= '">'.$lang['user_info_hl'].'</a>&nbsp;';
+			$topnav .= '<span class="current-page">'.$lang['edit_pw_ln'].'</span>';
+			}
+		if ($action == "email")
+			{
+			$lang['user_info_hl'] = str_replace("[name]", htmlspecialchars($userName["user_name"]), $lang['user_info_hl']);
+			$topnav .= '<a class="textlink" href="user.php';
+			$topnav .= '?id='.intval($uid);
+			$topnav .= '">'.$lang['user_info_hl'].'</a>&nbsp;';
+			$topnav .= '<span class="current-page">'.$lang['change_email_hl'].'</span>';
+			}
+		if ($action == "personal_message")
+			{
+			$lang['pers_msg_ln'] = str_replace("[name]", htmlspecialchars($userName["user_name"]), $lang['pers_msg_ln']);
+			$topnav .= '<span class="current-page">'.$lang['pers_msg_ln'].'</span>';
+			}
+		}
+	}
+
 if ($action == "show users")
 	{
 	if (empty($descasc)) $descasc="ASC";
 	if (empty($order)) $order="user_name";
-	$topnav = '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['reg_users_hl'].'</b>';
 
 	if (isset($_GET['letter']) && $_GET['letter']!="")
 		{
@@ -538,22 +625,19 @@ if ($action == "show users")
 	$subnav_2 .= ' src="img/submit.gif" alt="&raquo;" /></div></form>'."\n";
 	$subnav_2 .= nav($page, $settings['users_per_page'], $thread_count, $order, $descasc, $category);
 	}
-else
-	{
-	$topnav = '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['user_area_title'].'</b>';
-	}
 
 parse_template();
 echo $header;
 
 #echo "<h2>SESSION</h2>\n";
 #echo "<pre>".print_r($_SESSION, true)."</pre>\n";
-#echo "<h2>COOKIE</h2>\n";
-#echo "<pre>".print_r($_COOKIE, true)."</pre>\n";
 #echo "<h2>GET</h2>\n";
 #echo "<pre>".print_r($_GET, true)."</pre>\n";
 #echo "<h2>POST</h2>\n";
 #echo "<pre>".print_r($_POST, true)."</pre>\n";
+#echo "<h2>Infos</h2>\n";
+#echo "<pre>".print_r($uid, true)."</pre>\n";
+#echo "<pre>".print_r($userName, true)."</pre>\n";
 
 switch ($action)
 	{
@@ -577,7 +661,7 @@ switch ($action)
 		FROM ".$db_settings['userdata_table']."
 		WHERE user_id = ".intval($id);
 		$result = mysql_query($singleUserQuery, $connid);
-		if (!$result) die($lang['db_error']."<br />keine ID übergeben");
+		if (!$result) die($lang['db_error']);
 		$field = mysql_fetch_assoc($result);
 		mysql_free_result($result);
 
@@ -1138,7 +1222,8 @@ switch ($action)
 		echo '<p><input type="submit" name="change_email_submit" value="';
 		echo $lang['submit_button_ok'].'"></p>'."\n";
 		echo '</form>'."\n";
-	break;	case "personal_message":
+	break;
+	case "personal_message":
 		$pma_result = mysql_query("SELECT user_name, personal_messages FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($id)." LIMIT 1", $connid);
 		if (!$pma_result) die($lang['db_error']);
 		$field = mysql_fetch_assoc($pma_result);
