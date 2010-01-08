@@ -212,7 +212,12 @@ if ($settings['upload_images']==1)
 	}
 $additionalJS .= "\nvar delete_text = '".$lang['delete_link']."';";
 $additionalJS .= '</script>'."\n";
-if ($settings['user_control_refresh']==1 and $MyOwnSettings['control_refresh'] == 'true')
+if ($settings['user_control_refresh']==1
+	and (isset($MyOwnSettings['control_refresh'])
+	and $MyOwnSettings['control_refresh'] == 'true')
+	and (basename($_SERVER['SCRIPT_NAME']) == 'board.php'
+	or basename($_SERVER['SCRIPT_NAME']) == 'forum.php'
+	or basename($_SERVER['SCRIPT_NAME']) == 'mix.php'))
 	{
 	$additionalJS .= '<meta http-equiv="refresh" content="1200" />'."\n";
 	}
