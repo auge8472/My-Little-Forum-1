@@ -1555,86 +1555,146 @@ if (isset($_GET['move_down_smiley']))
 
 if (empty($action)) $action="main";
 
-switch ($action)
+$topnav = '<a class="textlink" href="';
+if (isset($view))
 	{
-	case "settings":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['forum_settings'] .'</b>';
-	break;
-	case "advanced_settings":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=settings"><b>'. $lang_add['forum_settings'] .'</b></a> / <b>'. $lang_add['advanced_settings'] .'</b>';
-	break;
-	case "categories":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['category_administr'] .'</b>';
-	break;
-	case "delete_category":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=categories"><b>'. $lang_add['category_administr'] .'</b></a> / <b>'. $lang_add['delete_category'] .'</b>';
-	break;
-	case "edit_category":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=categories"><b>'. $lang_add['category_administr'] .'</b></a> / <b>'. $lang_add['cat_edit_hl'] .'</b>';
-	break;
-	case "user":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['user_administr'] .'</b>';
-	break;
-	case "edit_user":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a>  / <b>'. $lang_add['edit_user'] .'</b>';
-	break;
-	case "delete_users_sure":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a>  / <b>'. $lang_add['delete_user'] .'</b>';
-	break;
-	case "register":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a> / <b>'. $lang_add['reg_user'] .'</b>';
-	break;
-	case "email_list":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a> / <b>'. $lang_add['email_list'] .'</b>';
-	break;
-	case "clear_userdata":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a> / <b>'. $lang_add['clear_userdata'] .'</b>';
-	break;
-	case "banlists":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['banlists'] .'</b>';
-	break;
-	case "empty":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['empty_forum'] .'</b>';
-	break;
-	case "backup":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['backup_restore'] .'</b>';
-	break;
-	case "import_sql":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=backup"><b>'. $lang_add['backup_restore'] .'</b></a> / <b>'. $lang_add['import_sql'] .'</b>';
-	break;
-	case "import_sql_ok":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=backup"><b>'. $lang_add['backup_restore'] .'</b></a> / <b>'. $lang_add['import_sql'] .'</b>';
-	break;
-	case "uninstall":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['uninstall'] .'</b>';
-	break;
-	case "smilies":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['smilies'] .'</b>';
-	break;
-	case "edit_smiley":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=smilies"><b>'. $lang_add['smilies'] .'</b></a> / <b>'. $lang_add['edit_smiley_hl'] .'</b>';
-	break;
-	case "delete_marked_threads":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['del_marked'] .'</b>';
-	break;
-	case "unmark":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['unmark_threads'] .'</b>';
-	break;
-	case "lock_marked_threads":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['lock_marked'] .'</b>';
-	break;
-	case "unlock_marked_threads":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['unlock_marked'] .'</b>';
-	break;
-	case "invert_markings":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['invert_markings'] .'</b>';
-	break;
-	case "mark_threads":
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['mark_threads'] .'</b>';
-	break;
-	default:
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'.$lang_add['admin_area'].'</b>';
-	break;
+	$topnav .= ($view == 'board') ? 'board.php' : 'mix.php';
+	}
+else
+	{
+	$topnav .= 'forum.php';
+	}
+$topnav .= '">'.$lang['back_to_overview_linkname'].'</a>&nbsp;';
+if (empty($action))
+	{
+	$topnav .= '<span class="current-page">'.$lang_add['admin_area'].'</span>';
+	}
+else
+	{
+	if ($action == "settings")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['forum_settings'] .'</span>';
+		}
+	if ($action == "advanced_settings")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<a class="textlink" href="admin.php?action=settings">'.$lang_add['forum_settings'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['advanced_settings'].'</span>';
+		}
+	if ($action == "categories")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['category_administr'].'</span>';
+		}
+	if ($action == "delete_category")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<a class="textlink" href="admin.php?action=categories">'.$lang_add['category_administr'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['delete_category'].'</span>';
+		}
+	if ($action == "edit_category")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<a class="textlink" href="admin.php?action=categories">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['cat_edit_hl'].'</span>';
+		}
+	if ($action == "user")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['user_administr'].'</span>';
+		}
+	if ($action == "edit_user")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<a class="textlink" href="admin.php?action=user">'.$lang_add['user_administr'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['edit_user'].'</span>';
+		}
+	if ($action == "delete_users_sure")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<a class="textlink" href="admin.php?action=user">'.$lang_add['user_administr'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['delete_user'].'</span>';
+		}
+	if ($action == "register")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<a class="textlink" href="admin.php?action=user">'.$lang_add['user_administr'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['reg_user'].'</span>';
+		}
+	if ($action == "email_list")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<a class="textlink" href="admin.php?action=user">'.$lang_add['user_administr'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['email_list'].'</span>';
+		}
+	if ($action == "clear_userdata")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<a class="textlink" href="admin.php?action=user">'.$lang_add['user_administr'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['clear_userdata'].'</span>';
+		}
+	if ($action == "banlists")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['banlists'].'</span>';
+		}
+	if ($action == "empty")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['empty_forum'].'</span>';
+		}
+	if ($action == "backup")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['backup_restore'].'</span>';
+		}
+	if ($action == "import_sql" or $action == "import_sql_ok")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<a class="textlink" href="admin.php?action=backup">'.$lang_add['backup_restore'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['import_sql'].'</span>';
+		}
+	if ($action == "uninstall")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['uninstall'].'</span>';
+		}
+	if ($action == "smilies")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['smilies'].'</span>';
+		}
+	if ($action == "edit_smiley")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<a class="textlink" href="admin.php?action=smilies">'.$lang_add['smilies'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['edit_smiley_hl'].'</span>';
+		}
+	if ($action == "delete_marked_threads")
+		{
+		$topnav .= '<span class="current-page">'.$lang_add['del_marked'].'</span>';
+		}
+	if ($action == "unmark")
+		{
+		$topnav .= '<span class="current-page">'.$lang_add['unmark_threads'].'</span>';
+		}
+	if ($action == "lock_marked_threads")
+		{
+		$topnav .= '<span class="current-page">'.$lang_add['lock_marked'].'</span>';
+		}
+	if ($action == "unlock_marked_threads")
+		{
+		$topnav .= '<span class="current-page">'.$lang_add['unlock_marked'].'</span>';
+		}
+	if ($action == "invert_markings")
+		{
+		$topnav .= '<span class="current-page">'.$lang_add['invert_markings'].'</span>';
+		}
+	if ($action == "mark_threads")
+		{
+		$topnav .= '<span class="current-page">'.$lang_add['mark_threads'].'</span>';
+		}
 	}
 
 parse_template();
