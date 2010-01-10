@@ -219,7 +219,18 @@ if ($settings['user_control_refresh']==1
 	or basename($_SERVER['SCRIPT_NAME']) == 'forum.php'
 	or basename($_SERVER['SCRIPT_NAME']) == 'mix.php'))
 	{
+	$loadTime = time();
+	$reloadTime = $loadTime + 1200;
+	$loadTime = strftime($lang['time_format'], $loadTime);
+	$reloadTime = strftime($lang['time_format'], $reloadTime);
 	$additionalJS .= '<meta http-equiv="refresh" content="1200" />'."\n";
+	$lang['forum_load_message'] = str_replace('[load]', $loadTime, $lang['forum_load_message']);
+	$lang['forum_load_message'] = str_replace('[reload]', $reloadTime, $lang['forum_load_message']);
+	$lang['forum_load_message'] = '<p class="index">'.$lang['forum_load_message'].'</p>';
+	}
+else
+	{
+	$lang['forum_load_message'] = '';
 	}
 
 $time_difference = (isset($settings['time_difference'])) ? $settings['time_difference'] : 0;

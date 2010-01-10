@@ -20,8 +20,7 @@ $lang['info'] =                        "Information";
 $lang['info_forum_disabled'] =         "Das Forum ist zur Zeit nicht verfügbar.";
 
 // Navigation:
-$lang['forum_home_linkname'] =         "Forums-Ausgangsseite";
-$lang['forum_home_linktitle'] =        "zur Forums-Ausgangsseite";
+$lang['forum_load_message'] =          "Ladezeitpunkt: [load], Reload: [reload]";
 $lang['login_linkname'] =              "log in";
 $lang['login_linktitle'] =             "einloggen";
 $lang['logout_linkname'] =             "log out";

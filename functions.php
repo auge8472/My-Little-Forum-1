@@ -764,8 +764,7 @@ $template = str_replace('{ADD-JS}',$additionalJS,$template);
 $template = str_replace("{FORUM-NAME}",stripslashes($settings['forum_name']),$template);
 $template = str_replace('{HOME-ADDRESS}',$settings['home_linkaddress'],$template);
 $template = str_replace('{HOME-LINK}',$settings['home_linkname'],$template);
-$template = str_replace('{FORUM-INDEX-LINK}',$lang['forum_home_linkname'],$template);
-$template = str_replace('{FORUM-INDEX-LINKTITLE}',$lang['forum_home_linktitle'],$template);
+$template = str_replace('{LOAD-TIME}',$lang['forum_load_message'],$template);
 $template = str_replace('{FORUM-ADDRESS}',$settings['forum_address'],$template);
 $template = str_replace('{CONTACT}',$lang['contact_linkname'],$template);
 

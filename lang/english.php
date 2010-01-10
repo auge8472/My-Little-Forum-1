@@ -24,8 +24,7 @@ $lang['info'] =                        "Information";
 $lang['info_forum_disabled'] =         "The forum is currently unavailable.";
 
 // Navigation:
-$lang['forum_home_linkname'] =         "Forum index page";
-$lang['forum_home_linktitle'] =        "Back to forum index page";
+$lang['forum_load_message'] =         "Loading moment: [load], Reload: [reload]";
 $lang['login_linkname'] =              "Log in";
 $lang['login_linktitle'] =             "Log in";
 $lang['logout_linkname'] =             "Log out";
