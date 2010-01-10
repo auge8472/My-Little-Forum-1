@@ -232,14 +232,8 @@ else
 		}
 	else
 		{
-		if ($view=="board")
-			{
-			$subnav_1 .= '<a class="textlink" href="board_entry.php?id='.$field['tid'].'&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_topic_linkname'].'</a>';
-			}
-		else
-			{
-			$subnav_1 .= '<a class="textlink" href="mix_entry.php?id='.$field['tid'].'&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_topic_linkname'].'</a>';
-			}
+		$backURL = ($view=="board") ? 'board_entry.php' : 'mix_entry.php';
+		$subnav_1 .= '<a class="textlink" href="'.$backURL.'?id='.$field['tid'].'&amp;page='.$page.'&amp;category='.intval($category).'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_topic_linkname'].'</a>';
 		}
 	}
 
