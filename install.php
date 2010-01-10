@@ -78,7 +78,7 @@ $settings['captcha_contact'] = 0;
 $settings['captcha_register'] = 0;
 $settings['captcha_type'] = 0;
 $settings['user_control_refresh'] = 0;
-$settings['user_control_css'] = 0;
+#$settings['user_control_css'] = 0;
 
 $smilies = array(
 array('smile.gif', ':-)', '', '', '', '', ''),
@@ -109,11 +109,25 @@ array('wink2.gif', ':wink:', '', '', '', '', ''),
 array('flower.gif', ':flower:', '', '', '', '', ''),
 );
 
-$usersettings['control_refresh'] = 'false';
+$usersettings[] = array('name'=>'control_refresh','value'=>'false','type'=>'bool');
 
 # Lists all versions wich can be updated.
 # Update the list in the case of a new version 1.x!
 $updateVersions = array("1.3","1.4","1.5","1.6");
+
+
+function errorMessages($error) {
+global $lang;
+
+$r  = "<h3>".$lang['error_headline']."</h3>\n";
+$r .= "<ul>\n";
+foreach ($error as $err)
+	{
+	$r .= " <li>".htmlspecialchars($err)."</li>\n";
+	}
+$r .= "</ul>\n";
+return $r;
+} # End: errorMessages
 
 // update functions:
 function update13to14() {
@@ -216,32 +230,32 @@ function update15to16() {
 global $db_settings, $settings, $connid, $smilies, $lang_add;
 
 $newSettings = array(
-array("type"="insert",
-"query"="INSERT INTO ".$db_settings['settings_table']." SET
+array("type"=>"insert",
+"query"=>"INSERT INTO ".$db_settings['settings_table']." SET
 name = 'mail_parameter',
 value = '".mysql_real_escape_string($settings['mail_parameter'])."'"),
-array("type"="insert",
-"query"="INSERT INTO ".$db_settings['settings_table']." SET
+array("type"=>"insert",
+"query"=>"INSERT INTO ".$db_settings['settings_table']." SET
 name = 'forum_disabled',
 value = '".intval($settings['forum_disabled'])."'"),
-array("type"="insert",
-"query"="INSERT INTO ".$db_settings['settings_table']." SET
+array("type"=>"insert",
+"query"=>"INSERT INTO ".$db_settings['settings_table']." SET
 name = 'session_prefix',
 value = 'mlf_'"),
-array("type"="insert",
-"query"="INSERT INTO ".$db_settings['settings_table']." SET
+array("type"=>"insert",
+"query"=>"INSERT INTO ".$db_settings['settings_table']." SET
 name = 'version',
 value = '".mysql_real_escape_string($settings['version'])."'"),
-array("type"="insert",
-"query"="INSERT INTO ".$db_settings['settings_table']." SET
+array("type"=>"insert",
+"query"=>"INSERT INTO ".$db_settings['settings_table']." SET
 name = 'users_per_page',
 value = '40'"),
-array("type"="update",
-"query"="UPDATE ".$db_settings['settings_table']." SET
+array("type"=>"update",
+"query"=>"UPDATE ".$db_settings['settings_table']." SET
 value='".mysql_real_escape_string($settings['language_file'])."'
 WHERE name = 'language_file'"),
-array("type"="update",
-"query"="UPDATE ".$db_settings['settings_table']." SET
+array("type"=>"update",
+"query"=>"UPDATE ".$db_settings['settings_table']." SET
 value='".mysql_real_escape_string($settings['template'])."'
 WHERE name = 'template'"));
 
@@ -352,9 +366,9 @@ mysql_free_result($settings_result);
 if($settings_count != 1)
 	{
 	@mysql_query("INSERT INTO ".$db_settings['settings_table']." (name, value) VALUES ('session_prefix','mlf_')", $connid) or $errors[] = $lang_add['db_insert_settings_error']." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
-	}db_alter_table_error
+	}
 
-$settings_result = mysql_query("SELECT value FROM ".$db_settings['settings_table']." WHERE name = 'users_per_page' LIMIT 1", $connid) or die(mysql_error());
+$settings_result = mysql_query("SELECT value FROM ".$db_settings['settings_table']." WHERE name = 'users_per_page' LIMIT 1", $connid);
 if(!$settings_result) die($lang['db_error']);
 
 $settings_count = mysql_num_rows($settings_result);
@@ -654,6 +668,7 @@ if (isset($_POST['form_submitted']))
 		$fileSettingsContent .= "\$db_settings['banlists_table'] = \"".$db_settings['banlists_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['useronline_table'] = \"".$db_settings['useronline_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['usersettings_table'] = \"".$db_settings['usersettings_table']."\";\n";
+		$fileSettingsContent .= "\$db_settings['us_templates_table'] = \"".$db_settings['us_templates_table']."\";\n";
 		$fileSettingsContent .= "?>";
 
 		$db_settings_file = @fopen("db_settings.php", "w") or $errors[] = str_replace("CHMOD",$chmod,$lang_add['no_writing_permission']);
@@ -777,12 +792,16 @@ if (isset($_POST['form_submitted']))
 			user_id int(11) unsigned default '0'
 			) ENGINE=MyISAM  DEFAULT CHARSET=utf8";
 			$table["usersettings"] = "CREATE TABLE IF NOT EXISTS ".$db_settings['usersettings_table']." (
-			id int(12) unsigned NOT NULL auto_increment,
 			user_id int(12) unsigned NOT NULL,
 			name varchar(60) NOT NULL default '',
 			value varchar(40) NOT NULL default '',
-			PRIMARY KEY  (id)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1";
+			PRIMARY KEY  (user_id,name)
+			) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+			$table['us_template'] = "CREATE TABLE ".$db_settings['us_templates_table']." (
+			name varchar(60) NOT NULL,
+			value varchar(40) NOT NULL,
+			type enum('string','bool') NOT NULL default 'string'
+			) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 			@mysql_query($table["settings"], $connid) or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 			@mysql_query($table["postings"], $connid) or $errors[] = str_replace("[table]",$db_settings['forum_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 			@mysql_query($table["category"], $connid) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
@@ -791,11 +810,12 @@ if (isset($_POST['form_submitted']))
 			@mysql_query($table["banlists"], $connid) or $errors[] = str_replace("[table]",$db_settings['banlists_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 			@mysql_query($table["useronline"], $connid) or $errors[] = str_replace("[table]",$db_settings['useronline_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 			@mysql_query($table["usersettings"], $connid) or $errors = str_replace("[table]",$db_settings['usersettings_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+			@mysql_query($table['us_template'], $connid) or $errors = str_replace("[table]",$db_settings['us_templates_table'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 			}
 
-		// insert admin in userdata table:
+		# insert admin in userdata table:
 		if (empty($errors))
-			{# unformatieren INSERT INTO * SET ...
+			{
 			$fillUserdata = "INSERT INTO ".$db_settings['userdata_table']." SET
 			user_type = 'admin',
 			user_name = '".mysql_real_escape_string($_POST['admin_name'])."',
@@ -864,14 +884,29 @@ if (isset($_POST['form_submitted']))
 		if (empty($errors))
 			{
 			$templateBanlist = array("users","ips","words");
-			foreach ($templatebanlist as $val)
+			foreach ($templateBanlist as $val)
 				{
 				$fillBanlist = "INSERT INTO ".$db_settings['banlists_table']." SET
-				name = ".mysql_real_escape_string($val).",
+				name = '".mysql_real_escape_string($val)."',
 				list = ''";
 				@mysql_query($fillBanlist, $connid) or $errors[] = str_replace("[setting]",$db_settings['banlists_table'],$lang_add['db_insert_settings_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 				# empty $fillBanlist for the next loop
 				$fillBanlist = "";
+				}
+			}
+
+		# insert possible usersettings
+		if (empty($errors))
+			{
+			foreach ($usersettings as $us)
+				{
+				$fillUserSetting = "INSERT INTO ".$db_settings['us_templates_table']." SET
+				name = '".mysql_real_escape_string($us['name'])."',
+				value = '".mysql_real_escape_string($us['value'])."',
+				type = '".mysql_real_escape_string($us['type'])."'";
+				@mysql_query($fillUserSetting, $connid) or $errors[] = str_replace("[setting]",$db_settings['us_templates_table'],$lang_add['db_insert_settings_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+				# empty $fillBanlist for the next loop
+				$fillUserSetting = "";
 				}
 			}
 		// still no errors, so the installation should have been successful!
@@ -984,29 +1019,29 @@ if (empty($installed))
 				}
 			}
 		closedir($handle);
-		$output .= '<h2>'.$lang_add['language_file_inst'].'</h2>';
-		$output .= '<form action="install.php" method="post">';
-		$output .= '<select>';
+		$output .= '<h2>'.$lang_add['language_file_inst'].'</h2>'."\n";
+		$output .= '<form action="install.php" method="post">'."\n";
+		$output .= '<select name="language" size="1">'."\n";
 		foreach ($languageFile as $langFile)
 			{
 			$output .= '<option value="'.$langFile.'"';
-			$output .= ($settings['language_file'] ==$file) ? ' selected="selected"' : '';
-			$output .= '>'.ucfirst(str_replace(".php","",$file)).'</option>';
+			$output .= ($settings['language_file'] ==$langFile) ? ' selected="selected"' : '';
+			$output .= '>'.htmlspecialchars(ucfirst(str_replace(".php","",$langFile))).'</option>'."\n";
 			}
-		$output .= '</select>';
-		$output .= '<input type="submit" value="'.$lang['submit_button_ok'].'" /></p>';
-		$output .= '</form>';
+		$output .= '</select>'."\n";
+		$output .= '<input type="submit" value="'.$lang['submit_button_ok'].'" /></p>'."\n";
+		$output .= '</form>'."\n";
 		}
 	else if (empty($installation_mode))
 		{
-		$output .= '<h2>'.$lang_add['installation_mode_inst'].'</h2>';
-		$output .= '<form action="install.php" method="post"><div>';
-		$output .= '<input type="hidden" name="language" value="'.$language.'" />';
-		$output .= '<p><input type="radio" name="installation_mode" value="installation" checked="checked" />';
-		$output .= $lang_add['installation_mode_installation'].'<br />';
-		$output .= '<input type="radio" name="installation_mode" value="update" />'.$lang_add['installation_mode_update'].'</p>';
-		$output .= '<p><input type="submit" value="'.$lang['submit_button_ok'].'" /></p>';
-		$output .= '</div></form>';
+		$output .= '<h2>'.$lang_add['installation_mode_inst'].'</h2>'."\n";
+		$output .= '<form action="install.php" method="post"><div>'."\n";
+		$output .= '<input type="hidden" name="language" value="'.$language.'" />'."\n";
+		$output .= '<p><input type="radio" name="installation_mode" id="mode-install" value="installation" checked="checked" />';
+		$output .= '<label for="mode-install">'.$lang_add['installation_mode_installation'].'</label><br />'."\n";
+		$output .= '<input type="radio" name="installation_mode" id="mode-update" value="update" /><label for="mode-update">'.$lang_add['installation_mode_update'].'</label></p>'."\n";
+		$output .= '<p><input type="submit" value="'.$lang['submit_button_ok'].'" /></p>'."\n";
+		$output .= '</div></form>'."\n";
 		}
 	else
 		{
@@ -1029,15 +1064,24 @@ if (empty($installed))
 				$output .= '<td class="admintab-r"><input type="text" name="forum_name" value="';
 				$output .= (isset($_POST['forum_name'])) ? htmlspecialchars($_POST['forum_name']) : $settings['forum_name'];
 				$output .= '" size="40" /></td>';
-				$output .= '</tr>';
-				$output .= '<tr>';
+				$output .= '</tr><tr>';
 				$output .= '<td class="admintab-l"><b>'.$lang_add['forum_address'].'</b><br />';
 				$output .= '<span class="small">'.$lang_add['forum_address_d'].'</span></td>';
 				$output .= '<td class="admintab-r"><input type="text" name="forum_address" value="';
-				$output .= (isset($_POST['forum_address'])) ? htmlspecialchars($_POST['forum_address']) : ($settings['forum_address'] != "") ? $settings['forum_address'] : "http://".$_SERVER['SERVER_NAME'].str_replace("install.php","",$_SERVER['SCRIPT_NAME']);
+				if (isset($_POST['forum_address']))
+					{
+					$output .= htmlspecialchars($_POST['forum_address']);
+					}
+				else if ($settings['forum_address'] != "")
+					{
+					$output .= $settings['forum_address'];
+					}
+				else
+					{
+					$output .= "http://".$_SERVER['SERVER_NAME'].str_replace("install.php","",$_SERVER['SCRIPT_NAME']);
+					}
 				$output .= '" size="40" /></td>';
-				$output .= '</tr>';
-				$output .= '<tr>';
+				$output .= '</tr><tr>';
 				$output .= '<td class="admintab-l"><b>'.$lang_add['forum_email'].'</b><br />';
 				$output .= '<span class="small">'.$lang_add['forum_email_d'].'</span></td>';
 				$output .= '<td class="admintab-r"><input type="text" name="forum_email" value="';
@@ -1072,7 +1116,7 @@ if (empty($installed))
 				$output .= '<tr>';
 				$output .= '<td class="admintab-l"><b>'.$lang_add['inst_admin_pw_conf'].'</b><br />';
 				$output .= '<span class="small">'.$lang_add['inst_admin_pw_conf_d'].'</span></td>';
-				$output .= '<td class="admintab-r"><input type="text" name="admin_pw_conf" value="" size="40" /></td>';
+				$output .= '<td class="admintab-r"><input type="password" name="admin_pw_conf" value="" size="40" /></td>';
 				$output .= '</tr>';
 				$output .= '</table>';
 				$output .= '</fieldset>';
@@ -1143,8 +1187,8 @@ if (empty($installed))
 					$output .= '<select name="old_version" size="1">';
 					foreach ($updateVersion as $updatable)
 						{
-						$output .= '<option value="'.$updatable.'"'
-						$output .= (if ($updateVersion == $updatable)) ? ' selected="selected"' : '';
+						$output .= '<option value="'.$updatable.'"';
+						$output .= ($updateVersion == $updatable) ? ' selected="selected"' : '';
 						$output .= '>'.$updatable.'</option>';
 						}
 					$output .= '</select>';
