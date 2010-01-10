@@ -163,7 +163,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 			$headerTemplate .= "Content-Type: text/plain; charset=UTF-8\n";
 			$headerTemplate .= "Content-Transfer-Encoding: 8bit\n";
 			$mail_subject = ($_POST['subject'] != "") ? $subject : $lang['email_no_subject'];
-			$mail_subject = mb_encode_mimeheader($mail_subject,"UTF-8");
+			$copySubject = mb_encode_mimeheader($mail_subject,"UTF-8");
 			if (isset($forum_contact))
 				{
 				$name = $settings['forum_name'];
@@ -178,11 +178,11 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 			$header .= $headerTemplate;
 			if ($settings['mail_parameter']!='')
 				{
-				if (@mail($mailto, $mail_subject, $mail_text, $header, $settings['mail_parameter'])) $sent = true; else $errors[] = $lang['error_meilserv'];
+				if (@mail($mailto, $copySubject, $mail_text, $header, $settings['mail_parameter'])) $sent = true; else $errors[] = $lang['error_meilserv'];
 				}
 			else
 				{
-				if (@mail($mailto, $mail_subject, $mail_text, $header)) $sent = true; else $errors[] = $lang['error_meilserv'];
+				if (@mail($mailto, $copySubject, $mail_text, $header)) $sent = true; else $errors[] = $lang['error_meilserv'];
 				}
 			// Bestätigung:
 			if (isset($sent))
@@ -191,7 +191,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 				$lang['conf_email_txt'] = str_replace("[sender_name]", $sender_name, $lang['conf_email_txt']);
 				$lang['conf_email_txt'] = str_replace("[recipient_name]", $name, $lang['conf_email_txt']);
 				$lang['conf_email_txt'] = str_replace("[subject]", $mail_subject, $lang['conf_email_txt']);
-				$lang['conf_email_txt'] .= "\n\n".stripslashes($text);
+				$lang['conf_email_txt'] .= "\n\n".$text;
 				$conf_mailto = mb_encode_mimeheader($sender_name,"UTF-8")." <".$sender_email.">";
 				$ip = $_SERVER["REMOTE_ADDR"];
 				$conf_header  = "From: ".mb_encode_mimeheader($settings['forum_name'],"UTF-8")." <".$settings['forum_email'].">\n";
