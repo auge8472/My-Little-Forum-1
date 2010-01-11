@@ -486,12 +486,17 @@ CHANGE category category VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_
 CHANGE description description VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE accession accession TINYINT( 4 ) UNSIGNED NOT NULL DEFAULT '0'";
 $newTable["user_settings"] = "CREATE TABLE ".$db_settings['usersettings_table']." (
-id int(12) unsigned NOT NULL auto_increment,
 user_id int(12) unsigned NOT NULL,
 name varchar(60) NOT NULL default '',
 value varchar(40) NOT NULL default '',
-PRIMARY KEY  (id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1";
+PRIMARY KEY  (user_id,name)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+$newTable['us_template'] = "CREATE TABLE ".$db_settings['us_templates_table']." (
+name varchar(60) NOT NULL,
+value varchar(40) NOT NULL,
+type enum('string','bool') NOT NULL default 'string'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+
 $newSetting["reply_name"] = "INSERT INTO ".$db_settings['settings_table']." SET
 name = 'last_reply_name',
 value = 1";
@@ -504,6 +509,10 @@ value = 0";
 $newSetting["user_control_refresh"] = "INSERT INTO ".$db_settings['settings_table']." SET
 name = 'user_control_refresh',
 value = 0";
+$newSetting["control_refresh_template"] = "INSERT INTO ".$db_settings['us_templates_table']." SET
+name = 'control_refresh',
+value = 'false',
+type = 'bool'";
 
 # alter settings table (part 1)
 @mysql_query($alterTable["settings1"], $connid) or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
