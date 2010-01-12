@@ -13,20 +13,15 @@ font-size: 100.01%;
 }
 
 h1 {
-font-size: 1.4em;
+font-size: 1.2em;
 font-weight: bold;
 }
 
 h2 {
 margin-top: 0;
-font-size: 1.3em;
+font-size: 1.2em;
 font-weight: bold;
 }
-
-p { margin-top: 0; }
-img { border: 0; }
-form { display: inline; }
-.inline-form { display: inline; }
 
 .normal {
 font-size: 1em;
@@ -117,6 +112,11 @@ background:url(img/where.gif) no-repeat left center;
 padding-left: 10px;
 }
 
+p { margin-top: 0; }
+img { border: 0; }
+form { display: inline; }
+.inline-form { display: inline; }
+
 /* template: */
 #top {
 margin:0;
@@ -157,6 +157,7 @@ font-size: 0.86em;
 
 #top h1 {
 margin:0 0 3px 0;
+padding:0;
 }
 
 .search {
