@@ -360,6 +360,7 @@ font-size: 1em;
 color: red;
 font-weight: bold;
 }
+.number-cell { text-align: right; }
 .small { font-size: 0.86em; }
 .postinginfo, .xsmall {
 font-size: 0.86em;

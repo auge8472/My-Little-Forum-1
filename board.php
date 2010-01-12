@@ -380,7 +380,7 @@ if($settings['access_for_users_only']  == 1
 				}
 			echo '</td>'."\n"; # end: authors names
 			echo '<td><span class="small">'.strftime($lang['time_format'],$zeile["xtime"]).'</span></td>'."\n"; # number of answers
-			echo '<td><span class="small">'.$answers_count.'</span></td>'."\n";
+			echo '<td class="number-cell"><span class="small">'.$answers_count.'</span></td>'."\n";
 			echo '<td><span class="small">'; # start: last reply
 			if ($answers_count > 0)
 				{
@@ -409,7 +409,7 @@ if($settings['access_for_users_only']  == 1
 			if ($settings['count_views'] == 1)
 				{
 				# number of views
-				echo '<td><span class="small">'.$zeile['views'].'</span></td>'."\n";
+				echo '<td class="number-cell"><span class="small">'.$zeile['views'].'</span></td>'."\n";
 				}
 			if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 			&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")

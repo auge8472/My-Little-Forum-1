@@ -460,7 +460,7 @@ if ($settings['access_for_users_only'] == 1
 				}
 			echo '</td>'."\n";
 			echo '<td><span class="small">'.strftime($lang['time_format'],($zeile["Uhrzeit"])).'</span></td>'."\n";
-			echo '<td><span class="small">'.$answers_count.'</span></td>'."\n";
+			echo '<td class="number-cell"><span class="small">'.$answers_count.'</span></td>'."\n";
 			echo '<td><span class="small">';
 			if ($answers_count > 0)
 				{
@@ -484,7 +484,7 @@ if ($settings['access_for_users_only'] == 1
 			echo '</span></td>'."\n";
 			if (isset($settings['count_views']) && $settings['count_views'] == 1)
 				{
-				echo '<td><span class="small">'.$zeile['views'].'</span></td>'."\n";
+				echo '<td class="number-cell"><span class="small">'.$zeile['views'].'</span></td>'."\n";
 				}
 			if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 			&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
