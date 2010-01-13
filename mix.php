@@ -344,7 +344,7 @@ if ($settings['access_for_users_only'] == 1
 				}
 			$rowClass = ($i % 2 == 0) ? "a" : "b";
 			echo '<tr class="'.$rowClass.'">'."\n";
-			echo '<td>'."\n";
+			echo '<td>'."\n"; # thread
 			echo '<a class="';
 			if ((isset($_SESSION[$settings['session_prefix'].'newtime'])
 			&& $_SESSION[$settings['session_prefix'].'newtime'] < $zeile["last_answer"])
@@ -410,7 +410,7 @@ if ($settings['access_for_users_only'] == 1
 			echo '</td>'."\n";
 			if ($categories!=false && $category == 0)
 				{
-				echo '<td>'."\n";
+				echo '<td class="thread-info">'."\n"; #categories
 				if (isset($categories[$zeile["category"]]) && $categories[$zeile["category"]]!='')
 					{
 					echo '<a title="'.str_replace("[category]", $categories[$zeile["category"]], $lang['choose_category_linktitle']);
@@ -447,7 +447,7 @@ if ($settings['access_for_users_only'] == 1
 					}
 				echo '</td>'."\n";
 				}
-			echo '<td>'."\n";
+			echo '<td class="thread-info">'."\n"; # author op
 			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
 				{
 				$sult = str_replace("[name]", htmlspecialchars($zeile["name"]), $lang['show_userdata_linktitle']);
@@ -459,9 +459,12 @@ if ($settings['access_for_users_only'] == 1
 				echo '</a>';
 				}
 			echo '</td>'."\n";
-			echo '<td><span class="small">'.strftime($lang['time_format'],($zeile["Uhrzeit"])).'</span></td>'."\n";
-			echo '<td class="number-cell"><span class="small">'.$answers_count.'</span></td>'."\n";
-			echo '<td><span class="small">';
+			# time op
+			echo '<td class="thread-info">'.strftime($lang['time_format'],($zeile["Uhrzeit"])).'</td>'."\n";
+			# number of answers
+			echo '<td class="number-cell">'.$answers_count.'</td>'."\n";
+			# date last answer
+			echo '<td class="thread-info">';
 			if ($answers_count > 0)
 				{
 				if ($settings['last_reply_link']==1)
@@ -481,14 +484,16 @@ if ($settings['access_for_users_only'] == 1
 				{
 				echo "&nbsp;";
 				}
-			echo '</span></td>'."\n";
+			echo '</td>'."\n";
 			if (isset($settings['count_views']) && $settings['count_views'] == 1)
 				{
-				echo '<td class="number-cell"><span class="small">'.$zeile['views'].'</span></td>'."\n";
+				# number of views
+				echo '<td class="number-cell">'.$zeile['views'].'</td>'."\n";
 				}
 			if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 			&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
 				{
+				# marker for admin
 				echo '<td><a href="admin.php?mark='.$zeile["tid"].'&amp;refer=';
 				echo basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$page.'&amp;category=';
 				echo $category.'&amp;order='.$order.'">';

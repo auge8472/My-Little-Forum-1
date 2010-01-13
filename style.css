@@ -361,7 +361,7 @@ color: red;
 font-weight: bold;
 }
 .number-cell { text-align: right; }
-.small { font-size: 0.86em; }
+.thread-info, .number-cell, .small { font-size: 0.86em; }
 .postinginfo, .xsmall {
 font-size: 0.86em;
 color: #808080;
