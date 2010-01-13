@@ -161,6 +161,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
     
 		if(empty($errors))
 			{
+			$ip = $_SERVER["REMOTE_ADDR"];
 			$headerTemplate  = "X-Mailer: PHP/" . phpversion(). "\n";
 			$headerTemplate .= "X-Sender-IP: $ip\n";
 			$headerTemplate .= "Content-Type: text/plain; charset=UTF-8\n";
@@ -173,7 +174,6 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 				$email = $settings['forum_email'];
 				}
 			$mailto = mb_encode_mimeheader($name,"UTF-8")." <".$email.">";
-			$ip = $_SERVER["REMOTE_ADDR"];
 			$mail_text = $text;
 			$mail_text .= "\n\n".str_replace("[forum_address]", $settings['forum_address'], $lang['msg_add']);
 			$header  = "From: ".mb_encode_mimeheader($sender_name,"UTF-8")." <".$sender_email.">\n";
