@@ -165,6 +165,56 @@ else
 	$posting_count = 0;
 	}
 
+$possViews = array();
+if ($settings['board_view'] == 1) $possViews[] = 'board';
+if ($settings['thread_view'] == 1) $possViews[] = 'thread';
+if ($settings['mix_view'] == 1) $possViews[] = 'mix';
+
+# look for the current used view
+if (isset($_GET['view']) and in_array($_GET['view'], $possViews))
+	{
+	$curr_view = $_GET['view'];
+	}
+else if (isset($_POST['view']) and in_array($_POST['view'], $possViews))
+	{
+	$curr_view = $_POST['view'];
+	}
+else if (isset($_SESSION[$settings['session_prefix'].'curr_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
+	{
+	$curr_view = $_SESSION[$settings['session_prefix'].'curr_view'];
+	}
+else if (isset($_COOKIE['curr_view']) and in_array($_COOKIE['curr_view'], $possViews))
+	{
+	$curr_view = $_COOKIE['curr_view'];
+	}
+else
+	{
+	if (isset($_SESSION[$settings['session_prefix']."user_view"]))
+		{
+		$curr_view = $_SESSION[$settings['session_prefix']."user_view"];
+		}
+	else
+		{
+		$curr_view = $settings['standard'];
+		}
+	}
+# save the current used view into the session or a cookie
+if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+	{
+	if ($curr_view != $_SESSION[$settings['session_prefix'].'curr_view'])
+		{
+		$_SESSION[$settings['session_prefix'].'curr_view'] = $curr_view;
+		}
+	}
+else
+	{
+	if ($curr_view != $_COOKIE['curr_view'])
+		{
+		setcookie('curr_view', $curr_view, time()+(3600*24*30));
+		}
+	}
+
 $count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
 list($user_count) = mysql_fetch_row($count_result);
 

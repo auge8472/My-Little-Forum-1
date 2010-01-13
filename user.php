@@ -522,9 +522,20 @@ else
 $wo = $lang['user_area_title'];
 
 $topnav  = '<a class="textlink" href="';
-if (isset($view))
+if (!empty($_SESSION[$settings['session_prefix'].'curr_view']))
 	{
-	$topnav .= ($view == 'board') ? 'board.php' : 'mix.php';
+	if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
+		{
+		$topnav .= 'forum.php';
+		}
+	else
+		{
+		$topnav .= $_SESSION[$settings['session_prefix'].'curr_view'].'.php';
+		}
+	}
+else if (!empty($_COOKIE['curr_view']) and in_array($_COOKIE['curr_view'], $possViews))
+	{
+	$topnav .= $_COOKIE['curr_view'].'.php';
 	}
 else
 	{
@@ -631,12 +642,14 @@ echo $header;
 
 #echo "<h2>SESSION</h2>\n";
 #echo "<pre>".print_r($_SESSION, true)."</pre>\n";
+#echo "<h2>COOKIE</h2>\n";
+#echo "<pre>".print_r($_COOKIE, true)."</pre>\n";
 #echo "<h2>GET</h2>\n";
 #echo "<pre>".print_r($_GET, true)."</pre>\n";
 #echo "<h2>POST</h2>\n";
 #echo "<pre>".print_r($_POST, true)."</pre>\n";
 #echo "<h2>Infos</h2>\n";
-#echo "<pre>".print_r($uid, true)."</pre>\n";
+#echo "<pre>".print_r($curr_view, true)."</pre>\n";
 #echo "<pre>".print_r($userName, true)."</pre>\n";
 
 switch ($action)
