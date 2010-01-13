@@ -120,7 +120,7 @@ if ($entrydata['locked'] == 0)
 	$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
 	$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
 	$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
-	$qs .= !empty($category) ? '&amp;category='.intval($category) : '';
+	$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
 	echo '<a class="textlink" href="posting.php?id='.$entrydata["id"].$qs;
 	echo '&amp;view=mix" title="'.$lang['board_answer_linktitle'].'">';
 	echo $lang['board_answer_linkname'].'</a>';
@@ -264,21 +264,25 @@ if ($settings['access_for_users_only'] == 1
 	mysql_free_result($result); // Aufräumen
 
 	$wo = $entrydata["subject"];
-	$subnav_1  = '<a class="textlink" href="mix.php?page='.$page.'&amp;category='.$category;
+	$subnav_1  = '<a class="textlink" href="mix.php?page='.$page;
+	$subnav_1 .= ($category > 0) ? '&amp;category='.$category : '';
 	$subnav_1 .= '&amp;order='.$order.'&amp;descasc='.$descasc.'">';
 	$subnav_1 .= $lang['back_to_overview_linkname'].'</a>';
 	$subnav_2 = "";
 	if ($settings['thread_view']==1)
 		{
-		$subnav_2 .= '&nbsp;<a href="forum_entry.php?id='.$entrydata["tid"].'&amp;page='.$page;
-		$subnav_2 .= '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
-		$subnav_2 .= '" class="thread-view" title="'.$lang['thread_view_linktitle'].'">';
+		$subnav_2 .= '&nbsp;<a href="forum_entry.php?id='.$entrydata["tid"];
+		$subnav_2 .= '&amp;page='.$page.'&amp;order='.$order.'&amp;descasc='.$descasc;
+		$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
+		$subnav_2 .= '&amp;view=thread" class="thread-view" title="'.$lang['thread_view_linktitle'].'">';
 		$subnav_2 .= $lang['thread_view_linkname'].'</a>';
 		}
 	if ($settings['board_view']==1)
 		{
-		$subnav_2 .= '&nbsp;<a href="board_entry.php?id='.$entrydata["tid"].'&amp;page='.$page;
-		$subnav_2 .= '&amp;order='.$order.'&amp;category='.$category.'" class="board-view"';
+		$subnav_2 .= '&nbsp;<a href="board_entry.php?id='.$entrydata["tid"];
+		$subnav_2 .= '&amp;page='.$page.'&amp;order='.$order;
+		$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
+		$subnav_2 .= '&amp;view=board" class="board-view"';
 		$subnav_2 .= ' title="'.$lang['board_view_linktitle'].'">';
 		$subnav_2 .= $lang['board_view_linkname'].'</a></span>';
 		}

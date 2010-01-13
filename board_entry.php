@@ -50,8 +50,9 @@ if ($entry_count > $entries_per_page)
 	if ($new_index_before >= 0)
 		{
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?&amp;id='.$id.'&amp;be_page=';
-		$output .= $new_index_before.'&amp;da='.$da.'&amp;page='.$page.'&amp;category=';
-		$output .= $category.'&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
+		$output .= $new_index_before.'&amp;da='.$da.'&amp;page='.$page;
+		$output .= ($category > 0) ? '&amp;category='.$category : '';
+		$output .= '&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
 		$output .= $lang['previous_page_linktitle'].'"><img src="img/prev.gif" alt="&laquo;"';
 		$output .= 'width="12" height="9" onmouseover="this.src=\'img/prev_mo.gif\';"';
 		$output .= ' onmouseout="this.src=\'img/prev.gif\';" /></a>';
@@ -63,8 +64,9 @@ if ($entry_count > $entries_per_page)
 	if ($new_index_after < $countPages)
 		{
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?&amp;id='.$id.'&amp;be_page=';
-		$output .= $new_index_after.'&amp;da='.$da.'&amp;page='.$page.'&amp;category=';
-		$output .= $category.'&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
+		$output .= $new_index_after.'&amp;da='.$da.'&amp;page='.$page;
+		$output .= ($category > 0) ? '&amp;category='.$category : '';
+		$output .= '&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
 		$output .= $lang['next_page_linktitle'].'"><img src="img/next.gif" alt="&laquo;"';
 		$output .= 'width="12" height="9" onmouseover="this.src=\'img/next_mo.gif\';"';
 		$output .= ' onmouseout="this.src=\'img/next.gif\';" /></a>';
@@ -81,7 +83,10 @@ if ($entry_count > $entries_per_page)
 		$output .= '<input type="hidden" name="da" value="'.$da.'">'."\n";
 		}
 	$output .= '<input type="hidden" name="page" value="'.$page.'">'."\n";
-	$output .= '<input type="hidden" name="category" value="'.$category.'">'."\n";
+	if ($category > 0)
+		{
+		$output .= '<input type="hidden" name="category" value="'.$category.'">'."\n";
+		}
 	$output .= '<input type="hidden" name="order" value="'.$order.'">'."\n";
 	$output .= '<input type="hidden" name="descasc" value ="'.$descasc.'">'."\n";
 	$output .= '<select class="kat" size="1" name="be_page" onchange="this.form.submit();">'."\n";
@@ -266,7 +271,8 @@ if ($settings['access_for_users_only'] == 1
 		}
 
 	$wo = $thread["subject"];
-	$subnav_1  = '<a class="textlink" href="board.php?page='.$page.'&amp;category='.$category;
+	$subnav_1  = '<a class="textlink" href="board.php?page='.$page;
+	$subnav_1 .= ($category > 0) ? '&amp;category='.$category : '';
 	$subnav_1 .= '&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
 	$subnav_1 .= $lang['back_to_board_linktitle'].'">'.$lang['back_to_board_linkname'].'</a>';
 	$subnav_2 = '';
@@ -283,21 +289,24 @@ if ($settings['access_for_users_only'] == 1
 		$order_text  = $lang['order_linkname'];
 		}
 	$subnav_2 .= '&nbsp;<a href="board_entry.php?id='.$thread["tid"].'&amp;da=';
-	$subnav_2 .= $order_order.'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc=';
-	$subnav_2 .= $descasc.'&amp;category='.$category.'" class="order-postings" title="';
+	$subnav_2 .= $order_order.'&amp;page='.$page.'&amp;order='.$order;
+	$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
+	$subnav_2 .= '&amp;descasc='.$descasc.'" class="order-postings" title="';
 	$subnav_2 .= $order_title.'">'.$order_text.'</a>';
 	if ($settings['thread_view']==1)
 		{
 		$subnav_2 .= '&nbsp;<a href="forum_entry.php?id='.$thread["tid"].'&amp;page='.$page;
-		$subnav_2 .= '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
-		$subnav_2 .= '" class="thread-view" title="'.$lang['thread_view_linktitle'].'">';
+		$subnav_2 .= '&amp;order='.$order.'&amp;descasc='.$descasc;
+		$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
+		$subnav_2 .= '&amp;view=thread" class="thread-view" title="'.$lang['thread_view_linktitle'].'">';
 		$subnav_2 .= $lang['thread_view_linkname'].'</a>';
 		}
 	if ($settings['mix_view']==1)
 		{
 		$subnav_2 .= '&nbsp;<a href="mix_entry.php?id='.$thread["tid"].'&amp;page='.$page;
-		$subnav_2 .= '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
-		$subnav_2 .= '" class="mix-view" title="'.$lang['mix_view_linktitle'].'">';
+		$subnav_2 .= '&amp;order='.$order.'&amp;descasc='.$descasc;
+		$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
+		$subnav_2 .= '&amp;view=mix" class="mix-view" title="'.$lang['mix_view_linktitle'].'">';
 		$subnav_2 .= $lang['mix_view_linkname'].'</a>';
 		}
 	$subnav_2 .= nav_b($be_page, $settings['answers_per_topic'], $thread_count, $thread["tid"], $da, $page, $category, $order, $descasc);
@@ -328,7 +337,7 @@ if ($settings['access_for_users_only'] == 1
 			$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
 			$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
 			$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
-			$qs .= !empty($category) ? '&amp;category='.intval($category) : '';
+			$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
 			$qs .= !empty($be_page) ? '&amp;be_page='.intval($be_page) : '';
 			echo '<a class="textlink" href="posting.php?id='.$thread["id"].$qs;
 			echo '&amp;view=board" title="'.$lang['board_answer_linktitle'].'">';
@@ -454,7 +463,7 @@ if ($settings['access_for_users_only'] == 1
 			$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
 			$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
 			$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
-			$qs .= !empty($category) ? '&amp;category='.intval($category) : '';
+			$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
 			$qs .= !empty($be_page) ? '&amp;be_page='.intval($be_page) : '';
 			echo '<a class="textlink" href="posting.php?id='.$entrydata["id"].$qs;
 			echo '&amp;view=board" title="'.$lang['board_answer_linktitle'].'">';

@@ -96,31 +96,36 @@ if ($settings['access_for_users_only'] == 1
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
 		# onmouseover="this.src=\'img/update_mo.gif\';" onmouseout="this.src=\'img/update.gif\';"
-		$subnav_2 .= '<a href="index.php?update=1&amp;category='.intval($category).'"';
-		$subnav_2 .= ' class="update-postings" title="'.$lang['update_time_linktitle'].'">';
+		$subnav_2 .= '<a href="index.php?update=1';
+		$subnav_2 .= ($category > 0) ? '&amp;category='.intval($category) : '';
+		$subnav_2 .= '" class="update-postings" title="'.$lang['update_time_linktitle'].'">';
 		$subnav_2 .= $lang['update_time_linkname'].'</a>';
 		}
 	if ($order=="time")
 		{
-		$subnav_2 .= '&nbsp;<a href="forum.php?order=last_answer&amp;category='.intval($category);
+		$subnav_2 .= '&nbsp;<a href="forum.php?order=last_answer';
+		$subnav_2 .= ($category > 0) ? '&amp;category='.intval($category) : '';
 		$subnav_2 .= '" class="order-postings" title="'.$lang['order_linktitle_1'];
 		$subnav_2 .= '">'.$lang['order_linkname'].'</a>';
 		}
 	else
 		{
-		$subnav_2 .= '&nbsp;<a href="forum.php?order=time&amp;category='.intval($category);
+		$subnav_2 .= '&nbsp;<a href="forum.php?order=time';
+		$subnav_2 .= ($category > 0) ? '&amp;category='.intval($category) : '';
 		$subnav_2 .= '" class="order-postings" title="'.$lang['order_linktitle_2'];
 		$subnav_2 .= '">'.$lang['order_linkname'].'</a>';
 		}
 	if ($settings['board_view'] == 1)
 		{
-		$cat = ($category != 0) ? '?category='.intval($category) : '';
+		$cat = ($category > 0) ? '?category='.intval($category) : '';
+		$cat .= !empty($cat) ? '&amp;view=board' : '?view=board';
 		$subnav_2 .= '&nbsp;<a href="board.php'.$cat.'" class="board-view" title="';
 		$subnav_2 .= $lang['board_view_linktitle'].'">'.$lang['board_view_linkname'].'</a>';
 		}
 	if ($settings['mix_view']==1)
 		{
-		$cat = ($category != 0) ? '?category='.intval($category) : '';
+		$cat = ($category > 0) ? '?category='.intval($category) : '';
+		$cat .= !empty($cat) ? '&amp;view=mix' : '?view=mix';
 		$subnav_2 .= '&nbsp;<a href="mix.php'.$cat.'" class="mix-view" title="';
 		$subnav_2 .= $lang['mix_view_linktitle'].'">'.$lang['mix_view_linkname'].'</a>';
 		}

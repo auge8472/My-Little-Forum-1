@@ -144,19 +144,22 @@ if($settings['access_for_users_only']  == 1
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
-		$subnav_2 .= '<a href="index.php?update=1&amp;view=board&amp;category='.intval($category);
+		$subnav_2 .= '<a href="index.php?update=1&amp;view=board';
+		$subnav_2 .= ($category > 0) ? '&amp;category='.intval($category) : '';
 		$subnav_2 .= '" class="update-postings" title="'.$lang['update_time_linktitle'].'">';
 		$subnav_2 .= $lang['update_time_linkname'].'</a>';
 		}
 	if ($settings['thread_view'] == 1)
 		{
-		$cat = ($category != 0) ? '?category='.intval($category) : '';
+		$cat  = ($category > 0) ? '?category='.intval($category) : '';
+		$cat .= !empty($cat) ? '&amp;view=thread' : '?view=thread';
 		$subnav_2 .= '&nbsp;<a href="forum.php'.$cat.'" class="thread-view" title="';
 		$subnav_2 .= $lang['thread_view_linktitle'].'">'.$lang['thread_view_linkname'].'</a>';
 		}
 	if ($settings['mix_view']==1)
 		{
-		$cat = ($category != 0) ? '?category='.intval($category) : '';
+		$cat  = ($category > 0) ? '?category='.intval($category) : '';
+		$cat .= !empty($cat) ? '&amp;view=mix' : '?view=mix';
 		$subnav_2 .= '&nbsp;<a href="mix.php'.$cat.'" class="mix-view" title="';
 		$subnav_2 .= $lang['mix_view_linktitle'].'">'.$lang['mix_view_linkname'].'</a>';
 		}
@@ -317,13 +320,17 @@ if($settings['access_for_users_only']  == 1
 				echo " <span class=\"small\">";
 				if ($settings['thread_view']==1)
 					{
-					echo '<a href="forum_entry.php?id='.$zeile["tid"].'"><img src="img/thread_d.gif"';
-					echo ' alt="[Thread]" title="'.$lang['open_in_thread_linktitle'].'" width="12" height="9" /></a>';
+					echo '<a href="forum_entry.php?id='.$zeile["tid"].'&amp;view=thread';
+					echo ($category > 0) ? '&amp;category='.$category : '';
+					echo '"><img src="img/thread_d.gif" alt="[Thread]" title="';
+					echo $lang['open_in_thread_linktitle'].'" width="12" height="9" /></a>';
 					}
 				if ($settings['mix_view'] == 1)
 					{
-					echo '<a href="mix_entry.php?id='.$zeile["tid"].'"><img src="img/mix_d.gif"';
-					echo ' alt="[Mix]" title="'.$lang['open_in_mix_linktitle'].'" width="12" height="9" /></a>&nbsp;';
+					echo '<a href="mix_entry.php?id='.$zeile["tid"].'&amp;view=mix';
+					echo ($category > 0) ? '&amp;category='.$category : '';
+					echo '"><img src="img/mix_d.gif" alt="[Mix]" title="';
+					echo $lang['open_in_mix_linktitle'].'" width="12" height="9" /></a>';
 					}
 				echo "</span>";
 				}
@@ -388,8 +395,9 @@ if($settings['access_for_users_only']  == 1
 					{
 					echo '<a href="board_entry.php?id='.$zeile["tid"].'&amp;be_page=';
 					echo (ceil($answers_count / $settings['answers_per_topic'])-1).'&amp;page='.$page;
-					echo '&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc;
-					echo '#p'.$last_answer['id'].'" title="'.str_replace("[name]", $last_answer['name'], $lang['last_reply_lt']).'">';
+					echo ($category > 0) ? '&amp;category='.$category : '';
+					echo '&amp;order='.$order.'&amp;descasc='.$descasc.'#p'.$last_answer['id'];
+					echo '" title="'.str_replace("[name]", $last_answer['name'], $lang['last_reply_lt']).'">';
 					}
 				echo strftime($lang['time_format'],$zeile["la_time"]);
 				if ($settings['last_reply_name'] == 1)
@@ -416,7 +424,8 @@ if($settings['access_for_users_only']  == 1
 				{
 				echo '<td><a href="admin.php?mark='.$zeile["tid"].'&amp;refer=';
 				echo basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$page;
-				echo '&amp;category='.$category.'&amp;order='.$order.'">';
+				echo ($category > 0) ? '&amp;category='.$category : '';
+				echo '&amp;order='.$order.'">';
 				if ($zeile['marked']==1)
 					{
 					echo '<img src="img/marked.gif" alt="[x]" width="9" height="9" title="'.$lang['unmark_linktitle'].'" />';

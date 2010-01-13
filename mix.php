@@ -200,19 +200,22 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
-		$subnav_2 .= '<a href="index.php?update=1&amp;view=mix&amp;category='.intval($category);
+		$subnav_2 .= '<a href="index.php?update=1&amp;view=mix';
+		$subnav_2 .= ($category > 0) ? '&amp;category='.intval($category) : '';
 		$subnav_2 .= '" class="update-postings" title="'.$lang['update_time_linktitle'].'">';
 		$subnav_2 .= $lang['update_time_linkname'].'</a>';
 		}
 	if ($settings['thread_view'] == 1)
 		{
-		$cat = ($category != 0) ? '?category='.intval($category) : '';
+		$cat  = ($category > 0) ? '?category='.intval($category) : '';
+		$cat .= !empty($cat) ? '&amp;view=thread' : '?view=thread';
 		$subnav_2 .= '&nbsp;<a href="forum.php'.$cat.'" class="thread-view" title="';
 		$subnav_2 .= $lang['thread_view_linktitle'].'">'.$lang['thread_view_linkname'].'</a>';
 		}
 	if ($settings['board_view']==1)
 		{
-		$cat = ($category != 0) ? '?category='.intval($category) : '';
+		$cat  = ($category > 0) ? '?category='.intval($category) : '';
+		$cat .= !empty($cat) ? '&amp;view=board' : '?view=board';
 		$subnav_2 .= '&nbsp;<a href="board.php'.$cat.'" class="board-view" title="';
 		$subnav_2 .= $lang['board_view_linktitle'].'">'.$lang['board_view_linkname'].'</a>';
 		}
@@ -374,14 +377,16 @@ if ($settings['access_for_users_only'] == 1
 				echo " <span class=\"small\">";
 				if ($settings['board_view'] == 1)
 					{
-					echo '<a href="board_entry.php?id='.$zeile["tid"].'">';
-					echo '<img src="img/board_d.gif" alt="[Board]" title="';
+					echo '<a href="board_entry.php?id='.$zeile["tid"].'&amp;view=board';
+					echo ($category > 0) ? '&amp;category='.$category : '';
+					echo '"><img src="img/board_d.gif" alt="[Board]" title="';
 					echo $lang['open_in_board_linktitle'].'" width="12" height="9" /></a>';
 					}
 				if ($settings['thread_view']==1)
 					{
-					echo '<a href="forum_entry.php?id='.$zeile["tid"].'">';
-					echo '<img src="img/thread_d.gif" alt="[Thread]" title="';
+					echo '<a href="forum_entry.php?id='.$zeile["tid"].'&amp;view=thread';
+					echo ($category > 0) ? '&amp;category='.$category : '';
+					echo '"><img src="img/thread_d.gif" alt="[Thread]" title="';
 					echo $lang['open_in_thread_linktitle'].'" width="12" height="9" /></a>';
 					}
 				echo "</span>";
@@ -470,7 +475,8 @@ if ($settings['access_for_users_only'] == 1
 				if ($settings['last_reply_link']==1)
 					{
 					echo '<a href="mix_entry.php?id='.$zeile["tid"].'&amp;page='.$page;
-					echo '&amp;category='.$category.'&amp;order='.$order.'&amp;descasc=';
+					echo ($category > 0) ? '&amp;category='.$category : '';
+					echo '&amp;order='.$order.'&amp;descasc=';
 					echo $descasc.'#p'.$last_answer['id'].'" title="';
 					echo str_replace("[name]", $last_answer['name'], $lang['last_reply_lt']).'">';
 					}
@@ -495,8 +501,9 @@ if ($settings['access_for_users_only'] == 1
 				{
 				# marker for admin
 				echo '<td><a href="admin.php?mark='.$zeile["tid"].'&amp;refer=';
-				echo basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$page.'&amp;category=';
-				echo $category.'&amp;order='.$order.'">';
+				echo basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$page;
+				echo ($category > 0) ? '&amp;category='.$category : '';
+				echo '&amp;order='.$order.'">';
 				if ($zeile['marked']==1)
 					{
 					echo '<img src="img/marked.gif" alt="[x]" width="9" height="9"';

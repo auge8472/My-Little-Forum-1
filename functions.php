@@ -205,7 +205,7 @@ if ($entry_count > $entries_per_page)
 	$new_index_after = $page + 1;
 	$site_count = ceil($entry_count / $entries_per_page);
 	$ic = '';
-	$ic .= (isset($category)) ? '&amp;category='.intval($category) : '';
+	$ic .= (isset($category) and $category > 0) ? '&amp;category='.intval($category) : '';
 	$ic .= (isset($action) && $action!="") ? '&amp;action='.$action : '';
 	$ic .= (isset($_GET['letter'])) ? '&amp;letter='.urlencode($_GET['letter']) : '';
 	if ($new_index_before >= 0)
@@ -222,9 +222,9 @@ if ($entry_count > $entries_per_page)
 	$output .= $lang['choose_page_formtitle'].'"><div class="inline-form">'."\n";
 	$output .= isset($order) ? '<input type="hidden" name="order" value="'.$order.'" />' : '';
 	$output .= isset($descasc) ? '<input type="hidden" name="descasc" value="'.$descasc.'" />' : '';
-	$output .= isset($category) ? '<input type="hidden" name="category" value="'.$category.'" />' : '';
+	$output .= (isset($category) and $category > 0) ? '<input type="hidden" name="category" value="'.$category.'" />' : '';
 	$output .= (isset($action) && $action!="") ? '<input type="hidden" name="action" value="'.$action.'" />' : '';
-	$output .= (isset($_GET['letter'])) ? '<input type="hidden" name="letter" value="'.urlencode($_GET['letter']).'" />' : '';
+	$output .= (isset($_GET['letter'])) ? '<input type="hidden" name="letter" value="'.$_GET['letter'].'" />' : '';
 	$output .= '<select class="kat" size="1" name="page" onchange="this.form.submit();">'."\n";
 	$output .= '<option value="0"';
 	$output .= ($page == 0) ? ' selected="selected"' : '';
@@ -696,14 +696,16 @@ if ($parent_array[$id]["pid"]==0 && $settings['all_views_direct'] == 1)
 	echo '&nbsp;';
 	if ($settings['board_view']==1)
 		{
-		echo '<a href="board_entry.php?id='.$parent_array[$id]['tid'].'">';
-		echo '<img src="img/board_d.gif" alt="[Board]" title="';
+		echo '<a href="board_entry.php?id='.$parent_array[$id]['tid'];
+		echo ($category > 0) ? '&amp;category='.intval($category) : '';
+		echo '&amp;view=board"><img src="img/board_d.gif" alt="[Board]" title="';
 		echo $lang['open_in_board_linktitle'].'" width="12" height="9" /></a>';
 		}
 	if ($settings['mix_view'] == 1)
 		{
-		echo '<a href="mix_entry.php?id='.$parent_array[$id]['tid'].'">';
-		echo '<img src="img/mix_d.gif" alt="[Mix]" title="';
+		echo '<a href="mix_entry.php?id='.$parent_array[$id]['tid'];
+		echo ($category > 0) ? '&amp;category='.intval($category) : '';
+		echo '&amp;view=mix"><img src="img/mix_d.gif" alt="[Mix]" title="';
 		echo $lang['open_in_mix_linktitle'].'" width="12" height="9" /></a>';
 		}
 	echo "</span>";
@@ -714,8 +716,9 @@ if ($parent_array[$id]["pid"]==0
 	&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
 	{
 	echo '<a href="admin.php?mark='.$parent_array[$id]["tid"].'&amp;refer=';
-	echo $_SERVER["SCRIPT_NAME"].'&amp;page='.$page.'&amp;category='.intval($category);
-	echo '&amp;order='.$order.'"><img src="';
+	echo basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$page.'&amp;order='.$order;
+	echo ($category > 0) ? '&amp;category='.intval($category) : '';
+	echo '"><img src="';
 	if ($parent_array[$id]['marked']==1)
 		{
 		echo 'img/marked.gif" alt="[x]" title="'.$lang['demark_linktitle'].'"';

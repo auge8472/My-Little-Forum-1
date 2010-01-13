@@ -194,22 +194,27 @@ if ($settings['access_for_users_only'] == 1
 	$category = intval($category);
 
 	$wo = $entrydata["subject"];
-	$subnav_1  = '<a class="textlink" href="forum.php?page='.$page.'&amp;category=';
-	$subnav_1 .= intval($category).'&amp;order='.$order.'" title="';
+	$subnav_1  = '<a class="textlink" href="forum.php?page='.$page;
+	$subnav_1 .= ($category > 0) ? '&amp;category='.$category : '';
+	$subnav_1 .= '&amp;order='.$order.'" title="';
 	$subnav_1 .= $lang['back_to_forum_linktitle'].'">'.$lang['back_to_forum_linkname'].'</a>';
 	$subnav_2 = "";
 	if ($settings['board_view']==1)
 		{
-		$subnav_2 .= '&nbsp;<a href="board_entry.php?id='.$entrydata["tid"].'&amp;page='.$page;
-		$subnav_2 .= '&amp;order='.$order.'&amp;category='.intval($category).'"';
-		$subnav_2 .= ' class="board-view" title="'.$lang['board_view_linktitle'].'">';
+		$subnav_2 .= '&nbsp;<a href="board_entry.php?id='.$entrydata["tid"];
+		$subnav_2 .= '&amp;page='.$page.'&amp;order='.$order;
+		$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
+		$subnav_2 .= '&amp;view=board" class="board-view"';
+		$subnav_2 .= ' title="'.$lang['board_view_linktitle'].'">';
 		$subnav_2 .= $lang['board_view_linkname'].'</a>';
 		}
 	if ($settings['mix_view']==1)
 		{
-		$subnav_2 .= '&nbsp;<a href="mix_entry.php?id='.$entrydata["tid"].'&amp;page='.$page;
-		$subnav_2 .= '&amp;order='.$order.'&amp;category='.intval($category).'"';
-		$subnav_2 .= ' class="mix-view" title="'.$lang['mix_view_linktitle'].'">';
+		$subnav_2 .= '&nbsp;<a href="mix_entry.php?id='.$entrydata["tid"];
+		$subnav_2 .= '&amp;page='.$page.'&amp;order='.$order;
+		$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
+		$subnav_2 .= '&amp;view=mix" class="mix-view"';
+		$subnav_2 .= ' title="'.$lang['mix_view_linktitle'].'">';
 		$subnav_2 .= $lang['mix_view_linkname'].'</a>';
 		}
 
@@ -256,7 +261,7 @@ if ($settings['access_for_users_only'] == 1
 		$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
 		$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
 		$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
-		$qs .= !empty($category) ? '&amp;category='.intval($category) : '';
+		$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
 		echo '<a class="textlink" href="posting.php?id='.$id.$qs;
 		echo '" title="'.$lang['forum_answer_linktitle'].'">';
 		echo $lang['forum_answer_linkname'].'</a>';
