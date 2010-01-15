@@ -165,11 +165,14 @@ if ($entry["hp"]!="")
 	$email_hp .= htmlspecialchars($entry["hp"]).'"><img src="img/homepage.gif" ';
 	$email_hp .= 'alt="'.$lang['homepage_alt'].'" width="13" height="13" /></a>';
 	}
-if (($entry["email"]!="" && $entry["hide_email"] != 1) && $entry["hp"]!="") 
+if ((($entry["email"]!="" && $entry["hide_email"] != 1)
+	&& isset($_SESSION[$settings['session_prefix'].'user_id']))
+	&& $entry["hp"]!="") 
 	{
 	$email_hp .= "&nbsp;";
 	}
-if ($entry["email"]!="" && $entry["hide_email"] != 1)
+if (($entry["email"]!="" && $entry["hide_email"] != 1)
+	and isset($_SESSION[$settings['session_prefix'].'user_id']))
 	{
 	$email_hp .= '<a href="contact.php?id='.$entry["id"];
 	$email_hp .= !empty($page) ? '&amp;page='.intval($page) : '';
