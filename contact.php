@@ -42,17 +42,20 @@ if (empty($order)) $order = "time";
 $category = empty($category) ? 0 : intval($category);
 if (empty($descasc)) $descasc = "DESC";
 
+# user is not logged in: captcha required (if setted)
 if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_contact']==1)
 	{
 	require('captcha/captcha.php');
 	$captcha = new captcha();
 	}
-
+# user is not logged in and tries to contact a specific user: no access
 if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($uid))
 	{
 	header("location: ".$settings['forum_address']."index.php");
 	die("<a href=\"index.php\">further...</a>");
 	}
+# user is not logged in, wants not contact a specific user:
+# reload the page to contact an admin
 if (empty($id) && empty($uid) && empty($forum_contact))
 	{
 	header("location: ".$settings['forum_address']."contact.php?forum_contact=true");
