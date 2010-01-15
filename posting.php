@@ -1467,40 +1467,10 @@ if (($settings['access_for_users_only'] == 1
 					{
 					echo htmlspecialchars($text);
 					}
-				echo '</textarea>'."\n".'<div id="bb-code-buttons">';
-				echo $lang['bbcode_marking_user'].'</div></td>'."\n";
-				echo '<td id="buttonspace">';
-				if ($settings['smilies'] == 1)
-					{
-					$smiley_buttons = 6;
-					$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['smilies_table'], $connid);
-					list($smilies_count) = mysql_fetch_row($count_result);
-					mysql_free_result($count_result);
-					$result = mysql_query("SELECT file, code_1, title FROM ".$db_settings['smilies_table']." ORDER BY order_id ASC LIMIT ".$smiley_buttons, $connid);
-					$i=1;
-					while ($data = mysql_fetch_assoc($result))
-						{
-						echo '<button class="smiley-button" name="smiley" type="button" value="';
-						echo stripslashes($data['code_1']).'" title="'.$lang['smiley_title'].'" onclick="';
-						echo "insert('".stripslashes($data['code_1'])."');\">";
-						echo '<img src="img/smilies/'.stripslashes($data['file']).'" alt="'.htmlspecialchars($data['code_1']).'" /></button>'."\n";
-						if($i % 2 == 0)
-							{
-							?><br /><?php
-							}
-						$i++;
-						}
-					mysql_free_result($result);
-					if($smilies_count > $smiley_buttons)
-						{
-						if($i % 2 == 0)
-							{
-							echo '<br />';
-							}
-						echo '<span class="small"><a href="javascript:more_smilies()" title="'.$lang['more_smilies_linktitle'].'">'.$lang['more_smilies_linkname'].'</a></span>'."\n";
-						}
-					}
-				echo '</td>'."\n".'</tr>'."\n".'</table>'."\n";
+				echo '</textarea>'."\n";
+				echo '</td>'."\n";
+				echo '<td id="buttonspace">'.$lang['bbcode_marking_user'].'</td>'."\n";
+				echo '</tr>'."\n".'</table>'."\n";
 				echo '</td>'."\n";
 				echo '</tr>'."\n";
 				if ((isset($_SESSION[$settings['session_prefix'].'user_id'])

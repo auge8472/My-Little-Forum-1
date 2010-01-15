@@ -134,11 +134,44 @@ if (Buttons && o>0)
 	for (var i=0;i<o;i++)
 		{
 		j = i + 1;
-		output[j] = "<input type=\"button\" value=\""+ Buttons[i].get('text') +"\" title=\"" + Buttons[i].get('titel') + "\" class=\"bb-button\" onClick=\"bbcode('"+ Buttons[i].get('value') +"')\">";
+		output[j] = "<input type=\"button\" value=\""+ Buttons[i].get('text') +"\" title=\"" + Buttons[i].get('titel') + "\" class=\"bb-button\" onClick=\"bbcode('"+ Buttons[i].get('value') +"')\"><br />";
 		}
 	j = j + 1;
 	}
-$('bb-code-buttons').update(output.join(" "));
+$('buttonspace').update(output.join("\n"));
+}
+
+/**
+ * This function inserts the smilies buttons
+ * for the textarea (#text) into the form.
+ */
+function auge_smilies_buttons(Smilies) {
+var o = Smilies.length;
+var x = o - 1;
+var output = $A();
+var j = 0;
+
+if (Smilies && o>0)
+	{
+	for (var i=0; i<6; i++)
+		{
+		output[i] = "<button name=\"smiley\" type=\"button\" value=\""+ Smilies[i].get('value') +"\" title=\""+ Smilies[i].get('title') + Smilies[i].get('value') +"\" onclick=\"insertIt(this.value,'text');\"><img src=\"img/smilies/"+ Smilies[i].get('url') +"\" alt=\""+ Smilies[i].get('value') +"\"></button>";
+		if (i % 2 == 1)
+			{
+			output[i] = output[i] +"<br />";
+			}
+		}
+	if (o > i)
+		{
+		j = o - 1;
+		output[j] = "<span class=\"js-handler\" title=\""+ Smilies[j].get('title') +"\" onclick=\"moreSmilies()\">"+ Smilies[j].get('value') +"</span>";
+		if (i % 2 == 1)
+			{
+			output[j] = "<br />"+ output[j];
+			}
+		}
+	}
+Element.insert($('buttonspace'), {'bottom': "\n<br />"+ output.join("")});
 }
 
 /**

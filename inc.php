@@ -248,20 +248,37 @@ $additionalJS .= '<script type="text/javascript">'."\n";
 if ($settings['bbcode'] == 1)
 	{
 	$additionalJS .= "var auge_buttons = \$A();\n";
-	$additionalJS .= "auge_buttons[0] = new Hash({value:'i', text:'".$lang['bbcode_italic']."', titel:'".$lang['bbcode_italic_title'].".'});\n";
-	$additionalJS .= "auge_buttons[1] = new Hash({value:'b', text:'".$lang['bbcode_bold']."', titel:'".$lang['bbcode_bold_title']."'});\n";
-	$additionalJS .= "auge_buttons[2] = new Hash({value:'code', text:'".$lang['bbcode_code']."', titel:'".$lang['bbcode_code_title']."'});\n";
+	$additionalJS .= "auge_buttons[0] = \$H({value:'i', text:'".$lang['bbcode_italic']."', titel:'".$lang['bbcode_italic_title'].".'});\n";
+	$additionalJS .= "auge_buttons[1] = \$H({value:'b', text:'".$lang['bbcode_bold']."', titel:'".$lang['bbcode_bold_title']."'});\n";
+	$additionalJS .= "auge_buttons[2] = \$H({value:'code', text:'".$lang['bbcode_code']."', titel:'".$lang['bbcode_code_title']."'});\n";
 	if ($settings['bbcode_img']==1)
 		{
-		$additionalJS .= "auge_buttons[3] = new Hash({value:'img', text:'".$lang['bbcode_image']."', titel:'".$lang['bbcode_image_title']."'});\n";
+		$additionalJS .= "auge_buttons[3] = \$H({value:'img', text:'".$lang['bbcode_image']."', titel:'".$lang['bbcode_image_title']."'});\n";
 		}
 	}
 if ($settings['upload_images']==1)
 	{
 	$additionalJS .= "\nvar auge_upload = \$H({text:'".$lang['upload_image']."', title:'".$lang['upload_image_title']."'});";
 	}
+if ($settings['smilies'] == 1)
+	{
+	$result = mysql_query("SELECT file, code_1, title FROM ".$db_settings['smilies_table']." ORDER BY order_id ASC", $connid);
+	if (mysql_num_rows($result) > 0)
+		{
+		$additionalJS .= "\nvar auge_smilies = \$A();\n";
+		$i=0;
+		while ($data = mysql_fetch_assoc($result))
+			{
+			$additionalJS .= "auge_smilies[".$i."] = \$H({value:'".$data['code_1']."', url:'".$data['file']."', title: '".$lang['smiley_title']."'});\n";
+			$i++;
+			}
+		$additionalJS .= "auge_smilies[".$i."] = \$H({value:'".$lang['more_smilies_linkname']."', url:'".$data['file']."', title: '".$lang['more_smilies_linktitle']."'});\n";
+		}
+	mysql_free_result($result);
+	}
 $additionalJS .= "\nvar delete_text = '".$lang['delete_link']."';";
-$additionalJS .= '</script>'."\n";
+$additionalJS .= "\n".'</script>';
+
 if ($settings['user_control_refresh']==1
 	and (isset($MyOwnSettings['control_refresh'])
 	and $MyOwnSettings['control_refresh'] == 'true')
