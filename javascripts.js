@@ -1,6 +1,7 @@
 function bbcode(v)
  {
- if (document.selection) // for IE
+ // for IE
+ if (document.selection)
    {
     var str = document.selection.createRange().text;
     document.forms['entryform'].elements['text'].focus();
@@ -8,7 +9,8 @@ function bbcode(v)
     sel.text = "[" + v + "]" + str + "[/" + v + "]";
     return;
    }
-  else if ((typeof document.forms['entryform'].elements['text'].selectionStart) != 'undefined') // for Mozilla
+  // for Mozilla
+  else if ((typeof document.forms['entryform'].elements['text'].selectionStart) != 'undefined')
    {
     var txtarea = document.forms['entryform'].elements['text'];
     var selLength = txtarea.textLength;
@@ -35,7 +37,8 @@ function insert(what)
     document.forms['entryform'].elements['text'].focus();
     document.selection.createRange().duplicate().text = what;
    }
-  else if ((typeof document.forms['entryform'].elements['text'].selectionStart) != 'undefined') // für Mozilla
+  // for Mozilla
+  else if ((typeof document.forms['entryform'].elements['text'].selectionStart) != 'undefined')
    {
     var tarea = document.forms['entryform'].elements['text'];
     var selEnd = tarea.selectionEnd;
@@ -58,7 +61,8 @@ function insert(what)
 
 function insert_link(form,field,link_text,link_target)
  {
- if (document.selection) // for IE
+ // for IE
+ if (document.selection)
    {
     var str = document.selection.createRange().text;
     document.forms[form].elements[field].focus();
@@ -79,7 +83,8 @@ function insert_link(form,field,link_text,link_target)
      }
     return;
    }
-  else if ((typeof document.forms[form].elements[field].selectionStart) != 'undefined') // for Mozilla
+  // for Mozilla
+  else if ((typeof document.forms[form].elements[field].selectionStart) != 'undefined')
    {
     var txtarea = document.forms[form].elements[field];
     var selLength = txtarea.textLength;
