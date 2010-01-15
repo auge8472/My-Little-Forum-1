@@ -412,6 +412,22 @@ font-weight: bold;
 font-style: normal;
 }
 
+#buttonspace {
+width: 160px;
+/*border:1px solid;*/
+padding: 0 0 0 0.5em;
+vertical-align: top;
+font-size:0.86em;
+}
+#buttonspace input {
+width: 5.6em;
+height: 1.8em;
+}
+#buttonspace button {
+width: 5.6em;
+height: 1.8em;
+}
+
 /* quoted text: */
 .citation {
 color: #6d6d6d;
