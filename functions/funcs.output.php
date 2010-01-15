@@ -106,14 +106,7 @@ if (!empty($view) or !empty($category))
 	$qs .= '?'.$q1;
 	if (!empty($q2))
 		{
-		if ($qs != '?')
-			{
-			$qs .= '&amp;'.$q2;
-			}
-		else
-			{
-			$qs .= $q2;
-			}
+		$qs .= ($qs != '?') ? '&amp;'.$q2 : $q2;
 		}
 	}
 
