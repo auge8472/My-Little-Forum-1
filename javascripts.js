@@ -219,6 +219,10 @@ $(a).focus();
 $(a).value = "";
 }
 
+function moreSmilies() {
+alert('moreSmilies');
+}
+
 function more_smilies()
  {
   var popurl="more_smilies.php";
