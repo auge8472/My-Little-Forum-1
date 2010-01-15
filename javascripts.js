@@ -115,12 +115,9 @@ function insert_link(form,field,link_text,link_target)
  }
  
 /**
- * Diese Funktion fuegt die Buttons fuer die BB-Codes
- * der textarea (#text) in das Formular ein.
- *
  * This function inserts the bb-code buttons
  * for the textarea (#text) into the form.
-*/
+ */
 function auge_bbc_buttons(Buttons) {
 var o = Buttons.length;
 var x = o - 1;
@@ -139,10 +136,14 @@ if (Buttons && o>0)
 $('bb-code-buttons').update(output.join(" "));
 }
 
-function clear()
- {
-  document.forms['entryform'].elements['text'].value = "";
- }
+/**
+ * delete text of an form element with given ID
+ * @param string ID
+ */
+function clearText(a) {
+$(a).focus();
+$(a).value = "";
+}
 
 function more_smilies()
  {

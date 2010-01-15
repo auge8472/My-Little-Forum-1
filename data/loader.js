@@ -12,12 +12,11 @@ if ($('bb-code-buttons'))
 		{
 		Element.insert($('bb-code-buttons'), {'bottom': " <input value=\""+ auge_upload.get('text') +"\" title=\""+ auge_upload.get('title') +"\" class=\"bb-button\" type=\"button\" name=\"imgupload\" onclick=\"upload();\" />"});
 		}
-
 	}
 
 if ($('delete-text') && typeof(delete_text) != "undefined")
 	{
-	Element.insert($('delete-text'), {'bottom': " - <a href=\"#\" onclick=\"clear(); return false;\">"+ delete_text +"</a>"});
+	Element.insert($('delete-text'), {'bottom': " - <span class=\"js-handler\" onclick=\"clearText('text'); return false;\">"+ delete_text +"</a>"});
 	}
 
 }
