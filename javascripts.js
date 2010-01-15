@@ -59,6 +59,42 @@ function insert(what)
    }
  }
 
+/**
+ * insert BB-Codes without text content
+ *
+ * @param string code
+ * @param string element-ID
+ */
+function insertIt(code, id) {
+
+$(id).focus();
+
+if ($(id).createTextRange)
+	{
+	document.selection.createRange().duplicate().$(id) = code;
+	}
+// for Mozilla
+else if ((typeof $(id).selectionStart) != 'undefined')
+	{
+	var selEnd = $(id).selectionEnd;
+	var txtLen = $(id).value.length;
+	var txtbefore = $(id).value.substring(0,selEnd);
+	var txtafter =  $(id).value.substring(selEnd, txtLen);
+	var oldScrollTop = $(id).scrollTop;
+	$(id).value = txtbefore + code + txtafter;
+	$(id).selectionStart = txtbefore.length + code.length;
+	$(id).selectionEnd = txtbefore.length + code.length;
+	$(id).scrollTop = oldScrollTop;
+	$(id).focus();
+   }
+  else
+   {
+	$(id).value += code;
+	$(id).focus();
+   }
+
+}
+
 function insert_link(form,field,link_text,link_target)
  {
  // for IE
