@@ -220,7 +220,7 @@ if ($view=='forum')
 	$authorstring = str_replace("[time]", strftime($lang['time_format'],$entry["p_time"]), $authorstring);
 	$entryID = !empty($entryID) ? ' - '.$entryID : '';
 	$entryedit = (!empty($entryedit)) ? '<br />'.$entryedit : '';
-	$r .= '<p class="author">'.$authorstring.'&nbsp;'.$entryIP.$entryID.$entryedit.'</p>'."\n";
+	$r .= '<p class="author">'.$authorstring.'&nbsp;'.$entryIP.$answer.$entryID.$entryedit.'</p>'."\n";
 	}
 else if ($view=='board' or $view=='mix')
 	{
