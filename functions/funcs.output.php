@@ -158,14 +158,18 @@ if ($entry["hp"]!="")
 	$email_hp .= htmlspecialchars($entry["hp"]).'"><img src="img/homepage.gif" ';
 	$email_hp .= 'alt="'.$lang['homepage_alt'].'" width="13" height="13" /></a>';
 	}
-if ((($entry["email"]!="" && $entry["hide_email"] != 1)
-	&& isset($_SESSION[$settings['session_prefix'].'user_id']))
-	&& $entry["hp"]!="") 
+if (($entry["email"]!="" && $entry["hide_email"] != 1)
+	and $entry["hp"]!=""
+	and (($settings['entries_by_users_only'] == 1
+	and isset($_SESSION[$settings['session_prefix'].'user_id']))
+	or $settings['entries_by_users_only'] == 0))
 	{
 	$email_hp .= "&nbsp;";
 	}
 if (($entry["email"]!="" && $entry["hide_email"] != 1)
+	and (($settings['entries_by_users_only'] == 1
 	and isset($_SESSION[$settings['session_prefix'].'user_id']))
+	or $settings['entries_by_users_only'] == 0))
 	{
 	$email_hp .= '<a href="contact.php?id='.$entry["id"];
 	$email_hp .= !empty($page) ? '&amp;page='.intval($page) : '';
