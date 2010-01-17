@@ -1039,7 +1039,7 @@ if (($settings['access_for_users_only'] == 1
 					{
 					$qs = "&page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category;
 					}
-				else if (isset($category))
+				else if (isset($category) and $category > 0)
 					{
 					$qs = "&category=".$category;
 					}
