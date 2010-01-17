@@ -762,7 +762,7 @@ else $template = preg_replace("#\{IF:HOME-LINK\}(.+?)\{ENDIF:HOME-LINK\}#is", ""
 
 $template = str_replace("{LANGUAGE}",$lang['language'],$template);
 $template = str_replace("{CHARSET}",$lang['charset'],$template);
-if (isset($wo)) $title .= $settings['forum_name']." - ".htmlspecialchars($wo);
+$title = isset($wo) ? $settings['forum_name']." - ".htmlspecialchars($wo) : $settings['forum_name'];
 $template = str_replace("{TITLE}",$title,$template);
 $template = str_replace("{DESCRIPTION}",$settings['forum_name'],$template);
 $template = str_replace('{ADD-JS}',$additionalJS,$template);
