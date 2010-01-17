@@ -242,9 +242,11 @@ if ($settings['access_for_users_only'] == 1
 			echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" />';
 			}
 		echo '</th>'."\n";
-		if ($categories!=false && $category == 0)
+		if ($categories != false && $category == 0)
 			{
-			echo '<th>'.$lang['board_category_headline'];
+			echo '<th><a href="mix.php?category='.$category.'&amp;order=category&amp;descasc=';
+		echo ($descasc=="ASC" && $order=="category") ? 'DESC' : 'ASC';
+			echo '" title="'.$lang['order_linktitle'].'">'.$lang['board_category_headline'].'</a>';
 			if ($order=="category" && $descasc=="ASC")
 				{
 				echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
