@@ -376,7 +376,7 @@ if ($settings['access_for_users_only'] == 1
 				}
 			if ($settings['all_views_direct'] == 1)
 				{
-				echo " <span class=\"small\">";
+				echo ' <span class="small">';
 				if ($settings['board_view'] == 1)
 					{
 					echo '<a href="board_entry.php?id='.$zeile["tid"].'&amp;view=board';
@@ -417,7 +417,7 @@ if ($settings['access_for_users_only'] == 1
 			echo '</td>'."\n";
 			if ($categories!=false && $category == 0)
 				{
-				echo '<td class="thread-info">'."\n"; #categories
+				echo '<td class="info">'."\n"; #categories
 				if (isset($categories[$zeile["category"]]) && $categories[$zeile["category"]]!='')
 					{
 					echo '<a title="'.str_replace("[category]", $categories[$zeile["category"]], $lang['choose_category_linktitle']);
@@ -454,7 +454,7 @@ if ($settings['access_for_users_only'] == 1
 					}
 				echo '</td>'."\n";
 				}
-			echo '<td class="thread-info">'."\n"; # author op
+			echo '<td class="info">'."\n"; # author op
 			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
 				{
 				$sult = str_replace("[name]", htmlspecialchars($zeile["name"]), $lang['show_userdata_linktitle']);
@@ -467,11 +467,11 @@ if ($settings['access_for_users_only'] == 1
 				}
 			echo '</td>'."\n";
 			# time op
-			echo '<td class="thread-info">'.strftime($lang['time_format'],($zeile["Uhrzeit"])).'</td>'."\n";
+			echo '<td class="info">'.strftime($lang['time_format'],($zeile["Uhrzeit"])).'</td>'."\n";
 			# number of answers
 			echo '<td class="number-cell">'.$answers_count.'</td>'."\n";
 			# date last answer
-			echo '<td class="thread-info">';
+			echo '<td class="info">';
 			if ($answers_count > 0)
 				{
 				if ($settings['last_reply_link']==1)
