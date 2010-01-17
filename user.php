@@ -730,8 +730,8 @@ switch ($action)
 				echo '<td class="d">'.htmlspecialchars($field['user_place']).'</td>'."\n";
 				echo '</tr>';
 				}
-			$days_registered = round((time() - $field["since_date"])/86400);
-			if ($days_registered<1) $days_registered=1;
+			$days_registered = floor((time() - $field["since_date"])/86400);
+			if ($days_registered < 1) $days_registered = 1;
 			$lang['user_last_login_text'] = str_replace('[logins]',$field['logins'],$lang['user_last_login_text']);
 			$lang['user_last_login_text'] = str_replace('[log-per-day]',round($field['logins']/$days_registered,2),$lang['user_last_login_text']);
 			echo '<tr>'."\n";
