@@ -112,7 +112,7 @@ $lang['board_category_headline'] =     "Kategorie";
 $lang['board_author_headline'] =       "Autor";
 $lang['board_date_headline'] =         "Datum";
 $lang['board_answers_headline'] =      "Antw.";
-$lang['board_last_answer_headline'] =  "letzte&nbsp;Antwort";
+$lang['board_last_answer_headline'] =  "letzte Antwort";
 $lang['views_headline'] =              "Views";
 $lang['new_answer_symbol'] =           "neuer Thread bzw. neue Antwort";
 
