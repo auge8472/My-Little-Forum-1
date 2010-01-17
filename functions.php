@@ -784,13 +784,13 @@ if (isset($_SESSION[$settings['session_prefix']."user_name"]))
 		{
 		$user_menu_admin = "";
 		}
-	$user_menu = '<a href="user.php?id='.$_SESSION[$settings['session_prefix'].'user_id'].'" title="'.$lang['own_userdata_linktitle'].'"><b>'.htmlspecialchars(stripslashes($_SESSION[$settings['session_prefix'].'user_name'])).'</b></a> | <a href="user.php" title="'.$lang['user_area_linktitle'].'">'.$lang['user_area_linkname'].'</a>'.$user_menu_admin.' | <a href="login.php" title="'.$lang['logout_linktitle'].'">'.$lang['logout_linkname'].'</a>';
+	$user_menu = '<a href="user.php?id='.$_SESSION[$settings['session_prefix'].'user_id'].'" title="'.$lang['own_userdata_linktitle'].'"><b>'.htmlspecialchars($_SESSION[$settings['session_prefix'].'user_name']).'</b></a> | <a href="user.php" title="'.$lang['user_area_linktitle'].'">'.$lang['user_area_linkname'].'</a>'.$user_menu_admin.' | <a href="login.php" title="'.$lang['logout_linktitle'].'">'.$lang['logout_linkname'].'</a>';
 	}
 else
 	{
-	$user_menu = '<a href="login.php" title="'.$lang['login_linktitle'].'">'.$lang['login_linkname'].'</a> | <a href="register.php" title="'.$lang['register_linktitle'].'">'.$lang['register_linkname'].'</a>';
+	$user_menu = '<a href="login.php" rel="nofollow" title="'.$lang['login_linktitle'].'">'.$lang['login_linkname'].'</a> | <a href="register.php" rel="nofollow" title="'.$lang['register_linktitle'].'">'.$lang['register_linkname'].'</a>';
 	}
-$user_menu .= ' | <a href="search.php" title="'.$lang['search_formtitle'].'">'.$lang['search_linkname'].'</a>';
+$user_menu .= ' | <a href="search.php" rel="nofollow" title="'.$lang['search_formtitle'].'">'.$lang['search_linkname'].'</a>';
 $template = str_replace("{USER-MENU}",$user_menu,$template);
 
 // Search:
