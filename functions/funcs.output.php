@@ -110,7 +110,7 @@ if (!empty($view) or !empty($category))
 		}
 	}
 
-$r .= '<a class="textlink" href="posting.php'.$qs;
+$r .= '<a class="textlink"  rel="nofollow" href="posting.php'.$qs;
 $r .= '" title="'.$lang['new_entry_linktitle'].'">'.$lang['new_entry_linkname'].'</a>';
 
 return $r;
