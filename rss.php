@@ -66,11 +66,7 @@ if ($result_count > 0
 			}
 		$rss .= '</i><br /><br />'.$ftext.']]></content:encoded>'."\n";
 		$rss .= '   <link>'.$settings['forum_address']."forum_entry.php?id=".$zeile['id'].'</link>'."\n";
-		$rss .= '   <pubDate>';
-		setlocale(LC_TIME, "C");
-		$rss .= strftime($lang['rss_time'],$zeile['rss_time']);
-		setlocale(LC_TIME, $lang['locale']);
-		$rss .= '</pubDate>'."\n";
+		$rss .= '   <pubDate>'.date("r", $zeile['rss_time']).'</pubDate>'."\n";
 		$rss .= '  </item>'."\n";
 		}
 	}
