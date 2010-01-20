@@ -105,7 +105,7 @@ background-image:url(img/update_mo.gif);
 
 /* general settings */
 .bold { font-weight: bold; }
-label { font-weight: bold; }
+label { font-weight: bold; cursor: pointer; }
 .current-page { font-weight: bold; }
 span.current-page {
 background:url(img/where.gif) no-repeat left center;
@@ -364,8 +364,6 @@ font-size: 1em;
 color: red;
 font-weight: bold;
 }
-.number-cell { text-align: right; }
-.thread-info, .number-cell, .small { font-size: 0.86em; }
 .postinginfo, .xsmall {
 font-size: 0.86em;
 color: #808080;
@@ -430,7 +428,7 @@ height: 1.8em;
 
 /* quoted text: */
 .citation {
-color: #6d6d6d;
+color: #606060;
 font-style: italic;
 }
 
@@ -615,12 +613,13 @@ table.normaltab td.c   {
 width:150px;
 vertical-align: top;
 font-size: 1em;
-font-weight: normal;
+font-weight: bold;
 color: #000;
 background: #d2ddea;
 background-image:url(img/bg_author.gif);
 background-repeat: repeat-y;
 background-position: right;
+border-bottom: 1px dotted #fff;
 }
 table.normaltab td.d {
 vertical-align: top;
@@ -629,6 +628,12 @@ font-weight: normal;
 color: #000;
 background: #f5f5f5;
 }
+table.normaltab td .info { font-weight: normal; }
+table.normaltab td.number-cell { text-align: right; }
+table.normaltab td.info,
+table.normaltab td.number-cell,
+table.normaltab td .info,
+.small { font-size: 0.86em; }
 
 /* mix view: */
 div.mixdivl { }
@@ -649,10 +654,6 @@ select.kat { font-size: 0.86em; }
 display: block;
 margin: 1em 0 0 0;
 padding: 0;
-}
-#entryform label {
-font-weight: bold;
-cursor: pointer;
 }
 
 input.bbcode-button {

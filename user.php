@@ -730,13 +730,15 @@ switch ($action)
 				echo '<td class="d">'.htmlspecialchars($field['user_place']).'</td>'."\n";
 				echo '</tr>';
 				}
-			$days_registered = floor((time() - $field["since_date"])/86400);
-			if ($days_registered < 1) $days_registered = 1;
+			$days_reg = floor((time() - $field["since_date"])/86400);
+			if ($days_reg < 1) $days_reg = 1;
+			$lang['user_since_text'] = str_replace('[reg-days]', $days_reg, $lang['user_since_text']);
 			$lang['user_last_login_text'] = str_replace('[logins]',$field['logins'],$lang['user_last_login_text']);
-			$lang['user_last_login_text'] = str_replace('[log-per-day]',round($field['logins']/$days_registered,2),$lang['user_last_login_text']);
+			$lang['user_last_login_text'] = str_replace('[log-per-day]',round($field['logins']/$days_reg,2),$lang['user_last_login_text']);
 			echo '<tr>'."\n";
 			echo '<td class="c">'.$lang['user_since'].'</td>'."\n";
-			echo '<td class="d">'.strftime($lang['time_format'],$field['since_date']).' ('.$days_registered.' days ago)</td>'."\n";
+			echo '<td class="d">'.strftime($lang['time_format'],$field['since_date']);
+			echo $lang['user_since_text'].'</td>'."\n";
 			echo '</tr><tr>'."\n";
 			echo '<td class="c">'.$lang['user_last_login'].'</td>'."\n";
 			echo '<td class="d">'.strftime($lang['time_format'],$field["login_date"]);
@@ -746,9 +748,10 @@ switch ($action)
 			echo '<td class="d">'.$postings_count;
 			if ($postings_count > 0)
 				{
-				echo ' ('.round($postings_count*100/$posting_count,1).'%; ';
-				echo round($postings_count/$days_registered,2).' per day)&nbsp;&nbsp;';
-				echo '<span class="small">[ <a href="search.php?show_postings='.$field["user_id"];
+				$lang['user_posting_text'] = str_replace('[post-percent]', round($postings_count*100/$posting_count,1), $lang['user_posting_text']);
+				$lang['user_posting_text'] = str_replace('[post-per-day]', round($postings_count/$days_reg,2), $lang['user_posting_text']);
+				echo $lang['user_posting_text'].'&nbsp;&nbsp;<span class="small">';
+				echo '[ <a href="search.php?show_postings='.$field["user_id"];
 				echo '">'.$lang['show_postings_ln'].'</a> ]</span>';
 				}
 			echo '</td>'."\n";
