@@ -23,16 +23,16 @@ $result = mysql_query($rssQuery, $connid);
 if (!$result) die($lang['db_error']);
 $result_count = mysql_num_rows($result);
 
-header("Content-Type: text/xml; charset: UTF-8";
-echo '<?xml version="1.0" encoding="UTF-8"?>';
-?>
-<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
- <channel>
-  <title><?php echo $settings['forum_name']; ?></title>
-  <link><?php echo $settings['forum_address']; ?></link>
-  <description><?php echo $settings['forum_name']; ?></description>
-  <language><?php echo $lang['language']; ?></language>
-<?php
+$rss  = '';
+$rss .= '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+
+$rss .= '<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">'."\n";
+$rss .= ' <channel>'."\n";
+$rss .= '  <title>'.$settings['forum_name'].'</title>'."\n";
+$rss .= '  <link>'.$settings['forum_address'].'</link>'."\n";
+$rss .= '  <description>'.$settings['forum_name'].'</description>'."\n";
+$rss .= '  <language>'.$lang['language'].'</language>'."\n";
+
 if ($result_count > 0
 && $settings['provide_rssfeed'] == 1
 && $settings['access_for_users_only'] == 0)
@@ -51,27 +51,34 @@ if ($result_count > 0
 		$title = htmlspecialchars($title);
 		$name = $zeile['name'];
 		$name = htmlspecialchars($name);
-?>
-  <item>
-   <title><?php echo $title; ?></title>
-   <content:encoded><![CDATA[<i><?php
-    if ($zeile['pid']==0)
-     {
-     $rss_author_info = str_replace("[name]", $name, $lang['rss_posting_by']);
-     echo str_replace("[time]", strftime($lang['time_format'],$zeile["xtime"]), $rss_author_info);
-     }
-    else
-     {
-     $rss_author_info = str_replace("[name]", $name, $lang['rss_reply_by']);
-     echo str_replace("[time]", strftime($lang['time_format'],$zeile["xtime"]), $rss_author_info);
-     }
-?></i><br /><br /><?php echo $ftext; ?>]]></content:encoded>
-   <link><?php echo $settings['forum_address']."forum_entry.php?id=".$zeile['id']; ?></link>
-   <pubDate><?php setlocale(LC_TIME, "C"); echo strftime($lang['rss_time'],$zeile['rss_time']); setlocale(LC_TIME, $lang['locale']); ?></pubDate>
-  </item>
-<?php
+		$rss .= '  <item>'."\n";
+		$rss .= '   <title>'.$title.'</title>'."\n";
+		$rss .= '   <content:encoded><![CDATA[<i>';
+		if ($zeile['pid']==0)
+			{
+			$rss_author_info = str_replace("[name]", $name, $lang['rss_posting_by']);
+			$rss .= str_replace("[time]", strftime($lang['time_format'],$zeile["xtime"]), $rss_author_info);
+			}
+		else
+			{
+			$rss_author_info = str_replace("[name]", $name, $lang['rss_reply_by']);
+			$rss .= str_replace("[time]", strftime($lang['time_format'],$zeile["xtime"]), $rss_author_info);
+			}
+		$rss .= '</i><br /><br />'.$ftext.']]></content:encoded>'."\n";
+		$rss .= '   <link>'.$settings['forum_address']."forum_entry.php?id=".$zeile['id'].'</link>'."\n";
+		$rss .= '   <pubDate>';
+		setlocale(LC_TIME, "C");
+		$rss .= strftime($lang['rss_time'],$zeile['rss_time']);
+		setlocale(LC_TIME, $lang['locale']);
+		$rss .= '</pubDate>'."\n";
+		$rss .= '  </item>'."\n";
 		}
 	}
+$rss .= ' </channel>'."\n";
+$rss .= '</rss>'."\n";
+
+#header("Content-Type: text/html; charset: UTF-8");
+#echo '<pre>'.htmlspecialchars($rss).'</pre>';
+header("Content-Type: text/xml; charset: UTF-8");
+echo $rss;
 ?>
- </channel>
-</rss>
