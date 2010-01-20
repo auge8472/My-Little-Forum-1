@@ -5,8 +5,8 @@ include("inc.php");
 $rssQuery = "SELECT
 id,
 pid,
-UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS xtime,
-UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS rss_time,
+DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS xtime,
+UNIX_TIMESTAMP(time) AS rss_time,
 name,
 subject,
 text
@@ -20,7 +20,7 @@ $rssQuery .= "
 ORDER BY time DESC
 LIMIT 15";
 $result = mysql_query($rssQuery, $connid);
-if (!$result) die($lang['db_error']);
+if (!$result) die($lang['db_error']."<br />".mysql_error());
 $result_count = mysql_num_rows($result);
 
 $rss  = '';
@@ -57,13 +57,12 @@ if ($result_count > 0
 		if ($zeile['pid']==0)
 			{
 			$rss_author_info = str_replace("[name]", $name, $lang['rss_posting_by']);
-			$rss .= str_replace("[time]", strftime($lang['time_format'],$zeile["xtime"]), $rss_author_info);
 			}
 		else
 			{
 			$rss_author_info = str_replace("[name]", $name, $lang['rss_reply_by']);
-			$rss .= str_replace("[time]", strftime($lang['time_format'],$zeile["xtime"]), $rss_author_info);
 			}
+		$rss .= str_replace("[time]", $zeile["xtime"], $rss_author_info);
 		$rss .= '</i><br /><br />'.$ftext.']]></content:encoded>'."\n";
 		$rss .= '   <link>'.$settings['forum_address']."forum_entry.php?id=".$zeile['id'].'</link>'."\n";
 		$rss .= '   <pubDate>'.date("r", $zeile['rss_time']).'</pubDate>'."\n";
