@@ -1096,7 +1096,8 @@ if (($settings['access_for_users_only'] == 1
 				}
 			if (isset($page) && isset($order) && isset($category))
 				{
-				$subnav1_query1 = '&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order;
+				$subnav1_query1  = '&amp;page='.$page.'&amp;order='.$order;
+				$subnav1_query1 .= ($category > 0) ? '&amp;category='.$category : '';
 				}
 			else
 				{
@@ -1133,7 +1134,7 @@ if (($settings['access_for_users_only'] == 1
 				$subnav1_href2 = 'forum.php';
 				}
 			$subnav_1 .= '<a class="textlink" href="'.$subnav1_href2;
-			$subnav_1 .= (isset($category)) ? '?category='.$category : '';
+			$subnav_1 .= ($category > 0) ? '?category='.$category : '';
 			$subnav_1 .= '">'.$lang['back_to_overview_linkname'].'</a>';
 			}
 
