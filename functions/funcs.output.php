@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	collection of functions for output control
+ * collection of functions for generation of HTML-output
  * @author: Heiko August
  */
 
@@ -49,7 +49,7 @@ return $r;
 
 
 /**
- * generates the form for categories
+ * generates a form for categories
  *
  * @param array $categories
  * @param integer $category
@@ -381,4 +381,5 @@ if (($settings['user_edit'] == 1
 
 return $r;
 } # End: outputPostingEditMenu
+
 ?>
