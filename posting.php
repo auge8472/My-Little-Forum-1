@@ -424,7 +424,8 @@ if (($settings['access_for_users_only'] == 1
 
 						if (isset($page) && isset($order) && isset($category) && isset($descasc)) 
 							{
-							$qs="?page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category;
+							$qs  = "?page=".$page."&amp;order=".$order."&amp;descasc=".$descasc;
+							$qs .= ($category > 0) ? "&amp;category=".$category : '';
 							}
 						else
 							{
@@ -727,7 +728,7 @@ if (($settings['access_for_users_only'] == 1
 				}
 			# end check data
 
-			if(empty($errors) && empty($preview) && isset($_POST['save_entry']))
+			if (empty($errors) && empty($preview) && isset($_POST['save_entry']))
 				{
 				switch ($action)
 					{
@@ -771,8 +772,10 @@ if (($settings['access_for_users_only'] == 1
 						# letzten Eintrag ermitteln (um darauf umzuleiten):
 						$redirectQuery = "SELECT
 						tid,
+						tid AS counter,
 						pid,
-						id
+						id,
+						(SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE tid = counter) AS count
 						FROM ".$db_settings['forum_table']."
 						WHERE id = LAST_INSERT_ID()";
 						$result_neu = mysql_query($redirectQuery, $connid);
@@ -927,6 +930,16 @@ if (($settings['access_for_users_only'] == 1
 						# for redirect:
 						$further_tid = $neu["tid"];
 						$further_id = $neu["id"];
+						$further_page = 0;
+						if ($curr_view == 'board')
+							{
+							# there are more postings in thread than
+							# the setting for postings per page allows
+							if ($neu['count'] > $settings['answers_per_topic'])
+								{
+								$further_page = floor($neu['count']/$settings['answers_per_topic']);
+								}
+							}
 						$refer = 1;
 					break;
 
@@ -946,6 +959,8 @@ if (($settings['access_for_users_only'] == 1
 								{
 								$editPostingQuery = "SELECT
 								tid,
+								tid AS counter,
+								(SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE tid = counter) AS count,
 								name,
 								subject,
 								text
@@ -1012,6 +1027,16 @@ if (($settings['access_for_users_only'] == 1
 									$further_tid = $back;
 									}
 								$further_id = $id;
+								$further_page = 0;
+								if ($curr_view == 'board')
+									{
+									# there are more postings in thread than
+									# the setting for postings per page allows
+									if ($field['count'] > $settings['answers_per_topic'])
+										{
+										$further_page = floor($field['count']/$settings['answers_per_topic']);
+										}
+									}
 								$refer = 1;
 								}
 							else
@@ -1037,20 +1062,25 @@ if (($settings['access_for_users_only'] == 1
 				{
 				if (isset($page) && isset($order) && isset($category) && isset($descasc))
 					{
-					$qs = "&page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category;
+					$qs  = '&page='.$page.'&order='.$order.'&descasc='.$descasc;
+					$qs .= ($category > 0) ? '&category='.$category : '';
 					}
 				else if (isset($category) and $category > 0)
 					{
-					$qs = "&category=".$category;
+					$qs = '&category='.$category;
 					}
 				else
 					{
-					$qs = "";
+					$qs = '';
 					}
 				if (!empty($view))
 					{
 					$header_href = ($view=='board') ? 'board_entry.php' : 'mix_entry.php';
 					$further = $further_tid;
+					if ($further_page > 0)
+						{
+						$qs .= '&be_page='.$further_page;
+						}
 					$qs .= '#p'.$further_id;
 					}
 				else
@@ -1172,13 +1202,11 @@ if (($settings['access_for_users_only'] == 1
 					{
 					echo '<h2>'.$lang['edit_marking'].'</h2>'."\n";
 					}
-
 				# error messages, if present:
 				if (isset($errors))
 					{
 					echo errorMessages($errors);
 					}
-
 				# preview:
 				if (isset($preview) && empty($errors))
 					{
