@@ -426,6 +426,17 @@ width: 2.8em;
 height: 1.8em;
 }
 
+#buttonspace .additional-menu {
+width: 7.4em;
+height: 140px;
+position: relative;
+left: 6em;
+bottom: 140px;
+overflow: auto;
+background-color: #eef;
+border:1px solid #bacbdf;
+}
+
 /* quoted text: */
 .citation {
 color: #606060;
