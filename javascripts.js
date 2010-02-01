@@ -30,35 +30,6 @@ function bbcode(v)
   else insert('[' + v + '][/' + v + '] ');
  }
 
-function insert(what)
- {
-  if (document.forms['entryform'].elements['text'].createTextRange)
-   {
-    document.forms['entryform'].elements['text'].focus();
-    document.selection.createRange().duplicate().text = what;
-   }
-  // for Mozilla
-  else if ((typeof document.forms['entryform'].elements['text'].selectionStart) != 'undefined')
-   {
-    var tarea = document.forms['entryform'].elements['text'];
-    var selEnd = tarea.selectionEnd;
-    var txtLen = tarea.value.length;
-    var txtbefore = tarea.value.substring(0,selEnd);
-    var txtafter =  tarea.value.substring(selEnd, txtLen);
-    var oldScrollTop = tarea.scrollTop;
-    tarea.value = txtbefore + what + txtafter;
-    tarea.selectionStart = txtbefore.length + what.length;
-    tarea.selectionEnd = txtbefore.length + what.length;
-    tarea.scrollTop = oldScrollTop;
-    tarea.focus();
-   }
-  else
-   {
-    document.forms['entryform'].elements['text'].value += what;
-    document.forms['entryform'].elements['text'].focus();
-   }
- }
-
 /**
  * insert BB-Codes without text content
  *
@@ -71,7 +42,7 @@ $(id).focus();
 
 if ($(id).createTextRange)
 	{
-	document.selection.createRange().duplicate().$(id) = code;
+	document.selection.createRange().duplicate().text = code;
 	}
 // for Mozilla
 else if ((typeof $(id).selectionStart) != 'undefined')
@@ -92,7 +63,6 @@ else if ((typeof $(id).selectionStart) != 'undefined')
 	$(id).value += code;
 	$(id).focus();
    }
-
 }
 
 function insert_link(form,field,link_text,link_target)
@@ -159,7 +129,8 @@ function insert_link(form,field,link_text,link_target)
  * This function inserts the bb-code buttons
  * for the textarea (#text) into the form.
  */
-function auge_bbc_buttons(Buttons) {
+
+function bbCodeButtons(Buttons) {
 var o = Buttons.length;
 var x = o - 1;
 var output = $A();
@@ -170,7 +141,7 @@ if (Buttons && o>0)
 	for (var i=0;i<o;i++)
 		{
 		j = i + 1;
-		output[j] = "<input type=\"button\" value=\""+ Buttons[i].get('text') +"\" title=\"" + Buttons[i].get('titel') + "\" class=\"bb-button\" onClick=\"bbcode('"+ Buttons[i].get('value') +"')\"><br />";
+		output[j] = "<input type=\"button\" value=\""+ Buttons[i].get('text') +"\" title=\"" + Buttons[i].get('titel') + "\" class=\"bb-button\" onclick=\"bbcode('"+ Buttons[i].get('value') +"')\"><br />";
 		}
 	j = j + 1;
 	}
@@ -200,7 +171,7 @@ if (Smilies && o>0)
 	if (o > i)
 		{
 		j = o - 1;
-		output[j] = "<span class=\"js-handler\" title=\""+ Smilies[j].get('title') +"\" onclick=\"moreSmilies()\">"+ Smilies[j].get('value') +"</span>";
+		output[j] = "<span class=\"js-handler\" title=\""+ Smilies[j].get('title') +"\" onclick=\"moreSmilies(auge_smilies)\">"+ Smilies[j].get('value') +"</span>";
 		if (i % 2 == 1)
 			{
 			output[j] = "<br />"+ output[j];
@@ -209,6 +180,8 @@ if (Smilies && o>0)
 	}
 Element.insert($('buttonspace'), {'bottom': "\n<br />"+ output.join("")});
 }
+
+
 
 /**
  * delete text of an form element with given ID
@@ -219,8 +192,32 @@ $(a).focus();
 $(a).value = "";
 }
 
-function moreSmilies() {
-alert('moreSmilies');
+function moreSmilies(Smilies) {
+var o = Smilies.size() - 1;
+var buttons = $A();
+
+var div = new Element('div');
+div.writeAttribute('id', 'add-smilies');
+div.writeAttribute('class', 'additional-menu');
+
+for (i = 6; i < o; i++)
+	{
+	j = i - 6;
+	buttons[j] = "<button name=\"smiley\" type=\"button\" value=\""+ Smilies[i].get('value') +"\" title=\""+ Smilies[i].get('title') + Smilies[i].get('value') +"\" onclick=\"insertIt(this.value,'text'); destroyElement('add-smilies');\"><img src=\"img/smilies/"+ Smilies[i].get('url') +"\" alt=\""+ Smilies[i].get('value') +"\"></button>";
+	if (i % 2 == 1)
+		{
+		buttons[j] = buttons[j] +"<br />";
+		}
+//	buttons[j] = SmileyButton(Smilies[i]);
+	}
+Element.insert(div, buttons.join(''));
+//alert(div.inspect());
+
+$('buttonspace').insert(div);
+}
+
+function destroyElement(name) {
+$(name).remove();
 }
 
 function more_smilies()
