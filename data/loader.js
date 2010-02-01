@@ -4,7 +4,7 @@ function onloadList() {
 
 if ($('buttonspace'))
 	{
-	auge_bbc_buttons(auge_buttons);
+	bbCodeButtons(auge_buttons);
 
 	Element.insert($('buttonspace'), {'bottom': " <input value=\"Link\" title=\"Link einfügen: \[link=http://www.domain.tld/\]Link\[/link\] oder \[link\]http://www.domain.tld/\[/link\]\" class=\"bb-button\" type=\"button\" name=\"link2\" onclick=\"insert_link('entryform','text','Link-Text (optional)','Link-Ziel (URL):');\" />"});
 
