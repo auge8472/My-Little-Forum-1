@@ -504,7 +504,7 @@ $connid = @mysql_connect($host, $user, $pw);
 if(!$connid) die($lang['db_error']);
 
 mysql_select_db($db, $connid) or die($lang['db_error']);
-mysql_query("SET NAMES utf8",$connid) or die($lang['db_error']);
+mysql_set_charset("utf8",$connid) or die($lang['db_error']);
 
 return $connid;
 } # End: connect_db
