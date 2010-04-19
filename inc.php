@@ -25,7 +25,7 @@ header('Content-Type: text/html; charset=UTF-8');
 #ini_set("session.use_trans_sid","0");
 session_start();
 
-if(!defined('MB_CASE_LOWER')) require('/functions/funcs.mb_replacements.php');
+if (!extension_loaded('mbstring')) include_once('/functions/funcs.mb_replacements.php');
 include("db_settings.php");
 include("functions.php");
 
