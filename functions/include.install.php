@@ -1,4 +1,108 @@
 <?php
+function stripslashes_deep($value) {
+$value = is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value);
+return $value;
+} # Ende: stripslashes_deep
+
+
+
+/**
+ * connects to a MySQL database
+ * @param array [$db]
+ * @return resource [$sql]
+ * @since 1.8
+ * @link http://termindbase.auge8472.de/dokumentation/dok.funcs_db.php
+ */
+function auge_connect_db($db) {
+$s = @mysql_connect($db["host"],$db["user"],$db["pw"]);
+$t = @mysql_select_db($db["db"],$s);
+
+$return = array();
+
+if ($s===false or $t===false)
+	{
+	$return["status"] = false;
+	$return["errnbr"] = mysql_errno();
+	}
+else
+	{
+	# UTF-8 erzwingen (2008-07-29)
+	$q = "SET NAMES utf8";
+	$a = auge_ask_database($q,$s);
+	if ($a===false)
+		{
+		$return["status"] = false;
+		$return["errnbr"] = mysql_errno();
+		}
+	else
+		{
+		# $s: MySQL-resource-ID
+		$return["status"] = $s;
+		$return["errnbr"] = "0002";
+		}
+	}
+return $return;
+} # Ende: auge_connect_db()
+
+
+
+/**
+ * sends any query to the database
+ * @param string [$query]
+ * @param resource [$sql]
+ * @return bool [false]
+ * @return bool [true]
+ * @return array [$datasets]
+ */
+function auge_ask_database($q,$s) {
+# $q: der auszufuehrende Query
+# $s: die Kennung der DB-Verbindung
+$return = array();
+
+$a = @mysql_query($q,$s);
+
+if ($a===false)
+	{
+	$return["status"] = false;
+	$return["errnbr"] = mysql_errno();
+	}
+else
+	{
+	if ($a===true)
+		{
+		# INSERT, UPDATE, ALTER etc. pp.
+		$return["status"] = true;
+		$return["errnbr"] = "0001";
+		}
+	else
+		{
+		# !true, !false, ressource number
+		# SELECT, EXPLAIN, SHOW, DESCRIBE
+		$b = auge_generate_answer($a);
+		$return["status"] = $b;
+		$return["errnbr"] = "0002";
+		}
+	}
+return $return;
+} # Ende: auge_ask_database($q,$s)
+
+
+
+/**
+ * puts datasets into an associated array
+ * @param resource []
+ * @return array [$datasets]
+ */
+function auge_generate_answer($a) {
+$b = array();
+while ($row = mysql_fetch_assoc($a))
+	{
+	$b[] = $row;
+	}
+return $b;
+} # Ende: auge_generate_answer($a)
+
+
 
 function errorMessages($error) {
 global $lang;
