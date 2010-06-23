@@ -267,9 +267,7 @@ return $return;
  * sends any query to the database
  * @param string [$query]
  * @param resource [$sql]
- * @return bool [false]
- * @return bool [true]
- * @return array [$datasets]
+ * @return array [status: false, true, array; errnbr: numeric string]
  */
 function auge_ask_database($q,$s) {
 # $q: der auszufuehrende Query
@@ -307,7 +305,7 @@ return $return;
 
 /**
  * puts datasets into an associated array
- * @param resource []
+ * @param resource [$resource number]
  * @return array [$datasets]
  */
 function auge_generate_answer($a) {
