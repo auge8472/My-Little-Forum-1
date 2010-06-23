@@ -21,10 +21,6 @@
 
 include("inc.php");
 
-if (count($_GET) > 0)
-foreach($_GET as $key => $value)
-$$key = $value;
-
 if (file_exists('install.php')
 or file_exists('update.php')
 or file_exists('update_content.php'))
@@ -32,6 +28,10 @@ or file_exists('update_content.php'))
 	header("location: ".$settings['forum_address']."service.php");
 	die("<a href=\"service.php\">further...</a>");
 	}
+
+if (count($_GET) > 0)
+foreach($_GET as $key => $value)
+$$key = $value;
 
 if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 && isset($_COOKIE['auto_login'])
