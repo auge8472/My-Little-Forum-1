@@ -255,7 +255,7 @@ else
 		{
 		# $s: MySQL-resource-ID
 		$return["status"] = $s;
-		$return["errnbr"] = "0002";
+		$return["errnbr"] = "0001";
 		}
 	}
 return $return;
@@ -289,7 +289,7 @@ else
 		{
 		# INSERT, UPDATE, ALTER etc. pp.
 		$return["status"] = true;
-		$return["errnbr"] = "0001";
+		$return["errnbr"] = "0002";
 		}
 	else
 		{
@@ -297,7 +297,7 @@ else
 		# SELECT, EXPLAIN, SHOW, DESCRIBE
 		$b = auge_generate_answer($a);
 		$return["status"] = $b;
-		$return["errnbr"] = "0002";
+		$return["errnbr"] = "0003";
 		}
 	}
 return $return;
