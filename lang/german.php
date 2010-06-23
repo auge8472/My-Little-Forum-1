@@ -18,6 +18,7 @@ $lang['show_userdata_linktitle'] =     "Benutzerdaten von [name] anzeigen";
 $lang['registered_user_title'] =       "registrierter Benutzer";
 $lang['info'] =                        "Information";
 $lang['info_forum_disabled'] =         "Das Forum ist zur Zeit nicht verfügbar.";
+$lang['info_forum_servicing'] =        "Das Forum wird momentan gewartet. Bitte versuchen Sie es später noch einmal.";
 
 // Navigation:
 $lang['forum_load_message'] =          "Ladezeitpunkt: [load], Reload: [reload]";

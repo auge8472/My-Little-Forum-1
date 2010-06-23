@@ -22,6 +22,7 @@ $lang['show_userdata_linktitle'] =     "Show user data of [name]";
 $lang['registered_user_title'] =       "Registered user";
 $lang['info'] =                        "Information";
 $lang['info_forum_disabled'] =         "The forum is currently unavailable.";
+$lang['info_forum_servicing'] =        "The forum is currently in service mode. Please try later again.";
 
 // Navigation:
 $lang['forum_load_message'] =         "Loading time: [load], reload: [reload]";
