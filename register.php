@@ -21,6 +21,14 @@
 
 include("inc.php");
 
+if (file_exists('install.php')
+or file_exists('update.php')
+or file_exists('update_content.php'))
+	{
+	header("location: ".$settings['forum_address']."service.php");
+	die("<a href=\"service.php\">further...</a>");
+	}
+
 if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_register']==1)
 	{
 	require('captcha/captcha.php');

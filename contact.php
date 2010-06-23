@@ -21,6 +21,14 @@
 
 include_once("inc.php");
 
+if (file_exists('install.php')
+or file_exists('update.php')
+or file_exists('update_content.php'))
+	{
+	header("location: ".$settings['forum_address']."service.php");
+	die("<a href=\"service.php\">further...</a>");
+	}
+
 if (isset($_GET['id'])) $id = $_GET['id'];
 if (isset($_POST['id'])) $id = $_POST['id'];
 if (isset($_GET['uid'])) $uid = $_GET['uid'];

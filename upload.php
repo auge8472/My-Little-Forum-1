@@ -1,6 +1,14 @@
 <?php
 include("inc.php");
 
+if (file_exists('install.php')
+or file_exists('update.php')
+or file_exists('update_content.php'))
+	{
+	header("location: ".$settings['forum_address']."service.php");
+	die("<a href=\"service.php\">further...</a>");
+	}
+
 if ($settings['upload_images']!=1) die('This feature is not activated.');
 
 $uploaded_images_path = 'img/uploaded/';
