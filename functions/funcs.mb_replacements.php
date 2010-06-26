@@ -3,8 +3,23 @@
 function mb_internal_encoding($charset='') {
 }
 
-function mb_strlen($str, $encoding='') {
-return strlen($str);
+function mb_strlen($string, $encoding='utf-8') {
+$encoding = strtolower($encoding);
+if (function_exists('mb_strlen'))
+	{
+	return mb_strlen($string, $encoding);
+	}
+else if ($encoding=='utf-8')
+	{
+	$string = utf8_decode($string);
+	$string = strlen($string);
+	$string = utf8_encode($string);
+	return ($string);
+	}
+else
+	{
+	return strlen($string);
+	}
 }
  
 function mb_substr($str, $start, $length=0, $encoding='') {
