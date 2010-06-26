@@ -19,12 +19,42 @@ function mb_strrpos($haystack, $needle, $offset=0, $encoding='') {
 return strrpos($haystack, $needle, $offset);
 }
 
-function mb_strtolower($str, $encoding='') {
-return strtolower($str);
+function mb_strtolower($string, $encoding='utf-8') {
+$encoding = strtolower($encoding);
+if (function_exists('mb_strtolower'))
+	{
+	return mb_strtolower($string, $encoding);
+	}
+else if ($encoding=='utf-8')
+	{
+	$string = utf8_decode($string);
+	$string = strtolower($string);
+	$string = utf8_encode($string);
+	return ($string);
+	}
+else
+	{
+	return strtolower($string);
+	}
 }
 
-function mb_strtoupper($str, $encoding='') {
-return strtoupper($str);
+function mb_strtoupper($string, $encoding='utf-8') {
+$encoding = strtolower($encoding);
+if (function_exists('mb_strtolower'))
+	{
+	return mb_strtoupper($string, $encoding);
+	}
+else if ($encoding=='utf-8')
+	{
+	$string = utf8_decode($string);
+	$string = strtoupper($string);
+	$string = utf8_encode($string);
+	return ($string);
+	}
+else
+	{
+	return strtoupper($string);
+	}
 }
 
 function mb_encode_mimeheader($str, $charset='utf-8', $transfer_encoding='', $linefeed='', $indent='') {
