@@ -25,8 +25,8 @@ if (file_exists('install.php')
 or file_exists('update.php')
 or file_exists('update_content.php'))
 	{
-	header("location: ".$settings['forum_address']."service.php");
-	die("<a href=\"service.php\">further...</a>");
+	header("location: ".$settings['forum_address']."info.php?info=2");
+	die("<a href=\"info.php?info=2\">further...</a>");
 	}
 
 // Variablen importieren:
