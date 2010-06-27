@@ -12,16 +12,14 @@ if (function_exists('mb_strlen'))
 else if ($encoding=='utf-8')
 	{
 	$string = utf8_decode($string);
-	$string = strlen($string);
-	$string = utf8_encode($string);
-	return ($string);
+	return = strlen($string);
 	}
 else
 	{
 	return strlen($string);
 	}
 }
- 
+
 function mb_substr($str, $start, $length=0, $encoding='') {
 return substr($str, $start, $length);
 }
