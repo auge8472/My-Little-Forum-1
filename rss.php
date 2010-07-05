@@ -61,7 +61,7 @@ if ($result_count > 0
 	{
 	while ($zeile = mysql_fetch_assoc($result))
 		{
-		$ftext = $zeile["text"];
+		$ftext = outputXMLclearedString($zeile["text"]);
 		$ftext = htmlspecialchars($ftext);
 		$ftext = make_link($ftext);
 		$ftext = preg_replace("#\[msg\](.+?)\[/msg\]#is", "\\1", $ftext);
@@ -69,9 +69,9 @@ if ($result_count > 0
 		$ftext = bbcode($ftext);
 		$ftext = nl2br($ftext);
 		$ftext = rss_quote($ftext);
-		$title = $zeile['subject'];
+		$title = outputXMLclearedString($zeile['subject']);
 		$title = htmlspecialchars($title);
-		$name = $zeile['name'];
+		$name = outputXMLclearedString($zeile['name']);
 		$name = htmlspecialchars($name);
 		$rss .= '  <item>'."\n";
 		$rss .= '   <title>'.$title.'</title>'."\n";
