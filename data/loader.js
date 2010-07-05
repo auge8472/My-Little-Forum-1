@@ -23,4 +23,9 @@ if ($('delete-text') && typeof(delete_text) != "undefined")
 	Element.insert($('delete-text'), {'bottom': " - <span class=\"js-handler\" onclick=\"clearText('text'); return false;\">"+ delete_text +"</a>"});
 	}
 
+if ($('user-name'))
+	{
+	$('user-name').focus();
+	}
+
 }
