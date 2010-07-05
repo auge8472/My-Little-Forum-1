@@ -382,4 +382,78 @@ if (($settings['user_edit'] == 1
 return $r;
 } # End: outputPostingEditMenu
 
+
+function outputXMLclearedString($string) {
+$illegalChars = array(array(), array());
+
+$illegalChars["char"][0] = chr(0);
+$illegalChars["repl"][0] = "";
+$illegalChars["char"][1] = chr(1);
+$illegalChars["repl"][1] = "";
+$illegalChars["char"][2] = chr(2);
+$illegalChars["repl"][2] = "";
+$illegalChars["char"][3] = chr(3);
+$illegalChars["repl"][3] = "";
+$illegalChars["char"][4] = chr(4);
+$illegalChars["repl"][4] = "";
+$illegalChars["char"][5] = chr(5);
+$illegalChars["repl"][5] = "";
+$illegalChars["char"][6] = chr(6);
+$illegalChars["repl"][6] = "";
+$illegalChars["char"][7] = chr(7);
+$illegalChars["repl"][7] = "";
+$illegalChars["char"][8] = chr(8);
+$illegalChars["repl"][8] = "";
+$illegalChars["char"][9] = chr(9);
+$illegalChars["repl"][9] = " ";
+$illegalChars["char"][10] = chr(10);
+$illegalChars["repl"][10] = chr(10);
+$illegalChars["char"][11] = chr(11);
+$illegalChars["repl"][11] = "";
+$illegalChars["char"][12] = chr(12);
+$illegalChars["repl"][12] = "";
+$illegalChars["char"][13] = chr(13);
+$illegalChars["repl"][13] = chr(13);
+$illegalChars["char"][14] = chr(14);
+$illegalChars["repl"][14] = "";
+$illegalChars["char"][15] = chr(15);
+$illegalChars["repl"][15] = "";
+$illegalChars["char"][16] = chr(16);
+$illegalChars["repl"][16] = "";
+$illegalChars["char"][17] = chr(17);
+$illegalChars["repl"][17] = "";
+$illegalChars["char"][18] = chr(18);
+$illegalChars["repl"][18] = "";
+$illegalChars["char"][19] = chr(19);
+$illegalChars["repl"][19] = "";
+$illegalChars["char"][20] = chr(20);
+$illegalChars["repl"][20] = "";
+$illegalChars["char"][21] = chr(21);
+$illegalChars["repl"][21] = "";
+$illegalChars["char"][22] = chr(22);
+$illegalChars["repl"][22] = "";
+$illegalChars["char"][23] = chr(23);
+$illegalChars["repl"][23] = "";
+$illegalChars["char"][24] = chr(24);
+$illegalChars["repl"][24] = "";
+$illegalChars["char"][25] = chr(25);
+$illegalChars["repl"][25] = "";
+$illegalChars["char"][26] = chr(26);
+$illegalChars["repl"][26] = "";
+$illegalChars["char"][27] = chr(27);
+$illegalChars["repl"][27] = "";
+$illegalChars["char"][28] = chr(28);
+$illegalChars["repl"][28] = "";
+$illegalChars["char"][29] = chr(29);
+$illegalChars["repl"][29] = "";
+$illegalChars["char"][30] = chr(30);
+$illegalChars["repl"][30] = "";
+$illegalChars["char"][31] = chr(31);
+$illegalChars["repl"][31] = "";
+
+$string = str_replace($illegalChars["char"], $illegalChars["repl"], $string);
+
+return $string;
+} # End: outputXMLclearedString
+
 ?>
