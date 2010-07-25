@@ -23,6 +23,70 @@ for ($i=0; $i<$countWords; $i++)
 
 return $error;
 } # End: processCountCharsInWords
+/**
+ * splits URL in parts and encodes the parts
+ *
+ * @param string $url
+ * @return string $url
+ */
+function processUrlEncode($url) {
+$url = trim($url);
+$temp = parse_url($url);
+$nurl .= (!empty($temp['scheme'])) ? $temp['scheme'].'://' : '';
+$nurl .= (!empty($temp['user']) and !empty($temp['pass'])) ? $temp['user'].':'.$temp['pass'].'@' : '';
+$nurl .= (!empty($temp['host'])) ? $temp['host'] : '';
+$nurl .= (!empty($temp['port'])) ? ':'.$temp['port'] : '';
+if (!empty($temp['path']))
+	{
+	$temp['path'] = explode("/", $temp['path']);
+	for ($i = 0; $i < count($temp['path']); $i ++)
+		{
+		if (!empty($temp['path'][$i]))
+			{
+			$nurl .= '/'.rawurlencode($temp['path'][$i]);
+			}
+		}
+	}
+if (!empty($temp['query']))
+	{
+	$nurl .= '?';
+	if (strpos($temp['query'], ';'))
+		{
+		$queryParts = explode(';', $temp['query']);
+		}
+	else if (strpos($temp['query'], '&amp;'))
+		{
+		$queryParts = explode('&amp;', $temp['query']);
+		}
+	else if (strpos($temp['query'], '&'))
+		{
+		$queryParts = explode('&', $temp['query']);
+		}
+	else
+		{
+		$queryParts = array($temp['query']);
+		}
+	for ($i = 0; $i < count($queryParts); $i++)
+		{
+		$splitter[$i] = explode('=', $queryParts[$i]);
+		if ($i == 0)
+			{
+			$nurl .= $splitter[$i][0].'='.urlencode($splitter[$i][1]);
+			}
+		else
+			{
+			$nurl .= '&amp;'.$splitter[$i][0].'='.urlencode($splitter[$i][1]);
+			}
+		}
+	}
+else
+	{
+	$nurl .= '';
+	}
+$nurl .= (!empty($temp['fragment'])) ? '#'.$temp['fragment'] : '';
+
+return $nurl;
+} # End: processUrlEncode
 
 
 ?>
