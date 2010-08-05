@@ -29,7 +29,7 @@ return $error;
  * @param string $url
  * @return string $url
  */
-function processUrlEncode($url) {
+function processUrlEncode($url, $uri= true) {
 $url = trim($url);
 $temp = parse_url($url);
 $nurl .= (!empty($temp['scheme'])) ? $temp['scheme'].'://' : '';
@@ -43,7 +43,14 @@ if (!empty($temp['path']))
 		{
 		if (!empty($temp['path'][$i]))
 			{
-			$nurl .= '/'.rawurlencode($temp['path'][$i]);
+			if ($i==0 and $uri===false)
+				{
+				$nurl .= rawurlencode($temp['path'][$i]);
+				}
+			else
+				{
+				$nurl .= '/'.rawurlencode($temp['path'][$i]);
+				}
 			}
 		}
 	}
