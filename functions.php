@@ -708,7 +708,6 @@ if ($parent_array[$id]["pid"]==0 && $settings['all_views_direct'] == 1)
 		echo '&amp;view=mix"><img src="img/mix_d.gif" alt="[Mix]" title="';
 		echo $lang['open_in_mix_linktitle'].'" width="12" height="9" /></a>';
 		}
-	echo "</span>";
 	}
 
 if ($parent_array[$id]["pid"]==0
@@ -742,7 +741,7 @@ if(isset($child_array[$id]) && is_array($child_array[$id]))
 		}
 	echo '</ul>';
 	}
-echo '</li>';
+echo '</li>'."\n";
 } # End: thread_tree
 
 
