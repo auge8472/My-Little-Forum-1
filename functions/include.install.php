@@ -125,6 +125,7 @@ name = 'control_refresh',
 value = 'false',
 type = 'bool'";
 
+
 # alter settings table (part 1)
 @mysql_query($alterTable["settings1"], $connid) or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 # alter settings table (part 2)
@@ -180,27 +181,32 @@ if (empty($errors))
 # alter posting data table (part 1)
 if (empty($errors))
 	{
-	@mysql_query($alterTable["userdat1"], $connid) or $errors[] = str_replace("[table]",$db_settings['forum_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query($alterTable["posting1"], $connid) or $errors[] = str_replace("[table]",$db_settings['forum_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	}
 # alter posting data table (part 2)
 if (empty($errors))
 	{
-	@mysql_query($alterTable["userdat2"], $connid) or $errors[] = str_replace("[table]",$db_settings['forum_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query($alterTable["posting2"], $connid) or $errors[] = str_replace("[table]",$db_settings['forum_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	}
 # alter category data table (part 1)
 if (empty($errors))
 	{
-	@mysql_query($alterTable["userdat1"], $connid) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query($alterTable["category1"], $connid) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	}
 # alter category data table (part 2)
 if (empty($errors))
 	{
-	@mysql_query($alterTable["userdat2"], $connid) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query($alterTable["category2"], $connid) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	}
 # create new table for users own forum settings
 if (empty($errors))
 	{
-	$mysql_query($newTable["user_settings"], $connid) or $errors[] = str_replace("[table]",$db_settings['usersettings_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query($newTable["user_settings"], $connid) or $errors[] = str_replace("[table]",$db_settings['usersettings_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
+# create new table for administrating users own forum settings
+if (empty($errors))
+	{
+	@mysql_query($newTable['us_template'], $connid) or $errors[] = str_replace("[table]",$db_settings['us_templates_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	}
 # insert new settings
 if (empty($errors))
@@ -218,6 +224,7 @@ if (empty($errors))
 	}
 
 $return = (isset($errors)) ? $errors : false;
+
 return $return;
 } # End: update17to18
 
