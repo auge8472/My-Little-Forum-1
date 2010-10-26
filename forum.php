@@ -77,10 +77,10 @@ if ($settings['access_for_users_only'] == 1
 
 	# database request
 	# no categories defined
-	if ($categories == false)
+	if ($categories === false)
 		{
 		$result = mysql_query("SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE pid = 0 ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page'], $connid);
-		if(!$result) die($lang['db_error']);
+		if (!$result) die($lang['db_error']);
 		}
 	# there are categories and all categories should be shown
 	else if (is_array($categories) && $category == 0)
@@ -92,7 +92,7 @@ if ($settings['access_for_users_only'] == 1
 	else if (is_array($categories) && $category != 0 && in_array($category, $category_ids))
 		{
 		$result = mysql_query("SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE category = '".mysql_real_escape_string($category)."' AND pid = 0 ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page'], $connid);
-		if(!$result) die($lang['db_error']);
+		if (!$result) die($lang['db_error']);
 		# how many entries?
 		$pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '".mysql_real_escape_string($category)."'", $connid);
 		list($thread_count) = mysql_fetch_row($pid_result);

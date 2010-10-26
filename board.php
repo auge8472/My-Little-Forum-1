@@ -70,7 +70,7 @@ if($settings['access_for_users_only']  == 1
 
 	# database request
 	# no categories defined
-	if ($categories == false)
+	if ($categories === false)
 		{
 		$threadsNoCatsQuery = "SELECT
 		id,

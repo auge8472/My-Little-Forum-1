@@ -133,14 +133,14 @@ $last_visit = (isset($c_last_visit)) ? $c_last_visit[0] : time();
 if (isset($_GET['category'])) $category = intval($_GET['category']);
 $categories = get_categories();
 $category_ids = get_category_ids($categories);
-if ($category_ids != false) $category_ids_query = implode(", ", $category_ids);
+if ($category_ids !== false) $category_ids_query = implode(", ", $category_ids);
 if (empty($category)) $category=0;
 
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $category_accession = category_accession();
 
 # count postings, threads, users and users online:
 # no categories defined
-if ($categories == false)
+if ($categories === false)
 	{
 	$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0", $connid);
 	list($thread_count) = mysql_fetch_row($count_result);
