@@ -20,8 +20,6 @@
 ###############################################################################
 
 include("inc.php");
-
-if (file_exists('install.php')
 include_once("functions/include.prepare.php");
 
 if(count($_GET) > 0)
