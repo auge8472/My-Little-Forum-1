@@ -69,6 +69,7 @@ CHANGE id id INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT,
 CHANGE pid pid INT( 11 ) UNSIGNED NOT NULL DEFAULT '0',
 CHANGE tid tid INT( 11 ) UNSIGNED NOT NULL DEFAULT '0',
 CHANGE uniqid uniqid VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE time time DATETIME NOT NULL,
 CHANGE edited_by edited_by VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE user_id user_id INT( 11 ) UNSIGNED NULL DEFAULT '0',
 CHANGE name name VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
@@ -223,7 +224,7 @@ if (empty($errors))
 	@mysql_query("UPDATE ".$db_settings['settings_table']." SET value='1.8' WHERE name = 'version'", $connid) or $errors[] = $lang_add['db_update_error']. " (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	}
 
-$return = (isset($errors)) ? $errors : false;
+$return = (!empty($errors)) ? $errors : false;
 
 return $return;
 } # End: update17to18

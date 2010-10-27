@@ -113,7 +113,7 @@ if (isset($_POST['form_submitted']))
 			pid int(11) unsigned NOT NULL default '0',
 			tid int(11) unsigned NOT NULL default '0',
 			uniqid varchar(255) NOT NULL default '',
-			post_time timestamp(14) NOT NULL default '0000-00-00 00:00:00',
+			time datetime NOT NULL,
 			last_answer timestamp(14) NOT NULL default '0000-00-00 00:00:00',
 			edited timestamp(14) NOT NULL default '0000-00-00 00:00:00',
 			edited_by varchar(255) NOT NULL default '',

@@ -47,7 +47,7 @@ if ($sql["status"] === false)
 	{
 	# no contact to the database server
 	# generate error message
-	$errors[] = "MySQL error: ".$sql["errnbr"]."\n".$lang_add['db_'.$sql["errnbr"]];
+	$errors[] = "MySQL error: ".$sql["errnbr"]."<br />".$lang_add['db_'.$sql["errnbr"]];
 	# status: no connection to database
 	$scriptStatus = 1;
 	$output .= "<p>The script can not contact the database server. The username, password or database name seems to be wrong.</p>";
@@ -119,13 +119,12 @@ else
 			if (empty($errors))
 				{
 				# Umstellung auf meine SQL-Funktionen
-				$tempDBConnData = array('host'=>$_POST['host'],'user'=>$_POST['user'],'pw'=>$_POST['pw'],'db'=>$_POST['db']);
+				$tempDBConnData = array('host'=>$db_settings['host'],'user'=>$db_settings['user'],'pw'=>$db_settings['pw'],'db'=>$db_settings['db']);
 				$tempSQL = auge_connect_db($tempDBConnData);
 				if ($tempSQL['status'] === false)
 					{
 					# wrong given data
 					# generate error message
-					$error = 'db_'.$tempSQL["errnbr"];
 					$errors[] = "MySQL error: ".$tempSQL["errnbr"]."\n".$lang_add['db_'.$tempSQL["errnbr"]];
 					# status: no connection to database
 					# because wrong given data from the form
@@ -349,9 +348,9 @@ a:active            { color: #ff0000; text-decoration: none; }
 <div id="content">
 <h1><?php echo $lang_add['installation_mode_update']; ?></h1>
 <?php
-if (!empty($errors) and is_array($errors)) {
-	echo errorMessages($errors);
-	}
+#if (!empty($errors) and is_array($errors)) {
+#	echo errorMessages($errors);
+#	}
 echo $output;
 ?>
 </div>
