@@ -20,14 +20,7 @@
 ###############################################################################
 
 include("inc.php");
-
-if (file_exists('install.php')
-or file_exists('update.php')
-or file_exists('update_content.php'))
-	{
-	header("location: ".$settings['forum_address']."info.php?info=2");
-	die("<a href=\"info.php?info=2\">further...</a>");
-	}
+include_once("functions/include.prepare.php");
 
 if (count($_GET) > 0)
 foreach($_GET as $key => $value)

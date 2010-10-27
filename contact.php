@@ -20,14 +20,7 @@
 ###############################################################################
 
 include_once("inc.php");
-
-if (file_exists('install.php')
-or file_exists('update.php')
-or file_exists('update_content.php'))
-	{
-	header("location: ".$settings['forum_address']."info.php?info=2");
-	die("<a href=\"info.php?info=2\">further...</a>");
-	}
+include_once("functions/include.prepare.php");
 
 if (isset($_GET['id'])) $id = $_GET['id'];
 if (isset($_POST['id'])) $id = $_POST['id'];
