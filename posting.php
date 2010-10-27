@@ -22,20 +22,6 @@
 include_once("inc.php");
 include_once("functions/include.prepare.php");
 
-if (count($_GET) > 0)
-	{
-	foreach($_GET as $key => $value)
-		{
-		$$key = $value;
-		}
-	}
-if (count($_POST) > 0)
-	{
-	foreach($_POST as $key => $value)
-		{
-		$$key = $value;
-		}
-	}
 
 if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_posting']==1)
 	{

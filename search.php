@@ -23,10 +23,6 @@ include("inc.php");
 include_once("functions/include.prepare.php");
 
 
-if(count($_POST) > 0)
-foreach($_POST as $key => $value)
-$$key = $value;
-
 // Seiten-Navigation für suche.php
 function snav($page, $suchergebnisse, $count, $search, $ao, $category) {
 global $lang;

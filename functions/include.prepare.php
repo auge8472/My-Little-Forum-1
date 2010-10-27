@@ -48,10 +48,25 @@ $generalLocalPath.'/board_entry.php',
 $generalLocalPath.'/forum.php',
 $generalLocalPath.'/forum_entry.php',
 $generalLocalPath.'/mix.php',
-$generalLocalPath.'/mix_entry.php');
+$generalLocalPath.'/mix_entry.php',
+$generalLocalPath.'/posting.php',
+$generalLocalPath.'/search.php');
 
 if (in_array($_SERVER['SCRIPT_NAME'], $generalGetParameterUse) and count($_GET) > 0) {
 	foreach($_GET as $key => $value) {
+		$$key = $value;
+		}
+	}
+
+/**
+ * make use of POST-parameters in some scripts
+ */
+$generalPostParameterUse = array(
+$generalLocalPath.'/posting.php',
+$generalLocalPath.'/search.php');
+
+if (in_array($_SERVER['SCRIPT_NAME'], $generalPostParameterUse) and count($_POST) > 0) {
+	foreach($_POST as $key => $value) {
 		$$key = $value;
 		}
 	}
