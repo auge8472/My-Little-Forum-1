@@ -26,11 +26,34 @@
  * @since version 1.8
  */
 
+
+/**
+ * if install.php or update.php is present relocate to info.php
+ * to show the message "forum in maintanance, try again"
+ */
 if (file_exists('install.php')
-or file_exists('update.php'))
-	{
+or file_exists('update.php')) {
 	header("location: ".$settings['forum_address']."info.php?info=2");
 	die("<a href=\"info.php?info=2\">further...</a>");
+	}
+
+
+/**
+ * make use of GET-parameters in some scripts
+ */
+$generalLocalPath = dirname($_SERVER['SCRIPT_NAME']);
+$generalGetParameterUse = array(
+$generalLocalPath.'/board.php',
+$generalLocalPath.'/board_entry.php',
+$generalLocalPath.'/forum.php',
+$generalLocalPath.'/forum_entry.php',
+$generalLocalPath.'/mix.php',
+$generalLocalPath.'/mix_entry.php');
+
+if (in_array($_SERVER['SCRIPT_NAME'], $generalGetParameterUse) and count($_GET) > 0) {
+	foreach($_GET as $key => $value) {
+		$$key = $value;
+		}
 	}
 
 ?>

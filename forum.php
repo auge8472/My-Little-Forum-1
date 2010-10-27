@@ -22,10 +22,6 @@
 include("inc.php");
 include_once("functions/include.prepare.php");
 
-# import vars:
-if(count($_GET) > 0)
-foreach($_GET as $key => $value)
-$$key = $value;
 
 # log in automatically if cookie is set
 if (!isset($_SESSION[$settings['session_prefix'].'user_id'])

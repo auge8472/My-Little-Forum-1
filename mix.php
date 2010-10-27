@@ -22,11 +22,6 @@
 include("inc.php");
 include_once("functions/include.prepare.php");
 
-if(count($_GET) > 0)
-foreach($_GET as $key => $value)
-$$key = $value;
-
-
 
 function mix_tree($id, $aktuellerEintrag = 0, $tiefe = 0) {
 global $settings, $parent_array, $child_array, $page, $order, $category, $descasc, $last_visit, $lang;

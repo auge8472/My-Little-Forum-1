@@ -22,9 +22,6 @@
 include("inc.php");
 include_once("functions/include.prepare.php");
 
-if (count($_GET) > 0)
-foreach ($_GET as $key => $value)
-$$key = $value;
 
 function nav_b($be_page, $entries_per_page, $entry_count, $id, $da, $page, $category, $order, $descasc) {
 global $lang, $select_submit_button;

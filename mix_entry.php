@@ -22,9 +22,6 @@
 include("inc.php");
 include_once("functions/include.prepare.php");
 
-if (count($_GET) > 0)
-foreach ($_GET as $key => $value)
-$$key = $value;
 
 function thread($id, $aktuellerEintrag = 0, $tiefe = 0) {
 global $settings, $connid, $lang, $db_settings, $parent_array, $child_array, $user_delete, $page, $category, $order, $descasc, $time_difference, $categories;
