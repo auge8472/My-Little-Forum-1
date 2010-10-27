@@ -20,8 +20,10 @@
 ###############################################################################
 
 /**
- * @author: Heinko August
- * @email: post@auge8472.de
+ * This file collects code wich is used at start of all requestable scripts
+ *
+ * @author Heiko August <post@auge8472.de>
+ * @since version 1.8
  */
 
 if (file_exists('install.php')
