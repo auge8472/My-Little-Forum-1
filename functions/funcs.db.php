@@ -28,6 +28,30 @@
  */
 
 
+
+/**
+ * connects to the database
+ *
+ * @param string $host
+ * @param string $user (username)
+ * @param string $pw (password)
+ * @param string $db (database name)
+ * @return ressource (of the database connection)
+ */
+function connect_db($host,$user,$pw,$db) {
+global $lang;
+
+$connid = @mysql_connect($host, $user, $pw);
+if (!$connid) die($lang['db_error']);
+
+mysql_select_db($db, $connid) or die($lang['db_error']);
+mysql_set_charset("utf8",$connid) or die($lang['db_error']);
+
+return $connid;
+} # End: connect_db
+
+
+
 /**
  * splits SQL output into lines and strips the slashes
  *
