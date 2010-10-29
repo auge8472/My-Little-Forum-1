@@ -4,6 +4,7 @@ $lang_add['admin_area'] =                     "Adminbereich";
 $lang_add['back'] =                           "zurück";
 $lang_add['user_administr'] =                 "Benutzerverwaltung";
 $lang_add['banlists'] =                       "Bannlisten und nicht akzeptierte Wörter";
+$lang_add['debug_administr'] =                "Debug Modes";
 $lang_add['category_administr'] =             "Kategorien verwalten";
 $lang_add['delete_category'] =                "Kategorie löschen";
 $lang_add['forum_settings'] =                 "Forumseinstellungen";
