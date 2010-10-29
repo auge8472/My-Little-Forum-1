@@ -20,6 +20,7 @@
 ###############################################################################
 
 #require_once("function.tab2space.php");
+require_once('functions/funcs.db.php');
 require_once('functions/funcs.output.php');
 require_once('functions/funcs.processing.php');
 
