@@ -383,6 +383,30 @@ return $r;
 } # End: outputPostingEditMenu
 
 
+
+/**
+ * generates output for language file debug mode
+ *
+ * @param array $lang
+ * @return array $lang
+ */
+function outputLangDebugOrNot($lang, $file) {
+$str = array();
+$debug = (!empty($_SESSION['debug']) and $_SESSION['debug'] == 'lang') ? 1 : 0;
+
+foreach ($lang as $key => $val) {
+	$str[$key]  = $debug == 1 ? '<span title="key: '.htmlspecialchars($key).', file: '.htmlspecialchars($file).'">' : '';
+	$str[$key] .= htmlspecialchars($val);
+	$str[$key] .= $debug == 1 ? '</span>' : '';
+	}
+return $str;
+}
+
+
+
+/**
+ *
+ */
 function outputXMLclearedString($string) {
 $illegalChars = array(array(), array());
 
