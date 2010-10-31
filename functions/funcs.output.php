@@ -62,7 +62,7 @@ $r = '';
 
 if($categories != false && $categories != "not accessible")
 	{
-	$r .= "\n".'<form method="get" action="'.$_SERVER['SCRIPT_NAME'].'" title="'.strip_tags($lang['choose_category_formtitle']).'">'."\n".'<div class="inline-form">'."\n";
+	$r .= "\n".'<form method="get" action="'.$_SERVER['SCRIPT_NAME'].'" title="'.outputLangDebugInAttributes($lang['choose_category_formtitle']).'">'."\n".'<div class="inline-form">'."\n";
 	$r .= '<select class="kat" size="1" name="category" onchange="this.form.submit();">'."\n";
 	$r .= '<option value="0"';
 	$r .= (isset($category) && $category==0) ? ' selected="selected"' : '';
@@ -111,7 +111,7 @@ if (!empty($view) or !empty($category))
 	}
 
 $r .= '<a class="textlink"  rel="nofollow" href="posting.php'.$qs;
-$r .= '" title="'.strip_tags($lang['new_entry_linktitle']).'">'.$lang['new_entry_linkname'].'</a>';
+$r .= '" title="'.outputLangDebugInAttributes($lang['new_entry_linktitle']).'">'.$lang['new_entry_linkname'].'</a>';
 
 return $r;
 } # End: outputPostingLink
@@ -156,7 +156,7 @@ if ($entry["hp"]!="")
 	{
 	$email_hp .= '<a href="'.amendProtocol($entry["hp"]).'" title="';
 	$email_hp .= htmlspecialchars($entry["hp"]).'"><img src="img/homepage.gif" ';
-	$email_hp .= 'alt="'.strip_tags($lang['homepage_alt']).'" width="13" height="13" /></a>';
+	$email_hp .= 'alt="'.outputLangDebugInAttributes($lang['homepage_alt']).'" width="13" height="13" /></a>';
 	}
 if (($entry["email"]!="" && $entry["hide_email"] != 1)
 	and $entry["hp"]!=""
@@ -176,8 +176,8 @@ if (($entry["email"]!="" && $entry["hide_email"] != 1)
 	$email_hp .= !empty($order) ? '&amp;order='.$order : '';
 	$email_hp .= !empty($category) ? '&amp;category='.intval($category) : '';
 	$email_hp .= '" rel="nofollow" title="';
-	$email_hp .= str_replace("[name]", htmlspecialchars($entry['name']), strip_tags($lang['email_to_user_linktitle'])).'">';
-	$email_hp .= '<img src="img/email.gif" alt="'.strip_tags($lang['email_alt']).'" width="13" height="10" /></a>';
+	$email_hp .= str_replace("[name]", htmlspecialchars($entry['name']), outputLangDebugInAttributes($lang['email_to_user_linktitle'])).'">';
+	$email_hp .= '<img src="img/email.gif" alt="'.outputLangDebugInAttributes($lang['email_alt']).'" width="13" height="10" /></a>';
 	}
 if ($entry["place"] != "")
 	{
@@ -189,7 +189,7 @@ $name = outputAuthorsName($entry['name'], $mark, $entry['user_id']);
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	and $entry['user_id'] > 0)
 	{
-	$linktitle = str_replace("[name]", htmlspecialchars($entry['name']), strip_tags($lang['show_userdata_linktitle']));
+	$linktitle = str_replace("[name]", htmlspecialchars($entry['name']), outputLangDebugInAttributes($lang['show_userdata_linktitle']));
 	$uname .= '<a class="userlink" href="user.php?id='.$entry["user_id"].'"';
 	$uname .= ' rel="nofollow" title="'.$linktitle.'">'.$name.'</a>';
 	}
@@ -211,7 +211,7 @@ if ($entry["edited_diff"] > 0
 	&& $settings['show_if_edited'] == 1)
 	{
 	$editstring = str_replace("[name]", htmlspecialchars($entry["edited_by"]), $editstring);
-	$editstring = str_replace("[time]", strftime(strip_tags($lang['time_format']),$entry["e_time"]), $editstring);
+	$editstring = str_replace("[time]", strftime($lang['time_format'],$entry["e_time"]), $editstring);
 	$entryedit .= '<span class="postinginfo">'.$editstring.'</span>';
 	}
 
@@ -221,7 +221,7 @@ if ($view=='forum')
 	$authorstring = str_replace("[email_hp]", $email_hp, $authorstring);
 	$authorstring = str_replace("[place]", $place, $authorstring);
 	$authorstring = str_replace("[place]", $place, $authorstring);
-	$authorstring = str_replace("[time]", strftime(strip_tags($lang['time_format']),$entry["p_time"]), $authorstring);
+	$authorstring = str_replace("[time]", strftime($lang['time_format'],$entry["p_time"]), $authorstring);
 	$entryID = !empty($entryID) ? ' - '.$entryID : '';
 	$entryedit = (!empty($entryedit)) ? '<br />'.$entryedit : '';
 	$r .= '<p class="author">'.$authorstring.'&nbsp;'.$entryIP.$answer.$entryID.$entryedit.'</p>'."\n";
@@ -246,7 +246,7 @@ else if ($view=='board' or $view=='mix')
 				}
 			}
 		}
-	$r .= $uname.'<br />'."\n".$email_hp.$place."\n<br />".strftime(strip_tags($lang['time_format']),$entry["p_time"]).$entryedit.$separator.$entryIP.$answer.$entryID."\n";
+	$r .= $uname.'<br />'."\n".$email_hp.$place."\n<br />".strftime($lang['time_format'],$entry["p_time"]).$entryedit.$separator.$entryIP.$answer.$entryID."\n";
 	}
 else
 	{
@@ -282,15 +282,15 @@ if ($mark['admin']===true or $mark['mod']===true or $mark['user']===true)
 	{
 	if ($mark['admin']==true)
 		{
-		$name .= 'admin-highlight" title="'.strip_tags($lang['ud_admin']);
+		$name .= 'admin-highlight" title="'.outputLangDebugInAttributes($lang['ud_admin']);
 		}
 	else if ($mark['mod']==true)
 		{
-		$name .= 'mod-highlight" title="'.strip_tags($lang['ud_mod']);
+		$name .= 'mod-highlight" title="'.outputLangDebugInAttributes($lang['ud_mod']);
 		}
 	else if ($mark['user']===true)
 		{
-		$name .= 'user-highlight" title="'.strip_tags($lang['ud_user']);
+		$name .= 'user-highlight" title="'.outputLangDebugInAttributes($lang['ud_user']);
 		}
 	}
 else
@@ -304,7 +304,7 @@ if ($settings['show_registered'] ==1
 	and isset($_SESSION[$settings['session_prefix'].'user_id'])
 	and $user_id > 0)
 	{
-	$regimg .= '<img src="img/registered.gif" alt="(R)" width="10" height="10" title="'.strip_tags($lang['registered_user_title']).'" />';
+	$regimg .= '<img src="img/registered.gif" alt="(R)" width="10" height="10" title="'.outputLangDebugInAttributes($lang['registered_user_title']).'" />';
 	}
 
 $r .= $name.$regimg;
@@ -347,7 +347,7 @@ if (($settings['user_edit'] == 1
 	$r .= '<li><a href="posting.php?action=edit&amp;id=';
 	$r .= $thread["id"].$view.'&amp;back='.$thread["tid"].'&amp;page='.$page;
 	$r .= '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
-	$r .= '" class="edit-posting" title="'.strip_tags($lang['edit_linktitle']).'">';
+	$r .= '" class="edit-posting" title="'.outputLangDebugInAttributes($lang['edit_linktitle']).'">';
 	$r .= $lang['edit_linkname'].'</a></li>'."\n";
 	if (($settings['user_delete'] == 1
 		and (isset($_SESSION[$settings['session_prefix'].'user_id'])
@@ -360,7 +360,7 @@ if (($settings['user_edit'] == 1
 		$r .= '<li><a href="posting.php?action=delete&amp;id=';
 		$r .= $thread["id"].'&amp;back='.$thread["tid"].$view.'&amp;page=';
 		$r .= $page.'&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category=';
-		$r .= $category.'" class="delete-posting" title="'.strip_tags($lang['delete_linktitle']).'">';
+		$r .= $category.'" class="delete-posting" title="'.outputLangDebugInAttributes($lang['delete_linktitle']).'">';
 		$r .= $lang['delete_linkname'].'</a></li>'."\n";
 		}
 	if ((!empty($first) and $first==='opener')
@@ -371,7 +371,7 @@ if (($settings['user_edit'] == 1
 		$r .= '<li><a href="posting.php?lock=true'.$view.'&amp;id=';
 		$r .= $thread["id"].'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc=';
 		$r .= $descasc.'&amp;category='.$category.'" class="lock-posting" title="';
-		$r .= ($thread['locked'] == 0) ? strip_tags($lang['lock_linktitle']) : strip_tags($lang['unlock_linktitle']);
+		$r .= ($thread['locked'] == 0) ? outputLangDebugInAttributes($lang['lock_linktitle']) : outputLangDebugInAttributes($lang['unlock_linktitle']);
 		$r .= '">';
 		$r .= ($thread['locked'] == 0) ? $lang['lock_linkname'] : $lang['unlock_linkname'];
 		$r .= '</a></li>'."\n";
