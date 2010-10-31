@@ -20,7 +20,11 @@
 ###############################################################################
 
 include("inc.php");
-include("lang/".$lang['additional_language_file']);
+
+include("lang/english_add.php");
+$lang_add = outputLangDebugOrNot($lang_add, "english_add.php");
+include("lang/".strip_tags($lang['additional_language_file']));
+$lang_add = outputLangDebugOrNot($lang_add, strip_tags($lang['additional_language_file']));
 
 
 
@@ -545,6 +549,16 @@ if (isset($_POST['delete_category_submit']))
 	$action = 'categories';
 	}
 
+
+/**
+ * sets debug type (standard: no)
+ */
+if (isset($_POST['debug_submitted'])) {
+	$_SESSION['debug'] = $_POST['debug_type'];
+	$action = 'debug';
+	}
+
+
 if (isset($_GET['delete_user']))
 	{
 	$user_id = intval($_GET['delete_user']);
@@ -1059,7 +1073,7 @@ if (isset($_POST['ar_username']))
 		if (isset($ar_send_userdata))
 			{
 			$ip = $_SERVER["REMOTE_ADDR"];
-			$lang['new_user_email_txt_a'] = str_replace("[name]", $ar_username, $lang['new_user_email_txt_a']);
+			$lang['new_user_email_txt_a'] = str_replace("[name]", $ar_username, strip_tags($lang['new_user_email_txt_a']));
 			$lang['new_user_email_txt_a'] = str_replace("[password]", $ar_pw, $lang['new_user_email_txt_a']);
 			$lang['new_user_email_txt_a'] = str_replace("[login_link]", $settings['forum_address']."login.php?username=".urlencode($ar_username)."&userpw=".$ar_pw, $lang['new_user_email_txt_a']);
 			$lang['new_user_email_txt_a'] = $lang['new_user_email_txt_a'];
@@ -1070,14 +1084,14 @@ if (isset($_POST['ar_username']))
 			$new_user_mailto = $ar_username." <".$ar_email.">";
 			if ($settings['mail_parameter']!='')
 				{
-				if (!@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt_a'], $header, $settings['mail_parameter']))
+				if (!@mail($new_user_mailto, strip_tags($lang['new_user_email_sj']), $lang['new_user_email_txt_a'], $header, $settings['mail_parameter']))
 					{
 					$send_error = '&send_error=true';
 					}
 				}
 			else
 				{
-				if (!@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt_a'], $header))
+				if (!@mail($new_user_mailto, strip_tags($lang['new_user_email_sj']), $lang['new_user_email_txt_a'], $header))
 					{
 					$send_error = '&send_error=true';
 					}
@@ -1366,6 +1380,11 @@ if (!empty($action))
 		$topnav .= '<a class="textlink" href="admin.php?action=settings">'.$lang_add['forum_settings'].'</a>&nbsp;';
 		$topnav .= '<span class="current-page">'.$lang_add['advanced_settings'].'</span>';
 		}
+	if ($action == "debug")
+		{
+		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
+		$topnav .= '<span class="current-page">'.$lang_add['debug_administr'] .'</span>';
+		}
 	if ($action == "categories")
 		{
 		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
@@ -1489,6 +1508,7 @@ switch ($action)
 	case "main":
 		echo '<ul class="linklist">'."\n";
 		echo '<li><a class="textlink" href="admin.php?action=settings">'.$lang_add['forum_settings'].'</a></li>'."\n";
+		echo '<li><a class="textlink" href="admin.php?action=debug">'.$lang_add['debug_administr'].'</a></li>'."\n";
 		echo '<li><a class="textlink" href="admin.php?action=categories">'.$lang_add['category_administr'].'</a></li>'."\n";
 		echo '<li><a class="textlink" href="admin.php?action=user">'.$lang_add['user_administr'].'</a></li>'."\n";
 		echo '<li><a class="textlink" href="admin.php?action=smilies">'.$lang_add['smilies'].'</a></li>'."\n";
@@ -1497,6 +1517,29 @@ switch ($action)
 		echo '<li><a class="textlink" href="admin.php?action=backup">'.$lang_add['backup_restore'].'</a></li>'."\n";
 		echo '<li><a class="textlink" href="admin.php?action=uninstall">'.$lang_add['uninstall'].'</a></li>'."\n";
 		echo '</ul>'."\n";
+	break;
+	case "debug":
+		echo '<form action="admin.php" method="post">'."\n";
+		echo '<table class="normaltab">'."\n";
+		echo '<tr>'."\n";
+		echo '<td class="c"><label for="debug-none">'.$lang_add['debug_none'].'</label><br />';
+		echo '<span class="info">'.$lang_add['debug_none_d'].'</span></td>'."\n";
+		echo '<td class="d"><input type="radio" name="debug_type" id="debug-none" value="no"';
+		echo ($_SESSION['debug'] == 'no') ? ' checked="checked"' : '';
+		echo ' /></td>'."\n";
+		echo '</tr><tr>'."\n";
+		echo '<td class="c"><label for="debug-lang">'.$lang_add['debug_lang'].'</label><br />';
+		echo '<span class="info">'.$lang_add['debug_lang_d'].'</span></td>'."\n";
+		echo '<td class="d"><input type="radio" name="debug_type" id="debug-lang" value="lang"';
+		echo ($_SESSION['debug'] == 'lang') ? ' checked="checked"' : '';
+		echo ' /></td>'."\n";
+		echo '</tr><tr>'."\n";
+		echo '<td class="c">&nbsp;</td>'."\n";
+		echo '<td class="d"><input type="submit" name="debug_submitted"';
+		echo ' value="'.outputLangDebugInAttributes($lang_add['settings_sb']).'" /></td>'."\n";
+		echo '</tr>'."\n";
+		echo '</table>'."\n";
+		echo '</form>'."\n";
 	break;
 	case "categories":
 		# look if there are entries in not existing categories:
@@ -1540,7 +1583,7 @@ switch ($action)
 			echo '<input type="radio" name="mode" value="move" />';
 			echo str_replace("[category]",$cat_select,$lang_add['entries_in_not_ex_cat_move']).'</p>'."\n";
 			echo '<p><input type="submit" name="not_displayed_entries_submit" value="';
-			echo $lang['submit_button_ok'].'"></p>'."\n";
+			echo outputLangDebugInAttributes($lang['submit_button_ok']).'"></p>'."\n";
 			echo '</form>'."\n";
 			}
 		$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['category_table'], $connid);
@@ -1625,7 +1668,7 @@ switch ($action)
 				echo ' checked="ckecked"';
 				}
 			echo ' /><label for="access-mod-admin">'.$lang_add['cat_accession_mod_admin'].'</label><br /><br />'."\n";
-			echo '<input type="submit" value="'.$lang['submit_button_ok'].'" /></div></form>'."\n";
+			echo '<input type="submit" value="'.outputLangDebugInAttributes($lang['submit_button_ok']).'" /></div></form>'."\n";
 		break;
 		case "user":
 			$order = isset($_GET['order']) ? $_GET['order'] : "user_id";
@@ -1910,7 +1953,7 @@ switch ($action)
 				mysql_free_result($result);
 				echo '</table>'."\n";
 				echo '<div style="margin:5px 0px 0px 7px; padding:0px;"><img src="img/selected_arrow.gif" alt="" width="35"';
-				echo ' height="20" border="0"><input type="submit" name="delete_user" value="'.$lang_add['delete_users_sb'];
+				echo ' height="20" border="0"><input type="submit" name="delete_user" value="'.outputLangDebugInAttributes($lang_add['delete_users_sb']);
 				echo '" title="'.$lang_add['delete_users_sb_title'].'" /></div>'."\n".'</form>'."\n";
 				}
 			else
@@ -2246,7 +2289,7 @@ switch ($action)
 			echo '</tr><tr>'."\n";
 			echo '<td class="c">&nbsp;</td>'."\n";
 			echo '<td class="d"><input type="submit" name="settings_submitted"';
-			echo ' value="'.$lang_add['settings_sb'].'" /></td>'."\n";
+			echo ' value="'.outputLangDebugInAttributes($lang_add['settings_sb']).'" /></td>'."\n";
 			echo '</tr>'."\n";
 			echo '</table>'."\n";
 			echo '</form>'."\n";
@@ -2268,8 +2311,8 @@ switch ($action)
 				}
 			echo "\n".'</table>'."\n";
 			echo '<p><input type="submit" name="settings_submitted" value="';
-			echo $lang_add['settings_sb'].'" />&nbsp;<input type="reset" value="';
-			echo $lang['reset_button'].'" /></p>'."\n".'</form>'."\n";
+			echo outputLangDebugInAttributes($lang_add['settings_sb']).'" />&nbsp;<input type="reset" value="';
+			echo outputLangDebugInAttributes($lang['reset_button']).'" /></p>'."\n".'</form>'."\n";
 		break;
 		case "delete_users_sure":
 			echo '<h2>'.$lang_add['delete_users_hl'].'</h2>'."\n";
@@ -2287,7 +2330,8 @@ switch ($action)
 				{
 				echo '<input type="hidden" name="selected_confirmed[]" value="'.$selected[$x].'" />'."\n";
 				}
-			echo '<input type="submit" name="delete_confirmed" value="'.$lang['user_del_subm_b'].'" />'."\n";
+			echo '<input type="submit" name="delete_confirmed" value="';
+			echo outputLangDebugInAttributes($lang['user_del_subm_b']).'" />'."\n";
 			echo '</form>'."\n";
 		break;
 		case "empty":
@@ -2301,7 +2345,7 @@ switch ($action)
 			echo '<b>'.$lang['password_marking'].'</b><br /><input type="password"';
 			echo ' size="25" name="delete_all_postings_confirm_pw" /><br /><br />';
 			echo '<input type="submit" name="delete_all_postings_confirmed" value="';
-			echo $lang_add['empty_forum_sb'].'" />'."\n";
+			echo outputLangDebugInAttributes($lang_add['empty_forum_sb']).'" />'."\n";
 			echo '</form>'."\n";
 		break;
 		case "uninstall":
@@ -2319,7 +2363,7 @@ switch ($action)
 			echo '<br /><br /><b>'.$lang['password_marking'].'</b><br />';
 			echo '<input type="password" size="25" name="delete_db_confirm_pw" /><br /><br />';
 			echo '<input type="submit" name="delete_db_confirmed" value="';
-			echo $lang_add['delete_db_note_sb'].'" />'."\n".'</form>'."\n";
+			echo outputLangDebugInAttributes($lang_add['delete_db_note_sb']).'" />'."\n".'</form>'."\n";
 		break;
 		case "delete_marked_threads":
 			$lang_add['del_marked_note'] = str_replace('[marked_symbol]', '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['del_marked_note']);
@@ -2332,7 +2376,7 @@ switch ($action)
 				echo htmlspecialchars($_GET['refer']).'" />'."\n";
 				}
 			echo '<input type="submit" name="delete_marked_threads_confirmed" value="';
-			echo $lang_add['del_marked_sb'].'" />'."\n";
+			echo outputLangDebugInAttributes($lang_add['del_marked_sb']).'" />'."\n";
 			echo '</form>'."\n";
 		break;
 		case "unmark":
@@ -2344,7 +2388,7 @@ switch ($action)
 				echo htmlspecialchars($_GET['refer']).'" />'."\n";
 				}
 			echo '<input type="submit" name="unmark_confirmed" value="';
-			echo $lang['submit_button_ok'].'" />'."\n".'</form>'."\n";
+			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" />'."\n".'</form>'."\n";
 		break;
 		case "invert_markings":
 			echo '<p>'.$lang_add['invert_markings_note'].'</p>'."\n";
@@ -2355,7 +2399,7 @@ switch ($action)
 				echo htmlspecialchars($_GET['refer']).'" />'."\n";
 				}
 			echo '<input type="submit" name="invert_markings_confirmed" value="';
-			echo $lang['submit_button_ok'].'" /></form>'."\n";
+			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></form>'."\n";
 		break;
 		case "mark_threads":
 			echo '<form action="admin.php" method="post" style="display: inline;">'."\n";
@@ -2371,7 +2415,7 @@ switch ($action)
 			echo '<p><input type="radio" name="mark_threads" value="2" /> ';
 			echo $lang_add['mark_old_threads_no_replies'].'</p>'."\n";
 			echo '<p><input type="submit" name="mark_threads_submitted" value="';
-			echo $lang['submit_button_ok'].'" /></p></form>'."\n";
+			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></p></form>'."\n";
 		break;
 		case "lock_marked_threads":
 			$lang_add['lock_marked_conf'] = str_replace('[marked_symbol]', '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['lock_marked_conf']);
@@ -2383,7 +2427,7 @@ switch ($action)
 				echo htmlspecialchars($_GET['refer']).'" />'."\n";
 				}
 			echo '<input type="submit" name="lock_marked_threads_submitted" value="';
-			echo $lang['submit_button_ok'].'" /></form>'."\n";
+			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></form>'."\n";
 		break;
 		case "unlock_marked_threads":
 			$lang_add['unlock_marked_conf'] = str_replace('[marked_symbol]', '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['unlock_marked_conf']);
@@ -2395,7 +2439,7 @@ switch ($action)
 				echo htmlspecialchars($_GET['refer']).'" />'."\n";
 				}
 			echo '<input type="submit" name="unlock_marked_threads_submitted" value="';
-			echo $lang['submit_button_ok'].'" /></form>'."\n";
+			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></form>'."\n";
 		break;
 		case "delete_category":
 			if (count($categories) > 1)
@@ -2428,7 +2472,7 @@ switch ($action)
 				echo ' <label for="del-keep-cat">'.str_replace("[category]",$cat_select,$lang_add['del_cat_move_entries']).'</label>';
 				}
 			echo '</p>'."\n".'<p><input type="submit" name="delete_category_submit" value="';
-			echo $lang_add['del_cat_sb'].'" /></p></form>'."\n";
+			echo outputLangDebugInAttributes($lang_add['del_cat_sb']).'" /></p></form>'."\n";
 		break;
 		case "edit_category":
 			if (isset($errors))
@@ -2451,7 +2495,7 @@ switch ($action)
 			echo ($accession==2) ? ' checked="ckecked"' : '';
 			echo ' /><label for="access-mod-admin">'.$lang_add['cat_accession_mod_admin'].'</label><br /><br />'."\n";
 			echo '<input type="submit" name="edit_category_submit" value="';
-			echo $lang['submit_button_ok'].'" /></div></form>'."\n";
+			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></div></form>'."\n";
 		break;
 		case "backup":
 			echo '<h2>'.$lang_add['backup_restore'].'</h2>';
@@ -2486,7 +2530,7 @@ switch ($action)
 			echo '<p><label for="sql_pw">'.$lang['password_marking'].'</label><br />';
 			echo '<input type="password" size="25" name="sql_pw" id="sql_pw" /></p>'."\n";
 			echo '<p><input type="submit" name="sql_submit" value="';
-			echo $lang['submit_button_ok'].'" /></p>'."\n";
+			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></p>'."\n";
 			echo '</div></form>'."\n";
 		break;
 		case "import_sql_ok":
@@ -2525,7 +2569,7 @@ switch ($action)
 			echo '  <td>'.$lang_add['clear_users_5'].'</td>'."\n";
 			echo ' </tr><tr>'."\n";
 			echo '  <td colspan="2"><input type="submit" value="';
-			echo $lang['submit_button_ok'].'" /></td>'."\n";
+			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></td>'."\n";
 			echo ' </tr>'."\n";
 			echo '</table>'."\n";
 			echo '</form>'."\n";
@@ -2572,7 +2616,7 @@ switch ($action)
 			echo ' </tr><tr>'."\n";
 			echo '  <td class="c">&nbsp;</td>'."\n";
 			echo '  <td class="d"><input type="submit" name="banlists_submit" value="';
-			echo $lang_add['banlists_submit'].'" /></td>'."\n";
+			echo outputLangDebugInAttributes($lang_add['banlists_submit']).'" /></td>'."\n";
 			echo ' </tr>'."\n";
 			echo '</table>'."\n";
 			echo '</form>'."\n";
@@ -2673,7 +2717,7 @@ switch ($action)
 						}
 					echo '</select></td>'."\n";
 					echo '<td><input type="text" name="smiley_code" size="10" /></td>'."\n";
-					echo '<td><input type="submit" value="'.$lang['submit_button_ok'].'" /></td>'."\n";
+					echo '<td><input type="submit" value="'.outputLangDebugInAttributes($lang['submit_button_ok']).'" /></td>'."\n";
 					echo '</tr>'."\n";
 					echo '</table>'."\n";
 					echo '</form>'."\n";
@@ -2740,7 +2784,7 @@ switch ($action)
 			echo '</tr><tr>'."\n";
 			echo '<td class="c">&nbsp;</td>'."\n";
 			echo '<td class="d"><input type="submit" name="edit_smiley_submit" value="';
-			echo $lang['submit_button_ok'].'" /><input type="hidden" name="id" value="';
+			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /><input type="hidden" name="id" value="';
 			echo $id.'" /></td>'."\n";
 			echo '</tr>'."\n";
 			echo '</table>'."\n";
@@ -2871,8 +2915,8 @@ switch ($action)
 			echo '<tr>'."\n";
 			echo '  <td class="c">&nbsp;</td>'."\n";
 			echo '  <td class="d"><input type="submit" name="edit_user_submit" value="';
-			echo $lang['userdata_subm_button'].'" />&nbsp;<input type="reset" value="';
-			echo $lang['reset_button'].'" /></td>'."\n";
+			echo outputLangDebugInAttributes($lang['userdata_subm_button']).'" />&nbsp;<input type="reset" value="';
+			echo outputLangDebugInAttributes($lang['reset_button']).'" /></td>'."\n";
 			echo ' </tr>'."\n";
 			echo '</table>'."\n";
 			echo '</div></form>'."\n";
