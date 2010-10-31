@@ -75,7 +75,9 @@ if (in_array($_SERVER['SCRIPT_NAME'], $generalPostParameterUse) and count($_POST
  * use $mark in some scripts (handles marking of user roles)
  */
 $generalMarkUse = array(
-$generalLocalPath.'board_entry.php');
+$generalLocalPath.'board_entry.php',
+$generalLocalPath.'forum_entry.php',
+$generalLocalPath.'mix_entry.php');
 
 if (in_array($_SERVER['SCRIPT_NAME'], $generalMarkUse)) {
 	$mark['admin'] = false;

@@ -54,10 +54,6 @@ if(!$posting_result) die($lang['db_error']);
 $entrydata = mysql_fetch_assoc($posting_result);
 mysql_free_result($posting_result);
 
-$mark['admin'] = false;
-$mark['mod'] = false;
-$mark['user'] = false;
-
 if ($entrydata["user_id"] > 0)
 	{
 	$userdata_result = mysql_query("SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$entrydata["user_id"]."'", $connid);

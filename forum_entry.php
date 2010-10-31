@@ -105,9 +105,7 @@ if ($settings['access_for_users_only'] == 1
 				{
 				mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE id=".intval($id), $connid);
 				}
-			$mark['admin'] = false;
-			$mark['mod'] = false;
-			$mark['user'] = false;
+
 			if ($entrydata["user_id"] > 0)
 				{
 				$userDataQuery = "SELECT
