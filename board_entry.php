@@ -207,18 +207,7 @@ if ($settings['access_for_users_only'] == 1
 				$thread["hide_email"] = $userdata["hide_email"];
 				$thread["place"] = $userdata["user_place"];
 				$thread["hp"] = $userdata["user_hp"];
-				if ($userdata["user_type"] == "admin" && $settings['admin_mod_highlight'] == 1)
-					{
-					$mark['admin'] = true;
-					}
-				else if ($userdata["user_type"] == "mod" && $settings['admin_mod_highlight'] == 1)
-					{
-					$mark['mod'] = true;
-					}
-				else if ($userdata["user_type"] == "user" && $settings['user_highlight'] == 1)
-					{
-					$mark['user'] = true;
-					}
+				$mark = outputStatusMark($mark, $userdata["user_type"], $connid);
 				if ($thread["show_signature"]==1)
 					{
 					$signature = $userdata["signature"];
@@ -418,18 +407,7 @@ if ($settings['access_for_users_only'] == 1
 			$entrydata["hide_email"] = $userdata["hide_email"];
 			$entrydata["place"] = $userdata["user_place"];
 			$entrydata["hp"] = $userdata["user_hp"];
-			if ($userdata["user_type"] == "admin" && $settings['admin_mod_highlight'] == 1)
-				{
-				$mark['admin'] = true;
-				}
-			else if ($userdata["user_type"] == "mod" && $settings['admin_mod_highlight'] == 1)
-				{
-				$mark['mod'] = true;
-				}
-			else if ($userdata["user_type"] == "user" && $settings['user_highlight'] == 1)
-				{
-				$mark['user'] = true;
-				}
+			$mark = outputStatusMark($mark, $userdata["user_type"], $connid);
 			if ($entrydata["show_signature"]==1)
 				{
 				$signature = $userdata["signature"];

@@ -85,6 +85,39 @@ return $r;
 
 
 /**
+ * detects the status of $mark dependent of users role
+ *
+ * @param array $mark
+ * @param array $zeile
+ * @param string $connid
+ * @return array $mark
+ */
+function outputStatusMark($mark, $zeile, $connid) {
+global $settings;
+if (is_array($zeile)) {
+	global $db_settings;
+	$query = "SELECT
+	user_type
+	FROM ".$db_settings['userdata_table']."
+	WHERE user_id = '".$zeile["user_id"]."'";
+	$userdata_result = mysql_query($query, $connid);
+	$userdata = mysql_fetch_assoc($userdata_result);
+	mysql_free_result($userdata_result);
+	}
+else
+	{
+	$userdata['user_type'] = $zeile;
+	}
+
+$mark['admin'] = ($userdata['user_type'] === "admin" && $settings['admin_mod_highlight'] == 1) ? true : false;
+$mark['mod'] = ($userdata['user_type'] === "mod" && $settings['admin_mod_highlight'] == 1) ? true : false;
+$mark['user'] = ($userdata['user_type'] === "user" && $settings['user_highlight'] == 1) ? true : false;
+return $mark;
+}
+
+
+
+/**
  * generates the link to the posting form in top- and subnavigation
  *
  * @param integer $category

@@ -556,25 +556,14 @@ return $r;
  * @param int $tiefe
  */
 function thread_tree($id, $aktuellerEintrag = 0, $tiefe = 0) {
-global $settings, $lang, $parent_array, $child_array, $page, $category, $order, $db_settings, $connid, $last_visit, $categories, $category_accession;
+global $settings, $lang, $parent_array, $child_array, $page, $category, $order, $db_settings, $connid, $last_visit, $categories, $category_accession, $mark;
 
 // highlighting of admins, mods and users:
-$mark['admin'] = false; $mark['mod'] = false; $mark['user'] = false;
-if (($settings['admin_mod_highlight'] == 1 or $settings['user_highlight'] == 1) && $parent_array[$id]["user_id"] > 0)
+if (($settings['admin_mod_highlight'] == 1
+	or $settings['user_highlight'] == 1)
+	&& $parent_array[$id]["user_id"] > 0)
 	{
-	$userdata_result = mysql_query("SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = '".$parent_array[$id]["user_id"]."'", $connid);
-	if (!$userdata_result) die($lang['db_error']);
-	$userdata = mysql_fetch_assoc($userdata_result);
-	mysql_free_result($userdata_result);
-	if ($settings['admin_mod_highlight'] == 1)
-		{
-		if ($userdata['user_type'] == "admin") $mark['admin'] = true;
-		else if ($userdata['user_type'] == "mod") $mark['mod'] = true;
-		}
-	if ($settings['user_highlight'] == 1)
-		{
-		if ($userdata['user_type'] == "user") $mark['user'] = true;
-		}
+	$mark = outputStatusMark($mark, $parent_array[$id], $connid);
 	}
 
 $name = outputAuthorsName($parent_array[$id]["name"], $mark, $parent_array[$id]['user_id']);

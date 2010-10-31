@@ -263,29 +263,11 @@ if($settings['access_for_users_only']  == 1
 				}
 
 			# highlight user, mods and admins:
-			$mark['admin'] = false;
-			$mark['mod'] = false;
-			$mark['user'] = false;
 			if (($settings['admin_mod_highlight'] == 1
 			or $settings['user-highlight'] == 1)
 			&& $zeile["user_id"] > 0)
 				{
-				$userdata_result=mysql_query("SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = '".$zeile["user_id"]."'", $connid);
-				if (!$userdata_result) die($lang['db_error']);
-				$userdata = mysql_fetch_array($userdata_result);
-				mysql_free_result($userdata_result);
-				if ($userdata['user_type'] == "admin")
-					{
-					$mark['admin'] = true;
-					}
-				else if ($userdata['user_type'] == "mod")
-					{
-					$mark['mod'] = true;
-					}
-				else if ($userdata['user_type'] == "user")
-					{
-					$mark['user'] = true;
-					}
+				$mark = outputStatusMark($mark, $zeile, $connid);
 				}
 			$rowClass = ($i % 2 == 0) ? "a" : "b";
 			echo '<tr class="'.$rowClass.'">'."\n";
