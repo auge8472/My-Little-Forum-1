@@ -38,10 +38,10 @@ or file_exists('update.php')) {
 	}
 
 
+$generalLocalPath = dirname($_SERVER['SCRIPT_NAME']);
 /**
  * make use of GET-parameters in some scripts
  */
-$generalLocalPath = dirname($_SERVER['SCRIPT_NAME']);
 $generalGetParameterUse = array(
 $generalLocalPath.'/board.php',
 $generalLocalPath.'/board_entry.php',
@@ -69,6 +69,18 @@ if (in_array($_SERVER['SCRIPT_NAME'], $generalPostParameterUse) and count($_POST
 	foreach($_POST as $key => $value) {
 		$$key = $value;
 		}
+	}
+
+/**
+ * use $mark in some scripts (handles marking of user roles)
+ */
+$generalMarkUse = array(
+$generalLocalPath.'board_entry.php');
+
+if (in_array($_SERVER['SCRIPT_NAME'], $generalMarkUse)) {
+	$mark['admin'] = false;
+	$mark['mod'] = false;
+	$mark['user'] = false;
 	}
 
 ?>
