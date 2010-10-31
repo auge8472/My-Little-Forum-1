@@ -178,7 +178,7 @@ if(isset($_GET['uploaded_image_selected']))
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<title><?php echo $lang['upload_image_title']; ?></title>
+<title><?php echo strip_tags($lang['upload_image_title']); ?></title>
 <style type="text/css">
 <!--
 body {
@@ -226,7 +226,7 @@ switch($action)
 		echo '<p>'.$lang['upload_exp'].'</p>'."\n";
 		echo '<form action="'.$_SERVER['SCRIPT_NAME'].'" method="post" '."\n";
 		echo 'enctype="multipart/form-data"><input type="file" name="probe" />'."\n";
-		echo '<input type="submit" value="'.$lang['upload_subm_button'].'">'."\n";
+		echo '<input type="submit" value="'.outputLangDebugInAttributes($lang['upload_subm_button']).'">'."\n";
 		echo '</form>'."\n";
 		echo '<p>[ <a href="'.$_SERVER['PHP_SELF'].'?action=show_uploaded_images">';
 		echo $lang['available_images'].'</a> ]</p>'."\n";
@@ -245,17 +245,17 @@ switch($action)
 			}
 		echo '<img src="img/uploaded/'.$filename.'" alt="" height="100" border="1">'."\n";
 		echo '<p>'.$lang['paste_image'].'</p>'."\n";
-		echo '<p><button style="width:25px; height:25px;" title="'.$lang['insert_image_normal'];
+		echo '<p><button style="width:25px; height:25px;" title="'.outputLangDebugInAttributes($lang['insert_image_normal']);
 		echo '" onclick="opener.insert(\'[img]'.$uploaded_images_path.$filename.'[/img]\');';
-		echo ' window.close()"><img src="img/img_normal.gif" alt="'.$lang['insert_image_normal'];
+		echo ' window.close()"><img src="img/img_normal.gif" alt="'.outputLangDebugInAttributes($lang['insert_image_normal']);
 		echo '" width="11" height="11" /></button>&nbsp;<button style="width:25px; height:25px;"';
-		echo ' title="'.$lang['insert_image_left'].'" onclick="opener.insert(\'[img|left]';
+		echo ' title="'.outputLangDebugInAttributes($lang['insert_image_left']).'" onclick="opener.insert(\'[img|left]';
 		echo $uploaded_images_path.$filename.'[/img]\'); window.close()"><img';
-		echo ' src="img/img_left.gif" alt="'.$lang['insert_image_left'].'" width="11" height="11"';
+		echo ' src="img/img_left.gif" alt="'.outputLangDebugInAttributes($lang['insert_image_left']).'" width="11" height="11"';
 		echo ' /></button>&nbsp;<button style="width:25px; height:25px;" title="';
-		echo $lang['insert_image_right'].'" onclick="opener.insert(\'[img|right]';
+		echo outputLangDebugInAttributes($lang['insert_image_right']).'" onclick="opener.insert(\'[img|right]';
 		echo $uploaded_images_path.$filename.'[/img]\'); window.close()"><img';
-		echo ' src="img/img_right.gif" alt="'.$lang['insert_image_right'].'" width="11"';
+		echo ' src="img/img_right.gif" alt="'.outputLangDebugInAttributes($lang['insert_image_right']).'" width="11"';
 		echo ' height="11" /></button></p>'."\n";
 	break;
 	case 'show_uploaded_images':
