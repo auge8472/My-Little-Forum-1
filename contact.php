@@ -170,7 +170,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 			$headerTemplate .= "X-Sender-IP: $ip\n";
 			$headerTemplate .= "Content-Type: text/plain; charset=UTF-8\n";
 			$headerTemplate .= "Content-Transfer-Encoding: 8bit\n";
-			$mail_subject = ($_POST['subject'] != "") ? $subject : $lang['email_no_subject'];
+			$mail_subject = ($_POST['subject'] != "") ? $subject : strip_tags($lang['email_no_subject']);
 			$copySubject = mb_encode_mimeheader($mail_subject,"UTF-8");
 			if (isset($forum_contact))
 				{
@@ -179,7 +179,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 				}
 			$mailto = mb_encode_mimeheader($name,"UTF-8")." <".$email.">";
 			$mail_text = $text;
-			$mail_text .= "\n\n".str_replace("[forum_address]", $settings['forum_address'], $lang['msg_add']);
+			$mail_text .= "\n\n".str_replace("[forum_address]", $settings['forum_address'], strip_tags($lang['msg_add']));
 			$header  = "From: ".mb_encode_mimeheader($sender_name,"UTF-8")." <".$sender_email.">\n";
 			$header .= "Reply-To: ".mb_encode_mimeheader($sender_name,"UTF-8")." <".$sender_email.">\n";
 			$header .= $headerTemplate;
@@ -194,7 +194,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 			// Bestätigung:
 			if (isset($sent))
 				{
-				$lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['conf_email_txt']);
+				$lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], strip_tags($lang['conf_email_txt']));
 				$lang['conf_email_txt'] = str_replace("[sender_name]", $sender_name, $lang['conf_email_txt']);
 				$lang['conf_email_txt'] = str_replace("[recipient_name]", $name, $lang['conf_email_txt']);
 				$lang['conf_email_txt'] = str_replace("[subject]", $mail_subject, $lang['conf_email_txt']);
@@ -203,7 +203,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 				$ip = $_SERVER["REMOTE_ADDR"];
 				$conf_header  = "From: ".mb_encode_mimeheader($settings['forum_name'],"UTF-8")." <".$settings['forum_email'].">\n";
 				$conf_header .= $headerTemplate;
-				$confSubject = mb_encode_mimeheader($lang['conf_sj'],"UTF-8");
+				$confSubject = mb_encode_mimeheader(strip_tags($lang['conf_sj']),"UTF-8");
 				if ($settings['mail_parameter']!='')
 					{
 					@mail($conf_mailto, $confSubject, $lang['conf_email_txt'], $conf_header, $settings['mail_parameter']);
@@ -327,7 +327,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 				{
 				echo '<tr>'."\n";
 				echo '<td colspan="2"><img class="captcha" src="captcha/captcha_image.php';
-				echo '?'.SID.'" alt="'.$lang['captcha_image_alt'];
+				echo '?'.SID.'" alt="'.outputLangDebugInAttributes($lang['captcha_image_alt']);
 				echo '" width="180" height="40"/></td>'."\n";
 				echo '</tr><tr>'."\n";
 				echo '<td colspan="2">'.$lang['captcha_expl_image'].'</td>'."\n";
@@ -348,7 +348,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 			}
 		echo '</table>'."\n";
 		echo '<p><input type="submit" name="form_submitted" value="';
-		echo $lang['pers_msg_subm_button'].'" /></p>'."\n";
+		echo outputLangDebugInAttributes($lang['pers_msg_subm_button']).'" /></p>'."\n";
 		echo '</form>'."\n";
 		}
 	else if (empty($sent) && isset($no_message))

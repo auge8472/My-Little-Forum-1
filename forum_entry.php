@@ -191,7 +191,7 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_1  = '<a class="textlink" href="forum.php?page='.$page;
 	$subnav_1 .= ($category > 0) ? '&amp;category='.$category : '';
 	$subnav_1 .= '&amp;order='.$order.'" title="';
-	$subnav_1 .= $lang['back_to_forum_linktitle'].'">'.$lang['back_to_forum_linkname'].'</a>';
+	$subnav_1 .= outputLangDebugInAttributes($lang['back_to_forum_linktitle']).'">'.$lang['back_to_forum_linkname'].'</a>';
 	$subnav_2 = "";
 	if ($settings['board_view']==1)
 		{
@@ -199,7 +199,7 @@ if ($settings['access_for_users_only'] == 1
 		$subnav_2 .= '&amp;page='.$page.'&amp;order='.$order;
 		$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
 		$subnav_2 .= '&amp;view=board" class="board-view"';
-		$subnav_2 .= ' title="'.$lang['board_view_linktitle'].'">';
+		$subnav_2 .= ' title="'.outputLangDebugInAttributes($lang['board_view_linktitle']).'">';
 		$subnav_2 .= $lang['board_view_linkname'].'</a>';
 		}
 	if ($settings['mix_view']==1)
@@ -208,7 +208,7 @@ if ($settings['access_for_users_only'] == 1
 		$subnav_2 .= '&amp;page='.$page.'&amp;order='.$order;
 		$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
 		$subnav_2 .= '&amp;view=mix" class="mix-view"';
-		$subnav_2 .= ' title="'.$lang['mix_view_linktitle'].'">';
+		$subnav_2 .= ' title="'.outputLangDebugInAttributes($lang['mix_view_linktitle']).'">';
 		$subnav_2 .= $lang['mix_view_linkname'].'</a>';
 		}
 
@@ -257,7 +257,7 @@ if ($settings['access_for_users_only'] == 1
 		$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
 		$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
 		echo '<a class="textlink" href="posting.php?id='.$id.$qs;
-		echo '" title="'.$lang['forum_answer_linktitle'].'">';
+		echo '" title="'.outputLangDebugInAttributes($lang['forum_answer_linktitle']).'">';
 		echo $lang['forum_answer_linkname'].'</a>';
 		}
 	else

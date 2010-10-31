@@ -37,7 +37,7 @@ if ($count > $suchergebnisse)
 		{
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?search='.$search;
 		$output .= '&amp;category='.$category.'&amp;ao='.$ao.'&amp;page='.$new_index_before;
-		$output .= '" title="'.$lang['previous_page_linktitle'].'"><b>&laquo;</b></a>&nbsp;';
+		$output .= '" title="'.outputLangDebugInAttributes($lang['previous_page_linktitle']).'"><b>&laquo;</b></a>&nbsp;';
 		}
 
 	if ($page == 3)
@@ -74,7 +74,7 @@ if ($count > $suchergebnisse)
 		{
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?search='.$search;
 		$output .= '&amp;category='.$category.'&amp;ao='.$ao.'&amp;page='.$new_index_after;
-		$output .= '" title="'.$lang['next_page_linktitle'].'"><b>&raquo;</b></a>';
+		$output .= '" title="'.outputLangDebugInAttributes($lang['next_page_linktitle']).'"><b>&raquo;</b></a>';
  		}
  	}
 return $output;
@@ -91,7 +91,7 @@ if ($count > $how_many_per_page)
 	if (($page-1) >= 0)
 		{
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?show_postings='.$show_postings;
-		$output .= '&amp;page='.($page-1).'" title="'.$lang['previous_page_linktitle'];
+		$output .= '&amp;page='.($page-1).'" title="'.outputLangDebugInAttributes($lang['previous_page_linktitle']);
 		$output .= '"><b>&laquo;</b></a>&nbsp;';
 		}
 	$page_count = ceil($count/$how_many_per_page);
@@ -125,7 +125,7 @@ if ($count > $how_many_per_page)
 		{
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?show_postings=';
 		$output .= $show_postings.'&amp;page='.($page+1).'" title="';
-		$output .= $lang['next_page_linktitle'].'"><b>&raquo;</b></a>';
+		$output .= outputLangDebugInAttributes($lang['next_page_linktitle']).'"><b>&raquo;</b></a>';
 		}
 	}
 return $output;
@@ -208,7 +208,7 @@ list($count) = mysql_fetch_row($count_result);
 
 
 // HTML:
-$wo = $lang['search_title'];
+$wo = strip_tags($lang['search_title']);
 $subnav_1 = "";
 if (isset($search) && empty($show_postings))
 	{
@@ -258,7 +258,7 @@ else if (isset($show_postings) && empty($search))
 	$field = mysql_fetch_assoc($user_name_result);
 	mysql_free_result($user_name_result);
 	$lang['show_userdata_linktitle'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['show_userdata_linktitle']);
-	$lang['postings_by_user'] = str_replace('[name]', '<a href="user.php?id='.$show_postings.'" title="'.$lang['show_userdata_linktitle'].'">'.htmlspecialchars($field["user_name"]).'</a>', $lang['postings_by_user']);
+	$lang['postings_by_user'] = str_replace('[name]', '<a href="user.php?id='.$show_postings.'" title="'.outputLangDebugInAttributes($lang['show_userdata_linktitle']).'">'.htmlspecialchars($field["user_name"]).'</a>', $lang['postings_by_user']);
 	$subnav_1 .= '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['postings_by_user'].'</b>';
 	}
 
@@ -285,7 +285,7 @@ else
 if (isset($search) && empty($show_postings))
 	{
 	echo '<form action="search.php" method="get" title="';
-	echo $lang['search_formtitle'].'"><div class="search">'."\n";
+	echo outputLangDebugInAttributes($lang['search_formtitle']).'"><div class="search">'."\n";
 	echo '<input type="text" name="search" value="'.htmlspecialchars($search_match).'" size="30" />'."\n";
 	if ($categories!=false)
 		{
@@ -304,7 +304,7 @@ if (isset($search) && empty($show_postings))
 			}
 		echo '</select>'."\n";
 		}
-	echo '<input type="submit" name="" value="'.$lang['search_submit'].'" /><br />'."\n";
+	echo '<input type="submit" name="" value="'.outputLangDebugInAttributes($lang['search_submit']).'" /><br />'."\n";
 	echo '<input type="radio" name="ao" value="and"';
 	echo ($ao == "and") ? ' checked="checked"' : '';
 	echo ' />'.$lang['search_and'].'&nbsp;<input type="radio" class="search-radio"';

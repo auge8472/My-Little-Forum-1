@@ -64,7 +64,7 @@ if (isset($_GET['id']) && isset($_GET['key']) && trim($_GET['key'])!='')
 			# E-Mail-Benachrichtigung an Admins und Moderatoren:
 			# E-Mail erstellen:
 			$ip = $_SERVER["REMOTE_ADDR"];
-			$lang['new_user_notif_txt'] = str_replace("[name]", $data['user_name'], $lang['new_user_notif_txt']);
+			$lang['new_user_notif_txt'] = str_replace("[name]", $data['user_name'], strip_tags($lang['new_user_notif_txt']));
 			$lang['new_user_notif_txt'] = str_replace("[email]", $data['user_email'], $lang['new_user_notif_txt']);
 			$lang['new_user_notif_txt'] = str_replace("[user_link]", $settings['forum_address']."user.php?id=".$user_id, $lang['new_user_notif_txt']);
 			$lang['new_user_notif_txt'] = $lang['new_user_notif_txt'];
@@ -82,14 +82,14 @@ if (isset($_GET['id']) && isset($_GET['key']) && trim($_GET['key'])!='')
 				$admin_mailto = mb_encode_mimeheader($admin_array['user_name'],'UTF-8')." <".$admin_array['user_email'].">";
 				if ($settings['mail_parameter']!='')
 					{
-					if (@mail($admin_mailto, $lang['new_user_notif_sj'], $ind_reg_emailbody, $header, $settings['mail_parameter']))
+					if (@mail($admin_mailto, strip_tags($lang['new_user_notif_sj']), $ind_reg_emailbody, $header, $settings['mail_parameter']))
 						{
 						$sent = "ok";
 						}
 					}
 				else
 					{
-					if (@mail($admin_mailto, $lang['new_user_notif_sj'], $ind_reg_emailbody, $header))
+					if (@mail($admin_mailto, strip_tags($lang['new_user_notif_sj']), $ind_reg_emailbody, $header))
 						{
 						$sent = "ok";
 						}
@@ -245,9 +245,8 @@ if (isset($_POST['register_submit']))
 
 			# send e-mail with activation key to new user:
 			$ip = $_SERVER["REMOTE_ADDR"];
-			$lang['new_user_email_txt'] = str_replace("[name]", $new_user_name, $lang['new_user_email_txt']);
+			$lang['new_user_email_txt'] = str_replace("[name]", $new_user_name, strip_tags($lang['new_user_email_txt']));
 			$lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$new_user_id."&key=".$activate_code, $lang['new_user_email_txt']);
-			$lang['new_user_email_txt'] = $lang['new_user_email_txt'];
 			$header = "From: ".mb_encode_mimeheader($settings['forum_name'],'UTF-8')." <".$settings['forum_email'].">\n";
 			$header .= "X-Mailer: Php/" . phpversion(). "\n";
 			$header .= "X-Sender-ip: $ip\n";
@@ -257,14 +256,14 @@ if (isset($_POST['register_submit']))
 
 			if ($settings['mail_parameter']!='')
 				{
-				if (@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header, $settings['mail_parameter']))
+				if (@mail($new_user_mailto, strip_tags($lang['new_user_email_sj']), $lang['new_user_email_txt'], $header, $settings['mail_parameter']))
 					{
 					$sent = true;
 					}
 				}
 			else
 				{
-				if (@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header))
+				if (@mail($new_user_mailto, strip_tags($lang['new_user_email_sj']), $lang['new_user_email_txt'], $header))
 					{
 					$sent = true;
 					}
@@ -279,7 +278,7 @@ if (isset($_POST['register_submit']))
 		}
 	}
 
-$wo = $lang['register_hl'];
+$wo = strip_tags($lang['register_hl']);
 $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'.$lang['register_hl'].'</b>';
 parse_template();
 echo $header;
@@ -334,7 +333,7 @@ switch($action)
 				if ($settings['captcha_type']==1)
 					{
 					echo '<p><img class="captcha" src="captcha/captcha_image.php?'.SID;
-					echo '" alt="'.$lang['captcha_image_alt'].'" width="180" height="40"/></p>'."\n";
+					echo '" alt="'.outputLangDebugInAttributes($lang['captcha_image_alt']).'" width="180" height="40"/></p>'."\n";
 					echo '<p>'.$lang['captcha_expl_image'].'<br />';
 					echo '<input type="text" name="captcha_code" value="" size="10" /></p>'."\n";
 					}
@@ -346,7 +345,7 @@ switch($action)
 					}
 				}
 			echo '<p><input type="submit" name="register_submit" value="';
-			echo $lang['reg_subm_button'].'" /></p>'."\n".'</div>'."\n".'</form>'."\n";
+			echo outputLangDebugInAttributes($lang['reg_subm_button']).'" /></p>'."\n".'</div>'."\n".'</form>'."\n";
 			}
 		else
 			{

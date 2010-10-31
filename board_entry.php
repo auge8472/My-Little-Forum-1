@@ -51,7 +51,7 @@ if ($entry_count > $entries_per_page)
 		$output .= $new_index_before.'&amp;da='.$da.'&amp;page='.$page;
 		$output .= ($category > 0) ? '&amp;category='.$category : '';
 		$output .= '&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
-		$output .= $lang['previous_page_linktitle'].'"><img src="img/prev.gif" alt="&laquo;"';
+		$output .= outputLangDebugInAttributes($lang['previous_page_linktitle']).'"><img src="img/prev.gif" alt="&laquo;"';
 		$output .= 'width="12" height="9" onmouseover="this.src=\'img/prev_mo.gif\';"';
 		$output .= ' onmouseout="this.src=\'img/prev.gif\';" /></a>';
 		}
@@ -65,12 +65,12 @@ if ($entry_count > $entries_per_page)
 		$output .= $new_index_after.'&amp;da='.$da.'&amp;page='.$page;
 		$output .= ($category > 0) ? '&amp;category='.$category : '';
 		$output .= '&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
-		$output .= $lang['next_page_linktitle'].'"><img src="img/next.gif" alt="&laquo;"';
+		$output .= outputLangDebugInAttributes($lang['next_page_linktitle']).'"><img src="img/next.gif" alt="&laquo;"';
 		$output .= 'width="12" height="9" onmouseover="this.src=\'img/next_mo.gif\';"';
 		$output .= ' onmouseout="this.src=\'img/next.gif\';" /></a>';
 		}
 	$output .= '&nbsp;<form method="get" action="'.$_SERVER["SCRIPT_NAME"].'"';
-	$output .= ' title="'.$lang['choose_page_formtitle'].'">';
+	$output .= ' title="'.outputLangDebugInAttributes($lang['choose_page_formtitle']).'">';
 	$output .= "\n".'<div class="inline-form">'."\n";
 	if (isset($id))
 		{
@@ -272,7 +272,7 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_1  = '<a class="textlink" href="board.php?page='.$page;
 	$subnav_1 .= ($category > 0) ? '&amp;category='.$category : '';
 	$subnav_1 .= '&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
-	$subnav_1 .= $lang['back_to_board_linktitle'].'">'.$lang['back_to_board_linkname'].'</a>';
+	$subnav_1 .= outputLangDebugInAttributes($lang['back_to_board_linktitle']).'">'.$lang['back_to_board_linkname'].'</a>';
 	$subnav_2 = '';
 	if ($da=="DESC")
 		{
@@ -290,13 +290,13 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_2 .= $order_order.'&amp;page='.$page.'&amp;order='.$order;
 	$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
 	$subnav_2 .= '&amp;descasc='.$descasc.'" class="order-postings" title="';
-	$subnav_2 .= $order_title.'">'.$order_text.'</a>';
+	$subnav_2 .= outputLangDebugInAttributes($order_title).'">'.$order_text.'</a>';
 	if ($settings['thread_view']==1)
 		{
 		$subnav_2 .= '&nbsp;<a href="forum_entry.php?id='.$thread["tid"].'&amp;page='.$page;
 		$subnav_2 .= '&amp;order='.$order.'&amp;descasc='.$descasc;
 		$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
-		$subnav_2 .= '&amp;view=thread" class="thread-view" title="'.$lang['thread_view_linktitle'].'">';
+		$subnav_2 .= '&amp;view=thread" class="thread-view" title="'.outputLangDebugInAttributes($lang['thread_view_linktitle']).'">';
 		$subnav_2 .= $lang['thread_view_linkname'].'</a>';
 		}
 	if ($settings['mix_view']==1)
@@ -304,7 +304,7 @@ if ($settings['access_for_users_only'] == 1
 		$subnav_2 .= '&nbsp;<a href="mix_entry.php?id='.$thread["tid"].'&amp;page='.$page;
 		$subnav_2 .= '&amp;order='.$order.'&amp;descasc='.$descasc;
 		$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
-		$subnav_2 .= '&amp;view=mix" class="mix-view" title="'.$lang['mix_view_linktitle'].'">';
+		$subnav_2 .= '&amp;view=mix" class="mix-view" title="'.outputLangDebugInAttributes($lang['mix_view_linktitle']).'">';
 		$subnav_2 .= $lang['mix_view_linkname'].'</a>';
 		}
 	$subnav_2 .= nav_b($be_page, $settings['answers_per_topic'], $thread_count, $thread["tid"], $da, $page, $category, $order, $descasc);
@@ -338,7 +338,7 @@ if ($settings['access_for_users_only'] == 1
 			$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
 			$qs .= !empty($be_page) ? '&amp;be_page='.intval($be_page) : '';
 			echo '<a class="textlink" href="posting.php?id='.$thread["id"].$qs;
-			echo '&amp;view=board" title="'.$lang['board_answer_linktitle'].'">';
+			echo '&amp;view=board" title="'.outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
 			echo $lang['board_answer_linkname'].'</a>';
 			}
 		else
@@ -464,7 +464,7 @@ if ($settings['access_for_users_only'] == 1
 			$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
 			$qs .= !empty($be_page) ? '&amp;be_page='.intval($be_page) : '';
 			echo '<a class="textlink" href="posting.php?id='.$entrydata["id"].$qs;
-			echo '&amp;view=board" title="'.$lang['board_answer_linktitle'].'">';
+			echo '&amp;view=board" title="'.outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
 			echo $lang['board_answer_linkname'].'</a>';
 			}
 		else

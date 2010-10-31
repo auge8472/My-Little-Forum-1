@@ -839,14 +839,14 @@ if (($settings['access_for_users_only'] == 1
 								$an = mb_encode_mimeheader($parent["name"],"UTF-8")." <".$parent["email"].">";
 								if ($settings['mail_parameter']!='')
 									{
-									if (@mail($an, $lang['email_subject'], $emailbody, $header,$settings['mail_parameter']))
+									if (@mail($an, strip_tags($lang['email_subject']), $emailbody, $header,$settings['mail_parameter']))
 										{
 										$sent = "ok";
 										}
 									}
 								else
 									{
-									if (@mail($an, $lang['email_subject'], $emailbody, $header))
+									if (@mail($an, strip_tags($lang['email_subject']), $emailbody, $header))
 										{
 										$sent = "ok";
 										}
@@ -858,11 +858,11 @@ if (($settings['access_for_users_only'] == 1
 						# E-Mail-Benachrichtigung an Admins und Moderatoren:
 						if ($id > 0)
 							{
-							$emailbody = str_replace("[name]", $name, $lang['admin_email_text_reply']);
+							$emailbody = str_replace("[name]", $name, strip_tags($lang['admin_email_text_reply']));
 							}
 						else
 							{
-							$emailbody = str_replace("[name]", $name, $lang['admin_email_text']);
+							$emailbody = str_replace("[name]", $name, strip_tags($lang['admin_email_text']));
 							}
 						$emailbody = str_replace("[subject]", $subject, $emailbody);
 						$emailbody = str_replace("[text]", $mail_text, $emailbody);
@@ -876,7 +876,7 @@ if (($settings['access_for_users_only'] == 1
 						$header .= "X-Sender-ip: $ip\n";
 						$header .= "Content-Type: text/plain; charset=UTF-8; format=flowed\n";
 						$header .= "Content-Transfer-Encoding: 8bit\n";
-						$adminSubject = mb_encode_mimeheader($lang['admin_email_subject'],"UTF-8");
+						$adminSubject = mb_encode_mimeheader(strip_tags($lang['admin_email_subject']),"UTF-8");
 #						$adminSubject = mb_encode_mimeheader(str_replace("[subject]", $subject, $lang['admin_email_subject']),"UTF-8");
 						// Schauen, wer eine E-Mail-Benachrichtigung will:
 						$en_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_posting_notify='1'", $connid);
@@ -1093,6 +1093,7 @@ if (($settings['access_for_users_only'] == 1
 				$wo = $lang['delete_marking'];
 			break;
 			}
+		$wo = strip_tags($wo);
 
 		if (isset($aname))
 			{
@@ -1418,7 +1419,7 @@ if (($settings['access_for_users_only'] == 1
 						or isset($_COOKIE['user_hp']))
 							{
 							echo '&nbsp;&nbsp;&nbsp;<a onclick="javascript:delete_cookie(); return false;"';
-							echo ' href="delete_cookie.php" title="'.$lang['delete_cookies_linktitle'].'"><img border="0"';
+							echo ' href="delete_cookie.php" title="'.outputLangDebugInAttributes($lang['delete_cookies_linktitle']).'"><img border="0"';
 							echo ' src="img/dc.gif" name="dc" alt="" width="12" height="9">'.$lang['delete_cookies_linkname'].'</a>';
 							}
 						echo '</span></td>'."\n";
@@ -1535,7 +1536,7 @@ if (($settings['access_for_users_only'] == 1
 						{
 						echo '<tr>'."\n";
 						echo '<td colspan="2"><img class="captcha" src="captcha/captcha_image.php?';
-						echo SID.'" alt="'.$lang['captcha_image_alt'].'" width="180" height="40"/></td>'."\n";
+						echo SID.'" alt="'.outputLangDebugInAttributes($lang['captcha_image_alt']).'" width="180" height="40"/></td>'."\n";
 						echo '</tr><tr>'."\n";
 						echo '<td colspan="2">'.$lang['captcha_expl_image'].'</td>'."\n";
 						echo '</tr><tr>'."\n";
@@ -1554,10 +1555,10 @@ if (($settings['access_for_users_only'] == 1
 					}
 				echo '<tr>'."\n";
 				echo '<td colspan="2"><input type="submit" name="save_entry" value="';
-				echo $lang['submit_button'].'" title="'.$lang['submit_button_title'].'" />&nbsp;';
+				echo outputLangDebugInAttributes($lang['submit_button']).'" title="'.outputLangDebugInAttributes($lang['submit_button_title']).'" />&nbsp;';
 				echo '<input type="submit" name="preview" value="';
-				echo $lang['preview_button'].'" title="'.$lang['preview_button_title'].'" />&nbsp;';
-				echo '<input type="reset" value="'.$lang['reset_button'].'" title="'.$lang['reset_button_title'].'" /></td>'."\n";
+				echo outputLangDebugInAttributes($lang['preview_button']).'" title="'.outputLangDebugInAttributes($lang['preview_button_title']).'" />&nbsp;';
+				echo '<input type="reset" value="'.outputLangDebugInAttributes($lang['reset_button']).'" title="'.outputLangDebugInAttributes($lang['reset_button_title']).'" /></td>'."\n";
 				echo "</tr>\n</table>\n</form>\n";
 				if (!isset($_SESSION[$settings['session_prefix'].'user_id']) || isset($_SESSION[$settings['session_prefix'].'user_id']) && $action=="edit" )
 					{

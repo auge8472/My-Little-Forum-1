@@ -43,6 +43,7 @@ $lang_add['delete_users_sb_title'] =          "ausgewählte User löschen";
 $lang_add['delete_users_hl'] =                "User löschen";
 $lang_add['delete_user_conf'] =               "Sicher, dass dieser User gelöscht werden soll?";
 $lang_add['delete_users_conf'] =              "Sicher, dass folgende User gelöscht werden sollen?";
+$lang_add['debug_none'] =                     "Debugging: aus";
 $lang_add['forum_name'] =                     "Forumname";
 $lang_add['forum_name_d'] =                   "wird u.a. im Header angezeigt";
 $lang_add['forum_email'] =                    "Forum-E-Mail-Adresse";

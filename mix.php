@@ -61,7 +61,7 @@ if ($parent_array[$id]["pid"]!=0)
 		echo '&amp;order='.$order.'&amp;descasc='.$descasc;
 		}
 	echo '#p'.$parent_array[$id]["id"].'" title="'.htmlspecialchars($parent_array[$id]["name"]);
-	echo ", ".strftime($lang['time_format'],$parent_array[$id]["Uhrzeit"]).'">'.htmlspecialchars($parent_array[$id]["subject"]).'</a> (<span class="id">#&nbsp;'.$parent_array[$id]["id"].'</span>)';
+	echo ", ".strftime(outputLangDebugInAttributes($lang['time_format']),$parent_array[$id]["Uhrzeit"]).'">'.htmlspecialchars($parent_array[$id]["subject"]).'</a> (<span class="id">#&nbsp;'.$parent_array[$id]["id"].'</span>)';
 	}
 
 // Anfang der Schleife über alle Kinder ...
@@ -197,7 +197,7 @@ if ($settings['access_for_users_only'] == 1
 		{
 		$subnav_2 .= '<a href="index.php?update=1&amp;view=mix';
 		$subnav_2 .= ($category > 0) ? '&amp;category='.intval($category) : '';
-		$subnav_2 .= '" class="update-postings" title="'.$lang['update_time_linktitle'].'">';
+		$subnav_2 .= '" class="update-postings" title="'.outputLangDebugInAttributes($lang['update_time_linktitle']).'">';
 		$subnav_2 .= $lang['update_time_linkname'].'</a>';
 		}
 	if ($settings['thread_view'] == 1)
@@ -205,14 +205,14 @@ if ($settings['access_for_users_only'] == 1
 		$cat  = ($category > 0) ? '?category='.intval($category) : '';
 		$cat .= !empty($cat) ? '&amp;view=thread' : '?view=thread';
 		$subnav_2 .= '&nbsp;<a href="forum.php'.$cat.'" class="thread-view" title="';
-		$subnav_2 .= $lang['thread_view_linktitle'].'">'.$lang['thread_view_linkname'].'</a>';
+		$subnav_2 .= outputLangDebugInAttributes($lang['thread_view_linktitle']).'">'.$lang['thread_view_linkname'].'</a>';
 		}
 	if ($settings['board_view']==1)
 		{
 		$cat  = ($category > 0) ? '?category='.intval($category) : '';
 		$cat .= !empty($cat) ? '&amp;view=board' : '?view=board';
 		$subnav_2 .= '&nbsp;<a href="board.php'.$cat.'" class="board-view" title="';
-		$subnav_2 .= $lang['board_view_linktitle'].'">'.$lang['board_view_linkname'].'</a>';
+		$subnav_2 .= outputLangDebugInAttributes($lang['board_view_linktitle']).'">'.$lang['board_view_linkname'].'</a>';
 		}
 	$subnav_2 .= nav($page, $settings['topics_per_page'], $thread_count, $order, $descasc, $category);
 	$categories = get_categories();
@@ -227,7 +227,7 @@ if ($settings['access_for_users_only'] == 1
 		echo '<tr class="titlerow">'."\n";
 		echo '<th><a href="mix.php?category='.$category.'&amp;order=subject&amp;descasc=';
 		echo ($descasc=="ASC" && $order=="subject") ? 'DESC' : 'ASC';
-		echo '" title="'.$lang['order_linktitle'].'">'.$lang['board_subject_headline'].'</a>';
+		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_subject_headline'].'</a>';
 		if ($order=="subject" && $descasc=="ASC")
 			{
 			echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
@@ -241,7 +241,7 @@ if ($settings['access_for_users_only'] == 1
 			{
 			echo '<th><a href="mix.php?category='.$category.'&amp;order=category&amp;descasc=';
 		echo ($descasc=="ASC" && $order=="category") ? 'DESC' : 'ASC';
-			echo '" title="'.$lang['order_linktitle'].'">'.$lang['board_category_headline'].'</a>';
+			echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_category_headline'].'</a>';
 			if ($order=="category" && $descasc=="ASC")
 				{
 				echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
@@ -254,7 +254,7 @@ if ($settings['access_for_users_only'] == 1
 			}
 		echo '<th><a href="mix.php?category='.$category.'&amp;order=name&amp;descasc=';
 		echo ($descasc=="ASC" && $order=="name") ? 'DESC' : 'ASC';
-		echo '" title="'.$lang['order_linktitle'].'">'.$lang['board_author_headline'].'</a>';
+		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_author_headline'].'</a>';
 		if ($order=="name" && $descasc=="ASC")
 			{
 			echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
@@ -266,7 +266,7 @@ if ($settings['access_for_users_only'] == 1
 		echo '</th>'."\n";
 		echo '<th><a href="mix.php?category='.$category.'&amp;order=time&amp;descasc=';
 		echo ($descasc=="DESC" && $order=="time") ? 'ASC' : 'DESC';
-		echo '" title="'.$lang['order_linktitle'].'">'.$lang['board_date_headline'].'</a>';
+		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_date_headline'].'</a>';
 		if ($order=="time" && $descasc=="ASC")
 			{
 			echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
@@ -279,7 +279,7 @@ if ($settings['access_for_users_only'] == 1
 		echo '<th>'.$lang['board_answers_headline'].'</th>'."\n";
 		echo '<th><a href="mix.php?category='.$category.'&amp;order=last_answer&amp;descasc=';
 		echo ($descasc=="DESC" && $order=="last_answer") ? 'ASC' : 'DESC';
-		echo '" title="'.$lang['order_linktitle'].'">'.$lang['board_last_answer_headline'].'</a>';
+		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_last_answer_headline'].'</a>';
 		if ($order=="last_answer" && $descasc=="ASC")
 			{
 			echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
@@ -367,7 +367,7 @@ if ($settings['access_for_users_only'] == 1
 			echo '">'.htmlspecialchars($zeile["subject"]).'</a>';
 			if ($zeile["fixed"] == 1)
 				{
-				echo ' <img src="img/fixed.gif" width="9" height="9" title="'.$lang['fixed'].'" alt="*" />';
+				echo ' <img src="img/fixed.gif" width="9" height="9" title="'.outputLangDebugInAttributes($lang['fixed']).'" alt="*" />';
 				}
 			if ($settings['all_views_direct'] == 1)
 				{
@@ -377,14 +377,14 @@ if ($settings['access_for_users_only'] == 1
 					echo '<a href="board_entry.php?id='.$zeile["tid"].'&amp;view=board';
 					echo ($category > 0) ? '&amp;category='.$category : '';
 					echo '"><img src="img/board_d.gif" alt="[Board]" title="';
-					echo $lang['open_in_board_linktitle'].'" width="12" height="9" /></a>';
+					echo outputLangDebugInAttributes($lang['open_in_board_linktitle']).'" width="12" height="9" /></a>';
 					}
 				if ($settings['thread_view']==1)
 					{
 					echo '<a href="forum_entry.php?id='.$zeile["tid"].'&amp;view=thread';
 					echo ($category > 0) ? '&amp;category='.$category : '';
 					echo '"><img src="img/thread_d.gif" alt="[Thread]" title="';
-					echo $lang['open_in_thread_linktitle'].'" width="12" height="9" /></a>';
+					echo outputLangDebugInAttributes($lang['open_in_thread_linktitle']).'" width="12" height="9" /></a>';
 					}
 				echo "</span>";
 				}
@@ -415,16 +415,16 @@ if ($settings['access_for_users_only'] == 1
 				echo '<td class="info">'."\n"; #categories
 				if (isset($categories[$zeile["category"]]) && $categories[$zeile["category"]]!='')
 					{
-					echo '<a title="'.str_replace("[category]", $categories[$zeile["category"]], $lang['choose_category_linktitle']);
+					echo '<a title="'.str_replace("[category]", $categories[$zeile["category"]], outputLangDebugInAttributes($lang['choose_category_linktitle']));
 					if (isset($category_accession[$zeile["category"]])
 					&& $category_accession[$zeile["category"]] == 2)
 						{
-						echo " ".$lang['admin_mod_category'];
+						echo " ".outputLangDebugInAttributes($lang['admin_mod_category']);
 						}
 					else if (isset($category_accession[$zeile["category"]])
 					&& $category_accession[$zeile["category"]] == 1)
 						{
-						echo " ".$lang['registered_users_category'];
+						echo " ".outputLangDebugInAttributes($lang['registered_users_category']);
 						}
 					echo '" href="mix.php?category='.$zeile["category"].'"><span class="';
 					if (isset($category_accession[$zeile["category"]])
@@ -452,7 +452,7 @@ if ($settings['access_for_users_only'] == 1
 			echo '<td class="info">'."\n"; # author op
 			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
 				{
-				$sult = str_replace("[name]", htmlspecialchars($zeile["name"]), $lang['show_userdata_linktitle']);
+				$sult = str_replace("[name]", htmlspecialchars($zeile["name"]), outputLangDebugInAttributes($lang['show_userdata_linktitle']));
 				echo '<a href="user.php?id='.$zeile["user_id"].'" title="'.$sult.'">';
 				}
 			echo outputAuthorsName($zeile["name"], $mark, $zeile["user_id"]);
@@ -475,7 +475,7 @@ if ($settings['access_for_users_only'] == 1
 					echo ($category > 0) ? '&amp;category='.$category : '';
 					echo '&amp;order='.$order.'&amp;descasc=';
 					echo $descasc.'#p'.$last_answer['id'].'" title="';
-					echo str_replace("[name]", $last_answer['name'], $lang['last_reply_lt']).'">';
+					echo str_replace("[name]", $last_answer['name'], outputLangDebugInAttributes($lang['last_reply_lt'])).'">';
 					}
 				echo strftime($lang['time_format'],$zeile["la_Uhrzeit"]);
 				if ($settings['last_reply_link']==1)
@@ -504,12 +504,12 @@ if ($settings['access_for_users_only'] == 1
 				if ($zeile['marked']==1)
 					{
 					echo '<img src="img/marked.gif" alt="[x]" width="9" height="9"';
-					echo ' title="'.$lang['unmark_linktitle'].'" />';
+					echo ' title="'.outputLangDebugInAttributes($lang['unmark_linktitle']).'" />';
 					}
 				else
 					{
 					echo '<img src="img/mark.gif" alt="[-]" title="';
-					echo $lang['mark_linktitle'].'" width="9" height="9" />';
+					echo outputLangDebugInAttributes($lang['mark_linktitle']).'" width="9" height="9" />';
 					}
 				echo '</a></td>'."\n";
 				}

@@ -22,6 +22,7 @@
 include("inc.php");
 include_once("functions/include.prepare.php");
 
+
 if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 && isset($_COOKIE['auto_login'])
 && isset($settings['autologin'])
@@ -152,9 +153,9 @@ if (isset($_POST['change_email_submit']))
 		{
 		$activate_code = md5(uniqid(rand()));
 		# send mail with activation key:
+		$lang['change_email_txt'] = strip_tags($lang['change_email_txt']);
 		$lang['new_user_email_txt'] = str_replace("[name]", $field['user_name'], $lang['change_email_txt']);
 		$lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$field['user_id']."&key=".$activate_code, $lang['new_user_email_txt']);
-#		$lang['new_user_email_txt'] = stripslashes($lang['new_user_email_txt']);
 		$header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
 		$header .= "X-Mailer: Php/" . phpversion(). "\n";
 		$header .= "X-Sender-ip: ".$_SERVER["REMOTE_ADDR"]."\n";
@@ -162,11 +163,11 @@ if (isset($_POST['change_email_submit']))
 		$new_user_mailto = $field['user_name']." <".$new_email.">";
 		if($settings['mail_parameter']!='')
 			{
-			@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header, $settings['mail_parameter']) or $errors[] = $lang['error_meilserv'];
+			@mail($new_user_mailto, strip_tags($lang['new_user_email_sj']), $lang['new_user_email_txt'], $header, $settings['mail_parameter']) or $errors[] = $lang['error_meilserv'];
 			}
 		else
 			{
-			@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header) or $errors[] = $lang['error_meilserv'];
+			@mail($new_user_mailto, strip_tags($lang['new_user_email_sj']), $lang['new_user_email_txt'], $header) or $errors[] = $lang['error_meilserv'];
 			}
 		if(empty($errors))
 			{
@@ -405,7 +406,7 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 				$ip = $_SERVER["REMOTE_ADDR"];
 				$mail_subject = $_POST['pm_subject'];
 				$mail_text  = $_POST['pm_text'];
-				$mail_text .= "\n\n".$lang['pers_msg_mail_add'];
+				$mail_text .= "\n\n".strip_tags($lang['pers_msg_mail_add']);
 				$header  = "From: ".$sender['user_name']." <".$sender['user_email'].">\n";
 				$header .= "Reply-To: ".$sender['user_name']." <".$sender['user_email'].">\n";
 				$header .= "X-Mailer: PHP/" . phpversion(). "\n";
@@ -428,7 +429,7 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 
 				if(empty($errors))
 					{
-					$lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['conf_email_txt']);
+					$lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], strip_tags($lang['conf_email_txt']));
 					$lang['conf_email_txt'] = str_replace("[sender_name]", $sender['user_name'], $lang['conf_email_txt']);
 					$lang['conf_email_txt'] = str_replace("[recipient_name]", $recipient['user_name'], $lang['conf_email_txt']);
 					$lang['conf_email_txt'] = str_replace("[subject]", $_POST['pm_subject'], $lang['conf_email_txt']);
@@ -441,11 +442,11 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 					$conf_header .= "Content-Type: text/plain";
 					if ($settings['mail_parameter']!='')
 						{
-						@mail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt'], $conf_header, $settings['mail_parameter']);
+						@mail($conf_mailto, strip_tags($lang['conf_sj']), $lang['conf_email_txt'], $conf_header, $settings['mail_parameter']);
 						}
 					else
 						{
-						@mail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt'], $conf_header);
+						@mail($conf_mailto, strip_tags($lang['conf_sj']), $lang['conf_email_txt'], $conf_header);
 						}
 					}
 
@@ -520,7 +521,7 @@ else
 	die("<a href=\"index.php\">further...</a>");
 	}
 
-$wo = $lang['user_area_title'];
+$wo = strip_tags($lang['user_area_title']);
 
 $topnav  = '<a class="textlink" href="';
 if (!empty($_SESSION[$settings['session_prefix'].'curr_view']))
@@ -708,8 +709,8 @@ switch ($action)
 				echo '<tr>'."\n";
 				echo '<td class="c">'.$lang['user_email_marking'].'</td>'."\n";
 				echo '<td class="d"><a href="contact.php?uid='.$field['user_id'].'">';
-				echo '<img src="img/email.gif" alt="'.$lang['email_alt'].'" title="';
-				echo str_replace('[name]', htmlspecialchars($field['user_name']), $lang['email_to_user_linktitle']);
+				echo '<img src="img/email.gif" alt="'.outputLangDebugInAttributes($lang['email_alt']).'" title="';
+				echo str_replace('[name]', htmlspecialchars($field['user_name']), outputLangDebugInAttributes($lang['email_to_user_linktitle']));
 				echo '" width="13" height="10" /></a></td>'."\n";
 				echo '</tr>';
 				}
@@ -720,7 +721,7 @@ switch ($action)
 				echo '<td class="c">'.$lang['user_hp'].'</td>'."\n";
 				echo '<td class="d">';
 				echo '<a href="'.$field['user_hp'].'"><img src="img/homepage.gif" alt="';
-				echo $lang['homepage_alt'].'" title="'.htmlspecialchars($field['user_hp']);
+				echo outputLangDebugInAttributes($lang['homepage_alt']).'" title="'.htmlspecialchars($field['user_hp']);
 				echo '" width="13" height="13" /></a></td>'."\n";
 				echo '</tr>';
 				}
@@ -874,7 +875,7 @@ switch ($action)
 			echo "\n".'</table>'."\n";
 			echo '<p><input type="hidden" name="action" value="submit usersettings" />';
 			echo '<input type="submit" name="us-submit" value="';
-			echo $lang['submit_usersettings_button'].'" /></p>';
+			echo outputLangDebugInAttributes($lang['submit_usersettings_button']).'" /></p>';
 			echo '</form>'."\n";
 			mysql_free_result($all_settings);
 			}
@@ -921,7 +922,7 @@ switch ($action)
 			echo '<tr class="titlerow">'."\n";
 			echo '<th><a href="user.php?action=show+users&amp;order=user_name&amp;descasc=';
 			echo ($descasc=="ASC" && $order=="user_name") ? 'DESC' : 'ASC';
-			echo '&amp;ul='.$ul.'" title="'.$lang['order_linktitle'].'">'.$lang['userlist_name'].'</a>';
+			echo '&amp;ul='.$ul.'" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['userlist_name'].'</a>';
 			if ($order=="user_name" && $descasc=="ASC")
 				{
 				echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
@@ -933,7 +934,7 @@ switch ($action)
 			echo '</th>'."\n";
 			echo '<th><a href="user.php?action=show+users&amp;order=user_type&amp;descasc=';
 			echo ($descasc=="ASC" && $order=="user_type") ? 'DESC' : 'ASC';
-			echo '&amp;ul='.$ul.'" title="'.$lang['order_linktitle'].'">'.$lang['userlist_type'].'</a>';
+			echo '&amp;ul='.$ul.'" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['userlist_type'].'</a>';
 			if ($order=="user_type" && $descasc=="ASC")
 				{
 				echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
@@ -955,7 +956,7 @@ switch ($action)
 				{
 				echo '<th><a href="user.php?action=show+users&amp;order=user_lock&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_lock") ? 'DESC' : 'ASC';
-				echo '&amp;ul='.$ul.'" title="'.$lang['order_linktitle'].'">'.$lang['lock'].'</a>';
+				echo '&amp;ul='.$ul.'" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['lock'].'</a>';
 				if ($order=="user_lock" && $descasc=="ASC")
 					{
 					echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
@@ -973,7 +974,7 @@ switch ($action)
 				$rowClass = ($i % 2 == 0) ? "a" : "b";
 				echo '<tr class="'.$rowClass.'">'."\n";
 				echo '<td><a href="user.php?id='.$field['user_id'].'" title="';
-				echo str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['show_userdata_linktitle']);
+				echo str_replace("[name]", htmlspecialchars($field["user_name"]), outputLangDebugInAttributes($lang['show_userdata_linktitle']));
 				echo '"><b>'.htmlspecialchars($field['user_name']).'</b></a></td>'."\n";
 				echo '<td class="info">';
 				if ($field["user_type"] == "admin") echo $lang['ud_admin'];
@@ -984,8 +985,8 @@ switch ($action)
 				if ($field["hide_email"]!=1)
 					{
 					echo '<a href="contact.php?uid='.$field['user_id'].'"><img src="img/email.gif"';
-					echo ' alt="'.$lang['email_alt'].'" title="';
-					echo str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['email_to_user_linktitle']);
+					echo ' alt="'.outputLangDebugInAttributes($lang['email_alt']).'" title="';
+					echo str_replace("[name]", htmlspecialchars($field["user_name"]), outputLangDebugInAttributes($lang['email_to_user_linktitle']));
 					echo '" width="13" height="10" /></a>';
 					}
 				else echo "&nbsp;";
@@ -995,7 +996,7 @@ switch ($action)
 					{
 					$field["user_hp"] = amendProtocol($field["user_hp"]);
 					echo '<a href="'.$field["user_hp"].'"><img src="img/homepage.gif" alt="';
-					echo $lang['homepage_alt'].'" title="';
+					echo outputLangDebugInAttributes($lang['homepage_alt']).'" title="';
 					echo htmlspecialchars($field["user_hp"]).'" width="13" height="13" /></a>'."\n";
 					}
 				else echo "&nbsp;";
@@ -1022,14 +1023,14 @@ switch ($action)
 							{
 							echo '<a href="user.php?user_lock='.$field["user_id"];
 							echo '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;page='.$page;
-							echo '" title="'.str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['lock_user_lt']);
+							echo '" title="'.str_replace("[name]", htmlspecialchars($field["user_name"]), outputLangDebugInAttributes($lang['lock_user_lt']));
 							echo '">'.$lang['unlocked'].'</a>';
 							}
 						else
 							{
 							echo '<a style="color: red;" href="user.php?user_lock=';
 							echo $field["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
-							echo '&amp;page='.$page.'" title="'.str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['unlock_user_lt']);
+							echo '&amp;page='.$page.'" title="'.str_replace("[name]", htmlspecialchars($field["user_name"]), outputLangDebugInAttributes($lang['unlock_user_lt']));
 							echo '">'.$lang['locked'].'</a>';
 							}
 						}
@@ -1188,7 +1189,8 @@ switch ($action)
 			echo ($user_time_difference==$h) ? ' selected="selected"' : '';
 			echo '>'.$h.'</option>'."\n";
 			}
-		echo '</select>&nbsp;&nbsp;Test: <select size="1">'.outputTimeZonesOptions().'</select>';
+		echo '</select>';
+#		echo '&nbsp;&nbsp;Test: <select size="1">'.outputTimeZonesOptions().'</select>';
 		echo '</td>'."\n".'</tr>';
 		if ($user_type=="admin" || $user_type=="mod")
 			{
@@ -1205,8 +1207,8 @@ switch ($action)
 		echo '<tr>'."\n";
 		echo '<td class="c">&nbsp;</td>'."\n";
 		echo '<td class="d"><input type="submit" name="userdata_submit" value="';
-		echo $lang['userdata_subm_button'].'" />&nbsp;';
-		echo '<input type="reset" value="'.$lang['reset_button'].'" /></td>'."\n";
+		echo outputLangDebugInAttributes($lang['userdata_subm_button']).'" />&nbsp;';
+		echo '<input type="reset" value="'.outputLangDebugInAttributes($lang['reset_button']).'" /></td>'."\n";
 		echo '</tr>'."\n".'</table>'."\n".'</form>'."\n";
 		if ($settings['bbcode'] == 1)
 			{
@@ -1232,8 +1234,8 @@ switch ($action)
 		echo '<input type="password" size="25" name="new_pw" id="new-pw" maxlength="50"></p>'."\n";
 		echo '<p><label for="pw-conf">'.$lang['new_pw_conf'].'</label><br />'."\n";
 		echo '<input type="password" size="25" name="new_pw_conf" id="pw-conf" maxlength="50"></p>'."\n";
-		echo '<p><input type="submit" name="pw_submit" value="'.$lang['new_pw_subm_button'];
-		echo '" title="'.$lang['new_pw_subm_button_title'].'"></p>'."\n";
+		echo '<p><input type="submit" name="pw_submit" value="'.outputLangDebugInAttributes($lang['new_pw_subm_button']);
+		echo '" title="'.outputLangDebugInAttributes($lang['new_pw_subm_button_title']).'"></p>'."\n";
 		echo '</div></form>'."\n";
 	break;
 	case "email":
@@ -1252,7 +1254,7 @@ switch ($action)
 		echo '<p><label for="pw-email">'.$lang['password_marking'].'</label><br />'."\n";
 		echo '<input type="password" size="25" name="pw_new_email" id="pw-email" maxlength="50"></p>'."\n";
 		echo '<p><input type="submit" name="change_email_submit" value="';
-		echo $lang['submit_button_ok'].'"></p>'."\n";
+		echo outputLangDebugInAttributes($lang['submit_button_ok']).'"></p>'."\n";
 		echo '</form>'."\n";
 	break;
 	case "personal_message":
@@ -1280,7 +1282,8 @@ switch ($action)
 			echo '<textarea name="pm_text" id="mess-text" cols="60" rows="15">';
 			echo (isset($_POST['pm_text'])) ? htmlspecialchars($_POST['pm_text']) : '';
 			echo '</textarea></p>'."\n";
-			echo '<p><input type="submit" name="pm_ok" value="'.$lang['pers_msg_subm_button'].'" /></p>';
+			echo '<p><input type="submit" name="pm_ok" value="';
+			echo outputLangDebugInAttributes($lang['pers_msg_subm_button']).'" /></p>';
 			echo '</div></form>'."\n";
 			}
 		else

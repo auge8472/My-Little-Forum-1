@@ -231,7 +231,7 @@ switch ($action)
 
 				# send mail with activating link:
 				$ip = $_SERVER["REMOTE_ADDR"];
-				$lang['pwf_activating_email_txt'] = str_replace("[name]", $field["user_name"], $lang['pwf_activating_email_txt']);
+				$lang['pwf_activating_email_txt'] = str_replace("[name]", $field["user_name"], satrip_tags($lang['pwf_activating_email_txt']));
 				$lang['pwf_activating_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['pwf_activating_email_txt']);
 				$lang['pwf_activating_email_txt'] = str_replace("[activating_link]", $settings['forum_address']."login.php?activate=".$field["user_id"]."&code=".$pwf_code, $lang['pwf_activating_email_txt']);
 #				$lang['pwf_activating_email_txt'] = stripslashes($lang['pwf_activating_email_txt']);
@@ -242,7 +242,7 @@ switch ($action)
 				$pwf_mailto = $field["user_name"]." <".$field["user_email"].">";
 				if ($settings['mail_parameter']!='')
 					{
-					if (@mail($pwf_mailto, $lang['pwf_activating_email_sj'], $lang['pwf_activating_email_txt'], $header,$settings['mail_parameter']))
+					if (@mail($pwf_mailto, strip_tags($lang['pwf_activating_email_sj']), $lang['pwf_activating_email_txt'], $header,$settings['mail_parameter']))
 						{
 						header('Location: '.$settings['forum_address'].'login.php?msg=mail_sent');
 						die('<a href="'.$_SERVER['SCRIPT_NAME'].'?msg=mail_sent">further...</a>');
@@ -251,7 +251,7 @@ switch ($action)
 					}
 				else
 					{
-					if (@mail($pwf_mailto, $lang['pwf_activating_email_sj'], $lang['pwf_activating_email_txt'], $header))
+					if (@mail($pwf_mailto, strip_tags($lang['pwf_activating_email_sj']), $lang['pwf_activating_email_txt'], $header))
 						{
 						header('Location: '.$settings['forum_address'].'login.php?msg=mail_sent');
 						die('<a href="'.$_SERVER['SCRIPT_NAME'].'?msg=mail_sent">further...</a>');
@@ -296,7 +296,7 @@ switch ($action)
 				$update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET last_login=last_login, registered=registered, user_pw='".$encoded_new_user_pw."', pwf_code='' WHERE user_id='".$field["user_id"]."' LIMIT 1", $connid);
 				# send new password:
 				$ip = $_SERVER["REMOTE_ADDR"];
-				$lang['new_pw_email_txt'] = str_replace("[name]", $field['user_name'], $lang['new_pw_email_txt']);
+				$lang['new_pw_email_txt'] = str_replace("[name]", $field['user_name'], strip_tags($lang['new_pw_email_txt']));
 				$lang['new_pw_email_txt'] = str_replace("[password]", $new_user_pw, $lang['new_pw_email_txt']);
 				$lang['new_pw_email_txt'] = str_replace("[login_link]", $settings['forum_address']."login.php?username=".urlencode($field['user_name'])."&userpw=".$new_user_pw, $lang['new_pw_email_txt']);
 #				$lang['new_pw_email_txt'] = stripslashes($lang['new_pw_email_txt']);
@@ -307,7 +307,7 @@ switch ($action)
 				$new_pw_mailto = $field['user_name']." <".$field['user_email'].">";
 				if ($settings['mail_parameter']!='')
 					{
-					if (@mail($new_pw_mailto, $lang['new_pw_email_sj'], $lang['new_pw_email_txt'], $header,$settings['mail_parameter']))
+					if (@mail($new_pw_mailto, strip_tags($lang['new_pw_email_sj']), $lang['new_pw_email_txt'], $header,$settings['mail_parameter']))
 						{
 						header('Location: '.$settings['forum_address'].'login.php?msg=pw_sent');
 						die('<a href="'.$_SERVER['SCRIPT_NAME'].'?msg=pw_sent">further...</a>');
@@ -316,7 +316,7 @@ switch ($action)
 					}
 				else
 					{
-				if (@mail($new_pw_mailto, $lang['new_pw_email_sj'], $lang['new_pw_email_txt'], $header))
+				if (@mail($new_pw_mailto, strip_tags($lang['new_pw_email_sj']), $lang['new_pw_email_txt'], $header))
 					{
 					header('Location: '.$settings['forum_address'].'login.php?msg=pw_sent');
 					die("<a href=\"".$_SERVER['SCRIPT_NAME']."?msg=pw_sent\">further...</a>");
@@ -339,7 +339,7 @@ switch ($action)
 	}
 
 // HTML:
-$wo = $lang['login_title'];
+$wo = strip_tags($lang['login_title']);
 $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'.$lang['login_title'].'</b>';
 parse_template();
 echo $header;
@@ -395,7 +395,7 @@ switch ($action)
 			echo '<label for="autologin" class="small"> '.$lang['auto_login_marking'];
 			echo '</label><br /><br />'."\n";
 			}
-		echo '<input type="submit" value="'.$lang['login_submit_button'].'" />'."\n";
+		echo '<input type="submit" value="'.outputLangDebugInAttributes($lang['login_submit_button']).'" />'."\n";
 		echo '</div></form>'."\n";
 		echo '<p>'.$lang['login_advice'].'</p>'."\n";
 		echo '<p><span class="small"><a href="'.$_SERVER['SCRIPT_NAME'].'?action=pw_forgotten">'."\n";
@@ -412,7 +412,7 @@ switch ($action)
 		echo '<input type="text" name="pwf_username" id="user-name" /><br /><br />'."\n";
 		echo '<label for="user-email">'.$lang['user_email_marking'].'</label><br />'."\n";
 		echo '<input type="text" name="pwf_email" id="user-email" /><br /><br />'."\n";
-		echo '<input type="submit" value="'.$lang['submit_button_ok'].'" /></div>'."\n";
+		echo '<input type="submit" value="'.outputLangDebugInAttributes($lang['submit_button_ok']).'" /></div>'."\n";
 		echo '</form>'."\n";
 	break;
 	}

@@ -49,8 +49,11 @@ if (get_magic_quotes_gpc())
 
 $connid = connect_db($db_settings['host'], $db_settings['user'], $db_settings['pw'], $db_settings['db']);
 get_settings();
+include("lang/english.php");
+$lang = outputLangDebugOrNot($lang, "english.php");
 include("lang/".$settings['language_file']);
-setlocale(LC_ALL, $lang['locale']);
+$lang = outputLangDebugOrNot($lang, $settings['language_file']);
+setlocale(LC_ALL, strip_tags($lang['locale']));
 if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 	{
 	$MyOwnSettings = getMyOwnSettings($_SESSION[$settings['session_prefix'].'user_id']);
@@ -71,7 +74,22 @@ if (basename($_SERVER['SCRIPT_NAME'])!='login.php'
 	die('<a href="info.php?info=1">further...</a>');
 	}
 
-// look if IP is banned:
+
+/**
+ * set default for debug mode (no)
+ * if visitor is not admin and debug mode
+ * is not setted manually to different value
+ */
+if ($_SESSION[$settings['session_prefix'].'user_type']!='admin'
+or ($_SESSION[$settings['session_prefix'].'user_type']=='admin'
+and empty($_SESSION['debug']))) {
+	$_SESSION['debug'] = 'no';
+	}
+
+
+/**
+ * look if IP is banned
+ */
 $ip_result = mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'ips' LIMIT 1", $connid);
 if (!$ip_result) die($lang['db_error']);
 $data = mysql_fetch_assoc($ip_result);
@@ -250,17 +268,17 @@ if (in_array(basename($_SERVER['SCRIPT_NAME']), $postingPages))
 	if ($settings['bbcode'] == 1)
 		{
 		$additionalJS .= "var auge_buttons = \$A();\n";
-		$additionalJS .= "auge_buttons[0] = \$H({value:'i', text:'".$lang['bbcode_italic']."', titel:'".$lang['bbcode_italic_title'].".'});\n";
-		$additionalJS .= "auge_buttons[1] = \$H({value:'b', text:'".$lang['bbcode_bold']."', titel:'".$lang['bbcode_bold_title']."'});\n";
-		$additionalJS .= "auge_buttons[2] = \$H({value:'code', text:'".$lang['bbcode_code']."', titel:'".$lang['bbcode_code_title']."'});\n";
+		$additionalJS .= "auge_buttons[0] = \$H({value:'i', text:'".strip_tags($lang['bbcode_italic'])."', titel:'".strip_tags($lang['bbcode_italic_title']).".'});\n";
+		$additionalJS .= "auge_buttons[1] = \$H({value:'b', text:'".strip_tags($lang['bbcode_bold'])."', titel:'".strip_tags($lang['bbcode_bold_title'])."'});\n";
+		$additionalJS .= "auge_buttons[2] = \$H({value:'code', text:'".strip_tags($lang['bbcode_code'])."', titel:'".strip_tags($lang['bbcode_code_title'])."'});\n";
 		if ($settings['bbcode_img']==1)
 			{
-			$additionalJS .= "auge_buttons[3] = \$H({value:'img', text:'".$lang['bbcode_image']."', titel:'".$lang['bbcode_image_title']."'});\n";
+			$additionalJS .= "auge_buttons[3] = \$H({value:'img', text:'".strip_tags($lang['bbcode_image'])."', titel:'".strip_tags($lang['bbcode_image_title'])."'});\n";
 			}
 		}
 	if ($settings['upload_images']==1)
 		{
-		$additionalJS .= "\nvar auge_upload = \$H({text:'".$lang['upload_image']."', title:'".$lang['upload_image_title']."'});";
+		$additionalJS .= "\nvar auge_upload = \$H({text:'".strip_tags($lang['upload_image'])."', title:'".strip_tags($lang['upload_image_title'])."'});";
 		}
 	if ($settings['smilies'] == 1)
 		{
@@ -271,14 +289,14 @@ if (in_array(basename($_SERVER['SCRIPT_NAME']), $postingPages))
 			$i=0;
 			while ($data = mysql_fetch_assoc($result))
 				{
-				$additionalJS .= "auge_smilies[".$i."] = \$H({value:'".$data['code_1']."', url:'".$data['file']."', title: '".$lang['smiley_title']."'});\n";
+				$additionalJS .= "auge_smilies[".$i."] = \$H({value:'".$data['code_1']."', url:'".$data['file']."', title: '".strip_tags($lang['smiley_title'])."'});\n";
 				$i++;
 				}
-			$additionalJS .= "auge_smilies[".$i."] = \$H({value:'".$lang['more_smilies_linkname']."', url:'".$data['file']."', title: '".$lang['more_smilies_linktitle']."'});\n";
+			$additionalJS .= "auge_smilies[".$i."] = \$H({value:'".strip_tags($lang['more_smilies_linkname'])."', url:'".$data['file']."', title: '".strip_tags($lang['more_smilies_linktitle'])."'});\n";
 			}
 		mysql_free_result($result);
 		}
-	$additionalJS .= "\nvar delete_text = '".$lang['delete_link']."';";
+	$additionalJS .= "\nvar delete_text = '".strip_tags($lang['delete_link'])."';";
 	$additionalJS .= "\n".'</script>';
 	}
 
@@ -291,8 +309,8 @@ if ($settings['user_control_refresh']==1
 	{
 	$loadTime = time();
 	$reloadTime = $loadTime + 1200;
-	$loadTime = strftime($lang['time_format'], $loadTime);
-	$reloadTime = strftime($lang['time_format'], $reloadTime);
+	$loadTime = strftime(strip_tags($lang['time_format']), $loadTime);
+	$reloadTime = strftime(strip_tags($lang['time_format']), $reloadTime);
 	$additionalJS .= '<meta http-equiv="refresh" content="1200" />'."\n";
 	$lang['forum_load_message'] = str_replace('[load]', $loadTime, $lang['forum_load_message']);
 	$lang['forum_load_message'] = str_replace('[reload]', $reloadTime, $lang['forum_load_message']);
