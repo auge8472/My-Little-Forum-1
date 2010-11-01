@@ -53,6 +53,58 @@ return $connid;
 
 
 /**
+ * sends any query to the database
+ * @param string [$query]
+ * @param resource [$sql]
+ * @return array, bool [false|true]
+ */
+function dbaseAskDatabase($q,$s) {
+# $q: der auszufuehrende Query
+# $s: die Kennung der DB-Verbindung
+
+$a = @mysql_query($q,$s);
+
+if ($a===false)
+	{
+	$return = false;
+	}
+else
+	{
+	if ($a===true)
+		{
+		# INSERT, UPDATE, ALTER etc. pp.
+		$return = true;
+		}
+	else
+		{
+		# !true, !false, ressource number
+		# SELECT, EXPLAIN, SHOW, DESCRIBE
+		$b = dbaseGenerateAnswer($a);
+		$return = $b;
+		}
+	}
+return $return;
+} # Ende: dbaseAskDatabase($q,$s)
+
+
+
+/**
+ * puts datasets into an associated array
+ * @param resource [$resource number]
+ * @return array [$datasets]
+ */
+function dbaseGenerateAnswer($a) {
+$b = array();
+while ($row = mysql_fetch_assoc($a))
+	{
+	$b[] = $row;
+	}
+return $b;
+} # Ende: dbaseGenerateAnswer($a)
+
+
+
+/**
  * splits SQL output into lines and strips the slashes
  *
  * @author Alex
