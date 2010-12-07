@@ -55,12 +55,10 @@ return $connid;
 /**
  * sends any query to the database
  * @param string [$query]
- * @param resource [$sql]
+ * @param ressource [$sql]
  * @return array, bool [false|true]
  */
 function dbaseAskDatabase($q,$s) {
-# $q: der auszufuehrende Query
-# $s: die Kennung der DB-Verbindung
 
 $a = @mysql_query($q,$s);
 
