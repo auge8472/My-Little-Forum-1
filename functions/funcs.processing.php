@@ -1,6 +1,7 @@
 <?php
 
 
+
 /**
  * counts the chars of the words in a given string
  *
@@ -23,6 +24,9 @@ for ($i=0; $i<$countWords; $i++)
 
 return $error;
 } # End: processCountCharsInWords
+
+
+
 /**
  * splits URL in parts and encodes the parts
  *
