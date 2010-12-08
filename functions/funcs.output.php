@@ -418,6 +418,34 @@ return $r;
 
 
 /**
+ * generates tree of threads
+ *
+ * @param array [$t] one or all threads
+ * @param array [$c] list of childs
+ * @param string [$v] information about the current view
+ * @param int [$d] optional depth for HTML source code (cosmetic)
+ */
+function outputThreads($t, $c, $v='thread', $d=0) {
+
+$r  = "";
+#$r .= "<pre>".print_r($t, true)."</pre>\n";
+
+if (is_array($c)) {
+	foreach ($c[0] as $cid) {
+		$dn = $d+1;
+		$r .= ($v == 'mix') ? "\n" : "";
+		$r .= str_repeat(" ", $d).'<ul class="thread">'."\n";
+		$r .= outputThreadTree($t, $c, $cid, $v, true, $dn);
+		$r .= str_repeat(" ", $d).'</ul>'."\n";
+		}
+	}
+
+return $r;
+} # End: outputThreads
+
+
+
+/**
  * generates output for language file debug mode
  *
  * @param array $lang
