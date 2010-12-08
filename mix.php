@@ -25,7 +25,9 @@ include_once("functions/include.prepare.php");
 
 function mix_tree($id, $aktuellerEintrag = 0, $tiefe = 0) {
 global $settings, $parent_array, $child_array, $page, $order, $category, $descasc, $last_visit, $lang;
-		
+
+# see: line 342
+
 echo '<div class="threadkl" style="margin-left: ';
 if ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix']/$settings['thread_indent_mix']))
 	{
@@ -35,12 +37,12 @@ else
 	{
 	echo $settings['thread_indent_mix'];
 	}
-echo 'px;">';
+echo 'px;">'."\n";
 
 //[... Zeile mit den Eintragsdaten oder einem Link ausgeben ...]
 if ($parent_array[$id]["pid"]!=0)
 	{
-	echo '<a class="';
+	echo '<li><a class="';
 	if (($aktuellerEintrag == 0
 		&& isset($_SESSION[$settings['session_prefix'].'newtime'])
 		&& $_SESSION[$settings['session_prefix'].'newtime'] < $parent_array[$id]["time"])
@@ -61,7 +63,7 @@ if ($parent_array[$id]["pid"]!=0)
 		echo '&amp;order='.$order.'&amp;descasc='.$descasc;
 		}
 	echo '#p'.$parent_array[$id]["id"].'" title="'.htmlspecialchars($parent_array[$id]["name"]);
-	echo ", ".strftime(outputLangDebugInAttributes($lang['time_format']),$parent_array[$id]["Uhrzeit"]).'">'.htmlspecialchars($parent_array[$id]["subject"]).'</a> (<span class="id">#&nbsp;'.$parent_array[$id]["id"].'</span>)';
+	echo ", ".strftime(outputLangDebugInAttributes($lang['time_format']),$parent_array[$id]["Uhrzeit"]).'">'.htmlspecialchars($parent_array[$id]["subject"]).'</a> (<span class="id">#&nbsp;'.$parent_array[$id]["id"].'</span>)</li>'."\n";
 	}
 
 // Anfang der Schleife über alle Kinder ...
@@ -113,83 +115,63 @@ if ($settings['access_for_users_only'] == 1
 	unset($parent_array);
 	unset($child_array);
 
+	# use next results somewhere around line 280
 	# database request
 	# no categories defined
 	if ($categories === false)
 		{
-		$threadsNoCatsQuery = "SELECT
-		id,
-		pid,
-		tid,
-		user_id,
-		UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
-		UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_Uhrzeit,
-		UNIX_TIMESTAMP(last_answer) AS last_answer,
-		name,
-		subject,
-		category,
-		marked,
-		fixed,
-		views
-		FROM ".$db_settings['forum_table']."
-		WHERE pid = 0
-		ORDER BY fixed DESC, ".$order." ".$descasc."
-		LIMIT ".$ul.", ".$settings['topics_per_page'];
-		$result = mysql_query($threadsNoCatsQuery, $connid);
-		if(!$result) die($lang['db_error']);
+		$threadsQueryWhere = '';
 		}
 	# there are categories and all categories should be shown
 	else if (is_array($categories) && $category == 0)
 		{
-		$threadsCatsQuery = "SELECT
-		id,
-		pid,
-		tid,
-		user_id,
-		UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
-		UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_Uhrzeit,
-		UNIX_TIMESTAMP(last_answer) AS last_answer,
-		name,
-		subject,
-		category,
-		marked,
-		fixed,
-		views
-		FROM ".$db_settings['forum_table']."
-		WHERE pid = 0 AND category IN (".$category_ids_query.")
-		ORDER BY fixed DESC, ".$order." ".$descasc."
-		LIMIT ".$ul.", ".$settings['topics_per_page'];
-		$result = mysql_query($threadsCatsQuery, $connid);
-		if (!$result) die($lang['db_error']);
+		$threadsQueryWhere = " AND category IN (".$category_ids_query.")";
 		}
-	# there are categories and all categories should be shown
+	# there are categories and one category should be shown
 	else if (is_array($categories) && $category != 0 && in_array($category, $category_ids))
 		{
-		$threadsSingleCatQuery = "SELECT
-		id,
-		pid,
-		tid,
-		user_id,
-		UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
-		UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_Uhrzeit,
-		UNIX_TIMESTAMP(last_answer) AS last_answer,
-		name,
-		subject,
-		category,
-		marked,
-		fixed,
-		views
-		FROM ".$db_settings['forum_table']."
-		WHERE category = '".mysql_real_escape_string($category)."' AND pid = 0
-		ORDER BY fixed DESC, ".$order." ".$descasc."
-		LIMIT ".$ul.", ".$settings['topics_per_page'];
-		$result = mysql_query($threadsSingleCatQuery, $connid);
-		if (!$result) die($lang['db_error']);
+		$threadsQueryWhere = " AND category = '".mysql_real_escape_string($category)."'";
 		# how many entries?
 		$pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = '0' AND category = '".mysql_real_escape_string($category)."'", $connid);
 		list($thread_count) = mysql_fetch_row($pid_result);
 		mysql_free_result($pid_result);
 		}
+	# list all threads
+	/*
+	$threadsQuery = "SELECT
+		id,
+		pid,
+		tid,
+		user_id,
+		UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
+		UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_Uhrzeit,
+		UNIX_TIMESTAMP(last_answer) AS last_answer,
+		name,
+		subject,
+		category,
+		marked,
+		fixed,
+		views
+		FROM ".$db_settings['forum_table']."
+		WHERE pid = 0".$threadsQueryWhere."
+		ORDER BY fixed DESC, ".$order." ".$descasc."
+		LIMIT ".$ul.", ".$settings['topics_per_page'];
+		*/
+	$threadsQuery = "SELECT
+		tid,
+		user_id,
+		UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
+		UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_Uhrzeit,
+		UNIX_TIMESTAMP(last_answer) AS last_answer,
+		name,
+		category,
+		views
+		FROM ".$db_settings['forum_table']."
+		WHERE pid = 0".$threadsQueryWhere."
+		ORDER BY fixed DESC, ".$order." ".$descasc."
+		LIMIT ".$ul.", ".$settings['topics_per_page'];
+	$threadsResult = mysql_query($threadsQuery, $connid);
+	if (!$threadsResult) die($lang['db_error']);
 
 	$subnav_1 = outputPostingLink($category,"mix");
 	$subnav_2 = '';
@@ -221,7 +203,7 @@ if ($settings['access_for_users_only'] == 1
 	parse_template();
 	echo $header;
 
-	if ($thread_count > 0 && isset($result))
+	if ($thread_count > 0 && isset($threadsResult))
 		{
 		echo '<table class="normaltab">'."\n";
 		echo '<tr class="titlerow">'."\n";
@@ -240,7 +222,7 @@ if ($settings['access_for_users_only'] == 1
 		if ($categories != false && $category == 0)
 			{
 			echo '<th><a href="mix.php?category='.$category.'&amp;order=category&amp;descasc=';
-		echo ($descasc=="ASC" && $order=="category") ? 'DESC' : 'ASC';
+			echo ($descasc=="ASC" && $order=="category") ? 'DESC' : 'ASC';
 			echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_category_headline'].'</a>';
 			if ($order=="category" && $descasc=="ASC")
 				{
@@ -300,9 +282,33 @@ if ($settings['access_for_users_only'] == 1
 			}
 		echo '</tr>';
 
-		$i=0;
-		while ($zeile = mysql_fetch_array($result))
+		$i = 0;
+		while ($zeile = mysql_fetch_assoc($threadsResult))
 			{
+			# read entries of thread
+			$threadCompleteQuery = "SELECT
+			id,
+			pid,
+			tid,
+			user_id,
+			UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
+#			UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_Uhrzeit,
+#			UNIX_TIMESTAMP(last_answer) AS last_answer,
+			name,
+			subject,
+#			category,
+			marked,
+			fixed,
+			views
+			FROM ".$db_settings['forum_table']."
+			WHERE tid = ".$zeile["tid"];
+			$rawresult = dbaseAskDatabase($threadCompleteQuery, $connid);
+			# Ergebnisse einlesen:
+			foreach ($rawresult as $tmp)
+				{
+				$postArray[$tmp["id"]] = $tmp;           // Ergebnis im Array ablegen
+				$childArray[$tmp["pid"]][] = $tmp["id"]; // Vorwärtsbezüge konstruieren
+				}
 			# count replies:
 			$pid_resultc = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"], $connid);
 			list($answers_count) = mysql_fetch_row($pid_resultc);
@@ -313,10 +319,10 @@ if ($settings['access_for_users_only'] == 1
 			if ($settings['last_reply_link'] == 1)
 				{
 				$last_answer_result = mysql_query("SELECT name, id FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"]." ORDER BY time DESC LIMIT 1", $connid);
-				$last_answer = mysql_fetch_array($last_answer_result);
+				$last_answer = mysql_fetch_assoc($last_answer_result);
 				mysql_free_result($last_answer_result);
 				}
-
+			# generate output of thread lists
 			# highlight user, mods and admins:
 			if (($settings['admin_mod_highlight'] == 1
 			or $settings['user-highlight'] == 1)
@@ -326,72 +332,7 @@ if ($settings['access_for_users_only'] == 1
 				}
 			$rowClass = ($i % 2 == 0) ? "a" : "b";
 			echo '<tr class="'.$rowClass.'">'."\n";
-			echo '<td>'."\n"; # thread
-			echo '<a class="';
-			if ((isset($_SESSION[$settings['session_prefix'].'newtime'])
-			&& $_SESSION[$settings['session_prefix'].'newtime'] < $zeile["last_answer"])
-			|| (($zeile["pid"]==0)
-			&& empty($_SESSION[$settings['session_prefix'].'newtime'])
-			&& $zeile["last_answer"] > $last_visit))
-				{
-				echo "threadnew";
-				}
-			else
-				{
-				echo "thread";
-				}
-			echo '" href="mix_entry.php?id='.$zeile["tid"];
-			if ($page != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC")
-				{
-				echo '&amp;page='.$page.'&amp;category='.$category;
-				echo '&amp;order='.$order.'&amp;descasc='.$descasc;
-				}
-			echo '">'.htmlspecialchars($zeile["subject"]).'</a>';
-			if ($zeile["fixed"] == 1)
-				{
-				echo ' <img src="img/fixed.gif" width="9" height="9" title="'.outputLangDebugInAttributes($lang['fixed']).'" alt="*" />';
-				}
-			if ($settings['all_views_direct'] == 1)
-				{
-				echo ' <span class="small">';
-				if ($settings['board_view'] == 1)
-					{
-					echo '<a href="board_entry.php?id='.$zeile["tid"].'&amp;view=board';
-					echo ($category > 0) ? '&amp;category='.$category : '';
-					echo '"><img src="img/board_d.gif" alt="[Board]" title="';
-					echo outputLangDebugInAttributes($lang['open_in_board_linktitle']).'" width="12" height="9" /></a>';
-					}
-				if ($settings['thread_view']==1)
-					{
-					echo '<a href="forum_entry.php?id='.$zeile["tid"].'&amp;view=thread';
-					echo ($category > 0) ? '&amp;category='.$category : '';
-					echo '"><img src="img/thread_d.gif" alt="[Thread]" title="';
-					echo outputLangDebugInAttributes($lang['open_in_thread_linktitle']).'" width="12" height="9" /></a>';
-					}
-				echo "</span>";
-				}
-			$postingIdsQuery = "SELECT
-			id,
-			pid,
-			tid,
-			UNIX_TIMESTAMP(time) AS time,
-			UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
-			name,
-			subject,
-			category
-			FROM ".$db_settings['forum_table']."
-			WHERE tid = ".$zeile["tid"]."
-			ORDER BY time ASC";
-			$thread_result = mysql_query($postingIdsQuery, $connid);
-			# Ergebnisse einlesen:
-			while($tmp = mysql_fetch_array($thread_result))
-				{
-				$parent_array[$tmp["id"]] = $tmp;          // Ergebnis im Array ablegen
-				$child_array[$tmp["pid"]][] =  $tmp["id"]; // Vorwärtsbezüge konstruieren
-				}
-			mix_tree($zeile["tid"]);
-			mysql_free_result($thread_result);
-			echo '</td>'."\n";
+			echo ' <td>'.outputThreads($postArray, $childArray, 'mix', 2).'</td>'."\n";
 			if ($categories!=false && $category == 0)
 				{
 				echo '<td class="info">'."\n"; #categories
@@ -431,7 +372,8 @@ if ($settings['access_for_users_only'] == 1
 					}
 				echo '</td>'."\n";
 				}
-			echo '<td class="info">'."\n"; # author op
+			# author op
+			echo '<td class="info">'."\n";
 			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
 				{
 				$sult = str_replace("[name]", htmlspecialchars($zeile["name"]), outputLangDebugInAttributes($lang['show_userdata_linktitle']));
@@ -495,11 +437,64 @@ if ($settings['access_for_users_only'] == 1
 					}
 				echo '</a></td>'."\n";
 				}
+			echo '</tr>'."\n";
+			unset($rawresult, $childArray, $postArray);
+
+/*
+			$rowClass = ($i % 2 == 0) ? "a" : "b";
+			echo '<tr class="'.$rowClass.'">'."\n";
+			echo '<td>'."\n"; # Start: output thread tree
+			echo '<a class="';
+			if ((isset($_SESSION[$settings['session_prefix'].'newtime'])
+			&& $_SESSION[$settings['session_prefix'].'newtime'] < $zeile["last_answer"])
+			|| (($zeile["pid"]==0)
+			&& empty($_SESSION[$settings['session_prefix'].'newtime'])
+			&& $zeile["last_answer"] > $last_visit))
+				{
+				echo "threadnew";
+				}
+			else
+				{
+				echo "thread";
+				}
+			echo '" href="mix_entry.php?id='.$zeile["tid"];
+			if ($page != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC")
+				{
+				echo '&amp;page='.$page.'&amp;category='.$category;
+				echo '&amp;order='.$order.'&amp;descasc='.$descasc;
+				}
+			echo '">'.htmlspecialchars($zeile["subject"]).'</a>';
+			if ($zeile["fixed"] == 1)
+				{
+				echo ' <img src="img/fixed.gif" width="9" height="9" title="'.outputLangDebugInAttributes($lang['fixed']).'" alt="*" />';
+				}
+			if ($settings['all_views_direct'] == 1)
+				{
+				echo ' <span class="small">';
+				if ($settings['board_view'] == 1)
+					{
+					echo '<a href="board_entry.php?id='.$zeile["tid"].'&amp;view=board';
+					echo ($category > 0) ? '&amp;category='.$category : '';
+					echo '"><img src="img/board_d.gif" alt="[Board]" title="';
+					echo outputLangDebugInAttributes($lang['open_in_board_linktitle']).'" width="12" height="9" /></a>';
+					}
+				if ($settings['thread_view']==1)
+					{
+					echo '<a href="forum_entry.php?id='.$zeile["tid"].'&amp;view=thread';
+					echo ($category > 0) ? '&amp;category='.$category : '';
+					echo '"><img src="img/thread_d.gif" alt="[Thread]" title="';
+					echo outputLangDebugInAttributes($lang['open_in_thread_linktitle']).'" width="12" height="9" /></a>';
+					}
+				echo "</span>";
+				}
+			echo '</td>'."\n";
+			# End: output thread tree
 			echo '</tr>';
+			*/
 			$i++;
 			}
 		echo "\n".'</table>'."\n";
-		mysql_free_result($result);
+		mysql_free_result($threadsResult);
 		echo outputManipulateMarked('mix');
 		}
 	else
