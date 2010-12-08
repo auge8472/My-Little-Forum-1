@@ -418,6 +418,52 @@ return $r;
 
 
 /**
+ * generates output of thread tree
+ *
+ * @param array [$t] threads
+ * @param int [$c] id of current entry
+ * @param string [$v] information about the current view
+ * @param int [$d] optional depth for HTML source code (cosmetic)
+ * @return string $r
+ */
+function outputThreadTree($t, $childs, $c, $v, $o, $d) {
+# return an empty string if $thread is 0
+if (count($t) == 0) return '';
+# otherwise ...
+#global $settings, $postArray, $childArray, $page, $order, $category, $descasc, $last_visit, $lang;
+global $settings, $page, $order, $category, $descasc, $last_visit, $lang;
+
+$r = '';
+
+$z = 1;
+#$z = $childs[$c];
+
+$postClass = ($o === true) ? 'thread' : 'reply';
+
+$r .= str_repeat(" ", $d).'<li>';
+#$r .= "<pre>".print_r($childs, true)."</pre>";
+$r .= '<a class="'.$postClass.'" href="'.$v.'_entry.php?id='.$t[$c]['id'].'#'.$t[$c]['id'].'">'.htmlspecialchars($t[$c]['subject']).'</a> (#'.$t[$c]['id'].')';
+
+
+# Eintrag hat Kindelement
+if (isset($childs[$c]))
+	{
+	$dn = $d+1;
+	$r .= "\n".str_repeat(" ", $dn).'<ul class="reply">'."\n";
+	foreach ($childs[$c] as $kind)
+		{
+		$r .= outputThreadTree($t, $childs, $kind, $v, false, $dn+1);
+		}
+	$r .= str_repeat(" ", $dn).'</ul>'."\n".str_repeat(" ", $d);
+	}
+
+$r .= '</li>'."\n";
+return $r;
+} # End: outputThreadTree
+
+
+
+/**
  * generates tree of threads
  *
  * @param array [$t] one or all threads
