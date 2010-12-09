@@ -154,7 +154,13 @@ return $r;
 /**
  * generates posting authr name string
  *
- *
+ * @param array $mark
+ * @param array $entry
+ * @param integer $page
+ * @param string $order
+ * @param string $view
+ * @param integer $category
+ * @return string $r
  */
 function outputAuthorInfo($mark, $entry, $page, $order, $view, $category=0) {
 global $lang, $settings;
@@ -299,7 +305,7 @@ return $r;
 /**
  * generates the name part of the authors information
  *
- * @param string $name
+ * @param string $username
  * @param array $mark
  * @param integer $user_id
  * @return string $output
@@ -348,7 +354,11 @@ return $r;
 
 
 /**
- * generates the menu for editing of a posting
+ * generates the menu for editing a posting
+ *
+ * @param array $thread
+ * @param string $view
+ * @param string $first
  * @return string
  */
 function outputPostingEditMenu($thread, $view, $first = '') {
@@ -420,10 +430,12 @@ return $r;
 /**
  * generates output of thread tree
  *
- * @param array [$t] threads
- * @param int [$c] id of current entry
- * @param string [$v] information about the current view
- * @param int [$d] optional depth for HTML source code (cosmetic)
+ * @param array $t threads
+ * @param array $childs list of ids of all entries of the thread(s)
+ * @param integer $c id of current entry
+ * @param string $v information about the current view
+ * @param bool $o true for opening posting, false for replies
+ * @param integer $d optional depth for HTML source code (cosmetic)
  * @return string $r
  */
 function outputThreadTree($t, $childs, $c, $v, $o, $d) {
@@ -473,10 +485,11 @@ return $r;
 /**
  * generates tree of threads
  *
- * @param array [$t] one or all threads
- * @param array [$c] list of childs
- * @param string [$v] information about the current view
- * @param int [$d] optional depth for HTML source code (cosmetic)
+ * @param array $t one or all threads
+ * @param array $c list of childs
+ * @param string $v information about the current view
+ * @param integer $d optional depth for HTML source code (cosmetic)
+ * @return string
  */
 function outputThreads($t, $c, $v='thread', $d=0) {
 
@@ -502,6 +515,7 @@ return $r;
  * generates output for language file debug mode
  *
  * @param array $lang
+ * @param string $file
  * @return array $lang
  */
 function outputLangDebugOrNot($lang, $file) {
@@ -526,10 +540,12 @@ return $str;
 
 /**
  * reorders the debug output for strings in case of use in HTML-attributes
+ *
+ * @param string $string
+ * @return string $string
  */
 function outputLangDebugInAttributes($string) {
 
-# <span title="key: [irgendwas], file: german.php">Wert</span>
 $debug = (!empty($_SESSION['debug']) and $_SESSION['debug'] == 'lang') ? 1 : 0;
 
 if ($debug == 1)
@@ -547,7 +563,10 @@ return $string;
 
 
 /**
+ * Strinps all control characters from output in case of XML output
  *
+ * @param string $string
+ * @return string $string
  */
 function outputXMLclearedString($string) {
 $illegalChars = array(array(), array());
