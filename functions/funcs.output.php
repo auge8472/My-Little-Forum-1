@@ -440,9 +440,16 @@ $z = 1;
 
 $postClass = ($o === true) ? 'thread' : 'reply';
 
+if ($v == 'mix')
+	{
+	$title = $t[$c]['name'].", ".$t[$c]['Uhrzeit'].' (#'.$t[$c]['id'].')';
+	}
+else
+	{
+	$title = '';
+	}
 $r .= str_repeat(" ", $d).'<li>';
-#$r .= "<pre>".print_r($childs, true)."</pre>";
-$r .= '<a class="'.$postClass.'" href="'.$v.'_entry.php?id='.$t[$c]['id'].'#'.$t[$c]['id'].'">'.htmlspecialchars($t[$c]['subject']).'</a> (#'.$t[$c]['id'].')';
+$r .= '<a class="'.$postClass.'" href="'.$v.'_entry.php?id='.$t[$c]['id'].'#'.$t[$c]['id'].'" title="'.$title.'">'.htmlspecialchars($t[$c]['subject']).'</a>';
 
 
 # Eintrag hat Kindelement
