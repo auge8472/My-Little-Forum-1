@@ -184,7 +184,7 @@ return $r;
 
 
 /**
- * Seiten-Navigation für forum.php, board.php und mix.php
+ * page navigation for forum.php, board.php and mix.php
  *
  * @param integer $page
  * @param integer $entries_per_page
@@ -257,6 +257,7 @@ return $output;
 
 /**
  * amend the protocol to a given link
+ *
  * @param string $link
  * @return string $link
  */
