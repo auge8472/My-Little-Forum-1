@@ -733,6 +733,7 @@ $description = isset($wo) ? $settings['forum_name'].": ".htmlspecialchars($wo) :
 $template = str_replace("{TITLE}",$title,$template);
 $template = str_replace("{DESCRIPTION}",$description,$template);
 $template = str_replace('{ADD-JS}',$additionalJS,$template);
+$template = str_replace('{SCRIPT-VERSION-STRING}',$settings['version'],$template);
 $template = str_replace("{FORUM-NAME}",$settings['forum_name'],$template);
 $template = str_replace('{HOME-ADDRESS}',$settings['home_linkaddress'],$template);
 $template = str_replace('{HOME-LINK}',$settings['home_linkname'],$template);
