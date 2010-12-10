@@ -150,7 +150,8 @@ if ($settings['access_for_users_only'] == 1
 			fixed
 			FROM ".$db_settings['forum_table']."
 			WHERE tid = ".$zeile["tid"]."
-			ORDER BY time ASC";
+			ORDER BY time DESC";
+			#ORDER BY time ASC";
 			$thread_result = mysql_query($threadQuery, $connid);
 
 			# put result into arrays:
