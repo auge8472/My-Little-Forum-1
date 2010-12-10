@@ -137,31 +137,11 @@ if ($settings['access_for_users_only'] == 1
 		mysql_free_result($pid_result);
 		}
 	# list all threads
-	/*
-	$threadsQuery = "SELECT
-		id,
-		pid,
-		tid,
-		user_id,
-		UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
-		UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_Uhrzeit,
-		UNIX_TIMESTAMP(last_answer) AS last_answer,
-		name,
-		subject,
-		category,
-		marked,
-		fixed,
-		views
-		FROM ".$db_settings['forum_table']."
-		WHERE pid = 0".$threadsQueryWhere."
-		ORDER BY fixed DESC, ".$order." ".$descasc."
-		LIMIT ".$ul.", ".$settings['topics_per_page'];
-		*/
 	$threadsQuery = "SELECT
 		tid,
 		user_id,
-		UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
-		UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_Uhrzeit,
+#		UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
+		DATE_FORMAT(last_answer + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS la_Uhrzeit,
 		UNIX_TIMESTAMP(last_answer) AS last_answer,
 		name,
 		category,
@@ -291,12 +271,10 @@ if ($settings['access_for_users_only'] == 1
 			pid,
 			tid,
 			user_id,
-			UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
-#			UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_Uhrzeit,
-#			UNIX_TIMESTAMP(last_answer) AS last_answer,
+			DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
 			name,
 			subject,
-#			category,
+			category,
 			marked,
 			fixed,
 			views
@@ -401,7 +379,7 @@ if ($settings['access_for_users_only'] == 1
 					echo $descasc.'#p'.$last_answer['id'].'" title="';
 					echo str_replace("[name]", $last_answer['name'], outputLangDebugInAttributes($lang['last_reply_lt'])).'">';
 					}
-				echo strftime($lang['time_format'],$zeile["la_Uhrzeit"]);
+				echo htmlspecialchars($zeile["la_Uhrzeit"]);
 				if ($settings['last_reply_link']==1)
 					{
 					echo '</a>';
