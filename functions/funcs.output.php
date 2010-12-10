@@ -443,28 +443,183 @@ function outputThreadTree($t, $childs, $c, $v, $o, $d) {
 if (count($t) == 0) return '';
 # otherwise ...
 #global $settings, $postArray, $childArray, $page, $order, $category, $descasc, $last_visit, $lang;
-global $settings, $page, $order, $category, $descasc, $last_visit, $lang;
+global $settings, $page, $order, $category, $descasc, $last_visit, $category_accession, $categories, $mark, $connid, $lang;
 
 $r = '';
 
 $z = 1;
 #$z = $childs[$c];
+# highlighting of admins, mods and users:
 
-$postClass = ($o === true) ? 'thread' : 'reply';
+if (($settings['admin_mod_highlight'] == 1
+	or $settings['user_highlight'] == 1)
+	&& $t[$c]["user_id"] > 0)
+	{
+	$mark = outputStatusMark($mark, $t[$c], $connid);
+	}
 
+if ($page != 0 and $category != 0 and $order != 'time')
+	{
+	$urlParam = '&amp;page='.$page.'&amp;category='.intval($category).'&amp;order='.$order;
+	}
+
+if ($t[$c]['pid']==0
+	&& $category==0
+	&& isset($categories[$t[$c]['category']])
+	&& $categories[$t[$c]['category']]!='')
+	{
+	# Is it a admin/mods-only category?
+	if (isset($category_accession[$t[$c]['category']])
+		&& $category_accession[$t[$c]['category']] == 2)
+		{
+		$titleAdd = ' '.strip_tags($lang['admin_mod_category']);
+		$catClassName = 'category-adminmod';
+		}
+	# Is it a registered users (including admins/mods) category?
+	else if (isset($category_accession[$t[$c]['category']])
+		&& $category_accession[$t[$c]["category"]] == 1)
+		{
+		$titleAdd = " ".strip_tags($lang['registered_users_category']);
+		$catClassName = 'category-regusers';
+		}
+	else
+		{
+		$titleAdd = '';
+		$catClassName = 'category';
+		}
+	$catLink  = '&nbsp;<a title="'.str_replace('[category]', $categories[$t[$c]['category']], strip_tags($lang['choose_category_linktitle'])).$titleAdd;
+	$catLink .= '" href="'.$v.'.php?category='.intval($t[$c]['category']).'"><span class="';
+	$catLink .= $catClassName.'">('.$categories[$t[$c]['category']].')</span></a>';
+	}
+else
+	{
+	$catLink  = '';
+	}
+
+if ($aktuellerEintrag == 0 && $t[$c]["pid"]==0 && $t[$c]["fixed"] == 1)
+	{
+	$fixed = ' <img src="img/fixed.gif" width="9" height="9" title="'.strip_tags($lang['fixed']).'" alt="*" />';
+	}
+else
+	{
+	$fixed  = '';
+	}
+
+if ($t[$c]["pid"]==0 && $settings['all_views_direct'] == 1)
+	{
+	$otherViews  = '&nbsp;';
+	if ($settings['board_view']==1)
+		{
+		$otherViews .= '<a href="board_entry.php?id='.$t[$c]['tid'];
+		$otherViews .= ($category > 0) ? '&amp;category='.intval($category) : '';
+		$otherViews .= '&amp;view=board"><img src="img/board_d.gif" alt="[Board]" title="';
+		$otherViews .= strip_tags($lang['open_in_board_linktitle']).'" width="12" height="9" /></a>';
+		}
+	if ($settings['mix_view'] == 1 and $v != 'mix')
+		{
+		$otherViews .= '<a href="mix_entry.php?id='.$t[$c]['tid'];
+		$otherViews .= ($category > 0) ? '&amp;category='.intval($category) : '';
+		$otherViews .= '&amp;view=mix"><img src="img/mix_d.gif" alt="[Mix]" title="';
+		$otherViews .= strip_tags($lang['open_in_mix_linktitle']).'" width="12" height="9" /></a>';
+		}
+	if ($settings['thread_view'] == 1 and $v != 'forum')
+		{
+		$otherViews .= '<a href="forum_entry.php?id='.$t[$c]['tid'];
+		$otherViews .= ($category > 0) ? '&amp;category='.intval($category) : '';
+		$otherViews .= '&amp;view=forum"><img src="img/thread_d.gif" alt="[Forum]" title="';
+		$otherViews .= strip_tags($lang['open_in_thread_linktitle']).'" width="12" height="9" /></a>';
+		}
+	}
+else
+	{
+	$otherViews = '';
+	}
+
+if ($t[$c]["pid"]==0
+	&& isset($_SESSION[$settings['session_prefix'].'user_type'])
+	&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
+	{
+	$otherViews .= '<a href="admin.php?mark='.$t[$c]["tid"].'&amp;refer=';
+	$otherViews .= basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$page.'&amp;order='.$order;
+	$otherViews .= ($category > 0) ? '&amp;category='.intval($category) : '';
+	$otherViews .= '"><img src="';
+	if ($t[$c]['marked']==1)
+		{
+		$otherViews .= 'img/marked.gif" alt="[x]" title="'.strip_tags($lang['demark_linktitle']).'"';
+		}
+	else
+		{
+		$otherViews .= 'img/mark.gif" alt="[-]" title="'.strip_tags($lang['mark_linktitle']).'"';
+		}
+	$otherViews .= ' width="9" height="9" /></a>';
+	}
+
+# view
 if ($v == 'mix')
 	{
 	$title = ' title="'.$t[$c]['name'].", ".$t[$c]['Uhrzeit'].' (#'.$t[$c]['id'].')"';
 	$append = '';
+	$postClass = ($o === true) ? 'thread' : 'reply';
 	}
 else
 	{
+	# $v (view) is thread or single thread (forum_entry.php)
 	$title = '';
-	$append = '';
+	$name = outputAuthorsName($t[$c]["name"], $mark, $t[$c]['user_id']);
+	if (isset($_SESSION[$settings['session_prefix'].'user_id'])
+		&& $t[$c]["user_id"] > 0
+		&& $settings['show_registered']==1)
+		{
+		$sult = str_replace("[name]", htmlspecialchars($t[$c]["name"]), outputLangDebugInAttributes($lang['show_userdata_linktitle']));
+		$thread_info_a = str_replace("[name]", '<a href="user.php?id='.$t[$c]["user_id"].'" title="'.$sult.'">'.$name.'</a>', $lang['thread_info']);
+		}
+	else $thread_info_a = str_replace("[name]", $name, $lang['thread_info']);
+#	$append = str_replace("[time]", strftime(strip_tags($lang['time_format']),$t[$c]["Uhrzeit"]), $thread_info_a);
+	$append = str_replace("[time]", $t[$c]["Uhrzeit"], $thread_info_a);
+	if ((($t[$c]['pid']==0)
+		&& isset($_SESSION[$settings['session_prefix'].'newtime'])
+		&& $_SESSION[$settings['session_prefix'].'newtime'] < $t[$c]['last_answer'])
+		|| (($t[$c]['pid']==0)
+		&& empty($_SESSION[$settings['session_prefix'].'newtime'])
+		&& $t[$c]['last_answer'] > $last_visit))
+		{
+		$postClass = 'threadnew';
+		}
+	else if ($t[$c]['pid']==0)
+		{
+		$postClass = 'thread';
+		}
+	else if ((($t[$c]['pid']!=0)
+		&& isset($_SESSION[$settings['session_prefix'].'newtime'])
+		&& $_SESSION[$settings['session_prefix'].'newtime'] < $t[$c]['time'])
+		|| (($t[$c]['pid']!=0)
+		&& empty($_SESSION[$settings['session_prefix'].'newtime'])
+		&& $t[$c]['time'] > $last_visit))
+		{
+		$postClass = 'replynew';
+		}
+	else
+		{
+		$postClass = 'reply';
+		}
+#	$append = '';
 	}
 $r .= str_repeat(" ", $d).'<li>';
-$r .= '<a class="'.$postClass.'" href="'.$v.'_entry.php?id='.$t[$c]['id'].'#'.$t[$c]['id'].'"'.$title.'>'.htmlspecialchars($t[$c]['subject']).'</a>'.$append;
-
+if ($c == $aktuellerEintrag && $t[$c]["pid"]==0)
+	{
+	echo '<span class="actthread">'.htmlspecialchars($t[$c]["subject"]).'</span>';
+	}
+else if ($c == $aktuellerEintrag && $t[$c]["pid"]!=0)
+	{
+	echo '<span class="actreply">'.htmlspecialchars($t[$c]["subject"]).'</span>';
+	}
+else
+	{
+	$r .= '<a class="'.$postClass.'" href="'.$v.'_entry.php?id='.$t[$c]['id'];
+	$r .= ($v == 'mix') ? '#'.$t[$c]['id'] : '';
+	$r .= '"'.$title.'>'.htmlspecialchars($t[$c]['subject']).'</a> '.$append;
+	}
+$r .= $catLink.$fixed.$otherViews;
 
 # Eintrag hat Kindelement
 if (isset($childs[$c]))
