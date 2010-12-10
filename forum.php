@@ -137,18 +137,31 @@ if ($settings['access_for_users_only'] == 1
 		{
 		while ($zeile = mysql_fetch_assoc($result))
 			{
-			$thread_result = mysql_query("SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS tp_time, UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"]." ORDER BY time ASC", $connid);
+			$threadQuery = "SELECT
+			id,
+			pid,
+			tid,
+			user_id,
+			DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
+			name,
+			subject,
+			category,
+			marked,
+			fixed
+			FROM ".$db_settings['forum_table']."
+			WHERE tid = ".$zeile["tid"]."
+			ORDER BY time ASC";
+			$thread_result = mysql_query($threadQuery, $connid);
 
 			# put result into arrays:
 			while ($tmp = mysql_fetch_assoc($thread_result))
 				{
-				$parent_array[$tmp["id"]] = $tmp;
-				$child_array[$tmp["pid"]][] =  $tmp["id"];
+				$postArray[$tmp["id"]] = $tmp;           // Ergebnis im Array ablegen
+				$childArray[$tmp["pid"]][] = $tmp["id"]; // Vorwärtsbezüge konstruieren
 				}
-			echo '<ul class="thread">'."\n";
-			# display the thread tree
-			thread_tree($zeile["id"]);
-			echo '</ul>'."\n";
+			# generate output of thread lists
+			echo outputThreads($postArray, $childArray, 'forum', 1);
+			unset($postArray, $childArray);
 			mysql_free_result($thread_result);
 			}
 		echo outputManipulateMarked();
