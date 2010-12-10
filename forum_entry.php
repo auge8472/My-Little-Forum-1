@@ -172,7 +172,7 @@ if ($settings['access_for_users_only'] == 1
 	category,
 	marked
 	FROM ".$db_settings['forum_table']."
-	WHERE tid = ".intval($Thread)."
+	WHERE tid = ".intval($entrydata["tid"])."
 	ORDER BY time DESC";
 	#ORDER BY time ASC";
 	$result = mysql_query($threadQuery, $connid);
