@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Language" content="en">
+  <title>StringParser_BBCode class documentation</title>
+  <meta name="author" content="Christian Seiler">
+  <link rel="stylesheet" href="../css/print.css"  type="text/css" media="print">
+  <link rel="stylesheet" href="../css/screen.css" type="text/css" media="screen, projection">
+</head>
+<body id="doku">
+<div id="container">
+<h1><span><code>StringParser_<abbr title="Bulletin Board Code">BBCode</abbr></code> class</span> documentation</h1>
+ <ul id="mainmenu">
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/index_en.html">Project homepage</a></li>
+  <li><a href="chapter1.html">Documentation</a></li>
+  <li><a href="../phpdoc/index.html">PHPDOC Documentation</a></li>
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/download_en.html">Download</a></li>
+  <li><a href="../de/kapitel4.html">Diese Seite auf Deutsch</a></li>
+ </ul>
+<ul id="menu">
+  <li><a href="chapter1.html">1. Introduction</a>
+    <ul>
+      <li><a href="chapter1.html#general">1.1 General</a></li>
+      <li><a href="chapter1.html#nesting">1.2 Nesting</a></li>
+      <li><a href="chapter1.html#special">1.3 Special codes</a></li>
+    </ul></li>
+  <li><a href="chapter2.html">2. Defining own <abbr>BBCode</abbr></a>
+    <ul>
+      <li><a href="chapter2.html#including">2.1 Including the class</a></li>
+      <li><a href="chapter2.html#first">2.2 The first code</a></li>
+      <li><a href="chapter2.html#processing_types">2.3 Processing types</a></li>
+      <li><a href="chapter2.html#parsing">2.4 Parsing text</a></li>
+    </ul></li>
+  <li><a href="chapter3.html">3. Parser functions</a>
+    <ul>
+      <li><a href="chapter3.html#task">3.1 Task of parser functions</a></li>
+      <li><a href="chapter3.html#content_types">3.2 Relevance of content types</a></li>
+      <li><a href="chapter3.html#registration">3.3 Registration of parser functions</a></li>
+    </ul></li>
+  <li><a href="chapter4.html">4. Callback functions</a>
+    <ul>
+      <li><a href="chapter4.html#processing_types">4.1 Processing types that need callback functions</a></li>
+      <li><a href="chapter4.html#prototype">4.2 Prototype of a callback function</a></li>
+      <li><a href="chapter4.html#example">4.3 Example for a callback function that replaces links</a></li>
+      <li><a href="chapter4.html#revalidation">4.4 Revalidation on close tag occurrence</a></li>
+    </ul></li>
+  <li><a href="chapter5.html">5. Filters</a>
+    <ul>
+      <li><a href="chapter5.html#types">5.1 Filter types</a></li>
+      <li><a href="chapter5.html#defining">5.2 Defining filters</a></li>
+    </ul></li>
+  <li><a href="chapter6.html">6. Flags to control the behaviour of the class</a>
+    <ul>
+      <li><a href="chapter6.html#general">6.1 General</a></li>
+      <li><a href="chapter6.html#flags">6.2 List of all flags</a></li>
+      <li><a href="chapter6.html#global">6.2 Global flags</a></li>
+    </ul></li>
+  <li><a href="chapter7.html">7. Limiting the amount of occurrences</a>
+    <ul>
+      <li><a href="chapter7.html#grouping">7.1 Grouping codes</a></li>
+      <li><a href="chapter7.html#limits">7.2 Setting limits</a></li>
+    </ul></li>
+  <li><a href="chapter8.html">8. Paragraph handling</a>
+    <ul>
+      <li><a href="chapter8.html#general">8.1 General</a></li>
+      <li><a href="chapter8.html#activating">8.2 Activating paragraph handling</a></li>
+      <li><a href="chapter8.html#further">8.3 Further possibilities</a></li>
+    </ul></li>
+  <li><a href="chapter9.html">9. Examples</a>
+    <ul>
+      <li><a href="chapter9.html#example">9.1 Simple example</a></li>
+<!--      <li><a href="chapter9.html#complex">9.2 More complex example</a></li> -->
+    </ul></li>
+  <li><a href="chapter10.html">10. Miscellaneous</a>
+    <ul>
+      <li><a href="chapter10.html#faq">10.1 Frequently asked questions</a></li>
+      <li><a href="chapter10.html#internals">10.2 Useful internals</a></li>
+    </ul></li>
+</ul>
+<div id="content"><h2>4. Callback functions</h2>
+<h3 id="processing_types"><a name="processing_types">4.1 Processing types that need callback functions</a></h3>
+<p>As is already described in the <a href="chapter2.html#first">explanation how to add <abbr>BBCode</abbr></a> there are several processing types that need callback functions to process <abbr>BBCode</abbr>. These are:</p>
+<ul>
+  <li><code>callback_replace</code></li>
+  <li><code>callback_replace_single</code></li>
+  <li><code>usecontent</code></li>
+  <li><code>usecontent?</code></li>
+  <li><code>callback_replace?</code></li>
+</ul>
+<p>With all these processing types one must pass the name of a function as a third parameter to the <code>addCode</code> method.
+<h3 id="prototype"><a name="prototype">4.2 Prototype of a callback function</a></h3>
+<p>All callback functions must have the following prototype:</p>
+<p class="php"><code>function name_der_funktion ($action, $attributes, $content, $params, &$node_object) { <br>&nbsp;&nbsp;// do something<br>}</code></p>
+<p>The following list shows how and when callback functions are called during the processing of <abbr>BBCode</abbr>:</p>
+<ol>
+  <li>A <abbr>BBCode</abbr> start tag is found. Name and attributes are extracted from it.</li>
+  <li>It is determined if the code is allowed here. If not, it is ignored.</li>
+  <li>The callback function for this <abbr>BBCode</abbr> is called with the <code>$action</code> parameter set to <code>'validate'</code>.</li>
+  <li>If the callback function has returned <code>false</code> the <abbr>BBCode</abbr> is ignored. If it has returned <code>true</code> the <abbr>BBCode</abbr> is added to the tree structure.</li>
+  <li>The processing continues.</p>
+  <li><em>If</em> revalidation is active, the callback function will be called with the <code>$action</code> parameter set to <code>'validate_again'</code> on occurrence of the closing BBCode tag. If the callback function returns <code>false</code> the code will be treated as invalid and everything right after the opening BBCode tag will be processed again.</li>
+  <li>After the whole text is processed the tree structure is converted back into a string.</li>
+  <li>During this process the callback function is called again with the <code>$action</code> parameter set to <code>'output'</code>.</li>
+  <li>The callback function must now return a string that will be used as a replacement for the complete element (including its contents!). If the function returns something other than a string <strong>the complete processing is immediately terminated</strong>.</li>
+</ol>
+<p>The parameters that the function must accept are the following:</p>
+<dl>
+  <dt><code>$action</code></dt>
+  <dd>Either <code>'validate'</code> or <code>'output'</code> - see above.</dd>
+  <dt><code>$attributes</code></dt>
+  <dd>The attributes that were found in the start tag as an associative array. <code>$attributes['source']</code> e.g. contains the content of the attribute<code>source</code>.</dd>
+  <dt><code>$content</code></dt>
+  <dd>The complete content between start and end tag. This value is always set when <code>$action == 'output'</code> where all parser functions were already applied and it is also set if <code>$action == 'validate'</code> and the processing type of the code is <code>usecontent</code> or <code>usecontent?</code>. Please notice that when dealing with these processing types the parser functions will not have been called if <code>$action == 'validate'</code> but will have been called if <code>$action == 'output'</code>.</dd>
+  <dt><code>$params</code></dt>
+  <dd>The parameters that were given to the class with the <code>addCode</code> call. The use of these parameters is up to the programmer.</dd>
+  <dt><code>$node_object</code></dt>
+  <dd>The object of the type <code>StringParser_BBCode_Node_Element</code> that contains all information on the current node in the tree structure. With this you can access parent and children for example. <strong>Warning:</strong> This object should only be interesting in some very special cases. A manipulation of this object cause unexpected results including infinite loops or similar. <strong>Notice:</strong> If <code>$action == 'validate'</code> the tree is still being built and the node will posess no child nodes yet.</dd>
+</dl>
+<h3 id="example"><a name="example">4.3 Example for a callback function that replaces links</a></h3>
+<p class="php"><code>function <span class="funcn">do_bbcode_url</span> ($action, $attributes, $content, $params, &$node_object) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1) the code is being valided</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;if ($action == 'validate') {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// the code is specified as follows: [url]http://.../[/url]</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!isset ($attributes['default'])) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// is this a valid URL?</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return is_valid_url ($content);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// the code is specified as follows: [url=http://.../]Text[/url]</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// is this a valid URL?</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return is_valid_url ($attributes['default']);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 2) the code is being output</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;else {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// the code was specified as follows: [url]http://.../[/url]</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (!isset ($attributes['default'])) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return '&lt;a href=&quot;'.htmlspecialchars ($content).'&quot;&gt;'.htmlspecialchars ($content).'&lt;/a&gt;';<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// the code was specified as follows: [url=http://.../]Text[/url]</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return '&lt;a href=&quot;'.htmlspecialchars ($attributes['default']).'&quot;&gt;'.$content.'&lt;/a&gt;';<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}<br>
+<br>
+<span class="comment">// ...</span><br>
+<br>
+$bbcode->addCode ('url', 'usecontent?', <span class="funcn">'do_bbcode_url'</span>, array ('usecontent_param' => 'default'),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'link', array ('block', 'inline'), array ('link'));</code></p>
+<p>The above example implies that there is a function <code>is_valid_url</code> that checks if a URL is valid and returns either <code>true</code> or <code>false</code>. One could not perform this type of check and always return <code>true</code> if <code>$action == 'validate'</code>. But this is not recommended as <code>[url]this://is everything else / than a valid url[/url]</code> would also be replaced what would cause error messages in every browser when trying to follow the link.</p>
+<p>Furthermore in the above example the <code>[url]</code> code has the processing type <code>usecontent?</code> to be able to write normal text between start and end tag that will be the link title if the code is specified in the form <code>[url=http://.../]</code> or that the URL is specified between start and end tag like <code>[url]http://.../[/url]</code>. Depending on the existance of the <code>default</code> attribute the function determines which form the user has chosen.</p>
+<h3 id="revalidation"><a name="revalidation">4.4 Revalidation on close tag occurrence</a></h3>
+<p>Normally the callback function is only called with <code>$action == 'validate'</code> set if the opening tag occurs. But it is possible to tell the class to call the callback function again when the closing tag occurs - this time with <code>$action == 'validate_again'</code>. Just call the method <code>setValidateAgain</code>:</p>
+<p><code>$bbcode->setValidateAgain(true);</code></p>
+<p>Since <code>usecontent</code> (and for the case that <code>usecontent?</code> or <code>callback_replace?</code> behave like <code>usecontent</code>) the callback function is called at the time the closing tag occurs anyway, this does not apply for that case.</p>
+<hr>
+<ul>
+  <li>Next: <a href="chapter5.html">5. Filters</a></li>
+  <li>Previous: <a href="chapter3.html">3. Parser functions</a></li>
+</ul>
+</div>
+<p id="footer">This is the documentation for the <code>StringParser_BBCode</code> class version <em>0.3.3</em><br>
+Author: Christian Seiler, <a href="mailto:webmaster@christian-seiler.de">webmaster@christian-seiler.de</a></p>
+</div>
+</body>
+</html>

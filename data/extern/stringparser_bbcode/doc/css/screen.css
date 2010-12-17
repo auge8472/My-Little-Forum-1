@@ -1,0 +1,180 @@
+body {
+ font-family: verdana, arial, sans-serif;
+ font-size: 100.01%;
+ background: url(../img/body_bg.png) #c2cfda;
+ margin: 0 3%;
+ padding: 0;
+}
+a:link {
+ color: #A75B00;
+ text-decoration: underline;
+}
+a:link:hover, a:visited:hover {
+ background: #f3ede4;
+}
+a:visited {
+ color: #A75B00;
+ text-decoration: none;
+}
+#container{
+ background: white;
+ border: 1px solid #aaa;
+ margin: 20px 0;
+ padding: 0;
+ font-size: 0.9em;
+ min-width: 38em;
+} 
+h1 {
+ background: url(../img/header_bg.png) #d7c5a1;
+ padding: 0.2em 2%;
+ margin: 0;
+ color: #745a0c;
+ text-align: left;
+ font-family: verdana, sans-serif;
+ font-size: 200%;
+ font-weight: normal;
+ letter-spacing: -0.08em;
+ vertical-align: middle;
+}
+h1 span code {
+ font-weight: bold;
+ font-size: 150%;
+ font-family: impact, sans-serif;
+ letter-spacing: 0.01em;
+}
+h1 span code abbr {
+ border: none;
+}
+h1:hover {
+ background: url(../img/header_bg.gif) #d7c5a1;
+}
+#mainmenu {
+ background: #70719D;
+ border-top: 1px solid #aaa;
+ border-bottom: 1px solid #aaa;
+ margin: 0;
+ padding: 0 0 0 3%;
+ text-align: left;
+ font-family: verdana;
+ font-size: 1.3em;
+}
+#mainmenu li {
+ display: inline;
+} 
+#mainmenu li a {
+ color: #EBEBEB;
+ text-decoration: none;
+ padding: 0 0.75em;
+ padding-left: 22px;
+ background: url(../img/menu_point.png) 10px 55% no-repeat;
+}
+#mainmenu li a:hover {
+ color: white;
+ background: url(../img/menu_point.png) 11px 55% no-repeat #555677;
+}
+#menu {
+ font-size: 80%;
+ background: #D4D4D4;
+ margin: 0;
+ width: 20%;
+ min-width: 13em;
+ float: right;
+ list-style-type: none;
+ padding: 1em 0;
+ border-left: 1px solid #aaa;
+ border-bottom: 1px solid #aaa;
+}
+#menu li a {
+ display: block;
+ text-decoration: none;
+ color: white;
+ padding: 0.1em 0.5em;
+ background: #70719D;
+ margin: 0.5em 0 0 0;
+}
+* html #menu li a, * html #menu li li a { width: 100%; }
+#menu a:hover {
+ background: #8B8CC4;
+ color: white;
+}
+#menu li li a {
+ display: block;
+ color: black;
+ padding: 0.07em 0.07em 0.07em 1em;
+ background: #D4D4D4;
+ margin: 0;
+}
+#menu ul {
+ list-style-type: none;
+ margin: 0;
+ padding: 0;
+}
+#content {
+ padding:  1em 1.5em 1em 1.5em;
+ max-width: 55em;
+ line-height: 140%;
+} 
+#content p {
+ 
+}
+#doku #content {
+ padding:  1em 22% 1em 1.5em;
+}
+#footer {
+ font-weight: bold;
+ clear: both;
+ padding: 0.4em 1em;
+ margin: 0;
+ border-top: 1px solid #aaa;
+ background: url(../img/header_bg.png) #D4CBBC;
+ color: #745a0c;
+}
+#footer a { color: #77530c; }
+
+/* Formatierungen für Beispiele usw. von Christian Seiler */
+.bb, .html, .demo, .php {
+  padding: 4px;
+  border: 1px solid #000;
+  margin-left: 12px;
+  background: #f0f0f0;
+}
+.bb, .html {
+  font-family: "courier new", monospace;
+  font-weight: normal;
+  white-space: pre;
+}
+.bbtn {
+  font-family: "courier new", monospace;
+  font-weight: normal;
+  color: #000;
+}
+.bben {
+  font-family: "courier new", monospace;
+  font-weight: normal;
+  color: #f00;
+}
+.bben .bbtn {
+  color: #060;
+}
+.bben .bben {
+  color: #00f;
+}
+.bben .bben .bbtn {
+  color: #0a0;
+}
+.b {
+  font-weight: bold;
+}
+.i {
+  font-style: italic;
+}
+.comment {
+  color: #444;
+}
+.funcn {
+  color: #090;
+}
+td, th {
+  vertical-align: top;
+  text-align: left;
+}

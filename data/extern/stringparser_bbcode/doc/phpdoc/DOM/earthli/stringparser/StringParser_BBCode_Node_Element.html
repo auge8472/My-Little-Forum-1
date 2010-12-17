@@ -1,0 +1,1255 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos  -->
+			<title>Docs For Class StringParser_BBCode_Node_Element</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+						<script src="../media/lib/classTree.js"></script>
+												<script language="javascript" type="text/javascript">
+				var imgPlus = new Image();
+				var imgMinus = new Image();
+				imgPlus.src = "../media/images/plus.png";
+				imgMinus.src = "../media/images/minus.png";
+				
+				function showNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgMinus.src;
+					oTable.style.display = "block";
+				}
+				
+				function hideNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgPlus.src;
+					oTable.style.display = "none";
+				}
+				
+				function nodeIsVisible(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+									break;
+							}
+					return (oTable && oTable.style.display == "block");
+				}
+				
+				function toggleNodeVisibility(Node){
+					if (nodeIsVisible(Node)){
+						hideNode(Node);
+					}else{
+						showNode(Node);
+					}
+				}
+			</script>
+					</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name"><img src="../media/images/Class_logo.png"
+														alt=" Class"
+														title=" Class"
+														style="vertical-align: middle"> StringParser_BBCode_Node_Element</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+													<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">BBCode String parser element node class</p>
+		<p class="notes">
+			Located in <a class="field" href="_stringparser_bbcode.class.php.html">/stringparser_bbcode.class.php</a> (line <span class="field"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1471">1471</a></span>)
+		</p>
+		
+				
+		<pre><a href="../stringparser/StringParser_Node.html">StringParser_Node</a>
+   |
+   --StringParser_BBCode_Node_Element</pre>
+	
+			</div>
+</div>
+
+
+
+	<a name="sec-var-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variable Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Vars</span> (<a href="#sec-vars">details</a>)
+							| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+								</div>
+		<div class="info-box-body">
+			<div class="var-summary">
+																																																																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">array</span>
+					<a href="#$_attributes" title="details" class="var-name">$_attributes</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">array</span>
+					<a href="#$_flags" title="details" class="var-name">$_flags</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">bool</span>
+					<a href="#$_hadCloseTag" title="details" class="var-name">$_hadCloseTag</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">string</span>
+					<a href="#$_name" title="details" class="var-name">$_name</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">bool</span>
+					<a href="#$_paragraphHandled" title="details" class="var-name">$_paragraphHandled</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">int</span>
+					<a href="#$_type" title="details" class="var-name">$_type</a>
+				</div>
+											</div>
+		</div>
+	</div>
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+																		<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+						<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																																																																																																																																																																																																							
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#appendToAttribute" title="details" class="method-name">appendToAttribute</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$chars</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#appendToName" title="details" class="method-name">appendToName</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$chars</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#attribute" title="details" class="method-name">attribute</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">object</span>
+										<a href="#duplicate" title="details" class="method-name">&amp;duplicate</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">mixed</span>
+										<a href="#findNextAdjentTextNode" title="details" class="method-name">&amp;findNextAdjentTextNode</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">mixed</span>
+										<a href="#findPrevAdjentTextNode" title="details" class="method-name">&amp;findPrevAdjentTextNode</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">mixed</span>
+										<a href="#firstChildIfText" title="details" class="method-name">&amp;firstChildIfText</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">mixed</span>
+										<a href="#getFlag" title="details" class="method-name">getFlag</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$flag</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$type</span> = <span class="var-default">'mixed'</span>], [<span class="var-type">mixed</span>&nbsp;<span class="var-name">$default</span> = <span class="var-default">null</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">string</span>
+										<a href="#getReplacement" title="details" class="method-name">getReplacement</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$subcontent</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#hadCloseTag" title="details" class="method-name">hadCloseTag</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">mixed</span>
+										<a href="#lastChildIfText" title="details" class="method-name">&amp;lastChildIfText</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#matchesCriterium" title="details" class="method-name">matchesCriterium</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$criterium</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$value</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">string</span>
+										<a href="#name" title="details" class="method-name">name</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#paragraphHandled" title="details" class="method-name">paragraphHandled</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#setAttribute" title="details" class="method-name">setAttribute</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$value</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#setCodeInfo" title="details" class="method-name">setCodeInfo</a>
+											(<span class="var-type">array</span>&nbsp;<span class="var-name">$info</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#setFlag" title="details" class="method-name">setFlag</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$value</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#setHadCloseTag" title="details" class="method-name">setHadCloseTag</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#setName" title="details" class="method-name">setName</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#setParagraphHandled" title="details" class="method-name">setParagraphHandled</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#validate" title="details" class="method-name">validate</a>
+											([<span class="var-type">string</span>&nbsp;<span class="var-name">$action</span> = <span class="var-default">'validate'</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">string</span>
+										<a href="#_dumpToString" title="details" class="method-name">_dumpToString</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#_findPrevAdjentTextNodeHelper" title="details" class="method-name">&amp;_findPrevAdjentTextNodeHelper</a>
+										()
+									</div>
+											</div>
+		</div>
+	</div>		
+
+	<a name="sec-vars"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variables</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Vars</a> (<span class="disabled">details</span>)
+						
+			
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			
+<a name="var$_attributes" id="$_attributes"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$_attributes</span>
+			 = <span class="var-default">array ()</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1508">1508</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Element attributes</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_flags" id="$_flags"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$_flags</span>
+			 = <span class="var-default">array ()</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1500">1500</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Element flags</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_hadCloseTag" id="$_hadCloseTag"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">bool</span>
+			<span class="var-name">$_hadCloseTag</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1516">1516</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Had a close tag</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_name" id="$_name"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$_name</span>
+			 = <span class="var-default"> ''</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1492">1492</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Element name</p>
+	<ul class="tags">
+				<li><span class="field">see:</span> StringParser_BBCode_Node_Element::appendToName</li>
+				<li><span class="field">see:</span> StringParser_BBCode_Node_Element::setName</li>
+				<li><span class="field">see:</span> StringParser_BBCode_Node_Element::name</li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_paragraphHandled" id="$_paragraphHandled"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">bool</span>
+			<span class="var-name">$_paragraphHandled</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1524">1524</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Was processed by paragraph handling</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_type" id="$_type"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">int</span>
+			<span class="var-name">$_type</span>
+			 = <span class="var-default"> STRINGPARSER_BBCODE_NODE_ELEMENT</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1481">1481</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">The type of this node.</p>
+<p class="description"><p>This node is a bbcode element node.</p></p>
+	<ul class="tags">
+				<li><span class="field">see:</span> <a href="../stringparser/_stringparser_bbcode.class.php.html#defineSTRINGPARSER_BBCODE_NODE_ELEMENT">STRINGPARSER_BBCODE_NODE_ELEMENT</a></li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../stringparser/StringParser_Node.html#var$_type">StringParser_Node::$_type</a></dt>
+						<dd>The type of this node.</dd>
+					</dl>
+		
+		
+
+</div>
+							<h4>Inherited Variables</h4>
+				<A NAME='inherited_vars'><!-- --></A>
+									<p>Inherited from <span class="classname"><a href="../stringparser/StringParser_Node.html">StringParser_Node</a></span></p>
+					<blockquote>
+													<img src="../media/images/Variable.png" />
+							<span class="var-title">
+								<span class="var-name"><a href="../stringparser/StringParser_Node.html#var$occurredAt">StringParser_Node::$occurredAt</a></span><br>
+							</span>
+													<img src="../media/images/Variable.png" />
+							<span class="var-title">
+								<span class="var-name"><a href="../stringparser/StringParser_Node.html#var$_children">StringParser_Node::$_children</a></span><br>
+							</span>
+													<img src="../media/images/Variable.png" />
+							<span class="var-title">
+								<span class="var-name"><a href="../stringparser/StringParser_Node.html#var$_id">StringParser_Node::$_id</a></span><br>
+							</span>
+													<img src="../media/images/Variable.png" />
+							<span class="var-title">
+								<span class="var-name"><a href="../stringparser/StringParser_Node.html#var$_parent">StringParser_Node::$_parent</a></span><br>
+							</span>
+											</blockquote> 
+										
+		</div>
+	</div>
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+																	<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+<a name="methodappendToAttribute" id="appendToAttribute"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">appendToAttribute</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1584">1584</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Append to attribute of this element</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			appendToAttribute
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$chars</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span><span class="var-description">: The name of the attribute</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$chars</span><span class="var-description">: The chars to append to the attribute of the element</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodappendToName" id="appendToName"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">appendToName</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1572">1572</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Append to name of this element</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			appendToName
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$chars</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$chars</span><span class="var-description">: The chars to append to the name of the element</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodattribute" id="attribute"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">attribute</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1623">1623</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get attribute value</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			attribute
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span><span class="var-description">: The name of the attribute</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodduplicate" id="duplicate"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">duplicate</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1534">1534</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Duplicate this node (but without children / parents)</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">object</span>
+		<span class="method-name">
+			&amp;duplicate
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodfindNextAdjentTextNode" id="findNextAdjentTextNode"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">findNextAdjentTextNode</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1757">1757</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Find next adjent text node after close tag</p>
+<p class="description"><p>returns the node or null if none exists</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">mixed</span>
+		<span class="method-name">
+			&amp;findNextAdjentTextNode
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodfindPrevAdjentTextNode" id="findPrevAdjentTextNode"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">findPrevAdjentTextNode</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1797">1797</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Find previous adjent text node before open tag</p>
+<p class="description"><p>returns the node or null if none exists</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">mixed</span>
+		<span class="method-name">
+			&amp;findPrevAdjentTextNode
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodfirstChildIfText" id="firstChildIfText"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">firstChildIfText</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1708">1708</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get first child if it is a text node</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">mixed</span>
+		<span class="method-name">
+			&amp;firstChildIfText
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodgetFlag" id="getFlag"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getFlag</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1854">1854</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get Flag</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">mixed</span>
+		<span class="method-name">
+			getFlag
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$flag</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$type</span> = <span class="var-default">'mixed'</span>], [<span class="var-type">mixed</span>&nbsp;<span class="var-name">$default</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$flag</span><span class="var-description">: The requested flag</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$type</span><span class="var-description">: The requested type of the return value</span>			</li>
+					<li>
+				<span class="var-type">mixed</span>
+				<span class="var-name">$default</span><span class="var-description">: The default return value</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodgetReplacement" id="getReplacement"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">getReplacement</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1931">1931</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get replacement for this code</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			getReplacement
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$subcontent</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$subcontent</span><span class="var-description">: The content of all sub-nodes</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodhadCloseTag" id="hadCloseTag"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">hadCloseTag</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1664">1664</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get flag if this element had a close tag</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			hadCloseTag
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodlastChildIfText" id="lastChildIfText"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">lastChildIfText</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1728">1728</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get last child if it is a text node AND if this element had a close tag</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">mixed</span>
+		<span class="method-name">
+			&amp;lastChildIfText
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodmatchesCriterium" id="matchesCriterium"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">matchesCriterium</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1676">1676</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Determines whether a criterium matches this node</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> True if this node matches that criterium</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			matchesCriterium
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$criterium</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$value</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$criterium</span><span class="var-description">: The criterium that is to be checked</span>			</li>
+					<li>
+				<span class="var-type">mixed</span>
+				<span class="var-name">$value</span><span class="var-description">: The value that is to be compared</span>			</li>
+				</ul>
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../stringparser/StringParser_Node.html#methodmatchesCriterium">StringParser_Node::matchesCriterium()</a></dt>
+						<dd>Determines whether a criterium matches this node</dd>
+					</dl>
+			
+	</div>
+<a name="methodname" id="name"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">name</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1551">1551</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Retreive name of this element</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			name
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodparagraphHandled" id="paragraphHandled"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">paragraphHandled</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1654">1654</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get flag if this element was already processed by paragraph handling</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			paragraphHandled
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodsetAttribute" id="setAttribute"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">setAttribute</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1600">1600</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Set attribute</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			setAttribute
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$value</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span><span class="var-description">: The name of the attribute</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$value</span><span class="var-description">: The new value of the attribute</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodsetCodeInfo" id="setCodeInfo"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">setCodeInfo</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1611">1611</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Set code info</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			setCodeInfo
+		</span>
+					(<span class="var-type">array</span>&nbsp;<span class="var-name">$info</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$info</span><span class="var-description">: The code info array</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodsetFlag" id="setFlag"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">setFlag</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1872">1872</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Set a flag</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			setFlag
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$value</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span><span class="var-description">: The name of the flag</span>			</li>
+					<li>
+				<span class="var-type">mixed</span>
+				<span class="var-name">$value</span><span class="var-description">: The value of the flag</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodsetHadCloseTag" id="setHadCloseTag"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">setHadCloseTag</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1635">1635</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Set flag that this element had a close tag</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			setHadCloseTag
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodsetName" id="setName"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">setName</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1561">1561</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Set name of this element</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			setName
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span><span class="var-description">: The new name of the element</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodsetParagraphHandled" id="setParagraphHandled"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">setParagraphHandled</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1644">1644</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Set flag that this element was already processed by paragraph handling</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			setParagraphHandled
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodvalidate" id="validate"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">validate</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1886">1886</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Validate code</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			validate
+		</span>
+					([<span class="var-type">string</span>&nbsp;<span class="var-name">$action</span> = <span class="var-default">'validate'</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$action</span><span class="var-description">: The action which is to be called ('validate'                        for first validation, 'validate_again' for                        second validation (optional))</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="method_dumpToString" id="_dumpToString"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_dumpToString</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1957">1957</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Dump this node to a string</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">string</span>
+		<span class="method-name">
+			_dumpToString
+		</span>
+				()
+			</div>
+	
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../stringparser/StringParser_Node.html#method_dumpToString">StringParser_Node::_dumpToString()</a></dt>
+						<dd>Dump this node to a string</dd>
+					</dl>
+			
+	</div>
+<a name="method_findPrevAdjentTextNodeHelper" id="_findPrevAdjentTextNodeHelper"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_findPrevAdjentTextNodeHelper</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser_bbcode.class.php.html#a1832">1832</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Helper function for findPrevAdjentTextNode</p>
+<p class="description"><p>Looks at the last child node; if it's a text node, it returns it,  if the element node did not have an open tag, it calls itself  recursively.</p></p>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			&amp;_findPrevAdjentTextNodeHelper
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+							<h4>Inherited Methods</h4>
+				<a name='inherited_methods'><!-- --></a>	
+									<!-- =========== Summary =========== -->
+					<p>Inherited From <span class="classname"><a href="../stringparser/StringParser_Node.html">StringParser_Node</a></span></p>
+					<blockquote>
+													<img src="../media/images/Constructor.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methodStringParser_Node">StringParser_Node::StringParser_Node()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methodappendChild">StringParser_Node::appendChild()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methodappendToLastTextChild">StringParser_Node::appendToLastTextChild()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methoddestroyNode">StringParser_Node::destroyNode()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methoddump">StringParser_Node::dump()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methodequals">StringParser_Node::equals()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methodfirstChild">StringParser_Node::firstChild()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methodgetNodeCountByCriterium">StringParser_Node::getNodeCountByCriterium()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methodgetNodesByCriterium">StringParser_Node::getNodesByCriterium()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methodinsertChildAfter">StringParser_Node::insertChildAfter()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methodinsertChildBefore">StringParser_Node::insertChildBefore()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methodlastChild">StringParser_Node::lastChild()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methodmatchesCriterium">StringParser_Node::matchesCriterium()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methodprependChild">StringParser_Node::prependChild()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methodremoveChild">StringParser_Node::removeChild()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#methodtype">StringParser_Node::type()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#method_destroy">StringParser_Node::_destroy()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#method_dumpToString">StringParser_Node::_dumpToString()</a></span><br>
+													<img src="../media/images/Method.png" alt=" "/>
+							<span class="method-name"><a href="../stringparser/StringParser_Node.html#method_findChild">StringParser_Node::_findChild()</a></span><br>
+											</blockquote>
+										
+		</div>
+	</div>
+
+	
+	<p class="notes" id="credit">
+		Documentation generated on Mon, 10 Dec 2007 13:30:05 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.0</a>
+	</p>
+	</div></body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Language" content="en">
+  <title>StringParser_BBCode class documentation</title>
+  <meta name="author" content="Christian Seiler">
+  <link rel="stylesheet" href="../css/print.css"  type="text/css" media="print">
+  <link rel="stylesheet" href="../css/screen.css" type="text/css" media="screen, projection">
+</head>
+<body id="doku">
+<div id="container">
+<h1><span><code>StringParser_<abbr title="Bulletin Board Code">BBCode</abbr></code> class</span> documentation</h1>
+ <ul id="mainmenu">
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/index_en.html">Project homepage</a></li>
+  <li><a href="chapter1.html">Documentation</a></li>
+  <li><a href="../phpdoc/index.html">PHPDOC Documentation</a></li>
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/download_en.html">Download</a></li>
+  <li><a href="../de/kapitel7.html">Diese Seite auf Deutsch</a></li>
+ </ul>
+<ul id="menu">
+  <li><a href="chapter1.html">1. Introduction</a>
+    <ul>
+      <li><a href="chapter1.html#general">1.1 General</a></li>
+      <li><a href="chapter1.html#nesting">1.2 Nesting</a></li>
+      <li><a href="chapter1.html#special">1.3 Special codes</a></li>
+    </ul></li>
+  <li><a href="chapter2.html">2. Defining own <abbr>BBCode</abbr></a>
+    <ul>
+      <li><a href="chapter2.html#including">2.1 Including the class</a></li>
+      <li><a href="chapter2.html#first">2.2 The first code</a></li>
+      <li><a href="chapter2.html#processing_types">2.3 Processing types</a></li>
+      <li><a href="chapter2.html#parsing">2.4 Parsing text</a></li>
+    </ul></li>
+  <li><a href="chapter3.html">3. Parser functions</a>
+    <ul>
+      <li><a href="chapter3.html#task">3.1 Task of parser functions</a></li>
+      <li><a href="chapter3.html#content_types">3.2 Relevance of content types</a></li>
+      <li><a href="chapter3.html#registration">3.3 Registration of parser functions</a></li>
+    </ul></li>
+  <li><a href="chapter4.html">4. Callback functions</a>
+    <ul>
+      <li><a href="chapter4.html#processing_types">4.1 Processing types that need callback functions</a></li>
+      <li><a href="chapter4.html#prototype">4.2 Prototype of a callback function</a></li>
+      <li><a href="chapter4.html#example">4.3 Example for a callback function that replaces links</a></li>
+      <li><a href="chapter4.html#revalidation">4.4 Revalidation on close tag occurrence</a></li>
+    </ul></li>
+  <li><a href="chapter5.html">5. Filters</a>
+    <ul>
+      <li><a href="chapter5.html#types">5.1 Filter types</a></li>
+      <li><a href="chapter5.html#defining">5.2 Defining filters</a></li>
+    </ul></li>
+  <li><a href="chapter6.html">6. Flags to control the behaviour of the class</a>
+    <ul>
+      <li><a href="chapter6.html#general">6.1 General</a></li>
+      <li><a href="chapter6.html#flags">6.2 List of all flags</a></li>
+      <li><a href="chapter6.html#global">6.2 Global flags</a></li>
+    </ul></li>
+  <li><a href="chapter7.html">7. Limiting the amount of occurrences</a>
+    <ul>
+      <li><a href="chapter7.html#grouping">7.1 Grouping codes</a></li>
+      <li><a href="chapter7.html#limits">7.2 Setting limits</a></li>
+    </ul></li>
+  <li><a href="chapter8.html">8. Paragraph handling</a>
+    <ul>
+      <li><a href="chapter8.html#general">8.1 General</a></li>
+      <li><a href="chapter8.html#activating">8.2 Activating paragraph handling</a></li>
+      <li><a href="chapter8.html#further">8.3 Further possibilities</a></li>
+    </ul></li>
+  <li><a href="chapter9.html">9. Examples</a>
+    <ul>
+      <li><a href="chapter9.html#example">9.1 Simple example</a></li>
+<!--      <li><a href="chapter9.html#complex">9.2 More complex example</a></li> -->
+    </ul></li>
+  <li><a href="chapter10.html">10. Miscellaneous</a>
+    <ul>
+      <li><a href="chapter10.html#faq">10.1 Frequently asked questions</a></li>
+      <li><a href="chapter10.html#internals">10.2 Useful internals</a></li>
+    </ul></li>
+</ul>
+<div id="content"><h2>7. Limiting the amount of occurrences</h2>
+<h3 id="grouping"><a name="grouping">7.1 Grouping codes</a></h3>
+<p>The class also provides the possibility to restrict the number of occurrences of a code. For this codes have to be organized in groups first and then it is possible to specify how often codes of a group my occur. The first code above the maximum number is simply ignored and appended as normal text. If one wants to restrict only one code one must nevertheless create a group. One assigns a code to a group with the help of the <code>setOccurrenceType</code> method:</p>
+<p class="php"><code>$bbcode->setOccurrenceType ('url', 'link');</code></p>
+<p>This would assign the <code>[url]</code> code to the <code>link</code> group. The name of the group is completely arbitrary. One has <em>not</em> to create the group before or something like this, one just has to specify it when calling the above method.</p>
+<h3 id="limits"><a name="limits">7.2 Setting limits</a></h3>
+<p>With the help of the method <code>setMaxOccurrences</code> one can specify how often elements of a group may occur. The method call looks like this:</p>
+<p class="php"><code>$bbcode->setMaxOccurrences ('link', 15);</code></p>
+<p>This would define for the <code>link</code> group a limit of 15 maximum occurrences. All further occurrences would be ignored.</p>
+<hr>
+<ul>
+  <li>Next: <a href="chapter8.html">8. Paragraph handling</a></li>
+  <li>Previous: <a href="chapter6.html">6. Flags to control the behaviour of the class</a></li>
+</ul>
+</div>
+<p id="footer">This is the documentation for the <code>StringParser_BBCode</code> class version <em>0.3.3</em><br>
+Author: Christian Seiler, <a href="mailto:webmaster@christian-seiler.de">webmaster@christian-seiler.de</a></p>
+</div>
+</body>
+</html>

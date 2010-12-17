@@ -1,0 +1,1516 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos  -->
+			<title>Docs For Class StringParser</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+						<script src="../media/lib/classTree.js"></script>
+												<script language="javascript" type="text/javascript">
+				var imgPlus = new Image();
+				var imgMinus = new Image();
+				imgPlus.src = "../media/images/plus.png";
+				imgMinus.src = "../media/images/minus.png";
+				
+				function showNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgMinus.src;
+					oTable.style.display = "block";
+				}
+				
+				function hideNode(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+							var oImg = document.layers["img" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+							var oImg = document.all["img" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+							var oImg = document.getElementById("img" + Node);
+									break;
+							}
+					oImg.src = imgPlus.src;
+					oTable.style.display = "none";
+				}
+				
+				function nodeIsVisible(Node){
+							switch(navigator.family){
+								case 'nn4':
+									// Nav 4.x code fork...
+							var oTable = document.layers["span" + Node];
+									break;
+								case 'ie4':
+									// IE 4/5 code fork...
+							var oTable = document.all["span" + Node];
+									break;
+								case 'gecko':
+									// Standards Compliant code fork...
+							var oTable = document.getElementById("span" + Node);
+									break;
+							}
+					return (oTable && oTable.style.display == "block");
+				}
+				
+				function toggleNodeVisibility(Node){
+					if (nodeIsVisible(Node)){
+						hideNode(Node);
+					}else{
+						showNode(Node);
+					}
+				}
+			</script>
+					</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name"><img src="../media/images/Class_logo.png"
+														alt=" Class"
+														title=" Class"
+														style="vertical-align: middle"> StringParser</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+							<a href="#sec-descendents">Descendents</a>
+			|											<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Generic string parser class</p>
+<p class="description"><p>This is an abstract class for any type of string parser.</p></p>
+		<p class="notes">
+			Located in <a class="field" href="_stringparser.class.php.html">/stringparser.class.php</a> (line <span class="field"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a66">66</a></span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+	<a name="sec-descendents"></a>
+	<div class="info-box">
+		<div class="info-box-title">Direct descendents</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+			<span class="disabled">Descendents</span>
+			|												<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+								|															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+								</div>
+		<div class="info-box-body">
+			<table cellpadding="2" cellspacing="0" class="class-table">
+				<tr>
+					<th class="class-table-header">Class</th>
+					<th class="class-table-header">Description</th>
+				</tr>
+								<tr>
+					<td style="padding-right: 2em; white-space: nowrap">
+						<img src="../media/images/Class.png"
+								 alt=" class"
+								 title=" class"
+								 style="vertical-align: center"/>
+						<a href="../stringparser/StringParser_BBCode.html">StringParser_BBCode</a>
+					</td>
+					<td>
+											BB code string parser class
+										</td>
+				</tr>
+							</table>
+		</div>
+	</div>
+
+
+	<a name="sec-var-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variable Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendants</a> |
+						<span class="disabled">Vars</span> (<a href="#sec-vars">details</a>)
+							| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+								</div>
+		<div class="info-box-body">
+			<div class="var-summary">
+																																																																																																																																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">boolean</span>
+					<a href="#$strict" title="details" class="var-name">$strict</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">array</span>
+					<a href="#$_charactersAllowed" title="details" class="var-name">$_charactersAllowed</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">array</span>
+					<a href="#$_charactersSearch" title="details" class="var-name">$_charactersSearch</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">integer</span>
+					<a href="#$_cpos" title="details" class="var-name">$_cpos</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">integer</span>
+					<a href="#$_length" title="details" class="var-name">$_length</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">int</span>
+					<a href="#$_parserMode" title="details" class="var-name">$_parserMode</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">boolean</span>
+					<a href="#$_parsing" title="details" class="var-name">$_parsing</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">array</span>
+					<a href="#$_postfilters" title="details" class="var-name">$_postfilters</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">array</span>
+					<a href="#$_prefilters" title="details" class="var-name">$_prefilters</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">bool</span>
+					<a href="#$_recentlyReparsed" title="details" class="var-name">$_recentlyReparsed</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">mixed</span>
+					<a href="#$_root" title="details" class="var-name">$_root</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">array</span>
+					<a href="#$_stack" title="details" class="var-name">$_stack</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">int</span>
+					<a href="#$_status" title="details" class="var-name">$_status</a>
+				</div>
+																<div class="var-title">
+					<img src="../media/images/Variable.png" alt=" " />
+					<span class="var-type">string</span>
+					<a href="#$_text" title="details" class="var-name">$_text</a>
+				</div>
+											</div>
+		</div>
+	</div>
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendants</a> |
+																		<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+						<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																																																																																																																																																																																																							
+				<div class="method-definition">
+					<img src="../media/images/Constructor.png" alt=" "/>
+											<span class="method-result">StringParser</span>
+										<a href="#StringParser" title="details" class="method-name">StringParser</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#addFilter" title="details" class="method-name">addFilter</a>
+											(<span class="var-type">int</span>&nbsp;<span class="var-name">$type</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$callback</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#clearFilters" title="details" class="method-name">clearFilters</a>
+											([<span class="var-type">int</span>&nbsp;<span class="var-name">$type</span> = <span class="var-default">0</span>])
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">mixed</span>
+										<a href="#parse" title="details" class="method-name">parse</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$text</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#_appendText" title="details" class="method-name">_appendText</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$text</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#_appendToLastTextChild" title="details" class="method-name">_appendToLastTextChild</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$text</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#_applyPostfilters" title="details" class="method-name">_applyPostfilters</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$text</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#_applyPrefilters" title="details" class="method-name">_applyPrefilters</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$text</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#_closeRemainingBlocks" title="details" class="method-name">_closeRemainingBlocks</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#_handleStatus" title="details" class="method-name">_handleStatus</a>
+											(<span class="var-type">int</span>&nbsp;<span class="var-name">$status</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$needle</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#_loop" title="details" class="method-name">_loop</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#_modifyTree" title="details" class="method-name">_modifyTree</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#_outputTree" title="details" class="method-name">_outputTree</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#_parserInit" title="details" class="method-name">_parserInit</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#_popNode" title="details" class="method-name">_popNode</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#_pushNode" title="details" class="method-name">_pushNode</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">&$node</span>, <span class="var-type">object</span>&nbsp;<span class="var-name">$node</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#_reparseAfterCurrentBlock" title="details" class="method-name">_reparseAfterCurrentBlock</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">bool</span>
+										<a href="#_searchLoop" title="details" class="method-name">_searchLoop</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">void</span>
+										<a href="#_setStatus" title="details" class="method-name">_setStatus</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$status</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">mixed</span>
+										<a href="#_strDetect" title="details" class="method-name">_strDetect</a>
+											(<span class="var-type">array</span>&nbsp;<span class="var-name">$needles</span>, <span class="var-type">int</span>&nbsp;<span class="var-name">$offset</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">array</span>
+										<a href="#_strpos" title="details" class="method-name">_strpos</a>
+											(<span class="var-type">array</span>&nbsp;<span class="var-name">$needles</span>, <span class="var-type">int</span>&nbsp;<span class="var-name">$offset</span>)
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">mixed</span>
+										<a href="#_topNode" title="details" class="method-name">_topNode</a>
+										()
+									</div>
+															
+				<div class="method-definition">
+					<img src="../media/images/Method.png" alt=" "/>
+											<span class="method-result">mixed</span>
+										<a href="#_topNodeVar" title="details" class="method-name">_topNodeVar</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$var</span>)
+									</div>
+											</div>
+		</div>
+	</div>		
+
+	<a name="sec-vars"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variables</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendents</a> |
+										<a href="#sec-var-summary">Vars</a> (<span class="disabled">details</span>)
+						
+			
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			
+<a name="var$strict" id="$strict"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">boolean</span>
+			<span class="var-name">$strict</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a142">142</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Strict mode</p>
+<p class="description"><p>Whether to stop parsing if a parse error occurs.</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_charactersAllowed" id="$_charactersAllowed"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$_charactersAllowed</span>
+			 = <span class="var-default">array ()</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a167">167</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Characters currently allowed</p>
+<p class="description"><p>Note that this will only be evaluated in loop mode; in search mode  this would ruin every performance increase. Note that only single  characters are permitted here, no strings. Please also note that in  loop mode, StringParser::_charactersSearch  is evaluated before this variable.</p><p>If in strict mode, parsing is stopped if a character that is not  allowed is encountered. If not in strict mode, the character is  simply ignored.</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_charactersSearch" id="$_charactersSearch"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$_charactersSearch</span>
+			 = <span class="var-default">array ()</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a149">149</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Characters or strings to look for</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_cpos" id="$_cpos"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">integer</span>
+			<span class="var-name">$_cpos</span>
+			 = <span class="var-default"> -1</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a107">107</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Current position in raw text</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_length" id="$_length"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">integer</span>
+			<span class="var-name">$_length</span>
+			 = <span class="var-default"> -1</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a121">121</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Length of the text</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_parserMode" id="$_parserMode"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">int</span>
+			<span class="var-name">$_parserMode</span>
+			 = <span class="var-default"> STRINGPARSER_MODE_SEARCH</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a86">86</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">String parser mode</p>
+<p class="description"><p>There are two possible modes: searchmode and loop mode. In loop mode  every single character is looked at in a loop and it is then decided  what action to take. This is the most straight-forward approach to  string parsing but due to the nature of PHP as a scripting language,  it can also cost performance. In search mode the class posseses a  list of relevant characters for parsing and uses the  <a href="http://www.php.net/strpos">strpos</a> function to search for the next  relevant character. The search mode will be faster than the loop mode  in most circumstances but it is also more difficult to implement.  The subclass that does the string parsing itself will define which  mode it will implement.</p></p>
+	<ul class="tags">
+				<li><span class="field">see:</span> <a href="../stringparser/_stringparser.class.php.html#defineSTRINGPARSER_MODE_SEARCH">STRINGPARSER_MODE_SEARCH</a>, <a href="../stringparser/_stringparser.class.php.html#defineSTRINGPARSER_MODE_LOOP">STRINGPARSER_MODE_LOOP</a></li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../stringparser/StringParser_BBCode.html#var$_parserMode">StringParser_BBCode::$_parserMode</a>
+								: String parser mode
+							</li>
+				</ul>
+		
+
+</div>
+<a name="var$_parsing" id="$_parsing"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">boolean</span>
+			<span class="var-name">$_parsing</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a132">132</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Flag if this object is already parsing a text</p>
+<p class="description"><p>This flag is to prevent recursive calls to the parse() function that  would cause very nasty things.</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_postfilters" id="$_postfilters"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$_postfilters</span>
+			 = <span class="var-default">array ()</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a188">188</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Postfilters</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_prefilters" id="$_prefilters"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$_prefilters</span>
+			 = <span class="var-default">array ()</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a181">181</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Prefilters</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_recentlyReparsed" id="$_recentlyReparsed"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">bool</span>
+			<span class="var-name">$_recentlyReparsed</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a195">195</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Recently reparsed?</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_root" id="$_root"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$_root</span>
+			 = <span class="var-default"> null</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a114">114</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Root node</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_stack" id="$_stack"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">array</span>
+			<span class="var-name">$_stack</span>
+			 = <span class="var-default">array ()</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a100">100</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Parse stack</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_status" id="$_status"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">int</span>
+			<span class="var-name">$_status</span>
+			 = <span class="var-default"> 0</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a174">174</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Current parser status</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$_text" id="$_text"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<img src="../media/images/Variable.png" />
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$_text</span>
+			 = <span class="var-default"> ''</span>			(line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a93">93</a></span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Raw text</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+						
+		</div>
+	</div>
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+							<a href="#sec-descendents">Descendents</a> |
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+																	<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+<a name="methodStringParser" id="StringParser"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Constructor.png" />
+		<span class="method-title">Constructor StringParser</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a202">202</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Constructor</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">StringParser</span>
+		<span class="method-name">
+			StringParser
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodaddFilter" id="addFilter"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">addFilter</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a214">214</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Add a filter</p>
+	<ul class="tags">
+				<li><span class="field">see:</span> <a href="../stringparser/_stringparser.class.php.html#defineSTRINGPARSER_FILTER_PRE">STRINGPARSER_FILTER_PRE</a>, <a href="../stringparser/_stringparser.class.php.html#defineSTRINGPARSER_FILTER_POST">STRINGPARSER_FILTER_POST</a></li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			addFilter
+		</span>
+					(<span class="var-type">int</span>&nbsp;<span class="var-name">$type</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$callback</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$type</span><span class="var-description">: The type of the filter</span>			</li>
+					<li>
+				<span class="var-type">mixed</span>
+				<span class="var-name">$callback</span><span class="var-description">: The callback to call</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodclearFilters" id="clearFilters"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">clearFilters</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a242">242</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Remove all filters</p>
+	<ul class="tags">
+				<li><span class="field">see:</span> <a href="../stringparser/_stringparser.class.php.html#defineSTRINGPARSER_FILTER_PRE">STRINGPARSER_FILTER_PRE</a>, <a href="../stringparser/_stringparser.class.php.html#defineSTRINGPARSER_FILTER_POST">STRINGPARSER_FILTER_POST</a></li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			clearFilters
+		</span>
+					([<span class="var-type">int</span>&nbsp;<span class="var-name">$type</span> = <span class="var-default">0</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$type</span><span class="var-description">: The type of the filter or 0 for all</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodparse" id="parse"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">parse</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a270">270</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">This function parses the text</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> Either the root object of the tree if no output method                is defined, the tree reoutput to e.g. a string or false                if an internal error occured, such as a parse error if                in strict mode or the object is already parsing a text.</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">mixed</span>
+		<span class="method-name">
+			parse
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$text</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$text</span><span class="var-description">: The text to parse</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="method_appendText" id="_appendText"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_appendText</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a665">665</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Abstract method Append text depending on current status</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> On success, the function returns true, else false</li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			_appendText
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$text</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$text</span><span class="var-description">: The text to append</span>			</li>
+				</ul>
+		
+			
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../stringparser/StringParser_BBCode.html#method_appendText">StringParser_BBCode::_appendText()</a>
+								: Abstract method Append text depending on current status
+							</li>
+				</ul>
+	</div>
+<a name="method_appendToLastTextChild" id="_appendToLastTextChild"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_appendToLastTextChild</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a679">679</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Append text to last text child of current top parser stack node</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> On success, the function returns true, else false</li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			_appendToLastTextChild
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$text</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$text</span><span class="var-description">: The text to append</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="method_applyPostfilters" id="_applyPostfilters"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_applyPostfilters</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a396">396</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Apply postfilters</p>
+<p class="description"><p>It is possible to specify postfilters for the parser to do some  manipulating of the string afterwards.</p></p>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			_applyPostfilters
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$text</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$text</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="method_applyPrefilters" id="_applyPrefilters"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_applyPrefilters</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a378">378</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Apply prefilters</p>
+<p class="description"><p>It is possible to specify prefilters for the parser to do some  manipulating of the string beforehand.</p></p>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			_applyPrefilters
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$text</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$text</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="method_closeRemainingBlocks" id="_closeRemainingBlocks"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_closeRemainingBlocks</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a477">477</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Abstract method: Close remaining blocks</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			_closeRemainingBlocks
+		</span>
+				()
+			</div>
+	
+		
+			
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../stringparser/StringParser_BBCode.html#method_closeRemainingBlocks">StringParser_BBCode::_closeRemainingBlocks()</a>
+								: Abstract method: Close remaining blocks
+							</li>
+				</ul>
+	</div>
+<a name="method_handleStatus" id="_handleStatus"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_handleStatus</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a524">524</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Abstract method: Handle status</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			_handleStatus
+		</span>
+					(<span class="var-type">int</span>&nbsp;<span class="var-name">$status</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$needle</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$status</span><span class="var-description">: The current status</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$needle</span><span class="var-description">: The needle that was found</span>			</li>
+				</ul>
+		
+			
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../stringparser/StringParser_BBCode.html#method_handleStatus">StringParser_BBCode::_handleStatus()</a>
+								: Handle status
+							</li>
+				</ul>
+	</div>
+<a name="method_loop" id="_loop"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_loop</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a603">603</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Loop mode loop</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			_loop
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="method_modifyTree" id="_modifyTree"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_modifyTree</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a413">413</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Abstract method: Manipulate the tree</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			_modifyTree
+		</span>
+				()
+			</div>
+	
+		
+			
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../stringparser/StringParser_BBCode.html#method_modifyTree">StringParser_BBCode::_modifyTree()</a>
+								: Abstract method: Manipulate the tree
+							</li>
+				</ul>
+	</div>
+<a name="method_outputTree" id="_outputTree"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_outputTree</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a422">422</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Abstract method: Output tree</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			_outputTree
+		</span>
+				()
+			</div>
+	
+		
+			
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../stringparser/StringParser_BBCode.html#method_outputTree">StringParser_BBCode::_outputTree()</a>
+								: Abstract method: Output tree
+							</li>
+				</ul>
+	</div>
+<a name="method_parserInit" id="_parserInit"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_parserInit</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a499">499</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Abstract method: Initialize the parser</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			_parserInit
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="method_popNode" id="_popNode"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_popNode</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a764">764</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Removes a node from the current parse stack</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> True on success, else false.</li>
+				<li><span class="field">see:</span> <a href="../stringparser/StringParser_Node.html">StringParser_Node</a>, StringParser::_stack</li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			_popNode
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="method_pushNode" id="_pushNode"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_pushNode</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a747">747</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Adds a node to the current parse stack</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> True on success, else false.</li>
+				<li><span class="field">see:</span> <a href="../stringparser/StringParser_Node.html">StringParser_Node</a>, StringParser::_stack</li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			_pushNode
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">&$node</span>, <span class="var-type">object</span>&nbsp;<span class="var-name">$node</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">object</span>
+				<span class="var-name">$node</span><span class="var-description">: The node that is to be added</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">&$node</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="method_reparseAfterCurrentBlock" id="_reparseAfterCurrentBlock"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_reparseAfterCurrentBlock</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a436">436</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Restart parsing after current block</p>
+<p class="description"><p>To achieve this the current top stack object is removed from the  tree. Then the current item</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			_reparseAfterCurrentBlock
+		</span>
+				()
+			</div>
+	
+		
+			
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../stringparser/StringParser_BBCode.html#method_reparseAfterCurrentBlock">StringParser_BBCode::_reparseAfterCurrentBlock()</a>
+								: Restart parsing after current block
+							</li>
+				</ul>
+	</div>
+<a name="method_searchLoop" id="_searchLoop"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_searchLoop</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a535">535</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Search mode loop</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">bool</span>
+		<span class="method-name">
+			_searchLoop
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="method_setStatus" id="_setStatus"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_setStatus</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a507">507</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Abstract method: Set a specific status</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			_setStatus
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$status</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$status</span>			</li>
+				</ul>
+		
+			
+			<hr class="separator" />
+		<div class="notes">Redefined in descendants as:</div>
+		<ul class="redefinitions">
+					<li>
+				<a href="../stringparser/StringParser_BBCode.html#method_setStatus">StringParser_BBCode::_setStatus()</a>
+								: Set a specific status
+							</li>
+				</ul>
+	</div>
+<a name="method_strDetect" id="_strDetect"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_strDetect</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a728">728</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Detects a string at the current position</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> The string that was detected or the needle</li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">mixed</span>
+		<span class="method-name">
+			_strDetect
+		</span>
+					(<span class="var-type">array</span>&nbsp;<span class="var-name">$needles</span>, <span class="var-type">int</span>&nbsp;<span class="var-name">$offset</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$needles</span><span class="var-description">: The strings that are to be detected</span>			</li>
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$offset</span><span class="var-description">: The current offset</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="method_strpos" id="_strpos"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_strpos</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a703">703</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Searches StringParser::_text for every needle that is</p>
+<p class="description"><p>specified by using the <a href="http://www.php.net/strpos">strpos</a> function. It  returns an associative array with the key <div class="src-code"><ol><li><div class="src-line"><span class="src-str">'needle'</span></div></li>
+</ol></div>  pointing at the string that was found first and the key  <div class="src-code"><ol><li><div class="src-line"><span class="src-str">'offset'</span></div></li>
+</ol></div> pointing at the offset at which the string was  found first. If no needle was found, the <div class="src-code"><ol><li><div class="src-line"><span class="src-str">'needle'</span></div></li>
+</ol></div>  element is <div class="src-code"><ol><li><div class="src-line"><span class="src-id">false</span></div></li>
+</ol></div> and the <div class="src-code"><ol><li><div class="src-line"><span class="src-str">'offset'</span></div></li>
+</ol></div> element  is <div class="src-code"><ol><li><div class="src-line">-<span class="src-num">1</span></div></li>
+</ol></div>.</p></p>
+	<ul class="tags">
+				<li><span class="field">see:</span> StringParser::_text</li>
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			_strpos
+		</span>
+					(<span class="var-type">array</span>&nbsp;<span class="var-name">$needles</span>, <span class="var-type">int</span>&nbsp;<span class="var-name">$offset</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$needles</span>			</li>
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$offset</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="method_topNode" id="_topNode"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_topNode</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a776">776</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Execute a method on the top element</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">mixed</span>
+		<span class="method-name">
+			_topNode
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="method_topNodeVar" id="_topNodeVar"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<img src="../media/images/Method.png" />
+		<span class="method-title">_topNodeVar</span> (line <span class="line-number"><a href="../__filesource/fsource_stringparser__stringparser.class.php.html#a796">796</a></span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get a variable of the top element</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> protected</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">mixed</span>
+		<span class="method-name">
+			_topNodeVar
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$var</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$var</span>			</li>
+				</ul>
+		
+			
+	</div>
+						
+		</div>
+	</div>
+
+	
+	<p class="notes" id="credit">
+		Documentation generated on Mon, 10 Dec 2007 13:29:55 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.0</a>
+	</p>
+	</div></body>
+</html>

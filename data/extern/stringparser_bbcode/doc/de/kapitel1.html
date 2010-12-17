@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Language" content="de">
+  <title>Dokumentation der StringParser_BBCode-Klasse</title>
+  <meta name="author" content="Christian Seiler">
+  <link rel="stylesheet" href="../css/print.css"  type="text/css" media="print">
+  <link rel="stylesheet" href="../css/screen.css" type="text/css" media="screen, projection">
+</head>
+<body id="doku">
+<div id="container">
+<h1>Dokumentation <span>der <code>StringParser_<abbr title="Bulletin Board Code">BBCode</abbr></code>-Klasse</span></h1>
+ <ul id="mainmenu">
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/index.html">Projektseite</a></li>
+  <li><a href="kapitel1.html">Dokumentation</a></li>
+  <li><a href="../phpdoc/index.html">PHPDOC-Dokumentation</a></li>
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/download.html">Download</a></li>
+  <li><a href="../en/chapter1.html">This page in english</a></li>
+ </ul>
+<ul id="menu">
+  <li><a href="kapitel1.html">1. Einführung</a>
+    <ul>
+      <li><a href="kapitel1.html#allgemeines">1.1 Allgemeines</a></li>
+      <li><a href="kapitel1.html#verschachtelung">1.2 Verschachtelung</a></li>
+      <li><a href="kapitel1.html#spezielle">1.3 Spezielle Codes</a></li>
+    </ul></li>
+  <li><a href="kapitel2.html">2. Das Definieren von eigenem <abbr>BBCode</abbr></a>
+    <ul>
+      <li><a href="kapitel2.html#einbinden">2.1 Einbinden der Klasse</a></li>
+      <li><a href="kapitel2.html#erster">2.2 Der erste Code</a></li>
+      <li><a href="kapitel2.html#behandlungsarten">2.3 Behandlungsarten</a></li>
+      <li><a href="kapitel2.html#parsen">2.4 Parsen von Text</a></li>
+    </ul></li>
+  <li><a href="kapitel3.html">3. Parserfunktionen</a>
+    <ul>
+      <li><a href="kapitel3.html#aufgabe">3.1 Aufgabe von Parserfunktionen</a></li>
+      <li><a href="kapitel3.html#inhaltstypen">3.2 Relevanz von Inhaltstypen</a></li>
+      <li><a href="kapitel3.html#registrieren">3.3 Registrieren von Parserfunktionen</a></li>
+    </ul></li>
+  <li><a href="kapitel4.html">4. Callback-Funktionen</a>
+    <ul>
+      <li><a href="kapitel4.html#behandlungsarten">4.1 Behandlungsarten, die Callback-Funktionen benötigen</a></li>
+      <li><a href="kapitel4.html#aufbau">4.2 Aufbau der Callback-Funktionen</a></li>
+      <li><a href="kapitel4.html#beispiel">4.3 Beispiel einer Callback-Funktion zum Ersetzen von Links</a></li>
+      <li><a href="kapitel4.html#revalidierung">4.4 Revalidierung beim Auftreten von schließenden Tags</a></li>
+    </ul></li>
+  <li><a href="kapitel5.html">5. Filter</a>
+    <ul>
+      <li><a href="kapitel5.html#arten">5.1 Filterarten</a></li>
+      <li><a href="kapitel5.html#definieren">5.2 Filter definieren</a></li>
+    </ul></li>
+  <li><a href="kapitel6.html">6. Flags zum Steuern des Verhaltens der Klasse</a>
+    <ul>
+      <li><a href="kapitel6.html#allgemeines">6.1 Allgemeines</a></li>
+      <li><a href="kapitel6.html#flags">6.2 Liste aller Flags</a></li>
+      <li><a href="kapitel6.html#globale">6.3 Globale flags</a></li>
+    </ul></li>
+  <li><a href="kapitel7.html">7. Maximales Auftreten von Elementen</a>
+    <ul>
+      <li><a href="kapitel7.html#gruppieren">7.1 Codes gruppieren</a></li>
+      <li><a href="kapitel7.html#festlegen">7.2 Limits festlegen</a></li>
+    </ul></li>
+  <li><a href="kapitel8.html">8. Absatzbehandlung</a>
+    <ul>
+      <li><a href="kapitel8.html#allgemeines">8.1 Allgemeines</a></li>
+      <li><a href="kapitel8.html#aktivieren">8.2 Absatzbehandlung aktivieren</a></li>
+      <li><a href="kapitel8.html#weitere">8.3 Weitere Möglichkeiten</a></li>
+    </ul></li>
+  <li><a href="kapitel9.html">9. Beispiele</a>
+    <ul>
+      <li><a href="kapitel9.html#beispiel">9.1 Einfaches Beispiel</a></li>
+<!--      <li><a href="kapitel9.html#kompliziert">9.1 Komplizierteres Beispiel</a></li> -->
+    </ul></li>
+  <li><a href="kapitel10.html">10. Sonstiges</a>
+    <ul>
+      <li><a href="kapitel10.html#faq">10.1 Häufig gestellte Fragen</a></li>
+      <li><a href="kapitel10.html#interna">10.2 Nützliche Interna</a></li>
+    </ul></li>
+</ul>
+<div id="content"><h2>1. Einführung</h2>
+<h3 id="allgemeines"><a name="allgemeines">1.1 Allgemeines</a></h3>
+<p>Die <code>StringParser_<abbr>BBCode</abbr></code>-Klasse bietet die Möglichkeit, Zeichenketten mit BB-Codes zu parsen und daraus beispielsweise <abbr title="Hypertext Markup Language" lang="en">HTML</abbr>-Code zu erzeugen. <abbr>BBCode</abbr> sind Auszeichnungen, mit denen man Text formatieren oder strukturieren kann. Sie sind ähnlich wie die Auszeichnungen bei <abbr>HTML</abbr> aufgebaut, nutzen jedoch eckige Klammern anstelle von spitzen Klammern. Desweitern unterscheidet sich <abbr>BBCode</abbr> von HTML, dass ein ungültiger Code-Abschnitt ignoriert werden sollte, während bei <abbr>HTML</abbr> die Gültigkeit wichtig ist.</p>
+<p>Ein Beispiel für einen Text, der mit Hilfe von <abbr>BBCode</abbr> ausgezeichnet wurde:</p>
+<p class="bb"><code><span class="bbtn">Dies ist ein </span><span class="bben">[b]<span class="bbtn">fetter, </span><span class="bben">[i]<span class="bbtn">kursiver</span>[/i]</span><span class="bbtn"> Text</span>[/b]</span>!</code></p>
+<p>Dieser Text könnte nun nach HTML verwandelt werden:</p>
+<p class="html"><code>Dies ist ein &lt;b&gt;fetter, &lt;i&gt;kursiver&lt;/i&gt; Text&lt;/b&gt;!</code></p>
+<p>Dies würde dann so aussehen:</p>
+<p class="demo">Dies ist ein <span class="b">fetter, <span class="i">kursiver</span> Text</span>!</p>
+<p>Die einfachste Möglichkeit, den <abbr>BBCode</abbr> hier in <abbr>HTML</abbr> umzuwandeln, wäre, <code>[b]</code>, <code>[i]</code>, <code>[/b]</code> und <code>[/i]</code> durch jeweils <code>&lt;b&gt;</code>, <code>&lt;i&gt;</code>, <code>&lt;/b&gt;</code> und <code>&lt;/i&gt;</code> zu ersetzen. Dies würde im obigen Beispiel problemlos funktionieren. Allerdings würde es zu Problemen führen, wenn jemand sich beim <abbr>BBCode</abbr> vertippt. Folgendes Beispiel:</p>
+<p class="bb"><code><span class="bbtn">Dies ist ein </span><span class="bben">[b]<span class="bbtn">fetter, </span><span class="bben">[i]<span class="bbtn">kursiver</span>[/io]</span><span class="bbtn"> Text</span>[/b]</span>!</code></p>
+<p>Der Autor des Textes hat sich vertippt und ist beim Eintippen des <code>[/i]</code> auch auf die <kbd>o</kbd>-Taste gekommen, was dazu geführt hat, dass er oder sie stattdessen <code>[/io]</code> eingetippt hat. Wenn man dies nun stupide ersetzen würde, dann würde folgender <abbr>HTML</abbr>-Code herauskommen:</p>
+<p class="html"><code>Dies ist ein &lt;b&gt;fetter, &lt;i&gt;kursiver[/io] Text&lt;/b&gt;!</code></p>
+<p>Dies ist ungültiger <abbr>HTML</abbr>-Code, da der Code nicht korrekt verschachtelt ist und das <code>&lt;i&gt;</code>-Element nie geschlossen wird. Es gibt andere Ansätze, <abbr>BBCode</abbr> zu ersetzen, die beispielsweise mit regulären Ausdrücken arbeiten, um sicherzustellen, dass das Element auch wirklich wieder geschlossen wird, allerdings können diese für die korrekte Verschachtelung nicht garantieren.</p>
+<p>Aus diesem Grund verfolgt die Klasse einen anderen Ansatz. Der Text wird sozusagen Zeichen für Zeichen eingelesen und der komplette Text wird dann in eine Baumstruktur umgewandelt. Diese Baumstruktur wird dann, sobald der komplette Text umgewandelt ist, in beispielswiese <abbr>HTML</abbr>-Code weiterverwandelt. Der Text</p>
+<p class="bb"><code><span class="bbtn">Dies ist ein </span><span class="bben">[b]<span class="bbtn">fetter, </span><span class="bben">[i]<span class="bbtn">kursiver</span>[/i]</span><span class="bbtn"> Text</span>[/b]</span>!</code></p>
+<p>würde also in folgende Baumstruktur umgewandelt werden:</p>
+<ul class="tree">
+  <li class="bbtn">Text: <code>"Dies ist ein "</code></li>
+  <li class="bben">Element: <code>[b]</code>
+    <ul>
+      <li class="bbtn">Text: <code>"fetter, "</code></li>
+      <li class="bben">Element: <code>[i]</code>
+        <ul>
+          <li class="bbtn">Text: <code>"kursiver"</code></li>
+        </ul></li>
+      <li class="bbtn">Text: <code>" Text"</code></li>
+    </ul></li>
+    <li class="bbtn">Text: "!"</li>
+</ul>
+<p>Wenn nun ein Text wie oben kommen sollte, bei dem das <code>[/i]</code> nicht vorhanden ist, sondern durch einen Vertipper etwas anderes dort steht, dann wird die Klasse dies bei dem <code>[/b]</code> erkennen. Das <code>[/b]</code> würde nämlich kommen, während die Klasse noch auf ein <code>[/i]</code> wartet, weil sie weiß, dass das <code>[i]</code> noch offen ist. Hier gibt es nun zwei Möglichkeiten, von denen der Programmierer, der die Klasse verwendet, entscheidet, was genau passiert: Zum einen könnte die Klasse daraufhin das <code>[i]</code> für ungültig erklären und dort noch einmal weitermachen, wo dieses <code>[i]</code> stand, oder sie könnte an der Stelle des <code>[/b]</code> (an der sie ja merkt, dass das <code>[i]</code> noch offen ist, das <code>[i]</code> gleich mit schließen (d.h. so tun, als ob dort <code>[/i][/b]</code> stünde). Die Klasse versucht jedoch <em>nicht</em> zu erraten, dass mit <code>[/io]</code> vielleicht doch <code>[/i]</code> gemeint sein könnte, da das dazu führen könnte, dass die Klasse an anderer Stelle Fehler macht, weil sie denkt, sie korrigiere einen Fehler, der in Wirklichkeit keiner ist.</p>
+<p>Die Klasse selbst gibt nicht vor, nach was für Codes gesucht wird. <code>[b]</code> und <code>[i]</code> sind populäre Beispiele und deswegen werden sie hier angeführt, die Klasse selbst bietet jedoch die Möglichkeit, beliebige eigene Codes zu definieren, solange sie sich in eckigen Klammern befinden. Im nächsten Kapitel wird gezeigt, wie man mit der Klasse eigene Codes definieren kann.</p>
+<p>Es können auch - genauso, wie in HTML - Attribute angegeben werden. Diese sähen dann beispielsweise so aus:</p>
+<p class="bb"><code><span class="bbtn">Dies ist ein </span><span class="bben">[b staerke=richtig_fett]<span class="bbtn">richtig fetter Text</span>[/b]</span>!</code></p>
+<p>Die Klasse erkennt verschiedene Formen der Attribute:</p>
+<dl>
+  <dt><code>[code attribut=wert]</code>, <code>[code attribut=&quot;wert&quot;]</code>, <code>[code attribut='wert']</code></dt>
+  <dd>Dies ist die Form, die sich an HTML anlehnt. Es ist desweiteren auch die einzige Form, die es erlaubt, mehrere Attribute gleichzeitig zu setzen. Der Ausdruck vor dem Gleichheitszeichen ist der <em>Name des Attributs</em>, der Ausdruck dahinter ist der <em>Wert des Attributs</em>. Wenn der Wert in Anführungszeichen gesetzt wird, dann sind auch Leerzeichen und <code>]</code> im Attributwert möglich; um zusätzlich noch zu ermöglichen, dass ein Anführungszeichen selbst im Attributwert vorhanden sein kann, muss es mit <code>\</code> maskiert werden. Beispiel: <code>[code attribut=&quot;wert ] und immer noch weiter im wert\&quot; und immer noch weiter&quot;]</code>.</dd>
+  <dt><code>[code=wert]</code>, <code>[code = wert]</code>, <code>[code="wert"]</code>, <code>[code='wert']</code></dt>
+  <dd>Mit dieser Form kann nur ein einziges Attribut gesetzt werden. Dieses Attribut hat den Namen <code>default</code>. Eine Angabe <code>[code=wert]</code> wäre also identisch mit <code>[code default=wert]</code>. Diese Syntax orientiert sich an klassichem BB-Code.</dd>
+  <dt><code>[code:wert]</code>, <code>[code: wert]</code></dt>
+  <dd>Diese Syntax ist auch möglich und das Attribut heißt hier genauso <code>default</code>.</dd>
+</dl>
+<h3 id="verschachtelung"><a name="verschachtelung">1.2 Verschachtelung</a></h3>
+<p>Wie oben bereits gesehen, müssen Elemente korrekt verschachtelt werden. Dies wird durch die Klasse sichergestellt. Allerdings ist die obige Prüfung nur eine rein formale Kontrolle. Bei der Verarbeitung von folgendem Konstrukt wird die Problematik deutlich:</p>
+<p class="bb"><code><span class="bben">[b]<span class="bbtn">Hier kommt eine Liste:</span><br><span class="bben">[list]<br><span class="bben">[*]<span class="bbtn"> Listenpunkt</span></span><br><span class="bben">[*]<span class="bbtn"> Listenpunkt</span></span><br>[/list]</span><br>[/b]</span></code></p>
+<p>Wenn man das nun nach <abbr>HTML</abbr> verwandeln würde, dann würde folgendes herauskommen:</p>
+<p class="html"><code>&lt;b&gt;Hier kommt eine Liste:<br>&lt;ul&gt;<br>&lt;li&gt; Listenpunkt&lt;/li&gt;<br>&lt;li&gt; Listenpunkt&lt;/li&gt;<br>&lt;/ul&gt;<br>&lt;/b&gt;</code></p>
+<p>Dieser HTML-Code ist zwar formal korrekt verschachtelt, allerdings darf in <abbr>HTML</abbr> das <code>&lt;b&gt;</code>-Element keine <code>&lt;ul&gt;</code>-Elemente enthalten. Es würde also wieder ungültiges <abbr>HTML</abbr> produziert werden. Aus diesem Grund kann man der Klasse sagen, welches Element welches andere Element enthalten darf. Dazu gibt es sogenannte <em>Inhaltstypen</em>. Jedem Element wird ein Inhaltstyp zugewiesen. Desweiteren kann man bei jedem Element angeben, innerhalb von welchen Inhaltstypen es sich befinden darf. Ein Beispiel:</p>
+<p class="bb"><code><span class="bben">[a]<span class="bben">[b]<span class="bben">[c]<span class="bbtn">Text</span>[/c]</span>[/b]</span>[/a]</span></code></p>
+<p>Hier wäre das Element <code>[b]</code> innerhalb des Elements <code>[a]</code> und das Element <code>[c]</code> innerhalb des Elements <code>[b]</code>. Folgende Struktur würde also erzeugt werden:
+<ul class="tree">
+  <li class="bben">Element: <code>[a]</code>
+    <ul>
+      <li class="bben">Element: <code>[b]</code>
+        <ul>
+          <li class="bben">Element: <code>[c]</code>
+            <ul>
+              <li class="bbtn">Text: <code>"Text"</code></li>
+            </ul></li>
+        </ul></li>
+    </ul></li>
+</ul>
+<p>Wir geben jedem Element nun einen Inhaltstyp. Das Element <code>[a]</code> erhält den Inhaltstyp <samp>alpha</samp>, das Element <code>[b]</code> den Inhaltstyp <samp>beta</samp> und das Element <code>[c]</code> den Inhaltstyp <samp>gamma</samp>. Damit der Parser alle Elemente hier verwertet, muss das Element <code>[b]</code> innerhalb des Inhaltstyps <samp>alpha</samp> erlaubt sein, weil diese der Inhaltstyp von <code>[a]</code> ist, innerhalb dessen sich das <code>[b]</code>-Element hier befindet. Genauso muss das Element <code>[c]</code> innerhalb des Inhaltstyps <samp>beta</samp> erlaubt sein, weil das der Inhaltstyp des Elements <code>[b]</code> ist, innerhalb dessen sich das <code>[c]</code>-Element hier befindet. Allerdings muss das <code>[c]</code>-Element <em>nicht</em> innerhalb des Inhaltstyps <samp>alpha</samp> erlaubt sein, da nur die erste Ebene betrachtet wird.</p>
+<p>Wenn noch gar kein Element geöffnet ist, gilt der sogenannte Root-Inhaltstyp. Dieser ist per Standardeinstellung <code>block</code>, kann jedoch geändert werden. Siehe dazu das Kapitel <a href="...">Parserfunktionen</a>, in dem die Inhaltstypen eine weitere Rolle spielen.</p>
+<p>Man hat jedoch nicht nur eine Positivliste, sondern auch eine Negativliste. Ein Link innerhalb eines anderen Links wäre nicht sinnvoll. Allerdings könnte man ja auch ein Element dazwischenschalten und somit die Positivliste aushebeln. Beispiel:</p>
+<p class="bb"><code><span class="bben">[link]<span class="bben">[b]<span class="bben">[link]<span class="bbtn">Text</span>[/link]</span>[/b]</span>[/link]</span></code></p>
+<p>Es gäbe keinen Grund, <code>[b]</code> in <code>[link]</code> zu verbieten und auch keinen Grund <code>[link]</code> in <code>[b]</code> zu verbieten, allerdings gäbe es durchaus einen Grund, diese Konstruktion zu verbieten. Hier greift die Negativliste. Die Negativliste wird auf alle Ebenen angewandt, nicht bloß auf die nächsthöhere Ebene. Somit kann man obige Konstrukte ausschließen.</p>
+
+<h3 id="spezielle"><a name="spezielle">1.3 Spezielle Codes</a></h3>
+<p>Manchmal kann es sinnvoll sein, das Erkennen von Codes kurzzeitig zu deaktivieren. In vielen Foren wird der Code <code>[code]</code> angeboten, mit dem man Ausschnitte aus Quelltexten markieren kann und dafür sorgen kann, dass <code>[b]</code> und ähnliches innerhalb dieses Ausschnitts nicht ersetzt wird. Der Ausschnitt kann dann nur von <code>[/code]</code> beendet werden. Die Klasse bietet auch eine Möglichkeit, dieses Verhalten besonders einfach zu erzeugen. Beispiel:</p>
+<p class="bb"><code><span class="bben">[code]<br><span class="bbtn">// so wird der [b]-Code erzeugt:<br>// ...</span>[/code]</span></code></p>
+<p>In diesem Beispiel wäre es natürlich nicht gewollt, das <code>[b]</code> zu interpretieren, das gehört ja zum Code, den man anzeigen lassen will, dazu. Dazu gibt es eine sogenannte <a href="kapitel2.html#behandlungsarten">Behandlungsart</a> namens <code>usecontent</code>, die dazu führt, dass sobald ein Start-Tag gefunden wurde, nur noch nach dem dafür vorgesehenen End-Tag gesucht wird.</p>
+<hr>
+<ul>
+  <li>Weiter: <a href="kapitel2.html">2. Das Definieren von eigenem <abbr>BBCode</abbr></a></li>
+</ul>
+</div>
+<p id="footer">Dies ist die Dokumentation zur <code>StringParser_BBCode</code>-Klasse Version <em>0.3.3</em><br>Autor: Christian Seiler, <a href="mailto:webmaster@christian-seiler.de">webmaster@christian-seiler.de</a></p>
+</div>
+</body>
+</html>

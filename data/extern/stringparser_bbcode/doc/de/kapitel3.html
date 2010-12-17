@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Language" content="de">
+  <title>Dokumentation der StringParser_BBCode-Klasse</title>
+  <meta name="author" content="Christian Seiler">
+  <link rel="stylesheet" href="../css/print.css"  type="text/css" media="print">
+  <link rel="stylesheet" href="../css/screen.css" type="text/css" media="screen, projection">
+</head>
+<body id="doku">
+<div id="container">
+<h1>Dokumentation <span>der <code>StringParser_<abbr title="Bulletin Board Code">BBCode</abbr></code>-Klasse</span></h1>
+ <ul id="mainmenu">
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/index.html">Projektseite</a></li>
+  <li><a href="kapitel1.html">Dokumentation</a></li>
+  <li><a href="../phpdoc/index.html">PHPDOC-Dokumentation</a></li>
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/download.html">Download</a></li>
+  <li><a href="../en/chapter3.html">This page in english</a></li>
+ </ul>
+<ul id="menu">
+  <li><a href="kapitel1.html">1. Einführung</a>
+    <ul>
+      <li><a href="kapitel1.html#allgemeines">1.1 Allgemeines</a></li>
+      <li><a href="kapitel1.html#verschachtelung">1.2 Verschachtelung</a></li>
+      <li><a href="kapitel1.html#spezielle">1.3 Spezielle Codes</a></li>
+    </ul></li>
+  <li><a href="kapitel2.html">2. Das Definieren von eigenem <abbr>BBCode</abbr></a>
+    <ul>
+      <li><a href="kapitel2.html#einbinden">2.1 Einbinden der Klasse</a></li>
+      <li><a href="kapitel2.html#erster">2.2 Der erste Code</a></li>
+      <li><a href="kapitel2.html#behandlungsarten">2.3 Behandlungsarten</a></li>
+      <li><a href="kapitel2.html#parsen">2.4 Parsen von Text</a></li>
+    </ul></li>
+  <li><a href="kapitel3.html">3. Parserfunktionen</a>
+    <ul>
+      <li><a href="kapitel3.html#aufgabe">3.1 Aufgabe von Parserfunktionen</a></li>
+      <li><a href="kapitel3.html#inhaltstypen">3.2 Relevanz von Inhaltstypen</a></li>
+      <li><a href="kapitel3.html#registrieren">3.3 Registrieren von Parserfunktionen</a></li>
+    </ul></li>
+  <li><a href="kapitel4.html">4. Callback-Funktionen</a>
+    <ul>
+      <li><a href="kapitel4.html#behandlungsarten">4.1 Behandlungsarten, die Callback-Funktionen benötigen</a></li>
+      <li><a href="kapitel4.html#aufbau">4.2 Aufbau der Callback-Funktionen</a></li>
+      <li><a href="kapitel4.html#beispiel">4.3 Beispiel einer Callback-Funktion zum Ersetzen von Links</a></li>
+      <li><a href="kapitel4.html#revalidierung">4.4 Revalidierung beim Auftreten von schließenden Tags</a></li>
+    </ul></li>
+  <li><a href="kapitel5.html">5. Filter</a>
+    <ul>
+      <li><a href="kapitel5.html#arten">5.1 Filterarten</a></li>
+      <li><a href="kapitel5.html#definieren">5.2 Filter definieren</a></li>
+    </ul></li>
+  <li><a href="kapitel6.html">6. Flags zum Steuern des Verhaltens der Klasse</a>
+    <ul>
+      <li><a href="kapitel6.html#allgemeines">6.1 Allgemeines</a></li>
+      <li><a href="kapitel6.html#flags">6.2 Liste aller Flags</a></li>
+      <li><a href="kapitel6.html#globale">6.3 Globale flags</a></li>
+    </ul></li>
+  <li><a href="kapitel7.html">7. Maximales Auftreten von Elementen</a>
+    <ul>
+      <li><a href="kapitel7.html#gruppieren">7.1 Codes gruppieren</a></li>
+      <li><a href="kapitel7.html#festlegen">7.2 Limits festlegen</a></li>
+    </ul></li>
+  <li><a href="kapitel8.html">8. Absatzbehandlung</a>
+    <ul>
+      <li><a href="kapitel8.html#allgemeines">8.1 Allgemeines</a></li>
+      <li><a href="kapitel8.html#aktivieren">8.2 Absatzbehandlung aktivieren</a></li>
+      <li><a href="kapitel8.html#weitere">8.3 Weitere Möglichkeiten</a></li>
+    </ul></li>
+  <li><a href="kapitel9.html">9. Beispiele</a>
+    <ul>
+      <li><a href="kapitel9.html#beispiel">9.1 Einfaches Beispiel</a></li>
+<!--      <li><a href="kapitel9.html#kompliziert">9.1 Komplizierteres Beispiel</a></li> -->
+    </ul></li>
+  <li><a href="kapitel10.html">10. Sonstiges</a>
+    <ul>
+      <li><a href="kapitel10.html#faq">10.1 Häufig gestellte Fragen</a></li>
+      <li><a href="kapitel10.html#interna">10.2 Nützliche Interna</a></li>
+    </ul></li>
+</ul>
+<div id="content"><h2>3. Parserfunktionen</h2>
+<h3 id="aufgabe"><a name="aufgabe">3.1 Aufgabe von Parserfunktionen</a></h3>
+<p>BBCode wird verwendet, damit HTML nicht zugelassen werden muss. Wenn jetzt allerdings nur der BBCode ersetzt wird, wird der möglicherweise eingegebene HTML-Code direkt wieder ausgegeben. Beispiel: Es wäre sinnlos, bei einem Text von <code>[b]Hallo&lt;script type="text/javascript"&gt;/* tu was ganz böses mit javascript */&lt;/script&gt;[/b]</code> nur die BBCodes zu ersetzen und das <code>&lt;script&gt;</code>-Element dennoch direkt wieder auszugeben. Das <code>&lt;script&gt;</code>-Element sollte möglichst so maskiert werden, dass es keinen Schaden anrichten kann. Dies kann man mit der Funktion <code>htmlspecialchars</code> erreichen. Man könnte jetzt <code>htmlspecialchars</code> vor dem Parsen durch die Klasse auf den kompletten Inhalt anwenden. Dann würden allerdings Anführungszeichen auch durch <code>&amp;quot;</code> ersetzt werden und falls Anführungszeichen dann in Attributen (wie z.B. <code>[img alt="Alternativer Text"]</code>) verwendet würden, dann würde die Parserklasse das nicht mehr akzeptieren. Daher bietet die Klasse eine Möglichkeit, Funktionen nur für <em>relevante</em> Textteile aufzurufen. Funktionen, die der Klasse für diesen Zweck bekannt gemacht wurden, heißen <em>Parserfunktionen</em>.</p>
+<p>Der Einsatzgebiet von Parserfunktionen beschränkt sich nicht nur auf das Maskieren von HTML-Code, man kann auch andere Dinge erledigen, wie zum Beispiel das Ersetzen von Smilys.</p>
+<h3 id="inhaltstypen"><a name="inhaltstypen">3.2 Relevanz von Inhaltstypen</a></h3>
+<p>Die Klasse bietet nicht nur die Möglichkeit, für die Textteile, die kein BBCode sind, Funktionen auszuführen. Die Klasse kann auch, je nach unterschiedlichem Inhaltstypen, unterscheiden Paresrfunktionen aufrufen. Beim <em>registrieren</em> der Parserfunktionen gibt man auch gleich den Inhaltstyp an, für den die Parserfunktion gelten soll. Wenn man beispielsweise einen Code namens <code>[code]</code> definiert, der zur Darstellung von Quelltext verwendet werden soll, will man innerhalb des Blocks natürlich keine Smilys ersetzt haben, HTML-Code soll dagegen natürlich maskiert werden. Im Rest des Textes will man aber Smilys ersetzen.</p>
+<p>Die Inhaltstypen spielen auch für die korrekte Verschachtelung des BBCodes eine Rolle. Es wurde bereits erwähnt, dass der Standard-Inhaltstyp, falls noch kein BBCode geöffnet wurde, <code>block</code> ist. Diesen kann man auch ändern. Dazu gibt es die Methode</p>
+<p class="php"><code>void setRootContentType (string $content_type);</code></p>
+<p>Diese ruft man wie folgt auf:</p>
+<p class="php"><code>$bbcode->setRootContentType ('mein_eigener_typ');</code></p>
+<h3 id="registrieren"><a name="registrieren">3.3 Registrieren von Parserfunktionen</a></h3>
+<p>Parserfunktionen kann man der Klasse über die Methode</p>
+<p class="php"><code>void addParser (mixed $type, mixed $parser);</code></p>
+<p>bekannt machen. Der Parameter <code>$type</code> gibt dabei an, für welchen Inhaltstyp der Parser gelten soll, der Parameter <code>$parser</code> gibt an, welche Funktion aufgerufen werden soll. <code>$type</code> kann hierbei einfach eine Zeichenkette sein (ein einziger Typ), es kann aber auch ein Array sein (falls man für mehrere Typen auf einmal registrieren will). Folgendes Beispiel zeigt, wie man Parserfunktionen registrieren kann:</p>
+<p class="php"><code>$bbcode->addParser ('block', 'htmlspecialchars');</code></p>
+<p>Hier würde die Funktion <code>htmlspecialchars</code> immer dann aufgerufen werden, wenn ein Text ausgegeben werden soll, der sich in einem Element des Inhaltstyps <code>block</code> befindet.</p>
+<p class="php"><code>$bbcode->addParser (array ('block', 'inline'), 'htmlspecialchars');</code></p>
+<p>Dieser Aufruf wäre identisch mit den zwei aufeinderfolgenden Aufrufen:</p>
+<p class="php"><code>$bbcode->addParser ('block', 'htmlspecialchars');<br>$bbcode->addParser ('inline', 'htmlspecialchars');</code></p>
+<p>Man kann nicht nur globale Funktionen als Parserfunktionen registrieren, sondern auch Methoden von Objekten:</p>
+<p class="php"><code>$bbcode->addParser ('inhaltstyp', array (&$mein_objekt, 'tuwas'));</code></p>
+<p>Die Klasse würde in diesem Fall <code>$mein_objekt->tuwas ($text)</code> aufrufen. Es ist auch möglich, statische Methoden zu registrieren:</p>
+<p class="php"><code>$bbcode->addParser ('inhaltstyp', array ('MeineKlasse', 'tuwas'));</code></p>
+<p>Hier würde die Klasse <code>MeineKlasse::tuwas ($text)</code> aufrufen.</p>
+<p>Weiterhin ist es problemlos möglich, mehrere Parserfunktionen für einen Inhaltstyp zu registrieren. Diese werden dann in der Reihenfolge aufgerufen, in der sie registriert wurden:</p>
+<p class="php"><code>$bbcode->addParser ('block', 'htmlspecialchars');<br>$bbcode->addParser ('block', 'nl2br');</code></p>
+<p>Hier würden die Funktionen <code>htmlspecialchars</code> und <code>nl2br</code> für den Inhaltstyp <code>block</code> registriert werden. Wenn ein Text innerhalb eines Elements dieses Inhaltstyps ausgegeben werden soll, so wird er so verarbeitet: <code>$text = htmlspecialchars ($text); $text = nl2br ($text);</code></p>
+<hr>
+<ul>
+  <li>Weiter: <a href="kapitel4.html">4. Callback-Funktionen</a></li>
+  <li>Zurück: <a href="kapitel2.html">2. Definieren von eigenem BBCode</a></li>
+</ul>
+</div>
+<p id="footer">Dies ist die Dokumentation zur <code>StringParser_BBCode</code>-Klasse Version <em>0.3.3</em><br>Autor: Christian Seiler, <a href="mailto:webmaster@christian-seiler.de">webmaster@christian-seiler.de</a></p>
+</div>
+</body>
+</html>

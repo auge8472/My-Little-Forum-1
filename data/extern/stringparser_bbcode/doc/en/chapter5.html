@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Language" content="en">
+  <title>StringParser_BBCode class documentation</title>
+  <meta name="author" content="Christian Seiler">
+  <link rel="stylesheet" href="../css/print.css"  type="text/css" media="print">
+  <link rel="stylesheet" href="../css/screen.css" type="text/css" media="screen, projection">
+</head>
+<body id="doku">
+<div id="container">
+<h1><span><code>StringParser_<abbr title="Bulletin Board Code">BBCode</abbr></code> class</span> documentation</h1>
+ <ul id="mainmenu">
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/index_en.html">Project homepage</a></li>
+  <li><a href="chapter1.html">Documentation</a></li>
+  <li><a href="../phpdoc/index.html">PHPDOC Documentation</a></li>
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/download_en.html">Download</a></li>
+  <li><a href="../de/kapitel5.html">Diese Seite auf Deutsch</a></li>
+ </ul>
+<ul id="menu">
+  <li><a href="chapter1.html">1. Introduction</a>
+    <ul>
+      <li><a href="chapter1.html#general">1.1 General</a></li>
+      <li><a href="chapter1.html#nesting">1.2 Nesting</a></li>
+      <li><a href="chapter1.html#special">1.3 Special codes</a></li>
+    </ul></li>
+  <li><a href="chapter2.html">2. Defining own <abbr>BBCode</abbr></a>
+    <ul>
+      <li><a href="chapter2.html#including">2.1 Including the class</a></li>
+      <li><a href="chapter2.html#first">2.2 The first code</a></li>
+      <li><a href="chapter2.html#processing_types">2.3 Processing types</a></li>
+      <li><a href="chapter2.html#parsing">2.4 Parsing text</a></li>
+    </ul></li>
+  <li><a href="chapter3.html">3. Parser functions</a>
+    <ul>
+      <li><a href="chapter3.html#task">3.1 Task of parser functions</a></li>
+      <li><a href="chapter3.html#content_types">3.2 Relevance of content types</a></li>
+      <li><a href="chapter3.html#registration">3.3 Registration of parser functions</a></li>
+    </ul></li>
+  <li><a href="chapter4.html">4. Callback functions</a>
+    <ul>
+      <li><a href="chapter4.html#processing_types">4.1 Processing types that need callback functions</a></li>
+      <li><a href="chapter4.html#prototype">4.2 Prototype of a callback function</a></li>
+      <li><a href="chapter4.html#example">4.3 Example for a callback function that replaces links</a></li>
+      <li><a href="chapter4.html#revalidation">4.4 Revalidation on close tag occurrence</a></li>
+    </ul></li>
+  <li><a href="chapter5.html">5. Filters</a>
+    <ul>
+      <li><a href="chapter5.html#types">5.1 Filter types</a></li>
+      <li><a href="chapter5.html#defining">5.2 Defining filters</a></li>
+    </ul></li>
+  <li><a href="chapter6.html">6. Flags to control the behaviour of the class</a>
+    <ul>
+      <li><a href="chapter6.html#general">6.1 General</a></li>
+      <li><a href="chapter6.html#flags">6.2 List of all flags</a></li>
+      <li><a href="chapter6.html#global">6.2 Global flags</a></li>
+    </ul></li>
+  <li><a href="chapter7.html">7. Limiting the amount of occurrences</a>
+    <ul>
+      <li><a href="chapter7.html#grouping">7.1 Grouping codes</a></li>
+      <li><a href="chapter7.html#limits">7.2 Setting limits</a></li>
+    </ul></li>
+  <li><a href="chapter8.html">8. Paragraph handling</a>
+    <ul>
+      <li><a href="chapter8.html#general">8.1 General</a></li>
+      <li><a href="chapter8.html#activating">8.2 Activating paragraph handling</a></li>
+      <li><a href="chapter8.html#further">8.3 Further possibilities</a></li>
+    </ul></li>
+  <li><a href="chapter9.html">9. Examples</a>
+    <ul>
+      <li><a href="chapter9.html#example">9.1 Simple example</a></li>
+<!--      <li><a href="chapter9.html#complex">9.2 More complex example</a></li> -->
+    </ul></li>
+  <li><a href="chapter10.html">10. Miscellaneous</a>
+    <ul>
+      <li><a href="chapter10.html#faq">10.1 Frequently asked questions</a></li>
+      <li><a href="chapter10.html#internals">10.2 Useful internals</a></li>
+    </ul></li>
+</ul>
+<div id="content"><h2>5. Filters</h2>
+<h3 id="types"><a name="types">5.1 Filter types</a></h3>
+<p>In addition to the <a href="chapter3.html">parser functions</a> the class also provides so-called <em>filters</em>. Filters are functions that have to behave the same as parser functions. They have to accept a text as the only parameter and return a string. The class knows of two different filter types:</p>
+<dl>
+  <dt><em>Prefilters</em></dt>
+  <dd>These are filters that are called <strong>before the parsing process</strong>. The complete text that is to be parsed is passed through every filter and is processed not until then.</dd>
+  <dt><em>Postfilters</em></dt>
+  <dd>These are filters that are called after <strong>the tree has been converted to a string again</strong> and just before the <code>parse</code> method returns the text.</dd>
+</dl>
+<h3 id="defining"><a name="defining">5.2 Defining filters</a></h3>
+<p>Filters are defined similar to parser functions:</p>
+<p class="php"><code>$bbcode->addFilter (STRINGPARSER_FILTER_PRE, 'my_filter_function');<br>
+$bbcode->addFilter (STRINGPARSER_FILTER_POST, 'my_second_filter_function');</code></p>
+<p>The constants <code>STRINGPARSER_FILTER_PRE</code> and <code>STRINGPARSER_FILTER_POST</code> are important here. <code>STRINGPARSER_FILTER_PRE</code> indicates that the filter is a prefilter, <code>STRINGPARSER_FILTER_POST</code> that it is a postfilter.</p>
+<p>Exactly as with parser functions filters may also be class methods:</p>
+<p class="php"><code>$bbcode->addFilter (STRINGPARSER_FILTER_PRE, array (&my_object, 'my_method'));</code></p>
+<hr>
+<ul>
+  <li>Weiter: <a href="chapter6.html">6. Flags to control the behaviour of the class</a></li>
+  <li>Zurück: <a href="chapter4.html">4. Callback functions</a></li>
+</ul>
+</div>
+<p id="footer">This is the documentation for the <code>StringParser_BBCode</code> class version <em>0.3.3</em><br>
+Author: Christian Seiler, <a href="mailto:webmaster@christian-seiler.de">webmaster@christian-seiler.de</a></p>
+</div>
+</body>
+</html>

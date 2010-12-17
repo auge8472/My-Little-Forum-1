@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Language" content="de">
+  <title>Dokumentation der StringParser_BBCode-Klasse</title>
+  <meta name="author" content="Christian Seiler">
+  <link rel="stylesheet" href="../css/print.css"  type="text/css" media="print">
+  <link rel="stylesheet" href="../css/screen.css" type="text/css" media="screen, projection">
+</head>
+<body id="doku">
+<div id="container">
+<h1>Dokumentation <span>der <code>StringParser_<abbr title="Bulletin Board Code">BBCode</abbr></code>-Klasse</span></h1>
+ <ul id="mainmenu">
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/index.html">Projektseite</a></li>
+  <li><a href="kapitel1.html">Dokumentation</a></li>
+  <li><a href="../phpdoc/index.html">PHPDOC-Dokumentation</a></li>
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/download.html">Download</a></li>
+  <li><a href="../en/chapter8.html">This page in english</a></li>
+ </ul>
+<ul id="menu">
+  <li><a href="kapitel1.html">1. Einführung</a>
+    <ul>
+      <li><a href="kapitel1.html#allgemeines">1.1 Allgemeines</a></li>
+      <li><a href="kapitel1.html#verschachtelung">1.2 Verschachtelung</a></li>
+      <li><a href="kapitel1.html#spezielle">1.3 Spezielle Codes</a></li>
+    </ul></li>
+  <li><a href="kapitel2.html">2. Das Definieren von eigenem <abbr>BBCode</abbr></a>
+    <ul>
+      <li><a href="kapitel2.html#einbinden">2.1 Einbinden der Klasse</a></li>
+      <li><a href="kapitel2.html#erster">2.2 Der erste Code</a></li>
+      <li><a href="kapitel2.html#behandlungsarten">2.3 Behandlungsarten</a></li>
+      <li><a href="kapitel2.html#parsen">2.4 Parsen von Text</a></li>
+    </ul></li>
+  <li><a href="kapitel3.html">3. Parserfunktionen</a>
+    <ul>
+      <li><a href="kapitel3.html#aufgabe">3.1 Aufgabe von Parserfunktionen</a></li>
+      <li><a href="kapitel3.html#inhaltstypen">3.2 Relevanz von Inhaltstypen</a></li>
+      <li><a href="kapitel3.html#registrieren">3.3 Registrieren von Parserfunktionen</a></li>
+    </ul></li>
+  <li><a href="kapitel4.html">4. Callback-Funktionen</a>
+    <ul>
+      <li><a href="kapitel4.html#behandlungsarten">4.1 Behandlungsarten, die Callback-Funktionen benötigen</a></li>
+      <li><a href="kapitel4.html#aufbau">4.2 Aufbau der Callback-Funktionen</a></li>
+      <li><a href="kapitel4.html#beispiel">4.3 Beispiel einer Callback-Funktion zum Ersetzen von Links</a></li>
+      <li><a href="kapitel4.html#revalidierung">4.4 Revalidierung beim Auftreten von schließenden Tags</a></li>
+    </ul></li>
+  <li><a href="kapitel5.html">5. Filter</a>
+    <ul>
+      <li><a href="kapitel5.html#arten">5.1 Filterarten</a></li>
+      <li><a href="kapitel5.html#definieren">5.2 Filter definieren</a></li>
+    </ul></li>
+  <li><a href="kapitel6.html">6. Flags zum Steuern des Verhaltens der Klasse</a>
+    <ul>
+      <li><a href="kapitel6.html#allgemeines">6.1 Allgemeines</a></li>
+      <li><a href="kapitel6.html#flags">6.2 Liste aller Flags</a></li>
+      <li><a href="kapitel6.html#globale">6.3 Globale flags</a></li>
+    </ul></li>
+  <li><a href="kapitel7.html">7. Maximales Auftreten von Elementen</a>
+    <ul>
+      <li><a href="kapitel7.html#gruppieren">7.1 Codes gruppieren</a></li>
+      <li><a href="kapitel7.html#festlegen">7.2 Limits festlegen</a></li>
+    </ul></li>
+  <li><a href="kapitel8.html">8. Absatzbehandlung</a>
+    <ul>
+      <li><a href="kapitel8.html#allgemeines">8.1 Allgemeines</a></li>
+      <li><a href="kapitel8.html#aktivieren">8.2 Absatzbehandlung aktivieren</a></li>
+      <li><a href="kapitel8.html#weitere">8.3 Weitere Möglichkeiten</a></li>
+    </ul></li>
+  <li><a href="kapitel9.html">9. Beispiele</a>
+    <ul>
+      <li><a href="kapitel9.html#beispiel">9.1 Einfaches Beispiel</a></li>
+<!--      <li><a href="kapitel9.html#kompliziert">9.1 Komplizierteres Beispiel</a></li> -->
+    </ul></li>
+  <li><a href="kapitel10.html">10. Sonstiges</a>
+    <ul>
+      <li><a href="kapitel10.html#faq">10.1 Häufig gestellte Fragen</a></li>
+      <li><a href="kapitel10.html#interna">10.2 Nützliche Interna</a></li>
+    </ul></li>
+</ul>
+<div id="content"><h2>8. Absatzbehandlung</h2>
+<h3 id="allgemeines"><a name="allgemeines">8.1 Allgemeines</a></h3>
+<p>Es ist mit Hilfe dieser Klasse Möglich, dass Absätze automatisch erkannt werden und mit entsprechenden HTML-Tags umschlossen werden. Beispielsweise könnte folgender Text:</p>
+<p class="bb"><code><span class="bbtn">Dies ist der erste Absatz eines längeren Textes!
+
+Dies ist der zweite Absatz eines längeren Textes!</span></code></p>
+<p>Automatisch in folgendes HTML verwandelt werden:</p>
+<p class="html"><code>&lt;p&gt;Dies ist der erste Absatz eines längeren Textes!&lt;/p&gt;
+&lt;p&gt;Dies ist der zweite Absatz eines längeren Textes!&lt;/p&gt;</code></p>
+<p>Wenn im Text noch keine BBCodes vorkommen, ist dieses Unterfangen noch trivial und könnte mit einer einfachen Funktion realisiert werden. Schwierig wird es jedoch, wenn BBCodes in einem Absatz geöffnet und erst im nächsten geschlossen werden.</p>
+<p>Man kann die Art, wie die Klasse Absätze erkennt und ersetzt, beeinflussen. Es gibt dazu die Methode <code>setParagraphHandlingParameters</code>:</p>
+<p class="php"><code>void setParagraphHandlingParameters (string $detect_string, string $start_tag, string $end_tag);</code></p>
+<dl>
+  <dt><code>$detect_string</code></dt>
+  <dd>Die Zeichenkette, nach der gesucht werden soll.</dd>
+  <dt><code>$start_tag</code></dt>
+  <dd>Der Starttag, der bei der Ersetzung verwendet werden soll.</dd>
+  <dt><code>$end_tag</code></dt>
+  <dd>Der Endtag, der bei der Ersetzung verwendet werden soll.</dd>
+</dl>
+<p>Die Standardeinstellungen sind:</p>
+<p class="php"><code>$bbcode->setParagraphHandlingParameters ("\n\n", "&lt;p&gt;, "&lt;/p&gt;");</code></p>
+<p>Wenn man mit diesen Standardeinstellungen zufrieden ist, ist es nicht notwendig die Methode aufzurufen.</p>
+<h3 id="aktivieren"><a name="aktivieren">8.2 Absatzbehandlung aktivieren</a></h3>
+<p>Im Normalfall ist die Absatzbehandlung <strong>deaktiviert</strong>. Absätze können direkt im Text (innerhalb des sogenannten Root-Elements) und auch innerhalb von BBCodes ersetzt werden. Damit Absätze innerhalb des Root-Elements ersetzt werden, muss man folgende Methode aufrufen:</p>
+<p class="php"><code>$bbcode->setRootParagraphHandling (true);</code></p>
+<p>Damit werden Absätze direkt innerhalb des Elternelements gesucht und ersetzt. Um Absätze innerhalb eines BBCodes ersetzen zu lassen, muss man ein Flag für diesen Code setzen:</p>
+<p class="php"><code>$bbcode->setCodeFlag ('*', 'paragraphs', true);</code></p>
+<p>Damit würde für das <code>[*]</code>-Element die Absatzbehandlung aktiviert werden und innerhalb des <code>[*]</code>-Elements würden Absätze ersetzt werden.</p>
+<h3 id="weitere"><a name="weitere">8.3 Weitere Möglichkeiten</a></h3>
+<p>Im Normalfall wird, falls ein BBCode in einem Absatz geöffnet und in einem späteren Absatz geschlossen wird, der BBCode vor dem Ende des ersten Absatzes geschlossen und im nächsten Absatz sofort wieder geöffnet. Beispiel:</p>
+<p class="bb"><code><span class="bbtn">Dies ist der erste Absatz </span><span class="bben">[b]<span class="bbtn">eines längeren Textes!
+
+Dies ist der zweite Absatz</span>[/b]</span><span class="bbtn"> eines längeren Textes!</span></code></p>
+<p>Dies würde im Normalfall zu folgendem ersetzt werden:</p>
+<p class="html"><code>&lt;p&gt;Dies ist der erste Absatz &lt;b&gt;eines längeren Textes!<strong>&lt;/b&gt;</strong>&lt;/p&gt;
+&lt;p&gt;<strong>&lt;b&gt;</strong>Dies ist der zweite Absatz&lt;/b&gt; eines längeren Textes!&lt;/p&gt;</code></p>
+<p>Es besteht jedoch auch die Möglichkeit, dass ein bestimmter BBCode nicht durch einen Absatz unterbrochen werden sollte - bei Links kann dies ganz sinnvoll sein. In diesem Fall kann man das Code-Flag <code>'paragraph_type'</code> auf <code>BBCODE_PARAGRAPH_ALLOW_INSIDE</code> setzen, damit dies eben nicht passiert:</p>
+<p class="php"><code>$bbcode->setCodeFlag ('url', 'paragraph_type', BBCODE_PARAGRAPH_ALLOW_INSIDE);</code></p>
+<p>Folgender Text:</p>
+<p class="bb"><code><span class="bbtn">Dies ist der erste Absatz </span><span class="bben">[url=http://www.example.org/]<span class="bbtn">eines längeren Textes!
+
+Dies ist der zweite Absatz</span>[/url]</span><span class="bbtn"> eines längeren Textes!</span></code></p>
+<p>Würde dann so ersetzt werden:</p>
+<p class="html"><code>&lt;p&gt;Dies ist der erste Absatz &lt;a href=&quot;http://www.example.com/&quot;&gt;eines längeren Textes!&lt;br&gt;
+&lt;br&gt;
+Dies ist der zweite Absatz&lt;/a&gt; eines längeren Textes!&lt;/p&gt;</code></p>
+<p>Der BBCode wird also nicht durch einen Absatz unterbrochen und die zwei Leerzeilen zwischendrin werden normal durch Parserfunktionen ersetzt.</p>
+<p>Es gibt außerdem noch Codes, deren HTML-Ersetzung nicht innerhalb von einem HTML-Absatz auftauchen darf, da dies sonst kein gültiges HTML wäre. Beispiele dafür sind zum Beispiel listen. Damit die Absatzbehandlung diese Listen auch berücksichtigt, muss das Code-Flag <code>'paragraph_type'</code> auf <code>BBCODE_PARAGRAPH_BLOCK_ELEMENT</code> gesetzt werden (Hinweis: Das <code>BLOCK</code> hat außer von der Namensgebung her <em>nichts</em> mit dem <code>'block'</code>-Standard-Inhaltstyp gemein):</p>
+<p class="php"><code>$bbcode->setCodeFlag ('list', 'paragraph_type', BBCODE_PARAGRAPH_BLOCK_ELEMENT);</code></p>
+<p>Folgender Text:</p>
+<p class="bb"><code><span class="bbtn">Dies ist der erste Absatz </span><span class="bben">[list]<span class="bbtn">
+</span><span class="bben">[*]<span class="bbtn">Listenpunkt
+</span></span>[/list]</span></code></p>
+<p>Würde dann so ersetzt werden:</p>
+<p class="html"><code>&lt;p&gt;Dies ist der erste Absatz &lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;Listenpunkt
+&lt;/li&gt;&lt;/ul&gt;</code></p>
+<p>Oder, falls innerhalb von <code>[*]</code> selbst wieder Absatzbehandlung aktiviert wurde, so:</p>
+<p class="html"><code>&lt;p&gt;Dies ist der erste Absatz &lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Listenpunkt
+&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</code></p>
+<p><strong>Tipp:</strong> Setzen Sie die Code-Flags <code>'opentag.before.newline'</code> und <code>'closetag.after.newline'</code> eines <code>BBCODE_PARAGRAPH_BLOCK_ELEMENT</code>-BBCodes auf <code>BBCODE_NEWLINE_IGNORE</code> oder <code>BBCODE_NEWLINE_DROP</code>. So vermeiden Sie, dass leere Absätze der Form <code>&lt;p&gt;&lt;/p&gt;</code> entstehen.</p>
+<hr>
+<ul>
+  <li>Weiter: <a href="kapitel9.html">9. Vollständiges Beispiel</a></li>
+  <li>Zurück: <a href="kapitel7.html">7. Maximales Auftreten von Elementen</a></li>
+</ul>
+</div>
+<p id="footer">Dies ist die Dokumentation zur <code>StringParser_BBCode</code>-Klasse Version <em>0.3.3</em><br>Autor: Christian Seiler, <a href="mailto:webmaster@christian-seiler.de">webmaster@christian-seiler.de</a></p>
+</div>
+</body>
+</html>

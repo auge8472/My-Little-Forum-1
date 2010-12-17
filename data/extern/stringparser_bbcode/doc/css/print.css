@@ -1,0 +1,80 @@
+body {
+ font-family: georgia, "Times New Roman" serif;
+}
+
+h1 {
+ text-align: left;
+ font-family: impact, verdana, sans-serif;
+ font-size: 190%;
+ font-weight: normal;
+}
+h1 span {
+ font-size: 60%;
+ font-family: tahoma, verdana, arial, sans-serif;
+}
+h1 span code {
+ font-weight: bold;
+}
+h1 span code abbr {
+ border: none;
+}
+#mainmenu {
+ display: none;
+}
+#menu {
+ display: none;
+}
+#footer {
+ padding-top: 4em;
+ font-weight: bold;
+}
+
+/* Formatierungen für Beispiele usw. von Christian Seiler */
+.bb, .html, .demo, .php {
+  padding: 4px;
+  border: 1px solid #000;
+  margin-left: 12px;
+}
+.bb, .html {
+  font-family: "courier new", monospace;
+  font-size: 12px;
+  font-weight: normal;
+  white-space: pre;
+}
+.bbtn {
+  font-family: "courier new", monospace;
+  font-size: 12px;
+  font-weight: normal;
+  color: #000;
+}
+.bben {
+  font-family: "courier new", monospace;
+  font-size: 12px;
+  font-weight: normal;
+  color: #f00;
+}
+.bben .bbtn {
+  color: #060;
+}
+.bben .bben {
+  color: #00f;
+}
+.bben .bben .bbtn {
+  color: #0a0;
+}
+.b {
+  font-weight: bold;
+}
+.i {
+  font-style: italic;
+}
+.comment {
+  color: #444;
+}
+.funcn {
+  color: #090;
+}
+td, th {
+  vertical-align: top;
+  text-align: left;
+}

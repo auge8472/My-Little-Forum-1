@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Language" content="de">
+  <title>Dokumentation der StringParser_BBCode-Klasse</title>
+  <meta name="author" content="Christian Seiler">
+  <link rel="stylesheet" href="../css/print.css"  type="text/css" media="print">
+  <link rel="stylesheet" href="../css/screen.css" type="text/css" media="screen, projection">
+</head>
+<body id="doku">
+<div id="container">
+<h1>Dokumentation <span>der <code>StringParser_<abbr title="Bulletin Board Code">BBCode</abbr></code>-Klasse</span></h1>
+ <ul id="mainmenu">
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/index.html">Projektseite</a></li>
+  <li><a href="kapitel1.html">Dokumentation</a></li>
+  <li><a href="../phpdoc/index.html">PHPDOC-Dokumentation</a></li>
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/download.html">Download</a></li>
+  <li><a href="../en/chapter9.html">This page in english</a></li>
+ </ul>
+<ul id="menu">
+  <li><a href="kapitel1.html">1. Einführung</a>
+    <ul>
+      <li><a href="kapitel1.html#allgemeines">1.1 Allgemeines</a></li>
+      <li><a href="kapitel1.html#verschachtelung">1.2 Verschachtelung</a></li>
+      <li><a href="kapitel1.html#spezielle">1.3 Spezielle Codes</a></li>
+    </ul></li>
+  <li><a href="kapitel2.html">2. Das Definieren von eigenem <abbr>BBCode</abbr></a>
+    <ul>
+      <li><a href="kapitel2.html#einbinden">2.1 Einbinden der Klasse</a></li>
+      <li><a href="kapitel2.html#erster">2.2 Der erste Code</a></li>
+      <li><a href="kapitel2.html#behandlungsarten">2.3 Behandlungsarten</a></li>
+      <li><a href="kapitel2.html#parsen">2.4 Parsen von Text</a></li>
+    </ul></li>
+  <li><a href="kapitel3.html">3. Parserfunktionen</a>
+    <ul>
+      <li><a href="kapitel3.html#aufgabe">3.1 Aufgabe von Parserfunktionen</a></li>
+      <li><a href="kapitel3.html#inhaltstypen">3.2 Relevanz von Inhaltstypen</a></li>
+      <li><a href="kapitel3.html#registrieren">3.3 Registrieren von Parserfunktionen</a></li>
+    </ul></li>
+  <li><a href="kapitel4.html">4. Callback-Funktionen</a>
+    <ul>
+      <li><a href="kapitel4.html#behandlungsarten">4.1 Behandlungsarten, die Callback-Funktionen benötigen</a></li>
+      <li><a href="kapitel4.html#aufbau">4.2 Aufbau der Callback-Funktionen</a></li>
+      <li><a href="kapitel4.html#beispiel">4.3 Beispiel einer Callback-Funktion zum Ersetzen von Links</a></li>
+      <li><a href="kapitel4.html#revalidierung">4.4 Revalidierung beim Auftreten von schließenden Tags</a></li>
+    </ul></li>
+  <li><a href="kapitel5.html">5. Filter</a>
+    <ul>
+      <li><a href="kapitel5.html#arten">5.1 Filterarten</a></li>
+      <li><a href="kapitel5.html#definieren">5.2 Filter definieren</a></li>
+    </ul></li>
+  <li><a href="kapitel6.html">6. Flags zum Steuern des Verhaltens der Klasse</a>
+    <ul>
+      <li><a href="kapitel6.html#allgemeines">6.1 Allgemeines</a></li>
+      <li><a href="kapitel6.html#flags">6.2 Liste aller Flags</a></li>
+      <li><a href="kapitel6.html#globale">6.3 Globale flags</a></li>
+    </ul></li>
+  <li><a href="kapitel7.html">7. Maximales Auftreten von Elementen</a>
+    <ul>
+      <li><a href="kapitel7.html#gruppieren">7.1 Codes gruppieren</a></li>
+      <li><a href="kapitel7.html#festlegen">7.2 Limits festlegen</a></li>
+    </ul></li>
+  <li><a href="kapitel8.html">8. Absatzbehandlung</a>
+    <ul>
+      <li><a href="kapitel8.html#allgemeines">8.1 Allgemeines</a></li>
+      <li><a href="kapitel8.html#aktivieren">8.2 Absatzbehandlung aktivieren</a></li>
+      <li><a href="kapitel8.html#weitere">8.3 Weitere Möglichkeiten</a></li>
+    </ul></li>
+  <li><a href="kapitel9.html">9. Beispiele</a>
+    <ul>
+      <li><a href="kapitel9.html#beispiel">9.1 Einfaches Beispiel</a></li>
+<!--      <li><a href="kapitel9.html#kompliziert">9.1 Komplizierteres Beispiel</a></li> -->
+    </ul></li>
+  <li><a href="kapitel10.html">10. Sonstiges</a>
+    <ul>
+      <li><a href="kapitel10.html#faq">10.1 Häufig gestellte Fragen</a></li>
+      <li><a href="kapitel10.html#interna">10.2 Nützliche Interna</a></li>
+    </ul></li>
+</ul>
+<div id="content"><h2>9. Beispiele</h2>
+<h3 id="beispiel"><a name="beispiel">9.1 Beispiel</a></h3>
+<p class="php"><code>// Zeilenumbrüche verschiedener Betriebsysteme vereinheitlichen<br>
+function convertlinebreaks ($text) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return preg_replace ("/\015\012|\015|\012/", "\n", $text);<br>
+}<br>
+<br>
+// Alles bis auf Neuezeile-Zeichen entfernen<br>
+function bbcode_stripcontents ($text) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return preg_replace ("/[^\n]/", '', $text);<br>
+}<br>
+<br>
+function do_bbcode_url ($action, $attributes, $content, $params, $node_object) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (!isset ($attributes['default'])) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$url = $content;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$text = htmlspecialchars ($content);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;} else {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$url = $attributes['default'];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$text = $content;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if ($action == 'validate') {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (substr ($url, 0, 5) == 'data:' || substr ($url, 0, 5) == 'file:'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| substr ($url, 0, 11) == 'javascript:' || substr ($url, 0, 4) == 'jar:') {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return false;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return true;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return '&lt;a href="'.htmlspecialchars ($url).'"&gt;'.$text.'&lt;/a&gt;';<br>
+}<br>
+<br>
+// Funktion zum Einbinden von Bildern<br>
+function do_bbcode_img ($action, $attributes, $content, $params, $node_object) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if ($action == 'validate') {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (substr ($content, 0, 5) == 'data:' || substr ($content, 0, 5) == 'file:'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|| substr ($content, 0, 11) == 'javascript:' || substr ($content, 0, 4) == 'jar:') {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return false;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return true;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return '&lt;img src="'.htmlspecialchars($content).'" alt=""&gt;';<br>
+}<br>
+<br>
+$bbcode = new StringParser_BBCode ();<br>
+$bbcode->addFilter (STRINGPARSER_FILTER_PRE, 'convertlinebreaks');<br>
+<br>
+$bbcode->addParser (array ('block', 'inline', 'link', 'listitem'), 'htmlspecialchars');<br>
+$bbcode->addParser (array ('block', 'inline', 'link', 'listitem'), 'nl2br');<br>
+$bbcode->addParser ('list', 'bbcode_stripcontents');<br>
+<br>
+$bbcode->addCode ('b', 'simple_replace', null, array ('start_tag' => '&lt;b&gt;', 'end_tag' => '&lt;/b&gt;'),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'inline', array ('listitem', 'block', 'inline', 'link'), array ());<br>
+$bbcode->addCode ('i', 'simple_replace', null, array ('start_tag' => '&lt;i&gt;', 'end_tag' => '&lt;/i&gt;'),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'inline', array ('listitem', 'block', 'inline', 'link'), array ());<br>
+$bbcode->addCode ('url', 'usecontent?', 'do_bbcode_url', array ('usecontent_param' => 'default'),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'link', array ('listitem', 'block', 'inline'), array ('link'));<br>
+$bbcode->addCode ('link', 'callback_replace_single', 'do_bbcode_url', array (),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'link', array ('listitem', 'block', 'inline'), array ('link'));<br>
+$bbcode->addCode ('img', 'usecontent', 'do_bbcode_img', array (),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'image', array ('listitem', 'block', 'inline', 'link'), array ());<br>
+$bbcode->addCode ('bild', 'usecontent', 'do_bbcode_img', array (),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'image', array ('listitem', 'block', 'inline', 'link'), array ());<br>
+$bbcode->setOccurrenceType ('img', 'image');<br>
+$bbcode->setOccurrenceType ('bild', 'image');<br>
+$bbcode->setMaxOccurrences ('image', 2);<br>
+$bbcode->addCode ('list', 'simple_replace', null, array ('start_tag' => '&lt;ul&gt;', 'end_tag' => '&lt;/ul&gt;'),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'list', array ('block', 'listitem'), array ());<br>
+$bbcode->addCode ('*', 'simple_replace', null, array ('start_tag' => '&lt;li&gt;', 'end_tag' => '&lt;/li&gt;'),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'listitem', array ('list'), array ());<br>
+$bbcode->setCodeFlag ('*', 'closetag', BBCODE_CLOSETAG_OPTIONAL);<br>
+$bbcode->setCodeFlag ('*', 'paragraphs', true);<br>
+$bbcode->setCodeFlag ('list', 'paragraph_type', BBCODE_PARAGRAPH_BLOCK_ELEMENT);<br>
+$bbcode->setCodeFlag ('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);<br>
+$bbcode->setCodeFlag ('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);<br>
+$bbcode->setRootParagraphHandling (true);<br>
+<br>
+$text = '[b]Dies ist ein Test![/b]';<br>
+echo $bbcode->parse ($text);</code></p>
+<hr>
+<ul>
+  <li>Weiter: <a href="kapitel10.html">10. Sonstiges</a></li>
+  <li>Zurück: <a href="kapitel8.html">8. Absatzbehandlung</a></li>
+</ul>
+</div>
+<p id="footer">Dies ist die Dokumentation zur <code>StringParser_BBCode</code>-Klasse Version <em>0.3.3</em><br>Autor: Christian Seiler, <a href="mailto:webmaster@christian-seiler.de">webmaster@christian-seiler.de</a></p>
+</div>
+</body>
+</html>

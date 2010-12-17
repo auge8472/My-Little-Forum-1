@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Language" content="de">
+  <title>Dokumentation der StringParser_BBCode-Klasse</title>
+  <meta name="author" content="Christian Seiler">
+  <link rel="stylesheet" href="../css/print.css"  type="text/css" media="print">
+  <link rel="stylesheet" href="../css/screen.css" type="text/css" media="screen, projection">
+</head>
+<body id="doku">
+<div id="container">
+<h1>Dokumentation <span>der <code>StringParser_<abbr title="Bulletin Board Code">BBCode</abbr></code>-Klasse</span></h1>
+ <ul id="mainmenu">
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/index.html">Projektseite</a></li>
+  <li><a href="kapitel1.html">Dokumentation</a></li>
+  <li><a href="../phpdoc/index.html">PHPDOC-Dokumentation</a></li>
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/download.html">Download</a></li>
+  <li><a href="../en/chapter6.html">This page in english</a></li>
+ </ul>
+<ul id="menu">
+  <li><a href="kapitel1.html">1. Einführung</a>
+    <ul>
+      <li><a href="kapitel1.html#allgemeines">1.1 Allgemeines</a></li>
+      <li><a href="kapitel1.html#verschachtelung">1.2 Verschachtelung</a></li>
+      <li><a href="kapitel1.html#spezielle">1.3 Spezielle Codes</a></li>
+    </ul></li>
+  <li><a href="kapitel2.html">2. Das Definieren von eigenem <abbr>BBCode</abbr></a>
+    <ul>
+      <li><a href="kapitel2.html#einbinden">2.1 Einbinden der Klasse</a></li>
+      <li><a href="kapitel2.html#erster">2.2 Der erste Code</a></li>
+      <li><a href="kapitel2.html#behandlungsarten">2.3 Behandlungsarten</a></li>
+      <li><a href="kapitel2.html#parsen">2.4 Parsen von Text</a></li>
+    </ul></li>
+  <li><a href="kapitel3.html">3. Parserfunktionen</a>
+    <ul>
+      <li><a href="kapitel3.html#aufgabe">3.1 Aufgabe von Parserfunktionen</a></li>
+      <li><a href="kapitel3.html#inhaltstypen">3.2 Relevanz von Inhaltstypen</a></li>
+      <li><a href="kapitel3.html#registrieren">3.3 Registrieren von Parserfunktionen</a></li>
+    </ul></li>
+  <li><a href="kapitel4.html">4. Callback-Funktionen</a>
+    <ul>
+      <li><a href="kapitel4.html#behandlungsarten">4.1 Behandlungsarten, die Callback-Funktionen benötigen</a></li>
+      <li><a href="kapitel4.html#aufbau">4.2 Aufbau der Callback-Funktionen</a></li>
+      <li><a href="kapitel4.html#beispiel">4.3 Beispiel einer Callback-Funktion zum Ersetzen von Links</a></li>
+      <li><a href="kapitel4.html#revalidierung">4.4 Revalidierung beim Auftreten von schließenden Tags</a></li>
+    </ul></li>
+  <li><a href="kapitel5.html">5. Filter</a>
+    <ul>
+      <li><a href="kapitel5.html#arten">5.1 Filterarten</a></li>
+      <li><a href="kapitel5.html#definieren">5.2 Filter definieren</a></li>
+    </ul></li>
+  <li><a href="kapitel6.html">6. Flags zum Steuern des Verhaltens der Klasse</a>
+    <ul>
+      <li><a href="kapitel6.html#allgemeines">6.1 Allgemeines</a></li>
+      <li><a href="kapitel6.html#flags">6.2 Liste aller Flags</a></li>
+      <li><a href="kapitel6.html#globale">6.3 Globale flags</a></li>
+    </ul></li>
+  <li><a href="kapitel7.html">7. Maximales Auftreten von Elementen</a>
+    <ul>
+      <li><a href="kapitel7.html#gruppieren">7.1 Codes gruppieren</a></li>
+      <li><a href="kapitel7.html#festlegen">7.2 Limits festlegen</a></li>
+    </ul></li>
+  <li><a href="kapitel8.html">8. Absatzbehandlung</a>
+    <ul>
+      <li><a href="kapitel8.html#allgemeines">8.1 Allgemeines</a></li>
+      <li><a href="kapitel8.html#aktivieren">8.2 Absatzbehandlung aktivieren</a></li>
+      <li><a href="kapitel8.html#weitere">8.3 Weitere Möglichkeiten</a></li>
+    </ul></li>
+  <li><a href="kapitel9.html">9. Beispiele</a>
+    <ul>
+      <li><a href="kapitel9.html#beispiel">9.1 Einfaches Beispiel</a></li>
+<!--      <li><a href="kapitel9.html#kompliziert">9.1 Komplizierteres Beispiel</a></li> -->
+    </ul></li>
+  <li><a href="kapitel10.html">10. Sonstiges</a>
+    <ul>
+      <li><a href="kapitel10.html#faq">10.1 Häufig gestellte Fragen</a></li>
+      <li><a href="kapitel10.html#interna">10.2 Nützliche Interna</a></li>
+    </ul></li>
+</ul>
+<div id="content"><h2>6. Flags zum Steuern des Verhaltens der Klasse</h2>
+<h3 id="allgemeines"><a name="allgemeines">6.1 Allgemeines</a></h3>
+<p>Man kann bei jedem definierten Code auch Flags setzen. Ein Flag sagt der Klasse, dass bei diesem Code bestimmte Besonderheiten auftreten, die zu Berücksichtigen sind. Um für einen Code ein Flag zu setzen, muss die Methode <code>setCodeFlag</code> aufgerufen werden:</p>
+<p class="php"><code>$bbcode->setCodeFlag ('b', 'mein_flag', 'mein_wert');</code></p>
+<p>Die Methode hat folgenden Prototyp:</p>
+<p class="php"><code>void setCodeFlag (string $code, string $name, mixed $value);</code></p>
+<dl>
+  <dt><code>$code</code></dt>
+  <dd>Gibt den Namen des Codes an, für den das Flag gesetzt werden soll.</dd>
+  <dt><code>$name</code></dt>
+  <dd>Gibt den Namen des Flags an, das gesetzt werden soll. <strong>Hinweis:</strong> Falls ein Flag schon gesetzt wurde, wird der Wert beim zweiten Aufruf überschrieben. Es wird desweiteren nicht geprüft, ob das Flag überhaupt gültig ist, sie können folglich <em>beliebige</em> Flags setzen, allerdings haben nur bestimmte, <a href="#flags">weiter unten aufgezählte Flags</a> eine besondere Bedeutung für die Klasse - alle anderen werden ignoriert.</dd>
+  <dt><code>$value</code></dt>
+  <dd>Der Wert des Flags, das zu setzen ist.</dd>
+</dl>
+<h3 id="flags"><a name="flags">6.2 Liste aller Flags</a></h3>
+<p>Es folgt nun eine Liste aller Flags, die von der Klasse interpretiert werden. <strong>Hinweis:</strong> Die meisten Werte für die Flags sind Konstanten. Daher sind diese <strong>nicht</strong> in Anführungszeichen zu setzen. Falls dies doch notwendig sein sollte, wird dies explizit durch Anführungszeichen gekennzeichnet!</p>
+<table width="100%">
+  <colgroup>
+    <col width="1*">
+    <col width="1*">
+    <col width="4*">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Name des Flags</th>
+      <th>Wert</th>
+      <th>Bedeutung</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th><code>'case_sensitive'</code></th>
+      <td><code>true</code> / <code>false</code></td>
+      <td>Gibt an, ob Klein- und Gro&szlig;schreibung bei diesem Code beachtet werden sollen. Standard ist <code>true</code>, d.h. es wird zwischen Klein- und Gro&szlig;schreibung unterschieden (bspw. w&auml;re <code>[b]</code> nicht gleich <code>[B]</code>). Bitte sehen Sie sich auch den globalen Flag <code>caseSensitive</code> an.</td>
+    </tr>
+    <tr>
+      <th rowspan="6"><code>'closetag'</code></th>
+      <td colspan="2">Gibt an, wie der Endtag zu behandeln ist. Dieses Flag und dessen Verhalten ist alles andere, als trivial, deswegen empfielt es sich, einfach einmal mit den Flags zu spielen, um die Effekte genau beobachten zu können.</td>
+    </tr>
+    <tr>
+      <td><code>BBCODE_CLOSETAG_FORBIDDEN</code></td>
+      <td>Der Endtag darf nicht vorkommen. Falls er doch vorkommt, wird das Vorkommen als normaler Text angefügt und das Element an dieser Stelle nicht geschlossen. Ansonsten verhält sich diese Option wie <code>BBCODE_CLOSETAG_OPTIONAL</code>.</td>
+    </tr>
+    <tr>
+      <td><code>BBCODE_CLOSETAG_OPTIONAL</code></td>
+      <td>Der Endtag ist optional. Wenn er vorkommt, schließt er ganz normal das Element. Wenn ein Elternelement geschlossen wird, wird dieses Element auch geschlossen. Wenn ein neuer Starttag des gleichen Codes auftritt, wird der Code vorher ebenfalls geschlossen. Dies ist beispielsweise bei Listen nützlich, die zum Beispiel so aussehen können:<br><code>[list]<br>[*] Punkt<br>[*] Punkt<br>[/list]</code><br>Hier soll der erste Listenpunkt geschlossen werden, sobald der zweite Listenpunkt geöffnet wird. Außerdem soll der zweite Listenpunkt geschlossen werden, sobald die Liste geschlossen wird. Das erreicht man, indem man dem Flag <code>'closetag'</code> des <code>[*]</code>-Codes diesen Wert (<code>BBCODE_CLOSETAG_OPTIONAL</code>) oder auch <code>BBCODE_CLOSETAG_FORBIDDEN</code> zuweist.</td>
+    </tr>
+    <tr>
+      <td><code>BBCODE_CLOSETAG_IMPLICIT</code><br>(Standardeinstellung)</td>
+      <td>Der Endtag ist nur dann optional, wenn das Elternelement geschlossen wird. Beispiel:<br><code>[b]dies ist[i]ein text[/b]</code><br>Wenn nun der <code>[i]</code>-Code das Flag <code>'closetag'</code> mit diesem Wert besitzt, dann wird es mit dem Auftreten von <code>[/b]</code> gleich mit geschlossen. Weiteres Beispiel:<br><code>[list]<br>[*] [b]Punkt<br>[*] Punkt<br>[/list]</code><br>Hier würde das <code>[b]</code>-Element beim Eintreten des zweiten <code>[*]</code> <em>ebenso geschlossen</em>, weil das <em>Elternelement</em> geschlossen wird.</td>
+    </tr>
+    <tr>
+      <td><code>BBCODE_CLOSETAG_IMPLICIT_ON_CLOSE_ONLY</code></td>
+      <td>Dies verhält sich wie <code>BBCODE_CLOSETAG_IMPLICIT</code>, nur, dass im Fall<br><code>[list]<br>[*] [b]Punkt<br>[*] Punkt<br>[/list]</code><br>das <code>[b]</code>-Element <em>nicht</em> geschlossen wird, da das Elternelement nur geschlossen würde, weil ein neues Element des gleichen Typs geöffnet würde. Dadurch, dass <code>[b]</code> nicht geschlossen wird, wird konsequenterweise auch das erste <code>[*]</code>-Element nicht geschlossen und somit das zweite <code>[*]</code>-Element nicht geöffnet, da es innerhalb von <code>[b]</code> nicht erlaubt ist.</td>
+    </tr>
+    <tr>
+      <td><code>BBCODE_CLOSETAG_MUSTEXIST</code></td>
+      <td>Der Endtag muss existieren. Falls er nicht existieren sollte, wird der Starttag als Text angehängt und nach dem Starttag weitergemacht. Ein derartiges Element kann auch nicht vom Elternelement geschlossen werden.</td>
+    </tr>
+    <tr>
+      <th rowspan="1"><code>'opentag.before.newline'</code></th>
+      <td colspan="2">Gibt an, wie ein möglicherweise existierendes Neue-Zeile-Zeichen (<code>\n</code>) <em>vor</em> dem Starttag behandelt werden soll. Zu den möglichen Werten weiter unten.</td>
+    </tr>
+    <tr>
+      <th rowspan="1"><code>'opentag.after.newline'</code></th>
+      <td colspan="2">Gibt an, wie ein möglicherweise existierendes Neue-Zeile-Zeichen (<code>\n</code>) <em>nach</em> dem Starttag behandelt werden soll. Zu den möglichen Werten weiter unten.</td>
+    </tr>
+    <tr>
+      <th rowspan="1"><code>'closetag.before.newline'</code></th>
+      <td colspan="2">Gibt an, wie ein möglicherweise existierendes Neue-Zeile-Zeichen (<code>\n</code>) <em>vor</em> dem Endtag behandelt werden soll. Zu den möglichen Werten weiter unten.</td>
+    </tr>
+    <tr>
+      <th rowspan="1"><code>'closetag.after.newline'</code></th>
+      <td colspan="2">Gibt an, wie ein möglicherweise existierendes Neue-Zeile-Zeichen (<code>\n</code>) <em>nach</em> dem Endtag behandelt werden soll. Zu den möglichen Werten weiter unten.</td>
+    </tr>
+    <tr>
+      <th rowspan="3">Mögliche Werte zu den vier obigen Flags</th>
+      <td><code>BBCODE_NEWLINE_PARSE</code><br>(Standardeinstellung)</td>
+      <td>Das Neue-Zeile-Zeichen wird ganz normal wie jedes andere Zeichen auch mit Hilfe der Parserfunktionen verarbeitet.</td>
+    </tr>
+    <tr>
+      <td><code>BBCODE_NEWLINE_IGNORE</code></td>
+      <td>Das Neue-Zeile-Zeichen wird nicht von den Parserfunktionen verarbeitet, jedoch an die Ausgabe angehängt.</td>
+    </tr>
+    <tr>
+      <td><code>BBCODE_NEWLINE_DROP</code></td>
+      <td>Das Neue-Zeile-Zeichen wird entfernt.</td>
+    </tr>
+    <tr>
+      <th rowspan="1"><code>'paragraph_type'</code></th>
+      <td colspan="2" rowspan="2">Flags, die bei der Absatzbehandlung notwendig ist. Dazu mehr im Kapitel <a href="kapitel8.html">Absatzbehandlung</a>.</td>
+    </tr>
+    <tr>
+      <th rowspan="1"><code>'paragraphs'</code></th>
+    </tr>
+    <tr>
+      <th rowspan="1"><code>'occurrence_type'</code></th>
+      <td colspan="2">Ein internes Flag, das von der Methode <code>setOccurrenceType</code> gesetzt wird. Es sollte nie notwendig sein, es manuell zu setzen oder auszuwerten. Mehr zu <code>setOccurrenceType</code> im Kapitel <a href="kapitel7.html">Maximales Auftreten von Elementen</a>.</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="globale"><a name="globale">6.3 Globale Flags</a></h3>
+<p>Es gibt auch einige globale Flags. Dies sind Flags, die nicht nur f&uuml;r einen einzelnen Code gelten, sondern f&uuml;r die gesamte Klasse.</p>
+<dl>
+  <dt><code>caseSensitive</code></dt>
+  <dd>
+    <p>Dieser Flag steuert, ob die gesamte Klasse zwischen Gro&szlig;- und Kleinschreibung unterscheidet. Der Wert des Flags kann mit der Methode <code>setGlobalCaseSensitive</code> ge&auml;ndert werden. Der aktuelle Wert kann mittels <code>globalCaseSensitive</code> abgefragt werden. Bei <code>true</code> (Standardeinstellung) unterscheidet die Klasse bei allen Codes zwischen Gro&szlig;- und Kleinschreibung - <strong>au&szlig;er</strong> bei denen, die das <code>'case_sensitive'</code>-Flag auf <code>false</code> gesetzt haben. Bei <code>false</code> unterscheidet die Klasse <strong>nie</strong> zwischen Gro&szlig;- und Kleinschreibung - unabh&auml;ngig davon, welchen Wert das <code>'case_sensitive'</code>-Attribut des Codes hat. Beispiel:<p>
+    <p><code>$bbcode->setGlobalCaseSensitive (false);</code></p>
+  </dd>
+  <dt><code>mixedAttributeTypes</code></dt>
+  <dd>
+    <p>Wenn das Flag aktiviert ist,  wird <code>[code=foo attr=bar]</code> so verarbeitet, dass zwei Attribute erkannt werden (<code>default</code> = <code>'foo'</code>, <code>attr</code> = <code>'bar'</code>), wenn das Flag deaktiviert ist, wird nur ein Attribut erkannt (<code>default</code> = <code>foo attr=bar</code>). Standardmäßig ist das Flag deaktiviert. Der aktuelle Wert kann mittels <code>mixedAttributeTypes</code> abgefragt werden. Beispiel:<p>
+    <p><code>$bbcode->setMixedAttributeTypes (true);</code></p>
+  </dd>
+</dl>
+<hr>
+<ul>
+  <li>Weiter: <a href="kapitel7.html">7. Maximales Auftreten von Elementen</a></li>
+  <li>Zurück: <a href="kapitel5.html">5. Filter</a></li>
+</ul>
+</div>
+<p id="footer">Dies ist die Dokumentation zur <code>StringParser_BBCode</code>-Klasse Version <em>0.3.3</em><br>Autor: Christian Seiler, <a href="mailto:webmaster@christian-seiler.de">webmaster@christian-seiler.de</a></p>
+</div>
+</body>
+</html>

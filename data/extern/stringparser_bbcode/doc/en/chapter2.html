@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Language" content="en">
+  <title>StringParser_BBCode class documentation</title>
+  <meta name="author" content="Christian Seiler">
+  <link rel="stylesheet" href="../css/print.css"  type="text/css" media="print">
+  <link rel="stylesheet" href="../css/screen.css" type="text/css" media="screen, projection">
+</head>
+<body id="doku">
+<div id="container">
+<h1><span><code>StringParser_<abbr title="Bulletin Board Code">BBCode</abbr></code> class</span> documentation</h1>
+ <ul id="mainmenu">
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/index_en.html">Project homepage</a></li>
+  <li><a href="chapter1.html">Documentation</a></li>
+  <li><a href="../phpdoc/index.html">PHPDOC Documentation</a></li>
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/download_en.html">Download</a></li>
+  <li><a href="../de/kapitel2.html">Diese Seite auf Deutsch</a></li>
+ </ul>
+<ul id="menu">
+  <li><a href="chapter1.html">1. Introduction</a>
+    <ul>
+      <li><a href="chapter1.html#general">1.1 General</a></li>
+      <li><a href="chapter1.html#nesting">1.2 Nesting</a></li>
+      <li><a href="chapter1.html#special">1.3 Special codes</a></li>
+    </ul></li>
+  <li><a href="chapter2.html">2. Defining own <abbr>BBCode</abbr></a>
+    <ul>
+      <li><a href="chapter2.html#including">2.1 Including the class</a></li>
+      <li><a href="chapter2.html#first">2.2 The first code</a></li>
+      <li><a href="chapter2.html#processing_types">2.3 Processing types</a></li>
+      <li><a href="chapter2.html#parsing">2.4 Parsing text</a></li>
+    </ul></li>
+  <li><a href="chapter3.html">3. Parser functions</a>
+    <ul>
+      <li><a href="chapter3.html#task">3.1 Task of parser functions</a></li>
+      <li><a href="chapter3.html#content_types">3.2 Relevance of content types</a></li>
+      <li><a href="chapter3.html#registration">3.3 Registration of parser functions</a></li>
+    </ul></li>
+  <li><a href="chapter4.html">4. Callback functions</a>
+    <ul>
+      <li><a href="chapter4.html#processing_types">4.1 Processing types that need callback functions</a></li>
+      <li><a href="chapter4.html#prototype">4.2 Prototype of a callback function</a></li>
+      <li><a href="chapter4.html#example">4.3 Example for a callback function that replaces links</a></li>
+      <li><a href="chapter4.html#revalidation">4.4 Revalidation on close tag occurrence</a></li>
+    </ul></li>
+  <li><a href="chapter5.html">5. Filters</a>
+    <ul>
+      <li><a href="chapter5.html#types">5.1 Filter types</a></li>
+      <li><a href="chapter5.html#defining">5.2 Defining filters</a></li>
+    </ul></li>
+  <li><a href="chapter6.html">6. Flags to control the behaviour of the class</a>
+    <ul>
+      <li><a href="chapter6.html#general">6.1 General</a></li>
+      <li><a href="chapter6.html#flags">6.2 List of all flags</a></li>
+      <li><a href="chapter6.html#global">6.2 Global flags</a></li>
+    </ul></li>
+  <li><a href="chapter7.html">7. Limiting the amount of occurrences</a>
+    <ul>
+      <li><a href="chapter7.html#grouping">7.1 Grouping codes</a></li>
+      <li><a href="chapter7.html#limits">7.2 Setting limits</a></li>
+    </ul></li>
+  <li><a href="chapter8.html">8. Paragraph handling</a>
+    <ul>
+      <li><a href="chapter8.html#general">8.1 General</a></li>
+      <li><a href="chapter8.html#activating">8.2 Activating paragraph handling</a></li>
+      <li><a href="chapter8.html#further">8.3 Further possibilities</a></li>
+    </ul></li>
+  <li><a href="chapter9.html">9. Examples</a>
+    <ul>
+      <li><a href="chapter9.html#example">9.1 Simple example</a></li>
+<!--      <li><a href="chapter9.html#complex">9.2 More complex example</a></li> -->
+    </ul></li>
+  <li><a href="chapter10.html">10. Miscellaneous</a>
+    <ul>
+      <li><a href="chapter10.html#faq">10.1 Frequently asked questions</a></li>
+      <li><a href="chapter10.html#internals">10.2 Useful internals</a></li>
+    </ul></li>
+</ul>
+<div id="content"><h2>2. Defining own <abbr>BBCode</abbr></h2>
+<h3 id="including"><a name="including">2.1 Including the class</a></h3>
+<p>To be able to use the class the two files <var>stringparser.class.php</var> and <var>stringparser_bbcode.class.php</var> have to be copied into a common directory. Now the file <var>stringparser_bbcode.class.php</var> has to be embedded into the own PHP file:</p>
+<p class="php"><code>&lt;?php<br>
+<strong>require_once 'path/to/stringparser_bbcode.class.php';</strong><br>
+// further PHP code<br>
+?&gt;</code></p>
+<p>To use the class you must create an object of it:</p>
+<p class="php"><code>&lt;?php<br>
+require_once 'path/to/stringparser_bbcode.class.php';<br>
+<br>
+<strong>$bbcode = new StringParser_BBCode ();</strong><br>
+// further PHP code<br>
+?&gt;</code></p>
+<p>Now the class is included into the PHP script and ready for use.</p>
+<h3 id="first"><a name="first">2.2 The first code</a></h3>
+<p>To define a <abbr>BBCode</abbr> you must call the <code>addCode</code> method of the class. In the following example a code with these characteristics is to be defined:</p>
+<ul>
+  <li>The code should be <code>[b]</code>.</li>
+  <li>The code should be replaced with <code>&lt;b&gt;</code> and <code>&lt;/b&gt;</code>.</li>
+  <li>The code should be allowed inside block and inline elements.</li>
+  <li>The code itself should be an inine element.</li>
+</ul>
+<p>To acchieve this the following code is necessary:</p>
+<p class="php"><code>&lt;?php<br>
+require 'path/to/stringparser_bbcode.class.php';<br>
+<br>
+$bbcode = new StringParser_BBCode ();<br>
+<br>
+<strong>$bbcode->addCode ('b', 'simple_replace', null, array ('start_tag' => '&lt;b&gt;', 'end_tag' => '&lt;/b&gt;'),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'inline', array ('block', 'inline'), array ());</strong><br>
+<br>
+// further PHP code<br>
+?&gt;</code></p>
+<p>The method addCode is defined as follows:</p>
+<p class="php"><code>void addCode (string $code, string $type, string $callback, string $params, string $content_type,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array $allowed_in, array $not_allowed_in);</code></p>
+<p>The following list explains the parameters of the <code>addCode</code> method:</p>
+<dl>
+  <dt><code>$code</code> (in the example <code>'b'</code>)</dt>
+  <dd>This is the name of the code. This means, it is going to looked for <code>[b]</code> in this example. If you changed this parameter to <code>'chatchme'</code> the class would look for <code>[chatchme]</code>.</dd>
+  <dt><code>$type</code> (in the example <code>'simple_replace'</code>)</dt>
+  <dd>This is the manner how the code should be processed. <code>'simple_replace'</code> has the consequence that the start tag (here: <code>[b]</code>) and the end tag (here: <code>[/b]</code>) are always to be replaced through the same strings. Beneath you will find more information on processing types.</dd>
+  <dt><code>$callback</code> (in the example <code>null</code>)</dt>
+  <dd>Here you can put a function that is to be called during the replacement process. Because the processing type <code>'simple_replace'</code> requires no function it is possible to simply supply <code>null</code> for this parameter - <em>in this case</em> it will simple not be considered.</dd>
+  <dt><code>$params</code> (in the example <code>array ('start_tag' => '&lt;b&gt;', 'end_tag' => '&lt;/b&gt;')</code>)</dt>
+  <dd>This parameter normally accepts values that are to be passed to the replacement function when it is called. Because for this processing type there is no need for a function, this parameter specifies the replacement strings instead.</dd>
+  <dt><code>$content_type</code> (in the example <code>'inline'</code>)</dt>
+  <dd>This is the <a href="chapter1.html#nexting">content type</a> of this code.</dd>
+  <dt><code>$allowed_in</code> (in the example <code>array ('block', 'inline')</code>)</dt>
+  <dd>This parameter is the list of content types inside which the code is allowed. If the code is found directly inside another content type it is ignored.</dd>
+  <dt><code>$not_allowed_in</code> (in the example <code>array ()</code>)</dt>
+  <dd>This parameter is the list of content types inside which the code is forbidden. If the code inside one of these content types, it is ignored. All parents of the code are taken into account.</dd>
+</dl>
+<h3 id="processing_types"><a name="processing_types">2.3 Processing types</a></h3>
+<p>The class makes it possible to react differently to codes. For this purpose, there are several <em>processing types</em>.</p>
+<dl>
+  <dt><code>'simple_replace'</code></dt>
+  <dd>With this processing type start and end tags will simply be replaced through strings. <code>[b]</code> can be replaced with <code>&lt;b&gt;</code> and <code>[/b]</code> with <code>&lt;/b&gt;</code> for example. With this processing type it is not possible to use attributes. The strings that define the replacements musst stand in <code>$params['start_tag']</code> and <code>$params['end_tag']</code>. Have a look at the example above.</dd>
+  <dt><code>'simple_replace_single'</code></dt>
+  <dd>This is identical to <code>'simple_replace'</code> except for the fact that there is only one tag and the element ends directly after it and contains no content. For this reason, it is necessary to set only <code>$params['start_tag']</code>.</dd>
+  <dt><code>'callback_replace'</code></dt>
+  <dd>With this processing type a function is called that has to return the text that is to be used as a replacement. This is explained in the chapter <a href="chapter4.html">callback functions</a>.</dd>
+  <dt><code>'callback_replace_single'</code></dt>
+  <dd>Like <code>'callback_replace'</code> but as in <code>'simple_replace_single'</code> there is only one tag.</dd>
+  <dt><code>'usecontent'</code></dt>
+  <dd>This processing type is just like <code>'callback_replace'</code> with the difference that inside the element it will not be looked for further BB-Codes. Have a look at the section <a href="chapter1.html#special">special codes</a>.</dd>
+  <dt><code>'usecontent?'</code></dt>
+  <dd><p>This processing type can either behave like <code>'usecontent'</code> or like <code>'callback_replace'</code>. First of all, there is a check if a certain attribute is set. If this is the case, the processing type behaves like <code>'callback_replace'</code>. In the other case the processing type behaves like <code>'usecontent'</code>. The name of the attribute that is to be looked for has to be specified in <code>$params['usecontent_param']</code>. An example for the use of this processing type is the often used BB-Code <code>[url]</code>: This code can be used in two different manners: <code>[url]http://www.example.com/[/url]</code> und <code>[url=http://www.example.com/]title of the link, also containing [b]bold[/b] text[/url]</code>. In the first case <code>'usecontent'</code> would be the processing type of choice because the link destination is specified between start and end tag of this element and it would be nonsense to replace further BB-Codes inside <code>http://www.example.org/</code>. On the other hand <code>'callback_replace'</code> would be the processing type of choice in the second example because the link destination is specified as an attribute and the link text itself may still contain further <bbr>BBCodes</abbr>.</p>
+  <p>Notice: Further, it is possible to supply several parameters for <code>usecontent_param</code>: just hand over an array instead of a string. Example: <code>$bbcode->addCode (..., array('usecontent_param' => array ('parameter1', 'parameter2')), ...);</code>.</p></dd></dd>
+  <dt><code>'callback_replace?'</code>
+  <dd>This processing type is the opposite of <code>'usecontent?'</code>: if an attribute specified with <code>usecontent_param</code> exists the code will be treated as if it were <code>'usecontent'</code>, else as if it were <code>'callback_replace'</code>.</dd>
+</dl>
+<h3 id="parsing"><a name="parsing">2.4 Parsing text</a></h3>
+<p>To convert a text one must call the <code>parse</code> method of the class:</p>
+<p class="php"><code>// code to include the class, calls to addCode, etc..<br>
+<br>
+<strong>$new_text = $bbcode->parse ($old_text);</strong></code></p>
+<p>The contents of <code>$old_text</code> is processed here and the result of it is stored in <code>$new_text</code>. The method <code>parse</code> may be called as many times as wanted inside your code <em>but it will always instantly return <code>false</code> if it is called during another parsing process</em>.</p>
+<hr>
+<ul>
+  <li>Next: <a href="chapter3.html">3. Parser functions</a></li>
+  <li>Previous: <a href="chapter1.html">1. Introduction</a></li>
+</ul>
+</div>
+<p id="footer">This is the documentation for the <code>StringParser_BBCode</code> class version <em>0.3.3</em><br>
+Author: Christian Seiler, <a href="mailto:webmaster@christian-seiler.de">webmaster@christian-seiler.de</a></p>
+</div>
+</body>
+</html>

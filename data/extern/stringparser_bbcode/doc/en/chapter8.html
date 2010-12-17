@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Language" content="en">
+  <title>StringParser_BBCode class documentation</title>
+  <meta name="author" content="Christian Seiler">
+  <link rel="stylesheet" href="../css/print.css"  type="text/css" media="print">
+  <link rel="stylesheet" href="../css/screen.css" type="text/css" media="screen, projection">
+</head>
+<body id="doku">
+<div id="container">
+<h1><span><code>StringParser_<abbr title="Bulletin Board Code">BBCode</abbr></code> class</span> documentation</h1>
+ <ul id="mainmenu">
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/index_en.html">Project homepage</a></li>
+  <li><a href="chapter1.html">Documentation</a></li>
+  <li><a href="../phpdoc/index.html">PHPDOC Documentation</a></li>
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/download_en.html">Download</a></li>
+  <li><a href="../de/kapitel8.html">Diese Seite auf Deutsch</a></li>
+ </ul>
+<ul id="menu">
+  <li><a href="chapter1.html">1. Introduction</a>
+    <ul>
+      <li><a href="chapter1.html#general">1.1 General</a></li>
+      <li><a href="chapter1.html#nesting">1.2 Nesting</a></li>
+      <li><a href="chapter1.html#special">1.3 Special codes</a></li>
+    </ul></li>
+  <li><a href="chapter2.html">2. Defining own <abbr>BBCode</abbr></a>
+    <ul>
+      <li><a href="chapter2.html#including">2.1 Including the class</a></li>
+      <li><a href="chapter2.html#first">2.2 The first code</a></li>
+      <li><a href="chapter2.html#processing_types">2.3 Processing types</a></li>
+      <li><a href="chapter2.html#parsing">2.4 Parsing text</a></li>
+    </ul></li>
+  <li><a href="chapter3.html">3. Parser functions</a>
+    <ul>
+      <li><a href="chapter3.html#task">3.1 Task of parser functions</a></li>
+      <li><a href="chapter3.html#content_types">3.2 Relevance of content types</a></li>
+      <li><a href="chapter3.html#registration">3.3 Registration of parser functions</a></li>
+    </ul></li>
+  <li><a href="chapter4.html">4. Callback functions</a>
+    <ul>
+      <li><a href="chapter4.html#processing_types">4.1 Processing types that need callback functions</a></li>
+      <li><a href="chapter4.html#prototype">4.2 Prototype of a callback function</a></li>
+      <li><a href="chapter4.html#example">4.3 Example for a callback function that replaces links</a></li>
+      <li><a href="chapter4.html#revalidation">4.4 Revalidation on close tag occurrence</a></li>
+    </ul></li>
+  <li><a href="chapter5.html">5. Filters</a>
+    <ul>
+      <li><a href="chapter5.html#types">5.1 Filter types</a></li>
+      <li><a href="chapter5.html#defining">5.2 Defining filters</a></li>
+    </ul></li>
+  <li><a href="chapter6.html">6. Flags to control the behaviour of the class</a>
+    <ul>
+      <li><a href="chapter6.html#general">6.1 General</a></li>
+      <li><a href="chapter6.html#flags">6.2 List of all flags</a></li>
+      <li><a href="chapter6.html#global">6.2 Global flags</a></li>
+    </ul></li>
+  <li><a href="chapter7.html">7. Limiting the amount of occurrences</a>
+    <ul>
+      <li><a href="chapter7.html#grouping">7.1 Grouping codes</a></li>
+      <li><a href="chapter7.html#limits">7.2 Setting limits</a></li>
+    </ul></li>
+  <li><a href="chapter8.html">8. Paragraph handling</a>
+    <ul>
+      <li><a href="chapter8.html#general">8.1 General</a></li>
+      <li><a href="chapter8.html#activating">8.2 Activating paragraph handling</a></li>
+      <li><a href="chapter8.html#further">8.3 Further possibilities</a></li>
+    </ul></li>
+  <li><a href="chapter9.html">9. Examples</a>
+    <ul>
+      <li><a href="chapter9.html#example">9.1 Simple example</a></li>
+<!--      <li><a href="chapter9.html#complex">9.2 More complex example</a></li> -->
+    </ul></li>
+  <li><a href="chapter10.html">10. Miscellaneous</a>
+    <ul>
+      <li><a href="chapter10.html#faq">10.1 Frequently asked questions</a></li>
+      <li><a href="chapter10.html#internals">10.2 Useful internals</a></li>
+    </ul></li>
+</ul>
+<div id="content"><h2>8. Paragraph handling</h2>
+<h3 id="general"><a name="general">8.1 General</a></h3>
+<p>With the help of this class there is the possibility to automatically detect paragraphs and enclose them with the corresponding HTML tags. For example could the following text:</p>
+<p class="bb"><code><span class="bbtn">This is the first paragraph of a long text!
+
+This is the second paragraph of a long text!</span></code></p>
+<p>automatically be converted to the following HTML code:</p>
+<p class="html"><code>&lt;p&gt;This is the first paragraph of a long text!&lt;/p&gt;
+&lt;p&gt;This is the second paragraph of a long text!&lt;/p&gt;</code></p>
+<p>If no BBCodes are presend in the text this undertaking is trivial and could be implemented with a simple function. It becomes difficult if BBCodes are opened inside of a paragraph and closed in the next.</p>
+<p>It is possible to influence the class how it detects paragraphs and outputs them. For this there is the method <code>setParagraphHandlingParameters</code>:</p>
+<p class="php"><code>void setParagraphHandlingParameters (string $detect_string, string $start_tag, string $end_tag);</code></p>
+<dl>
+  <dt><code>$detect_string</code></dt>
+  <dd>The string that is to be searched for.</dd>
+  <dt><code>$start_tag</code></dt>
+  <dd>The start tag that is to be used when the output is done.</dd>
+  <dt><code>$end_tag</code></dt>
+  <dd>The end tag that is to be used when the output is done.</dd>
+</dl>
+<p>The standard settings are:</p>
+<p class="php"><code>$bbcode->setParagraphHandlingParameters ("\n\n", "&lt;p&gt;, "&lt;/p&gt;");</code></p>
+<p>If one is content with these standard settings it is not necessary to call this method.</p>
+<h3 id="activating"><a name="activating">8.2 Activating paragraph handling</a></h3>
+<p>Paragraph handling is <strong>disabled</strong> by default. Paragraphs that are written directly in the text (inside the so-called root element) and paragraphs that occur inside BBCodes may be replaced. To active paragraph handling for paragraphs that occur inside the root element it is necessary to call the method <code>setRootParagraphHandling</code>:</p>
+<p class="php"><code>$bbcode->setRootParagraphHandling (true);</code></p>
+<p>To replace paragraphs inside a BBCode it is necessary to set a flag for this code:</p>
+<p class="php"><code>$bbcode->setCodeFlag ('*', 'paragraphs', true);</code></p>
+<p>Here the paragraph handling would be activated inside the <code>[*]</code> element.</p>
+<h3 id="further"><a name="further">8.3 Further possibilities</a></h3>
+<p>Normally, if a BBCode start tag occurs inside a paragraph and the end tag in a next paragraph, the BBCode will be closed just before the end of the first paragrah and reopened in the next paragraph. Example:</p>
+<p class="bb"><code><span class="bbtn">This is the first paragraph </span><span class="bben">[b]<span class="bbtn">of a long text!
+
+This is the second paragraph</span>[/b]</span><span class="bbtn"> of a long text!</span></code></p>
+<p>This would normally be replaced with:</p>
+<p class="html"><code>&lt;p&gt;This is the first paragraph &lt;b&gt;of a long text!<strong>&lt;/b&gt;</strong>&lt;/p&gt;
+&lt;p&gt;<strong>&lt;b&gt;</strong>This is the second paragraph&lt;/b&gt; of a long text!&lt;/p&gt;</code></p>
+<p>There is also the possibility to prohibit the interruption of a BBCode by paragraph handling. In the case of hyperlinks this can be quite useful. In this case one must set the <code>'paragraph_type'</code> code flag to <code>BBCODE_PARAGRAPH_ALLOW_INSIDE</code>:</p>
+<p class="php"><code>$bbcode->setCodeFlag ('url', 'paragraph_type', BBCODE_PARAGRAPH_ALLOW_INSIDE);</code></p>
+<p>The following text:</p>
+<p class="bb"><code><span class="bbtn">This is the first paragraph </span><span class="bben">[url=http://www.example.org/]<span class="bbtn">of a long text!
+
+This is the second paragraph</span>[/url]</span><span class="bbtn"> of a long text!</span></code></p>
+<p>would be replaced with:</p>
+<p class="html"><code>&lt;p&gt;This is the first paragraph &lt;a href=&quot;http://www.example.com/&quot;&gt;of a long text!&lt;br&gt;
+&lt;br&gt;
+This is the second paragraph&lt;/a&gt; of a long text!&lt;/p&gt;</code></p>
+<p>As one can see the element is not interrupted by paragraph handling and the two newline characters are simply replaced by the parser functions.</p>
+<p>There are also codes where the HTML replacement may not occur inside a HTML paragraph because this would be invalid HTML. An example would be lists. To account for lists one must set the <code>'paragraph_type'</code> code flag to <code>BBCODE_PARAGRAPH_BLOCK_ELEMENT</code> (Notice: The <code>BLOCK</code> has <em>nothing</em> in common with the <code>'block'</code> standard content type except for the name):</p>
+<p class="php"><code>$bbcode->setCodeFlag ('list', 'paragraph_type', BBCODE_PARAGRAPH_BLOCK_ELEMENT);</code></p>
+<p>The following text:</p>
+<p class="bb"><code><span class="bbtn">This is the first paragraph </span><span class="bben">[list]<span class="bbtn">
+</span><span class="bben">[*]<span class="bbtn">List item
+</span></span>[/list]</span></code></p>
+<p>Would be replaced with this:</p>
+<p class="html"><code>&lt;p&gt;This is the first paragraph &lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;List item
+&lt;/li&gt;&lt;/ul&gt;</code></p>
+<p>Or, if inside of <code>[*]</code> paragraph handling has also been activated, with this:</p>
+<p class="html"><code>&lt;p&gt;This is the first paragraph &lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;List item
+&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;</code></p>
+<p><strong>Hint:</strong> Set the flag <code>'opentag.before.newline'</code> and <code>'closetag.after.newline'</code> of a code which has <code>BBCODE_PARAGRAPH_BLOCK_ELEMENT</code> set to <code>BBCODE_NEWLINE_IGNORE</code> or <code>BBCODE_NEWLINE_DROP</code>. Else empty paragraphs like <code>&lt;p&gt;&lt;/p&gt;</code> are created.</p>
+<hr>
+<ul>
+  <li>Next: <a href="chapter9.html">9. Complete example</a></li>
+  <li>Previous: <a href="chapter7.html">7. Limiting the amount of occurrences</a></li>
+</ul>
+</div>
+<p id="footer">This is the documentation for the <code>StringParser_BBCode</code> class version <em>0.3.3</em><br>
+Author: Christian Seiler, <a href="mailto:webmaster@christian-seiler.de">webmaster@christian-seiler.de</a></p>
+</div>
+</body>
+</html>

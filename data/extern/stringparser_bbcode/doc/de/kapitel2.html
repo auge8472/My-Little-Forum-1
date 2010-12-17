@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="de">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Language" content="de">
+  <title>Dokumentation der StringParser_BBCode-Klasse</title>
+  <meta name="author" content="Christian Seiler">
+  <link rel="stylesheet" href="../css/print.css"  type="text/css" media="print">
+  <link rel="stylesheet" href="../css/screen.css" type="text/css" media="screen, projection">
+</head>
+<body id="doku">
+<div id="container">
+<h1>Dokumentation <span>der <code>StringParser_<abbr title="Bulletin Board Code">BBCode</abbr></code>-Klasse</span></h1>
+ <ul id="mainmenu">
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/index.html">Projektseite</a></li>
+  <li><a href="kapitel1.html">Dokumentation</a></li>
+  <li><a href="../phpdoc/index.html">PHPDOC-Dokumentation</a></li>
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/download.html">Download</a></li>
+  <li><a href="../en/chapter2.html">This page in english</a></li>
+ </ul>
+<ul id="menu">
+  <li><a href="kapitel1.html">1. Einführung</a>
+    <ul>
+      <li><a href="kapitel1.html#allgemeines">1.1 Allgemeines</a></li>
+      <li><a href="kapitel1.html#verschachtelung">1.2 Verschachtelung</a></li>
+      <li><a href="kapitel1.html#spezielle">1.3 Spezielle Codes</a></li>
+    </ul></li>
+  <li><a href="kapitel2.html">2. Das Definieren von eigenem <abbr>BBCode</abbr></a>
+    <ul>
+      <li><a href="kapitel2.html#einbinden">2.1 Einbinden der Klasse</a></li>
+      <li><a href="kapitel2.html#erster">2.2 Der erste Code</a></li>
+      <li><a href="kapitel2.html#behandlungsarten">2.3 Behandlungsarten</a></li>
+      <li><a href="kapitel2.html#parsen">2.4 Parsen von Text</a></li>
+    </ul></li>
+  <li><a href="kapitel3.html">3. Parserfunktionen</a>
+    <ul>
+      <li><a href="kapitel3.html#aufgabe">3.1 Aufgabe von Parserfunktionen</a></li>
+      <li><a href="kapitel3.html#inhaltstypen">3.2 Relevanz von Inhaltstypen</a></li>
+      <li><a href="kapitel3.html#registrieren">3.3 Registrieren von Parserfunktionen</a></li>
+    </ul></li>
+  <li><a href="kapitel4.html">4. Callback-Funktionen</a>
+    <ul>
+      <li><a href="kapitel4.html#behandlungsarten">4.1 Behandlungsarten, die Callback-Funktionen benötigen</a></li>
+      <li><a href="kapitel4.html#aufbau">4.2 Aufbau der Callback-Funktionen</a></li>
+      <li><a href="kapitel4.html#beispiel">4.3 Beispiel einer Callback-Funktion zum Ersetzen von Links</a></li>
+      <li><a href="kapitel4.html#revalidierung">4.4 Revalidierung beim Auftreten von schließenden Tags</a></li>
+    </ul></li>
+  <li><a href="kapitel5.html">5. Filter</a>
+    <ul>
+      <li><a href="kapitel5.html#arten">5.1 Filterarten</a></li>
+      <li><a href="kapitel5.html#definieren">5.2 Filter definieren</a></li>
+    </ul></li>
+  <li><a href="kapitel6.html">6. Flags zum Steuern des Verhaltens der Klasse</a>
+    <ul>
+      <li><a href="kapitel6.html#allgemeines">6.1 Allgemeines</a></li>
+      <li><a href="kapitel6.html#flags">6.2 Liste aller Flags</a></li>
+      <li><a href="kapitel6.html#globale">6.3 Globale flags</a></li>
+    </ul></li>
+  <li><a href="kapitel7.html">7. Maximales Auftreten von Elementen</a>
+    <ul>
+      <li><a href="kapitel7.html#gruppieren">7.1 Codes gruppieren</a></li>
+      <li><a href="kapitel7.html#festlegen">7.2 Limits festlegen</a></li>
+    </ul></li>
+  <li><a href="kapitel8.html">8. Absatzbehandlung</a>
+    <ul>
+      <li><a href="kapitel8.html#allgemeines">8.1 Allgemeines</a></li>
+      <li><a href="kapitel8.html#aktivieren">8.2 Absatzbehandlung aktivieren</a></li>
+      <li><a href="kapitel8.html#weitere">8.3 Weitere Möglichkeiten</a></li>
+    </ul></li>
+  <li><a href="kapitel9.html">9. Beispiele</a>
+    <ul>
+      <li><a href="kapitel9.html#beispiel">9.1 Einfaches Beispiel</a></li>
+<!--      <li><a href="kapitel9.html#kompliziert">9.1 Komplizierteres Beispiel</a></li> -->
+    </ul></li>
+  <li><a href="kapitel10.html">10. Sonstiges</a>
+    <ul>
+      <li><a href="kapitel10.html#faq">10.1 Häufig gestellte Fragen</a></li>
+      <li><a href="kapitel10.html#interna">10.2 Nützliche Interna</a></li>
+    </ul></li>
+</ul>
+<div id="content"><h2>2. Definieren von eigenem <abbr>BBCode</abbr></h2>
+<h3 id="einbinden"><a name="einbinden">2.1 Einbinden der Klasse</a></h3>
+<p>Um die Klasse verwenden zu können, müssen zuerst die beiden Dateien <var>stringparser.class.php</var> und <var>stringparser_bbcode.class.php</var> in ein gemeinsames Verzeichnis kopiert werden. Die Datei <var>stringparser_bbcode.class.php</var> muss nun im eigenen PHP-Script eingebunden werden:</p>
+<p class="php"><code>&lt;?php<br>
+<strong>require_once 'pfad/zu/stringparser_bbcode.class.php';</strong><br>
+// weiterer PHP-Code<br>
+?&gt;</code></p>
+<p>Nun steht die Klasse zur Verfügung. Um sie nutzen zu können, muss ein Objekt der Klasse erzeugt werden. Dies geschieht so:</p>
+<p class="php"><code>&lt;?php<br>
+require_once 'pfad/zu/stringparser_bbcode.class.php';<br>
+<br>
+<strong>$bbcode = new StringParser_BBCode ();</strong><br>
+// weiterer PHP-Code<br>
+?&gt;</code></p>
+<p>Somit ist die Klasse in das PHP-Script eingebunden und einsatzbereit.</p>
+<h3 id="erster"><a name="erster">2.2 Der erste Code</a></h3>
+<p>Um mit der Klasse einen Code zu definieren, verwendet man die Methode <code>addCode</code>. Nun soll folgender Code definiert werden:</p>
+<ul>
+  <li>Der Code soll <code>[b]</code> sein.</li>
+  <li>Der Code soll durch <code>&lt;b&gt;</code> und <code>&lt;/b&gt;</code> ersetzt werden.</li>
+  <li>Der Code soll innerhalb von Block- und Inline-Elementen vorkommen dürfen.</li>
+  <li>Der Code soll selbst ein Inline-Element sein.</li>
+</ul>
+<p>Dazu muss folgender Aufruf verwendet werden:</p>
+<p class="php"><code>&lt;?php<br>
+require_once 'pfad/zu/stringparser_bbcode.class.php';<br>
+<br>
+$bbcode = new StringParser_BBCode ();<br>
+<br>
+<strong>$bbcode->addCode ('b', 'simple_replace', null, array ('start_tag' => '&lt;b&gt;', 'end_tag' => '&lt;/b&gt;'),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'inline', array ('block', 'inline'), array ());</strong><br>
+<br>
+// weiterer PHP-Code<br>
+?&gt;</code></p>
+<p>Die Methode addCode ist wie folgt definiert:</p>
+<p class="php"><code>void addCode (string $code, string $type, string $callback, string $params, string $content_type,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array $allowed_in, array $not_allowed_in);</code></p>
+<p>Hier sind alle Parameter des <code>addCode</code>-Aufrufs noch einmal zusammen mit einer Erklärung aufgeführt:</p>
+<dl>
+  <dt><code>$code</code> (im Beispiel <code>'b'</code>)</dt>
+  <dd>Das ist der Name des Codes. Damit soll ausgedrückt werden, dass nach <code>[b]</code> gesucht werden soll. Falls dieser Parameter <code>'fangmich'</code> wäre, würde nach <code>[fangmich]</code> gesucht werden.</dd>
+  <dt><code>$type</code> (im Beispiel <code>'simple_replace'</code>)</dt>
+  <dd>Das ist die Art, wie der Code behandelt werden soll. <code>'simple_replace'</code> bedeutet, dass der Starttag (also <code>[b]</code>) und der Endtag (also <code>[/b]</code>) einfach durch feste Zeichenketten ersetzt werden sollen. Weiter unten mehr zu den Behandlungsarten.</dd>
+  <dt><code>$callback</code> (im Beispiel <code>null</code>)</dt>
+  <dd>Hier würde eine Funktion angegeben werden, die bei dem Ersetzen aufgerufen wird. Da für die Behandlungsart <code>'simple_replace'</code> keinerlei Funktionen notwendig sind, kann man hier getrost <code>null</code> angeben, er wird <em>in diesem Fall</em> schlichtweg nicht ausgewertet.</dd>
+  <dt><code>$params</code> (im Beispiel <code>array ('start_tag' => '&lt;b&gt;', 'end_tag' => '&lt;/b&gt;')</code>)</dt>
+  <dd>Dieser Parameter beinhaltet eigentlich Werte, die der Funktion mit übergeben werden, sobald sie aufgerufen wird. Da hier keine Funktion notwendig ist, werden hier stattdessen direkt die Ersetzungen angegeben, die verwendet werden sollen.</dd>
+  <dt><code>$content_type</code> (im Beispiel <code>'inline'</code>)</dt>
+  <dd>Dies ist er <a href="kapitel1.html#verschachtelung">Inhaltstyp</a> dieses Codes.</dd>
+  <dt><code>$allowed_in</code> (im Beispiel <code>array ('block', 'inline')</code>)</dt>
+  <dd>Dieser Parameter gibt an, innerhalb von welchen Inhaltstypen sich der Code befinden darf. Falls der Code innerhalb eines anderen Inhaltstyps angetroffen wird, wird er ignoriert. Bei diesem Parameter werden allerdings nur der Inhaltstyp des Codes, in dem sich der aktuelle Code gerade befindet, betrachtet.</dd>
+  <dt><code>$not_allowed_in</code> (im Beispiel <code>array ()</code>)</dt>
+  <dd>Dieser Parameter gibt an, innerhalb von welchen Inhaltstypen sich der Code auf keinen Fall befinden darf. Hierfür werden die Inhaltstypen aller Elemente betrachtet, in denen sich der Code befindet. Wird auch nur eines gefunden, in dem der Code nicht erlaubt ist, wird der Code ignoriert.</dd>
+</dl>
+<h3 id="behandlungsarten"><a name="behandlungsarten">2.3 Behandlungsarten</a></h3>
+<p>Die Klasse kann auf Codes unterschiedlich reagieren. Dazu gibt es die sogenannten <em>Behandlungsarten</em>.</p>
+<dl>
+  <dt><code>'simple_replace'</code></dt>
+  <dd>Bei dieser Behandlungsart werden Start- und End-Tags einfach durch feste Zeichenketten ersetzt. <code>[b]</code> kann man beispielsweise durch <code>&lt;b&gt;</code> ersetzen lassen und <code>[/b]</code> durch <code>&lt;/b&gt;</code>. Bei dieser Behandlungsart sind keinerlei Attribute möglich. Die Zeichenketten, die zum Ersetzen verwendet werden, müssen in <code>$params['start_tag']</code> und <code>$params['end_tag']</code> stehen, siehe auch das Beispiel oben.</dd>
+  <dt><code>'simple_replace_single'</code></dt>
+  <dd>Diese Behandlungsart ist wie <code>'simple_replace'</code>, allerdings wird davon ausgegangen, dass es ausschließlich den Starttag gibt und keinen Endtag, das Element also nur aus dem Starttag besteht und keinen Inhalt hat. Aus diesem Grund braucht auch nur <code>$params['start_tag']</code> gesetzt zu sein.</dd>
+  <dt><code>'callback_replace'</code></dt>
+  <dd>Bei dieser Behandlungsart wird eine Funktion aufgerufen, die dann den Text zurückliefert, der als Ersetzung verwendet werden soll. Dies wird ausführlich im Kapitel <a href="kapitel4.html">Callback-Funktionen</a> behandelt.</dd>
+  <dt><code>'callback_replace_single'</code></dt>
+  <dd>Wie <code>'callback_replace'</code>, allerdings gibt es auch hier nur einen Starttag.</dd>
+  <dt><code>'usecontent'</code></dt>
+  <dd>Diese Behandlungsart ist im Prinzip <code>'callback_replace'</code>, nur, dass innerhalb des Elements nicht nach weiteren BB-Codes gesucht wird. Eine ausführliche Erklärung dazu gibt es im Abschnitt <a href="kapitel1.html#spezielle">Spezielle Codes</a>.</dd>
+  <dt><code>'usecontent?'</code></dt>
+  <dd><p>Diese Behandlungsart kann sich entweder wie <code>'usecontent'</code> oder aber auch wie <code>'callback_replace'</code> verhalten. Es wird geprüft, ob ein bestimmtes Attribut gesetzt ist. Wenn dies der Fall ist, wird <code>'callback_replace'</code> angenommen. Im anderen Fall wird <code>'usecontent'</code> angenommen. Der Name des Attributs, nach dem gesucht werden soll, ist in <code>$params['usecontent_param']</code> anzugeben. Diese Behandlungsart ist beispielsweise für den häufig verwendeten BB-Code <code>[url]</code> sinnvoll. Dieser kann nämlich auf zwei verschiedene Weisen verwendet werden: <code>[url]http://www.example.com/[/url]</code> und <code>[url=http://www.example.com/]Linktext, auch noch mit [b]fettem[/b] Text[/url]</code>. Im ersten Fall wäre hier <code>'usecontent'</code> als Behandlungsart angebracht, da der URL, auf den der Link zeigen soll, als normaler Text zwischen Start- und Endtag angegeben ist und es überhaupt nicht sinnvoll wäre, innerhalb des URL <code>http://www.example.org/</code> weitere BB-Codes zu ersetzen. Andererseits wäre im zwieten Beispiel <code>'callback_replace'</code> als Behandlungstyp angebracht, da hier der URL als Parameter angegeben wurde und der Linktext ja durchaus weitere BB-Codes enthalten dürfte.</p>
+  <p>Hinweis: Es ist möglich, mehrere Parameter als <code>usecontent_param</code> anzugeben, indem man einfach ein Array übergibt anstelle einer Zeichenkette. Beispiel: <code>$bbcode->addCode (..., array('usecontent_param' => array ('parameter1', 'parameter2')), ...);</code>.</p></dd>
+  <dt><code>'callback_replace?'</code>
+  <dd>Diese Behandlungsart ist das genaue Gegenteil von <code>'usecontent?'</code> - wenn einer der Attribut, die in <code>usecontent_param</code> angegeben wurden, existiert, wird der Code wie <code>'usecontent'</code> behandelt, ansonsten wie <code>'callback_replace'</code>.</dd>
+</dl>
+<h3 id="parsen"><a name="parsen">2.4 Parsen von Text</a></h3>
+<p>Um nun einen Text umzuwandeln, muss man die <code>parse</code>-Methode der Klasse aufrufen:</p>
+<p class="php"><code>// Code, um die Klasse einzubinden, addCode-Aufrufe, etc.<br>
+<br>
+<strong>$neuer_text = $bbcode->parse ($alter_text);</strong></code></p>
+<p>Somit wird der Inhalt von <code>$alter_text</code> verarbeitet und das Ergebnis ist dann in <code>$neuer_text</code> enthalten. Die Methode <code>parse</code> kann beliebig oft hintereinander aufgerufen werden, <em>allerdings wird sie immer sofort <code>false</code> zurückgeben, wenn gerade noch ein Parsevorgang am Laufen ist</em>.</p>
+<hr>
+<ul>
+  <li>Weiter: <a href="kapitel3.html">3. Parserfunktionen</a></li>
+  <li>Zurück: <a href="kapitel1.html">1. Einführung</a></li>
+</ul>
+</div>
+<p id="footer">Dies ist die Dokumentation zur <code>StringParser_BBCode</code>-Klasse Version <em>0.3.3</em><br>Autor: Christian Seiler, <a href="mailto:webmaster@christian-seiler.de">webmaster@christian-seiler.de</a></p>
+</div>
+</body>
+</html>

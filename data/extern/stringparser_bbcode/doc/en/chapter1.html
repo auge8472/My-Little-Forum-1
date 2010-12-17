@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Language" content="en">
+  <title>StringParser_BBCode class documentation</title>
+  <meta name="author" content="Christian Seiler">
+  <link rel="stylesheet" href="../css/print.css"  type="text/css" media="print">
+  <link rel="stylesheet" href="../css/screen.css" type="text/css" media="screen, projection">
+</head>
+<body id="doku">
+<div id="container">
+<h1><span><code>StringParser_<abbr title="Bulletin Board Code">BBCode</abbr></code> class</span> documentation</h1>
+ <ul id="mainmenu">
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/index_en.html">Project homepage</a></li>
+  <li><a href="chapter1.html">Documentation</a></li>
+  <li><a href="../phpdoc/index.html">PHPDOC Documentation</a></li>
+  <li><a href="http://www.christian-seiler.de/projekte/php/bbcode/download_en.html">Download</a></li>
+  <li><a href="../de/kapitel1.html">Diese Seite auf Deutsch</a></li>
+ </ul>
+<ul id="menu">
+  <li><a href="chapter1.html">1. Introduction</a>
+    <ul>
+      <li><a href="chapter1.html#general">1.1 General</a></li>
+      <li><a href="chapter1.html#nesting">1.2 Nesting</a></li>
+      <li><a href="chapter1.html#special">1.3 Special codes</a></li>
+    </ul></li>
+  <li><a href="chapter2.html">2. Defining own <abbr>BBCode</abbr></a>
+    <ul>
+      <li><a href="chapter2.html#including">2.1 Including the class</a></li>
+      <li><a href="chapter2.html#first">2.2 The first code</a></li>
+      <li><a href="chapter2.html#processing_types">2.3 Processing types</a></li>
+      <li><a href="chapter2.html#parsing">2.4 Parsing text</a></li>
+    </ul></li>
+  <li><a href="chapter3.html">3. Parser functions</a>
+    <ul>
+      <li><a href="chapter3.html#task">3.1 Task of parser functions</a></li>
+      <li><a href="chapter3.html#content_types">3.2 Relevance of content types</a></li>
+      <li><a href="chapter3.html#registration">3.3 Registration of parser functions</a></li>
+    </ul></li>
+  <li><a href="chapter4.html">4. Callback functions</a>
+    <ul>
+      <li><a href="chapter4.html#processing_types">4.1 Processing types that need callback functions</a></li>
+      <li><a href="chapter4.html#prototype">4.2 Prototype of a callback function</a></li>
+      <li><a href="chapter4.html#example">4.3 Example for a callback function that replaces links</a></li>
+      <li><a href="chapter4.html#revalidation">4.4 Revalidation on close tag occurrence</a></li>
+    </ul></li>
+  <li><a href="chapter5.html">5. Filters</a>
+    <ul>
+      <li><a href="chapter5.html#types">5.1 Filter types</a></li>
+      <li><a href="chapter5.html#defining">5.2 Defining filters</a></li>
+    </ul></li>
+  <li><a href="chapter6.html">6. Flags to control the behaviour of the class</a>
+    <ul>
+      <li><a href="chapter6.html#general">6.1 General</a></li>
+      <li><a href="chapter6.html#flags">6.2 List of all flags</a></li>
+      <li><a href="chapter6.html#global">6.2 Global flags</a></li>
+    </ul></li>
+  <li><a href="chapter7.html">7. Limiting the amount of occurrences</a>
+    <ul>
+      <li><a href="chapter7.html#grouping">7.1 Grouping codes</a></li>
+      <li><a href="chapter7.html#limits">7.2 Setting limits</a></li>
+    </ul></li>
+  <li><a href="chapter8.html">8. Paragraph handling</a>
+    <ul>
+      <li><a href="chapter8.html#general">8.1 General</a></li>
+      <li><a href="chapter8.html#activating">8.2 Activating paragraph handling</a></li>
+      <li><a href="chapter8.html#further">8.3 Further possibilities</a></li>
+    </ul></li>
+  <li><a href="chapter9.html">9. Examples</a>
+    <ul>
+      <li><a href="chapter9.html#example">9.1 Simple example</a></li>
+<!--      <li><a href="chapter9.html#complex">9.2 More complex example</a></li> -->
+    </ul></li>
+  <li><a href="chapter10.html">10. Miscellaneous</a>
+    <ul>
+      <li><a href="chapter10.html#faq">10.1 Frequently asked questions</a></li>
+      <li><a href="chapter10.html#internals">10.2 Useful internals</a></li>
+    </ul></li>
+</ul>
+<div id="content"><h2>1. Introduction</h2>
+<h3 id="general"><a name="general">1.1 General</a></h3>
+<p>The <code>StringParser_<abbr>BBCode</abbr></code> class provides the possibility to parse strings with BB-Codes and convert them to e.g. <abbr title="Hypertext Markup Language" lang="en">HTML</abbr> code. <abbr>BBCode</abbr> is a kind of markup "language" with which one may structure and format text. It is similar to <abbr>HTML</abbr> but it utilizes square braces instead of angle brackets. Another difference between <abbr>BBCode</abbr> and <abbr>HTML</abbr> is that when using <abbr>BBCode</abbr> invalid code is ignored whereas the validity of the code is important when using <abbr>HTML</abbr>.</p>
+<p>Here is an example for a text that was structured with <abbr>BBCode</abbr>:</p>
+<p class="bb"><code><span class="bbtn">This is a </span><span class="bben">[b]<span class="bbtn">bold </span><span class="bben">[i]<span class="bbtn">text in italics</span>[/i]</span><span class="bbtn"> that has no meaning</span>[/b]</span>!</code></p>
+<p>This text could now be convertet to <abbr>HTML</abbr>:</p>
+<p class="html"><code>This is a &lt;b&gt;bold &lt;i&gt;text in italics&lt;/i&gt; that has no meaning&lt;/b&gt;!</code></p>
+<p>This would look like:</p>
+<p class="demo">This is a <span class="b">bold <span class="i">text in italics</span> that has no meaning</span>!</p>
+<p>The simplest possibility here to convert the <abbr>BBCode</abbr> to <abbr>HTML</abbr> would be to replace <code>[b]</code>, <code>[i]</code>, <code>[/b]</code> and <code>[/i]</code> through <code>&lt;b&gt;</code>, <code>&lt;i&gt;</code>, <code>&lt;/b&gt;</code> and <code>&lt;/i&gt;</code>. This would work fine with the above example. But this would also cause problems if somebody mistyped the <abbr>BBCode</abbr>. An example:</p>
+<p class="bb"><code><span class="bbtn">This is a </span><span class="bben">[b]<span class="bbtn">bold </span><span class="bben">[i]<span class="bbtn">text in italics</span>[/io]</span><span class="bbtn"> which has no meaning</span>[/b]</span>!</code></p>
+<p>The author of the text mistyped while typing the <code>[/i]</code>, also touching the <kbd>o</kbd> key and therefore producing the input <code>[/io]</code> instead of <code>[/i]</code>. If one would just do the simple replacements mentioned above, the following <abbr>HTML</abbr> code would be generated:</p>
+<p class="html"><code>This is a &lt;b&gt;bold &lt;i&gt;text in italics[/io] that has no meaning&lt;/b&gt;!</code></p>
+<p>This is invalid <abbr>HTML</abbr> since the elements are not correctly nested and the <code>&lt;i&gt;</code> element is never closed. There are other approaches to convert <abbr>BBCode</abbr> that use regular expressions to make sure every element is closed correctly. But thos approaches cannot ensure the correct nesting of the elements.</p>
+<p>This is why this class takes a different approach. The text is read character by character and the complete text is converted in a tree structure. This tree structure is then converted to <abbr>HTML</abbr> after the complete text has been originally converted to the tree. The text</p>
+<p class="bb"><code><span class="bbtn">This is a </span><span class="bben">[b]<span class="bbtn">bold </span><span class="bben">[i]<span class="bbtn">text in italics</span>[/i]</span><span class="bbtn"> that has no meaning</span>[/b]</span>!</code></p>
+<p>would be converted into following tree strcuture:</p>
+<ul class="tree">
+  <li class="bbtn">Text: <code>"This is a "</code></li>
+  <li class="bben">Element: <code>[b]</code>
+    <ul>
+      <li class="bbtn">Text: <code>"bold "</code></li>
+      <li class="bben">Element: <code>[i]</code>
+        <ul>
+          <li class="bbtn">Text: <code>"text in italics"</code></li>
+        </ul></li>
+      <li class="bbtn">Text: <code>" that has no meaning"</code></li>
+    </ul></li>
+    <li class="bbtn">Text: "!"</li>
+</ul>
+<p>Now if a text such as above, where the <code>[/i]</code> is missing, is to be converted the class will realise this at the <code>[/b]</code>. This is because the <code>[/b]</code> would appear while the class would still be waiting for a <code>[/i]</code> because she knows that the <code>[i]</code> is still open. Now there are two possibilities where the programmer using the class may decide what happens exactly: The first option would be to declare the <code>[i]</code> invalid, append it to the text just after <code>"bold"</code> and continue parsing at that location. The second option would be to imply a <code>[/i]</code> directly before the <code>[/b]</code> in order to close both elements. What the class does <em>not</em> do is to guess that <code>[/io]</code> could still mean <code>[/i]</code> - this would lead to the problem that the class would make errors elsewhere thinking that she is correcting an error that in reality is none.</p>
+<p>The class itself does not impose the constraint which codes are looked for. <code>[b]</code> and <code>[i]</code> are popular examples and are therefor quoted here The class itself however provides the possibilities to define own codes as long as they occur in square braces. In the following chapter it is shown how to define own codes.</p>
+<p>In addition to pure tags there is also the possibility to use attributes as in <abbr>HTML</abbr>. These would look like the following for example:</p>
+<p class="bb"><code><span class="bbtn">This is a </span><span class="bben">[b strength=really_bold]<span class="bbtn">really bold text</span>[/b]</span>!</code></p>
+<p> The class detects the following different forms of attribute syntaxes:</p>
+<dl>
+  <dt><code>[code attribute=value]</code>, <code>[code attribute=&quot;value&quot;]</code>, <code>[code attribute='value']</code></dt>
+  <dd>This is the form that is the form most similar to <abbr>HTML</abbr>. Furthermore it is the only form that allowes to set more than one attribute at the same time. The expression in front of the equal sign is the <em>attribute name</em> and the expression behind it is the <em>attribute value</em>. If a value is put in double or single quotes spaces and a closing square brace (<code>]</code>) will also be allowed inside the attribute value. If you also want the attribute value to contain a quote character itself it must be escaped with <code>\</code>. Example: <code>[code attribute=&quot;value ] we are still inside the value\&quot; yes, this also belongs to the value&quot;]</code>.</dd>
+  <dt><code>[code=value]</code>, <code>[code = value]</code>, <code>[code="value"]</code>, <code>[code='value']</code></dt>
+  <dd>In this form it is possible to set only one attribute. This attribute always has the name <code>default</code>. The syntax<code>[code=value]</code> would be identical to <code>[code default=value]</code>. This syntax is very similar to classical BB-Code.</dd>
+  <dt><code>[code:value]</code>, <code>[code: value]</code></dt>
+  <dd>This is another possible syntax and the attribute name is also <code>default</code> here.</dd>
+</dl>
+<h3 id="nesting"><a name="nesting">1.2 Nesting</a></h3>
+<p>As seen above elements must be nested correctly. This is guaranteed by the class. Nevertheless, the above check is only a formal check. The following example shows the problematic clearly:</p>
+<p class="bb"><code><span class="bben">[b]<span class="bbtn">This is a list:</span><br><span class="bben">[list]<br><span class="bben">[*]<span class="bbtn"> List item</span></span><br><span class="bben">[*]<span class="bbtn"> List item</span></span><br>[/list]</span><br>[/b]</span></code></p>
+<p>If this is converted to <abbr>HTML</abbr> the following would be the output:</p>
+<p class="html"><code>&lt;b&gt;This is a list:<br>&lt;ul&gt;<br>&lt;li&gt; List item&lt;/li&gt;<br>&lt;li&gt; List item&lt;/li&gt;<br>&lt;/ul&gt;<br>&lt;/b&gt;</code></p>
+<p>This <abbr>HTML</abbr> code is indeed formally correctly nested but in <abbr>HTML</abbr> the <code>&lt;b&gt;</code> element must not contain a <code>&lt;ul&gt;</code> element. This would also cause invalid <abbr>HTML</abbr>. Because of this it is possible to tell the class which element may contain which other element. For this purpose there are the so-called <em>content types</em>. Every element is assigned a content type. Further it is possible to specifiy for each element the content types inside which it is allowed. An example:</p>
+<p class="bb"><code><span class="bben">[a]<span class="bben">[b]<span class="bben">[c]<span class="bbtn">Text</span>[/c]</span>[/b]</span>[/a]</span></code></p>
+<p>In this example the <code>[b]</code> element would be inside the <code>[a]</code> element and the <code>[c]</code> element would be inside the <code>[b]</code> element. The following tree would be created:
+<ul class="tree">
+  <li class="bben">Element: <code>[a]</code>
+    <ul>
+      <li class="bben">Element: <code>[b]</code>
+        <ul>
+          <li class="bben">Element: <code>[c]</code>
+            <ul>
+              <li class="bbtn">Text: <code>"Text"</code></li>
+            </ul></li>
+        </ul></li>
+    </ul></li>
+</ul>
+<p>Now we assign a content type to each element. The <code>[a]</code> element receives the content type <samp>alpha</samp>, the <code>[b]</code> element den Inhaltstyp <samp>beta</samp> and the <code>[c]</code> element the content type <samp>gamma</samp>. To make sure the parser converts every element the <code>[b]</code> element must be allowed inside the <samp>alpha</samp> content type because this is the content type of the <code>[a]</code> element, inside which the <code>[b]</code> element resides. In the exact same manner the <code>[c]</code> element must be allowed inside the <samp>beta</samp> content type because that is the content type of the <code>[b]</code> element, inside which the <code>[c]</code> element resides. But the <code>[c]</code> element needs <em>not</em> to be allowed inside the <samp>alpha</samp> content type because only the first level is of relevance.</p>
+<p>If no element has yet been openend the so-called root content type is applied. This content type is <code>block</code> by default but it can be changed. Have a look at the chapter<a href="chapter3.html">parser functions</a>, in which content types play another role.</p>
+<p>But there is not only the possibility to specify the content types in which an element is allowed in - one has also the possibility to forbid an element inside certain content types. A link inside another link would not be that reasonable. On the one hand, it is easy to forbid a link directly inside another link. On the other hand, it is possible to put an element in between to work around the list of allowed content types. Example:</p>
+<p class="bb"><code><span class="bben">[link]<span class="bben">[b]<span class="bben">[link]<span class="bbtn">Text</span>[/link]</span>[/b]</span>[/link]</span></code></p>
+<p>There is no reason to forbid <code>[b]</code> inside of <code>[link]</code> and there is also no reason to forbid <code>[link]</code> inside of <code>[b]</code> but there would necessarily be a reason for forbidding this construction. At this point the list of disallowed content types comes in. This list is applied to all levels whereas the list of allowed content types is only applied to the topmost level. With this method it is possible to inhibit constructions like the above.</p>
+
+<h3 id="special"><a name="special">1.3 Special codes</a></h3>
+<p>Sometimes it can be useful to deactivate the code detection for a short period. In many forums the <code>[code]</code> element is offered in which it is possible to mark up portions of source code and inhibit the parsing of <code>[b]</code> and similar inside this part of the text. The part may only be terminated by  <code>[/code]</code>. The class posses the means to acchieve this behaviour very in a very simple way:</p>
+<p class="bb"><code><span class="bben">[code]<br><span class="bbtn">// this would be example code that replaces the [b] bbcode:<br>// ...</span>[/code]</span></code></p>
+<p>In this example it is certainly not wanted that the <code>[b]</code> is converted since the <code>[b]</code> is part of the source code that is to be shown litterally. For this there is a so-called <a href="chapter2.html#processing_types">processing type</a> <code>usecontent</code> that causes the class to only look for the end tag of this specific element and ignore every other code.</p>
+<hr>
+<ul>
+  <li>Next: <a href="chapter2.html">2. Defining own <abbr>BBCode</abbr></a></li>
+</ul>
+</div>
+<p id="footer">This is the documentation for the <code>StringParser_BBCode</code> class version <em>0.3.3</em><br>
+Author: Christian Seiler, <a href="mailto:webmaster@christian-seiler.de">webmaster@christian-seiler.de</a></p>
+</div>
+</body>
+</html>
