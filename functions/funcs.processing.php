@@ -123,4 +123,28 @@ function bbcodeStripContents($string) {
 return preg_replace("/[^\n]/", '', $string);
 } # End: bbcodeStripContents
 
+
+
+/**
+ * returns a string of a link from a given link-bbcode
+ *
+ * @param string $action
+ * @param array $attributes
+ * @param string $content
+ * @param array $params
+ * @param int $node_object
+ * @return string
+ */
+function bbcodeDoURL($action, $attributes, $content, $params, $node_object) {
+if ($action == 'validate')
+	{
+	return true;
+	}
+if (!isset ($attributes['default']))
+	{
+	return '<a rel="nofollow" href="'.htmlspecialchars($content).'">'.htmlspecialchars(shorten_link($content)).'</a>';
+	}
+return '<a rel="nofollow" href="'.htmlspecialchars($attributes['default']).'">'.$content.'</a>';
+} #End: bbcodeDoURL
+
 ?>
