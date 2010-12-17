@@ -328,10 +328,12 @@ $bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
 $bbcode->addParser('list', 'bbcodeStripContents');
 
 # codes
-$bbcode->addCode('b', 'simple_replace', null, array ('start_tag' => '<strong>', 'end_tag' => '</strong>'), 'inline', array ('block', 'inline'), array ());
-$bbcode->addCode('i', 'simple_replace', null, array ('start_tag' => '<em>', 'end_tag' => '</em>'), 'inline', array ('block', 'inline'), array ());
-$bbcode->addCode('u', 'simple_replace', null, array ('start_tag' => '<span class="underline">', 'end_tag' => '</span>'), 'inline', array ('block', 'inline'), array ());
+$bbcode->addCode('b', 'simple_replace', null, array ('start_tag' => '<strong>', 'end_tag' => '</strong>'), 'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+$bbcode->addCode('i', 'simple_replace', null, array ('start_tag' => '<em>', 'end_tag' => '</em>'), 'inline', array ('listitem', 'block', 'inline', 'link'), array ());
+$bbcode->addCode('u', 'simple_replace', null, array ('start_tag' => '<span class="underline">', 'end_tag' => '</span>'), 'inline', array ('listitem', 'block', 'inline'), array ());
 $bbcode->addCode('code', 'simple_replace', null, array ('start_tag' => '<code>', 'end_tag' => '</code>'), 'inline', array ('block', 'inline'), array ());
+$bbcode->addCode('url', 'usecontent?', 'bbcodeDoURL', array ('usecontent_param' => 'default'), 'link', array ('listitem', 'block', 'inline'), array ('link'));
+$bbcode->addCode('link', 'usecontent?', 'bbcodeDoURL', array ('usecontent_param' => 'default'), 'link', array ('listitem', 'block', 'inline'), array ('link'));
 $bbcode->addCode('list', 'simple_replace', null, array ('start_tag' => '<ul>', 'end_tag' => '</ul>'), 'list', array ('block', 'listitem'), array ());
 $bbcode->addCode('*', 'simple_replace', null, array ('start_tag' => '<li>', 'end_tag' => '</li>'), 'listitem', array ('list'), array ());
 
@@ -340,21 +342,22 @@ $bbcode->setCodeFlag('b', 'case_sensitive', false);
 $bbcode->setCodeFlag('i', 'case_sensitive', false);
 $bbcode->setCodeFlag('u', 'case_sensitive', false);
 
-$bbcode->setCodeFlag('*','closetag',BBCODE_CLOSETAG_OPTIONAL);
+$bbcode->setCodeFlag('*', 'closetag', BBCODE_CLOSETAG_OPTIONAL);
+$bbcode->setCodeFlag('*', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
 $bbcode->setCodeFlag('list', 'paragraph_type', BBCODE_PARAGRAPH_BLOCK_ELEMENT);
-$bbcode->setCodeFlag('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
+#$bbcode->setCodeFlag('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
 $bbcode->setCodeFlag('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
 $bbcode->setRootParagraphHandling(true);
 
 # do the parsing
 $string = $bbcode->parse($string);
 
-$string = preg_replace("#\[link\]www\.(.+?)\[/link\]#is", "<a href=\"http://www.\\1\">www.\\1</a>", $string);
-$string = preg_replace_callback("#\[link\](.+?)\[/link\]#is", "shorten_link", $string);
-$string = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "<a href=\"\\1\">\\2</a>", $string);
-$string = preg_replace("#\[url\]www\.(.+?)\[/url\]#is", "<a href=\"http://www.\\1\">www.\\1</a>", $string);
-$string = preg_replace_callback("#\[url\](.+?)\[/url\]#is", "shorten_link", $string);
-$string = preg_replace("#\[url=(.+?)\](.+?)\[/url\]#is", "<a href=\"\\1\">\\2</a>", $string);
+#$string = preg_replace("#\[link\]www\.(.+?)\[/link\]#is", "<a href=\"http://www.\\1\">www.\\1</a>", $string);
+#$string = preg_replace_callback("#\[link\](.+?)\[/link\]#is", "shorten_link", $string);
+#$string = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "<a href=\"\\1\">\\2</a>", $string);
+#$string = preg_replace("#\[url\]www\.(.+?)\[/url\]#is", "<a href=\"http://www.\\1\">www.\\1</a>", $string);
+#$string = preg_replace_callback("#\[url\](.+?)\[/url\]#is", "shorten_link", $string);
+#$string = preg_replace("#\[url=(.+?)\](.+?)\[/url\]#is", "<a href=\"\\1\">\\2</a>", $string);
 $string = preg_replace_callback("#\[code\](.+?)\[/code\]#is", "parse_code", $string);
 $string = preg_replace("#\[msg\](.+?)\[/msg\]#is", "<a href=\"".$_SERVER['SCRIPT_NAME']."?id=\\1\">\\1</a>", $string);
 $string = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", "<a href=\"".$_SERVER['SCRIPT_NAME']."?id=\\1\">\\2</a>", $string);
