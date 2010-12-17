@@ -107,9 +107,9 @@ return $nurl;
  * @param string $string
  * @return string $string
  */
-function convertlinebreaks($string) {
+function convertLineBreaks($string) {
 return preg_replace("/\015\012|\015|\012/", "\n", $string);
-} # End: convertlinebreaks
+} # End: convertLineBreaks
 
 
 
@@ -119,8 +119,8 @@ return preg_replace("/\015\012|\015|\012/", "\n", $string);
  * @param string $string
  * @return string $string
  */
-function bbcodeStripcontents($string) {
+function bbcodeStripContents($string) {
 return preg_replace("/[^\n]/", '', $string);
-} # End: bbcodeStripcontents
+} # End: bbcodeStripContents
 
 ?>
