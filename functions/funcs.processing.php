@@ -100,4 +100,27 @@ return $nurl;
 } # End: processUrlEncode
 
 
+
+/**
+ * unifies all possible line breaks into unixoid break
+ *
+ * @param string $string
+ * @return string $string
+ */
+function convertlinebreaks($string) {
+return preg_replace("/\015\012|\015|\012/", "\n", $string);
+} # End: convertlinebreaks
+
+
+
+/**
+ * extracts all line breaks from a string
+ *
+ * @param string $string
+ * @return string $string
+ */
+function bbcodeStripcontents($string) {
+return preg_replace("/[^\n]/", '', $string);
+} # End: bbcodeStripcontents
+
 ?>
