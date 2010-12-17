@@ -760,9 +760,9 @@ switch ($action)
 			echo '</tr>';
 			if ($field["profile"]!=="")
 				{
-				$ftext=$field['profile'];
-				$ftext = htmlspecialchars($ftext);
-				$ftext = nl2br($ftext);
+				$ftext = $field['profile'];
+#				$ftext = htmlspecialchars($ftext);
+#				$ftext = nl2br($ftext);
 				$ftext = zitat($ftext);
 				if ($settings['autolink'] == 1) $ftext = make_link($ftext);
 				if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
@@ -774,10 +774,9 @@ switch ($action)
 				}
 			if ($field["signature"]!=="")
 				{
-				$ftext=$field['signature'];
-				$ftext = htmlspecialchars($ftext);
-				$ftext = nl2br($ftext);
-				$ftext = zitat($ftext);
+				$ftext = $field['signature'];
+#				$ftext = htmlspecialchars($ftext);
+#				$ftext = nl2br($ftext);
 				if ($settings['autolink'] == 1) $ftext = make_link($ftext);
 				if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
 				if ($settings['smilies'] == 1) $ftext = smilies($ftext);
