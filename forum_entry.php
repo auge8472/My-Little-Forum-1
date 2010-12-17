@@ -226,13 +226,13 @@ if ($settings['access_for_users_only'] == 1
 		}
 	else
 		{
-		$ftext=$entrydata["text"];
+		$ftext = $entrydata["text"];
 #		$ftext = htmlspecialchars($ftext);
 #		$ftext = nl2br($ftext);
-		$ftext = zitat($ftext);
 		if ($settings['autolink'] == 1) $ftext = make_link($ftext);
 		if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
 		if ($settings['smilies'] == 1) $ftext = smilies($ftext);
+		$ftext = zitat($ftext);
 		echo '<div class="posting">'.$ftext.'</div>'."\n";
 		}
 

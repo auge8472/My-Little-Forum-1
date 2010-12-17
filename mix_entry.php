@@ -132,10 +132,10 @@ else
 	$ftext = $entrydata["text"];
 #	$ftext = htmlspecialchars($ftext);
 #	$ftext = nl2br($ftext);
-	$ftext = zitat($ftext);
 	if ($settings['autolink'] == 1) $ftext = make_link($ftext);
 	if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
 	if ($settings['smilies'] == 1) $ftext = smilies($ftext);
+	$ftext = zitat($ftext);
 	echo '<div class="postingboard">'.$ftext.'</div>';
 	}
 if (isset($signature) && $signature != "")

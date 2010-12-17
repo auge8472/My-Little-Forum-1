@@ -344,7 +344,6 @@ if ($settings['access_for_users_only'] == 1
 			$ftext=$thread["text"];
 #			$ftext = htmlspecialchars($ftext);
 #			$ftext = nl2br($ftext);
-			$ftext = zitat($ftext);
 			if ($settings['autolink'] == 1)
 				{
 				$ftext = make_link($ftext);
@@ -357,6 +356,7 @@ if ($settings['access_for_users_only'] == 1
 				{
 				$ftext = smilies($ftext);
 				}
+			$ftext = zitat($ftext);
 			echo '<div class="postingboard">'.$ftext.'</div>';
 			}
 		if (isset($signature) && $signature != "")
