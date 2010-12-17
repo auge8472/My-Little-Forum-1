@@ -342,8 +342,8 @@ if ($settings['access_for_users_only'] == 1
 		else
 			{
 			$ftext=$thread["text"];
-			$ftext = htmlspecialchars($ftext);
-			$ftext = nl2br($ftext);
+#			$ftext = htmlspecialchars($ftext);
+#			$ftext = nl2br($ftext);
 			$ftext = zitat($ftext);
 			if ($settings['autolink'] == 1)
 				{
@@ -357,12 +357,13 @@ if ($settings['access_for_users_only'] == 1
 				{
 				$ftext = smilies($ftext);
 				}
-			echo '<p class="postingboard">'.$ftext.'</p>';
+			echo '<div class="postingboard">'.$ftext.'</div>';
 			}
 		if (isset($signature) && $signature != "")
 			{
-			$signature = htmlspecialchars($signature);
-			$signature = nl2br($signature);
+			$signature = $settings['signature_separator'].$signature;
+#			$signature = htmlspecialchars($signature);
+#			$signature = nl2br($signature);
 			if ($settings['autolink'] == 1)
 				{
 				$signature = make_link($signature);
@@ -375,7 +376,7 @@ if ($settings['access_for_users_only'] == 1
 				{
 				$signature = smilies($signature);
 				}
-			echo '<p class="signature">'.$settings['signature_separator'].$signature.'</p>';
+			echo '<div class="signature">'.$signature.'</div>';
 			}
 		echo '</td>'."\n";
 		echo '</tr>';
