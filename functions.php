@@ -23,6 +23,7 @@
 require_once('functions/funcs.db.php');
 require_once('functions/funcs.output.php');
 require_once('functions/funcs.processing.php');
+require_once('data/extern/stringparser_bbcode/src/stringparser_bbcode.class.php');
 
 #
 # Entferne bei aktivem magic_quotes_gpc die Slashes in den uebergebenen Werten
