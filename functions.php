@@ -321,9 +321,21 @@ return $string;
 function bbcode($string) {
 global $settings;
 
-$string = preg_replace("#\[b\](.+?)\[/b\]#is", "<b>\\1</b>", $string);
-$string = preg_replace("#\[i\](.+?)\[/i\]#is", "<i>\\1</i>", $string);
-$string = preg_replace("#\[u\](.+?)\[/u\]#is", "<u>\\1</u>", $string);
+$bbcode = new StringParser_BBCode ();
+
+# codes
+$bbcode->addCode('b', 'simple_replace', null, array ('start_tag' => '<strong>', 'end_tag' => '</strong>'), 'inline', array ('block', 'inline'), array ());
+$bbcode->addCode('i', 'simple_replace', null, array ('start_tag' => '<em>', 'end_tag' => '</em>'), 'inline', array ('block', 'inline'), array ());
+$bbcode->addCode('u', 'simple_replace', null, array ('start_tag' => '<span class="underline">', 'end_tag' => '</span>'), 'inline', array ('block', 'inline'), array ());
+
+# code flags
+$bbcode->setCodeFlag('b', 'case_sensitive', false);
+$bbcode->setCodeFlag('i', 'case_sensitive', false);
+$bbcode->setCodeFlag('u', 'case_sensitive', false);
+
+# do the parsing
+$string = $bbcode->parse($string);
+
 $string = preg_replace("#\[link\]www\.(.+?)\[/link\]#is", "<a href=\"http://www.\\1\">www.\\1</a>", $string);
 $string = preg_replace_callback("#\[link\](.+?)\[/link\]#is", "shorten_link", $string);
 $string = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "<a href=\"\\1\">\\2</a>", $string);
