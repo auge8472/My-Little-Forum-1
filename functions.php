@@ -322,6 +322,10 @@ function bbcode($string) {
 global $settings;
 
 $bbcode = new StringParser_BBCode ();
+$bbcode->addFilter(STRINGPARSER_FILTER_PRE,'convertLineBreaks');
+$bbcode->addParser(array('block','inline','link','listitem'),'htmlspecialchars');
+$bbcode->addParser(array('block','inline','link','listitem'),'nl2br');
+$bbcode->addParser('list','bbcodeStripContents');
 
 # codes
 $bbcode->addCode('b', 'simple_replace', null, array ('start_tag' => '<strong>', 'end_tag' => '</strong>'), 'inline', array ('block', 'inline'), array ());
@@ -332,6 +336,10 @@ $bbcode->addCode('u', 'simple_replace', null, array ('start_tag' => '<span class
 $bbcode->setCodeFlag('b', 'case_sensitive', false);
 $bbcode->setCodeFlag('i', 'case_sensitive', false);
 $bbcode->setCodeFlag('u', 'case_sensitive', false);
+
+$bbcode->setCodeFlag('*','closetag',BBCODE_CLOSETAG_OPTIONAL);
+$bbcode->setCodeFlag('*','paragraphs',true);
+$bbcode->setRootParagraphHandling(true);
 
 # do the parsing
 $string = $bbcode->parse($string);
