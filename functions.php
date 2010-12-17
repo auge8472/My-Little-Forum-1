@@ -322,15 +322,18 @@ function bbcode($string) {
 global $settings;
 
 $bbcode = new StringParser_BBCode ();
-$bbcode->addFilter(STRINGPARSER_FILTER_PRE,'convertLineBreaks');
-$bbcode->addParser(array('block','inline','link','listitem'),'htmlspecialchars');
-$bbcode->addParser(array('block','inline','link','listitem'),'nl2br');
-$bbcode->addParser('list','bbcodeStripContents');
+$bbcode->addFilter(STRINGPARSER_FILTER_PRE, 'convertLineBreaks');
+$bbcode->addParser(array('block','inline','link','listitem'), 'htmlspecialchars');
+$bbcode->addParser(array('block','inline','link','listitem'), 'nl2br');
+$bbcode->addParser('list', 'bbcodeStripContents');
 
 # codes
 $bbcode->addCode('b', 'simple_replace', null, array ('start_tag' => '<strong>', 'end_tag' => '</strong>'), 'inline', array ('block', 'inline'), array ());
 $bbcode->addCode('i', 'simple_replace', null, array ('start_tag' => '<em>', 'end_tag' => '</em>'), 'inline', array ('block', 'inline'), array ());
 $bbcode->addCode('u', 'simple_replace', null, array ('start_tag' => '<span class="underline">', 'end_tag' => '</span>'), 'inline', array ('block', 'inline'), array ());
+$bbcode->addCode('code', 'simple_replace', null, array ('start_tag' => '<code>', 'end_tag' => '</code>'), 'inline', array ('block', 'inline'), array ());
+$bbcode->addCode('list', 'simple_replace', null, array ('start_tag' => '<ul>', 'end_tag' => '</ul>'), 'list', array ('block', 'listitem'), array ());
+$bbcode->addCode('*', 'simple_replace', null, array ('start_tag' => '<li>', 'end_tag' => '</li>'), 'listitem', array ('list'), array ());
 
 # code flags
 $bbcode->setCodeFlag('b', 'case_sensitive', false);
@@ -338,7 +341,9 @@ $bbcode->setCodeFlag('i', 'case_sensitive', false);
 $bbcode->setCodeFlag('u', 'case_sensitive', false);
 
 $bbcode->setCodeFlag('*','closetag',BBCODE_CLOSETAG_OPTIONAL);
-$bbcode->setCodeFlag('*','paragraphs',true);
+$bbcode->setCodeFlag('list', 'paragraph_type', BBCODE_PARAGRAPH_BLOCK_ELEMENT);
+$bbcode->setCodeFlag('list', 'opentag.before.newline', BBCODE_NEWLINE_DROP);
+$bbcode->setCodeFlag('list', 'closetag.before.newline', BBCODE_NEWLINE_DROP);
 $bbcode->setRootParagraphHandling(true);
 
 # do the parsing
@@ -482,11 +487,8 @@ return $string;
 function zitat($string) {
 global $settings;
 
-$string = preg_replace("/^".htmlspecialchars($settings['quote_symbol'])."\\s+(.*)/", "<span class=\"citation\">".htmlspecialchars($settings['quote_symbol'])." \\1</span>", $string);
-$string = preg_replace("/\\n".htmlspecialchars($settings['quote_symbol'])."\\s+(.*)/", "<span class=\"citation\">".htmlspecialchars($settings['quote_symbol'])." \\1</span>", $string);
-$string = preg_replace("/\\n ".htmlspecialchars($settings['quote_symbol'])."\\s+(.*)/", "<span class=\"citation\">".htmlspecialchars($settings['quote_symbol'])." \\1</span>", $string);
+return str_replace('<p>'.$settings['quote_symbol'].' ', '<p class="citation">'.$settings['quote_symbol'].' ', $string);
 
-return $string;
 } # End: zitat
 
 
