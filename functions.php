@@ -377,16 +377,14 @@ return $string;
  * @param string $string
  * @return string $string
  */
-function shorten_link($string) {
+function shorten_link($url) {
 global $settings;
 
-if (count($string) == 2) { $pre = ""; $url = $string[1]; }
-else { $pre = $string[1]; $url = $string[2]; }
+$t = $url;
+if (strlen($url) > $settings['text_word_maxlength'])
+$t = substr($url, 0, ($settings['text_word_maxlength']/2)) . "..." . substr($url, - ($settings['text_word_maxlength']-3-$settings['text_word_maxlength']/2));
 
-$shortened_url = $url;
-if (strlen($url) > $settings['text_word_maxlength']) $shortened_url = substr($url, 0, ($settings['text_word_maxlength']/2)) . "..." . substr($url, - ($settings['text_word_maxlength']-3-$settings['text_word_maxlength']/2));
-
-return $pre.'<a href="'.$url.'">'.htmlspecialchars($shortened_url).'</a>';
+return $t;
 } # End: shorten_link
 
 
