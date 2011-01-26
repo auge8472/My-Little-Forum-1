@@ -238,9 +238,8 @@ else
 	}
 
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])
-	&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin" ||
-	isset($_SESSION[$settings['session_prefix'].'user_id'])
-	&& $_SESSION[$settings['session_prefix'].'user_type'] == "mod")
+	and ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
+	or $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
 	{
 	$entryIP = '<span class="postinginfo">'.$entry['ip'].'</span>';
 	}
