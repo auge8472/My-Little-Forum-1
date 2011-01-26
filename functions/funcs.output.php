@@ -385,7 +385,7 @@ if (($settings['user_edit'] == 1
 	and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
 	or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
 	{
-	$r .= "<ul class=\"menu\">\n";
+	$r .= '<ul class="menu">'."\n";
 	$r .= '<li><a href="posting.php?action=edit&amp;id=';
 	$r .= $thread["id"].$view.'&amp;back='.$thread["tid"].'&amp;page='.$page;
 	$r .= '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
