@@ -31,21 +31,21 @@ if (empty($error))
 		{
 		$current_image = @ImageCreateFromGIF($uploaded_file) or $error = true;
 		if (empty($error)) $new_image = @ImageCreate($new_width,$new_height) or $error = true;
-		if (empty($error)) @ImageCopyResized($new_image,$current_image,0,0,0,0,$new_width,$new_height,$image_info[0],$image_info[1]) or $error=true;
+		if (empty($error)) @ImageCopyResampled($new_image,$current_image,0,0,0,0,$new_width,$new_height,$image_info[0],$image_info[1]) or $error=true;
 		if (empty($error)) @ImageGIF($new_image, $file) or $error = true;
 		}
 	else if ($image_info[2]==2) // JPG
 		{
 		$current_image = @ImageCreateFromJPEG($uploaded_file) or $error = true;
 		if (empty($error)) $new_image=@imagecreatetruecolor($new_width,$new_height) or $error = true;
-		if (empty($error)) @ImageCopyResized($new_image,$current_image,0,0,0,0,$new_width,$new_height,$image_info[0],$image_info[1]) or $error = true;
+		if (empty($error)) @ImageCopyResampled($new_image,$current_image,0,0,0,0,$new_width,$new_height,$image_info[0],$image_info[1]) or $error = true;
 		if (empty($error)) @ImageJPEG($new_image, $file, $compression) or $error = true;
 		}
 	else if($image_info[2]==3) // PNG
 		{
 		$current_image=ImageCreateFromPNG($uploaded_file) or $error = true;
 		if (empty($error)) $new_image=imagecreatetruecolor($new_width,$new_height) or $error = true;
-		if (empty($error)) ImageCopyResized($new_image,$current_image,0,0,0,0,$new_width,$new_height,$image_info[0],$image_info[1]) or $error = true;
+		if (empty($error)) ImageCopyResampled($new_image,$current_image,0,0,0,0,$new_width,$new_height,$image_info[0],$image_info[1]) or $error = true;
 		if (empty($error)) ImagePNG($new_image, $file) or $error = $true;
 		}
 	}
@@ -53,7 +53,6 @@ if (empty($error))
 if (empty($error)) return true;
 else return false;
 }
-
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : 'upload';
 
