@@ -92,7 +92,6 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
-		# onmouseover="this.src=\'img/update_mo.gif\';" onmouseout="this.src=\'img/update.gif\';"
 		$subnav_2 .= '<a href="index.php?update=1';
 		$subnav_2 .= ($category > 0) ? '&amp;category='.intval($category) : '';
 		$subnav_2 .= '" class="update-postings" title="'.outputLangDebugInAttributes($lang['update_time_linktitle']).'">';
