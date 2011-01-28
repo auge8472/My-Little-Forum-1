@@ -369,7 +369,7 @@ if ($settings['access_for_users_only'] == 1
 				}
 			echo '</td>'."\n";
 			# time op
-			echo '<td class="info">'.strftime($lang['time_format'],($zeile["Uhrzeit"])).'</td>'."\n";
+			echo '<td class="info">'.htmlspecialchars($zeile["Uhrzeit"]).'</td>'."\n";
 			# number of answers
 			echo '<td class="number-cell">'.$answers_count.'</td>'."\n";
 			# date last answer
