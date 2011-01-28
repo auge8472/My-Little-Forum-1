@@ -140,18 +140,21 @@ if ($settings['access_for_users_only'] == 1
 			id,
 			pid,
 			tid,
-			user_id,
+			t1.user_id AS posters_id,
 			DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
 			name,
 			subject,
 			category,
 			marked,
-			fixed
-			FROM ".$db_settings['forum_table']."
+			fixed,
+			(SELECT
+				user_type
+				FROM ".$db_settings['userdata_table']."
+				WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
+			FROM ".$db_settings['forum_table']." AS t1
 			WHERE tid = ".$zeile["tid"]."
 			ORDER BY time DESC";
-			#ORDER BY time ASC";
-			$thread_result = mysql_query($threadQuery, $connid);
+			$thread_result = @mysql_query($threadQuery, $connid);
 
 			# put result into arrays:
 			while ($tmp = mysql_fetch_assoc($thread_result))

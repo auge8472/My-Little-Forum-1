@@ -139,14 +139,18 @@ if ($settings['access_for_users_only'] == 1
 	# list all threads
 	$threadsQuery = "SELECT
 		tid,
-		user_id,
-#		UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
+		t1.user_id AS posters_id,
+		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
 		DATE_FORMAT(last_answer + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS la_Uhrzeit,
 		UNIX_TIMESTAMP(last_answer) AS last_answer,
 		name,
 		category,
-		views
-		FROM ".$db_settings['forum_table']."
+		views,
+		(SELECT
+			user_type
+			FROM ".$db_settings['userdata_table']."
+			WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
+		FROM ".$db_settings['forum_table']." AS t1
 		WHERE pid = 0".$threadsQueryWhere."
 		ORDER BY fixed DESC, ".$order." ".$descasc."
 		LIMIT ".$ul.", ".$settings['topics_per_page'];
@@ -279,7 +283,8 @@ if ($settings['access_for_users_only'] == 1
 			fixed,
 			views
 			FROM ".$db_settings['forum_table']."
-			WHERE tid = ".$zeile["tid"];
+			WHERE tid = ".$zeile["tid"]."
+			ORDER BY time DESC";
 			$rawresult = dbaseAskDatabase($threadCompleteQuery, $connid);
 			# Ergebnisse einlesen:
 			foreach ($rawresult as $tmp)
@@ -302,11 +307,11 @@ if ($settings['access_for_users_only'] == 1
 				}
 			# generate output of thread lists
 			# highlight user, mods and admins:
-			if (($settings['admin_mod_highlight'] == 1
-			or $settings['user-highlight'] == 1)
-			&& $zeile["user_id"] > 0)
+			if (!empty($zeile['user_type'])
+			and ($settings['admin_mod_highlight'] == 1
+			or $settings['user-highlight'] == 1))
 				{
-				$mark = outputStatusMark($mark, $zeile, $connid);
+				$markA = outputStatusMark($mark, $zeile['user_type'], $connid);
 				}
 			$rowClass = ($i % 2 == 0) ? "a" : "b";
 			echo '<tr class="'.$rowClass.'">'."\n";
@@ -357,7 +362,7 @@ if ($settings['access_for_users_only'] == 1
 				$sult = str_replace("[name]", htmlspecialchars($zeile["name"]), outputLangDebugInAttributes($lang['show_userdata_linktitle']));
 				echo '<a href="user.php?id='.$zeile["user_id"].'" title="'.$sult.'">';
 				}
-			echo outputAuthorsName($zeile["name"], $mark, $zeile["user_id"]);
+			echo outputAuthorsName($zeile["name"], $markA, $zeile["user_id"]);
 			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
 				{
 				echo '</a>';

@@ -88,30 +88,16 @@ return $r;
  * detects the status of $mark dependent of users role
  *
  * @param array $mark
- * @param array $zeile
+ * @param string $user_type
  * @param string $connid
  * @return array $mark
  */
-function outputStatusMark($mark, $zeile, $connid) {
+function outputStatusMark($mark, $user_type = '', $connid) {
 global $settings;
-if (is_array($zeile)) {
-	global $db_settings;
-	$query = "SELECT
-	user_type
-	FROM ".$db_settings['userdata_table']."
-	WHERE user_id = '".$zeile["user_id"]."'";
-	$userdata_result = mysql_query($query, $connid);
-	$userdata = mysql_fetch_assoc($userdata_result);
-	mysql_free_result($userdata_result);
-	}
-else
-	{
-	$userdata['user_type'] = $zeile;
-	}
 
-$mark['admin'] = ($userdata['user_type'] === "admin" && $settings['admin_mod_highlight'] == 1) ? true : false;
-$mark['mod'] = ($userdata['user_type'] === "mod" && $settings['admin_mod_highlight'] == 1) ? true : false;
-$mark['user'] = ($userdata['user_type'] === "user" && $settings['user_highlight'] == 1) ? true : false;
+$mark['admin'] = ($user_type === "admin" && $settings['admin_mod_highlight'] == 1) ? 1 : 0;
+$mark['mod'] = ($user_type === "mod" && $settings['admin_mod_highlight'] == 1) ? 1 : 0;
+$mark['user'] = ($user_type === "user" && $settings['user_highlight'] == 1) ? 1 : 0;
 return $mark;
 }
 
@@ -316,17 +302,17 @@ $r = '';
 $name = '<span class="';
 $regimg = '';
 
-if ($mark['admin']===true or $mark['mod']===true or $mark['user']===true)
+if ($mark['admin'] === 1 or $mark['mod'] === 1 or $mark['user'] === 1)
 	{
-	if ($mark['admin']==true)
+	if ($mark['admin'] === 1)
 		{
 		$name .= 'admin-highlight" title="'.outputLangDebugInAttributes($lang['ud_admin']);
 		}
-	else if ($mark['mod']==true)
+	else if ($mark['mod'] === 1)
 		{
 		$name .= 'mod-highlight" title="'.outputLangDebugInAttributes($lang['ud_mod']);
 		}
-	else if ($mark['user']===true)
+	else if ($mark['user'] === 1)
 		{
 		$name .= 'user-highlight" title="'.outputLangDebugInAttributes($lang['ud_user']);
 		}
@@ -447,14 +433,19 @@ global $settings, $page, $order, $category, $descasc, $last_visit, $category_acc
 $r = '';
 
 $z = 1;
-#$z = $childs[$c];
 # highlighting of admins, mods and users:
-
-if (($settings['admin_mod_highlight'] == 1
-	or $settings['user_highlight'] == 1)
-	&& $t[$c]["user_id"] > 0)
+if ($v == 'forum'
+	and $t[$c]['posters_id'] > 0
+	and ($settings['admin_mod_highlight'] == 1
+	or $settings['user_highlight'] == 1))
 	{
-	$mark = outputStatusMark($mark, $t[$c], $connid);
+	$mark = outputStatusMark($mark, $t[$c]['user_type'], $connid);
+	}
+else
+	{
+	$mark['admin'] = 0;
+	$mark['mod'] = 0;
+	$mark['user'] = 0;
 	}
 
 if ($page != 0 and $category != 0 and $order != 'time')
