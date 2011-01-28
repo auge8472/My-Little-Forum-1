@@ -83,9 +83,9 @@ $generalLocalPath.'/mix.php',
 $generalLocalPath.'/mix_entry.php');
 
 if (in_array($_SERVER['SCRIPT_NAME'], $generalMarkUse)) {
-	$mark['admin'] = false;
-	$mark['mod'] = false;
-	$mark['user'] = false;
+	$mark['admin'] = 0;
+	$mark['mod'] = 0;
+	$mark['user'] = 0;
 	}
 
 ?>
