@@ -676,7 +676,7 @@ foreach ($lang as $key => $val) {
 		}
 	else {
 		$str[$key]  = $debug == 1 ? '<span title="key: ['.htmlspecialchars($key).'], file: '.htmlspecialchars($file).'">' : '';
-		$str[$key] .= htmlspecialchars(strval($val));
+		$str[$key] .= strval($val);
 		$str[$key] .= $debug == 1 ? '</span>' : '';
 		}
 	}
