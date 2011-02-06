@@ -232,7 +232,6 @@ if ($settings['access_for_users_only'] == 1
 		$ftext = outputPreparePosting($entrydata["text"]);
 		echo '<div class="posting">'.$ftext.'</div>'."\n";
 		}
-
 	if (isset($signature) && $signature != "")
 		{
 		$signature = outputPreparePosting($settings['signature_separator'].$signature, 'signature');
