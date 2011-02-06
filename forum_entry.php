@@ -129,15 +129,15 @@ if ($settings['access_for_users_only'] == 1
 				$opener = ($entrydata['pid'] == 0) ? 'opener' : '';
 				if ($userdata["user_type"] == "admin" && $settings['admin_mod_highlight'] == 1)
 					{
-					$mark['admin'] = true;
+					$mark['admin'] = 1;
 					}
 				else if ($userdata["user_type"] == "mod" && $settings['admin_mod_highlight'] == 1)
 					{
-					$mark['mod'] = true;
+					$mark['mod'] = 1;
 					}
 				else if ($userdata["user_type"] == "user" && $settings['user_highlight'] == 1)
 					{
-					$mark['user'] = true;
+					$mark['user'] = 1;
 					}
 				if ($entrydata["show_signature"] == 1)
 					{
