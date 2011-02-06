@@ -788,4 +788,24 @@ $string = str_replace($illegalChars["char"], $illegalChars["repl"], $string);
 return $string;
 } # End: outputXMLclearedString
 
+
+
+/**
+ * Prepares the posting for output
+ *
+ * @param string $entry
+ * @return string $entry
+ */
+function outputPreparePosting($entry, $type = 'posting') {
+global $settings;
+
+if ($settings['autolink'] == 1) $entry = make_link($entry);
+if ($settings['bbcode'] == 1) $entry = bbcode($entry);
+if ($settings['smilies'] == 1) $entry = smilies($entry);
+if ($type == 'posting') $entry = zitat($entry);
+
+return $entry;
+}
+
+
 ?>

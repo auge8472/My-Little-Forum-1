@@ -129,19 +129,12 @@ if ($entrydata["text"]=="")
 	}
 else
 	{
-	$ftext = $entrydata["text"];
-	if ($settings['autolink'] == 1) $ftext = make_link($ftext);
-	if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
-	if ($settings['smilies'] == 1) $ftext = smilies($ftext);
-	$ftext = zitat($ftext);
+	$ftext = outputPreparePosting($entrydata["text"]);
 	echo '<div class="postingboard">'.$ftext.'</div>';
 	}
 if (isset($signature) && $signature != "")
 	{
-	$signature = $settings['signature_separator'].$signature;
-	if ($settings['autolink'] == 1) $signature = make_link($signature);
-	if ($settings['bbcode'] == 1) $signature = bbcode($signature);
-	if ($settings['smilies'] == 1) $signature = smilies($signature);
+	$signature = outputPreparePosting($settings['signature_separator'].$signature, 'signature');
 	echo '<div class="signature">'.$signature.'</div>';
 	}
 
