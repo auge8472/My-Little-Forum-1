@@ -163,14 +163,18 @@ if ($settings['access_for_users_only'] == 1
 	id,
 	pid,
 	tid,
-	user_id,
-	UNIX_TIMESTAMP(time) AS time,
+	user_id AS posters_id,
+	DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
 	UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS tp_time,
 	UNIX_TIMESTAMP(last_answer) AS last_answer,
 	name,
 	subject,
 	category,
-	marked
+	marked,
+	(SELECT
+		user_type
+		FROM ".$db_settings['userdata_table']."
+		WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
 	FROM ".$db_settings['forum_table']."
 	WHERE tid = ".intval($entrydata["tid"])."
 	ORDER BY time DESC";
@@ -178,8 +182,8 @@ if ($settings['access_for_users_only'] == 1
 	if (!$result) die($lang['db_error']);
 	while ($tmp = mysql_fetch_assoc($result))
 		{
-		$parent_array[$tmp["id"]] = $tmp;
-		$child_array[$tmp["pid"]][] =  $tmp["id"];
+		$postArray[$tmp["id"]] = $tmp;           // Ergebnis im Array ablegen
+		$childArray[$tmp["pid"]][] = $tmp["id"]; // Vorwärtsbezüge konstruieren
 		}
 	mysql_free_result($result);
 
@@ -261,9 +265,7 @@ if ($settings['access_for_users_only'] == 1
 	echo '</div>'."\n".'</div>'."\n";
 	echo '<hr class="entryline" />'."\n";
 	echo '<h3>'.$lang['whole_thread_marking'].'</h3>'."\n";
-	echo '<ul class="thread">'."\n";
-	echo thread_tree($Thread, $id);
-	echo '</ul>'."\n";
+	echo outputThreads($postArray, $childArray, 'forum', 0);
 	echo $footer;
 	}
 else
