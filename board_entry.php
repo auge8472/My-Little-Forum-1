@@ -461,14 +461,14 @@ if ($settings['access_for_users_only'] == 1
 			if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
 			if ($settings['smilies'] == 1) $ftext = smilies($ftext);
 			$ftext = zitat($ftext);
-			echo '<p class="postingboard">'.$ftext.'</p>'."\n";
+			echo '<div class="postingboard">'.$ftext.'</div>'."\n";
 			}
 		if (isset($signature) && $signature != "")
 			{
 			if ($settings['autolink'] == 1) $signature = make_link($signature);
 			if ($settings['bbcode'] == 1) $signature = bbcode($signature);
 			if ($settings['smilies'] == 1) $signature = smilies($signature);
-			echo '<p class="signature">'.$settings['signature_separator'].$signature.'</p>'."\n";
+			echo '<div class="signature">'.$settings['signature_separator'].$signature.'</div>'."\n";
 			}
 		echo '</td>'."\n";
 		echo '</tr>'."\n";
