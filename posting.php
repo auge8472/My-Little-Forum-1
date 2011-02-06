@@ -1269,9 +1269,8 @@ if (($settings['access_for_users_only'] == 1
 						else
 							{
 							$pr_text = $text;
-							$pr_text = htmlspecialchars($pr_text);
-							$pr_text = nl2br($pr_text);
-							$pr_text = zitat($pr_text);
+#							$pr_text = htmlspecialchars($pr_text);
+#							$pr_text = nl2br($pr_text);
 							if ($settings['autolink'] == 1)
 								{
 								$pr_text = make_link($pr_text);
@@ -1284,12 +1283,14 @@ if (($settings['access_for_users_only'] == 1
 								{
 								$pr_text = smilies($pr_text);
 								}
-							echo '<p class="postingboard">'.$pr_text.'</p>'."\n";
+							$pr_text = zitat($pr_text);
+							echo '<div class="postingboard">'.$pr_text.'</div>'."\n";
 							}
 						if ($show_signature == 1 && $pr_signature != "")
 							{
-							$pr_signature = htmlspecialchars($pr_signature);
-							$pr_signature = nl2br($pr_signature);
+							$pr_signature = $settings['signature_separator'].$pr_signature;
+#							$pr_signature = htmlspecialchars($pr_signature);
+#							$pr_signature = nl2br($pr_signature);
 							if ($settings['autolink'] == 1)
 								{
 								$pr_signature = make_link($pr_signature);
@@ -1302,7 +1303,7 @@ if (($settings['access_for_users_only'] == 1
 								{
 								$pr_signature = smilies($pr_signature);
 								}
-							echo '<p class="signature">'.$settings['signature_separator'].$pr_signature.'</p>'."\n";
+							echo '<div class="signature">'.$pr_signature.'</div>'."\n";
 							}
 						echo '</td>'."\n";
 						echo '</tr>'."\n";
@@ -1320,9 +1321,8 @@ if (($settings['access_for_users_only'] == 1
 						else
 							{
 							$pr_text = $text;
-							$pr_text = htmlspecialchars($pr_text);
-							$pr_text = nl2br($pr_text);
-							$pr_text = zitat($pr_text);
+#							$pr_text = htmlspecialchars($pr_text);
+#							$pr_text = nl2br($pr_text);
 							if ($settings['autolink'] == 1)
 								{
 								$pr_text = make_link($pr_text);
@@ -1335,12 +1335,14 @@ if (($settings['access_for_users_only'] == 1
 								{
 								$pr_text = smilies($pr_text);
 								}
-							echo '<p class="posting">'.$pr_text.'</p>'."\n";
+							$pr_text = zitat($pr_text);
+							echo '<div class="posting">'.$pr_text.'</div>'."\n";
 							} # End: if ($text == "") else
 						if ($show_signature == 1 && $pr_signature != "")
 							{
-							$pr_signature = htmlspecialchars($pr_signature);
-							$pr_signature = nl2br($pr_signature);
+							$pr_signature = $settings['signature_separator'].$pr_signature;
+#							$pr_signature = htmlspecialchars($pr_signature);
+#							$pr_signature = nl2br($pr_signature);
 							if ($settings['autolink'] == 1)
 								{
 								$pr_signature = make_link($pr_signature);
@@ -1353,7 +1355,7 @@ if (($settings['access_for_users_only'] == 1
 								{
 								$pr_signature = smilies($pr_signature);
 								}
-							echo '<p class="signature">'.$settings['signature_separator'].$pr_signature.'</p>'."\n";
+							echo '<div class="signature">'.$pr_signature.'</div>'."\n";
 							}
 						echo '</div>'."\n";
 						}

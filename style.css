@@ -105,6 +105,7 @@ background-image:url(img/update_mo.gif);
 
 /* general settings */
 .bold { font-weight: bold; }
+.underline { text-decoration: underline; }
 label { font-weight: bold; cursor: pointer; }
 .current-page { font-weight: bold; }
 span.current-page {
