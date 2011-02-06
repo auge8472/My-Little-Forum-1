@@ -385,9 +385,9 @@ if ($settings['access_for_users_only'] == 1
 	while ($entrydata = mysql_fetch_assoc($result))
 		{
 		unset($signature);
-		$mark['admin'] = false;
-		$mark['mod'] = false;
-		$mark['user'] = false;
+		$mark['admin'] = 0;
+		$mark['mod'] = 0;
+		$mark['user'] = 0;
 		if ($entrydata["user_id"] > 0)
 			{
 			$userdataPerPostingQuery = "SELECT
