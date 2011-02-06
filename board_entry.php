@@ -457,39 +457,17 @@ if ($settings['access_for_users_only'] == 1
 		else
 			{
 			$ftext=$entrydata["text"];
-			$ftext = htmlspecialchars($ftext);
-			$ftext = nl2br($ftext);
+			if ($settings['autolink'] == 1) $ftext = make_link($ftext);
+			if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
+			if ($settings['smilies'] == 1) $ftext = smilies($ftext);
 			$ftext = zitat($ftext);
-			if ($settings['autolink'] == 1)
-				{
-				$ftext = make_link($ftext);
-				}
-			if ($settings['bbcode'] == 1)
-				{
-				$ftext = bbcode($ftext);
-				}
-			if ($settings['smilies'] == 1)
-				{
-				$ftext = smilies($ftext);
-				}
 			echo '<p class="postingboard">'.$ftext.'</p>'."\n";
 			}
 		if (isset($signature) && $signature != "")
 			{
-			$signature = htmlspecialchars($signature);
-			$signature = nl2br($signature);
-			if ($settings['autolink'] == 1)
-				{
-				$signature = make_link($signature);
-				}
-			if ($settings['bbcode'] == 1)
-				{
-				$signature = bbcode($signature);
-				}
-			if ($settings['smilies'] == 1)
-				{
-				$signature = smilies($signature);
-				}
+			if ($settings['autolink'] == 1) $signature = make_link($signature);
+			if ($settings['bbcode'] == 1) $signature = bbcode($signature);
+			if ($settings['smilies'] == 1) $signature = smilies($signature);
 			echo '<p class="signature">'.$settings['signature_separator'].$signature.'</p>'."\n";
 			}
 		echo '</td>'."\n";
