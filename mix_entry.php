@@ -130,8 +130,6 @@ if ($entrydata["text"]=="")
 else
 	{
 	$ftext = $entrydata["text"];
-#	$ftext = htmlspecialchars($ftext);
-#	$ftext = nl2br($ftext);
 	if ($settings['autolink'] == 1) $ftext = make_link($ftext);
 	if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
 	if ($settings['smilies'] == 1) $ftext = smilies($ftext);
@@ -141,13 +139,10 @@ else
 if (isset($signature) && $signature != "")
 	{
 	$signature = $settings['signature_separator'].$signature;
-#	$signature = htmlspecialchars($signature);
-#	$signature = nl2br($signature);
 	if ($settings['autolink'] == 1) $signature = make_link($signature);
 	if ($settings['bbcode'] == 1) $signature = bbcode($signature);
 	if ($settings['smilies'] == 1) $signature = smilies($signature);
 	echo '<div class="signature">'.$signature.'</div>';
-#	echo '<div class="signature">'.$settings['signature_separator'].$signature.'</div>';
 	}
 
 echo '</td>'."\n".'</tr>'."\n".'</table>'."\n";
