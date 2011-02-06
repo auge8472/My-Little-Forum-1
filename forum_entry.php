@@ -174,7 +174,6 @@ if ($settings['access_for_users_only'] == 1
 	FROM ".$db_settings['forum_table']."
 	WHERE tid = ".intval($entrydata["tid"])."
 	ORDER BY time DESC";
-	#ORDER BY time ASC";
 	$result = mysql_query($threadQuery, $connid);
 	if (!$result) die($lang['db_error']);
 	while ($tmp = mysql_fetch_assoc($result))
