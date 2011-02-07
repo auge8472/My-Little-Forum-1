@@ -136,8 +136,19 @@ return preg_replace("/[^\n]/", '', $string);
  * @return string
  */
 function bbcodeDoURL($action, $attributes, $content, $params, $node_object) {
+
+/**
+ * Origin of code inside "if ($action == 'validate')" is jlog 1.1.3
+ * see: http://jeenaparadies.net/webdesign/jlog/
+ */
 if ($action == 'validate')
 	{
+	if (preg_match('#^(http://|ftp://|news:|mailto:|/)#i', $url)) return true; 
+	# Some people just write www.example.org, skipping the http://
+	# We're going to be gentle a prefix this link with the protocoll.
+	# However, example.org (without www) will not be recognized
+	else if (substr($url, 0, 4) == 'www.') return true;
+	# all other links will be ignored
 	return true;
 	}
 if (!isset ($attributes['default']))

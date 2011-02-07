@@ -340,7 +340,7 @@ padding: 0 5px 0 0;
 
 .actthread {
 padding-left: 18px;
-color: #f00;
+color: #000;
 font-weight: bold;
 background-image:url(img/topic.gif);
 background-repeat:no-repeat;
@@ -348,7 +348,7 @@ background-position: top left;
 }
 .actreply {
 padding-left: 16px;
-color: #f00;
+color: #000;
 font-weight: bold;
 background-image:url(img/reply.gif);
 background-repeat:no-repeat;
