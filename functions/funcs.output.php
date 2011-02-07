@@ -486,8 +486,7 @@ else
 	$catLink  = '';
 	}
 
-if ($aktuellerEintrag == 0
-	and $t[$c]["pid"]==0
+if ($t[$c]["pid"]==0
 	and (isset($t[$c]["fixed"])
 	and $t[$c]["fixed"] == 1))
 	{
@@ -598,13 +597,13 @@ else
 #	$append = '';
 	}
 $r .= str_repeat(" ", $d).'<li>';
-if ($c == $aktuellerEintrag && $t[$c]["pid"]==0)
+if ($c == intval($_GET['id']) && $t[$c]["pid"]==0)
 	{
-	echo '<span class="actthread">'.htmlspecialchars($t[$c]["subject"]).'</span>';
+	$r .= '<span class="actthread">'.htmlspecialchars($t[$c]["subject"]).'</span> '.$append;
 	}
-else if ($c == $aktuellerEintrag && $t[$c]["pid"]!=0)
+else if ($c == intval($_GET['id']) && $t[$c]["pid"]!=0)
 	{
-	echo '<span class="actreply">'.htmlspecialchars($t[$c]["subject"]).'</span>';
+	$r .= '<span class="actreply">'.htmlspecialchars($t[$c]["subject"]).'</span> '.$append;
 	}
 else
 	{
