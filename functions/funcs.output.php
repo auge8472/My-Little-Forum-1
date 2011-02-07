@@ -486,7 +486,10 @@ else
 	$catLink  = '';
 	}
 
-if ($aktuellerEintrag == 0 && $t[$c]["pid"]==0 && $t[$c]["fixed"] == 1)
+if ($aktuellerEintrag == 0
+	and $t[$c]["pid"]==0
+	and (isset($t[$c]["fixed"])
+	and $t[$c]["fixed"] == 1))
 	{
 	$fixed = ' <img src="img/fixed.gif" width="9" height="9" title="'.strip_tags($lang['fixed']).'" alt="*" />';
 	}
