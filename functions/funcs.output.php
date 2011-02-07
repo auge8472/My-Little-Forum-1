@@ -794,6 +794,7 @@ return $string;
  * Prepares the posting for output
  *
  * @param string $entry
+ * @param string $type (optional)
  * @return string $entry
  */
 function outputPreparePosting($entry, $type = 'posting') {
