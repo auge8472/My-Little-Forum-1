@@ -23,60 +23,6 @@ include("inc.php");
 include_once("functions/include.prepare.php");
 
 
-function mix_tree($id, $aktuellerEintrag = 0, $tiefe = 0) {
-global $settings, $parent_array, $child_array, $page, $order, $category, $descasc, $last_visit, $lang;
-
-# see: line 342
-
-echo '<div class="threadkl" style="margin-left: ';
-if ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix']/$settings['thread_indent_mix']))
-	{
-	echo "0";
-	}
-else
-	{
-	echo $settings['thread_indent_mix'];
-	}
-echo 'px;">'."\n";
-
-//[... Zeile mit den Eintragsdaten oder einem Link ausgeben ...]
-if ($parent_array[$id]["pid"]!=0)
-	{
-	echo '<li><a class="';
-	if (($aktuellerEintrag == 0
-		&& isset($_SESSION[$settings['session_prefix'].'newtime'])
-		&& $_SESSION[$settings['session_prefix'].'newtime'] < $parent_array[$id]["time"])
-		|| ($aktuellerEintrag == 0
-		&& empty($_SESSION[$settings['session_prefix'].'newtime'])
-		&& $parent_array[$id]["time"] > $last_visit))
-		{
-		echo "replynew";
-		}
-	else
-		{
-		echo "reply";
-		}
-	echo '" href="mix_entry.php?id='.$parent_array[$id]["tid"];
-	if ($page != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC")
-		{
-		echo '&amp;page='.$page.'&amp;category='.$category;
-		echo '&amp;order='.$order.'&amp;descasc='.$descasc;
-		}
-	echo '#p'.$parent_array[$id]["id"].'" title="'.htmlspecialchars($parent_array[$id]["name"]);
-	echo ", ".strftime(outputLangDebugInAttributes($lang['time_format']),$parent_array[$id]["Uhrzeit"]).'">'.htmlspecialchars($parent_array[$id]["subject"]).'</a> (<span class="id">#&nbsp;'.$parent_array[$id]["id"].'</span>)</li>'."\n";
-	}
-
-// Anfang der Schleife über alle Kinder ...
-if (isset($child_array[$id]) && is_array($child_array[$id]))
-	{
-    foreach($child_array[$id] as $kind)
-    	{
-      mix_tree($kind, $aktuellerEintrag, $tiefe+1);
-		}
-	}
-echo '</div>'."\n";
-} # End: mix_tree
-
 if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 && isset($_COOKIE['auto_login'])
 && isset($settings['autologin'])
