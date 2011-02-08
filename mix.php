@@ -315,7 +315,7 @@ if ($settings['access_for_users_only'] == 1
 				}
 			echo '</td>'."\n";
 			# time op
-			echo '<td class="info">'.htmlspecialchars($zeile["Uhrzeit"]).'</td>'."\n";
+			echo '<td class="info">'.$zeile["Uhrzeit"].'</td>'."\n";
 			# number of answers
 			echo '<td class="number-cell">'.$answers_count.'</td>'."\n";
 			# date last answer
@@ -330,7 +330,7 @@ if ($settings['access_for_users_only'] == 1
 					echo $descasc.'#p'.$last_answer['id'].'" title="';
 					echo str_replace("[name]", $last_answer['name'], outputLangDebugInAttributes($lang['last_reply_lt'])).'">';
 					}
-				echo htmlspecialchars($zeile["la_Uhrzeit"]);
+				echo $zeile["la_Uhrzeit"];
 				if ($settings['last_reply_link']==1)
 					{
 					echo '</a>';
