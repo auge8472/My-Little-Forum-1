@@ -242,14 +242,19 @@ if ($settings['access_for_users_only'] == 1
 
 	if ($entrydata['locked'] == 0)
 		{
-		$qs  = '';
-		$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
-		$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
-		$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
-		$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
-		echo '<a class="textlink" href="posting.php?id='.$id.$qs;
-		echo '" title="'.outputLangDebugInAttributes($lang['forum_answer_linktitle']).'">';
-		echo $lang['forum_answer_linkname'].'</a>';
+		if ($settings['entries_by_users_only'] == 0
+			or ($settings['entries_by_users_only'] == 1
+			and isset($_SESSION[$settings['session_prefix'].'user_name'])))
+			{
+			$qs  = '';
+			$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
+			$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
+			$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
+			$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
+			echo '<a class="textlink" href="posting.php?id='.$id.$qs;
+			echo '" title="'.outputLangDebugInAttributes($lang['forum_answer_linktitle']).'">';
+			echo $lang['forum_answer_linkname'].'</a>';
+			}
 		}
 	else
 		{
