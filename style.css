@@ -342,6 +342,11 @@ display: inline;
 padding: 0 5px 0 0;
 }
 
+.menu span.inactive-function {
+color: #666;
+text-decoration: line-through;
+}
+
 .actthread {
 padding-left: 18px;
 color: #000;
