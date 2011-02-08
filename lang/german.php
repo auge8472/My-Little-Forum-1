@@ -97,6 +97,9 @@ $lang['unlock_marked_threads'] =       "entsperren";
 $lang['unmark_threads'] =              "unmarkieren";
 $lang['invert_markings'] =             "umkehren";
 $lang['mark_threads'] =                "Threads markieren...";
+$lang['fix_thread_link'] =             "fixiere Thread";
+$lang['unfix_thread_link'] =           "Fixierung aufheben";
+$lang['move_posting_link'] =           "verschieben";
 
 // forum_entry.php:
 $lang['back_to_forum_linkname'] =      "zurück zum Forum";
