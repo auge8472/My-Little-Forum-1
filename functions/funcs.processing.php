@@ -5,7 +5,10 @@
 /**
  * counts the chars of the words in a given string
  *
- * @param string
+ * @param string $string
+ * @param string $setting
+ * @param string $message
+ * @return array $error
  */
 function processCountCharsInWords($string, $setting, $message) {
 $error = array();
@@ -157,15 +160,5 @@ if (!isset ($attributes['default']))
 	}
 return '<a rel="nofollow" href="'.htmlspecialchars($attributes['default']).'">'.$content.'</a>';
 } #End: bbcodeDoURL
-
-
-
-function bbcodeDoCode($action, $attributes, $content, $params, $node_object) {
-if ($action == 'validate')
-	{
-	return true;
-	}
-return '<code>'.$content.'</code>';
-} #End: bbcodeDoCode
 
 ?>
