@@ -158,4 +158,14 @@ if (!isset ($attributes['default']))
 return '<a rel="nofollow" href="'.htmlspecialchars($attributes['default']).'">'.$content.'</a>';
 } #End: bbcodeDoURL
 
+
+
+function bbcodeDoCode($action, $attributes, $content, $params, $node_object) {
+if ($action == 'validate')
+	{
+	return true;
+	}
+return '<code>'.$content.'</code>';
+} #End: bbcodeDoCode
+
 ?>
