@@ -101,6 +101,8 @@ $lang['unlock_marked_threads'] =       "unlock";
 $lang['unmark_threads'] =              "unmark";
 $lang['invert_markings'] =             "invert";
 $lang['mark_threads'] =                "mark threads...";
+$lang['fix_link'] =                    "Fix thread";
+$lang['unfix_link'] =                  "Unfix thread";
 
 // forum_entry.php:
 $lang['back_to_forum_linkname'] =      "Back to the forum";
