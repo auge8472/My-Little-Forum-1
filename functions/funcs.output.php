@@ -427,7 +427,6 @@ function outputThreadTree($t, $childs, $c, $v, $o, $d) {
 # return an empty string if $thread is 0
 if (count($t) == 0) return '';
 # otherwise ...
-#global $settings, $postArray, $childArray, $page, $order, $category, $descasc, $last_visit, $lang;
 global $settings, $page, $order, $category, $descasc, $last_visit, $category_accession, $categories, $mark, $connid, $lang;
 
 $r = '';
@@ -566,7 +565,6 @@ else
 		$thread_info_a = str_replace("[name]", '<a href="user.php?id='.$t[$c]["user_id"].'" title="'.$sult.'">'.$name.'</a>', $lang['thread_info']);
 		}
 	else $thread_info_a = str_replace("[name]", $name, $lang['thread_info']);
-#	$append = str_replace("[time]", strftime(strip_tags($lang['time_format']),$t[$c]["Uhrzeit"]), $thread_info_a);
 	$append = str_replace("[time]", $t[$c]["Uhrzeit"], $thread_info_a);
 	if ((($t[$c]['pid']==0)
 		&& isset($_SESSION[$settings['session_prefix'].'newtime'])
@@ -594,7 +592,6 @@ else
 		{
 		$postClass = 'reply';
 		}
-#	$append = '';
 	}
 $r .= str_repeat(" ", $d).'<li>';
 if ($c == intval($_GET['id']) && $t[$c]["pid"]==0)
