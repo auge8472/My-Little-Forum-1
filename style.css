@@ -259,6 +259,7 @@ font-style: italic;
 clear:both;
 margin:25px 0 0 0;
 padding: 0;
+overflow: hidden;
 }
 
 .postinganswer { float: left; }

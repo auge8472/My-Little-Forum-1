@@ -238,7 +238,7 @@ if ($settings['access_for_users_only'] == 1
 		echo '<div class="signature">'.$signature.'</div>'."\n";
 		}
 	echo '<div class="postingbottom">'."\n";
-	echo '<div class="postinganswer">'."\n";
+	echo '<div class="postinganswer">';
 
 	if ($entrydata['locked'] == 0)
 		{
