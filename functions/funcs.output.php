@@ -377,6 +377,7 @@ if (($settings['user_edit'] == 1
 	$r .= '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
 	$r .= '" class="edit-posting" title="'.outputLangDebugInAttributes($lang['edit_linktitle']).'">';
 	$r .= $lang['edit_linkname'].'</a></li>'."\n";
+	# delete a posting
 	if (($settings['user_delete'] == 1
 		and (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		and $thread["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]
@@ -391,6 +392,7 @@ if (($settings['user_edit'] == 1
 		$r .= $category.'" class="delete-posting" title="'.outputLangDebugInAttributes($lang['delete_linktitle']).'">';
 		$r .= $lang['delete_linkname'].'</a></li>'."\n";
 		}
+	# lock a thread
 	if ((!empty($first) and $first==='opener')
 		and (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
