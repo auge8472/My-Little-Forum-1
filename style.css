@@ -263,7 +263,10 @@ overflow: hidden;
 }
 
 .postinganswer { float: left; }
-.postingedit { text-align: right; }
+.postingedit {
+float: right;
+text-align: right;
+}
 
 h2.postingform { margin: 0; }
 p.postingforma { margin: 3px 0 0 0; }
@@ -292,7 +295,7 @@ padding: 0;
 ul.menu {
 list-style-type: none;
 font-size: 0.86em;
-margin: 15px 0 0 0;
+margin: 0;
 padding: 0;
 }
 .menu li {
