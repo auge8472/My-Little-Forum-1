@@ -490,7 +490,7 @@ if ($t[$c]["pid"]==0
 	and (isset($t[$c]["fixed"])
 	and $t[$c]["fixed"] == 1))
 	{
-	$fixed = ' <img src="img/fixed.gif" width="9" height="9" title="'.outputLangDebugInAttributes($lang['fixed']).'" alt="*" />';
+	$fixed = ' <img src="img/fixed.png" width="9" height="9" title="'.outputLangDebugInAttributes($lang['fixed']).'" alt="*" />';
 	}
 else
 	{
@@ -504,21 +504,21 @@ if ($t[$c]["pid"]==0 && $settings['all_views_direct'] == 1)
 		{
 		$otherViews .= '<a href="board_entry.php?id='.$t[$c]['tid'];
 		$otherViews .= ($category > 0) ? '&amp;category='.intval($category) : '';
-		$otherViews .= '&amp;view=board"><img src="img/board_d.gif" alt="[Board]" title="';
+		$otherViews .= '&amp;view=board"><img src="img/board_d.png" alt="[Board]" title="';
 		$otherViews .= outputLangDebugInAttributes($lang['open_in_board_linktitle']).'" width="12" height="9" /></a>';
 		}
 	if ($settings['mix_view'] == 1 and $v != 'mix')
 		{
 		$otherViews .= '<a href="mix_entry.php?id='.$t[$c]['tid'];
 		$otherViews .= ($category > 0) ? '&amp;category='.intval($category) : '';
-		$otherViews .= '&amp;view=mix"><img src="img/mix_d.gif" alt="[Mix]" title="';
+		$otherViews .= '&amp;view=mix"><img src="img/mix_d.png" alt="[Mix]" title="';
 		$otherViews .= outputLangDebugInAttributes($lang['open_in_mix_linktitle']).'" width="12" height="9" /></a>';
 		}
 	if ($settings['thread_view'] == 1 and $v != 'forum')
 		{
 		$otherViews .= '<a href="forum_entry.php?id='.$t[$c]['tid'];
 		$otherViews .= ($category > 0) ? '&amp;category='.intval($category) : '';
-		$otherViews .= '&amp;view=forum"><img src="img/thread_d.gif" alt="[Forum]" title="';
+		$otherViews .= '&amp;view=forum"><img src="img/thread_d.png" alt="[Forum]" title="';
 		$otherViews .= outputLangDebugInAttributes($lang['open_in_thread_linktitle']).'" width="12" height="9" /></a>';
 		}
 	}
@@ -537,11 +537,11 @@ if ($t[$c]["pid"]==0
 	$otherViews .= '"><img src="';
 	if ($t[$c]['marked']==1)
 		{
-		$otherViews .= 'img/marked.gif" alt="[x]" title="'.outputLangDebugInAttributes($lang['demark_linktitle']).'"';
+		$otherViews .= 'img/marked.png" alt="[x]" title="'.outputLangDebugInAttributes($lang['demark_linktitle']).'"';
 		}
 	else
 		{
-		$otherViews .= 'img/mark.gif" alt="[-]" title="'.outputLangDebugInAttributes($lang['mark_linktitle']).'"';
+		$otherViews .= 'img/mark.png" alt="[-]" title="'.outputLangDebugInAttributes($lang['mark_linktitle']).'"';
 		}
 	$otherViews .= ' width="9" height="9" /></a>';
 	}
