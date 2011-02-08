@@ -82,6 +82,7 @@ if ($settings['access_for_users_only'] == 1
 		show_signature,
 		category,
 		locked,
+		fixed,
 		ip
 		FROM ".$db_settings['forum_table']."
 		WHERE id = ".intval($id);
@@ -171,6 +172,7 @@ if ($settings['access_for_users_only'] == 1
 	subject,
 	category,
 	marked,
+	fixed,
 	(SELECT
 		user_type
 		FROM ".$db_settings['userdata_table']."
