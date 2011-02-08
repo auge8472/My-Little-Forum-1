@@ -462,14 +462,14 @@ if ($t[$c]['pid']==0
 	if (isset($category_accession[$t[$c]['category']])
 		&& $category_accession[$t[$c]['category']] == 2)
 		{
-		$titleAdd = ' '.strip_tags($lang['admin_mod_category']);
+		$titleAdd = ' '.outputLangDebugInAttributes($lang['admin_mod_category']);
 		$catClassName = 'category-adminmod';
 		}
 	# Is it a registered users (including admins/mods) category?
 	else if (isset($category_accession[$t[$c]['category']])
 		&& $category_accession[$t[$c]["category"]] == 1)
 		{
-		$titleAdd = " ".strip_tags($lang['registered_users_category']);
+		$titleAdd = " ".outputLangDebugInAttributes($lang['registered_users_category']);
 		$catClassName = 'category-regusers';
 		}
 	else
@@ -477,7 +477,7 @@ if ($t[$c]['pid']==0
 		$titleAdd = '';
 		$catClassName = 'category';
 		}
-	$catLink  = '&nbsp;<a title="'.str_replace('[category]', $categories[$t[$c]['category']], strip_tags($lang['choose_category_linktitle'])).$titleAdd;
+	$catLink  = '&nbsp;<a title="'.str_replace('[category]', $categories[$t[$c]['category']], outputLangDebugInAttributes($lang['choose_category_linktitle'])).$titleAdd;
 	$catLink .= '" href="'.$v.'.php?category='.intval($t[$c]['category']).'"><span class="';
 	$catLink .= $catClassName.'">('.$categories[$t[$c]['category']].')</span></a>';
 	}
@@ -490,7 +490,7 @@ if ($t[$c]["pid"]==0
 	and (isset($t[$c]["fixed"])
 	and $t[$c]["fixed"] == 1))
 	{
-	$fixed = ' <img src="img/fixed.gif" width="9" height="9" title="'.strip_tags($lang['fixed']).'" alt="*" />';
+	$fixed = ' <img src="img/fixed.gif" width="9" height="9" title="'.outputLangDebugInAttributes($lang['fixed']).'" alt="*" />';
 	}
 else
 	{
@@ -505,21 +505,21 @@ if ($t[$c]["pid"]==0 && $settings['all_views_direct'] == 1)
 		$otherViews .= '<a href="board_entry.php?id='.$t[$c]['tid'];
 		$otherViews .= ($category > 0) ? '&amp;category='.intval($category) : '';
 		$otherViews .= '&amp;view=board"><img src="img/board_d.gif" alt="[Board]" title="';
-		$otherViews .= strip_tags($lang['open_in_board_linktitle']).'" width="12" height="9" /></a>';
+		$otherViews .= outputLangDebugInAttributes($lang['open_in_board_linktitle']).'" width="12" height="9" /></a>';
 		}
 	if ($settings['mix_view'] == 1 and $v != 'mix')
 		{
 		$otherViews .= '<a href="mix_entry.php?id='.$t[$c]['tid'];
 		$otherViews .= ($category > 0) ? '&amp;category='.intval($category) : '';
 		$otherViews .= '&amp;view=mix"><img src="img/mix_d.gif" alt="[Mix]" title="';
-		$otherViews .= strip_tags($lang['open_in_mix_linktitle']).'" width="12" height="9" /></a>';
+		$otherViews .= outputLangDebugInAttributes($lang['open_in_mix_linktitle']).'" width="12" height="9" /></a>';
 		}
 	if ($settings['thread_view'] == 1 and $v != 'forum')
 		{
 		$otherViews .= '<a href="forum_entry.php?id='.$t[$c]['tid'];
 		$otherViews .= ($category > 0) ? '&amp;category='.intval($category) : '';
 		$otherViews .= '&amp;view=forum"><img src="img/thread_d.gif" alt="[Forum]" title="';
-		$otherViews .= strip_tags($lang['open_in_thread_linktitle']).'" width="12" height="9" /></a>';
+		$otherViews .= outputLangDebugInAttributes($lang['open_in_thread_linktitle']).'" width="12" height="9" /></a>';
 		}
 	}
 else
@@ -537,11 +537,11 @@ if ($t[$c]["pid"]==0
 	$otherViews .= '"><img src="';
 	if ($t[$c]['marked']==1)
 		{
-		$otherViews .= 'img/marked.gif" alt="[x]" title="'.strip_tags($lang['demark_linktitle']).'"';
+		$otherViews .= 'img/marked.gif" alt="[x]" title="'.outputLangDebugInAttributes($lang['demark_linktitle']).'"';
 		}
 	else
 		{
-		$otherViews .= 'img/mark.gif" alt="[-]" title="'.strip_tags($lang['mark_linktitle']).'"';
+		$otherViews .= 'img/mark.gif" alt="[-]" title="'.outputLangDebugInAttributes($lang['mark_linktitle']).'"';
 		}
 	$otherViews .= ' width="9" height="9" /></a>';
 	}
@@ -609,7 +609,7 @@ else
 	{
 	$r .= '<a class="'.$postClass.'" href="'.$v.'_entry.php?id='.$t[$c]['id'];
 	$r .= ($v == 'mix') ? '#'.$t[$c]['id'] : '';
-	$r .= '"'.$title.'>'.htmlspecialchars($t[$c]['subject']).'</a> '.$append;
+	$r .= '"'.outputLangDebugInAttributes($title).'>'.htmlspecialchars($t[$c]['subject']).'</a> '.$append;
 	}
 $r .= $catLink.$fixed.$otherViews;
 
