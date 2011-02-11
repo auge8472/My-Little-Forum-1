@@ -24,7 +24,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 	{
 	$ref = (!empty($refer)) ? '&amp;refer='.$refer : '';
 	$r .= '<div class="marked-threads">'."\n";
-	$r .= ' <h2><img src="img/marked.gif" alt="[x]" width="9" height="9" /> ';
+	$r .= ' <h2><img src="img/marked.png" alt="[x]" width="9" height="9" /> ';
 	$r .= $lang['marked_threads_actions'].'</h2>'."\n";
 	$r .= ' <ul>'."\n";
 	$r .= '  <li><a href="admin.php?action=delete_marked_threads'.$ref.'">';
