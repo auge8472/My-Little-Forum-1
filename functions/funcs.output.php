@@ -406,6 +406,38 @@ if (($settings['user_edit'] == 1
 		$r .= ($thread['locked'] == 0) ? $lang['lock_linkname'] : $lang['unlock_linkname'];
 		$r .= '</a></li>'."\n";
 		}
+	# pin a thread
+	if ((!empty($first) and $first==='opener')
+		and (isset($_SESSION[$settings['session_prefix'].'user_id'])
+		and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
+		or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
+		{
+		$fixClass = ($thread['fixed'] == 1) ? 'unfix' : 'fix';
+		$r .= '<li><a href="posting.php?fix=true'.$view.'&amp;id=';
+		$r .= $thread["id"].'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc=';
+		$r .= $descasc.'&amp;category='.$category.'" class="'.$fixClass.'-posting">';
+#		$r .= $descasc.'&amp;category='.$category.'" class="fix-posting" title="';
+#		$r .= ($thread['locked'] == 0) ? outputLangDebugInAttributes($lang['lock_linktitle']) : outputLangDebugInAttributes($lang['unlock_linktitle']);
+#		$r .= '">';
+		$r .= ($thread['fixed'] == 0) ? $lang['fix_thread_link'] : $lang['unfix_thread_link'];
+		$r .= '</a></li>'."\n";
+		}
+	# move a posting
+	if (isset($_SESSION[$settings['session_prefix'].'user_id'])
+		and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
+		or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
+		{
+		$r .= '<li><span class="inactive-function">';
+		$r .= $lang['move_posting_link'];
+		$r .= '</span></li>'."\n";
+#		$r .= '<li><a href="posting.php?pin=true'.$view.'&amp;id=';
+#		$r .= $thread["id"].'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc=';
+#		$r .= $descasc.'&amp;category='.$category.'" class="lock-posting" title="';
+#		$r .= ($thread['locked'] == 0) ? outputLangDebugInAttributes($lang['lock_linktitle']) : outputLangDebugInAttributes($lang['unlock_linktitle']);
+#		$r .= '">';
+#		$r .= ($thread['locked'] == 0) ? $lang['lock_linkname'] : $lang['unlock_linkname'];
+#		$r .= '</a></li>'."\n";
+		}
 	$r .= "</ul>\n";
 	}
 

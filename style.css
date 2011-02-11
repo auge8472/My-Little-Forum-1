@@ -337,6 +337,26 @@ color: #00f;
 text-decoration: underline;
 background-image:url(img/lock_mo.png);
 }
+.menu a.fix-posting:link, .menu a.fix-posting:visited {
+color: #00c;
+text-decoration: none;
+background-image:url(img/fixed.png);
+}
+.menu a.fix-posting:focus, .menu a.fix-posting:hover {
+color: #00c;
+text-decoration: none;
+background-image:url(img/fixed_mo.png);
+}
+.menu a.unfix-posting:link, .menu a.unfix-posting:visited {
+color: #00c;
+text-decoration: none;
+background-image:url(img/unfixed.png);
+}
+.menu a.unfix-posting:focus, .menu a.unfix-posting:hover {
+color: #00c;
+text-decoration: none;
+background-image:url(img/unfixed_mo.png);
+}
 .postingedit .menu li {
 display: inline;
 padding: 0 5px 0 0;

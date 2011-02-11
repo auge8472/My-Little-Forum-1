@@ -92,6 +92,49 @@ or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
 	header('location: '.$settings['forum_address'].$header_href.$header_id.'&page='.$page.'&order='.$order.'&descasc='.$descasc.'&category='.$category);
 	} # if (isset($_GET['lock']) ...)
 
+
+if (isset($_GET['fix'])
+and isset($_SESSION[$settings['session_prefix'].'user_id'])
+and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
+or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
+	{
+	$fixQuery = "SELECT
+	tid,
+	fixed
+	FROM ".$db_settings['forum_table']."
+	WHERE id = ".intval($id)."
+	LIMIT 1";
+	$fix_result = mysql_query($fixQuery, $connid);
+	if (!$fix_result) die($lang['db_error']);
+	$field = mysql_fetch_assoc($fix_result);
+	mysql_free_result($fix_result);
+
+	$fixer = ($field['fixed']==0) ? 1 : 0;
+	$refixQuery = "UPDATE ".$db_settings['forum_table']." SET
+	time=time,
+	last_answer=last_answer,
+	edited=edited,
+	fixed='".$fixer."'
+	WHERE tid = ".intval($field['tid']);
+	@mysql_query($refixQuery, $connid);
+
+	if (empty($page)) $page = 0;
+	if (empty($order)) $order = "time";
+	if (empty($descasc)) $descasc = "DESC";
+	if (isset($_GET['view']))
+		{
+		$header_href = ($view=="board") ? 'board_entry.php' : 'mix_entry.php';
+		$header_id = '?id='.$field['tid'];
+		}
+	else
+		{
+		$header_href = 'forum_entry.php';
+		$header_id = '?id='.$id;
+		}
+	header('location: '.$settings['forum_address'].$header_href.$header_id.'&page='.$page.'&order='.$order.'&descasc='.$descasc.'&category='.$category);
+	} # if (isset($_GET['fix']) ...)
+
+
 if (($settings['access_for_users_only'] == 1
 && isset($_SESSION[$settings['session_prefix'].'user_name']))
 || $settings['access_for_users_only'] != 1)
