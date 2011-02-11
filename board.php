@@ -175,11 +175,11 @@ if($settings['access_for_users_only']  == 1
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_subject_headline'].'</a>';
 		if ($order=="subject" && $descasc=="ASC")
 			{
-			echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
 			}
 		else if ($order=="subject" && $descasc=="DESC")
 			{
-			echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
 			}
 		echo '</th>'."\n";
 		if ($categories!=false && $category == 0)
@@ -189,11 +189,11 @@ if($settings['access_for_users_only']  == 1
 			echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_category_headline'].'</a>';
 			if ($order=="category" && $descasc=="ASC")
 				{
-				echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
+				echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
 				}
 			else if ($order=="category" && $descasc=="DESC")
 				{
-				echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" />';
+				echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
 				}
 			echo '</th>'."\n";
 			}
@@ -202,11 +202,11 @@ if($settings['access_for_users_only']  == 1
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_author_headline'].'</a>'."\n";
 		if ($order=="name" && $descasc=="ASC")
 			{
-			echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
 			}
 		else if ($order=="name" && $descasc=="DESC")
 			{
-			echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
 			}
 		echo '</th>'."\n";
 		echo '<th><a href="board.php?category='.$category.'&amp;order=time&amp;descasc=';
@@ -214,11 +214,11 @@ if($settings['access_for_users_only']  == 1
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_date_headline'].'</a>'."\n";
 		if ($order=="time" && $descasc=="ASC")
 			{
-			echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
 			}
 		else if ($order=="time" && $descasc=="DESC")
 			{
-			echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
 			}
 		echo '</th>'."\n";
 		echo '<th>'.$lang['board_answers_headline'].'</th>'."\n";
@@ -227,11 +227,11 @@ if($settings['access_for_users_only']  == 1
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_last_answer_headline'].'</a>'."\n";
 		if ($order=="last_answer" && $descasc=="ASC")
 			{
-			echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
 			}
 		else if ($order=="last_answer" && $descasc=="DESC")
 			{
-			echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
 			}
 		echo '</th>'."\n";
 		if (isset($settings['count_views']) && $settings['count_views'] == 1)
@@ -295,7 +295,7 @@ if($settings['access_for_users_only']  == 1
 			# show sign for fixed threads
 			if ($zeile["fixed"] == 1)
 				{
-				echo ' <img src="img/fixed.gif" width="9" height="9" title="';
+				echo ' <img src="img/fixed.png" width="9" height="9" title="';
 				echo outputLangDebugInAttributes($lang['fixed']).'" alt="*" />';
 				}
 			if ($settings['all_views_direct'] == 1)
@@ -305,14 +305,14 @@ if($settings['access_for_users_only']  == 1
 					{
 					echo '<a href="forum_entry.php?id='.$zeile["tid"].'&amp;view=thread';
 					echo ($category > 0) ? '&amp;category='.$category : '';
-					echo '"><img src="img/thread_d.gif" alt="[Thread]" title="';
+					echo '"><img src="img/thread_d.png" alt="[Thread]" title="';
 					echo outputLangDebugInAttributes($lang['open_in_thread_linktitle']).'" width="12" height="9" /></a>';
 					}
 				if ($settings['mix_view'] == 1)
 					{
 					echo '<a href="mix_entry.php?id='.$zeile["tid"].'&amp;view=mix';
 					echo ($category > 0) ? '&amp;category='.$category : '';
-					echo '"><img src="img/mix_d.gif" alt="[Mix]" title="';
+					echo '"><img src="img/mix_d.png" alt="[Mix]" title="';
 					echo outputLangDebugInAttributes($lang['open_in_mix_linktitle']).'" width="12" height="9" /></a>';
 					}
 				echo "</span>";
@@ -412,11 +412,11 @@ if($settings['access_for_users_only']  == 1
 				echo '&amp;order='.$order.'">';
 				if ($zeile['marked']==1)
 					{
-					echo '<img src="img/marked.gif" alt="[x]" width="9" height="9" title="'.outputLangDebugInAttributes($lang['unmark_linktitle']).'" />';
+					echo '<img src="img/marked.png" alt="[x]" width="9" height="9" title="'.outputLangDebugInAttributes($lang['unmark_linktitle']).'" />';
 					}
 				else
 					{
-					echo '<img src="img/mark.gif" alt="[-]" title="'.outputLangDebugInAttributes($lang['mark_linktitle']).'" width="9" height="9" />';
+					echo '<img src="img/mark.png" alt="[-]" title="'.outputLangDebugInAttributes($lang['mark_linktitle']).'" width="9" height="9" />';
 					}
 				echo '</a></td>'."\n";
 				}

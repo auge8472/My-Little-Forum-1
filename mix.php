@@ -142,11 +142,11 @@ if ($settings['access_for_users_only'] == 1
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_subject_headline'].'</a>';
 		if ($order=="subject" && $descasc=="ASC")
 			{
-			echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
 			}
 		else if ($order=="subject" && $descasc=="DESC")
 			{
-			echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
 			}
 		echo '</th>'."\n";
 		if ($categories != false && $category == 0)
@@ -156,11 +156,11 @@ if ($settings['access_for_users_only'] == 1
 			echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_category_headline'].'</a>';
 			if ($order=="category" && $descasc=="ASC")
 				{
-				echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
+				echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
 				}
 			else if ($order=="category" && $descasc=="DESC")
 				{
-				echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" />';
+				echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
 				}
 			echo '</th>'."\n";
 			}
@@ -169,11 +169,11 @@ if ($settings['access_for_users_only'] == 1
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_author_headline'].'</a>';
 		if ($order=="name" && $descasc=="ASC")
 			{
-			echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
 			}
 		else if ($order=="name" && $descasc=="DESC")
 			{
-			echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
 			}
 		echo '</th>'."\n";
 		echo '<th><a href="mix.php?category='.$category.'&amp;order=time&amp;descasc=';
@@ -181,11 +181,11 @@ if ($settings['access_for_users_only'] == 1
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_date_headline'].'</a>';
 		if ($order=="time" && $descasc=="ASC")
 			{
-			echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
 			}
 		else if ($order=="time" && $descasc=="DESC")
 			{
-			echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
 			}
 		echo '</th>'."\n";
 		echo '<th>'.$lang['board_answers_headline'].'</th>'."\n";
@@ -194,11 +194,11 @@ if ($settings['access_for_users_only'] == 1
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_last_answer_headline'].'</a>';
 		if ($order=="last_answer" && $descasc=="ASC")
 			{
-			echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
 			}
 		else if ($order=="last_answer" && $descasc=="DESC")
 			{
-			echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" />';
+			echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
 			}
 		echo '</th>'."\n";
 		if (isset($settings['count_views']) && $settings['count_views'] == 1)
@@ -356,12 +356,12 @@ if ($settings['access_for_users_only'] == 1
 				echo '&amp;order='.$order.'">';
 				if ($zeile['marked']==1)
 					{
-					echo '<img src="img/marked.gif" alt="[x]" width="9" height="9"';
+					echo '<img src="img/marked.png" alt="[x]" width="9" height="9"';
 					echo ' title="'.outputLangDebugInAttributes($lang['unmark_linktitle']).'" />';
 					}
 				else
 					{
-					echo '<img src="img/mark.gif" alt="[-]" title="';
+					echo '<img src="img/mark.png" alt="[-]" title="';
 					echo outputLangDebugInAttributes($lang['mark_linktitle']).'" width="9" height="9" />';
 					}
 				echo '</a></td>'."\n";
