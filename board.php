@@ -258,7 +258,7 @@ if($settings['access_for_users_only']  == 1
 		echo '</tr>';
 
 		$i=0;
-		while ($zeile = mysql_fetch_array($result))
+		while ($zeile = mysql_fetch_assoc($result))
 			{
 			# count replies:
 			$pid_resultc = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"], $connid);
@@ -270,7 +270,7 @@ if($settings['access_for_users_only']  == 1
 			if ($settings['last_reply_link'] == 1 or $settings['last_reply_name'] == 1)
 				{
 				$last_answer_result = mysql_query("SELECT name, id FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"]." ORDER BY time DESC LIMIT 1", $connid);
-				$last_answer = mysql_fetch_array($last_answer_result);
+				$last_answer = mysql_fetch_assoc($last_answer_result);
 				mysql_free_result($last_answer_result);
 				}
 
