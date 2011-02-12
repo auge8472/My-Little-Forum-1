@@ -76,7 +76,7 @@ if($categories != false && $categories != "not accessible")
 			$r .= '>'.$val.'</option>'."\n";
 			}
 		}
-	$r .= '</select>'."\n".'<noscript><p class="inline-form"> <input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></p></noscript></div>'."\n".'</form>'."\n";
+	$r .= '</select>'."\n".'<noscript><p class="inline-form"> <input type="image" name="" value="" src="img/submit.png" alt="&raquo;" /></p></noscript></div>'."\n".'</form>'."\n";
 	}
 
 return $r;
