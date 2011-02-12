@@ -99,6 +99,8 @@ $lang['invert_markings'] =             "umkehren";
 $lang['mark_threads'] =                "Threads markieren...";
 $lang['fix_thread_link'] =             "fixiere Thread";
 $lang['unfix_thread_link'] =           "Fixierung aufheben";
+$lang['fix_thread_linktitle'] =        "Fixiere den Thread am Beginn der Seite";
+$lang['unfix_thread_linktitle'] =      "Der Thread in den normalen Fluss aller Threads einfügen";
 $lang['move_posting_link'] =           "verschieben";
 
 // forum_entry.php:

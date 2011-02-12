@@ -415,10 +415,9 @@ if (($settings['user_edit'] == 1
 		$fixClass = ($thread['fixed'] == 1) ? 'unfix' : 'fix';
 		$r .= '<li><a href="posting.php?fix=true'.$view.'&amp;id=';
 		$r .= $thread["id"].'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc=';
-		$r .= $descasc.'&amp;category='.$category.'" class="'.$fixClass.'-posting">';
-#		$r .= $descasc.'&amp;category='.$category.'" class="fix-posting" title="';
-#		$r .= ($thread['locked'] == 0) ? outputLangDebugInAttributes($lang['lock_linktitle']) : outputLangDebugInAttributes($lang['unlock_linktitle']);
-#		$r .= '">';
+		$r .= $descasc.'&amp;category='.$category.'" class="'.$fixClass.'-posting" title="';
+		$r .= ($thread['fixed'] == 0) ? outputLangDebugInAttributes($lang['fix_thread_linktitle']) : outputLangDebugInAttributes($lang['unfix_thread_linktitle']);
+		$r .= '">';
 		$r .= ($thread['fixed'] == 0) ? $lang['fix_thread_link'] : $lang['unfix_thread_link'];
 		$r .= '</a></li>'."\n";
 		}

@@ -103,6 +103,8 @@ $lang['invert_markings'] =             "invert";
 $lang['mark_threads'] =                "mark threads...";
 $lang['fix_thread_link'] =             "fix thread";
 $lang['unfix_thread_link'] =           "unfix thread";
+$lang['fix_thread_linktitle'] =        "Fix the thread at the top of the page";
+$lang['unfix_thread_linktitle'] =      "Put the thread into flow with all threads";
 $lang['move_posting_link'] =           "move";
 
 // forum_entry.php:
