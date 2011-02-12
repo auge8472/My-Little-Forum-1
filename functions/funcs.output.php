@@ -674,7 +674,6 @@ return $r;
 function outputThreads($t, $c, $v='thread', $d=0) {
 
 $r  = "";
-#$r .= "<pre>".print_r($t, true)."</pre>\n";
 
 if (is_array($c)) {
 	foreach ($c[0] as $cid) {
