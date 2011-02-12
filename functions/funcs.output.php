@@ -180,7 +180,7 @@ if ($entry["email"]!="" && $entry["hide_email"] != 1 or $entry["hp"]!="")
 if ($entry["hp"]!="")
 	{
 	$email_hp .= '<a href="'.amendProtocol($entry["hp"]).'" title="';
-	$email_hp .= htmlspecialchars($entry["hp"]).'"><img src="img/homepage.gif" ';
+	$email_hp .= htmlspecialchars($entry["hp"]).'"><img src="img/homepage.png" ';
 	$email_hp .= 'alt="'.outputLangDebugInAttributes($lang['homepage_alt']).'" width="13" height="13" /></a>';
 	}
 if (($entry["email"]!="" && $entry["hide_email"] != 1)
@@ -202,7 +202,7 @@ if (($entry["email"]!="" && $entry["hide_email"] != 1)
 	$email_hp .= !empty($category) ? '&amp;category='.intval($category) : '';
 	$email_hp .= '" rel="nofollow" title="';
 	$email_hp .= str_replace("[name]", htmlspecialchars($entry['name']), outputLangDebugInAttributes($lang['email_to_user_linktitle'])).'">';
-	$email_hp .= '<img src="img/email.gif" alt="'.outputLangDebugInAttributes($lang['email_alt']).'" width="13" height="10" /></a>';
+	$email_hp .= '<img src="img/email.png" alt="'.outputLangDebugInAttributes($lang['email_alt']).'" width="13" height="10" /></a>';
 	}
 if ($entry["place"] != "")
 	{
@@ -328,7 +328,7 @@ if ($settings['show_registered'] ==1
 	and isset($_SESSION[$settings['session_prefix'].'user_id'])
 	and $user_id > 0)
 	{
-	$regimg .= '<img src="img/registered.gif" alt="(R)" width="10" height="10" title="'.outputLangDebugInAttributes($lang['registered_user_title']).'" />';
+	$regimg .= '<img src="img/registered.png" alt="(R)" width="10" height="10" title="'.outputLangDebugInAttributes($lang['registered_user_title']).'" />';
 	}
 
 $r .= $name.$regimg;
