@@ -66,16 +66,20 @@ if($settings['access_for_users_only']  == 1
 		id,
 		pid,
 		tid,
-		user_id,
-		UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS xtime,
-		UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_time,
+		user_id AS posters_id,
+		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS xtime,
+		DATE_FORMAT(last_answer + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS la_time,
 		UNIX_TIMESTAMP(last_answer) AS last_answer,
 		name,
 		subject,
 		category,
 		marked,
 		fixed,
-		views
+		views,
+		(SELECT
+			user_type
+			FROM ".$db_settings['userdata_table']."
+			WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
 		FROM ".$db_settings['forum_table']."
 		WHERE pid = 0
 		ORDER BY fixed DESC, ".$order." ".$descasc."
@@ -90,16 +94,20 @@ if($settings['access_for_users_only']  == 1
 		id,
 		pid,
 		tid,
-		user_id,
-		UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS xtime,
-		UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_time,
+		user_id AS posters_id,
+		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS xtime,
+		DATE_FORMAT(last_answer + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS la_time,
 		UNIX_TIMESTAMP(last_answer) AS last_answer,
 		name,
 		subject,
 		category,
 		marked,
 		fixed,
-		views
+		views,
+		(SELECT
+			user_type
+			FROM ".$db_settings['userdata_table']."
+			WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
 		FROM ".$db_settings['forum_table']."
 		WHERE pid = 0 AND category IN (".$category_ids_query.")
 		ORDER BY fixed DESC, ".$order." ".$descasc."
@@ -114,16 +122,20 @@ if($settings['access_for_users_only']  == 1
 		id,
 		pid,
 		tid,
-		user_id,
-		UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS xtime,
-		UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_time,
+		user_id AS posters_id,
+		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS xtime,
+		DATE_FORMAT(last_answer + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS la_time,
 		UNIX_TIMESTAMP(last_answer) AS last_answer,
 		name,
 		subject,
 		category,
 		marked,
 		fixed,
-		views
+		views,
+		(SELECT
+			user_type
+			FROM ".$db_settings['userdata_table']."
+			WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
 		FROM ".$db_settings['forum_table']."
 		WHERE category = '".intval($category)."' AND pid = 0
 		ORDER BY fixed DESC, ".$order." ".$descasc."
@@ -265,9 +277,9 @@ if($settings['access_for_users_only']  == 1
 			# highlight user, mods and admins:
 			if (($settings['admin_mod_highlight'] == 1
 			or $settings['user-highlight'] == 1)
-			&& $zeile["user_id"] > 0)
+			&& $zeile["posters_id"] > 0)
 				{
-				$mark = outputStatusMark($mark, $zeile, $connid);
+				$mark = outputStatusMark($mark, $zeile['user_type'], $connid);
 				}
 			$rowClass = ($i % 2 == 0) ? "a" : "b";
 			echo '<tr class="'.$rowClass.'">'."\n";
@@ -358,19 +370,18 @@ if($settings['access_for_users_only']  == 1
 				echo '</td>'."\n"; # end: categories
 				}
 			echo '<td class="info">'."\n"; # start: authors names
-			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
+			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["posters_id"] > 0)
 				{
 				$sult = str_replace("[name]", htmlspecialchars($zeile["name"]), outputLangDebugInAttributes($lang['show_userdata_linktitle']));
-				echo '<a href="user.php?id='.$zeile["user_id"].'" title="'.$sult.'">';
+				echo '<a href="user.php?id='.$zeile["posters_id"].'" title="'.$sult.'">';
 				}
-			echo outputAuthorsName($zeile["name"], $mark, $zeile["user_id"]);
-			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
+			echo outputAuthorsName($zeile["name"], $mark, $zeile["posters_id"]);
+			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["posters_id"] > 0)
 				{
 				echo '</a>';
 				}
 			echo '</td>'."\n"; # end: authors names
-			echo '<td class="info">'.strftime($lang['time_format'],$zeile["xtime"]).'</td>'."\n";
-			# number of answers
+			echo '<td class="info">'.$zeile["xtime"].'</td>'."\n";
 			echo '<td class="number-cell">'.$answers_count.'</td>'."\n";
 			echo '<td class="info">'; # start: last reply
 			if ($answers_count > 0)
@@ -383,7 +394,7 @@ if($settings['access_for_users_only']  == 1
 					echo '&amp;order='.$order.'&amp;descasc='.$descasc.'#p'.$last_answer['id'];
 					echo '" title="'.str_replace("[name]", $last_answer['name'], outputLangDebugInAttributes($lang['last_reply_lt'])).'">';
 					}
-				echo strftime($lang['time_format'],$zeile["la_time"]);
+				echo $zeile["la_time"];
 				if ($settings['last_reply_name'] == 1)
 					{
 					echo (!empty($last_answer['name'])) ? ' ('.$last_answer['name'].')' : '';
