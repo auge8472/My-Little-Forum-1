@@ -348,7 +348,7 @@ if ($count == 0 && $search != "")
 
 if (isset($search) && $search != "" || isset($show_postings) && $show_postings !="")
 	{
-	echo "<ul id=\"searchresults\">\n";
+	echo '<ul id="searchresults">'."\n";
 	$i=0;
 	while ($entrydata = mysql_fetch_assoc($result))
 		{
