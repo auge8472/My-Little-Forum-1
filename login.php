@@ -340,7 +340,7 @@ switch ($action)
 
 // HTML:
 $wo = strip_tags($lang['login_title']);
-$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'.$lang['login_title'].'</b>';
+$topnav = '<img src="img/where.png" alt="" width="11" height="8" /><b>'.$lang['login_title'].'</b>';
 parse_template();
 echo $header;
 

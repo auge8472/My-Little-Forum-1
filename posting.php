@@ -1465,7 +1465,7 @@ if (($settings['access_for_users_only'] == 1
 							{
 							echo '&nbsp;&nbsp;&nbsp;<a onclick="javascript:delete_cookie(); return false;"';
 							echo ' href="delete_cookie.php" title="'.outputLangDebugInAttributes($lang['delete_cookies_linktitle']).'"><img border="0"';
-							echo ' src="img/dc.gif" name="dc" alt="" width="12" height="9">'.$lang['delete_cookies_linkname'].'</a>';
+							echo ' src="img/dc.png" name="dc" alt="" width="12" height="9">'.$lang['delete_cookies_linkname'].'</a>';
 							}
 						echo '</span></td>'."\n";
 						echo '</tr>';

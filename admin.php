@@ -1631,9 +1631,9 @@ switch ($action)
 				# onmouseover="this.src='img/up_mo.gif';" onmouseout="this.src='img/up.gif';"
 				# onmouseover="this.src='img/down_mo.gif';" onmouseout="this.src='img/down.gif';"
 				echo '<td><a href="admin.php?move_up_category='.$line['id'].'">'."\n";
-				echo '<img src="img/up.gif" alt="up" width="11" height="11" /></a>&nbsp;';
+				echo '<img src="img/up.png" alt="up" width="11" height="11" /></a>&nbsp;';
 				echo '<a href="admin.php?move_down_category='.$line['id'].'">';
-				echo '<img src="img/down.gif" alt="down" width="11" height="11" /></a></td>'."\n";
+				echo '<img src="img/down.png" alt="down" width="11" height="11" /></a></td>'."\n";
 				echo '</tr>';
 				$i++;
 				}
@@ -1764,7 +1764,7 @@ switch ($action)
 			echo '<input type="hidden" name="action" value="user" />'."\n";
 			echo '<input type="text" name="search_user" value="';
 			echo (isset($search_user)) ? htmlspecialchars($search_user) : '';
-			echo '" size="25">&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" />';
+			echo '" size="25">&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;" />';
 			echo '</form>'."\n";
 			if (empty($serach_user) || trim($search_user==''))
 				{
@@ -1779,7 +1779,7 @@ switch ($action)
 					echo (isset($_GET['letter']) && $_GET['letter'] == $lett) ? ' selected="selected"' : '';
 					echo '>'.$lett.'</option>'."\n";
 					}
-				echo '</select>&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></form>'."\n";
+				echo '</select>&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;" /></form>'."\n";
 				echo nav($page, $settings['users_per_page'], $sel_user_count, $order, $descasc, $category, $action);
 				}
 			echo '</td>'."\n";
@@ -1811,11 +1811,11 @@ switch ($action)
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_id'].'</a>';
 				if ($order=="user_id" && $descasc=="ASC")
 					{
-					echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
+					echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" border="0">';
 					}
 				else if ($order=="user_id" && $descasc=="DESC")
 					{
-					echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0">';
+					echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" border="0">';
 					}
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=user_name&amp;descasc=';
@@ -1952,7 +1952,7 @@ switch ($action)
 					}
 				mysql_free_result($result);
 				echo '</table>'."\n";
-				echo '<div style="margin:5px 0px 0px 7px; padding:0px;"><img src="img/selected_arrow.gif" alt="" width="35"';
+				echo '<div style="margin:5px 0px 0px 7px; padding:0px;"><img src="img/selected_arrow.png" alt="" width="35"';
 				echo ' height="20" border="0"><input type="submit" name="delete_user" value="'.outputLangDebugInAttributes($lang_add['delete_users_sb']);
 				echo '" title="'.$lang_add['delete_users_sb_title'].'" /></div>'."\n".'</form>'."\n";
 				}
@@ -2366,7 +2366,7 @@ switch ($action)
 			echo outputLangDebugInAttributes($lang_add['delete_db_note_sb']).'" />'."\n".'</form>'."\n";
 		break;
 		case "delete_marked_threads":
-			$lang_add['del_marked_note'] = str_replace('[marked_symbol]', '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['del_marked_note']);
+			$lang_add['del_marked_note'] = str_replace('[marked_symbol]', '<img src="img/marked.png" alt="[x]" width="9" height="9" />', $lang_add['del_marked_note']);
 			echo '<p class="caution">'.$lang['caution'].'</p>'."\n";
 			echo '<p>'.$lang_add['del_marked_note'].'</p>'."\n";
 			echo '<form action="admin.php" method="post">'."\n";
@@ -2418,7 +2418,7 @@ switch ($action)
 			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></p></form>'."\n";
 		break;
 		case "lock_marked_threads":
-			$lang_add['lock_marked_conf'] = str_replace('[marked_symbol]', '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['lock_marked_conf']);
+			$lang_add['lock_marked_conf'] = str_replace('[marked_symbol]', '<img src="img/marked.png" alt="[x]" width="9" height="9" />', $lang_add['lock_marked_conf']);
 			echo '<p>'.$lang_add['lock_marked_conf'].'</p>'."\n";
 			echo '<form action="admin.php" method="post">'."\n";
 			if (isset($_GET['refer']))
@@ -2430,7 +2430,7 @@ switch ($action)
 			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></form>'."\n";
 		break;
 		case "unlock_marked_threads":
-			$lang_add['unlock_marked_conf'] = str_replace('[marked_symbol]', '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['unlock_marked_conf']);
+			$lang_add['unlock_marked_conf'] = str_replace('[marked_symbol]', '<img src="img/marked.png" alt="[x]" width="9" height="9" />', $lang_add['unlock_marked_conf']);
 			echo '<p>'.$lang_add['unlock_marked_conf'].'</p>'."\n";
 			echo '<form action="admin.php" method="post">'."\n";
 			if (isset($_GET['refer']))
@@ -2681,9 +2681,9 @@ switch ($action)
 						echo '<td><a href="admin.php?delete_smiley='.$line['id'].'">';
 						echo $lang_add['delete_link'].'</a></td>'."\n";
 						echo '<td><a href="admin.php?move_up_smiley='.$line['id'];
-						echo '"><img src="img/up.gif" alt="up" width="11" height="11" /></a>';
+						echo '"><img src="img/up.png" alt="up" width="11" height="11" /></a>';
 						echo '&nbsp;<a href="admin.php?move_down_smiley='.$line['id'];
-						echo '"><img src="img/down.gif" alt="down" width="11" height="11" /></a></td>'."\n";
+						echo '"><img src="img/down.png" alt="down" width="11" height="11" /></a></td>'."\n";
 						echo '</tr>'."\n";
 						$i++;
 						}

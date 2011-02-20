@@ -260,7 +260,7 @@ if ($settings['access_for_users_only'] == 1
 		}
 	else
 		{
-		echo '<span class="xsmall"><img src="img/lock.gif" alt="" width="12" height="12" />';
+		echo '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />';
 		echo $lang['thread_locked'].'</span>';
 		}
 
