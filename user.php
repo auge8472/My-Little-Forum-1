@@ -635,7 +635,7 @@ if ($action == "show users")
 		$subnav_2 .= '>'.$letter.'</option>'."\n";
 		}
 	$subnav_2 .= '</select>&nbsp;<input type="image" name="" value=""';
-	$subnav_2 .= ' src="img/submit.gif" alt="&raquo;" /></div></form>'."\n";
+	$subnav_2 .= ' src="img/submit.png" alt="&raquo;" /></div></form>'."\n";
 	$subnav_2 .= nav($page, $settings['users_per_page'], $thread_count, $order, $descasc, $category);
 	}
 
@@ -709,7 +709,7 @@ switch ($action)
 				echo '<tr>'."\n";
 				echo '<td class="c">'.$lang['user_email_marking'].'</td>'."\n";
 				echo '<td class="d"><a href="contact.php?uid='.$field['user_id'].'">';
-				echo '<img src="img/email.gif" alt="'.outputLangDebugInAttributes($lang['email_alt']).'" title="';
+				echo '<img src="img/email.png" alt="'.outputLangDebugInAttributes($lang['email_alt']).'" title="';
 				echo str_replace('[name]', htmlspecialchars($field['user_name']), outputLangDebugInAttributes($lang['email_to_user_linktitle']));
 				echo '" width="13" height="10" /></a></td>'."\n";
 				echo '</tr>';
@@ -720,7 +720,7 @@ switch ($action)
 				echo '<tr>'."\n";
 				echo '<td class="c">'.$lang['user_hp'].'</td>'."\n";
 				echo '<td class="d">';
-				echo '<a href="'.$field['user_hp'].'"><img src="img/homepage.gif" alt="';
+				echo '<a href="'.$field['user_hp'].'"><img src="img/homepage.png" alt="';
 				echo outputLangDebugInAttributes($lang['homepage_alt']).'" title="'.htmlspecialchars($field['user_hp']);
 				echo '" width="13" height="13" /></a></td>'."\n";
 				echo '</tr>';
@@ -924,11 +924,11 @@ switch ($action)
 			echo '&amp;ul='.$ul.'" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['userlist_name'].'</a>';
 			if ($order=="user_name" && $descasc=="ASC")
 				{
-				echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
+				echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" border="0">';
 				}
 			else if ($order=="user_name" && $descasc=="DESC")
 				{
-				echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0">';
+				echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" border="0">';
 				}
 			echo '</th>'."\n";
 			echo '<th><a href="user.php?action=show+users&amp;order=user_type&amp;descasc=';
@@ -936,11 +936,11 @@ switch ($action)
 			echo '&amp;ul='.$ul.'" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['userlist_type'].'</a>';
 			if ($order=="user_type" && $descasc=="ASC")
 				{
-				echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
+				echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" border="0">';
 				}
 			else if ($order=="user_type" && $descasc=="DESC")
 				{
-				echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0">';
+				echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" border="0">';
 				}
 			echo '</th>'."\n";
 			echo '<th>'.$lang['userlist_email'].'</th>'."\n";
@@ -958,11 +958,11 @@ switch ($action)
 				echo '&amp;ul='.$ul.'" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['lock'].'</a>';
 				if ($order=="user_lock" && $descasc=="ASC")
 					{
-					echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
+					echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" border="0">';
 					}
 				else if ($order=="user_lock" && $descasc=="DESC")
 					{
-					echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0">';
+					echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" border="0">';
 					}
 				echo '</th>'."\n";
 				}
@@ -983,7 +983,7 @@ switch ($action)
 				echo '<td class="info">';
 				if ($field["hide_email"]!=1)
 					{
-					echo '<a href="contact.php?uid='.$field['user_id'].'"><img src="img/email.gif"';
+					echo '<a href="contact.php?uid='.$field['user_id'].'"><img src="img/email.png"';
 					echo ' alt="'.outputLangDebugInAttributes($lang['email_alt']).'" title="';
 					echo str_replace("[name]", htmlspecialchars($field["user_name"]), outputLangDebugInAttributes($lang['email_to_user_linktitle']));
 					echo '" width="13" height="10" /></a>';
@@ -994,7 +994,7 @@ switch ($action)
 				if ($field["user_hp"] != '')
 					{
 					$field["user_hp"] = amendProtocol($field["user_hp"]);
-					echo '<a href="'.$field["user_hp"].'"><img src="img/homepage.gif" alt="';
+					echo '<a href="'.$field["user_hp"].'"><img src="img/homepage.png" alt="';
 					echo outputLangDebugInAttributes($lang['homepage_alt']).'" title="';
 					echo htmlspecialchars($field["user_hp"]).'" width="13" height="13" /></a>'."\n";
 					}
