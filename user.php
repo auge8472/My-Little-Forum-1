@@ -1190,7 +1190,7 @@ switch ($action)
 			}
 		echo '</select>';
 #		echo '&nbsp;&nbsp;Test: <select size="1">'.outputTimeZonesOptions().'</select>';
-		echo '</td>'."\n".'</tr>';
+		echo '</td>'."\n";
 		if ($user_type=="admin" || $user_type=="mod")
 			{
 			echo '<tr>'."\n";
@@ -1201,14 +1201,12 @@ switch ($action)
 			echo ' id="notice-post" /><label for="notice-post">'.$lang['admin_mod_notif_np'].'</label><br />';
 			echo '<input type="checkbox" name="new_user_notify" value="1"';
 			echo ($new_user_notify=="1") ? ' checked="checked"' : '';
-			echo ' id="notice-user" /><label for="notice-user">'.$lang['admin_mod_notif_nu'].'</label></td>'."\n".'</tr>';
+			echo ' id="notice-user" /><label for="notice-user">'.$lang['admin_mod_notif_nu'].'</label></td>'."\n";
 			}
-		echo '<tr>'."\n";
-		echo '<td class="c">&nbsp;</td>'."\n";
-		echo '<td class="d"><input type="submit" name="userdata_submit" value="';
+		echo '</tr>'."\n".'</table>'."\n";
+		echo '<p><input type="submit" name="userdata_submit" value="';
 		echo outputLangDebugInAttributes($lang['userdata_subm_button']).'" />&nbsp;';
-		echo '<input type="reset" value="'.outputLangDebugInAttributes($lang['reset_button']).'" /></td>'."\n";
-		echo '</tr>'."\n".'</table>'."\n".'</form>'."\n";
+		echo '<input type="reset" value="'.outputLangDebugInAttributes($lang['reset_button']).'" /></p></form>'."\n";
 		if ($settings['bbcode'] == 1)
 			{
 			echo '<p class="xsmall">'.$lang['bbcode_marking_user'];
