@@ -180,18 +180,15 @@ if($settings['access_for_users_only']  == 1
 	echo $header;
 	if ($thread_count > 0 && isset($result))
 		{
+		$currDescAsc = strtolower($descasc);
 		echo '<table class="normaltab">'."\n";
 		echo '<tr class="titlerow">'."\n";
 		echo '<th><a href="board.php?category='.$category.'&amp;order=subject&amp;descasc=';
 		echo ($descasc=="ASC" && $order=="subject") ? 'DESC' : 'ASC';
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_subject_headline'].'</a>';
-		if ($order=="subject" && $descasc=="ASC")
+		if ($order=="subject")
 			{
-			echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
-			}
-		else if ($order=="subject" && $descasc=="DESC")
-			{
-			echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
+			echo outputImageDescAsc($currDescAsc);
 			}
 		echo '</th>'."\n";
 		if ($categories!=false && $category == 0)
@@ -199,51 +196,35 @@ if($settings['access_for_users_only']  == 1
 			echo '<th><a href="board.php?category='.$category.'&amp;order=category&amp;descasc=';
 			echo ($descasc=="ASC" && $order=="category") ? 'DESC' : 'ASC';
 			echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_category_headline'].'</a>';
-			if ($order=="category" && $descasc=="ASC")
+			if ($order=="category")
 				{
-				echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
-				}
-			else if ($order=="category" && $descasc=="DESC")
-				{
-				echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
+				echo outputImageDescAsc($currDescAsc);
 				}
 			echo '</th>'."\n";
 			}
 		echo '<th><a href="board.php?category='.$category.'&amp;order=name&amp;descasc=';
 		echo ($descasc=="ASC" && $order=="name") ? 'DESC' : 'ASC';
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_author_headline'].'</a>'."\n";
-		if ($order=="name" && $descasc=="ASC")
+		if ($order=="name")
 			{
-			echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
-			}
-		else if ($order=="name" && $descasc=="DESC")
-			{
-			echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
+			echo outputImageDescAsc($currDescAsc);
 			}
 		echo '</th>'."\n";
 		echo '<th><a href="board.php?category='.$category.'&amp;order=time&amp;descasc=';
 		echo ($descasc=="DESC" && $order=="time") ? "ASC" : "DESC";
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_date_headline'].'</a>'."\n";
-		if ($order=="time" && $descasc=="ASC")
+		if ($order=="time")
 			{
-			echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
-			}
-		else if ($order=="time" && $descasc=="DESC")
-			{
-			echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
+			echo outputImageDescAsc($currDescAsc);
 			}
 		echo '</th>'."\n";
 		echo '<th>'.$lang['board_answers_headline'].'</th>'."\n";
 		echo '<th><a href="board.php?category='.$category.'&amp;order=last_answer&amp;descasc=';
 		echo ($descasc=="DESC" && $order=="last_answer") ? "ASC" : "DESC";
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_last_answer_headline'].'</a>'."\n";
-		if ($order=="last_answer" && $descasc=="ASC")
+		if ($order=="last_answer")
 			{
-			echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" />';
-			}
-		else if ($order=="last_answer" && $descasc=="DESC")
-			{
-			echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" />';
+			echo outputImageDescAsc($currDescAsc);
 			}
 		echo '</th>'."\n";
 		if (isset($settings['count_views']) && $settings['count_views'] == 1)
