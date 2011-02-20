@@ -917,30 +917,23 @@ switch ($action)
 			}
 		if ($thread_count > 0)
 			{
+			$currDescAsc = strtolower($descasc);
 			echo '<table class="normaltab">'."\n";
 			echo '<tr class="titlerow">'."\n";
 			echo '<th><a href="user.php?action=show+users&amp;order=user_name&amp;descasc=';
 			echo ($descasc=="ASC" && $order=="user_name") ? 'DESC' : 'ASC';
 			echo '&amp;ul='.$ul.'" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['userlist_name'].'</a>';
-			if ($order=="user_name" && $descasc=="ASC")
+			if ($order=="user_name")
 				{
-				echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" border="0">';
-				}
-			else if ($order=="user_name" && $descasc=="DESC")
-				{
-				echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" border="0">';
+				echo outputImageDescAsc($currDescAsc);
 				}
 			echo '</th>'."\n";
 			echo '<th><a href="user.php?action=show+users&amp;order=user_type&amp;descasc=';
 			echo ($descasc=="ASC" && $order=="user_type") ? 'DESC' : 'ASC';
 			echo '&amp;ul='.$ul.'" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['userlist_type'].'</a>';
-			if ($order=="user_type" && $descasc=="ASC")
+			if ($order=="user_type")
 				{
-				echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" border="0">';
-				}
-			else if ($order=="user_type" && $descasc=="DESC")
-				{
-				echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" border="0">';
+				echo outputImageDescAsc($currDescAsc);
 				}
 			echo '</th>'."\n";
 			echo '<th>'.$lang['userlist_email'].'</th>'."\n";
@@ -956,13 +949,9 @@ switch ($action)
 				echo '<th><a href="user.php?action=show+users&amp;order=user_lock&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_lock") ? 'DESC' : 'ASC';
 				echo '&amp;ul='.$ul.'" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['lock'].'</a>';
-				if ($order=="user_lock" && $descasc=="ASC")
+				if ($order=="user_lock")
 					{
-					echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" border="0">';
-					}
-				else if ($order=="user_lock" && $descasc=="DESC")
-					{
-					echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" border="0">';
+					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
 				}
