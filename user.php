@@ -968,7 +968,7 @@ switch ($action)
 				}
 			echo '</tr>';
 			$i=0;
-			while ($field = mysql_fetch_array($result))
+			while ($field = mysql_fetch_assoc($result))
 				{
 				$rowClass = ($i % 2 == 0) ? "a" : "b";
 				echo '<tr class="'.$rowClass.'">'."\n";
