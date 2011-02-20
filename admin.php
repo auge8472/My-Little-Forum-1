@@ -1786,6 +1786,7 @@ switch ($action)
 
 			if ($result_count > 0)
 				{
+				$currDescAsc = strtolower($descasc);
 				if (isset($_GET['new_user']))
 					{
 					echo '<p class="caution">';
@@ -1807,97 +1808,65 @@ switch ($action)
 				echo '<th><a href="admin.php?action=user&amp;order=user_id&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_id") ? 'DESC' : 'ASC';
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_id'].'</a>';
-				if ($order=="user_id" && $descasc=="ASC")
+				if ($order=="user_id")
 					{
-					echo '&nbsp;<img src="img/asc.png" alt="[asc]" width="5" height="9" border="0">';
-					}
-				else if ($order=="user_id" && $descasc=="DESC")
-					{
-					echo '&nbsp;<img src="img/desc.png" alt="[desc]" width="5" height="9" border="0">';
+					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=user_name&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_name") ? "DESC" : "ASC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_name'].'</a>';
-				if ($order=="user_name" && $descasc=="ASC")
+				if ($order=="user_name")
 					{
-					echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
-					}
-				else if ($order=="user_name" && $descasc=="DESC")
-					{
-					echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0">';
+					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=user_email&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_email") ? "DESC" : "ASC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_email'].'</a>';
-				if ($order=="user_email" && $descasc=="ASC")
+				if ($order=="user_email")
 					{
-					echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
-					}
-				else if ($order=="user_email" && $descasc=="DESC")
-					{
-					echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0">';
+					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=user_type&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_type") ? "DESC" : "ASC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_type'].'</a>';
-				if ($order=="user_type" && $descasc=="ASC")
+				if ($order=="user_type")
 					{
-					echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
-					}
-				else if ($order=="user_type" && $descasc=="DESC")
-					{
-					echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0">';
+					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=registered&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="registered") ? "DESC" : "ASC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_registered'].'</a>';
-				if ($order=="registered" && $descasc=="ASC")
+				if ($order=="registered")
 					{
-					echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
-					}
-				else if ($order=="registered" && $descasc=="DESC")
-					{
-					echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0">';
+					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=logins&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="logins") ? "DESC" : "ASC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_logins'].'</a>';
-				if ($order=="logins" && $descasc=="ASC")
+				if ($order=="logins")
 					{
-					echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
-					}
-				else if ($order=="logins" && $descasc=="DESC")
-					{
-					echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0">';
+					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=last_login&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="last_login") ? "DESC" : "ASC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['last_login'].'</a>';
-				if ($order=="last_login" && $descasc=="ASC")
+				if ($order=="last_login")
 					{
-					echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
-					}
-				else if ($order=="last_login" && $descasc=="DESC")
-					{
-					echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0">';
+					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=user_lock&amp;descasc=';
 				echo ($descasc=="DESC" && $order=="user_lock") ? "ASC" : "DESC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang['lock'].'</a>';
-				if ($order=="user_lock" && $descasc=="ASC")
+				if ($order=="user_lock")
 					{
-					echo '&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0">';
-					}
-				else if ($order=="user_lock" && $descasc=="DESC")
-					{
-					echo '&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0">';
+					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
 				echo '<th colspan="2">&nbsp;</th>'."\n";
