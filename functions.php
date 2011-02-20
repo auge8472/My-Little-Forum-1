@@ -212,10 +212,9 @@ if ($entry_count > $entries_per_page)
 	$ic .= (isset($_GET['letter'])) ? '&amp;letter='.urlencode($_GET['letter']) : '';
 	if ($new_index_before >= 0)
 		{
-		#  onmouseover="this.src='img/prev_mo.gif';" onmouseout="this.src='img/prev.gif';"
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?page='.$new_index_before;
 		$output .= '&amp;order='.$order.'&amp;descasc='.$descasc.$ic.'">';
-		$output .= '<img src="img/prev.gif" alt="&laquo;" title="';
+		$output .= '<img src="img/prev.png" alt="&laquo;" title="';
 		$output .= strip_tags($lang['previous_page_linktitle']).'" width="12" height="9" /></a>&nbsp;';
 		}
 	# if ($new_index_before >= 0 && $new_index_after < $site_count) $output .= " ";
@@ -240,13 +239,12 @@ if ($entry_count > $entries_per_page)
 			$output .= '>'.str_replace("[number]", $x+1, $lang['page_number']).'</option>'."\n";
 			}
 		}
-	$output .= '</select>'."\n".'<noscript>&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></noscript></div></form>'."\n";
+	$output .= '</select>'."\n".'<noscript>&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;" /></noscript></div></form>'."\n";
 	if ($new_index_after < $site_count)
 		{
-		# onmouseover="this.src='img/next_mo.gif';" onmouseout="this.src='img/next.gif';"
 		$output .= '&nbsp;<a href="'.$_SERVER["SCRIPT_NAME"]."?page=".$new_index_after;
 		$output .= '&amp;order='.$order.'&amp;descasc='.$descasc.$ic.'">';
-		$output .= '<img src="img/next.gif" alt="&raquo;" title="';
+		$output .= '<img src="img/next.png" alt="&raquo;" title="';
 		$output .= strip_tags($lang['next_page_linktitle']).'" width="12" height="9" /></a>';
 		}
 	}
