@@ -349,58 +349,6 @@ if ($settings['access_for_users_only'] == 1
 				}
 			echo '</tr>'."\n";
 			unset($rawresult, $childArray, $postArray);
-
-/*
-			$rowClass = ($i % 2 == 0) ? "a" : "b";
-			echo '<tr class="'.$rowClass.'">'."\n";
-			echo '<td>'."\n"; # Start: output thread tree
-			echo '<a class="';
-			if ((isset($_SESSION[$settings['session_prefix'].'newtime'])
-			&& $_SESSION[$settings['session_prefix'].'newtime'] < $zeile["last_answer"])
-			|| (($zeile["pid"]==0)
-			&& empty($_SESSION[$settings['session_prefix'].'newtime'])
-			&& $zeile["last_answer"] > $last_visit))
-				{
-				echo "threadnew";
-				}
-			else
-				{
-				echo "thread";
-				}
-			echo '" href="mix_entry.php?id='.$zeile["tid"];
-			if ($page != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC")
-				{
-				echo '&amp;page='.$page.'&amp;category='.$category;
-				echo '&amp;order='.$order.'&amp;descasc='.$descasc;
-				}
-			echo '">'.htmlspecialchars($zeile["subject"]).'</a>';
-			if ($zeile["fixed"] == 1)
-				{
-				echo ' <img src="img/fixed.gif" width="9" height="9" title="'.outputLangDebugInAttributes($lang['fixed']).'" alt="*" />';
-				}
-			if ($settings['all_views_direct'] == 1)
-				{
-				echo ' <span class="small">';
-				if ($settings['board_view'] == 1)
-					{
-					echo '<a href="board_entry.php?id='.$zeile["tid"].'&amp;view=board';
-					echo ($category > 0) ? '&amp;category='.$category : '';
-					echo '"><img src="img/board_d.gif" alt="[Board]" title="';
-					echo outputLangDebugInAttributes($lang['open_in_board_linktitle']).'" width="12" height="9" /></a>';
-					}
-				if ($settings['thread_view']==1)
-					{
-					echo '<a href="forum_entry.php?id='.$zeile["tid"].'&amp;view=thread';
-					echo ($category > 0) ? '&amp;category='.$category : '';
-					echo '"><img src="img/thread_d.gif" alt="[Thread]" title="';
-					echo outputLangDebugInAttributes($lang['open_in_thread_linktitle']).'" width="12" height="9" /></a>';
-					}
-				echo "</span>";
-				}
-			echo '</td>'."\n";
-			# End: output thread tree
-			echo '</tr>';
-			*/
 			$i++;
 			}
 		echo "\n".'</table>'."\n";
