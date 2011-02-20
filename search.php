@@ -227,7 +227,7 @@ if (isset($search) && empty($show_postings))
 	else
 		{
 		$subnav_1 .= "&nbsp;";
-		$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'.$lang['search_title'].'</b>';
+		$topnav = '<img src="img/where.png" alt="" width="11" height="8" /><b>'.$lang['search_title'].'</b>';
 		}
 
 	if ($count > 0 && $search != "")
@@ -248,7 +248,7 @@ if (isset($search) && empty($show_postings))
 	else
 		{
 		$subnav_1 .= "&nbsp;";
-		#$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'.$lang['search_title'].'</b>';
+		#$topnav = '<img src="img/where.png" alt="" width="11" height="8" /><b>'.$lang['search_title'].'</b>';
 		}
 	}
 else if (isset($show_postings) && empty($search))
@@ -259,7 +259,7 @@ else if (isset($show_postings) && empty($search))
 	mysql_free_result($user_name_result);
 	$lang['show_userdata_linktitle'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['show_userdata_linktitle']);
 	$lang['postings_by_user'] = str_replace('[name]', '<a href="user.php?id='.$show_postings.'" title="'.outputLangDebugInAttributes($lang['show_userdata_linktitle']).'">'.htmlspecialchars($field["user_name"]).'</a>', $lang['postings_by_user']);
-	$subnav_1 .= '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['postings_by_user'].'</b>';
+	$subnav_1 .= '<img src="img/where.png" alt="" width="11" height="8" border="0"><b>'.$lang['postings_by_user'].'</b>';
 	}
 
 if (isset($search) && $search != "")
