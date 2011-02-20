@@ -1628,8 +1628,6 @@ switch ($action)
 				echo '<td>'.$postings_in_category.'</td>'."\n";
 				echo '<td><a href="admin.php?edit_category='.$line['id'].'">'.$lang_add['cat_edit'].'</a></td>'."\n";
 				echo '<td><a href="admin.php?delete_category='.$line['id'].'">'.$lang_add['cat_delete'].'</a></td>'."\n";
-				# onmouseover="this.src='img/up_mo.gif';" onmouseout="this.src='img/up.gif';"
-				# onmouseover="this.src='img/down_mo.gif';" onmouseout="this.src='img/down.gif';"
 				echo '<td><a href="admin.php?move_up_category='.$line['id'].'">'."\n";
 				echo '<img src="img/up.png" alt="up" width="11" height="11" /></a>&nbsp;';
 				echo '<a href="admin.php?move_down_category='.$line['id'].'">';
