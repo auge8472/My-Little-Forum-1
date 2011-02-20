@@ -1,0 +1,45 @@
+Changelog for 'my little forum 1'
+
+my little forum
+version 1.8 - 2011
+Copyright (C) 2008 mylittleforum.net
+http://mylittleforum.net/
+
+Copyright (C) 2011 auge8472.de
+http://www.auge8472.de/
+========================================
+
+version 1.8
+-----------
+
+bugfixes in comparision to 1.7.6
+................................
+
+- If a new user registers with a not completely filled form, the following test for empty strings in the given data failed because the variables do not exists.
+- Send the PHP generated HTTP header 'Location' with a complete URI instead a relative URL.
+- Fields for IPs in database tables have now a length of 39 to match the length of the string representation of an IP-v6-address.
+- Replace the use of $_SERVER['PHP_SELF'] with $_SERVER['SCRIPT_NAME'] due to security reasons.
+- Use htmlspecialchars instead stripslashes while generating the HTML sources.
+- Disable magic_quotes script wise if it is an active server setting.
+- Some HTML elements was generated even if there was no data (like a homepage-URL) or reason (a user should not edit a posting (after x minutes), the link to do so was accessible continious).
+- Use '&amp;' instead of '&' in HTML sources to match the HTML validation rules.
+- BB-Code buttons now will be generated through JacaScript. No JavaScript, no (in this case unusual) buttons.
+- Mask strings in database requests with mysql_real_escape_string.
+- Integers from variables in database requests are safe because the use of intval (if given in wrong format => value: 0).
+- Use 'rel="nofollow"' in intern links to prevent access to some scripts for search engine robots (i.e. data of registered users, posting- and contact forms).
+- If a thread is in board view shown on more than one page, a poster was redirected to the first page instead the last page (where his posting is located) after a reply.
+- Delete control characters from the output of XML (i.e. RSS, causing parse errors).
+
+
+new features and featurettes in comparision to 1.7.6
+....................................................
+
+- Use only UTF-8 instead different ISO codings for different languages.
+- As an alternative way to mark registered users with (R) you are now able to mark the name strings of admins, mods and registered users with different colours via CSS rules.
+- Add some configurable settings to give the users and/or the admins and moderators of a forum more infos about a special posting and/or its author.
+- New setting to give registered users more control over the behaviour of the script. Aa an example: an admin can allow the user to decide if the main page of the forum should reload every 20 minutes automatically.
+- Ability for sorting of threads by category in board view an mix view.
+- If the forum is in maintenance mode, visitors will be redirected and will get a message.
+- As first the english language file will be loaded. If another language file misses strings the english string will be used.
+- Indroduce a debug mode for language files. It shows the array key of the string to simplify the search for it in the language file.
+- Version string of the forum script is shown inside a HTML comment in the <head> section of the output.
