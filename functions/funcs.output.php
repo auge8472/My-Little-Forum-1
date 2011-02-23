@@ -85,6 +85,28 @@ return $r;
 
 
 /**
+ * generates the number of replies
+ *
+ * @param string $threadID
+ * @param string $connid
+ * @return integer $replies
+ */
+function outputGetReplies($threadID, $connid) {
+global $db_settings;
+
+# as first count members of a thread including the opening posting
+$replyResult = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE tid = ".$threadID, $connid);
+list($answers) = mysql_fetch_row($replyResult);
+# now reduce by 1 (the opening posting, it's by definition not a reply)
+$answers = $answers - 1;
+mysql_free_result($replyResult);
+
+return $answers;
+} # End: outputGetReplies
+
+
+
+/**
  * detects the status of $mark dependent of users role
  *
  * @param array $mark

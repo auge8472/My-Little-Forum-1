@@ -242,10 +242,7 @@ if($settings['access_for_users_only']  == 1
 		while ($zeile = mysql_fetch_assoc($result))
 			{
 			# count replies:
-			$pid_resultc = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"], $connid);
-			list($answers_count) = mysql_fetch_row($pid_resultc);
-			$answers_count = $answers_count - 1;
-			mysql_free_result($pid_resultc);
+			$answers_count = outputGetReplies($zeile["tid"], $connid);
 
 			# data for link to last reply:
 			if ($settings['last_reply_link'] == 1 or $settings['last_reply_name'] == 1)
