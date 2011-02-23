@@ -62,91 +62,44 @@ if($settings['access_for_users_only']  == 1
 	# no categories defined
 	if ($categories === false)
 		{
-		$threadsNoCatsQuery = "SELECT
-		id,
-		pid,
-		tid,
-		user_id AS posters_id,
-		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS xtime,
-		DATE_FORMAT(last_answer + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS la_time,
-		UNIX_TIMESTAMP(last_answer) AS last_answer,
-		name,
-		subject,
-		category,
-		marked,
-		fixed,
-		views,
-		(SELECT
-			user_type
-			FROM ".$db_settings['userdata_table']."
-			WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
-		FROM ".$db_settings['forum_table']."
-		WHERE pid = 0
-		ORDER BY fixed DESC, ".$order." ".$descasc."
-		LIMIT ".$ul.", ".$settings['topics_per_page'];
-   	$result = mysql_query($threadsNoCatsQuery, $connid);
-		if(!$result) die($lang['db_error']);
+		$threadsQueryWhere = '';
 		}
 	# there are categories and all categories should be shown
 	else if (is_array($categories) && $category == 0)
 		{
-		$threadsCatsQuery = "SELECT
-		id,
-		pid,
-		tid,
-		user_id AS posters_id,
-		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS xtime,
-		DATE_FORMAT(last_answer + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS la_time,
-		UNIX_TIMESTAMP(last_answer) AS last_answer,
-		name,
-		subject,
-		category,
-		marked,
-		fixed,
-		views,
-		(SELECT
-			user_type
-			FROM ".$db_settings['userdata_table']."
-			WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
-		FROM ".$db_settings['forum_table']."
-		WHERE pid = 0 AND category IN (".$category_ids_query.")
-		ORDER BY fixed DESC, ".$order." ".$descasc."
-		LIMIT ".$ul.", ".$settings['topics_per_page'];
-		$result = mysql_query($threadsCatsQuery, $connid);
-		if(!$result) die($lang['db_error']);
+		$threadsQueryWhere = " AND category IN (".$category_ids_query.")";
 		}
 	# there are categories and only one category should be shown
 	else if (is_array($categories) && $category != 0 && in_array($category, $category_ids))
 		{
-		$threadsSingleCatQuery = "SELECT
-		id,
-		pid,
-		tid,
-		user_id AS posters_id,
-		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS xtime,
-		DATE_FORMAT(last_answer + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS la_time,
-		UNIX_TIMESTAMP(last_answer) AS last_answer,
-		name,
-		subject,
-		category,
-		marked,
-		fixed,
-		views,
-		(SELECT
-			user_type
-			FROM ".$db_settings['userdata_table']."
-			WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
-		FROM ".$db_settings['forum_table']."
-		WHERE category = '".intval($category)."' AND pid = 0
-		ORDER BY fixed DESC, ".$order." ".$descasc."
-		LIMIT ".$ul.", ".$settings['topics_per_page'];
-		$result = mysql_query($threadsSingleCatQuery, $connid);
-		if(!$result) die($lang['db_error']);
+		$threadsQueryWhere = " AND category = '".mysql_real_escape_string($category)."'";
 		// how many entries?
 		$pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '".mysql_real_escape_string($category)."'", $connid);
 		list($thread_count) = mysql_fetch_row($pid_result);
 		mysql_free_result($pid_result);
 		}
+	# list all threads
+	$threadsQuery = "SELECT
+		tid,
+		t1.user_id AS posters_id,
+		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
+		DATE_FORMAT(last_answer + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS la_Uhrzeit,
+		UNIX_TIMESTAMP(last_answer) AS last_answer,
+		name,
+		subject,
+		category,
+		views,
+		fixed,
+		(SELECT
+			user_type
+			FROM ".$db_settings['userdata_table']."
+			WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
+		FROM ".$db_settings['forum_table']." AS t1
+		WHERE pid = 0".$threadsQueryWhere."
+		ORDER BY fixed DESC, ".$order." ".$descasc."
+		LIMIT ".$ul.", ".$settings['topics_per_page'];
+	$threadsResult = mysql_query($threadsQuery, $connid);
+	if (!$threadsResult) die($lang['db_error']);
 
 	$category = stripslashes($category);
 
@@ -178,7 +131,7 @@ if($settings['access_for_users_only']  == 1
 
 	parse_template();
 	echo $header;
-	if ($thread_count > 0 && isset($result))
+	if ($thread_count > 0 && isset($threadsResult))
 		{
 		$currDescAsc = strtolower($descasc);
 		echo '<table class="normaltab">'."\n";
@@ -239,7 +192,7 @@ if($settings['access_for_users_only']  == 1
 		echo '</tr>';
 
 		$i=0;
-		while ($zeile = mysql_fetch_assoc($result))
+		while ($zeile = mysql_fetch_assoc($threadsResult))
 			{
 			# count replies:
 			$answers_count = outputGetReplies($zeile["tid"], $connid);
@@ -357,7 +310,7 @@ if($settings['access_for_users_only']  == 1
 				echo '</a>';
 				}
 			echo '</td>'."\n"; # end: authors names
-			echo '<td class="info">'.$zeile["xtime"].'</td>'."\n";
+			echo '<td class="info">'.$zeile["Uhrzeit"].'</td>'."\n";
 			echo '<td class="number-cell">'.$answers_count.'</td>'."\n";
 			echo '<td class="info">'; # start: last reply
 			if ($answers_count > 0)
@@ -370,7 +323,7 @@ if($settings['access_for_users_only']  == 1
 					echo '&amp;order='.$order.'&amp;descasc='.$descasc.'#p'.$last_answer['id'];
 					echo '" title="'.str_replace("[name]", $last_answer['name'], outputLangDebugInAttributes($lang['last_reply_lt'])).'">';
 					}
-				echo $zeile["la_time"];
+				echo $zeile["la_Uhrzeit"];
 				if ($settings['last_reply_name'] == 1)
 					{
 					echo (!empty($last_answer['name'])) ? ' ('.$last_answer['name'].')' : '';
@@ -411,7 +364,7 @@ if($settings['access_for_users_only']  == 1
 			$i++;
 			} # End: while ()
 		echo "\n".'</table>'."\n";
-		mysql_free_result($result);
+		mysql_free_result($threadsResult);
 		echo outputManipulateMarked('board');
 		} # End: if ($thread_count > 0 && isset($result))
 	else
