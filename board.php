@@ -247,9 +247,7 @@ if($settings['access_for_users_only']  == 1
 			# data for link to last reply:
 			if ($settings['last_reply_link'] == 1 or $settings['last_reply_name'] == 1)
 				{
-				$last_answer_result = mysql_query("SELECT name, id FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"]." ORDER BY time DESC LIMIT 1", $connid);
-				$last_answer = mysql_fetch_assoc($last_answer_result);
-				mysql_free_result($last_answer_result);
+				$last_answer = outputGetLastReply($zeile["tid"], $connid);
 				}
 
 			# highlight user, mods and admins:

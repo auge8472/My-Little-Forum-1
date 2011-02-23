@@ -107,6 +107,24 @@ return $answers;
 
 
 /**
+ * search the data of last reply
+ *
+ * @param string $threadID
+ * @param string $connid
+ * @return array $lastReply
+ */
+function outputGetLastReply($threadID, $connid) {
+global $db_settings;
+
+$la_result = mysql_query("SELECT name, id FROM ".$db_settings['forum_table']." WHERE tid = ".$threadID." ORDER BY time DESC LIMIT 1", $connid);
+$last_answer = mysql_fetch_assoc($la_result);
+mysql_free_result($la_result);
+
+return $last_answer;
+} # End: outputGetLastReply
+
+
+/**
  * detects the status of $mark dependent of users role
  *
  * @param array $mark
