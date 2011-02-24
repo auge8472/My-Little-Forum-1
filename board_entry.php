@@ -312,7 +312,7 @@ if ($settings['access_for_users_only'] == 1
 		echo '<h2>'.htmlspecialchars($thread["subject"]);
 		if(isset($categories[$thread["category"]]) && $categories[$thread["category"]]!='')
 			{
-			echo "&nbsp;<span class=\"category\">(".$categories[$thread["category"]].")</span>";
+			echo '&nbsp;<span class="category">('.$categories[$thread["category"]].')</span>';
 			}
 		echo '</h2></div>'."\n".'<div class="right">';
 		if ($thread['locked'] == 0)
