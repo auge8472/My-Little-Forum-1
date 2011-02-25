@@ -250,6 +250,7 @@ $lang['user_doesnt_exist'] =           "This user doesn't exist or no longer exi
 $lang['reg_users_hl'] =                "Registered users";
 $lang['num_reg_users'] =               "[number] registered users";
 $lang['user_info_hl'] =                "User info: [name]";
+$lang['edit_subscription_ln'] =        "Edit subscriptions";
 $lang['edit_userdata_ln'] =            "Edit user data";
 $lang['edit_pw_ln'] =                  "Change password";
 $lang['edit_email_ln'] =               "Change e-mail address";

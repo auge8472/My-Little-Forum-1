@@ -789,13 +789,15 @@ switch ($action)
 			if ($user_id == $id)
 				{
 				echo '<ul class="linklist">'."\n";
-				echo '<li><a class="textlink" href="user.php?action=edit">';
-				echo $lang['edit_userdata_ln'].'</a></li>'."\n";
+				echo '<li><a class="textlink" href="user.php?action=subscriptions">';
+				echo $lang['edit_subscription_ln'].'</a></li>'."\n";
 				if ($settings['user_control_refresh'] == 1 or $settings['user_control_css'] == 1)
 					{
 					echo '<li><a class="textlink" href="user.php?action=usersettings">';
 					echo $lang['edit_users_settings'].'</a></li>'."\n";
 					}
+				echo '<li><a class="textlink" href="user.php?action=edit">';
+				echo $lang['edit_userdata_ln'].'</a></li>'."\n";
 				echo '<li><a class="textlink" href="user.php?action=pw">';
 				echo $lang['edit_pw_ln'].'</a></li>'."\n";
 				echo '</ul>'."\n";
