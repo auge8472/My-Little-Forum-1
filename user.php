@@ -1280,7 +1280,7 @@ switch ($action)
 			echo $lang['pers_msg_deactivated'];
 			}
 	break;
-   case "locked":
+	case "locked":
 		echo '<h2 class="caution">'.$lang['user_locked_hl'].'</h2>'."\n";
 		echo '<p>'.str_replace("[name]", htmlspecialchars($user_name), $lang['usr_locked_txt']).'</p>'."\n";
 	break;
