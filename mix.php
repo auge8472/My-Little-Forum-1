@@ -284,7 +284,7 @@ if ($settings['access_for_users_only'] == 1
 				$sult = str_replace("[name]", htmlspecialchars($zeile["name"]), outputLangDebugInAttributes($lang['show_userdata_linktitle']));
 				echo '<a href="user.php?id='.$zeile["user_id"].'" title="'.$sult.'">';
 				}
-			echo outputAuthorsName($zeile["name"], $markA, $zeile["user_id"]);
+			echo outputAuthorsName($zeile["name"], $markA, $zeile["posters_id"]);
 			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
 				{
 				echo '</a>';
