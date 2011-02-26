@@ -19,6 +19,9 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. #
 ###############################################################################
 
+#ini_set('display_errors', 1);
+#error_reporting(E_ALL);
+
 ini_set('arg_separator.output', '&amp;');
 header('Content-Type: text/html; charset=UTF-8');
 
