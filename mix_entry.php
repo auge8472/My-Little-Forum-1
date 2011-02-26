@@ -24,7 +24,7 @@ include_once("functions/include.prepare.php");
 
 
 function thread($id, $aktuellerEintrag = 0, $tiefe = 0) {
-global $settings, $connid, $lang, $db_settings, $parent_array, $child_array, $user_delete, $page, $category, $order, $descasc, $time_difference, $categories;
+global $settings, $connid, $lang, $db_settings, $parent_array, $child_array, $user_delete, $page, $category, $order, $descasc, $time_difference, $categories, $mark;
 
 $singlePostingQuery = "SELECT
 id,
