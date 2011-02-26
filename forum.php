@@ -142,6 +142,8 @@ if ($settings['access_for_users_only'] == 1
 			tid,
 			t1.user_id AS posters_id,
 			DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
+			UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS time,
+			UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS last_answer,
 			name,
 			subject,
 			category,
