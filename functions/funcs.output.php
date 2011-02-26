@@ -667,11 +667,11 @@ else
 		}
 	}
 $r .= str_repeat(" ", $d).'<li>';
-if ($c == intval($_GET['id']) && $t[$c]["pid"]==0)
+if (isset($_GET['id']) and $c == intval($_GET['id']) && $t[$c]["pid"]==0)
 	{
 	$r .= '<span class="actthread">'.htmlspecialchars($t[$c]["subject"]).'</span> '.$append;
 	}
-else if ($c == intval($_GET['id']) && $t[$c]["pid"]!=0)
+else if (isset($_GET['id']) and $c == intval($_GET['id']) && $t[$c]["pid"]!=0)
 	{
 	$r .= '<span class="actreply">'.htmlspecialchars($t[$c]["subject"]).'</span> '.$append;
 	}
