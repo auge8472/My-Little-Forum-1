@@ -464,7 +464,7 @@ $result = mysql_query("SELECT file, code_1, code_2, code_3, code_4, code_5, titl
 while($data = mysql_fetch_assoc($result))
 	{
 	$title = ($data['title']!='') ? ' title="'.htmlspecialchars($data['title']).'"' : '';
-	$string = ($data['code_1']!='') ? str_replace($data['code_1'], '<img src="img/smilies'.$data['file'].'" alt="'.$data['code_1'].'"'.$title.' />', $string) : $string;
+	$string = ($data['code_1']!='') ? str_replace($data['code_1'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_1'].'"'.$title.' />', $string) : $string;
 	$string = ($data['code_2']!='') ? str_replace($data['code_2'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_2'].'"'.$title.' />', $string) : $string;
 	$string = ($data['code_3']!='') ? str_replace($data['code_3'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_3'].'"'.$title.' />', $string) : $string;
 	$string = ($data['code_4']!='') ? str_replace($data['code_4'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_4'].'"'.$title.' />', $string) : $string;
