@@ -53,7 +53,7 @@ include("lang/english.php");
 $lang = outputLangDebugOrNot($lang, "english.php");
 include("lang/".$settings['language_file']);
 $lang = outputLangDebugOrNot($lang, $settings['language_file']);
-setlocale(LC_ALL, strip_tags($lang['locale']));
+setlocale(LC_ALL, $lang['locale']);
 if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 	{
 	$MyOwnSettings = getMyOwnSettings($_SESSION[$settings['session_prefix'].'user_id']);
