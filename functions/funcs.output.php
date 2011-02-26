@@ -892,6 +892,7 @@ if ($settings['autolink'] == 1) $entry = make_link($entry);
 if ($settings['bbcode'] == 1) $entry = bbcode($entry);
 if ($settings['smilies'] == 1) $entry = smilies($entry);
 if ($type == 'posting') $entry = zitat($entry);
+if ($type == 'posting') $entry = codeblock($entry);
 
 return $entry;
 }

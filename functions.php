@@ -493,6 +493,41 @@ return str_replace('<p>'.$settings['quote_symbol'].' ', '<p class="citation">'.$
 
 
 /**
+ * make code in blocks to codeblocks
+ *
+ * @param string $string
+ * @return string $string
+ */
+function codeblock($string) {
+global $settings;
+
+
+if (preg_match("#<p><code>(.+?)</code></p>#is", $string))
+	{
+	return preg_replace("#<p><code>(.+?)</code></p>#ise", "'<pre><code>'.br2nl('\\1').'</code></pre>'", $string);
+	}
+else
+	{
+	return $string;
+	}
+
+return $string;
+} # End: codeblock
+
+
+
+/**
+ *
+ * @param string
+ * @return string
+ */
+function br2nl($data) {
+return preg_replace( '!<br.*>!iU', "", $data );
+}
+
+
+
+/**
  * puts the quote symbol to the begin of a line for RSS-feeds
  *
  * @param string $string
