@@ -80,7 +80,8 @@ if (basename($_SERVER['SCRIPT_NAME'])!='login.php'
  * if visitor is not admin and debug mode
  * is not setted manually to different value
  */
-if ($_SESSION[$settings['session_prefix'].'user_type']!='admin'
+if (!isset($_SESSION[$settings['session_prefix'].'user_type'])
+or $_SESSION[$settings['session_prefix'].'user_type']!='admin'
 or ($_SESSION[$settings['session_prefix'].'user_type']=='admin'
 and empty($_SESSION['debug']))) {
 	$_SESSION['debug'] = 'no';
