@@ -741,14 +741,19 @@ $str = array();
 $debug = (!empty($_SESSION['debug']) and $_SESSION['debug'] == 'lang') ? 1 : 0;
 
 foreach ($lang as $key => $val) {
-	$hasDebug = strpos($val, '<span title="key: ');
-	if ($hasDebug !== false) {
-		$str[$key]  = $val;
+	if (is_string($val)) {
+		$hasDebug = strpos($val, '<span title="key: ');
+		if ($hasDebug !== false) {
+			$str[$key]  = $val;
+			}
+		else {
+			$str[$key]  = $debug == 1 ? '<span title="key: ['.htmlspecialchars($key).'], file: '.htmlspecialchars($file).'">' : '';
+			$str[$key] .= strval($val);
+			$str[$key] .= $debug == 1 ? '</span>' : '';
+			}
 		}
 	else {
-		$str[$key]  = $debug == 1 ? '<span title="key: ['.htmlspecialchars($key).'], file: '.htmlspecialchars($file).'">' : '';
-		$str[$key] .= strval($val);
-		$str[$key] .= $debug == 1 ? '</span>' : '';
+		$str[$key] = $val;
 		}
 	}
 return $str;
