@@ -525,7 +525,8 @@ if ($page != 0 and $category != 0 and $order != 'time')
 	$urlParam = '&amp;page='.$page.'&amp;category='.intval($category).'&amp;order='.$order;
 	}
 
-if ($t[$c]['pid']==0
+if ($v != 'mix'
+	&&$t[$c]['pid']==0
 	&& $category==0
 	&& isset($categories[$t[$c]['category']])
 	&& $categories[$t[$c]['category']]!='')
