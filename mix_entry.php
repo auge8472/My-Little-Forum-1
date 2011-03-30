@@ -225,7 +225,7 @@ if ($settings['access_for_users_only'] == 1
 		}
 
 	$thread = $entrydata["tid"];
-	$result = mysql_query("SELECT id, pid FROM ".$db_settings['forum_table']." WHERE tid = ".$thread." ORDER BY time DESC", $connid);
+	$result = mysql_query("SELECT id, pid FROM ".$db_settings['forum_table']." WHERE tid = ".$thread." ORDER BY time ASC", $connid);
 	if (!$result) die($lang['db_error']);
 
 	// Ergebnisse einlesen

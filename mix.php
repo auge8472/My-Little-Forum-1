@@ -211,7 +211,7 @@ if ($settings['access_for_users_only'] == 1
 			views
 			FROM ".$db_settings['forum_table']."
 			WHERE tid = ".$zeile["tid"]."
-			ORDER BY time DESC";
+			ORDER BY time ASC";
 			$rawresult = dbaseAskDatabase($threadCompleteQuery, $connid);
 			# Ergebnisse einlesen:
 			foreach ($rawresult as $tmp)
