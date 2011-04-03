@@ -12,4 +12,5 @@ $db_settings['banlists_table'] = "forum_banlists";
 $db_settings['useronline_table'] = "forum_useronline";
 $db_settings['usersettings_table'] = "forum_usersettings";
 $db_settings['us_templates_table'] = "forum_fu_settings";
+$db_settings['usersubscripts_table'] = "forum_subscripts";
 ?>

@@ -715,7 +715,7 @@ background: #efefef;
 }
 
 /* thread links: */
-a.thread {
+span.thread, a.thread {
 padding-left: 18px;
 font-weight: bold;
 background-image:url(img/topic.png);
@@ -765,8 +765,8 @@ text-decoration: none;
 }
 
 /* replies: */
-a.reply {
-padding-left: 16px;
+span.reply, a.reply {
+padding-left: 18px;
 font-weight: normal;
 background-image:url(img/reply.png);
 background-repeat:no-repeat;
@@ -788,10 +788,11 @@ a.reply:active {
 color: #0000cc;
 text-decoration: none;
 }
+span.reply { font-weight: bold; }
 
 /* new reply */
 a.replynew {
-padding-left: 16px;
+padding-left: 18px;
 font-weight: normal;
 background-image:url(img/reply_new.png);
 background-repeat:no-repeat;

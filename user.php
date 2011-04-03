@@ -1281,11 +1281,93 @@ switch ($action)
 			}
 	break;
 	case 'subscriptions':
+	# no categories defined
+		if ($categories === false)
+			{
+			$threadsQueryWhere = '';
+			}
+		# there are categories and all categories should be shown
+		else if (is_array($categories))
+			{
+			$threadsQueryWhere = " AND category IN (".$category_ids_query.")";
+			}
+		$querySearchPostSubscr = "SELECT
+		id,
+		tid,
+		pid,
+		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
+		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '%Y%m%d%H%i%s') AS sort,
+		subject,
+		name,
+		email_notify
+		FROM ".$db_settings['forum_table']."
+		WHERE user_id = ".$_SESSION[$settings['session_prefix'].'user_id']."
+		AND email_notify = 1".$threadsQueryWhere."
+		ORDER BY time DESC";
+		$resultSearchPostSubscr = mysql_query($querySearchPostSubscr, $connid);
+		$querySearchThreadSubscr = "SELECT
+		t1.user_id,
+		t1.tid,
+		t2.id,
+		t2.pid,
+		DATE_FORMAT(t2.time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
+		DATE_FORMAT(t2.time + INTERVAL ".$time_difference." HOUR, '%Y%m%d%H%i%s') AS sort,
+		t2.subject,
+		t2.name,
+		t2.email_notify
+		FROM ".$db_settings['usersubscripts_table']." AS t1,
+		".$db_settings['forum_table']." AS t2
+		WHERE t1.user_id = ".$_SESSION[$settings['session_prefix'].'user_id']."
+		AND t1.tid = t2.tid
+		AND t2.pid = 0";
+		$resultSearchThreadSubscr = mysql_query($querySearchThreadSubscr, $connid);
 		echo '<h2>'.$lang['edit_subscriptions_hl'].'</h2>'."\n";
 		if (isset($errors))
 			{
 			echo errorMessages($errors);
 			}
+		$subscriptions = array();
+		while ($raw = mysql_fetch_assoc($resultSearchPostSubscr))
+			{
+			$raw['thread_notify'] = 0;
+			$subscriptions[] = $raw;
+			}
+		while ($rew = mysql_fetch_assoc($resultSearchThreadSubscr))
+			{
+			$rew['thread_notify'] = 1;
+			$subscriptions[] = $rew;
+			}
+		foreach ($subscriptions as $key=>$row)
+			{
+			$sortDate[$key] = $row['sort'];
+			}
+		array_multisort($sortDate, SORT_DESC, $subscriptions);
+		echo '<table class="normaltab">'."\n";
+		echo '<tr class="titlerow">'."\n";
+		echo '<th>Abonnementliste</th>'."\n".'<th>Posting</th>'."\n".'<th>Thread</th>'."\n".'<th>nein</th>'."\n".'</tr>';
+		$i=0;
+		foreach ($subscriptions as $row)
+			{
+			$item = ($row['pid'] == 0) ? 'thread' : 'reply';
+			$rowClass = ($i % 2 == 0) ? "a" : "b";
+			echo '<tr class="'.$rowClass.'">'."\n";
+			echo '<td>';
+			echo '<span class="'.$item.'">'.$row['subject'].'</span> - '.$row['name'].', '.$row['Uhrzeit'].'</td>';
+			echo '<td>'."\n";
+			echo '<input type="radio" name="id-'.$row['id'].'" value="posting-'.$row['id'].'"';
+			echo ($row['email_notify'] == 1) ? ' checked="checked"' : '';
+			echo ' />';
+			echo '</td><td>'."\n";
+			echo '<input type="radio" name="id-'.$row['id'].'" value="thread-'.$row['id'].'"';
+			echo ($row['thread_notify'] == 1) ? ' checked="checked"' : '';
+			echo ' />';
+			echo '</td><td>'."\n";
+			echo '<input type="radio" name="id-'.$row['id'].'" value="none-'.$row['id'].'" />';
+			echo '</td>'."\n";
+			echo '</tr>';
+			$i++;
+			}
+		echo "\n".'</table>'."\n";
 	break;
 	case "locked":
 		echo '<h2 class="caution">'.$lang['user_locked_hl'].'</h2>'."\n";
