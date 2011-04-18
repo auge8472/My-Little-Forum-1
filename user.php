@@ -1341,6 +1341,7 @@ switch ($action)
 			{
 			$sortDate[$key] = $row['sort'];
 			}
+		$subscriptions = processSubscriptFilter($subscriptions);
 		array_multisort($sortDate, SORT_DESC, $subscriptions);
 		echo '<table class="normaltab">'."\n";
 		echo '<tr class="titlerow">'."\n";
@@ -1348,24 +1349,27 @@ switch ($action)
 		$i=0;
 		foreach ($subscriptions as $row)
 			{
-			$item = ($row['pid'] == 0) ? 'thread' : 'reply';
-			$rowClass = ($i % 2 == 0) ? "a" : "b";
-			echo '<tr class="'.$rowClass.'">'."\n";
-			echo '<td>';
-			echo '<span class="'.$item.'">'.$row['subject'].'</span> - '.$row['name'].', '.$row['Uhrzeit'].'</td>';
-			echo '<td>'."\n";
-			echo '<input type="radio" name="id-'.$row['id'].'" value="posting-'.$row['id'].'"';
-			echo ($row['email_notify'] == 1) ? ' checked="checked"' : '';
-			echo ' />';
-			echo '</td><td>'."\n";
-			echo '<input type="radio" name="id-'.$row['id'].'" value="thread-'.$row['id'].'"';
-			echo ($row['thread_notify'] == 1) ? ' checked="checked"' : '';
-			echo ' />';
-			echo '</td><td>'."\n";
-			echo '<input type="radio" name="id-'.$row['id'].'" value="none-'.$row['id'].'" />';
-			echo '</td>'."\n";
-			echo '</tr>';
-			$i++;
+			if (!isset($row['delete']))
+				{
+				$item = ($row['pid'] == 0) ? 'thread' : 'reply';
+				$rowClass = ($i % 2 == 0) ? "a" : "b";
+				echo '<tr class="'.$rowClass.'">'."\n";
+				echo '<td>';
+				echo '<span class="'.$item.'">'.$row['subject'].'</span> - '.$row['name'].', '.$row['Uhrzeit'].' (#'.$row['id'].', Thread-#'.$row['tid'].')</td>';
+				echo '<td>'."\n";
+				echo '<input type="radio" name="id-'.$row['id'].'" value="posting-'.$row['id'].'"';
+				echo ($row['email_notify'] == 1) ? ' checked="checked"' : '';
+				echo ' />';
+				echo '</td><td>'."\n";
+				echo '<input type="radio" name="id-'.$row['id'].'" value="thread-'.$row['tid'].'"';
+				echo ($row['thread_notify'] == 1) ? ' checked="checked"' : '';
+				echo ' />';
+				echo '</td><td>'."\n";
+				echo '<input type="radio" name="id-'.$row['id'].'" value="none-'.$row['id'].'" />';
+				echo '</td>'."\n";
+				echo '</tr>';
+				$i++;
+				}
 			}
 		echo "\n".'</table>'."\n";
 	break;

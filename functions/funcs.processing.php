@@ -105,6 +105,66 @@ return $nurl;
 
 
 /**
+ * filters subscriptions of postings if there is a subscription for the whole thread 
+ *
+ * @param array $subscriptions
+ * @return array $subscriptions
+ */
+function processSubscriptFilter($a) {
+global $db_settings, $connid, $lang;
+
+$i = 0;
+
+foreach ($a as $sub)
+	{
+	if ($sub['thread_notify'] == 1)
+		{
+		$temp[$i]['tid'] = $sub['tid'];
+		$temp[$i]['id'] = $sub['id'];
+		}
+	$i++;
+	}
+
+for ($i = 0; $i < count($a); $i++)
+	{
+	foreach ($temp as $tmp)
+		{
+		if ($tmp['tid'] == $a[$i]['tid']
+		and $a[$i]['id'] != $tmp['id'])
+			{
+			$queryDel[] = $a[$i]['id'];
+			$a[$i]['delete'] = 1;
+			break;
+			}
+		}
+	}
+
+if (!empty($queryDel))
+	{
+	if (count($queryDel) > 1)
+		{
+		$queryDel = join(", ", $queryDel);
+		$matches = "IN (".$queryDel.")";
+		}
+	else
+		{
+		$matches = "= ".$queryDel[0];
+		}
+
+	$queryUnsubscribe = "UPDATE ".$db_settings['forum_table']." SET 
+		email_notify = 0
+		WHERE id ".$matches;
+#	echo '<pre>'.print_r($queryUnsubscribe, true).'</pre>';
+	$result = mysql_query($queryUnsubscribe, $connid);
+	if (!$result) die($lang['db_error']);
+	}
+
+return $a;
+} # End: processSubscriptFilter($a)
+
+
+
+/**
  * unifies all possible line breaks into unixoid break
  *
  * @param string $string
