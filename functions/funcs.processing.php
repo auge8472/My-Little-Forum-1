@@ -109,9 +109,12 @@ return $nurl;
  *
  * @param array $subscriptions
  * @return array $subscriptions
+ * @return bool false
  */
 function processSubscriptFilter($a) {
 global $db_settings, $connid, $lang;
+
+if (is_array($a) === false) return false;
 
 $i = 0;
 
@@ -154,7 +157,6 @@ if (!empty($queryDel))
 	$queryUnsubscribe = "UPDATE ".$db_settings['forum_table']." SET 
 		email_notify = 0
 		WHERE id ".$matches;
-#	echo '<pre>'.print_r($queryUnsubscribe, true).'</pre>';
 	$result = mysql_query($queryUnsubscribe, $connid);
 	if (!$result) die($lang['db_error']);
 	}
