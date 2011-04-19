@@ -513,6 +513,35 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 				}
 			mysql_free_result($own_settings);
 		break;
+		case "edit subscriptions":
+			$blablabla = '';
+			foreach ($_POST as $key => $val)
+				{
+				if (strpos($key, "id-") !== false)
+					{
+					$kCont = explode("-", $key);
+					$vCont = explode("-", $val);
+					if ($kCont[1] == $vCont[1])
+						{
+						# '<input type="radio" name="id-235" value="posting-235-214" />';
+						if ($vCont[0] === "posting")
+							{
+							# delete thread subscription where a posting subscription is setted
+							}
+						else if ($vCont[0] === "thread")
+							{
+							# delete posting subscriptions where the whole thread has a subscription
+							}
+						else if ($vCont[0] === "none")
+							{
+							# delete every possible subscription where subscription is setted to "none"
+							}
+						$blablabla .= '<pre>'.$key.': '.$val.'</pre>'."\n";
+						}
+					}
+				}
+			$action = "subscriptions";
+		break;
 		}
 	}
 else
@@ -1343,6 +1372,10 @@ switch ($action)
 			}
 		$subscriptions = processSubscriptFilter($subscriptions);
 		array_multisort($sortDate, SORT_DESC, $subscriptions);
+		if (!empty($blablabla))
+			{
+			echo $blablabla;
+			}
 		echo '<form action="user.php" method="post">'."\n";
 		echo '<input type="hidden" name="action" value="edit subscriptions">'."\n";
 		echo '<table class="normaltab">'."\n";
