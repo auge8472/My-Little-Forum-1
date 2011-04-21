@@ -523,20 +523,65 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 					$vCont = explode("-", $val);
 					if ($kCont[1] == $vCont[1])
 						{
-						# '<input type="radio" name="id-235" value="posting-235-214" />';
 						if ($vCont[0] === "posting")
 							{
+							$Test = 'posting';
+							# <input type="radio" name="id-235" value="posting-235-214" />
 							# delete thread subscription where a posting subscription is setted
+							$querySubscribe = "UPDATE ".$db_settings['forum_table']." SET
+							email_notify = 1
+							WHERE id = ".intval($vCont[1])." AND user_id = ".intval($user_id);
 							}
 						else if ($vCont[0] === "thread")
 							{
+							$Test = 'thread';
+							# <input type="radio" name="id-214" value="thread-214-214" />
 							# delete posting subscriptions where the whole thread has a subscription
+							$querySubscribe = "INSERT INTO ".$db_settings['usersubscripts_table']." SET
+							user_id = ".intval($user_id).",
+							tid = ".intval($vCont[2])."
+							ON DUPLICATE KEY UPDATE
+							user_id = user_id,
+							tid = tid";
 							}
 						else if ($vCont[0] === "none")
 							{
+							$Test = 'none';
+							# <input type="radio" name="id-235" value="none-235-214" />
+							# <input type="radio" name="id-214" value="none-214-214" />
 							# delete every possible subscription where subscription is setted to "none"
+							$querySearchPostingSubscription = "SELECT
+							email_notify
+							FROM ".$db_settings['forum_table']."
+							WHERE id = ".intval($vCont[1])." AND user_id = ".intval($user_id);
+							$resultSPS = mysql_query($querySearchPostingSubscription, $connid);
+							if (!$resultSPS) $querySubscribe = 'reading of '.$db_settings['forum_table'].' failed';
+							else $subscriptPosting = mysql_fetch_assoc($resultSPS);
+							$querySearchThreadSubscription = "SELECT
+							user_id,
+							tid
+							FROM ".$db_settings['usersubscripts_table']."
+							WHERE tid = ".intval($vCont[2])." AND user_id = ".intval($user_id);
+							$resultSTS = mysql_query($querySearchThreadSubscription, $connid);
+							if (!$resultSTS) $querySubscribe = 'reading of '.$db_settings['usersubscripts_table'].' failed';
+							else $subscriptThread = mysql_fetch_assoc($resultSTS);
+							if (!empty($subscriptPosting)
+								and $subscriptPosting['email_notify'] == 1)
+								{
+								$querySubscribe = "UPDATE ".$db_settings['forum_table']." SET
+								email_notify = 0
+								WHERE id = ".intval($vCont[1])." AND user_id = ".intval($user_id)." LIMIT 1";
+								}
+							else if (!empty($subscriptThread)
+								and ($subscriptThread['user_id'] == $user_id
+								and $subscriptThread['tid'] == $vCont[2]))
+								{
+								$querySubscribe = "DELETE FROM ".$db_settings['usersubscripts_table']."
+								WHERE tid = ".intval($vCont[2])." AND user_id = ".intval($user_id)." LIMIT 1";
+								}
 							}
-						$blablabla .= '<pre>'.$key.': '.$val.'</pre>'."\n";
+						$blablabla .= '<pre>'.$querySubscribe.'</pre>'."\n<hr />\n";
+						unset($querySubscribe, $tester);
 						}
 					}
 				}
@@ -1350,7 +1395,6 @@ switch ($action)
 		AND t1.tid = t2.tid
 		AND t2.pid = 0";
 		$resultSearchThreadSubscr = mysql_query($querySearchThreadSubscr, $connid);
-		echo '<h2>'.$lang['edit_subscriptions_hl'].'</h2>'."\n";
 		if (isset($errors))
 			{
 			echo errorMessages($errors);
@@ -1372,6 +1416,7 @@ switch ($action)
 			}
 		$subscriptions = processSubscriptFilter($subscriptions);
 		array_multisort($sortDate, SORT_DESC, $subscriptions);
+		echo '<h2>'.$lang['edit_subscriptions_hl'].'</h2>'."\n";
 		if (!empty($blablabla))
 			{
 			echo $blablabla;
