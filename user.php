@@ -525,7 +525,6 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 						{
 						if ($vCont[0] === "posting")
 							{
-							$Test = 'posting';
 							# <input type="radio" name="id-235" value="posting-235-214" />
 							# delete thread subscription where a posting subscription is setted
 							$querySubscribe = "UPDATE ".$db_settings['forum_table']." SET
@@ -534,7 +533,6 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 							}
 						else if ($vCont[0] === "thread")
 							{
-							$Test = 'thread';
 							# <input type="radio" name="id-214" value="thread-214-214" />
 							# delete posting subscriptions where the whole thread has a subscription
 							$querySubscribe = "INSERT INTO ".$db_settings['usersubscripts_table']." SET
@@ -546,7 +544,6 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 							}
 						else if ($vCont[0] === "none")
 							{
-							$Test = 'none';
 							# <input type="radio" name="id-235" value="none-235-214" />
 							# <input type="radio" name="id-214" value="none-214-214" />
 							# delete every possible subscription where subscription is setted to "none"
@@ -580,8 +577,11 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 								WHERE tid = ".intval($vCont[2])." AND user_id = ".intval($user_id)." LIMIT 1";
 								}
 							}
-						$blablabla .= '<pre>'.$querySubscribe.'</pre>'."\n<hr />\n";
-						unset($querySubscribe, $tester);
+						if (!empty($querySubscribe))
+							{
+							$blablabla .= '<pre>'.$querySubscribe.'</pre>'."\n<hr />\n";
+							unset($querySubscribe);
+							}
 						}
 					}
 				}
