@@ -116,6 +116,7 @@ global $db_settings, $connid, $lang;
 
 if (is_array($a) === false) return false;
 
+$temp = array();
 $i = 0;
 
 foreach ($a as $sub)
