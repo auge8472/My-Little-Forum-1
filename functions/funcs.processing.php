@@ -168,6 +168,30 @@ return $a;
 
 
 /**
+ * search thread subscription of the current user and thread
+ *
+ * @param int $tid
+ * @param int $user
+ * @return bool
+ */
+function processSearchThreadSubscriptions($tid, $user) {
+global $db_settings, $connid;
+$querySTS = "SELECT
+user_id,
+tid
+FROM ".$db_settings['usersubscripts_table']."
+WHERE tid = ".intval($tid)."
+AND user_id = ".intval($user);
+$resultSTS = mysql_query($querySTS, $connid);
+if (!$resultSTS) return false;
+else $subscriptThread = mysql_fetch_assoc($resultSTS);
+$return = !empty($subscriptThread) ? true : false;
+return $return;
+} # End:  processSearchThreadSubscriptions
+
+
+
+/**
  * unifies all possible line breaks into unixoid break
  *
  * @param string $string
