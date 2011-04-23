@@ -327,6 +327,26 @@ color: #00f;
 text-decoration: underline;
 background-image:url(img/delete_mo.png);
 }
+.menu a.subscribe-posting:link, .menu a.subscribe-posting:visited {
+color: #00c;
+text-decoration: none;
+background-image:url(img/notify.png);
+}
+.menu a.subscribe-posting:focus, .menu a.subscribe-posting:hover {
+color: #00f;
+text-decoration: underline;
+background-image:url(img/notify_mo.png);
+}
+.menu a.unsubscribe-posting:link, .menu a.unsubscribe-posting:visited {
+color: #00c;
+text-decoration: none;
+background-image:url(img/denotify.png);
+}
+.menu a.unsubscribe-posting:focus, .menu a.unsubscribe-posting:hover {
+color: #00f;
+text-decoration: underline;
+background-image:url(img/denotify_mo.png);
+}
 .menu a.lock-posting:link, .menu a.lock-posting:visited {
 color: #00c;
 text-decoration: none;

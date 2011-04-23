@@ -135,6 +135,50 @@ or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
 	} # if (isset($_GET['fix']) ...)
 
 
+if (isset($_GET['subscribe'])
+and isset($_SESSION[$settings['session_prefix'].'user_id'])
+and isset($_GET['back']))
+	{
+	if ($_GET['subscribe'] == 'true')
+		{
+		$querySubscribe = "INSERT INTO ".$db_settings['usersubscripts_table']." SET
+		user_id = ".intval($_SESSION[$settings['session_prefix'].'user_id']).",
+		tid = ".intval($_GET['back'])."
+		ON DUPLICATE KEY UPDATE
+		user_id = user_id,
+		tid = tid";
+		}
+	else if ($_GET['subscribe'] == 'false')
+		{
+		$subscriptThread = processSearchThreadSubscriptions($_GET['back'], $_SESSION[$settings['session_prefix'].'user_id']);
+		if (($subscriptThread !== false and is_array($subscriptThread))
+		and ($subscriptThread['user_id'] == $_SESSION[$settings['session_prefix'].'user_id']
+		and $subscriptThread['tid'] == $_GET['back']))
+			{
+			$querySubscribe = "DELETE FROM ".$db_settings['usersubscripts_table']."
+			WHERE tid = ".intval($_GET['back'])."
+			AND user_id = ".intval($_SESSION[$settings['session_prefix'].'user_id'])." LIMIT 1";
+			}
+		}
+	if (!empty($querySubscribe)) @mysql_query($querySubscribe, $connid);
+
+	if (empty($page)) $page = 0;
+	if (empty($order)) $order = "time";
+	if (empty($descasc)) $descasc = "DESC";
+	if (isset($_GET['view']))
+		{
+		$header_href = ($view=="board") ? 'board_entry.php' : 'mix_entry.php';
+		$header_id = '?id='.intval($_GET['back']);
+		}
+	else
+		{
+		$header_href = 'forum_entry.php';
+		$header_id = '?id='.intval($_GET['id']);
+		}
+	header('location: '.$settings['forum_address'].$header_href.$header_id.'&page='.$page.'&order='.$order.'&descasc='.$descasc.'&category='.$category);
+	} # if (isset($_GET['subscribe'] ...)
+
+
 if (($settings['access_for_users_only'] == 1
 && isset($_SESSION[$settings['session_prefix'].'user_name']))
 || $settings['access_for_users_only'] != 1)

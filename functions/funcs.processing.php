@@ -185,7 +185,7 @@ AND user_id = ".intval($user);
 $resultSTS = mysql_query($querySTS, $connid);
 if (!$resultSTS) return false;
 else $subscriptThread = mysql_fetch_assoc($resultSTS);
-$return = !empty($subscriptThread) ? true : false;
+$return = !empty($subscriptThread) ? $subscriptThread : false;
 return $return;
 } # End:  processSearchThreadSubscriptions
 

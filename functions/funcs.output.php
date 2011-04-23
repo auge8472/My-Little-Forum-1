@@ -402,6 +402,8 @@ else if ($settings['user_edit']==1 and $settings['edit_period'] == 0)
 	{
 	$period = true;
 	}
+	
+$subscriptPresent = processSearchThreadSubscriptions($thread['tid'], $_SESSION[$settings['session_prefix'].'user_id']);
 
 if (($settings['user_edit'] == 1
 	and (isset($_SESSION[$settings['session_prefix'].'user_id'])
@@ -431,6 +433,31 @@ if (($settings['user_edit'] == 1
 		$r .= $page.'&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category=';
 		$r .= $category.'" class="delete-posting" title="'.outputLangDebugInAttributes($lang['delete_linktitle']).'">';
 		$r .= $lang['delete_linkname'].'</a></li>'."\n";
+		}
+	# subscribe a thread
+	if ((!empty($first) and $first==='opener')
+	and isset($_SESSION[$settings['session_prefix'].'user_id']))
+		{
+		if (is_array($subscriptPresent))
+			{
+			$subAction = 'false';
+			$subClass = 'unsubscribe-posting';
+			$subTitle = $lang['unsubscribe_linktitle'];
+			$subName = $lang['unsubscribe_linkname'];
+			}
+		else
+			{
+			$subAction = 'true';
+			$subClass = 'subscribe-posting';
+			$subTitle = $lang['subscribe_linktitle'];
+			$subName = $lang['subscribe_linkname'];
+			}
+		$r .= '<li><a href="posting.php?subscribe='.$subAction;
+		$r .= '&amp;id='.$thread["id"].'&amp;back='.$thread["tid"].$view.'&amp;page=';
+		$r .= $page.'&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category=';
+		$r .= $category.'" class="'.$subClass.'" title="';
+		$r .= outputLangDebugInAttributes($subTitle).'">';
+		$r .= $subName.'</a></li>'."\n";
 		}
 	# lock a thread
 	if ((!empty($first) and $first==='opener')
