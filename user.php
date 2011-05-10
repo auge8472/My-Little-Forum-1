@@ -535,6 +535,9 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 							{
 							# <input type="radio" name="id-214" value="thread-214-214" />
 							# delete posting subscriptions where the whole thread has a subscription
+							$queryUnsubscribe = "UPDATE ".$db_settings['forum_table']." SET
+							email_notify = 0
+							WHERE tid = ".intval($vCont[2])." AND user_id = ".intval($user_id);
 							$querySubscribe = "INSERT INTO ".$db_settings['usersubscripts_table']." SET
 							user_id = ".intval($user_id).",
 							tid = ".intval($vCont[2])."
