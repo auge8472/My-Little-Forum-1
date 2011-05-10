@@ -579,7 +579,8 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($actio
 							}
 						if (!empty($querySubscribe))
 							{
-							$blablabla .= '<pre>'.$querySubscribe.'</pre>'."\n<hr />\n";
+							$resultSS = mysql_query($querySubscribe, $connid);
+							if (!$resultSS) die($lang['db_error']);
 							unset($querySubscribe);
 							}
 						}
@@ -1410,50 +1411,58 @@ switch ($action)
 			$rew['thread_notify'] = 1;
 			$subscriptions[] = $rew;
 			}
-		foreach ($subscriptions as $key=>$row)
+		if (!empty($subscriptions))
 			{
-			$sortDate[$key] = $row['sort'];
-			}
-		$subscriptions = processSubscriptFilter($subscriptions);
-		array_multisort($sortDate, SORT_DESC, $subscriptions);
-		echo '<h2>'.$lang['edit_subscriptions_hl'].'</h2>'."\n";
-		if (!empty($blablabla))
-			{
-			echo $blablabla;
-			}
-		echo '<form action="user.php" method="post">'."\n";
-		echo '<input type="hidden" name="action" value="edit subscriptions">'."\n";
-		echo '<table class="normaltab">'."\n";
-		echo '<tr class="titlerow">'."\n";
-		echo '<th>Abonnementliste</th>'."\n".'<th>Posting</th>'."\n".'<th>Thread</th>'."\n".'<th>nein</th>'."\n".'</tr>';
-		$i=0;
-		foreach ($subscriptions as $row)
-			{
-			if (!isset($row['delete']))
+			foreach ($subscriptions as $key=>$row)
 				{
-				$item = ($row['pid'] == 0) ? 'thread' : 'reply';
-				$rowClass = ($i % 2 == 0) ? "a" : "b";
-				echo '<tr class="'.$rowClass.'">'."\n";
-				echo '<td>';
-				echo '<span class="'.$item.'">'.$row['subject'].'</span> - '.$row['name'].', '.$row['Uhrzeit'].' (#'.$row['id'].', Thread-#'.$row['tid'].')</td>';
-				echo '<td>'."\n";
-				echo '<input type="radio" name="id-'.$row['id'].'" value="posting-'.$row['id'].'-'.$row['tid'].'"';
-				echo ($row['email_notify'] == 1) ? ' checked="checked"' : '';
-				echo ' />';
-				echo '</td><td>'."\n";
-				echo '<input type="radio" name="id-'.$row['id'].'" value="thread-'.$row['id'].'-'.$row['tid'].'"';
-				echo ($row['thread_notify'] == 1) ? ' checked="checked"' : '';
-				echo ' />';
-				echo '</td><td>'."\n";
-				echo '<input type="radio" name="id-'.$row['id'].'" value="none-'.$row['id'].'-'.$row['tid'].'" />';
-				echo '</td>'."\n";
-				echo '</tr>';
-				$i++;
+				$sortDate[$key] = $row['sort'];
 				}
+			$subscriptions = processSubscriptFilter($subscriptions);
+			array_multisort($sortDate, SORT_DESC, $subscriptions);
+			echo '<h2>'.$lang['edit_subscriptions_hl'].'</h2>'."\n";
+			echo '<form action="user.php" method="post">'."\n";
+			echo '<input type="hidden" name="action" value="edit subscriptions">'."\n";
+			echo '<table class="normaltab">'."\n";
+			echo '<tr class="titlerow">'."\n";
+			echo '<th>'.$lang['edit_subscriptions_th_title'].'</th>'."\n";
+			echo '<th>'.$lang['edit_subscriptions_th_posting'].'</th>'."\n";
+			echo '<th>'.$lang['edit_subscriptions_th_thread'].'</th>'."\n";
+			echo '<th>'.$lang['no'].'</th>'."\n".'</tr>';
+			$i=0;
+			foreach ($subscriptions as $row)
+				{
+				if (!isset($row['delete']))
+					{
+					$item = ($row['pid'] == 0) ? 'thread' : 'reply';
+					$rowClass = ($i % 2 == 0) ? "a" : "b";
+					echo '<tr class="'.$rowClass.'">'."\n";
+					echo '<td>';
+					echo '<span class="'.$item.'">'.$row['subject'].'</span> - '.$row['name'].', '.$row['Uhrzeit'].'</td>';
+					echo '<td>'."\n";
+					echo '<input type="radio" name="id-'.$row['id'].'" value="posting-'.$row['id'].'-'.$row['tid'].'"';
+					echo ($row['email_notify'] == 1) ? ' checked="checked"' : '';
+					echo ($row['thread_notify'] == 1) ? ' disabled="disabled"' : '';
+					echo ' />';
+					echo '</td><td>'."\n";
+					echo '<input type="radio" name="id-'.$row['id'].'" value="thread-'.$row['id'].'-'.$row['tid'].'"';
+					echo ($row['thread_notify'] == 1) ? ' checked="checked"' : '';
+					echo ' />';
+					echo '</td><td>'."\n";
+					echo '<input type="radio" name="id-'.$row['id'].'" value="none-'.$row['id'].'-'.$row['tid'].'" />';
+					echo '</td>'."\n";
+					echo '</tr>';
+					$i++;
+					}
+				}
+			echo "\n".'</table>'."\n";
+			echo '<p><input type="submit" name="subscriptions_submit" value="';
+			echo outputLangDebugInAttributes($lang['userdata_subm_button']).'" /></p></form>'."\n";
 			}
-		echo "\n".'</table>'."\n";
-		echo '<p><input type="submit" name="subscriptions_submit" value="';
-		echo outputLangDebugInAttributes($lang['userdata_subm_button']).'" /></p></form>'."\n";
+		else
+			{
+			# no subscribed postings or threads
+			echo '<p>'.$lang['edit_subscriptions_none'].'</p>'."\n";
+			}
 	break;
 	case "locked":
 		echo '<h2 class="caution">'.$lang['user_locked_hl'].'</h2>'."\n";
