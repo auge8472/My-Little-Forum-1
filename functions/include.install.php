@@ -105,6 +105,11 @@ name varchar(60) NOT NULL,
 value varchar(40) NOT NULL,
 type enum('string','bool') NOT NULL default 'string'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+$newTable['user_subscriptions'] = "CREATE TABLE ".$db_settings['usersubscripts_table']." (
+user_id int(12) unsigned NOT NULL,
+tid int(12) unsigned NOT NULL,
+UNIQUE KEY user_thread (user_id,tid)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $newSetting["reply_name"] = "INSERT INTO ".$db_settings['settings_table']." SET
 name = 'last_reply_name',
@@ -209,6 +214,11 @@ if (empty($errors))
 	{
 	@mysql_query($newTable['us_template'], $connid) or $errors[] = str_replace("[table]",$db_settings['us_templates_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 	}
+# create new table for users own subscriptions
+if (empty($errors))
+	{
+	@mysql_query($newTable['user_subscriptions'], $connid) or $errors[] = str_replace("[table]",$db_settings['usersubscripts_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	}
 # insert new settings
 if (empty($errors))
 	{
@@ -217,7 +227,7 @@ if (empty($errors))
 		@mysql_query($Set, $connid) or $errors[] = $lang_add['db_insert_settings_error']." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
 		}
 	}
- 
+
 # set value 1.8 for version string
 if (empty($errors))
 	{

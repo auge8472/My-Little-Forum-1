@@ -59,6 +59,7 @@ if (isset($_POST['form_submitted']))
 		$db_settings['useronline_table'] = $_POST['table_prefix'].'useronline';
 		$db_settings['usersettings_table'] = $_POST['table_prefix'].'usersettings';
 		$db_settings['us_templates_table'] = $_POST['table_prefix'].'fu_settings';
+		$db_settings['usersubscripts_table'] = $_POST['table_prefix'].'forum_subscripts';
 		# content of db_settings.php
 		$fileSettingsContent  = "<?php\n";
 		$fileSettingsContent .= "\$db_settings['host'] = \"".$db_settings['host']."\";\n";
@@ -74,6 +75,7 @@ if (isset($_POST['form_submitted']))
 		$fileSettingsContent .= "\$db_settings['useronline_table'] = \"".$db_settings['useronline_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['usersettings_table'] = \"".$db_settings['usersettings_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['us_templates_table'] = \"".$db_settings['us_templates_table']."\";\n";
+		$fileSettingsContent .= "\$db_settings['usersubscripts_table'] = \"".$db_settings['usersubscripts_table']."\";\n";
 		$fileSettingsContent .= "?>";
 
 		$db_settings_file = @fopen("db_settings.php", "w") or $errors[] = str_replace("CHMOD",$chmod,$lang_add['no_writing_permission']);
@@ -217,6 +219,12 @@ if (isset($_POST['form_submitted']))
 			value varchar(40) NOT NULL,
 			type enum('string','bool') NOT NULL default 'string'
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+			$table["usersubscripts"]["name"] = $db_settings['usersubscripts_table'];
+			$table["usersubscripts"]["query"] = "CREATE TABLE ".$db_settings['usersubscripts_table']." (
+			user_id int(12) unsigned NOT NULL,
+			tid int(12) unsigned NOT NULL,
+			UNIQUE KEY user_thread (user_id,tid)
+			) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 			foreach ($table as $tbl)
 				{
 				@mysql_query($tbl["query"], $connid) or $errors[] = str_replace("[table]",$tbl['name'],$lang_add['db_create_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
