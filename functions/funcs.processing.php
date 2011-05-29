@@ -197,8 +197,8 @@ return $return;
  * @param string $string
  * @return string $string
  */
-function convertLineBreaks($string) {
-return preg_replace("/\015\012|\015|\012/", "\n", $string);
+function convertLineBreaks($string, $to = "\n") {
+return preg_replace("/\015\012|\015|\012/", $to, $string);
 } # End: convertLineBreaks
 
 
