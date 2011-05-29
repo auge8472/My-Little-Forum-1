@@ -276,8 +276,9 @@ else
 	}
 
 $headers .= "MIME-Version: 1.0".$mhs;
-$headers .= "X-Sender-IP: ". $_SERVER['REMOTE_ADDR'].$mhs;
-$headers .= "Content-Type: text/plain; charset=UTF-8".$mhs;
+$headers .= "X-Mailer: Php/".phpversion().$mhs;
+$headers .= "X-Sender-IP: ".$_SERVER['REMOTE_ADDR'].$mhs;
+$headers .= "Content-Type: text/plain; charset=UTF-8; format=flowed".$mhs;
 $headers .= "Content-Transfer-Encoding: quoted-printable";
 
 if ($settings['mail_parameter']!='')
