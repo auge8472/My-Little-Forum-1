@@ -1533,12 +1533,10 @@ switch ($action)
 		echo '<td class="d"><input type="radio" name="debug_type" id="debug-lang" value="lang"';
 		echo ($_SESSION['debug'] == 'lang') ? ' checked="checked"' : '';
 		echo ' /></td>'."\n";
-		echo '</tr><tr>'."\n";
-		echo '<td class="c">&nbsp;</td>'."\n";
-		echo '<td class="d"><input type="submit" name="debug_submitted"';
-		echo ' value="'.outputLangDebugInAttributes($lang_add['settings_sb']).'" /></td>'."\n";
 		echo '</tr>'."\n";
 		echo '</table>'."\n";
+		echo '<p><input type="submit" name="debug_submitted"';
+		echo ' value="'.outputLangDebugInAttributes($lang_add['settings_sb']).'" /></p>'."\n";
 		echo '</form>'."\n";
 	break;
 	case "categories":
@@ -2253,12 +2251,10 @@ switch ($action)
 			echo '<input type="radio" name="forum_disabled" id="forum-enabled" value="0"';
 			echo ($settings['forum_disabled']==0) ? ' checked="checked"' : '';
 			echo ' /><label for="forum-enabled">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">&nbsp;</td>'."\n";
-			echo '<td class="d"><input type="submit" name="settings_submitted"';
-			echo ' value="'.outputLangDebugInAttributes($lang_add['settings_sb']).'" /></td>'."\n";
 			echo '</tr>'."\n";
 			echo '</table>'."\n";
+			echo '<p><input type="submit" name="settings_submitted"';
+			echo ' value="'.outputLangDebugInAttributes($lang_add['settings_sb']).'" /></p>'."\n";
 			echo '</form>'."\n";
 			echo '<ul class="linklist">'."\n";
 			echo '<li><a class="textlink" href="admin.php?action=advanced_settings">'.$lang_add['advanced_settings'].'</a></li>'."\n";
@@ -2442,15 +2438,16 @@ switch ($action)
 			echo outputLangDebugInAttributes($lang_add['del_cat_sb']).'" /></p></form>'."\n";
 		break;
 		case "edit_category":
+			echo '<h2>'.$lang_add['cat_edit_hl'].'</h2>';
 			if (isset($errors))
 				{
 				echo errorMessages($errors);
 				}
 			echo '<form action="admin.php" method="post"><div>'."\n";
 			echo '<input type="hidden" name="id" value="'.$id.'" />'."\n";
-			echo '<label for="cat-name">'.$lang_add['edit_category'].'</label><br />'."\n";
+			echo '<label for="cat-name">'.$lang_add['edit_category']."\n";
 			echo '<input type="text" name="category" id="cat-name" value="';
-			echo htmlspecialchars($category).'" size="25" /><br /><br />'."\n";
+			echo htmlspecialchars($category).'" size="25" /></label><br />'."\n";
 			echo '<b>'.$lang_add['accessible_for'].'</b><br />'."\n";
 			echo '<input type="radio" name="accession" id="access-all" value="0"';
 			echo ($accession==0) ? ' checked="ckecked"' : '';
@@ -2498,7 +2495,7 @@ switch ($action)
 			echo '<input type="password" size="25" name="sql_pw" id="sql_pw" /></p>'."\n";
 			echo '<p><input type="submit" name="sql_submit" value="';
 			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></p>'."\n";
-			echo '</div></form>'."\n";
+			echo '</form>'."\n";
 		break;
 		case "import_sql_ok":
 			echo '<p>'.$lang_add['import_sql_ok'].'</p>'."\n";
@@ -2534,11 +2531,10 @@ switch ($action)
 			echo ' </tr><tr>'."\n";
 			echo '  <td><input type="radio" name="clear_userdata" value="5" /></td>'."\n";
 			echo '  <td>'.$lang_add['clear_users_5'].'</td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td colspan="2"><input type="submit" value="';
-			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></td>'."\n";
 			echo ' </tr>'."\n";
 			echo '</table>'."\n";
+			echo '<p><input type="submit" value="';
+			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></p>'."\n";
 			echo '</form>'."\n";
 		break;
 		case "banlists":
@@ -2580,12 +2576,10 @@ switch ($action)
 			echo '  <td class="d"><textarea name="not_accepted_words" id="bann-word" cols="50" rows="5">';
 			if (isset($not_accepted_words)) echo htmlspecialchars($not_accepted_words);
 			echo '</textarea></td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td class="c">&nbsp;</td>'."\n";
-			echo '  <td class="d"><input type="submit" name="banlists_submit" value="';
-			echo outputLangDebugInAttributes($lang_add['banlists_submit']).'" /></td>'."\n";
 			echo ' </tr>'."\n";
 			echo '</table>'."\n";
+			echo '<p><input type="submit" name="banlists_submit" value="';
+			echo outputLangDebugInAttributes($lang_add['banlists_submit']).'" /></p>'."\n";
 			echo '</form>'."\n";
 		break;
 		case "smilies":
@@ -2712,6 +2706,7 @@ switch ($action)
 		case 'edit_smiley':
 			if (isset($errors)) { echo errorMessages($errors); }
 			echo '<form action="admin.php" method="post">'."\n";
+			echo '<input type="hidden" name="id" value="'.$id.'" />'."\n";
 			echo '<table class="normaltab">'."\n";
 			echo '<tr>'."\n";
 			echo '<td class="c"><label for="smiley-file">'.$lang_add['edit_smilies_smiley'].'</label></td>'."\n";
@@ -2748,13 +2743,10 @@ switch ($action)
 			echo '<td class="d"><input type="text" name="title" id="smiley-title" value="';
 			if (isset($title)) echo htmlspecialchars($title);
 			echo '" size="25" /></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">&nbsp;</td>'."\n";
-			echo '<td class="d"><input type="submit" name="edit_smiley_submit" value="';
-			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /><input type="hidden" name="id" value="';
-			echo $id.'" /></td>'."\n";
 			echo '</tr>'."\n";
 			echo '</table>'."\n";
+			echo '<p><input type="submit" name="edit_smiley_submit" value="';
+			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></p>'."\n";
 		break;
 		case 'edit_user':
 			if (isset($errors))
@@ -2879,13 +2871,10 @@ switch ($action)
 				echo ' id="new-user" /><label for="new-user">'.$lang['admin_mod_notif_nu'].'</label></td>'."\n";
 				echo ' </tr>';
 				}
-			echo '<tr>'."\n";
-			echo '  <td class="c">&nbsp;</td>'."\n";
-			echo '  <td class="d"><input type="submit" name="edit_user_submit" value="';
+			echo "\n".'</table>'."\n";
+			echo '<p><input type="submit" name="edit_user_submit" value="';
 			echo outputLangDebugInAttributes($lang['userdata_subm_button']).'" />&nbsp;<input type="reset" value="';
-			echo outputLangDebugInAttributes($lang['reset_button']).'" /></td>'."\n";
-			echo ' </tr>'."\n";
-			echo '</table>'."\n";
+			echo outputLangDebugInAttributes($lang['reset_button']).'" /></p>'."\n";
 			echo '</div></form>'."\n";
 		break;
 		}
