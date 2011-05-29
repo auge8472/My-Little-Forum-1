@@ -202,8 +202,8 @@ $lang['edit_period_over'] =            "Entry cannot be edited any longer after 
 $lang['error_not_accepted_word'] =     "the posting contains at least one not accepted word";
 
 // E-mail texts
-$lang['email_subject'] =               "Reply to your post";
-$lang['email_text'] =                  "Hi [recipient],\n[name] has written a reply to this post:\n\nSubject: [subject]\n\n[text]\n\nURL of this post: [posting_address]\n\n\n--- Original post: ---\n\nSubject: [original_subject]\n\n[original_text]";
+$lang['email_subject'] =               "Reply to a post";
+$lang['email_text'] =                  "Hi [recipient],\n\n[name] has written a reply to this post:\n\nSubject: [subject]\n\n[text]\n\nURL of this post: [posting_address]\n\n\n--- Original post: ---\n\nSubject: [original_subject]\n\n[original_text]";
 #$lang['admin_email_subject'] =         "New entry in the forum: [subject]";
 $lang['admin_email_subject'] =         "New entry in the forum";
 $lang['admin_email_text'] =            "New Entry by [name]\n\nSubject: [subject]\n\n[text]\n\nLink to the entry: [posting_address]";
