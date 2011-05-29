@@ -248,4 +248,147 @@ if (!isset ($attributes['default']))
 return '<a rel="nofollow" href="'.htmlspecialchars($attributes['default']).'">'.$content.'</a>';
 } #End: bbcodeDoURL
 
+
+
+/**
+ * formats and sends an email
+ *
+ * @param string $to
+ * @param string $subject
+ * @param string $message
+ * @param string $from
+ * @return bool
+ */
+function processEmail($to, $subject, $message, $from='') {
+global $settings;
+$mhs = "\n";
+$to = convertLineBreaks($to, '');
+$subject = mb_encode_mimeheader(convertLineBreaks($subject, ''), 'UTF-8', "Q", $mhs);
+$message = myQuotedPrintableEncode($message);
+
+if ($from == '')
+	{
+	$headers = "From: ".encodeMailName($settings['forum_name'], $mhs)." <".$settings['forum_email'].">".$mhs;
+	}
+else
+	{
+	$headers  = "From: ".convertLineBreaks($from, '').$mhs;
+	}
+
+$headers .= "MIME-Version: 1.0".$mhs;
+$headers .= "X-Sender-IP: ". $_SERVER['REMOTE_ADDR'].$mhs;
+$headers .= "Content-Type: text/plain; charset=UTF-8".$mhs;
+$headers .= "Content-Transfer-Encoding: quoted-printable";
+
+if ($settings['mail_parameter']!='')
+	{
+	if(@mail($to, $subject, $message, $headers, $settings['mail_parameter']))
+		{
+		return true;
+		}
+	else
+		{
+		return false;
+		}
+	}
+else
+	{
+	if(@mail($to, $subject, $message, $headers))
+		{
+		return true;
+		}
+	else
+		{
+		return false;
+		}
+	}
+} # End: processEmail
+
+
+
+/**
+ * puts a name into a formatted string for mail header
+ *
+ * @param string $name
+ * @param string $linefeed
+ * @return string $name
+ */
+function encodeMailName($name, $lf="\r\n") {
+$name = str_replace('"', '\\"', $name);
+if (preg_match("/(\.|\;|\")/", $name))
+	{
+	return '"'.mb_encode_mimeheader($name, 'UTF-8', "Q", $lf).'"';
+	}
+else
+	{
+	return mb_encode_mimeheader($name, 'UTF-8', "Q", $lf);
+	}
+} # End: encodeMailName
+
+
+
+/**
+ * Encode string to quoted-printable.
+ * Original written by Andy Prevost http://phpmailer.sourceforge.net
+ * and distributed under the Lesser General Public License (LGPL) http://www.gnu.org/copyleft/lesser.html
+ *
+ * @return string
+ */
+function myQuotedPrintableEncode($input, $line_max=76, $space_conv = false ) {
+$hex = array('0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F');
+$lines = preg_split('/(?:\r\n|\r|\n)/', $input);
+$eol = "\n";
+$escape = '=';
+$output = '';
+while (list(, $line) = each($lines))
+	{
+	$linlen = strlen($line);
+	$newline = '';
+	for ($i = 0; $i < $linlen; $i++)
+		{
+		$c = substr($line, $i, 1);
+		$dec = ord( $c );
+		# convert first point in the line into =2E
+		if (($i == 0) && ($dec == 46))
+			{ 
+			$c = '=2E';
+			}
+		if ($dec == 32)
+			{
+			# convert space at eol only
+			if ($i==($linlen-1))
+				{
+				$c = '=20';
+				}
+			elseif ($space_conv)
+				{
+				$c = '=20';
+				}
+			}
+		# always encode "\t", which is *not* required
+		elseif (($dec == 61) || ($dec < 32) || ($dec > 126))
+			{ 
+			$h2 = floor($dec/16);
+			$h1 = floor($dec%16);
+			$c = $escape.$hex[$h2].$hex[$h1];
+			}
+		# CRLF is not counted
+		if ((strlen($newline) + strlen($c)) >= $line_max)
+			{
+			# soft line break; " =\r\n" is okay
+			$output .= $newline.$escape.$eol;
+			$newline = '';
+			# check if newline first character will be point or not
+			if ($dec == 46)
+				{
+				$c = '=2E';
+				}
+			}
+		$newline .= $c;
+		} # end of for
+	$output .= $newline.$eol;
+	} # end of while
+return $output;
+} # End: myQuotedPrintableEncode
+
 ?>
