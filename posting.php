@@ -905,42 +905,60 @@ if (($settings['access_for_users_only'] == 1
 									$parent["name"] = $field["user_name"];
 									$parent["email"] = $field["user_email"];
 									}
-								$emailbody = str_replace("[recipient]", $parent["name"], $lang['email_text']);
+								$emailbody = $lang['email_text'];
+								$emailbody = str_replace("[recipient]", $parent["name"], $emailbody);
 								$emailbody = str_replace("[name]", $name, $emailbody);
 								$emailbody = str_replace("[subject]", $subject, $emailbody);
 								$emailbody = str_replace("[text]", $mail_text, $emailbody);
 								$emailbody = str_replace("[posting_address]", $PostAddress, $emailbody);
 								$emailbody = str_replace("[original_subject]", $parent["subject"], $emailbody);
-								$emailbody = str_replace("[original_text]", $parent["text"], $emailbody);
+								$emailbody = str_replace("[original_text]", unbbcode($parent["text"]), $emailbody);
 								$emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
 								$emailbody = stripslashes($emailbody);
-#								$emailbody = str_replace(htmlspecialchars($settings['quote_symbol']), ">", $emailbody);
 								$emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
-								$header  = "From: ".mb_encode_mimeheader($settings['forum_name'],"UTF-8")." <".$settings['forum_email'].">\n";
-								#$header .= "Reply-To: $name <$absender>\n";
-								#$header .= "Reply-To: <".$forum_email.">\n";
-								$header .= "X-Mailer: Php/" . phpversion(). "\n";
-								$header .= "X-Sender-ip: $ip\n";
-								$header .= "Content-Type: text/plain; charset=UTF-8; format=flowed\n";
-								$header .= "Content-Transfer-Encoding: 8bit\n";
 								$an = mb_encode_mimeheader($parent["name"],"UTF-8")." <".$parent["email"].">";
-								if ($settings['mail_parameter']!='')
+								$emailsubject = strip_tags($lang['email_subject']);
+								$sent = processEmail($an, $emailsubject, $emailbody);
+								if ($sent === true)
 									{
-									if (@mail($an, strip_tags($lang['email_subject']), $emailbody, $header,$settings['mail_parameter']))
-										{
-										$sent = "ok";
-										}
-									}
-								else
-									{
-									if (@mail($an, strip_tags($lang['email_subject']), $emailbody, $header))
-										{
-										$sent = "ok";
-										}
+									$sent = "ok";
 									}
 								unset($header);
+								unset($emailsubject);
 								unset($emailbody);
 								}
+							$threadNotifyQuery = "SELECT
+							t1.user_name AS name,
+							t1.user_email AS email,
+							t2.user_id
+							FROM ".$db_settings['userdata_table']." AS t1, ".$db_settings['usersubscripts_table']." AS t2
+							WHERE t1.user_id = t2.user_id AND t2.tid = ".$neu['tid'];
+							$emails_result = mysql_query($threadNotifyQuery, $connid);
+							if (!$emails_result) die($lang['db_error']);
+							while ($field = mysql_fetch_assoc($emails_result))
+								{
+								$emailbody = str_replace("[recipient]", $field["name"], $lang['email_text']);
+								$emailbody = str_replace("[name]", $name, $emailbody);
+								$emailbody = str_replace("[subject]", $subject, $emailbody);
+								$emailbody = str_replace("[text]", $mail_text, $emailbody);
+								$emailbody = str_replace("[posting_address]", $PostAddress, $emailbody);
+								$emailbody = str_replace("[original_subject]", $parent["subject"], $emailbody);
+								$emailbody = str_replace("[original_text]", unbbcode($parent["text"]), $emailbody);
+								$emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
+								$emailbody = stripslashes($emailbody);
+								$emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
+								$an = mb_encode_mimeheader($field["name"],"UTF-8")." <".$field["email"].">";
+								$emailsubject = strip_tags($lang['email_subject']);
+								$sent1 = processEmail($an, $emailsubject, $emailbody);
+								if ($sent1 === true)
+									{
+									$sent1 = "ok";
+									}
+								unset($header);
+								unset($emailsubject);
+								unset($emailbody);
+								}
+							mysql_free_result($emails_result);
 							}
 						# E-Mail-Benachrichtigung an Admins und Moderatoren:
 						if ($id > 0)
