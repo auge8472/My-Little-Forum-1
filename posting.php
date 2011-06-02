@@ -923,9 +923,9 @@ if (($settings['access_for_users_only'] == 1
 									{
 									$sent = "ok";
 									}
-								unset($header);
 								unset($emailsubject);
 								unset($emailbody);
+								unset($an);
 								}
 							$threadNotifyQuery = "SELECT
 							t1.user_name AS name,
@@ -954,35 +954,22 @@ if (($settings['access_for_users_only'] == 1
 									{
 									$sent1 = "ok";
 									}
-								unset($header);
 								unset($emailsubject);
 								unset($emailbody);
+								unset($an);
 								}
 							mysql_free_result($emails_result);
 							}
 						# E-Mail-Benachrichtigung an Admins und Moderatoren:
-						if ($id > 0)
-							{
-							$emailbody = str_replace("[name]", $name, strip_tags($lang['admin_email_text_reply']));
-							}
-						else
-							{
-							$emailbody = str_replace("[name]", $name, strip_tags($lang['admin_email_text']));
-							}
+						$emailbody = ($id > 0) ? strip_tags($lang['admin_email_text_reply']) : strip_tags($lang['admin_email_text']);
+						$emailbody = str_replace("[name]", $name, $emailbody);
 						$emailbody = str_replace("[subject]", $subject, $emailbody);
 						$emailbody = str_replace("[text]", $mail_text, $emailbody);
 						$emailbody = str_replace("[posting_address]", $PostAddress, $emailbody);
 						$emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
-						$emailbody = $emailbody;
-#						$emailbody = str_replace(htmlspecialchars($settings['quote_symbol']), ">", $emailbody);
 						$emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
-						$header  = "From: ".mb_encode_mimeheader($settings['forum_name'],"UTF-8")." <".$settings['forum_email'].">\n";
-						$header .= "X-Mailer: Php/" . phpversion(). "\n";
-						$header .= "X-Sender-ip: $ip\n";
-						$header .= "Content-Type: text/plain; charset=UTF-8; format=flowed\n";
-						$header .= "Content-Transfer-Encoding: 8bit\n";
-						$adminSubject = mb_encode_mimeheader(strip_tags($lang['admin_email_subject']),"UTF-8");
-#						$adminSubject = mb_encode_mimeheader(str_replace("[subject]", $subject, $lang['admin_email_subject']),"UTF-8");
+#						$emailsubject = strip_tags($lang['admin_email_subject']);
+						$emailsubject = str_replace("[subject]", $subject, $lang['admin_email_subject']);
 						// Schauen, wer eine E-Mail-Benachrichtigung will:
 						$en_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_posting_notify='1'", $connid);
 						if (!$en_result) die($lang['db_error']);
@@ -990,20 +977,9 @@ if (($settings['access_for_users_only'] == 1
 							{
 							$ind_emailbody = str_replace("[admin]", $admin_array['user_name'], $emailbody);
 							$an = mb_encode_mimeheader($admin_array['user_name'],"UTF-8")." <".$admin_array['user_email'].">";
-							if ($settings['mail_parameter']!='')
-								{
-								if (@mail($an, $adminSubject, $ind_emailbody, $header, $settings['mail_parameter']))
-									{
-									$sent2 = "ok";
-									}
-								}
-							else
-								{
-								if(@mail($an, $adminSubject, $ind_emailbody, $header))
-									{
-									$sent2 = "ok";
-									}
-								}
+							$sent2[] = processEmail($an, $emailsubject, $ind_emailbody);
+							unset($ind_emailbody);
+							unset($an);
 							}
 						mysql_free_result($en_result);
 
