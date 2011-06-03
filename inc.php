@@ -86,8 +86,8 @@ if (basename($_SERVER['SCRIPT_NAME'])!='login.php'
 if (!isset($_SESSION[$settings['session_prefix'].'user_type'])
 or $_SESSION[$settings['session_prefix'].'user_type']!='admin'
 or ($_SESSION[$settings['session_prefix'].'user_type']=='admin'
-and empty($_SESSION['debug']))) {
-	$_SESSION['debug'] = 'no';
+and empty($_SESSION[$settings['session_prefix'].'debug']))) {
+	$_SESSION[$settings['session_prefix'].'debug'] = 'no';
 	}
 
 
