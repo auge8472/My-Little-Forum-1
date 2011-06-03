@@ -393,4 +393,19 @@ while (list(, $line) = each($lines))
 return $output;
 } # End: myQuotedPrintableEncode
 
+
+
+/**
+ * process the standard parameters (category, page, order, descasc)
+ *
+ *
+ */
+function processStandardParametersGET() {
+global $settings;
+$_SESSION[$settings['session_prefix'].'page'] = !empty($_GET['page']) ? intval($_GET['page']) : 0;
+$_SESSION[$settings['session_prefix'].'order'] = !empty($_GET['order']) ? $_GET['order'] : "last_answer";
+$_SESSION[$settings['session_prefix'].'category'] = !empty($_GET['category']) ? intval($_GET['category']) : 0;
+$_SESSION[$settings['session_prefix'].'descasc'] = !empty($_GET['descasc']) ? $_GET['descasc'] : "DESC";
+} # End: processStandardParametersGET
+
 ?>
