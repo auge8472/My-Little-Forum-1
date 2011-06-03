@@ -137,11 +137,11 @@ if ($settings['access_for_users_only'] == 1 && !isset($_SESSION[$settings['sessi
 	die("<a href=\"login.php?msg=noaccess\">further...</a>");
 	}
 
-if (empty($page)) $page = 0;
+$page = !empty($_GET['page']) ? intval($_GET['page']) : 0;
+$search = !empty($_GET['search']) ? $_GET['search'] : '';
+$ao = !empty($_GET['ao']) ? $_GET['ao'] : 'and';
+$show_postings = (!empty($_GET['show_postings'])) ? intval($_GET['show_postings']) : '';
 
-if (empty($search)) $search = "";
-
-if (empty($ao)) $ao = "and";
 $ul = $page * $settings['search_results_per_page'];
 
 unset($entrydata);
