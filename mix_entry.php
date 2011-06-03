@@ -179,10 +179,11 @@ if ($settings['access_for_users_only'] == 1
 	$category = empty($category) ? 0 : intval($category);
 	if (empty($descasc)) $descasc = "DESC";
 
-	if (isset($id))
-		{  // Wenn $id übergeben wurde..
-		$id = (int) $id;   // ... $id erst mal zu einem Integer machen ..
-		if( $id > 0 )      // ... und schauen ob es größer als 0 ist ..
+	if (isset($_GET['id']))
+		{
+		# Wenn $id übergeben wurde ...
+		$id = intval($_GET['id']);	# ... $id erst mal zu einem Integer machen ...
+		if ($id > 0)	# ... und schauen ob es größer als 0 ist ...
 			{
 			$result = mysql_query("SELECT tid, pid, subject, category FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
 			if (!$result) die($lang['db_error']);
