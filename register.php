@@ -63,38 +63,23 @@ if (isset($_GET['id']) && isset($_GET['key']) && trim($_GET['key'])!='')
 
 			# E-Mail-Benachrichtigung an Admins und Moderatoren:
 			# E-Mail erstellen:
-			$ip = $_SERVER["REMOTE_ADDR"];
-			$lang['new_user_notif_txt'] = str_replace("[name]", $data['user_name'], strip_tags($lang['new_user_notif_txt']));
-			$lang['new_user_notif_txt'] = str_replace("[email]", $data['user_email'], $lang['new_user_notif_txt']);
-			$lang['new_user_notif_txt'] = str_replace("[user_link]", $settings['forum_address']."user.php?id=".$user_id, $lang['new_user_notif_txt']);
-			$lang['new_user_notif_txt'] = $lang['new_user_notif_txt'];
-			$header = "From: ".mb_encode_mimeheader($settings['forum_name'],'UTF-8')." <".$settings['forum_email'].">\n";
-			$header .= "X-Mailer: Php/" . phpversion(). "\n";
-			$header .= "X-Sender-ip: $ip\n";
-			$header .= "Content-Type: text/plain; charset=UTF-8; format=flowed\n";
-			$header .= "Content-Transfer-Encoding: 8bit\n";
+			$emailbody = strip_tags($lang['new_user_notif_txt']);
+			$emailbody = str_replace("[name]", $data['user_name'], $emailbody);
+			$emailbody = str_replace("[email]", $data['user_email'], $emailbody);
+			$emailbody = str_replace("[user_link]", $settings['forum_address']."user.php?id=".$user_id, $emailbody);
+			$subject = strip_tags($lang['new_user_notif_sj']);
 			# Schauen, wer eine E-Mail-Benachrichtigung will:
 			$admin_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_user_notify='1'", $connid);
 			if (!$admin_result) die($lang['db_error']);
 			while ($admin_array = mysql_fetch_assoc($admin_result))
 				{
-				$ind_reg_emailbody = str_replace("[admin]", $admin_array['user_name'], $lang['new_user_notif_txt']);
-				$admin_mailto = mb_encode_mimeheader($admin_array['user_name'],'UTF-8')." <".$admin_array['user_email'].">";
-				if ($settings['mail_parameter']!='')
-					{
-					if (@mail($admin_mailto, strip_tags($lang['new_user_notif_sj']), $ind_reg_emailbody, $header, $settings['mail_parameter']))
-						{
-						$sent = "ok";
-						}
-					}
-				else
-					{
-					if (@mail($admin_mailto, strip_tags($lang['new_user_notif_sj']), $ind_reg_emailbody, $header))
-						{
-						$sent = "ok";
-						}
-					}
+				$ind_emailbody = str_replace("[admin]", $admin_array['user_name'], $emailbody);
+				$admin_an = mb_encode_mimeheader($admin_array['user_name'], 'UTF-8')." <".$admin_array['user_email'].">";
+				$sent1[] = processEmail($admin_an, $subject, $ind_emailbody);
+				unset($ind_emailbody);
+				unset($admin_an);
 				}
+			unset($subject);
 			header("location: ".$settings['forum_address']."login.php?msg=user_activated");
 			exit();
 			}
@@ -244,30 +229,15 @@ if (isset($_POST['register_submit']))
 			mysql_free_result($new_user_id_result);
 
 			# send e-mail with activation key to new user:
-			$ip = $_SERVER["REMOTE_ADDR"];
-			$lang['new_user_email_txt'] = str_replace("[name]", $new_user_name, strip_tags($lang['new_user_email_txt']));
-			$lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$new_user_id."&key=".$activate_code, $lang['new_user_email_txt']);
-			$header = "From: ".mb_encode_mimeheader($settings['forum_name'],'UTF-8')." <".$settings['forum_email'].">\n";
-			$header .= "X-Mailer: Php/" . phpversion(). "\n";
-			$header .= "X-Sender-ip: $ip\n";
-			$header .= "Content-Type: text/plain; charset=UTF-8; format=flowed\n";
-			$header .= "Content-Transfer-Encoding: 8bit\n";
-			$new_user_mailto = mb_encode_mimeheader($new_user_name,'UTF-8')." <".$new_user_email.">";
-
-			if ($settings['mail_parameter']!='')
-				{
-				if (@mail($new_user_mailto, strip_tags($lang['new_user_email_sj']), $lang['new_user_email_txt'], $header, $settings['mail_parameter']))
-					{
-					$sent = true;
-					}
-				}
-			else
-				{
-				if (@mail($new_user_mailto, strip_tags($lang['new_user_email_sj']), $lang['new_user_email_txt'], $header))
-					{
-					$sent = true;
-					}
-				}
+			$emailbody = strip_tags($lang['new_user_email_txt'])
+			$emailbody = str_replace("[name]", $new_user_name, $emailbody);
+			$emailbody = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$new_user_id."&key=".$activate_code, $emailbody);
+			$subject = strip_tags($lang['new_user_email_sj']);
+			$an = mb_encode_mimeheader($new_user_name,'UTF-8')." <".$new_user_email.">";
+			$sent = processEmail($new_user_to, $subject, $emailbody);
+			unset($emailbody);
+			unset($subject);
+			unset($an);
 			# Bestätigung anzeigen:
 			$action = "registered";
 			}
