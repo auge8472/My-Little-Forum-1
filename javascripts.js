@@ -247,11 +247,11 @@ function delete_cookie()
   return false;
  }
 
-img1 = new Image();
-img1.src ="img/link_mo.gif";
-img2 = new Image();
-img2.src ="img/next_mo.gif";
-img3 = new Image();
-img3.src ="img/prev_mo.gif";
-img4 = new Image();
-img4.src ="img/update_mo.gif";
+var img1 = new Image();
+img1.src ="img/link_mo.png";
+var img2 = new Image();
+img2.src ="img/next_mo.png";
+var img3 = new Image();
+img3.src ="img/prev_mo.png";
+var img4 = new Image();
+img4.src ="img/update_mo.png";
