@@ -193,27 +193,35 @@ $(a).value = "";
 }
 
 function moreSmilies(Smilies) {
-var o = Smilies.size() - 1;
-var buttons = $A();
 
-var div = new Element('div');
-div.writeAttribute('id', 'add-smilies');
-div.writeAttribute('class', 'additional-menu');
-
-for (i = 6; i < o; i++)
+if ($('add-smilies'))
 	{
-	j = i - 6;
-	buttons[j] = "<button name=\"smiley\" type=\"button\" value=\""+ Smilies[i].get('value') +"\" title=\""+ Smilies[i].get('title') + Smilies[i].get('value') +"\" onclick=\"insertIt(this.value,'text'); destroyElement('add-smilies');\"><img src=\"img/smilies/"+ Smilies[i].get('url') +"\" alt=\""+ Smilies[i].get('value') +"\"></button>";
-	if (i % 2 == 1)
-		{
-		buttons[j] = buttons[j] +"<br />";
-		}
-//	buttons[j] = SmileyButton(Smilies[i]);
+	$('add-smilies').remove();
 	}
-Element.insert(div, buttons.join(''));
-//alert(div.inspect());
+else
+	{
+	var o = Smilies.size() - 1;
+	var buttons = $A();
 
-$('buttonspace').insert(div);
+	var div = new Element('div');
+	div.writeAttribute('id', 'add-smilies');
+	div.writeAttribute('class', 'additional-menu');
+
+	for (i = 6; i < o; i++)
+		{
+		j = i - 6;
+		buttons[j] = "<button name=\"smiley\" type=\"button\" value=\""+ Smilies[i].get('value') +"\" title=\""+ Smilies[i].get('title') + Smilies[i].get('value') +"\" onclick=\"insertIt(this.value,'text'); destroyElement('add-smilies');\"><img src=\"img/smilies/"+ Smilies[i].get('url') +"\" alt=\""+ Smilies[i].get('value') +"\"></button>";
+		if (i % 2 == 1)
+			{
+			buttons[j] = buttons[j] +"<br />";
+			}
+//		buttons[j] = SmileyButton(Smilies[i]);
+		}
+	Element.insert(div, buttons.join(''));
+//	alert(div.inspect());
+
+	$('buttonspace').insert(div);
+	}
 }
 
 function destroyElement(name) {
