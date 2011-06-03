@@ -338,7 +338,7 @@ if ($count == 0 && $search != "")
 	echo '</p>'."\n";
 	}
 
-if (isset($search) && $search != "" || isset($show_postings) && $show_postings !="")
+if (!empty($search) || !empty($show_postings))
 	{
 	echo '<ul id="searchresults">'."\n";
 	$i=0;
