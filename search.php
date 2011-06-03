@@ -170,7 +170,7 @@ else
 	$search_string = "concat(subject, name, place, text, email, hp) LIKE '%".implode("%' AND concat(subject, name, place, text, email, hp) LIKE '%",$search_array)."%'".$search_category;
 	}
 
-if (empty($search) && isset($show_postings)) $search_string = "user_id='".$show_postings."'";
+if (empty($search) && isset($show_postings)) $search_string = "user_id = '".$show_postings."'";
 
 $searchQuery = "SELECT
 id,
