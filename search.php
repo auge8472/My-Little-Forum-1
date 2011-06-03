@@ -315,15 +315,7 @@ if (isset($search) && empty($show_postings))
 	echo ($ao == "phrase") ? ' checked="checked"' : '';
 	echo ' />'.$lang['search_phrase'].'</div></form>'."\n";
 	}
-/*
-if (!empty($result))
-	{
-	while ($res = mysql_fetch_assoc($result))
-		{
-		echo "<pre>".print_r($res,true)."</pre>\n";
-		}
-	}
-*/
+
 if ($count == 0 && $search != "")
 	{
 	echo '<p class="caution">';
