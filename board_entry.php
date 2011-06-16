@@ -125,7 +125,7 @@ if ($settings['access_for_users_only'] == 1
 	if (empty($order)) $order = "last_answer";
 	if (empty($descasc)) $descasc = "DESC";
 	$category = empty($category) ? 0 : intval($category);
-	if (empty($be_page)) $be_page = 0;
+	$be_page = (empty($_GET['be_page'])) ? 0 : intval($_GET['be_page']);
 	if (empty($da)) $da = "ASC";
 	$ul = $be_page * $settings['answers_per_topic'];
 

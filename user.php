@@ -713,7 +713,7 @@ if ($action == "show users")
 		$subnav_2 .= '>'.$letter.'</option>'."\n";
 		}
 	$subnav_2 .= '</select>&nbsp;<input type="image" name="" value=""';
-	$subnav_2 .= ' src="img/submit.png" alt="&raquo;" /></div></form>'."\n";
+	$subnav_2 .= ' src="img/submit.png" alt="&raquo;" /></form>'."\n";
 	$subnav_2 .= nav($page, $settings['users_per_page'], $thread_count, $order, $descasc, $category);
 	}
 
