@@ -217,31 +217,16 @@ if ($settings['access_for_users_only'] == 1
 		}
 
 	parse_template();
-	echo $header;
-	echo "\n".'<h2 class="postingheadline">'.htmlspecialchars($entrydata["subject"]);
+	# import posting template
+	$posting = file_get_contents('data/templates/posting.thread.html');
+	# generate posting snippets
+	$pHeadline  = htmlspecialchars($entrydata["subject"]);
 	if (isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='')
 		{
-		echo ' <span class="category">('.$categories[$entrydata["category"]].')</span>';
+		$pHeadline .= ' <span class="category">('.$categories[$entrydata["category"]].')</span>';
 		}
-	echo '</h2>'."\n";
-	echo outputAuthorInfo($mark, $entrydata, $page, $order, 'forum', $category);
-	if ($entrydata["text"]=="")
-		{
-		echo $lang['no_text'];
-		}
-	else
-		{
-		$ftext = outputPreparePosting($entrydata["text"]);
-		echo '<div class="posting">'.$ftext.'</div>'."\n";
-		}
-	if (isset($signature) && $signature != "")
-		{
-		$signature = outputPreparePosting($settings['signature_separator'].$signature, 'signature');
-		echo '<div class="signature">'.$signature.'</div>'."\n";
-		}
-	echo '<div class="postingbottom">'."\n";
-	echo '<div class="postinganswer">';
-
+	$ftext = ($entrydata["text"]=="") ? $lang['no_text'] : outputPreparePosting($entrydata["text"]);
+	$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator'].$signature, 'signature').'</div>'."\n" : '';
 	if ($entrydata['locked'] == 0)
 		{
 		if ($settings['entries_by_users_only'] == 0
@@ -253,25 +238,27 @@ if ($settings['access_for_users_only'] == 1
 			$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
 			$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
 			$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
-			echo '<a class="textlink" href="posting.php?id='.$id.$qs;
-			echo '" title="'.outputLangDebugInAttributes($lang['forum_answer_linktitle']).'">';
-			echo $lang['forum_answer_linkname'].'</a>';
+			$answerlink  = '<a class="textlink" href="posting.php?id='.$id.$qs;
+			$answerlink .= '" title="'.outputLangDebugInAttributes($lang['forum_answer_linktitle']).'">';
+			$answerlink .= $lang['forum_answer_linkname'].'</a>';
 			}
 		}
 	else
 		{
-		echo '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />';
-		echo $lang['thread_locked'].'</span>';
+		$answerlink = '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />'.$lang['thread_locked'].'</span>';
 		}
-
-	echo '</div>'."\n";
-	echo '<div class="postingedit">';
-	# Menu for editing of the posting
-	echo outputPostingEditMenu($entrydata, '', $opener);
-	echo '</div>'."\n".'</div>'."\n";
-	echo '<hr class="entryline" />'."\n";
-	echo '<h3>'.$lang['whole_thread_marking'].'</h3>'."\n";
-	echo outputThreads($postArray, $childArray, 'forum', 0);
+	$editmenu = outputPostingEditMenu($entrydata, '', $opener);
+	# generate HTML source code of posting
+	$posting = str_replace('{postingheadline}', $pHeadline, $posting);
+	$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $entrydata, $page, $order, 'forum', $category), $posting);
+	$posting = str_replace('{posting}', $ftext, $posting);
+	$posting = str_replace('{signature}', $signature, $posting);
+	$posting = str_replace('{answer-locked}', $answerlink, $posting);
+	$posting = str_replace('{editmenu}', $editmenu, $posting);
+	$posting = str_replace('{threadheadline}', $lang['whole_thread_marking'], $posting);
+	$posting = str_replace('{thread}', outputThreads($postArray, $childArray, 'forum', 0), $posting);
+	echo $header;
+	echo $posting;
 	echo $footer;
 	}
 else
