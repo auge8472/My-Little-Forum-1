@@ -247,14 +247,13 @@ if ($settings['access_for_users_only'] == 1
 		{
 		$answerlink = '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />'.$lang['thread_locked'].'</span>';
 		}
-	$editmenu = outputPostingEditMenu($entrydata, '', $opener);
 	# generate HTML source code of posting
 	$posting = str_replace('{postingheadline}', $pHeadline, $posting);
 	$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $entrydata, $page, $order, 'forum', $category), $posting);
 	$posting = str_replace('{posting}', $ftext, $posting);
 	$posting = str_replace('{signature}', $signature, $posting);
 	$posting = str_replace('{answer-locked}', $answerlink, $posting);
-	$posting = str_replace('{editmenu}', $editmenu, $posting);
+	$posting = str_replace('{editmenu}', outputPostingEditMenu($entrydata, '', $opener), $posting);
 	$posting = str_replace('{threadheadline}', $lang['whole_thread_marking'], $posting);
 	$posting = str_replace('{thread}', outputThreads($postArray, $childArray, 'forum', 0), $posting);
 	echo $header;
