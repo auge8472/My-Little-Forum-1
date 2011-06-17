@@ -121,7 +121,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 		unset($errors);
 		if ($sender_name == "") $errors[] = $lang['error_no_name'];
 		if ($sender_email == "") $errors[] = $lang['error_no_email'];
-		if ($sender_email != "" and !preg_match("/^[^@]+@.+\.\D{2,}$/", $sender_email)) $errors[] = $lang['error_email_wrong'];
+		if ($sender_email != "" and !preg_match($validator['email'], $sender_email)) $errors[] = $lang['error_email_wrong'];
 		if ($text == "") $errors[] = $lang['error_no_text'];
 
 		# check for not accepted words:
