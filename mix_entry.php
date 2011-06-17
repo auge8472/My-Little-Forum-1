@@ -24,7 +24,7 @@ include_once("functions/include.prepare.php");
 
 
 function thread($id, $aktuellerEintrag = 0, $tiefe = 0) {
-global $settings, $connid, $lang, $db_settings, $parent_array, $child_array, $user_delete, $page, $category, $order, $descasc, $time_difference, $categories, $mark;
+global $settings, $connid, $lang, $db_settings, $parent_array, $child_array, $user_delete, $page, $category, $order, $descasc, $time_difference, $categories, $mark, $sPosting;
 
 $singlePostingQuery = "SELECT
 id,
@@ -79,66 +79,58 @@ mysql_free_result($result_a);
 $opener = ($entrydata['pid'] == 0) ? 'opener' : '';
 $entrydata['answer'] = $posting_a['name'];
 
-echo '<div id="p'.intval($entrydata["id"]).'" class="mixdivl" style="margin-left: ';
-echo ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix_topic']/$settings['thread_indent_mix_topic'])) ? "0" : $settings['thread_indent_mix_topic'];
-echo 'px;">'."\n";
-echo '<table class="mix-entry">'."\n".'<tr>'."\n";
-echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
-echo outputAuthorInfo($mark, $entrydata, $page, $order, 'mix', $category);
-# Menu for editing of the posting
-echo outputPostingEditMenu($entrydata, 'mix', $opener);
-echo '<div class="autorcellwidth">&nbsp;</div></td>'."\n";
-echo '<td class="titlecell" valign="top"><div class="left"><h2>';
-echo htmlspecialchars($entrydata["subject"]);
+$pHeadline  = htmlspecialchars($entrydata["subject"]);
 if (isset($categories[$entrydata["category"]])
 	&& $categories[$entrydata["category"]]!=''
 	&& $entrydata["pid"]==0)
 	{
-	echo "&nbsp;<span class=\"category\">(".$categories[$entrydata["category"]].")</span>";
+	$pHeadline .= "&nbsp;<span class=\"category\">(".$categories[$entrydata["category"]].")</span>";
 	}
-echo '</h2></div>'."\n".'<div class="right">';
 if ($entrydata['locked'] == 0)
 	{
-	$qs  = '';
-	$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
-	$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
-	$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
-	$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
-	echo '<a class="textlink" href="posting.php?id='.$entrydata["id"].$qs;
-	echo '&amp;view=mix" title="'.outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
-	echo $lang['board_answer_linkname'].'</a>';
+	if ($settings['entries_by_users_only'] == 0
+		or ($settings['entries_by_users_only'] == 1
+		and isset($_SESSION[$settings['session_prefix'].'user_name'])))
+		{
+		$qs  = '';
+		$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
+		$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
+		$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
+		$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
+		$answerlink  = '<a class="textlink" href="posting.php?id='.$entrydata["id"].$qs;
+		$answerlink .= '&amp;view=board" title="'.outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
+		$answerlink .= $lang['board_answer_linkname'].'</a>';
+		}
 	}
 else
 	{
 	if ($entrydata['pid']==0)
 		{
-		echo '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />';
-		echo $lang['thread_locked'].'</span>';
+		$answerlink = '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />';
+		$answerlink = $lang['thread_locked'].'</span>';
 		}
 	else
 		{
-		echo "&nbsp;";
+		$answerlink = "&nbsp;";
 		}
 	}
-echo '</div></td>'."\n";
-echo '</tr><tr>'."\n";
-echo '<td class="postingcell" valign="top">'."\n";
-if ($entrydata["text"]=="")
-	{
-	echo $lang['no_text'];
-	}
-else
-	{
-	$ftext = outputPreparePosting($entrydata["text"]);
-	echo '<div class="postingboard">'.$ftext.'</div>';
-	}
-if (isset($signature) && $signature != "")
-	{
-	$signature = outputPreparePosting($settings['signature_separator'].$signature, 'signature');
-	echo '<div class="signature">'.$signature.'</div>';
-	}
+$ftext = ($entrydata["text"]=="") ? $lang['no_text'] : outputPreparePosting($entrydata["text"]);
+$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator'].$signature, 'signature').'</div>'."\n" : '';
+# generate HTML source code of posting
+$posting = $sPosting;
+$posting = str_replace('{postingID}', 'p'.$entrydata['id'], $posting);
+$posting = str_replace('{postingheadline}', $pHeadline, $posting);
+$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $entrydata, $page, $order, 'mix', $category), $posting);
+$posting = str_replace('{posting}', $ftext, $posting);
+$posting = str_replace('{signature}', $signature, $posting);
+$posting = str_replace('{answer-locked}', $answerlink, $posting);
+$posting = str_replace('{editmenu}', outputPostingEditMenu($entrydata, 'mix', $opener), $posting);
 
-echo '</td>'."\n".'</tr>'."\n".'</table>'."\n";
+echo '<div id="p'.intval($entrydata["id"]).'" class="mixdivl" style="margin-left: ';
+echo ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix_topic']/$settings['thread_indent_mix_topic'])) ? "0" : $settings['thread_indent_mix_topic'];
+echo 'px;">'."\n";
+echo $posting;
+unset($posting);
 
 if (isset($child_array[$id]) && is_array($child_array[$id]))
 	{
@@ -262,6 +254,8 @@ if ($settings['access_for_users_only'] == 1
 		}
 
 	parse_template();
+	# import posting template
+	$sPosting = file_get_contents('data/templates/posting.mix.html');
 	echo $header;
 	thread($thread, $id);
 	echo $footer;
