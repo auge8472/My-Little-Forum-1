@@ -1,6 +1,12 @@
 <?php
 
 
+/**
+ * regular expressions
+ */
+$validator['email'] = "/^[^@]+@.+\.\D{2,}$/";
+
+
 
 /**
  * counts the chars of the words in a given string
