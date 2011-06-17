@@ -246,7 +246,7 @@ if (($entry["email"]!="" && $entry["hide_email"] != 1)
 	}
 if ($entry["place"] != "")
 	{
-	$place .= htmlspecialchars($entry['place']);
+	$place .= htmlspecialchars($entry['place']).', ';
 	}
 # generate HTML source code of authors name
 $name = outputAuthorsName($entry['name'], $mark, $entry['user_id']);

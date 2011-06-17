@@ -298,64 +298,55 @@ if ($settings['access_for_users_only'] == 1
 	parse_template();
 	echo $header;
 
+	# import posting template
+	$sPosting = file_get_contents('data/templates/posting.board.html');
 	echo '<table class="board-entry">'."\n";
 	if ($be_page==0)
 		{
-		echo '<tr id="p'.$thread['id'].'">'."\n";
-		echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
-		# wenn eingelogged und Posting von einem angemeldeten User stammt, dann Link zu dessen Userdaten:
-		echo outputAuthorInfo($mark, $thread, $page, $order, 'board', $category);
-		# Menu for editing of the posting
-		echo outputPostingEditMenu($thread, 'board', 'opener');
-		echo '</td>'."\n";
-		echo '<td class="titlecell" valign="top">'."\n".'<div class="left">';
-		echo '<h2>'.htmlspecialchars($thread["subject"]);
-		if(isset($categories[$thread["category"]]) && $categories[$thread["category"]]!='')
+		$posting = $sPosting;
+		$pHeadline  = htmlspecialchars($thread["subject"]);
+		if(isset($categories[$thread["category"]])
+			&& $categories[$thread["category"]]!='')
 			{
-			echo '&nbsp;<span class="category">('.$categories[$thread["category"]].')</span>';
+			$pHeadline .= '&nbsp;<span class="category">('.$categories[$thread["category"]].')</span>';
 			}
-		echo '</h2></div>'."\n".'<div class="right">';
 		if ($thread['locked'] == 0)
 			{
-			$qs  = '';
-			$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
-			$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
-			$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
-			$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
-			$qs .= !empty($be_page) ? '&amp;be_page='.intval($be_page) : '';
-			echo '<a class="textlink" href="posting.php?id='.$thread["id"].$qs;
-			echo '&amp;view=board" title="'.outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
-			echo $lang['board_answer_linkname'].'</a>';
+			if ($settings['entries_by_users_only'] == 0
+				or ($settings['entries_by_users_only'] == 1
+				and isset($_SESSION[$settings['session_prefix'].'user_name'])))
+				{
+				$qs  = '';
+				$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
+				$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
+				$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
+				$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
+				$answerlink  = '<a class="textlink" href="posting.php?id='.$thread["id"].$qs;
+				$answerlink .= '&amp;view=board" title="'.outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
+				$answerlink .= $lang['board_answer_linkname'].'</a>';
+				}
 			}
 		else
 			{
-			echo '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />';
-			echo $lang['thread_locked'].'</span>';
+			$answerlink = '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />'.$lang['thread_locked'].'</span>';
 			}
-		echo '</div></td>'."\n";
-		echo '</tr><tr>'."\n";
-		echo '<td class="postingcell" valign="top">';
-		if ($thread["text"]=="")
-			{
-			echo $lang['no_text'];
-			}
-		else
-			{
-			$ftext = outputPreparePosting($thread["text"]);
-			echo '<div class="postingboard">'.$ftext.'</div>';
-			}
-		if (isset($signature) && $signature != "")
-			{
-			$signature = outputPreparePosting($settings['signature_separator'].$signature, 'signature');
-			echo '<div class="signature">'.$signature.'</div>';
-			}
-		echo '</td>'."\n";
-		echo '</tr>';
+		$ftext = ($thread["text"]=="") ? $lang['no_text'] : outputPreparePosting($thread["text"]);
+		$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator'].$signature, 'signature').'</div>'."\n" : '';
+		# generate HTML source code of posting
+		$posting = str_replace('{postingID}', 'p'.$thread['id'], $posting);
+		$posting = str_replace('{postingheadline}', $pHeadline, $posting);
+		$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $thread, $page, $order, 'board', $category), $posting);
+		$posting = str_replace('{posting}', $ftext, $posting);
+		$posting = str_replace('{signature}', $signature, $posting);
+		$posting = str_replace('{answer-locked}', $answerlink, $posting);
+		$posting = str_replace('{editmenu}', outputPostingEditMenu($thread, 'board', 'opener'), $posting);
+		echo $posting;
 		}
 	$i=0;
 	while ($entrydata = mysql_fetch_assoc($result))
 		{
 		unset($signature);
+		unset($posting);
 		$mark['admin'] = 0;
 		$mark['mod'] = 0;
 		$mark['user'] = 0;
@@ -392,51 +383,39 @@ if ($settings['access_for_users_only'] == 1
 		mysql_free_result($result_a);
 		$entrydata['answer'] = $posting_a['name'];
 
-		echo '<tr id="p'.$entrydata['id'].'">'."\n";
-		echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
-		# wenn eingelogged und Posting von einem angemeldeten User stammt, dann Link zu dessen Userdaten:
-		echo outputAuthorInfo($mark, $entrydata, $page, $order, 'board', $category);
-		# Menu for editing of the posting
-		echo outputPostingEditMenu($entrydata, 'board');
-		echo '</td>'."\n";
-		echo '<td class="titlecell" valign="top">'."\n";
-		echo '<div class="left"><h2>'.htmlspecialchars($entrydata["subject"]).'</h2></div>'."\n";
-		echo '<div class="right">'."\n";
+		$posting = $sPosting;
+		$pHeadline  = htmlspecialchars($entrydata["subject"]);
 		if ($entrydata['locked'] == 0)
 			{
-			$qs  = '';
-			$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
-			$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
-			$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
-			$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
-			$qs .= !empty($be_page) ? '&amp;be_page='.intval($be_page) : '';
-			echo '<a class="textlink" href="posting.php?id='.$entrydata["id"].$qs;
-			echo '&amp;view=board" title="'.outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
-			echo $lang['board_answer_linkname'].'</a>';
+			if ($settings['entries_by_users_only'] == 0
+				or ($settings['entries_by_users_only'] == 1
+				and isset($_SESSION[$settings['session_prefix'].'user_name'])))
+				{
+				$qs  = '';
+				$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
+				$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
+				$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
+				$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
+				$answerlink  = '<a class="textlink" href="posting.php?id='.$entrydata["id"].$qs;
+				$answerlink .= '&amp;view=board" title="'.outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
+				$answerlink .= $lang['board_answer_linkname'].'</a>';
+				}
 			}
 		else
 			{
-			echo "&nbsp;";
+			$answerlink = '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />'.$lang['thread_locked'].'</span>';
 			}
-		echo '</div></td>'."\n";
-		echo '</tr><tr>'."\n";
-		echo '<td class="postingcell" valign="top">';
-		if ($entrydata["text"]=="")
-			{
-			echo $lang['no_text'];
-			}
-		else
-			{
-			$ftext = outputPreparePosting($entrydata["text"]);
-			echo '<div class="postingboard">'.$ftext.'</div>'."\n";
-			}
-		if (isset($signature) && $signature != "")
-			{
-			$signature = outputPreparePosting($settings['signature_separator'].$signature, 'signature');
-			echo '<div class="signature">'.$signature.'</div>'."\n";
-			}
-		echo '</td>'."\n";
-		echo '</tr>'."\n";
+		$ftext = ($entrydata["text"]=="") ? $lang['no_text'] : outputPreparePosting($entrydata["text"]);
+		$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator'].$signature, 'signature').'</div>'."\n" : '';
+		# generate HTML source code of posting
+		$posting = str_replace('{postingID}', 'p'.$entrydata['id'], $posting);
+		$posting = str_replace('{postingheadline}', $pHeadline, $posting);
+		$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $entrydata, $page, $order, 'board', $category), $posting);
+		$posting = str_replace('{posting}', $ftext, $posting);
+		$posting = str_replace('{signature}', $signature, $posting);
+		$posting = str_replace('{answer-locked}', $answerlink, $posting);
+		$posting = str_replace('{editmenu}', outputPostingEditMenu($entrydata, 'board'), $posting);
+		echo $posting;
 		}
 	mysql_free_result($result);
 	echo '</table>'."\n";
