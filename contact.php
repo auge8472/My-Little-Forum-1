@@ -164,53 +164,41 @@ if (isset($id) || isset($uid) || isset($forum_contact))
     
 		if(empty($errors))
 			{
-			$ip = $_SERVER["REMOTE_ADDR"];
-			$headerTemplate  = "X-Mailer: PHP/" . phpversion(). "\n";
-			$headerTemplate .= "X-Sender-IP: $ip\n";
-			$headerTemplate .= "Content-Type: text/plain; charset=UTF-8\n";
-			$headerTemplate .= "Content-Transfer-Encoding: 8bit\n";
-			$mail_subject = ($_POST['subject'] != "") ? $subject : strip_tags($lang['email_no_subject']);
-			$copySubject = mb_encode_mimeheader($mail_subject,"UTF-8");
+			# process text content of the message
+			$emailbody = trim($_POST['text']))."\n\n". str_replace("[forum_address]", $settings['forum_address'], strip_tags($lang['msg_add']));
+			# generate and process TO
 			if (isset($forum_contact))
 				{
 				$name = $settings['forum_name'];
 				$email = $settings['forum_email'];
 				}
-			$mailto = mb_encode_mimeheader($name,"UTF-8")." <".$email.">";
-			$mail_text = $text;
-			$mail_text .= "\n\n".str_replace("[forum_address]", $settings['forum_address'], strip_tags($lang['msg_add']));
-			$header  = "From: ".mb_encode_mimeheader($sender_name,"UTF-8")." <".$sender_email.">\n";
-			$header .= "Reply-To: ".mb_encode_mimeheader($sender_name,"UTF-8")." <".$sender_email.">\n";
-			$header .= $headerTemplate;
-			if ($settings['mail_parameter']!='')
-				{
-				if (@mail($mailto, $copySubject, $mail_text, $header, $settings['mail_parameter'])) $sent = true; else $errors[] = $lang['error_meilserv'];
-				}
-			else
-				{
-				if (@mail($mailto, $copySubject, $mail_text, $header)) $sent = true; else $errors[] = $lang['error_meilserv'];
-				}
+			$an = mb_encode_mimeheader($name, "UTF-8")." <".$email.">";
+			# process subject
+			$mail_subject = ($_POST['subject'] != "") ? trim($_POST['subject']) : $lang['email_no_subject'];
+			$emailsubject = mb_encode_mimeheader(strip_tags($mail_subject), "UTF-8");
+			# send email
+			$sent = processEmail($an, $emailsubject, $emailbody, $sender_email);
+			unset($emailsubject);
+			unset($emailbody);
+			unset($an);
 			// Bestätigung:
-			if (isset($sent))
+			if (isset($sent) and $sent === true)
 				{
-				$lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], strip_tags($lang['conf_email_txt']));
-				$lang['conf_email_txt'] = str_replace("[sender_name]", $sender_name, $lang['conf_email_txt']);
-				$lang['conf_email_txt'] = str_replace("[recipient_name]", $name, $lang['conf_email_txt']);
-				$lang['conf_email_txt'] = str_replace("[subject]", $mail_subject, $lang['conf_email_txt']);
-				$lang['conf_email_txt'] .= "\n\n".$text;
-				$conf_mailto = mb_encode_mimeheader($sender_name,"UTF-8")." <".$sender_email.">";
-				$ip = $_SERVER["REMOTE_ADDR"];
-				$conf_header  = "From: ".mb_encode_mimeheader($settings['forum_name'],"UTF-8")." <".$settings['forum_email'].">\n";
-				$conf_header .= $headerTemplate;
-				$confSubject = mb_encode_mimeheader(strip_tags($lang['conf_sj']),"UTF-8");
-				if ($settings['mail_parameter']!='')
-					{
-					@mail($conf_mailto, $confSubject, $lang['conf_email_txt'], $conf_header, $settings['mail_parameter']);
-					}
-				else
-					{
-					@mail($conf_mailto, $confSubject, $lang['conf_email_txt'], $conf_header);
-					}
+				$emailbody = strip_tags($lang['conf_email_txt']);
+				$emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
+				$emailbody = str_replace("[sender_name]", $sender_name, $emailbody);
+				$emailbody = str_replace("[recipient_name]", $name, $emailbody);
+				$emailbody = str_replace("[subject]", $mail_subject, $emailbody);
+				$emailbody .= "\n\n".$text;
+				# generate and process TO
+				$an = mb_encode_mimeheader($sender_name, "UTF-8")." <".$sender_email.">";
+				# process subject
+				$emailsubject = mb_encode_mimeheader(strip_tags($lang['conf_sj']), "UTF-8");
+				# send email
+				$sent = processEmail($an, $emailsubject, $emailbody);
+				unset($emailsubject);
+				unset($emailbody);
+				unset($an);
 				}
 			}
 		}
