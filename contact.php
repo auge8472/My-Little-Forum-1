@@ -115,14 +115,13 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 		$sender_name = trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_name'])));
 		$sender_email = trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_email'])));
 		$subject = trim($_POST['subject']);
-		$text = $_POST['text'];
 
 		# Check the data:
 		unset($errors);
 		if ($sender_name == "") $errors[] = $lang['error_no_name'];
 		if ($sender_email == "") $errors[] = $lang['error_no_email'];
 		if ($sender_email != "" and !preg_match($validator['email'], $sender_email)) $errors[] = $lang['error_email_wrong'];
-		if ($text == "") $errors[] = $lang['error_no_text'];
+		if (empty($_POST['text'])) $errors[] = $lang['error_no_text'];
 
 		# check for not accepted words:
 		$result = mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1", $connid);
