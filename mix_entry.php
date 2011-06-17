@@ -250,7 +250,7 @@ if ($settings['access_for_users_only'] == 1
 		$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
 		$subnav_2 .= '&amp;view=board" class="board-view"';
 		$subnav_2 .= ' title="'.outputLangDebugInAttributes($lang['board_view_linktitle']).'">';
-		$subnav_2 .= $lang['board_view_linkname'].'</a></span>';
+		$subnav_2 .= $lang['board_view_linkname'].'</a>';
 		}
 
 	parse_template();
