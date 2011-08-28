@@ -1468,8 +1468,11 @@ switch ($action)
 			}
 	break;
 	case "locked":
-		echo '<h2 class="caution">'.$lang['user_locked_hl'].'</h2>'."\n";
-		echo '<p>'.str_replace("[name]", htmlspecialchars($user_name), $lang['usr_locked_txt']).'</p>'."\n";
+		# import posting template
+		$output = file_get_contents('data/templates/locked.gen.html');
+		$output = str_replace('{locked_hl}', $lang['user_locked_hl'], $output);
+		$output = str_replace('{locked_txt}', str_replace("[name]", htmlspecialchars($user_name), $lang['usr_locked_txt']), $output);
+		echo $output;
 	break;
 	}
 
