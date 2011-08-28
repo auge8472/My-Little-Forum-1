@@ -104,27 +104,34 @@ if($settings['access_for_users_only']  == 1
 	$category = stripslashes($category);
 
 	$subnav_1 = outputPostingLink($category,"board");
+	$cat = ($category > 0) ? '&amp;category='.intval($category) : '';
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
-		$subnav_2 .= '<a href="index.php?update=1&amp;view=board';
-		$subnav_2 .= ($category > 0) ? '&amp;category='.intval($category) : '';
-		$subnav_2 .= '" class="update-postings" title="'.outputLangDebugInAttributes($lang['update_time_linktitle']).'">';
-		$subnav_2 .= $lang['update_time_linkname'].'</a>';
+		$url  = 'index.php?update=1&amp;view=board';
+		$url .= $cat;
+		$class = 'update-postings';
+		$title = outputLangDebugInAttributes($lang['update_time_linktitle']);
+		$linktext = $lang['update_time_linkname'];
+		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
 	if ($settings['thread_view'] == 1)
 		{
-		$cat  = ($category > 0) ? '?category='.intval($category) : '';
-		$cat .= !empty($cat) ? '&amp;view=thread' : '?view=thread';
-		$subnav_2 .= '&nbsp;<a href="forum.php'.$cat.'" class="thread-view" title="';
-		$subnav_2 .= outputLangDebugInAttributes($lang['thread_view_linktitle']).'">'.$lang['thread_view_linkname'].'</a>';
+		$url = 'forum.php?view=thread';
+		$url .= $cat;
+		$class = 'thread-view';
+		$title = outputLangDebugInAttributes($lang['thread_view_linktitle']);
+		$linktext = $lang['thread_view_linkname'];
+		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
 	if ($settings['mix_view']==1)
 		{
-		$cat  = ($category > 0) ? '?category='.intval($category) : '';
-		$cat .= !empty($cat) ? '&amp;view=mix' : '?view=mix';
-		$subnav_2 .= '&nbsp;<a href="mix.php'.$cat.'" class="mix-view" title="';
-		$subnav_2 .= outputLangDebugInAttributes($lang['mix_view_linktitle']).'">'.$lang['mix_view_linkname'].'</a>';
+		$url = 'mix.php?view=mix';
+		$url .= $cat;
+		$class = 'mix-view';
+		$title = outputLangDebugInAttributes($lang['mix_view_linktitle']);
+		$linktext = $lang['mix_view_linkname'];
+		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
 	$subnav_2 .= nav($page, $settings['topics_per_page'], $thread_count, $order, $descasc, $category);
 	$subnav_2 .= outputCategoriesList($categories, $category);
