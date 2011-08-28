@@ -352,8 +352,12 @@ if ($settings['access_for_users_only'] == 1
 		}
 	else
 		{
-		if ($category!=0) echo "<p>".$lang['no_messages_in_category']."</p>";
-		else echo "<p>".$lang['no_messages']."</p>";
+		# import posting template
+		$output = file_get_contents('data/templates/locked.gen.html');
+		$output = str_replace('{locked_hl}', $lang['caution'], $output);
+		$langTemp = ($category!=0) ? $lang['no_messages_in_category'] : $lang['no_messages'];
+		$output = str_replace('{locked_txt}', $langTemp, $output);
+		echo $output;
 		}
 	echo $footer;
 	}
