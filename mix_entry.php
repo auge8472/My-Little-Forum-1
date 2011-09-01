@@ -234,23 +234,25 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_1 .= ($category > 0) ? '&amp;category='.$category : '';
 	$subnav_1 .= '&amp;order='.$order.'&amp;descasc='.$descasc.'">';
 	$subnav_1 .= $lang['back_to_overview_linkname'].'</a>';
+	$cat = ($category > 0) ? '&amp;category='.intval($category) : '';
 	$subnav_2 = "";
 	if ($settings['thread_view']==1)
 		{
-		$subnav_2 .= '&nbsp;<a href="forum_entry.php?id='.$entrydata["tid"];
-		$subnav_2 .= '&amp;page='.$page.'&amp;order='.$order.'&amp;descasc='.$descasc;
-		$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
-		$subnav_2 .= '&amp;view=thread" class="thread-view" title="'.outputLangDebugInAttributes($lang['thread_view_linktitle']).'">';
-		$subnav_2 .= $lang['thread_view_linkname'].'</a>';
+		$url = 'forum_entry.php?id='.$entrydata["tid"].'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;view=thread';
+		$url .= $cat;
+		$class = 'thread-view';
+		$title = outputLangDebugInAttributes($lang['thread_view_linktitle']);
+		$linktext = $lang['thread_view_linkname'];
+		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
 	if ($settings['board_view']==1)
 		{
-		$subnav_2 .= '&nbsp;<a href="board_entry.php?id='.$entrydata["tid"];
-		$subnav_2 .= '&amp;page='.$page.'&amp;order='.$order;
-		$subnav_2 .= ($category > 0) ? '&amp;category='.$category : '';
-		$subnav_2 .= '&amp;view=board" class="board-view"';
-		$subnav_2 .= ' title="'.outputLangDebugInAttributes($lang['board_view_linktitle']).'">';
-		$subnav_2 .= $lang['board_view_linkname'].'</a>';
+		$url = 'board_entry.php?id='.$entrydata["tid"].'&amp;page='.$page.'&amp;order='.$order.'&amp;view=board';
+		$url .= $cat;
+		$class = 'board-view';
+		$title = outputLangDebugInAttributes($lang['board_view_linktitle']);
+		$linktext = $lang['board_view_linkname'];
+		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
 
 	parse_template();

@@ -8,6 +8,26 @@
 
 
 /**
+ * generates a single link
+ *
+ * @param string $url
+ * @param string $text
+ * @param string $title
+ * @param string $class
+ * @return string $link
+ */
+function outputSingleLink($url, $text, $title, $class) {	
+$link = '<a href="{URL}" class="{Class}" title="{Title}">{Text}</a>';
+
+$link = str_replace('{URL}', $url, $link);
+$link = str_replace('{Class}', $class, $link);
+$link = str_replace('{Title}', $title, $link);
+$link = str_replace('{Text}', $text, $link);
+return $link;
+} # End: outputSingleLink
+
+
+/**
  * generates the list of functions
  * to manipulate marked threads
  *

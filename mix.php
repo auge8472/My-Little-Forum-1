@@ -104,27 +104,34 @@ if ($settings['access_for_users_only'] == 1
 	if (!$threadsResult) die($lang['db_error']);
 
 	$subnav_1 = outputPostingLink($category,"mix");
+	$cat = ($category > 0) ? '&amp;category='.intval($category) : '';
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
-		$subnav_2 .= '<a href="index.php?update=1&amp;view=mix';
-		$subnav_2 .= ($category > 0) ? '&amp;category='.intval($category) : '';
-		$subnav_2 .= '" class="update-postings" title="'.outputLangDebugInAttributes($lang['update_time_linktitle']).'">';
-		$subnav_2 .= $lang['update_time_linkname'].'</a>';
+		$url  = 'index.php?update=1&amp;view=mix';
+		$url .= $cat;
+		$class = 'update-postings';
+		$title = outputLangDebugInAttributes($lang['update_time_linktitle']);
+		$linktext = $lang['update_time_linkname'];
+		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
 	if ($settings['thread_view'] == 1)
 		{
-		$cat  = ($category > 0) ? '?category='.intval($category) : '';
-		$cat .= !empty($cat) ? '&amp;view=thread' : '?view=thread';
-		$subnav_2 .= '&nbsp;<a href="forum.php'.$cat.'" class="thread-view" title="';
-		$subnav_2 .= outputLangDebugInAttributes($lang['thread_view_linktitle']).'">'.$lang['thread_view_linkname'].'</a>';
+		$url = 'forum.php?view=thread';
+		$url .= $cat;
+		$class = 'thread-view';
+		$title = outputLangDebugInAttributes($lang['thread_view_linktitle']);
+		$linktext = $lang['thread_view_linkname'];
+		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
 	if ($settings['board_view']==1)
 		{
-		$cat  = ($category > 0) ? '?category='.intval($category) : '';
-		$cat .= !empty($cat) ? '&amp;view=board' : '?view=board';
-		$subnav_2 .= '&nbsp;<a href="board.php'.$cat.'" class="board-view" title="';
-		$subnav_2 .= outputLangDebugInAttributes($lang['board_view_linktitle']).'">'.$lang['board_view_linkname'].'</a>';
+		$url = 'board.php?view=board';
+		$url .= $cat;
+		$class = 'board-view';
+		$title = outputLangDebugInAttributes($lang['board_view_linktitle']);
+		$linktext = $lang['board_view_linkname'];
+		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
 	$subnav_2 .= nav($page, $settings['topics_per_page'], $thread_count, $order, $descasc, $category);
 	$categories = get_categories();
@@ -352,8 +359,12 @@ if ($settings['access_for_users_only'] == 1
 		}
 	else
 		{
-		if ($category!=0) echo "<p>".$lang['no_messages_in_category']."</p>";
-		else echo "<p>".$lang['no_messages']."</p>";
+		# import posting template
+		$output = file_get_contents('data/templates/locked.gen.html');
+		$output = str_replace('{locked_hl}', $lang['caution'], $output);
+		$langTemp = ($category!=0) ? $lang['no_messages_in_category'] : $lang['no_messages'];
+		$output = str_replace('{locked_txt}', $langTemp, $output);
+		echo $output;
 		}
 	echo $footer;
 	}
