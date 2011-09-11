@@ -338,7 +338,7 @@ switch($action)
 			}
 	break;
 	case 'registered':
-		if (isset($sent))
+		if ($sent === true)
 			{
 			$lang['registered_ok'] = str_replace("[name]", htmlspecialchars(stripslashes($new_user_name)), $lang['registered_ok']);
 			$lang['registered_ok'] = str_replace("[email]", htmlspecialchars(stripslashes($new_user_email)), $lang['registered_ok']);
