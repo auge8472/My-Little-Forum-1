@@ -219,7 +219,21 @@ if (isset($_POST['register_submit']))
 			$new_user_type = "user";
 			$encoded_new_user_pw = md5($reg_pw);
 			$activate_code = md5(uniqid(rand()));
-			@mysql_query("INSERT INTO ".$db_settings['userdata_table']." (user_type, user_name, user_pw, user_email, hide_email, profile, last_login, last_logout, user_ip, registered, user_view, personal_messages, activate_code) VALUES ('".mysql_real_escape_string($new_user_type)."','".mysql_real_escape_string($new_user_name)."','".mysql_real_escape_string($encoded_new_user_pw)."','".mysql_real_escape_string($new_user_email)."','1','',NOW(),NOW(),'".mysql_real_escape_string($_SERVER["REMOTE_ADDR"])."',NOW(),'".mysql_real_escape_string($settings['standard'])."','1', '".mysql_real_escape_string($activate_code)."')", $connid) or die($lang['db_error']);
+			$newUserQuery = "INSERT INTO ".$db_settings['userdata_table']." SET
+			user_type = '".mysql_real_escape_string($new_user_type)."',
+			user_name = '".mysql_real_escape_string($new_user_name)."',
+			user_pw = '".mysql_real_escape_string($encoded_new_user_pw)."',
+			user_email = '".mysql_real_escape_string($new_user_email)."',
+			hide_email = '1',
+			profile = '',
+			last_login = NOW(),
+			last_logout = NOW(),
+			user_ip = '".mysql_real_escape_string($_SERVER["REMOTE_ADDR"])."',
+			registered = NOW(),
+			user_view = '".mysql_real_escape_string($settings['standard'])."',
+			personal_messages = '1',
+			activate_code = '".mysql_real_escape_string($activate_code)."'";
+			@mysql_query($newUserQuery, $connid) or die($lang['db_error']);
 
 			# get new user ID:
 			$new_user_id_result = mysql_query("SELECT user_id FROM ".$db_settings['userdata_table']." WHERE user_name = '".mysql_real_escape_string($new_user_name)."' LIMIT 1", $connid);
