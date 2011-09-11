@@ -234,7 +234,7 @@ if (isset($_POST['register_submit']))
 			$emailbody = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$new_user_id."&key=".$activate_code, $emailbody);
 			$subject = strip_tags($lang['new_user_email_sj']);
 			$an = mb_encode_mimeheader($new_user_name,'UTF-8')." <".$new_user_email.">";
-			$sent = processEmail($new_user_to, $subject, $emailbody);
+			$sent = processEmail($an, $subject, $emailbody);
 			unset($emailbody);
 			unset($subject);
 			unset($an);
