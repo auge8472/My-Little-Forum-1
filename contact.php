@@ -165,7 +165,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 		if(empty($errors))
 			{
 			# process text content of the message
-			$emailbody = trim($_POST['text']))."\n\n". str_replace("[forum_address]", $settings['forum_address'], strip_tags($lang['msg_add']));
+			$emailbody = trim($_POST['text'])."\n\n". str_replace("[forum_address]", $settings['forum_address'], strip_tags($lang['msg_add']));
 			# generate and process TO
 			if (isset($forum_contact))
 				{
