@@ -113,8 +113,8 @@ return $nurl;
 /**
  * filters subscriptions of postings if there is a subscription for the whole thread 
  *
- * @param array $subscriptions
- * @return array $subscriptions
+ * @param array $a (subscriptions)
+ * @return array $a (subscriptions)
  * @return bool false
  */
 function processSubscriptFilter($a) {
@@ -169,7 +169,7 @@ if (!empty($queryDel))
 	}
 
 return $a;
-} # End: processSubscriptFilter($a)
+} # End: processSubscriptFilter
 
 
 
