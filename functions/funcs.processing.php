@@ -181,7 +181,7 @@ if (!empty($queryDel))
 		email_notify = 0
 		WHERE id ".$matches;
 	$result = mysql_query($queryUnsubscribe, $connid);
-	if (!$result) die($lang['db_error']);
+	if ($result === false) return false;
 	}
 
 return $a;
