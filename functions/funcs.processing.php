@@ -155,7 +155,7 @@ for ($i = 0; $i < count($a); $i++)
 		if ($tmp['tid'] == $a[$i]['tid']
 		and $a[$i]['id'] != $tmp['id'])
 			{
-			$queryDel[] = $a[$i]['id'];
+			$queryDel[] = intval($a[$i]['id']);
 			$a[$i]['delete'] = 1;
 			break;
 			}
