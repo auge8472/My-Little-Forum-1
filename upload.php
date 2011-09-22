@@ -211,6 +211,21 @@ text-decoration:underline;
 }
 -->
 </style>
+<script src="data/prototype.js" type="text/javascript"></script>
+<script type="text/javascript">/* <![CDATA[ */
+function insertCode(imageCode) {
+if (opener) {
+/*	var txtArea = opener.document.getElementById("text"); */
+	var txtArea = opener.$("text");
+/*	var txtCont = txtArea.value; */
+	var txtCont = $F(txtArea);
+  var selLength = txtCont.length;
+	txtArea.value = txtCont + " " + imageCode;
+	self.close();
+	}
+}
+/* ]]> */
+</script>
 </head>
 <body>
 <h1><?php $lang['upload_image_title']; ?></h1>
@@ -245,15 +260,15 @@ switch($action)
 		echo '<img src="img/uploaded/'.$filename.'" alt="" height="100" border="1">'."\n";
 		echo '<p>'.$lang['paste_image'].'</p>'."\n";
 		echo '<p><button style="width:25px; height:25px;" title="'.outputLangDebugInAttributes($lang['insert_image_normal']);
-		echo '" onclick="opener.insert(\'[img]'.$uploaded_images_path.$filename.'[/img]\');';
-		echo ' window.close()"><img src="img/img_normal.gif" alt="'.outputLangDebugInAttributes($lang['insert_image_normal']);
+		echo '" onclick="insertCode(\'[img]'.$uploaded_images_path.$filename.'[/img]\');';
+		echo '"><img src="img/img_normal.gif" alt="'.outputLangDebugInAttributes($lang['insert_image_normal']);
 		echo '" width="11" height="11" /></button>&nbsp;<button style="width:25px; height:25px;"';
-		echo ' title="'.outputLangDebugInAttributes($lang['insert_image_left']).'" onclick="opener.insert(\'[img|left]';
-		echo $uploaded_images_path.$filename.'[/img]\'); window.close()"><img';
+		echo ' title="'.outputLangDebugInAttributes($lang['insert_image_left']).'" onclick="insertCode(\'[img|left]';
+		echo $uploaded_images_path.$filename.'[/img]\');"><img';
 		echo ' src="img/img_left.gif" alt="'.outputLangDebugInAttributes($lang['insert_image_left']).'" width="11" height="11"';
 		echo ' /></button>&nbsp;<button style="width:25px; height:25px;" title="';
-		echo outputLangDebugInAttributes($lang['insert_image_right']).'" onclick="opener.insert(\'[img|right]';
-		echo $uploaded_images_path.$filename.'[/img]\'); window.close()"><img';
+		echo outputLangDebugInAttributes($lang['insert_image_right']).'" onclick="insertCode(\'[img|right]';
+		echo $uploaded_images_path.$filename.'[/img]\');"><img';
 		echo ' src="img/img_right.gif" alt="'.outputLangDebugInAttributes($lang['insert_image_right']).'" width="11"';
 		echo ' height="11" /></button></p>'."\n";
 	break;
