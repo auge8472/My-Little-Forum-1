@@ -87,9 +87,9 @@ mysql_free_result($lock_result);
 if ($lock_result_array['user_lock'] > 0) $action = "locked";
 
 if (isset($_GET['user_lock'])
-&& isset($_SESSION[$settings['session_prefix'].'user_type'])
-&& ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
-|| $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
+	&& isset($_SESSION[$settings['session_prefix'].'user_type'])
+	&& ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
+	|| $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
 	{
 	$lock_result = mysql_query("SELECT user_lock, user_type FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_GET['user_lock'])." LIMIT 1", $connid);
 	if (!$lock_result) die($lang['db_error']);
@@ -105,11 +105,14 @@ if (isset($_GET['user_lock'])
 	}
 
 # show form for own forum settings or redirect to user data of a given user-ID
-if ($action == "usersettings" or $action == 'submit usersettings')
+if ($action == "usersettings"
+	or $action == 'submit usersettings')
 	{
-	if ($settings['user_control_refresh'] == 0 and $settings['user_control_css'] == 0)
+	if ($settings['user_control_refresh'] == 0
+		and $settings['user_control_css'] == 0)
 		{
-		if ((isset($id) and intval($id) > 0) or (isset($user_id) and intval($user_id) > 0))
+		if ((isset($id) and intval($id) > 0)
+			or (isset($user_id) and intval($user_id) > 0))
 			{
 			$action = "get userdata";
 			}
@@ -203,12 +206,14 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		}
 	}
 
-if (isset($_SESSION[$settings['session_prefix'].'user_id']) && empty($action))
+if (isset($_SESSION[$settings['session_prefix'].'user_id'])
+	&& empty($action))
 	{
 	if (isset($id)) $action = "get userdata";
 	else $action = "show users";
 	}
-else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action))
+else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
+	&& isset($action))
 	{
 	# Aktionen vor der Ausgabe von HTML
 	switch ($action)
