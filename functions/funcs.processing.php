@@ -122,11 +122,20 @@ global $db_settings, $connid, $lang;
 
 if (is_array($a) === false) return false;
 
+# $temp will contain all elements of
+# $a wich is a thread subscription.
+# $temp will be compared with $a
+# to search for posting subscriptions
+# of the user who wants to subscribe
+# to the whole thread
 $temp = array();
 $i = 0;
 
+# loop over all elements of the parameter array $a ...
 foreach ($a as $sub)
 	{
+	# ... to search for the elements,
+	# wich are/contains thread subscriptions
 	if ($sub['thread_notify'] == 1)
 		{
 		$temp[$i]['tid'] = $sub['tid'];
@@ -135,10 +144,14 @@ foreach ($a as $sub)
 	$i++;
 	}
 
+# second loop over parameter array $a (all subscriptions)
 for ($i = 0; $i < count($a); $i++)
 	{
+	# additional loop over array $temp (thread subscriptions)
 	foreach ($temp as $tmp)
 		{
+		# has thread-ID of $a[$i] the same value like $tmp and
+		# the posting-ID of $a[$i] and $tmp is different, then ...
 		if ($tmp['tid'] == $a[$i]['tid']
 		and $a[$i]['id'] != $tmp['id'])
 			{
@@ -149,8 +162,11 @@ for ($i = 0; $i < count($a); $i++)
 		}
 	}
 
+# Are there subscriptions, wich can be deleted?
 if (!empty($queryDel))
 	{
+	# if the answer is yes, give the posting ID(s)
+	# a proper format for the use in a database query
 	if (count($queryDel) > 1)
 		{
 		$queryDel = join(", ", $queryDel);
