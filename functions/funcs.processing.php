@@ -118,7 +118,7 @@ return $nurl;
  * @return bool false
  */
 function processSubscriptFilter($a) {
-global $db_settings, $connid, $lang;
+global $settings, $db_settings, $connid, $lang;
 
 if (is_array($a) === false) return false;
 
