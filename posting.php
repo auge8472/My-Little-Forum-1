@@ -147,6 +147,10 @@ and isset($_GET['back']))
 		ON DUPLICATE KEY UPDATE
 		user_id = user_id,
 		tid = tid";
+		$queryUnsubscribePost = "UPDATE".$db_settings['forum_table']." SET
+		email_notify = 0
+		WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ."
+		AND tid = ". intval($_GET['id']);
 		}
 	else if ($_GET['subscribe'] == 'false')
 		{
@@ -161,6 +165,7 @@ and isset($_GET['back']))
 			}
 		}
 	if (!empty($querySubscribe)) @mysql_query($querySubscribe, $connid);
+	if (!empty($queryUnsubscribePost)) @mysql_query($queryUnsubscribePost, $connid);
 
 	if (empty($page)) $page = 0;
 	if (empty($order)) $order = "time";
