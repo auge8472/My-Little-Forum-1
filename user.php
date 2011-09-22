@@ -1420,6 +1420,8 @@ switch ($action)
 				{
 				$sortDate[$key] = $row['sort'];
 				}
+			# delete possible posting subscriptions
+			# in case of a thread subscription
 			$subscriptions = processSubscriptFilter($subscriptions);
 			array_multisort($sortDate, SORT_DESC, $subscriptions);
 			echo '<h2>'.$lang['edit_subscriptions_hl'].'</h2>'."\n";
