@@ -179,7 +179,8 @@ if (!empty($queryDel))
 
 	$queryUnsubscribe = "UPDATE ".$db_settings['forum_table']." SET 
 		email_notify = 0
-		WHERE id ".$matches;
+		WHERE user_id = ".$_SESSION[$settings['session_prefix'].'user_id']."
+		AND id ".$matches;
 	$result = mysql_query($queryUnsubscribe, $connid);
 	if ($result === false) return false;
 	}
