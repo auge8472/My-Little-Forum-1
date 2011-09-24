@@ -30,33 +30,51 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 	die("<a href=\"login.php?referer=index.php\">further...</a>");
 	}
 
-if (isset($_GET['category']))
-	{
-	$qs = "?category=".intval($_GET['category']);
-	}
-else
-	{
-	$qs = "";
-	}
+processStandardParametersGET();
 
-if (isset($_GET['update']) && isset($_SESSION[$settings['session_prefix'].'newtime']))
+if (!empty($_SESSION[$settings['session_prefix'].'category'])
+	and $_SESSION[$settings['session_prefix'].'category'] > 0)
+	{
+	$qstrg[] = 'category='. intval($_SESSION[$settings['session_prefix'].'category']);
+	}
+else if (!empty($_GET['category'])
+	and intval($_GET['category']) > 0)
+	{
+	$qstrg[] = 'category='. intval($_GET['category']);
+	}
+if (!empty($_SESSION[$settings['session_prefix'].'page'])
+	and $_SESSION[$settings['session_prefix'].'page'] > 0)
+	{
+	$qstrg[] = 'page='. $_SESSION[$settings['session_prefix'].'page'];
+	}
+else if (!empty($_GET['page'])
+	and intval($_GET['page']) > 0)
+	{
+	$qstrg[] = 'page='. intval($_GET['page']);
+	}
+$qs = (!empty($qstrg) and is_array($qstrg)) ? '?'. implode('&', $qstrg) : '';
+$qsl = (!empty($qstrg) and is_array($qstrg)) ? '?'. implode('&amp;', $qstrg) : '';
+
+if (isset($_GET['update'])
+	&& intval($_GET['update']) == 1
+	&& isset($_SESSION[$settings['session_prefix'].'newtime']))
 	{
 	$_SESSION[$settings['session_prefix'].'newtime'] = time();
 	$update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET last_login=last_login, last_logout=NOW(), registered=registered WHERE user_id='".$_SESSION[$settings['session_prefix'].'user_id']."'", $connid);
 	if (empty($_GET['view']))
 		{
 		header("location: ".$settings['forum_address']."forum.php".$qs);
-		die("<a href=\"forum.php".$qs."\">further...</a>");
+		die("<a href=\"forum.php".$qsl."\">further...</a>");
 		}
 	else if (isset($_GET['view']) && $_GET['view']=="board")
 		{
 		header("location: ".$settings['forum_address']."board.php".$qs);
-		die("<a href=\"board.php".$qs."\">further...</a>");
+		die("<a href=\"board.php".$qsl."\">further...</a>");
 		}
 	else if (isset($_GET['view']) && $_GET['view']=="mix")
 		{
 		header("location: ".$settings['forum_address']."mix.php".$qs);
-		die("<a href=\"mix.php".$qs."\">further...</a>");
+		die("<a href=\"mix.php".$qsl."\">further...</a>");
 		}
 	}
 
