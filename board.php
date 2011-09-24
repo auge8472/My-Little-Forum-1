@@ -101,7 +101,7 @@ if($settings['access_for_users_only']  == 1
 			WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
 		FROM ".$db_settings['forum_table']." AS t1
 		WHERE pid = 0".$threadsQueryWhere."
-		ORDER BY fixed DESC, ".$order." ".$descasc."
+		ORDER BY fixed DESC, ".$order." ".$_SESSION[$settings['session_prefix'].'descasc']."
 		LIMIT ".$ul.", ".$settings['topics_per_page'];
 	$threadsResult = mysql_query($threadsQuery, $connid);
 	if (!$threadsResult) die($lang['db_error']);
@@ -137,7 +137,7 @@ if($settings['access_for_users_only']  == 1
 		$linktext = $lang['mix_view_linkname'];
 		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
-	$subnav_2 .= nav($_SESSION[$settings['session_prefix'].'page'], $settings['topics_per_page'], $thread_count, $order, $descasc, $category);
+	$subnav_2 .= nav($_SESSION[$settings['session_prefix'].'page'], $settings['topics_per_page'], $thread_count, $order, $_SESSION[$settings['session_prefix'].'descasc'], $category);
 	$subnav_2 .= outputCategoriesList($categories, $category);
 
 	parse_template();
@@ -147,11 +147,11 @@ if($settings['access_for_users_only']  == 1
 	# end output of SESSION values (testcase)
 	if ($thread_count > 0 && isset($threadsResult))
 		{
-		$currDescAsc = strtolower($descasc);
+		$currDescAsc = strtolower($_SESSION[$settings['session_prefix'].'descasc']);
 		echo '<table class="normaltab">'."\n";
 		echo '<tr class="titlerow">'."\n";
 		echo '<th><a href="board.php?order=subject&amp;descasc=';
-		echo ($descasc=="ASC" && $order=="subject") ? 'DESC' : 'ASC';
+		echo ($_SESSION[$settings['session_prefix'].'descasc']=="ASC" && $order=="subject") ? 'DESC' : 'ASC';
 		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_subject_headline'].'</a>';
 		if ($order=="subject")
@@ -162,7 +162,7 @@ if($settings['access_for_users_only']  == 1
 		if ($categories!=false && $category == 0)
 			{
 			echo '<th><a href="board.php?order=category&amp;descasc=';
-			echo ($descasc=="ASC" && $order=="category") ? 'DESC' : 'ASC';
+			echo ($_SESSION[$settings['session_prefix'].'descasc']=="ASC" && $order=="category") ? 'DESC' : 'ASC';
 			echo $cat;
 			echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_category_headline'].'</a>';
 			if ($order=="category")
@@ -172,7 +172,7 @@ if($settings['access_for_users_only']  == 1
 			echo '</th>'."\n";
 			}
 		echo '<th><a href="board.php?order=name&amp;descasc=';
-		echo ($descasc=="ASC" && $order=="name") ? 'DESC' : 'ASC';
+		echo ($_SESSION[$settings['session_prefix'].'descasc']=="ASC" && $order=="name") ? 'DESC' : 'ASC';
 		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_author_headline'].'</a>'."\n";
 		if ($order=="name")
@@ -181,7 +181,7 @@ if($settings['access_for_users_only']  == 1
 			}
 		echo '</th>'."\n";
 		echo '<th><a href="board.php?order=time&amp;descasc=';
-		echo ($descasc=="DESC" && $order=="time") ? "ASC" : "DESC";
+		echo ($_SESSION[$settings['session_prefix'].'descasc']=="DESC" && $order=="time") ? "ASC" : "DESC";
 		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_date_headline'].'</a>'."\n";
 		if ($order=="time")
@@ -191,7 +191,7 @@ if($settings['access_for_users_only']  == 1
 		echo '</th>'."\n";
 		echo '<th>'.$lang['board_answers_headline'].'</th>'."\n";
 		echo '<th><a href="board.php?order=last_answer&amp;descasc=';
-		echo ($descasc=="DESC" && $order=="last_answer") ? "ASC" : "DESC";
+		echo ($_SESSION[$settings['session_prefix'].'descasc']=="DESC" && $order=="last_answer") ? "ASC" : "DESC";
 		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_last_answer_headline'].'</a>'."\n";
 		if ($order=="last_answer")
