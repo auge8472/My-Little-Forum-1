@@ -111,6 +111,7 @@ if($settings['access_for_users_only']  == 1
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
 		$url  = 'index.php?update=1&amp;view=board';
+		$url .= ($_SESSION[$settings['session_prefix'].'page'] > 0) ? '&amp;page='.$_SESSION[$settings['session_prefix'].'page'] : '';
 		$url .= $cat;
 		$class = 'update-postings';
 		$title = outputLangDebugInAttributes($lang['update_time_linktitle']);
