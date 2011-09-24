@@ -245,13 +245,8 @@ if($settings['access_for_users_only']  == 1
 				{
 				echo 'thread';
 				}
-			echo '" href="board_entry.php?id='.$zeile["tid"];
-			if ($_SESSION[$settings['session_prefix'].'page'] != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC")
-				{
-				echo '&amp;page='.$_SESSION[$settings['session_prefix'].'page'].'&amp;category='.$category;
-				echo '&amp;order='.$order.'&amp;descasc='.$descasc;
-				}
-			echo '">'.htmlspecialchars($zeile["subject"]).'</a>'."\n";
+			echo '" href="board_entry.php?id='.$zeile["tid"].'">';
+			echo htmlspecialchars($zeile["subject"]).'</a>'."\n";
 			# show sign for fixed threads
 			if ($zeile["fixed"] == 1)
 				{
