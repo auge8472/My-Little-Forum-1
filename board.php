@@ -46,7 +46,7 @@ if($settings['access_for_users_only']  == 1
 	processStandardParametersGET();
 	unset($zeile);
 
-	if (empty($page)) $page = 0;
+#	if (empty($page)) $page = 0;
 	if (empty($order)) $order="last_answer";
 	if (empty($descasc)) $descasc="DESC";
 	if (isset($descasc) && $descasc=="ASC")
@@ -58,7 +58,7 @@ if($settings['access_for_users_only']  == 1
 		$descasc = "DESC";
 		}
 
-	$ul = $page * $settings['topics_per_page'];
+	$ul = $_SESSION[$settings['session_prefix'].'page'] * $settings['topics_per_page'];
 
 	# database request
 	# no categories defined
@@ -135,7 +135,7 @@ if($settings['access_for_users_only']  == 1
 		$linktext = $lang['mix_view_linkname'];
 		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
-	$subnav_2 .= nav($page, $settings['topics_per_page'], $thread_count, $order, $descasc, $category);
+	$subnav_2 .= nav($_SESSION[$settings['session_prefix'].'page'], $settings['topics_per_page'], $thread_count, $order, $descasc, $category);
 	$subnav_2 .= outputCategoriesList($categories, $category);
 
 	parse_template();
@@ -239,9 +239,9 @@ if($settings['access_for_users_only']  == 1
 				echo 'thread';
 				}
 			echo '" href="board_entry.php?id='.$zeile["tid"];
-			if ($page != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC")
+			if ($_SESSION[$settings['session_prefix'].'page'] != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC")
 				{
-				echo '&amp;page='.$page.'&amp;category='.$category;
+				echo '&amp;page='.$_SESSION[$settings['session_prefix'].'page'].'&amp;category='.$category;
 				echo '&amp;order='.$order.'&amp;descasc='.$descasc;
 				}
 			echo '">'.htmlspecialchars($zeile["subject"]).'</a>'."\n";
@@ -330,7 +330,7 @@ if($settings['access_for_users_only']  == 1
 				if ($settings['last_reply_link']==1)
 					{
 					echo '<a href="board_entry.php?id='.$zeile["tid"].'&amp;be_page=';
-					echo (ceil($answers_count / $settings['answers_per_topic'])-1).'&amp;page='.$page;
+					echo (ceil($answers_count / $settings['answers_per_topic'])-1).'&amp;page='.$_SESSION[$settings['session_prefix'].'page'];
 					echo ($category > 0) ? '&amp;category='.$category : '';
 					echo '&amp;order='.$order.'&amp;descasc='.$descasc.'#p'.$last_answer['id'];
 					echo '" title="'.str_replace("[name]", $last_answer['name'], outputLangDebugInAttributes($lang['last_reply_lt'])).'">';
@@ -359,7 +359,7 @@ if($settings['access_for_users_only']  == 1
 			&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
 				{
 				echo '<td><a href="admin.php?mark='.$zeile["tid"].'&amp;refer=';
-				echo basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$page;
+				echo basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$_SESSION[$settings['session_prefix'].'page'];
 				echo ($category > 0) ? '&amp;category='.$category : '';
 				echo '&amp;order='.$order.'">';
 				if ($zeile['marked']==1)
