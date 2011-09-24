@@ -41,7 +41,9 @@ if($settings['access_for_users_only']  == 1
 		{
 		setcookie("user_view","board",time()+(3600*24*30));
 		}
-
+	# process the standard parameters
+	# and put them into the session
+	processStandardParametersGET();
 	unset($zeile);
 
 	if (empty($page)) $page = 0;
@@ -138,6 +140,9 @@ if($settings['access_for_users_only']  == 1
 
 	parse_template();
 	echo $header;
+	# start output of SESSION values (testcase)
+	echo '<pre>'.print_r($_SESSION, true).'</pre>'."\n";
+	# end output of SESSION values (testcase)
 	if ($thread_count > 0 && isset($threadsResult))
 		{
 		$currDescAsc = strtolower($descasc);
