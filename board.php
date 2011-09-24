@@ -148,8 +148,9 @@ if($settings['access_for_users_only']  == 1
 		$currDescAsc = strtolower($descasc);
 		echo '<table class="normaltab">'."\n";
 		echo '<tr class="titlerow">'."\n";
-		echo '<th><a href="board.php?category='.$category.'&amp;order=subject&amp;descasc=';
+		echo '<th><a href="board.php?order=subject&amp;descasc=';
 		echo ($descasc=="ASC" && $order=="subject") ? 'DESC' : 'ASC';
+		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_subject_headline'].'</a>';
 		if ($order=="subject")
 			{
@@ -158,8 +159,9 @@ if($settings['access_for_users_only']  == 1
 		echo '</th>'."\n";
 		if ($categories!=false && $category == 0)
 			{
-			echo '<th><a href="board.php?category='.$category.'&amp;order=category&amp;descasc=';
+			echo '<th><a href="board.php?order=category&amp;descasc=';
 			echo ($descasc=="ASC" && $order=="category") ? 'DESC' : 'ASC';
+			echo $cat;
 			echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_category_headline'].'</a>';
 			if ($order=="category")
 				{
@@ -167,16 +169,18 @@ if($settings['access_for_users_only']  == 1
 				}
 			echo '</th>'."\n";
 			}
-		echo '<th><a href="board.php?category='.$category.'&amp;order=name&amp;descasc=';
+		echo '<th><a href="board.php?order=name&amp;descasc=';
 		echo ($descasc=="ASC" && $order=="name") ? 'DESC' : 'ASC';
+		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_author_headline'].'</a>'."\n";
 		if ($order=="name")
 			{
 			echo outputImageDescAsc($currDescAsc);
 			}
 		echo '</th>'."\n";
-		echo '<th><a href="board.php?category='.$category.'&amp;order=time&amp;descasc=';
+		echo '<th><a href="board.php?order=time&amp;descasc=';
 		echo ($descasc=="DESC" && $order=="time") ? "ASC" : "DESC";
+		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_date_headline'].'</a>'."\n";
 		if ($order=="time")
 			{
@@ -184,8 +188,9 @@ if($settings['access_for_users_only']  == 1
 			}
 		echo '</th>'."\n";
 		echo '<th>'.$lang['board_answers_headline'].'</th>'."\n";
-		echo '<th><a href="board.php?category='.$category.'&amp;order=last_answer&amp;descasc=';
+		echo '<th><a href="board.php?order=last_answer&amp;descasc=';
 		echo ($descasc=="DESC" && $order=="last_answer") ? "ASC" : "DESC";
+		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_last_answer_headline'].'</a>'."\n";
 		if ($order=="last_answer")
 			{
