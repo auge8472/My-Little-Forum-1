@@ -106,8 +106,6 @@ if($settings['access_for_users_only']  == 1
 	$threadsResult = mysql_query($threadsQuery, $connid);
 	if (!$threadsResult) die($lang['db_error']);
 
-	$category = stripslashes($category);
-
 	$subnav_1 = outputPostingLink($category,"board");
 	$cat = ($category > 0) ? '&amp;category='.intval($category) : '';
 	$subnav_2 = '';
