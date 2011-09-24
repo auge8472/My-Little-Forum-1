@@ -106,8 +106,8 @@ if($settings['access_for_users_only']  == 1
 	$threadsResult = mysql_query($threadsQuery, $connid);
 	if (!$threadsResult) die($lang['db_error']);
 
-	$subnav_1 = outputPostingLink($category,"board");
-	$cat = ($category > 0) ? '&amp;category='.intval($category) : '';
+	$subnav_1 = outputPostingLink($_SESSION[$settings['session_prefix'].'category'], "board");
+	$cat = ($_SESSION[$settings['session_prefix'].'category'] > 0) ? '&amp;category='.intval($_SESSION[$settings['session_prefix'].'category']) : '';
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
