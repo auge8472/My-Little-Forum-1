@@ -137,8 +137,8 @@ if($settings['access_for_users_only']  == 1
 		$linktext = $lang['mix_view_linkname'];
 		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
-	$subnav_2 .= nav($_SESSION[$settings['session_prefix'].'page'], $settings['topics_per_page'], $thread_count, $order, $_SESSION[$settings['session_prefix'].'descasc'], $category);
-	$subnav_2 .= outputCategoriesList($categories, $category);
+	$subnav_2 .= nav($_SESSION[$settings['session_prefix'].'page'], $settings['topics_per_page'], $thread_count, $order, $_SESSION[$settings['session_prefix'].'descasc'], $_SESSION[$settings['session_prefix'].'category']);
+	$subnav_2 .= outputCategoriesList($categories, $_SESSION[$settings['session_prefix'].'category']);
 
 	parse_template();
 	echo $header;
