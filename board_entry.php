@@ -260,7 +260,7 @@ if ($settings['access_for_users_only'] == 1
 	$wo = $thread["subject"];
 	$subnav_1  = '<a class="textlink" href="board.php" title="';
 	$subnav_1 .= outputLangDebugInAttributes($lang['back_to_board_linktitle']).'">'.$lang['back_to_board_linkname'].'</a>';
-	$cat = ($category > 0) ? '&amp;category='.intval($category) : '';
+	$cat = ($_SESSION[$settings['session_prefix'].'category'] > 0) ? '&amp;category='.intval($_SESSION[$settings['session_prefix'].'category']) : '';
 	$subnav_2 = '';
 	if ($da=="DESC")
 		{
