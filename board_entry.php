@@ -302,7 +302,7 @@ if ($settings['access_for_users_only'] == 1
 	parse_template();
 	echo $header;
 	# start output of SESSION values (testcase)
-	echo '<pre>'.print_r($_SESSION, true).'</pre>'."\n";
+#	echo '<pre>'.print_r($_SESSION, true).'</pre>'."\n";
 	# end output of SESSION values (testcase)
 
 	# import posting template

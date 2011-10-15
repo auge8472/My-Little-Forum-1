@@ -143,7 +143,7 @@ if($settings['access_for_users_only']  == 1
 	parse_template();
 	echo $header;
 	# start output of SESSION values (testcase)
-	echo '<pre>'.print_r($_SESSION, true).'</pre>'."\n";
+#	echo '<pre>'.print_r($_SESSION, true).'</pre>'."\n";
 	# end output of SESSION values (testcase)
 	if ($thread_count > 0 && isset($threadsResult))
 		{
@@ -258,16 +258,14 @@ if($settings['access_for_users_only']  == 1
 				echo ' <span class="small">';
 				if ($settings['thread_view']==1)
 					{
-					echo '<a href="forum_entry.php?id='.$zeile["tid"].'&amp;view=thread';
-					echo ($category > 0) ? '&amp;category='.$category : '';
-					echo '"><img src="img/thread_d.png" alt="[Thread]" title="';
+					echo '<a href="forum_entry.php?id='.$zeile["tid"].$cat.'">';
+					echo '<img src="img/thread_d.png" alt="[Thread]" title="';
 					echo outputLangDebugInAttributes($lang['open_in_thread_linktitle']).'" width="12" height="9" /></a>';
 					}
 				if ($settings['mix_view'] == 1)
 					{
-					echo '<a href="mix_entry.php?id='.$zeile["tid"].'&amp;view=mix';
-					echo ($category > 0) ? '&amp;category='.$category : '';
-					echo '"><img src="img/mix_d.png" alt="[Mix]" title="';
+					echo '<a href="mix_entry.php?id='.$zeile["tid"].$cat.'">';
+					echo '<img src="img/mix_d.png" alt="[Mix]" title="';
 					echo outputLangDebugInAttributes($lang['open_in_mix_linktitle']).'" width="12" height="9" /></a>';
 					}
 				echo "</span>";

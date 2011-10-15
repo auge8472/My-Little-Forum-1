@@ -425,11 +425,10 @@ return $output;
  */
 function processStandardParametersGET() {
 global $settings;
-
 $checkOrder = array('subject', 'category', 'name', 'time', 'last_answer');
 $checkDescAsc = array('DESC', 'ASC');
 
-if (!empty($_GET['page']))
+if (isset($_GET['page']) and intval($_GET['page']) > -1)
 	{
 	if (!isset($_SESSION[$settings['session_prefix'].'page']))
 		{
@@ -447,7 +446,7 @@ else
 		$_SESSION[$settings['session_prefix'].'page'] = 0;
 		}
 	}
-if (!empty($_GET['category']))
+if (isset($_GET['category']) and intval($_GET['category']) > -1)
 	{
 	if (!isset($_SESSION[$settings['session_prefix'].'category']))
 		{
