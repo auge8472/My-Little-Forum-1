@@ -125,7 +125,7 @@ form { display: inline; }
 /* template: */
 #top {
 margin:0;
-height: 70px;
+overflow: hidden;
 
 background: #ecf2f8; /* Old browsers */
 background: -moz-linear-gradient(top, #ccd8ea 0%, #ecf2f8 100%); /* FF3.6+ */
