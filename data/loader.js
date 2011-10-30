@@ -10,7 +10,7 @@ if ($('buttonspace'))
 
 	if (typeof(auge_upload) != "undefined")
 		{
-		Element.insert($('buttonspace'), {'bottom': " <input value=\""+ auge_upload.get('text') +"\" title=\""+ auge_upload.get('title') +"\" class=\"bb-button\" type=\"button\" name=\"imgupload\" onclick=\"upload();\" />"});
+		Element.insert($('buttonspace'), {'bottom': " <input value=\""+ auge_upload.get('text') +"\" title=\""+ auge_upload.get('title') +"\" class=\"bb-button\" type=\"button\" name=\"imgupload\" onclick=\"createPopup('upload.php', 380, 340);\" />"});
 		}
 	if (typeof(auge_smilies) != "undefined")
 		{
