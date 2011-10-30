@@ -656,7 +656,16 @@ border: 3px double #bacbdf;
 border-collapse: collapse;
 }
 table.normaltab .titlerow {
-background:#d2ddea url(img/bg_th.png) repeat-x bottom;
+
+background: #ecf2f8;
+background: -moz-linear-gradient(top, #ccd8ea 0%, #ecf2f8 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ccd8ea), color-stop(100%,#ecf2f8));
+background: -webkit-linear-gradient(top, #ccd8ea 0%, #ecf2f8 100%);
+background: -o-linear-gradient(top, #ccd8ea 0%, #ecf2f8 100%);
+background: -ms-linear-gradient(top, #ccd8ea 0%, #ecf2f8 100%);
+background: linear-gradient(top, #ccd8ea 0%, #ecf2f8 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ccd8ea', endColorstr='#ecf2f8',GradientType=0 );
+
 height: 1.8em;
 border-bottom: 1px solid #bacbdf;
 }
