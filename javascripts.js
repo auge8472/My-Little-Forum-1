@@ -241,6 +241,11 @@ function delete_cookie()
   return false;
  }
 
+function createPopup(url, width, height) {
+  winpops=window.open(url,"", "width=" + width + ", height=" + height + ", scrollbars, resizable");
+  return false;
+	}
+
 var img1 = new Image();
 img1.src ="img/link_mo.png";
 var img2 = new Image();
