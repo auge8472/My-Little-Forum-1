@@ -228,19 +228,6 @@ function destroyElement(name) {
 $(name).remove();
 }
 
-function upload()
- {
-  var popurl="upload.php";
-  winpops=window.open(popurl,"","width=340,height=340,scrollbars,resizable");
- }
-
-function delete_cookie()
- {
-  var popurl="delete_cookie.php";
-  winpops=window.open(popurl,"","width=200,height=150,scrollbars,resizable");
-  return false;
- }
-
 function createPopup(url, width, height) {
   winpops=window.open(url,"", "width=" + width + ", height=" + height + ", scrollbars, resizable");
   return false;
