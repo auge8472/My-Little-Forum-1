@@ -228,12 +228,6 @@ function destroyElement(name) {
 $(name).remove();
 }
 
-function more_smilies()
- {
-  var popurl="more_smilies.php";
-  winpops=window.open(popurl,"","width=250,height=250,scrollbars,resizable");
- }
-
 function upload()
  {
   var popurl="upload.php";
