@@ -586,9 +586,13 @@ width: 10em;
 padding: 5px 7px 5px 7px;
 color: #000;
 background:#d2ddea;
-background-image:url(img/bg_author.png);
-background-repeat: repeat-y;
-background-position: right;
+background: -moz-linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,#d2ddea), color-stop(100%,#ecf2f8));
+background: -webkit-linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
+background: -o-linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
+background: -ms-linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
+background: linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2ddea', endColorstr='#ecf2f8',GradientType=1 );
 border-right: 1px dotted #bacbdf;
 border-bottom: 1px solid #bacbdf;
 }
@@ -599,9 +603,13 @@ height:1.6em;
 font-size: 1em;
 color: #000;
 background: #d2ddea;
-background-image:url(img/bg_th.png);
-background-repeat: repeat-x;
-background-position: bottom;
+background: -moz-linear-gradient(top, #d2ddea 0%, #ecf2f8 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d2ddea), color-stop(100%,#ecf2f8));
+background: -webkit-linear-gradient(top, #d2ddea 0%, #ecf2f8 100%);
+background: -o-linear-gradient(top, #d2ddea 0%, #ecf2f8 100%);
+background: -ms-linear-gradient(top, #d2ddea 0%, #ecf2f8 100%);
+background: linear-gradient(top, #d2ddea 0%, #ecf2f8 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2ddea', endColorstr='#ecf2f8',GradientType=0 );
 border-bottom: 1px solid #bacbdf;
 }
 td.titlecell .left {
@@ -698,9 +706,13 @@ font-size: 1em;
 font-weight: bold;
 color: #000;
 background: #d2ddea;
-background-image:url(img/bg_author.png);
-background-repeat: repeat-y;
-background-position: right;
+background: -moz-linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,#d2ddea), color-stop(100%,#ecf2f8));
+background: -webkit-linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
+background: -o-linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
+background: -ms-linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
+background: linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2ddea', endColorstr='#ecf2f8',GradientType=1 );
 border-bottom: 1px dotted #fff;
 }
 table.normaltab td.d {
