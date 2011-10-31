@@ -215,9 +215,7 @@ text-decoration:underline;
 <script type="text/javascript">/* <![CDATA[ */
 function insertCode(imageCode) {
 if (opener) {
-/*	var txtArea = opener.document.getElementById("text"); */
 	var txtArea = opener.$("text");
-/*	var txtCont = txtArea.value; */
 	var txtCont = $F(txtArea);
   var selLength = txtCont.length;
 	txtArea.value = txtCont + " " + imageCode;
