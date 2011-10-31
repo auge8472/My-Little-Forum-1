@@ -145,7 +145,7 @@ if (Buttons && o>0)
 		}
 	j = j + 1;
 	}
-$('buttonspace').update(output.join("\n"));
+$('buttonspace').update(output.join("\n") + "\n");
 }
 
 /**
@@ -178,7 +178,7 @@ if (Smilies && o>0)
 			}
 		}
 	}
-Element.insert($('buttonspace'), {'bottom': "\n<br />"+ output.join("")});
+Element.insert($('buttonspace'), {'bottom': output.join("")});
 }
 
 
