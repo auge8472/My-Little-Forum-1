@@ -1948,7 +1948,7 @@ switch ($action)
 			echo '<input type="password" size="25" name="ar_pw_conf" maxlength="50"><br /><br />'."\n";
 			echo '<input type="checkbox" name="ar_send_userdata" value="true"';
 			echo (isset($ar_send_userdata)) ? ' checked="checked"' : '';
-			echo ' />'.$lang_add['ar_send_userdata'].'><br /><br />'."\n";
+			echo ' />'.$lang_add['ar_send_userdata'].'<br /><br />'."\n";
 			echo '<input type="submit" name="pw_submit" value="'.$lang['new_pw_subm_button'];
 			echo '" title="'.$lang['new_pw_subm_button_title'].'">'."\n";
 			echo '</form>'."\n";

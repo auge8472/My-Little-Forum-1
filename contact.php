@@ -175,7 +175,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 			$an = mb_encode_mimeheader($name, "UTF-8")." <".$email.">";
 			# process subject
 			$mail_subject = ($_POST['subject'] != "") ? trim($_POST['subject']) : $lang['email_no_subject'];
-			$emailsubject = mb_encode_mimeheader(strip_tags($mail_subject), "UTF-8");
+			$emailsubject = strip_tags($mail_subject);
 			# send email
 			$sent = processEmail($an, $emailsubject, $emailbody, $sender_email);
 			unset($emailsubject);
@@ -193,7 +193,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 				# generate and process TO
 				$an = mb_encode_mimeheader($sender_name, "UTF-8")." <".$sender_email.">";
 				# process subject
-				$emailsubject = mb_encode_mimeheader(strip_tags($lang['conf_sj']), "UTF-8");
+				$emailsubject = strip_tags($lang['conf_sj']);
 				# send email
 				$sent = processEmail($an, $emailsubject, $emailbody);
 				unset($emailsubject);

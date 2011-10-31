@@ -155,7 +155,7 @@ for ($i = 0; $i < count($a); $i++)
 		if ($tmp['tid'] == $a[$i]['tid']
 		and $a[$i]['id'] != $tmp['id'])
 			{
-			$queryDel[] = $a[$i]['id'];
+			$queryDel[] = intval($a[$i]['id']);
 			$a[$i]['delete'] = 1;
 			break;
 			}
@@ -179,7 +179,7 @@ if (!empty($queryDel))
 
 	$queryUnsubscribe = "UPDATE ".$db_settings['forum_table']." SET 
 		email_notify = 0
-		WHERE user_id = ".$_SESSION[$settings['session_prefix'].'user_id']."
+		WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ."
 		AND id ".$matches;
 	$result = mysql_query($queryUnsubscribe, $connid);
 	if ($result === false) return false;

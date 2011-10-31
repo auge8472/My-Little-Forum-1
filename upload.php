@@ -300,15 +300,16 @@ switch($action)
 		echo '<p>';
 		if ($p>1)
 			{
+			$pageDown = $p - 1;
 			echo '[ <a href="'.$_SERVER['SCRIPT_NAME'].'?action=show_uploaded_images';
-			echo '&amp;p='.$p-1.'">&laquo;</a> ] ';
+			echo '&amp;p='.$pageDown.'">&laquo;</a> ] ';
 			}
 		if ($p*$images_per_page < $images_count)
 			{
+			$pageUp = $p + 1;
 			echo '[ <a href="'.$_SERVER['SCRIPT_NAME'].'?action=show_uploaded_images';
-			echo '&amp;p='.$p+1.'">&raquo;</a> ] ';
+			echo '&amp;p='.$pageUp.'">&raquo;</a> ] ';
 			}
-		echo '[ <a href="'.$_SERVER['SCRIPT_NAME'].'">'.$lang['upload_image_title'].'</a> ]</p>'."\n";
 		echo '<hr /><p>';
 		if ($images_count > 0)
 			{
