@@ -145,7 +145,7 @@ if (Buttons && o>0)
 		}
 	j = j + 1;
 	}
-$('buttonspace').update(output.join("\n"));
+$('buttonspace').update(output.join("\n") + "\n");
 }
 
 /**
@@ -178,7 +178,7 @@ if (Smilies && o>0)
 			}
 		}
 	}
-Element.insert($('buttonspace'), {'bottom': "\n<br />"+ output.join("")});
+Element.insert($('buttonspace'), {'bottom': output.join("")});
 }
 
 
@@ -228,24 +228,10 @@ function destroyElement(name) {
 $(name).remove();
 }
 
-function more_smilies()
- {
-  var popurl="more_smilies.php";
-  winpops=window.open(popurl,"","width=250,height=250,scrollbars,resizable");
- }
-
-function upload()
- {
-  var popurl="upload.php";
-  winpops=window.open(popurl,"","width=340,height=340,scrollbars,resizable");
- }
-
-function delete_cookie()
- {
-  var popurl="delete_cookie.php";
-  winpops=window.open(popurl,"","width=200,height=150,scrollbars,resizable");
+function createPopup(url, width, height) {
+  winpops=window.open(url,"", "width=" + width + ", height=" + height + ", scrollbars, resizable");
   return false;
- }
+	}
 
 var img1 = new Image();
 img1.src ="img/link_mo.png";
