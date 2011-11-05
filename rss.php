@@ -87,6 +87,8 @@ if ($result_count > 0
 		$rss .= str_replace("[time]", $zeile["xtime"], $rss_author_info);
 		$rss .= '</i><br /><br />'.$ftext.']]></content:encoded>'."\n";
 		$rss .= '   <link>'.$settings['forum_address'].'forum_entry.php?id='.$zeile['id'].'</link>'."\n";
+		$rss .= '   <guid>'.$settings['forum_address'].'forum_entry.php?id='.$zeile['id'].'</guid>'."\n";
+		$rss .= '   <author>'.$name.'</author>'."\n";
 		$rss .= '   <pubDate>'.date("r", $zeile['rss_time']).'</pubDate>'."\n";
 		$rss .= '  </item>'."\n";
 		}
