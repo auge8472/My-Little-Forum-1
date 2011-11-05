@@ -213,15 +213,65 @@ text-decoration:underline;
 </style>
 <script src="data/prototype.js" type="text/javascript"></script>
 <script type="text/javascript">/* <![CDATA[ */
-function insertCode(imageCode) {
+
+function insertCode(code) {
+
+if (!code) code = "";
+
 if (opener) {
-	var txtArea = opener.$("text");
-	var txtCont = $F(txtArea);
-  var selLength = txtCont.length;
-	txtArea.value = txtCont + " " + imageCode;
+	// get the textarea of the main document and focus the element
+	var input = opener.document.getElementById("text");
+	input.focus();
+	var txtLen = input.value.length;
+	// for IE
+	if (typeof document.selection != 'undefined')
+		{
+		// code adapted from http://the-stickman.com/web-development/javascript/finding-selection-cursor-position-in-a-textarea-in-internet-explorer/
+		/*
+		THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+		INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+		PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+		FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+		OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+		DEALINGS IN THE SOFTWARE.
+		*/
+		// The current selection
+		var range = opener.document.selection.createRange();
+		// We'll use this as a 'dummy'
+		var stored_range = range.duplicate();
+		// Select all text
+		stored_range.moveToElementText(input);
+		// Now move 'dummy' end point to end point of original range
+		stored_range.setEndPoint( 'EndToEnd', range );
+		// Now we can calculate start and end points
+		var position = input.selectionStart = stored_range.text.length - range.text.length;
+//	input.selectionEnd = input.selectionStart + range.text.length;
+
+		var txtbefore = input.value.substring(0,position);
+		var txtafter = input.value.substring(position, txtLen);
+		input.value = txtbefore + code + txtafter;
+		}
+	// for Mozilla
+	else if ((typeof $(input).selectionStart) != 'undefined')
+		{
+		var selEnd = input.selectionEnd;
+		var txtbefore = input.value.substring(0,selEnd);
+		var txtafter =  input.value.substring(selEnd, txtLen);
+		var oldScrollTop = input.scrollTop;
+		input.value = txtbefore + code + txtafter;
+		input.selectionStart = txtbefore.length + code.length;
+		input.selectionEnd = txtbefore.length + code.length;
+		input.scrollTop = oldScrollTop;
+		}
+	else
+		{
+		input.value += code;
+		}
+	input.focus();
 	self.close();
 	}
 }
+
 /* ]]> */
 </script>
 </head>
