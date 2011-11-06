@@ -309,15 +309,15 @@ switch($action)
 		echo '<p>'.$lang['paste_image'].'</p>'."\n";
 		echo '<p><button style="width:25px; height:25px;" title="'.outputLangDebugInAttributes($lang['insert_image_normal']);
 		echo '" onclick="insertCode(\'[img]'.$uploaded_images_path.$filename.'[/img]\');';
-		echo '"><img src="img/img_normal.gif" alt="'.outputLangDebugInAttributes($lang['insert_image_normal']);
+		echo '"><img src="img/img_normal.png" alt="'.outputLangDebugInAttributes($lang['insert_image_normal']);
 		echo '" width="11" height="11" /></button>&nbsp;<button style="width:25px; height:25px;"';
 		echo ' title="'.outputLangDebugInAttributes($lang['insert_image_left']).'" onclick="insertCode(\'[img|left]';
 		echo $uploaded_images_path.$filename.'[/img]\');"><img';
-		echo ' src="img/img_left.gif" alt="'.outputLangDebugInAttributes($lang['insert_image_left']).'" width="11" height="11"';
+		echo ' src="img/img_left.png" alt="'.outputLangDebugInAttributes($lang['insert_image_left']).'" width="11" height="11"';
 		echo ' /></button>&nbsp;<button style="width:25px; height:25px;" title="';
 		echo outputLangDebugInAttributes($lang['insert_image_right']).'" onclick="insertCode(\'[img|right]';
 		echo $uploaded_images_path.$filename.'[/img]\');"><img';
-		echo ' src="img/img_right.gif" alt="'.outputLangDebugInAttributes($lang['insert_image_right']).'" width="11"';
+		echo ' src="img/img_right.png" alt="'.outputLangDebugInAttributes($lang['insert_image_right']).'" width="11"';
 		echo ' height="11" /></button></p>'."\n";
 	break;
 	case 'show_uploaded_images':
