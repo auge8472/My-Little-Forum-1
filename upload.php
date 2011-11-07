@@ -211,7 +211,6 @@ text-decoration:underline;
 }
 -->
 </style>
-<script src="data/prototype.js" type="text/javascript"></script>
 <script type="text/javascript">/* <![CDATA[ */
 
 function insertCode(code) {
@@ -268,7 +267,7 @@ if (opener) {
 		input.value = txtbefore + code + txtafter;
 		}
 	// for Mozilla
-	else if ((typeof $(input).selectionStart) != 'undefined')
+	else if ((typeof input.selectionStart) != 'undefined')
 		{
 		var selEnd = input.selectionEnd;
 		var txtbefore = input.value.substring(0,selEnd);
