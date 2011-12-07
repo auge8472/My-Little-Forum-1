@@ -826,6 +826,7 @@ if (($settings['access_for_users_only'] == 1
 						hp = '". mysql_real_escape_string($hp) ."',
 						place = '". mysql_real_escape_string($place) ."',
 						ip = '". $_SERVER["REMOTE_ADDR"] ."',
+						ip_addr = INET_ATON('". $_SERVER["REMOTE_ADDR"] ."'),
 						text = '". mysql_real_escape_string($text) ."',
 						show_signature = ". intval($show_signature) .",
 						email_notify = ". intval($email_notify) .",
