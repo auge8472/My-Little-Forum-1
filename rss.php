@@ -40,12 +40,13 @@ $result_count = mysql_num_rows($result);
 $rss  = '';
 $rss .= '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 
-$rss .= '<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">'."\n";
+$rss .= '<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">'."\n";
 $rss .= ' <channel>'."\n";
 $rss .= '  <title>'.$settings['forum_name'].'</title>'."\n";
 $rss .= '  <link>'.$settings['forum_address'].'</link>'."\n";
 $rss .= '  <description>'.$settings['forum_name'].'</description>'."\n";
 $rss .= '  <language>'.$lang['language'].'</language>'."\n";
+$rss .= '  <atom:link href="'.$settings['forum_address'].'rss.php" rel="self" type="application/rss+xml" />'."\n";
 
 if ($result_count > 0
 && $settings['provide_rssfeed'] == 1
