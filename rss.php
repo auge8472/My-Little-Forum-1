@@ -91,6 +91,6 @@ $rss .= '</rss>'."\n";
 
 #header("Content-Type: text/html; charset: UTF-8");
 #echo '<pre>'.htmlspecialchars($rss).'</pre>';
-header("Content-Type: text/xml; charset: UTF-8");
+header("Content-Type: application/xml; charset: UTF-8");
 echo $rss;
 ?>
