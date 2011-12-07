@@ -46,14 +46,6 @@ $rss .= '  <title>'.$settings['forum_name'].'</title>'."\n";
 $rss .= '  <link>'.$settings['forum_address'].'</link>'."\n";
 $rss .= '  <description>'.$settings['forum_name'].'</description>'."\n";
 $rss .= '  <language>'.$lang['language'].'</language>'."\n";
-/* Start: Testausgabe
-$rss .= '  <item>'."\n";
-$rss .= '   <title>Der Query</title>'."\n";
-$rss .= '   <content:encoded><![CDATA['.$rssQuery.']]></content:encoded>'."\n";
-$rss .= '   <link>'.$settings['forum_address'].'forum.php</link>'."\n";
-$rss .= '   <pubDate>Thu, 28 Jan 2267 20:33:00 +0100</pubDate>'."\n";
-$rss .= '  </item>'."\n";
-Ende: Testausgabe */
 
 if ($result_count > 0
 && $settings['provide_rssfeed'] == 1
