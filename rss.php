@@ -55,7 +55,7 @@ if ($result_count > 0
 	while ($zeile = mysql_fetch_assoc($result))
 		{
 		$ftext = outputXMLclearedString($zeile["text"]);
-		$ftext = htmlspecialchars($ftext);
+#		$ftext = htmlspecialchars($ftext);
 		$ftext = make_link($ftext);
 		$ftext = preg_replace("#\[msg\](.+?)\[/msg\]#is", "\\1", $ftext);
 		$ftext = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", "\\2 --> \\1", $ftext);
