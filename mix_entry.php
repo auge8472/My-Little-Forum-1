@@ -45,6 +45,7 @@ text,
 category,
 show_signature,
 locked,
+INET_NTOA(ip_addr) AS ip_address,
 ip
 FROM ".$db_settings['forum_table']."
 WHERE id = '".$parent_array[$id]["id"]."'

@@ -78,6 +78,7 @@ if ($settings['access_for_users_only'] == 1
 		hp,
 		place,
 		ip,
+		INET_NTOA(ip_addr) AS ip_address,
 		text,
 		show_signature,
 		category,

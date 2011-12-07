@@ -287,7 +287,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	and ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
 	or $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
 	{
-	$entryIP = '<span class="postinginfo">'.$entry['ip'].'</span>';
+	$entryIP = '<span class="postinginfo">'.$entry['ip_address'].'</span>';
 	}
 
 if ($entry["edited_diff"] > 0
