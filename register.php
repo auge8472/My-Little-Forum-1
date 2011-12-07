@@ -228,7 +228,7 @@ if (isset($_POST['register_submit']))
 			profile = '',
 			last_login = NOW(),
 			last_logout = NOW(),
-			user_ip = '".mysql_real_escape_string($_SERVER["REMOTE_ADDR"])."',
+			ip_addr = INET_ATON('". $_SERVER["REMOTE_ADDR"] ."'),
 			registered = NOW(),
 			user_view = '".mysql_real_escape_string($settings['standard'])."',
 			personal_messages = '1',
