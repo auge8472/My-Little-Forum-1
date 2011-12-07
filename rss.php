@@ -75,7 +75,7 @@ if ($result_count > 0
 		$name = htmlspecialchars($name);
 		$rss .= '  <item>'."\n";
 		$rss .= '   <title>'.$title.'</title>'."\n";
-		$rss .= '   <content:encoded><![CDATA[<i>';
+		$rss .= '   <description><![CDATA[<i>';
 		if ($zeile['pid']==0)
 			{
 			$rss_author_info = str_replace("[name]", $name, $lang['rss_posting_by']);
@@ -85,7 +85,7 @@ if ($result_count > 0
 			$rss_author_info = str_replace("[name]", $name, $lang['rss_reply_by']);
 			}
 		$rss .= str_replace("[time]", $zeile["xtime"], $rss_author_info);
-		$rss .= '</i><br /><br />'.$ftext.']]></content:encoded>'."\n";
+		$rss .= '</i><br /><br />'.$ftext.']]></description>'."\n";
 		$rss .= '   <link>'.$settings['forum_address'].'forum_entry.php?id='.$zeile['id'].'</link>'."\n";
 		$rss .= '   <guid>'.$settings['forum_address'].'forum_entry.php?id='.$zeile['id'].'</guid>'."\n";
 		$rss .= '   <author>'.$name.'</author>'."\n";
