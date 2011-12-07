@@ -40,7 +40,7 @@ $result_count = mysql_num_rows($result);
 $rss  = '';
 $rss .= '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 
-$rss .= '<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">'."\n";
+$rss .= '<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">'."\n";
 $rss .= ' <channel>'."\n";
 $rss .= '  <title>'.$settings['forum_name'].'</title>'."\n";
 $rss .= '  <link>'.$settings['forum_address'].'</link>'."\n";
@@ -80,7 +80,7 @@ if ($result_count > 0
 		$rss .= '</i><br /><br />'.$ftext.']]></description>'."\n";
 		$rss .= '   <link>'.$settings['forum_address'].'forum_entry.php?id='.$zeile['id'].'</link>'."\n";
 		$rss .= '   <guid>'.$settings['forum_address'].'forum_entry.php?id='.$zeile['id'].'</guid>'."\n";
-		$rss .= '   <author>'.$name.'</author>'."\n";
+		$rss .= '   <dc:creator>'.$name.'</dc:creator>'."\n";
 		$rss .= '   <pubDate>'.date("r", $zeile['rss_time']).'</pubDate>'."\n";
 		$rss .= '  </item>'."\n";
 		}
