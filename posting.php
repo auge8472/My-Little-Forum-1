@@ -681,7 +681,7 @@ if (($settings['access_for_users_only'] == 1
 					}
 				}
 			# check the given email address for format name@domain.tld
-			if (!empty($email) and !preg_match("/^[^@]+@.+\.\D{2,}$/", $email)) 
+			if (!empty($email) and !preg_match($validator['email'], $email)) 
 				{
 				$errors[] = $lang['error_email_wrong'];
 				}
