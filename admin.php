@@ -197,11 +197,11 @@ if (isset($_POST['new_category']))
 			$count_result = mysql_query($countCategoriesQuery, $connid);
 			list($category_count) = mysql_fetch_row($count_result);
 			mysql_free_result($count_result);
-			$saveNewCategory = "INSERT INTO ".$db_settings['category_table']." SET
+			$saveNewCategoryQuery = "INSERT INTO ".$db_settings['category_table']." SET
 			category_order = ". $category_count ."+1,
 			category = '". mysql_real_escape_string($new_category) ."',
 			accession = ". $accession;
-			mysql_query($saveNewCategory, $connid);
+			mysql_query($saveNewCategoryQuery, $connid);
 			header("location: ".$settings['forum_address']."admin.php?action=categories");
 			exit();
 			}
@@ -212,7 +212,7 @@ if (isset($_POST['new_category']))
 if (isset($_GET['edit_user']))
 	{
 	$edit_user_id = intval($_GET['edit_user']);
-	$getOneUser = "SELECT
+	$getOneUserQuery = "SELECT
 	user_type,
 	user_name,
 	user_real_name,
@@ -229,7 +229,7 @@ if (isset($_GET['edit_user']))
 	time_difference
 	FROM ". $db_settings['userdata_table'] ."
 	WHERE user_id = '". $edit_user_id ."'";
-	$result = mysql_query($getOneUser, $connid) or die($lang['db_error']);
+	$result = mysql_query($getOneUserQuery, $connid) or die($lang['db_error']);
 	$field = mysql_fetch_assoc($result);
 	mysql_free_result($result);
 	$edit_user_type = $field["user_type"];
