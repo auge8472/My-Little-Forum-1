@@ -424,12 +424,12 @@ if (isset($_POST['edit_user_submit']))
 		time_difference = '". intval($user_time_difference) ."'
 		WHERE user_id = ". intval($edit_user_id);
 		@mysql_query($updateUserDataQuery, $connid) or die($lang['db_error']);
-		$updateUserNameInPostings = "UPDATE ".$db_settings['forum_table']." SET
-		time=time,
-		last_answer=last_answer,
-		edited=edited,
-		name='".mysql_real_escape_string($edit_user_name)."'
-		WHERE user_id=".$edit_user_id;
+		$updateUserNameInPostings = "UPDATE ". $db_settings['forum_table'] ." SET
+		time = time,
+		last_answer = last_answer,
+		edited = edited,
+		name = '". mysql_real_escape_string($edit_user_name) ."'
+		WHERE user_id = ". $edit_user_id;
 		@mysql_query($updateUserNameInPostings, $connid);
 		header('location: '.$settings['forum_address'].'admin.php?action=user');
 		die('<a href="admin.php?action=user">further...</a>');
