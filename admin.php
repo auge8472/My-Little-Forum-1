@@ -154,8 +154,14 @@ if (isset($_GET['mark']))
 	$field = mysql_fetch_assoc($mark_result);
 	mysql_free_result($mark_result);
 	if ($field['marked']==0) $marked = 1; else $marked = 0;
+	$setMarkedQuery = "UPDATE ".$db_settings['forum_table']." SET
+	time = time,
+	last_answer = last_answer,
+	edited = edited,
+	marked = '".$marked."'
+	WHERE tid = '". $_GET['mark'] ."'";
 
-	mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, marked='".$marked."' WHERE tid='".$_GET['mark']."'", $connid);
+	mysql_query($setMarkedQuery, $connid);
 	$url = $_GET['refer']."?id=".$_GET['mark']."&category=".$_GET['category']."&page=".$_GET['page']."&order=".$_GET['order'];
 	header('Location: '.$url);
 	die('<a href="'.$url.'">further...</a>');
