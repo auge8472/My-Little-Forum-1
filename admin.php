@@ -488,22 +488,22 @@ if (isset($_POST['edit_category_submit']))
 	WHERE category LIKE '". mysql_real_escape_string($category) ."'
 	AND id != ". intval($id);
 	$count_result = mysql_query($categoryExistsQuery, $connid);
-	if(!$count_result) die($lang['db_error']);
+	if (!$count_result) die($lang['db_error']);
 	list($category_count) = mysql_fetch_row($count_result);
 	mysql_free_result($count_result);
 
-	if($category_count > 0) $errors[] = $lang_add['category_already_exists'];
-	if(empty($errors))
+	if ($category_count > 0) $errors[] = $lang_add['category_already_exists'];
+	if (empty($errors))
 		{
-		$editCategoryQuery = "UPDATE ".$db_settings['category_table']." SET
-		category='".mysql_real_escape_string($category)."',
-		accession=".$accession."
-		WHERE id=".$id;
+		$editCategoryQuery = "UPDATE ". $db_settings['category_table'] ." SET
+		category='". mysql_real_escape_string($category) ."',
+		accession=". $accession ."
+		WHERE id=". intval($id);
 		mysql_query($editCategoryQuery, $connid);
 		header("location: ".$settings['forum_address']."admin.php?action=categories");
 		die();
 		}
-	$action='edit_category';
+	$action = 'edit_category';
 	} # End: if (isset($_POST['edit_category_submit']))
 
 if (isset($_POST['not_displayed_entries_submit']))
