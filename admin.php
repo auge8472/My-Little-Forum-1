@@ -144,7 +144,12 @@ if(isset($_POST['sql_submit']))
 
 if (isset($_GET['mark']))
 	{
-	$mark_result = mysql_query("SELECT marked FROM ".$db_settings['forum_table']." WHERE id='".$_GET['mark']."' LIMIT 1", $connid);
+	$getMarkedQuery = "SELECT
+	marked
+	FROM ". $db_settings['forum_table'] ."
+	WHERE id='". $_GET['mark'] ."'
+	LIMIT 1";
+	$mark_result = mysql_query($getMarkedQuery, $connid);
 	if (!$mark_result) die($lang['db_error']);
 	$field = mysql_fetch_assoc($mark_result);
 	mysql_free_result($mark_result);
