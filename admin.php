@@ -1688,6 +1688,7 @@ switch ($action)
 				logins,
 				UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS last_login_time,
 				UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS registered_time,
+				INET_NTOA(ip_addr) AS ip_address,
 				user_lock
 				FROM ".$db_settings['userdata_table']."
 				WHERE user_name LIKE '".mysql_real_escape_string($_GET['letter'])."%'
@@ -1705,6 +1706,7 @@ switch ($action)
 				logins,
 				UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS last_login_time,
 				UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS registered_time,
+				INET_NTOA(ip_addr) AS ip_address,
 				user_lock
 				FROM ".$db_settings['userdata_table']."
 				WHERE user_name LIKE '".mysql_real_escape_string($search_user)."%'
@@ -1723,6 +1725,7 @@ switch ($action)
 				logins,
 				UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS last_login_time,
 				UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS registered_time,
+				INET_NTOA(ip_addr) AS ip_address,
 				user_lock
 				FROM ".$db_settings['userdata_table']."
 				ORDER BY ".$order." ".$descasc."
@@ -1887,7 +1890,8 @@ switch ($action)
 					elseif ($zeile["user_type"] == "mod") echo $lang['ud_mod'];
 					else echo $lang['ud_user'];
 					echo '</td>'."\n";
-					echo '<td class="info">'.strftime($lang['time_format'], $zeile["registered_time"]).'</td>'."\n";
+					echo '<td class="info" title="'. htmlspecialchars($zeile['ip_address']);
+					echo '">'.strftime($lang['time_format'], $zeile["registered_time"]).'</td>'."\n";
 					echo '<td class="info">'.$zeile["logins"].'</td>'."\n";
 					echo '<td class="info">';
 					echo ($zeile["logins"] > 0) ? strftime($lang['time_format'], $zeile["last_login_time"]) : "&nbsp;";
