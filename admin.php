@@ -1875,24 +1875,24 @@ switch ($action)
 					$rowClass = ($i % 2 == 0) ? "a" : "b";
 					echo '<tr class="'.$rowClass.'">'."\n";
 					echo '<td><input type="checkbox" name="selected[]" value="'.$zeile["user_id"].'" /></td>'."\n";
-					echo '<td>'.$zeile["user_id"].'</td>'."\n";
+					echo '<td class="info">'.$zeile["user_id"].'</td>'."\n";
 					echo '<td><a href="user.php?id='.$zeile["user_id"].'" title="';
 					echo str_replace("[name]", htmlspecialchars($zeile["user_name"]), $lang['show_userdata_linktitle']).'"><b>';
 					echo htmlspecialchars($zeile["user_name"]).'</b></a></td>'."\n";
-					echo '<td><a href="mailto:'.$zeile["user_email"].'" title="';
+					echo '<td class="info"><a href="mailto:'.$zeile["user_email"].'" title="';
 					echo str_replace("[name]", htmlspecialchars($zeile["user_name"]), $lang_add['mailto_user_lt']);
 					echo '">'.htmlspecialchars($zeile["user_email"]).'</a></td>'."\n";
-					echo '<td>'."\n";
+					echo '<td class="info">'."\n";
 					if ($zeile["user_type"] == "admin") echo $lang['ud_admin'];
 					elseif ($zeile["user_type"] == "mod") echo $lang['ud_mod'];
 					else echo $lang['ud_user'];
 					echo '</td>'."\n";
-					echo '<td>'.strftime($lang['time_format'], $zeile["registered_time"]).'</td>'."\n";
-					echo '<td>'.$zeile["logins"].'</td>'."\n";
-					echo '<td>'."\n";
+					echo '<td class="info">'.strftime($lang['time_format'], $zeile["registered_time"]).'</td>'."\n";
+					echo '<td class="info">'.$zeile["logins"].'</td>'."\n";
+					echo '<td class="info">';
 					echo ($zeile["logins"] > 0) ? strftime($lang['time_format'], $zeile["last_login_time"]) : "&nbsp;";
 					echo '</td>'."\n";
-					echo '<td>'."\n";
+					echo '<td class="info">';
 					if ($zeile["user_lock"] == 0)
 						{
 						echo '<a href="admin.php?user_lock='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc=';
@@ -1908,9 +1908,9 @@ switch ($action)
 						echo '">'.$lang['locked'].'</a>';
 						}
 					echo '</td>'."\n";
-					echo '<td><a href="admin.php?edit_user='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
+					echo '<td class="info"><a href="admin.php?edit_user='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
 					echo '&amp;ul='.$ul.'&amp;sam='.$sam.'">'.$lang_add['edit_link'].'</a></td>'."\n";
-					echo '<td><a href="admin.php?delete_user='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
+					echo '<td class="info"><a href="admin.php?delete_user='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
 					echo '&amp;ul='.$ul.'&amp;sam='.$sam.'">'.$lang_add['delete_link'].'</a></td>'."\n";
 					echo '</tr>'."\n";
 					$i++;
