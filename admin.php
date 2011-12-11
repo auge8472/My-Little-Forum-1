@@ -177,7 +177,12 @@ if (isset($_POST['new_category']))
 		#if(preg_match("/\"/i",$new_category) || preg_match("/</i",$new_category) || preg_match("/>/i",$new_category)) $errors[] = $lang_add['category_invalid_chars'];
 
 		# does this category already exist?
-		$category_result = mysql_query("SELECT category FROM ".$db_settings['category_table']." WHERE category = '".mysql_real_escape_string($new_category)."' LIMIT 1", $connid);
+		$searchForCategoryQuery = "SELECT
+		category
+		FROM ".$db_settings['category_table']."
+		WHERE category = '". mysql_real_escape_string($new_category) ."'
+		LIMIT 1";
+		$category_result = mysql_query($searchForCategoryQuery, $connid);
 		if (!$category_result) die($lang['db_error']);
 		$field = mysql_fetch_assoc($category_result);
 		mysql_free_result($category_result);
