@@ -524,14 +524,20 @@ if (isset($_POST['not_displayed_entries_submit']))
 		}
 	else
 		{
+		$moveEntriesToCatQuery = "UPDATE ".$db_settings['forum_table']." SET
+		time = time,
+		last_answer = last_answer,
+		category = ". intval($_POST['move_category']) ."
+		WHERE category";
 		if(isset($category_ids_query))
 			{
-			mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, category=".intval($_POST['move_category'])." WHERE category NOT IN (".$category_ids_query.")", $connid);
+			$moveEntriesToCatQuery .= " NOT IN (".$category_ids_query.")";
 			}
 		else
 			{
-			mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, category=".intval($_POST['move_category'])." WHERE category != 0", $connid);
+			$moveEntriesToCatQuery .= " != 0";
 			}
+		@mysql_query($moveEntriesToCatQuery, $connid);
 		}
 	header("location: ".$settings['forum_address']."admin.php?action=categories");
 	die();
