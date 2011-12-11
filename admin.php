@@ -575,8 +575,12 @@ if (isset($_GET['move_down_category']))
 	$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['category_table'], $connid);
 	list($category_count) = mysql_fetch_row($count_result);
 	mysql_free_result($count_result);
-
-	$category_result = mysql_query("SELECT category_order FROM ".$db_settings['category_table']." WHERE id = ".$_GET['move_down_category']." LIMIT 1", $connid);
+	$getCatPositionQuery = "SELECT
+	category_order
+	FROM ". $db_settings['category_table'] ."
+	WHERE id = ". intval($_GET['move_down_category']) ."
+	LIMIT 1";
+	$category_result = mysql_query($getCatPositionQuery, $connid);
 	if (!$category_result) die($lang['db_error']);
 	$field = mysql_fetch_array($category_result);
 	mysql_free_result($category_result);
