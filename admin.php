@@ -212,8 +212,25 @@ if (isset($_POST['new_category']))
 if (isset($_GET['edit_user']))
 	{
 	$edit_user_id = intval($_GET['edit_user']);
-	$result = mysql_query("SELECT user_type, user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, user_view, new_posting_notify, new_user_notify, personal_messages, time_difference FROM ".$db_settings['userdata_table']." WHERE user_id = '".$edit_user_id."'", $connid) or die($lang['db_error']);
-	$field = mysql_fetch_array($result);
+	$getOneUser = "SELECT
+	user_type,
+	user_name,
+	user_real_name,
+	user_email,
+	hide_email,
+	user_hp,
+	user_place,
+	signature,
+	profile,
+	user_view,
+	new_posting_notify,
+	new_user_notify,
+	personal_messages,
+	time_difference
+	FROM ". $db_settings['userdata_table'] ."
+	WHERE user_id = '". $edit_user_id ."'";
+	$result = mysql_query($getOneUser, $connid) or die($lang['db_error']);
+	$field = mysql_fetch_assoc($result);
 	mysql_free_result($result);
 	$edit_user_type = $field["user_type"];
 	$user_email = $field["user_email"];
