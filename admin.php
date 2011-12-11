@@ -462,11 +462,11 @@ if (isset($_GET['delete_category']))
 	$categoryDeleteQuery = "SELECT
 	id,
 	category
-	FROM ".$db_settings['category_table']."
-	WHERE id = '".intval($_GET['delete_category'])."'
+	FROM ". $db_settings['category_table'] ."
+	WHERE id = '". intval($_GET['delete_category']) ."'
 	LIMIT 1";
 	$category_result = mysql_query($categoryDeleteQuery, $connid);
-	if(!$category_result) die($lang['db_error']);
+	if (!$category_result) die($lang['db_error']);
 	$field = mysql_fetch_assoc($category_result);
 	mysql_free_result($category_result);
 
