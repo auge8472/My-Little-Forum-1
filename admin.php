@@ -406,23 +406,23 @@ if (isset($_POST['edit_user_submit']))
 	if (empty($errors))
 		{
 		$updateUserDataQuery = "UPDATE ".$db_settings['userdata_table']." SET
-		user_name='".mysql_real_escape_string($edit_user_name)."',
-		user_type='".mysql_real_escape_string($edit_user_type)."',
-		user_email='".mysql_real_escape_string($user_email)."',
-		user_real_name='".mysql_real_escape_string($user_real_name)."',
-		hide_email='".intval($hide_email)."',
-		user_hp='".mysql_real_escape_string($user_hp)."',
-		user_place='".mysql_real_escape_string($user_place)."',
-		profile='".mysql_real_escape_string($profile)."',
-		signature='".mysql_real_escape_string($signature)."',
-		last_login=last_login,
-		registered=registered,
-		user_view='".mysql_real_escape_string($user_view)."',
-		new_posting_notify='".intval($new_posting_notify)."',
-		new_user_notify='".intval($new_user_notify)."',
-		personal_messages='".intval($personal_messages)."',
-		time_difference='".$user_time_difference."'
-		WHERE user_id=".intval($edit_user_id);
+		user_name = '". mysql_real_escape_string($edit_user_name) ."',
+		user_type = '". mysql_real_escape_string($edit_user_type) ."',
+		user_email = '". mysql_real_escape_string($user_email) ."',
+		user_real_name = '". mysql_real_escape_string($user_real_name) ."',
+		hide_email = '". intval($hide_email) ."',
+		user_hp = '". mysql_real_escape_string($user_hp) ."',
+		user_place = '". mysql_real_escape_string($user_place) ."',
+		profile = '". mysql_real_escape_string($profile) ."',
+		signature = '". mysql_real_escape_string($signature) ."',
+		last_login = last_login,
+		registered = registered,
+		user_view = '". mysql_real_escape_string($user_view) ."',
+		new_posting_notify = '". intval($new_posting_notify) ."',
+		new_user_notify = '". intval($new_user_notify) ."',
+		personal_messages = '". intval($personal_messages) ."',
+		time_difference = '". intval($user_time_difference) ."'
+		WHERE user_id = ". intval($edit_user_id);
 		@mysql_query($updateUserDataQuery, $connid) or die($lang['db_error']);
 		$updateUserNameInPostings = "UPDATE ".$db_settings['forum_table']." SET
 		time=time,
