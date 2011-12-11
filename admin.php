@@ -556,9 +556,15 @@ if (isset($_GET['move_up_category']))
 	mysql_free_result($category_result);
 	if ($field['category_order'] > 1)
 		{
-		mysql_query("UPDATE ".$db_settings['category_table']." SET category_order=0 WHERE category_order=".$field['category_order']."-1", $connid);
-		mysql_query("UPDATE ".$db_settings['category_table']." SET category_order=category_order-1 WHERE category_order=".$field['category_order'], $connid);
-		mysql_query("UPDATE ".$db_settings['category_table']." SET category_order=".$field['category_order']." WHERE category_order=0", $connid);
+		mysql_query("UPDATE ". $db_settings['category_table'] ." SET
+		category_order = 0
+		WHERE category_order = ". $field['category_order'] ."-1", $connid);
+		mysql_query("UPDATE ". $db_settings['category_table'] ." SET
+		category_order = category_order-1
+		WHERE category_order = ".$field['category_order'], $connid);
+		mysql_query("UPDATE ". $db_settings['category_table'] ." SET
+		category_order = ". $field['category_order'] ."
+		WHERE category_order = 0", $connid);
 		}
 	header("location: ".$settings['forum_address']."admin.php?action=categories");
 	die();
