@@ -191,7 +191,10 @@ if (isset($_POST['new_category']))
 
 		if(empty($errors))
 			{
-			$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['category_table'], $connid);
+			$countCategoriesQuery = "SELECT
+			COUNT(*)
+			FROM ".$db_settings['category_table'];
+			$count_result = mysql_query($countCategoriesQuery, $connid);
 			list($category_count) = mysql_fetch_row($count_result);
 			mysql_free_result($count_result);
 			mysql_query("INSERT INTO ".$db_settings['category_table']." (category_order, category, accession)
