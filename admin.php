@@ -484,9 +484,9 @@ if (isset($_POST['edit_category_submit']))
 	# does this category already exist?
 	$categoryExistsQuery = "SELECT
 	COUNT(*)
-	FROM ".$db_settings['category_table']."
-	WHERE category LIKE '".mysql_real_escape_string($category)."'
-	AND id != ".intval($id);
+	FROM ". $db_settings['category_table'] ."
+	WHERE category LIKE '". mysql_real_escape_string($category) ."'
+	AND id != ". intval($id);
 	$count_result = mysql_query($categoryExistsQuery, $connid);
 	if(!$count_result) die($lang['db_error']);
 	list($category_count) = mysql_fetch_row($count_result);
