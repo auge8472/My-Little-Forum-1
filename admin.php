@@ -197,8 +197,11 @@ if (isset($_POST['new_category']))
 			$count_result = mysql_query($countCategoriesQuery, $connid);
 			list($category_count) = mysql_fetch_row($count_result);
 			mysql_free_result($count_result);
-			mysql_query("INSERT INTO ".$db_settings['category_table']." (category_order, category, accession)
-      VALUES (".$category_count."+1,'".mysql_real_escape_string($new_category)."',".$accession.")", $connid);
+			$saveNewCategory = "INSERT INTO ".$db_settings['category_table']." SET
+			category_order = ". $category_count ."+1,
+			category = '". mysql_real_escape_string($new_category) ."',
+			accession = ". $accession;
+			mysql_query($saveNewCategory, $connid);
 			header("location: ".$settings['forum_address']."admin.php?action=categories");
 			exit();
 			}
