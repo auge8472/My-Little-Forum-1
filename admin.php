@@ -95,8 +95,13 @@ if (isset($_GET['backup']))
 if(isset($_POST['sql_submit']))
 	{
 	$sql = $_POST['sql'];
+	$passUserQuery = "SELECT
+	user_pw
+	FROM ". $db_settings['userdata_table'] ."
+	WHERE user_id = '". $_SESSION[$settings['session_prefix'].'user_id'] ."'
+	LIMIT 1";
 
-	$pw_result = mysql_query("SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = '".$_SESSION[$settings['session_prefix'].'user_id']."' LIMIT 1", $connid);
+	$pw_result = mysql_query($passUserQuery, $connid);
 	if (!$pw_result) die($lang['db_error']);
 	$field = mysql_fetch_assoc($pw_result);
 	mysql_free_result($pw_result);
