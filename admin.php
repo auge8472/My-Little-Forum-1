@@ -443,11 +443,11 @@ if (isset($_GET['edit_category']))
 	id,
 	category_order,
 	category,
-	accession FROM ".$db_settings['category_table']."
-	WHERE id = '".intval($_GET['edit_category'])."'
+	accession FROM ". $db_settings['category_table'] ."
+	WHERE id = '". intval($_GET['edit_category']) ."'
 	LIMIT 1";
 	$category_result = mysql_query($selectCategoryData, $connid);
-	if(!$category_result) die($lang['db_error']);
+	if (!$category_result) die($lang['db_error']);
 	$field = mysql_fetch_assoc($category_result);
 	mysql_free_result($category_result);
 
