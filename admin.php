@@ -288,7 +288,12 @@ if (isset($_POST['edit_user_submit']))
 		$user_view = $standard;
 		}
 	# does the name already exist?
-	$name_result = mysql_query("SELECT user_id, user_name FROM ".$db_settings['userdata_table']." WHERE user_name = '".mysql_real_escape_string($edit_user_name)."'", $connid) or die($lang['db_error']);
+	$doesNameExistsQuery = "SELECT
+	user_id,
+	user_name
+	FROM ". $db_settings['userdata_table'] ."
+	WHERE user_name = '". mysql_real_escape_string($edit_user_name) ."'";
+	$name_result = mysql_query($doesNameExistsQuery, $connid) or die($lang['db_error']);
 	$field = mysql_fetch_assoc($name_result);
 	mysql_free_result($name_result);
 	if ($edit_user_id != $field['user_id']
