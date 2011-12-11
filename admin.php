@@ -510,14 +510,17 @@ if (isset($_POST['not_displayed_entries_submit']))
 	{
 	if ($_POST['mode'] == "delete")
 		{
-		if(isset($category_ids_query))
+		$delEntriesinInvalidCatQuery = "DELETE FROM ". $db_settings['forum_table'] ."
+		WHERE category";
+		if (isset($category_ids_query))
 			{
-			mysql_query("DELETE FROM ".$db_settings['forum_table']." WHERE category NOT IN (".$category_ids_query.")", $connid);
+			$delEntriesinInvalidCatQuery .= " NOT IN (". $category_ids_query .")";
 			}
 		else
 			{
-			mysql_query("DELETE FROM ".$db_settings['forum_table']." WHERE category != 0", $connid);
+			$delEntriesinInvalidCatQuery .= " != 0";
 			}
+		@mysql_query($delEntriesinInvalidCatQuery, $connid);
 		}
 	else
 		{
