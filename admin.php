@@ -628,11 +628,18 @@ if (isset($_POST['delete_category_submit']))
 		# what to to with the entries of deleted category:
 		if ($_POST['delete_mode'] == "complete")
 			{
-			mysql_query("DELETE FROM ".$db_settings['forum_table']." WHERE category = ".$category_id, $connid);
+			$delPostingsOfDeletedCatQuery = "DELETE FROM ".$db_settings['forum_table']."
+			WHERE category = ".$category_id;
+			mysql_query($delpostingsofDeletedCatQuery, $connid);
 			}
 		else
 			{
-			mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, category=".intval($_POST['move_category'])." WHERE category = ".$category_id, $connid);
+			$movePostingsOfDeletedCatQuery = "UPDATE ".$db_settings['forum_table']." SET
+			time = time,
+			last_answer = last_answer,
+			category = ". intval($_POST['move_category']) ."
+			WHERE category = ".$category_id;
+			mysql_query($movePostingsOfDeletedCatQuery, $connid);
 			}
 		header("location: ".$settings['forum_address']."admin.php?action=categories");
 		die();
