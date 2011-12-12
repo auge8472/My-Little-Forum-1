@@ -610,7 +610,11 @@ if (isset($_POST['delete_category_submit']))
 		WHERE id = ". $category_id;
 		mysql_query($delCatQuery, $connid);
 		# reset order:
-		$result = mysql_query("SELECT id FROM ".$db_settings['category_table']." ORDER BY category_order ASC", $connid);
+		$getCatIDsOerderedByOrderQuery = "SELECT
+		id
+		FROM ". $db_settings['category_table'] ."
+		ORDER BY category_order ASC";
+		$result = mysql_query($getCatIDsOerderedByOrderQuery, $connid);
 		$i=1;
 		while ($data = mysql_fetch_assoc($result))
 			{
