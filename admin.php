@@ -682,7 +682,12 @@ if (isset($_POST['delete_user']))
 		$selected = $_POST['selected'];
 		for ($x=0; $x<count($selected); $x++)
 			{
-			$user_result = mysql_query("SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_id='".$selected[$x]."' LIMIT 1", $connid);
+			$getUsersToDeleteQuery = "SELECT
+			user_name
+			FROM ". $db_settings['userdata_table'] ."
+			WHERE user_id = '". intval($selected[$x]) ."'
+			LIMIT 1";
+			$user_result = mysql_query($getUsersToDeleteQuery, $connid);
 			if (!$user_result) die($lang['db_error']);
 			$user = mysql_fetch_assoc($user_result);
 			mysql_free_result($user_result);
