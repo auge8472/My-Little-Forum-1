@@ -706,21 +706,62 @@ if (isset($_POST['clear_userdata']))
 	switch ($_POST['clear_userdata'])
 		{
 		case 1:
-			$clear_result = mysql_query("SELECT user_id, user_name FROM ".$db_settings['userdata_table']." WHERE user_type != 'admin' AND user_type != 'mod' AND logins=0 AND registered<(NOW()-INTERVAL 2 DAY) ORDER BY user_name", $connid);
+			$clearUserDataQuery = "SELECT
+			user_id,
+			user_name
+			FROM ". $db_settings['userdata_table'] ."
+			WHERE user_type != 'admin'
+			AND user_type != 'mod'
+			AND logins = 0
+			AND registered < (NOW()-INTERVAL 2 DAY)
+			ORDER BY user_name";
 		break;
 		case 2:
-			$clear_result = mysql_query("SELECT user_id, user_name FROM ".$db_settings['userdata_table']." WHERE user_type != 'admin' AND user_type != 'mod' AND ((logins=0 AND registered<(NOW()-INTERVAL 2 DAY)) OR (logins<=1 AND last_login<(NOW()-INTERVAL 30 DAY))) ORDER BY user_name", $connid);
+			$clearUserDataQuery = "SELECT
+			user_id,
+			user_name
+			FROM ". $db_settings['userdata_table'] ."
+			WHERE user_type != 'admin'
+			AND user_type != 'mod'
+			AND ((logins=0 AND registered<(NOW()-INTERVAL 2 DAY))
+				OR (logins<=1 AND last_login<(NOW()-INTERVAL 30 DAY)))
+			ORDER BY user_name";
 		break;
 		case 3:
-			$clear_result = mysql_query("SELECT user_id, user_name FROM ".$db_settings['userdata_table']." WHERE user_type != 'admin' AND user_type != 'mod' AND ((logins=0 AND registered<(NOW()-INTERVAL 2 DAY)) OR (logins<=3 AND last_login<(NOW()-INTERVAL 30 DAY))) ORDER BY user_name", $connid);
+			$clearUserDataQuery = "SELECT
+			user_id,
+			user_name
+			FROM ". $db_settings['userdata_table'] ."
+			WHERE user_type != 'admin'
+			AND user_type != 'mod'
+			AND ((logins=0 AND registered<(NOW()-INTERVAL 2 DAY))
+				OR (logins<=3 AND last_login<(NOW()-INTERVAL 30 DAY)))
+			ORDER BY user_name";
 		break;
 		case 4:
-			$clear_result = mysql_query("SELECT user_id, user_name FROM ".$db_settings['userdata_table']." WHERE user_type != 'admin' AND user_type != 'mod' AND ((logins=0 AND registered<(NOW()-INTERVAL 2 DAY)) OR (last_login<(NOW()-INTERVAL 60 DAY))) ORDER BY user_name", $connid);
+			$clearUserDataQuery = "SELECT
+			user_id,
+			user_name
+			FROM ". $db_settings['userdata_table'] ."
+			WHERE user_type != 'admin'
+			AND user_type != 'mod'
+			AND ((logins=0 AND registered<(NOW()-INTERVAL 2 DAY))
+				OR (last_login<(NOW()-INTERVAL 60 DAY)))
+			ORDER BY user_name";
 		break;
 		case 5:
-			$clear_result = mysql_query("SELECT user_id, user_name FROM ".$db_settings['userdata_table']." WHERE user_type != 'admin' AND user_type != 'mod' AND ((logins=0 AND registered<(NOW()-INTERVAL 2 DAY)) OR (last_login<(NOW()-INTERVAL 30 DAY))) ORDER BY user_name", $connid);
+			$clearUserDataQuery = "SELECT
+			user_id,
+			user_name
+			FROM ". $db_settings['userdata_table'] ."
+			WHERE user_type != 'admin'
+			AND user_type != 'mod'
+			AND ((logins=0 AND registered<(NOW()-INTERVAL 2 DAY))
+				OR (last_login<(NOW()-INTERVAL 30 DAY)))
+			ORDER BY user_name";
 		break;
 		}
+	$clear_result = mysql_query($clearUserDataQuery, $connid);
 	if (!$clear_result) die($lang['db_error']);
 	while ($line = mysql_fetch_assoc($clear_result))
 		{
