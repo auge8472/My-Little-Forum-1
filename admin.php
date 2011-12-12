@@ -662,7 +662,7 @@ if (isset($_GET['delete_user']))
 	$user_id = intval($_GET['delete_user']);
 	$getUserToDeleteQuery = "SELECT
 	user_name
-	FROM ".$db_settings['userdata_table']."
+	FROM ". $db_settings['userdata_table'] ."
 	WHERE user_id = '". intval($user_id) ."'
 	LIMIT 1";
 	$user_result = mysql_query($getUserToDeleteQuery, $connid);
