@@ -606,7 +606,9 @@ if (isset($_POST['delete_category_submit']))
 	if($category_id > 0)
 		{
 		# delete category from category table:
-		mysql_query("DELETE FROM ".$db_settings['category_table']." WHERE id=".$category_id, $connid);
+		$delCatQuery = "DELETE FROM ". $db_settings['category_table'] ."
+		WHERE id = ". $category_id;
+		mysql_query($delCatQuery, $connid);
 		# reset order:
 		$result = mysql_query("SELECT id FROM ".$db_settings['category_table']." ORDER BY category_order ASC", $connid);
 		$i=1;
