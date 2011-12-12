@@ -761,14 +761,17 @@ if (isset($_POST['clear_userdata']))
 			ORDER BY user_name";
 		break;
 		}
-	$clear_result = mysql_query($clearUserDataQuery, $connid);
-	if (!$clear_result) die($lang['db_error']);
-	while ($line = mysql_fetch_assoc($clear_result))
+	if (!empty($clearUserDataQuery))
 		{
-		$selected_usernames[] = $line['user_name'];
-		$selected[] = $line['user_id'];
+		$clear_result = mysql_query($clearUserDataQuery, $connid);
+		if (!$clear_result) die($lang['db_error']);
+		while ($line = mysql_fetch_assoc($clear_result))
+			{
+			$selected_usernames[] = $line['user_name'];
+			$selected[] = $line['user_id'];
+			}
+		mysql_free_result($clear_result);
 		}
-	mysql_free_result($clear_result);
 	if (isset($selected))
 		{
 		$action="delete_users_sure";
