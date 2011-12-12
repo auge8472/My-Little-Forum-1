@@ -618,7 +618,9 @@ if (isset($_POST['delete_category_submit']))
 		$i=1;
 		while ($data = mysql_fetch_assoc($result))
 			{
-			mysql_query("UPDATE ".$db_settings['category_table']." SET category_order=".$i." WHERE id = ".intval($data['id']), $connid);
+			mysql_query("UPDATE ". $db_settings['category_table'] ." SET
+			category_order = ". $i ."
+			WHERE id = ". intval($data['id']), $connid);
 			$i++;
 			}
 		mysql_free_result($result);
