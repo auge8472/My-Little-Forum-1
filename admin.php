@@ -790,10 +790,21 @@ if (isset($_POST['delete_confirmed']))
 	if (isset($_POST['selected_confirmed']))
 		{
 		$selected_confirmed = $_POST['selected_confirmed'];
-		for ($x=0; $x<count($selected_confirmed); $x++)
+		for ($x = 0; $x < count($selected_confirmed); $x++)
 			{
-			$delete_result = mysql_query("DELETE FROM ".$db_settings['userdata_table']." WHERE user_id = '".$selected_confirmed[$x]."'",$connid);
-			$update_result = mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, user_id='0', email_notify='0' WHERE user_id = '".$selected_confirmed[$x]."'", $connid);
+			$deleteUserQuery = "DELETE FROM ".$db_settings['userdata_table']."
+			WHERE user_id = '".$selected_confirmed[$x]."'";
+			$delete_result = mysql_query($deleteUserQuery, $connid);
+			if ($delete_result === true)
+				{
+				$deleteUserIDQuery = "UPDATE ".$db_settings['forum_table']." SET
+				time = time,
+				last_answer = last_answer,
+				user_id = '0',
+				email_notify = '0'
+				WHERE user_id = '".$selected_confirmed[$x]."'";
+				$update_result = mysql_query($deleteUserIDQuery, $connid);
+				}
 			}
 		}
 	$action="user";
