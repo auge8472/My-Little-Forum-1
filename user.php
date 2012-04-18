@@ -215,8 +215,8 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
 		$singleUserNameQuery = "SELECT
 		user_name
-		FROM ".$db_settings['userdata_table']."
-		WHERE user_id = ".intval($uid)."
+		FROM ". $db_settings['userdata_table'] ."
+		WHERE user_id = ". intval($uid) ."
 		LIMIT 1";
 		$userNameResult = @mysql_query($singleUserNameQuery, $connid) or die($lang['db_error']);
 		if (!$userNameResult) die($lang['db_error']);
