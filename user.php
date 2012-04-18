@@ -346,21 +346,21 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 			if (empty($hide_email)) $hide_email = 0;
 			if (empty($errors))
 				{
-				$updateUserData = "UPDATE ".$db_settings['userdata_table']." SET
-				user_real_name='".mysql_real_escape_string($user_real_name)."',
-				hide_email='".$hide_email."',
-				user_hp='".mysql_real_escape_string($user_hp)."',
-				user_place='".mysql_real_escape_string($user_place)."',
-				profile='".mysql_real_escape_string($profile)."',
-				signature='".mysql_real_escape_string($signature)."',
-				last_login=last_login,
-				registered=registered,
-				user_view='".$user_view."',
-				new_posting_notify='".$new_posting_notify."',
-				new_user_notify='".$new_user_notify."',
-				personal_messages='".$personal_messages."',
-				time_difference='".$user_time_difference."'
-				WHERE user_id='".intval($user_id)."'
+				$updateUserData = "UPDATE ". $db_settings['userdata_table'] ." SET
+				user_real_name = '". mysql_real_escape_string($user_real_name) ."',
+				hide_email = '". $hide_email ."',
+				user_hp = '". mysql_real_escape_string($user_hp) ."',
+				user_place = '". mysql_real_escape_string($user_place) ."',
+				profile = '". mysql_real_escape_string($profile) ."',
+				signature = '". mysql_real_escape_string($signature) ."',
+				last_login = last_login,
+				registered = registered,
+				user_view = '". $user_view ."',
+				new_posting_notify = '". $new_posting_notify ."',
+				new_user_notify = '". $new_user_notify ."',
+				personal_messages = '". $personal_messages ."',
+				time_difference = '". $user_time_difference ."'
+				WHERE user_id = '". intval($user_id) ."'
 				LIMIT 1";
 				$update_result = mysql_query($updateUserData, $connid);
 				$_SESSION[$settings['session_prefix'].'user_view'] = $user_view;
