@@ -528,31 +528,31 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 			$action = "usersettings";
 #		break;
 		case "usersettings":
-			$singleUserQuery = "SELECT
+			$getSingleUserQuery = "SELECT
 			user_id,
 			user_type,
 			user_name
-			FROM ".$db_settings['userdata_table']."
-			WHERE user_id = ".intval($user_id);
-			$result = mysql_query($singleUserQuery, $connid);
+			FROM ". $db_settings['userdata_table'] ."
+			WHERE user_id = ". intval($user_id);
+			$result = mysql_query($getSingleUserQuery, $connid);
 			if (!$result) die($lang['db_error']);
 			$field = mysql_fetch_assoc($result);
 			mysql_free_result($result);
-			$userSettingsQuery = "SELECT
+			$getUserSettingsQuery = "SELECT
 			name,
 			value,
 			type
-			FROM ".$db_settings['us_templates_table']."
+			FROM ". $db_settings['us_templates_table'] ."
 			ORDER BY name ASC";
-			$all_settings = mysql_query($userSettingsQuery, $connid);
+			$all_settings = mysql_query($getUserSettingsQuery, $connid);
 			if (!$all_settings) die($lang['db_error']);
-			$userOwnSettings = "SELECT
+			$userOwnSettingsQuery = "SELECT
 			name,
 			value
-			FROM ".$db_settings['usersettings_table']."
-			WHERE user_id = ".intval($user_id)."
+			FROM ". $db_settings['usersettings_table'] ."
+			WHERE user_id = ". intval($user_id) ."
 			ORDER BY name ASC";
-			$own_settings = mysql_query($userOwnSettings, $connid);
+			$own_settings = mysql_query($userOwnSettingsQuery, $connid);
 			if (!$own_settings) die($lang['db_error']);
 			$ownSet = array();
 			while ($row = mysql_fetch_assoc($own_settings))
