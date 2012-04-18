@@ -518,11 +518,11 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		case "submit usersettings":
 			foreach ($_POST['usersetting'] as $key=>$val)
 				{
-				$putUserForumSetting = "INSERT INTO ".$db_settings['usersettings_table']." SET
-				user_id = ".intval($user_id).",
-				name = '".mysql_real_escape_string($key)."',
-				value = '".mysql_real_escape_string($val)."'
-				ON DUPLICATE KEY UPDATE value = '".mysql_real_escape_string($val)."'";
+				$putUserForumSetting = "INSERT INTO ". $db_settings['usersettings_table'] ." SET
+				user_id = ". intval($user_id) .",
+				name = '". mysql_real_escape_string($key) ."',
+				value = '". mysql_real_escape_string($val) ."'
+				ON DUPLICATE KEY UPDATE value = '". mysql_real_escape_string($val) ."'";
 				@mysql_query($putUserForumSetting, $connid);
 				}
 			$action = "usersettings";
