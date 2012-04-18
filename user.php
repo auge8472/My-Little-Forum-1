@@ -162,7 +162,7 @@ if (isset($_POST['change_email_submit']))
 			{
 			$errors[] = $lang['error_email_equal'];
 			}
-		if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $new_email))
+		if (!preg_match($validator['email'], $new_email))
 			{
 			$errors[] = $lang['error_email_wrong'];
 			}
