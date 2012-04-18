@@ -821,10 +821,10 @@ switch ($action)
 		logins,
 		signature,
 		profile,
-		UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS since_date,
-		UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS login_date
-		FROM ".$db_settings['userdata_table']."
-		WHERE user_id = ".intval($id);
+		UNIX_TIMESTAMP(registered + INTERVAL ". $time_difference ." HOUR) AS since_date,
+		UNIX_TIMESTAMP(last_login + INTERVAL ". $time_difference ." HOUR) AS login_date
+		FROM ". $db_settings['userdata_table'] ."
+		WHERE user_id = ". intval($id);
 		$result = mysql_query($singleUserQuery, $connid);
 		if (!$result) die($lang['db_error']);
 		$field = mysql_fetch_assoc($result);
