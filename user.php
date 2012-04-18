@@ -91,15 +91,26 @@ if (isset($_GET['user_lock'])
 	&& ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
 	|| $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
 	{
-	$lock_result = mysql_query("SELECT user_lock, user_type FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_GET['user_lock'])." LIMIT 1", $connid);
+	$getUserLockedQuery = "SELECT
+	user_lock,
+	user_type
+	FROM ". $db_settings['userdata_table'] ."
+	WHERE user_id = ". intval($_GET['user_lock']) ."
+	LIMIT 1";
+	$lock_result = mysql_query($getUserLockedQuery, $connid);
 	if (!$lock_result) die($lang['db_error']);
 	$field = mysql_fetch_assoc($lock_result);
 	mysql_free_result($lock_result);
 	if ($field['user_type'] == "user")
 		{
-		if ($field['user_lock'] == 0) $new_lock = 1;
-		else $new_lock = 0;
-		$update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_lock='".$new_lock."', last_login=last_login, registered=registered WHERE user_id='".$_GET['user_lock']."' LIMIT 1", $connid);
+		$new_lock = ($field['user_lock'] == 0) ? 1 : 0;
+		$changeUserLockQuery = "UPDATE ". $db_settings['userdata_table'] ." SET
+		user_lock = '". $new_lock ."',
+		last_login = last_login,
+		registered = registered
+		WHERE user_id = '". intval($_GET['user_lock']) ."'
+		LIMIT 1";
+		$update_result = mysql_query($changeUserLockQuery, $connid);
 		}
 	$action="show users";
 	}
