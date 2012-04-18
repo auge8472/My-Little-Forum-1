@@ -415,12 +415,26 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 			else $action = "pw";
 		break;
 		case "pm_sent":
-			$pms_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+			# data of the sender of an PM
+			$getUserPMSender = "SELECT
+			user_name,
+			user_email
+			FROM ". $db_settings['userdata_table'] ."
+			WHERE user_id = ". intval($user_id) ."
+			LIMIT 1";
+			$pms_result = mysql_query($getUserPMSender, $connid);
 			if (!$pms_result) die($lang['db_error']);
 			$sender = mysql_fetch_assoc($pms_result);
 			mysql_free_result($pms_result);
-
-			$pmr_result = mysql_query("SELECT user_name, user_email, personal_messages FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_POST['recipient_id'])." LIMIT 1", $connid);
+			# data of the receiver of an PM
+			$getUserPMReceiver = "SELECT
+			user_name,
+			user_email,
+			personal_messages
+			FROM ". $db_settings['userdata_table'] ."
+			WHERE user_id = ". intval($_POST['recipient_id']) ."
+			LIMIT 1";
+			$pmr_result = mysql_query($getUserPMReceiver, $connid);
 			if (!$pmr_result) die($lang['db_error']);
 			$recipient = mysql_fetch_assoc($pmr_result);
 			mysql_free_result($pmr_result);
