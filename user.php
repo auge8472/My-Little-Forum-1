@@ -193,12 +193,12 @@ if (isset($_POST['change_email_submit']))
 			}
 		if(empty($errors))
 			{
-			$updateUserEmailQuery = "UPDATE ".$db_settings['userdata_table']." SET
-			user_email='".mysql_real_escape_string($new_email)."',
-			last_login=last_login,
-			registered=registered,
-			activate_code = '".mysql_real_escape_string($activate_code)."'
-			WHERE user_id= ".intval($user_id);
+			$updateUserEmailQuery = "UPDATE ". $db_settings['userdata_table'] ." SET
+			user_email = '". mysql_real_escape_string($new_email) ."',
+			last_login = last_login,
+			registered = registered,
+			activate_code = '". mysql_real_escape_string($activate_code) ."'
+			WHERE user_id = ". intval($user_id);
 			@mysql_query($updateUserEmailQuery, $connid) or die($lang['db_error']);
 			header("location: ".$settings['forum_address']."login.php");
 			die("<a href=\"login.php\">further...</a>");
