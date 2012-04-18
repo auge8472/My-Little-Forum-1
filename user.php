@@ -1439,38 +1439,38 @@ switch ($action)
 		# there are categories and all categories should be shown
 		else if (is_array($categories))
 			{
-			$threadsQueryWhere = " AND category IN (".$category_ids_query.")";
+			$threadsQueryWhere = " AND category IN (". $category_ids_query .")";
 			}
-		$querySearchPostSubscr = "SELECT
+		$searchPostSubscrQuery = "SELECT
 		id,
 		tid,
 		pid,
-		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
-		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '%Y%m%d%H%i%s') AS sort,
+		DATE_FORMAT(time + INTERVAL ". $time_difference ." HOUR, '". $lang['time_format_sql'] ."') AS Uhrzeit,
+		DATE_FORMAT(time + INTERVAL ". $time_difference ." HOUR, '%Y%m%d%H%i%s') AS sort,
 		subject,
 		name,
 		email_notify
-		FROM ".$db_settings['forum_table']."
-		WHERE user_id = ".$_SESSION[$settings['session_prefix'].'user_id']."
-		AND email_notify = 1".$threadsQueryWhere."
+		FROM ". $db_settings['forum_table'] ."
+		WHERE user_id = ". $_SESSION[$settings['session_prefix'] .'user_id']."
+		AND email_notify = 1". $threadsQueryWhere ."
 		ORDER BY time DESC";
-		$resultSearchPostSubscr = mysql_query($querySearchPostSubscr, $connid);
-		$querySearchThreadSubscr = "SELECT
+		$resultSearchPostSubscr = mysql_query($searchPostSubscrQuery, $connid);
+		$searchThreadSubscrQuery = "SELECT
 		t1.user_id,
 		t1.tid,
 		t2.id,
 		t2.pid,
-		DATE_FORMAT(t2.time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
-		DATE_FORMAT(t2.time + INTERVAL ".$time_difference." HOUR, '%Y%m%d%H%i%s') AS sort,
+		DATE_FORMAT(t2.time + INTERVAL ". $time_difference ." HOUR, '". $lang['time_format_sql'] ."') AS Uhrzeit,
+		DATE_FORMAT(t2.time + INTERVAL ". $time_difference ." HOUR, '%Y%m%d%H%i%s') AS sort,
 		t2.subject,
 		t2.name,
 		t2.email_notify
-		FROM ".$db_settings['usersubscripts_table']." AS t1,
-		".$db_settings['forum_table']." AS t2
-		WHERE t1.user_id = ".$_SESSION[$settings['session_prefix'].'user_id']."
+		FROM ". $db_settings['usersubscripts_table'] ." AS t1,
+		". $db_settings['forum_table'] ." AS t2
+		WHERE t1.user_id = ". $_SESSION[$settings['session_prefix'].'user_id'] ."
 		AND t1.tid = t2.tid
 		AND t2.pid = 0";
-		$resultSearchThreadSubscr = mysql_query($querySearchThreadSubscr, $connid);
+		$resultSearchThreadSubscr = mysql_query($searchThreadSubscrQuery, $connid);
 		if (isset($errors))
 			{
 			echo errorMessages($errors);
