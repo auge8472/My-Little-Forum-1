@@ -409,10 +409,10 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 				registered = registered
 				WHERE user_id = ". intval($user_id);
 				$pw_update_result = mysql_query($updateUserPassword, $connid);
-				header("location: ".$settings['forum_address']."user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']);
-				die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
+				header('location: '. $settings['forum_address'] .'user.php?id='. $_SESSION[$settings['session_prefix'].'user_id']);
+				die('<a href="user.php?id='. $_SESSION[$settings['session_prefix'].'user_id'] .'">further...</a>');
 				}
-			else $action="pw";
+			else $action = "pw";
 		break;
 		case "pm_sent":
 			$pms_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
