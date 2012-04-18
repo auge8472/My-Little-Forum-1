@@ -136,7 +136,15 @@ if (isset($_POST['change_email_submit']))
 	$new_email = trim($_POST['new_email']);
 	$pw_new_email = $_POST['pw_new_email'];
 	# Check data:
-	$email_result = mysql_query("SELECT user_id, user_name, user_pw, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+	$getUserHasNewEmailaddress = "SELECT
+	user_id,
+	user_name,
+	user_pw,
+	user_email
+	FROM ". $db_settings['userdata_table'] ."
+	WHERE user_id = ". intval($user_id) ."
+	LIMIT 1";
+	$email_result = mysql_query($getUserHasNewEmailaddress, $connid);
 	if (!$email_result) die($lang['db_error']);
 	$field = mysql_fetch_assoc($email_result);
 	mysql_free_result($email_result);
