@@ -1036,7 +1036,7 @@ switch ($action)
 		if (empty($order)) $order="user_name";
 		if (empty($descasc)) $descasc="ASC";
 		$ul = $page * $settings['users_per_page'];
-		$allUserQuery  = "SELECT
+		$getAllUsersQuery  = "SELECT
 		user_id,
 		user_name,
 		user_type,
@@ -1044,16 +1044,16 @@ switch ($action)
 		hide_email,
 		user_hp,
 		user_lock
-		FROM ".$db_settings['userdata_table'];
+		FROM ". $db_settings['userdata_table'];
 		if (isset($_GET['letter']))
 			{
 			$allUserQuery .= "
-			WHERE user_name LIKE '".$_GET['letter']."%'";
+			WHERE user_name LIKE '". mysql_real_escape_string($_GET['letter']) ."%'";
 			}
 		$allUserQuery .= "
-		ORDER BY ".$order." ".$descasc."
-		LIMIT ".$ul.", ".$settings['users_per_page'];
-		$result = mysql_query($allUserQuery, $connid);
+		ORDER BY ". $order ." ". $descasc."
+		LIMIT ". $ul .", ". $settings['users_per_page'];
+		$result = mysql_query($getAllUsersQuery, $connid);
 		if (!$result) die($lang['db_error']);
 
 		# Schauen, wer online ist:
