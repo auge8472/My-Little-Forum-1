@@ -1202,8 +1202,8 @@ switch ($action)
 		new_user_notify,
 		personal_messages,
 		time_difference
-		FROM ".$db_settings['userdata_table']."
-		WHERE user_id = ".intval($user_id);
+		FROM ". $db_settings['userdata_table'] ."
+		WHERE user_id = ". intval($user_id);
 		$result = mysql_query($singleUserDataQuery, $connid);
 		if (!$result) die($lang['db_error']);
 		$field = mysql_fetch_assoc($result);
