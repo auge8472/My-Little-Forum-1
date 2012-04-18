@@ -371,7 +371,12 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 			else $action="edit";
 		break;
 		case "pw submited":
-			$pw_result = mysql_query("SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+			$getUserPassword = "SELECT
+			user_pw
+			FROM ". $db_settings['userdata_table'] ."
+			WHERE user_id = ". intval($user_id) ."
+			LIMIT 1";
+			$pw_result = mysql_query($getUserPassword, $connid);
 			if (!$pw_result) die($lang['db_error']);
 			$field = mysql_fetch_assoc($pw_result);
 			mysql_free_result($pw_result);
@@ -398,7 +403,12 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 			# Update, if no errors:
 			if (empty($errors))
 				{
-				$pw_update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_pw='".md5($new_pw)."', last_login=last_login, registered=registered WHERE user_id='".intval($user_id)."'", $connid);
+				$updateUserPassword = "UPDATE ". $db_settings['userdata_table'] ." SET
+				user_pw = '". md5($new_pw) ."',
+				last_login = last_login,
+				registered = registered
+				WHERE user_id = ". intval($user_id);
+				$pw_update_result = mysql_query($updateUserPassword, $connid);
 				header("location: ".$settings['forum_address']."user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']);
 				die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
 				}
