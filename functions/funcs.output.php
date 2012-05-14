@@ -305,7 +305,7 @@ if ($view=='forum')
 	$authorstring = str_replace("[email_hp]", $email_hp, $authorstring);
 	$authorstring = str_replace("[place]", $place, $authorstring);
 	$authorstring = str_replace("[place]", $place, $authorstring);
-	$authorstring = str_replace("[time]", strftime($lang['time_format'],$entry["p_time"]), $authorstring);
+	$authorstring = str_replace("[time]", $entry["posting_time"], $authorstring);
 	$entryID = !empty($entryID) ? ' - '.$entryID : '';
 	$entryedit = (!empty($entryedit)) ? '<br />'.$entryedit : '';
 	$r .= $authorstring.'&nbsp;'.$entryIP.$answer.$entryID.$entryedit;
@@ -330,7 +330,8 @@ else if ($view=='board' or $view=='mix')
 				}
 			}
 		}
-	$r .= $uname.'<br />'."\n".$email_hp.$place."\n<br />".strftime($lang['time_format'],$entry["p_time"]).$entryedit.$separator.$entryIP.$answer.$entryID."\n";
+	$r .= $uname.'<br />'."\n".$email_hp.$place."\n<br />".$entry["posting_time"];
+	$r .= $entryedit.$separator.$entryIP.$answer.$entryID."\n";
 	}
 else
 	{
