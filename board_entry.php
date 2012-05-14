@@ -157,7 +157,6 @@ if ($settings['access_for_users_only'] == 1
 			show_signature,
 			category,
 			locked,
-			ip,
 			INET_NTOA(ip_addr) AS ip_address
 			FROM ".$db_settings['forum_table']."
 			WHERE id = ".$id." LIMIT 1";
@@ -233,7 +232,6 @@ if ($settings['access_for_users_only'] == 1
 			show_signature,
 			category,
 			locked,
-			ip,
 			INET_NTOA(ip_addr) AS ip_address
 			FROM ".$db_settings['forum_table']."
 			WHERE tid = ".intval($id)." AND id != ".intval($id)."
