@@ -107,12 +107,13 @@ if($settings['access_for_users_only']  == 1
 	if (!$threadsResult) die($lang['db_error']);
 
 	$subnav_1 = outputPostingLink($_SESSION[$settings['session_prefix'].'category'], "board");
+	$pagination = ($_SESSION[$settings['session_prefix'].'page'] > 0) ? '&amp;page='.$_SESSION[$settings['session_prefix'].'page'] : '';
 	$cat = ($_SESSION[$settings['session_prefix'].'category'] > 0) ? '&amp;category='.intval($_SESSION[$settings['session_prefix'].'category']) : '';
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
 		$url  = 'index.php?update=1';
-		$url .= ($_SESSION[$settings['session_prefix'].'page'] > 0) ? '&amp;page='.$_SESSION[$settings['session_prefix'].'page'] : '';
+		$url .= $pagination;
 		$url .= $cat;
 		$class = 'update-postings';
 		$title = outputLangDebugInAttributes($lang['update_time_linktitle']);
