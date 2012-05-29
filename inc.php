@@ -108,7 +108,9 @@ if (trim($data['list']) != '')
 		}
 	}
 
-// look if user is banned:
+/**
+ * look if user is banned:
+ */
 if (isset($_SESSION[$settings['session_prefix'].'user_name']))
 	{
 	$ban_result = mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'users' LIMIT 1", $connid);
@@ -128,7 +130,9 @@ if (isset($_SESSION[$settings['session_prefix'].'user_name']))
 		}
 	}
 
-// determine last visit:
+/**
+ * determine last visit:
+ */
 if (empty($_SESSION[$settings['session_prefix']."user_id"])
 && $settings['remember_last_visit'] == 1)
 	{
@@ -160,10 +164,12 @@ if (empty($category)) $category=0;
 
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $category_accession = category_accession();
 
-# count postings, threads, users and users online:
-# no categories defined
+/**
+ * count postings, threads, users and users online:
+ */
 if ($categories === false)
 	{
+	# no categories defined
 	$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0", $connid);
 	list($thread_count) = mysql_fetch_row($count_result);
 	mysql_free_result($count_result);
@@ -171,9 +177,9 @@ if ($categories === false)
 	list($posting_count) = mysql_fetch_row($count_result);
 	mysql_free_result($count_result);
 	}
-# there are categories
 else if (is_array($categories))
 	{
+	# there are categories
 	$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category IN (".$category_ids_query.")", $connid);
 	list($thread_count) = mysql_fetch_row($count_result);
 	mysql_free_result($count_result);
