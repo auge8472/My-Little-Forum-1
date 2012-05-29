@@ -51,7 +51,7 @@ if (get_magic_quotes_gpc())
 
 
 $connid = connect_db($db_settings['host'], $db_settings['user'], $db_settings['pw'], $db_settings['db']);
-get_settings();
+$settings = get_settings();
 include("lang/english.php");
 $lang = outputLangDebugOrNot($lang, "english.php");
 include("lang/".$settings['language_file']);
