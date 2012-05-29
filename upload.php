@@ -211,6 +211,84 @@ text-decoration:underline;
 }
 -->
 </style>
+<script type="text/javascript">/* <![CDATA[ */
+
+function insertCode(code) {
+
+if (!code) code = "";
+
+if (opener) {
+	// get the textarea of the main document and focus the element
+	var input = opener.document.getElementById("text");
+	input.focus();
+	var txtLen = input.value.length;
+	// for IE
+	if (typeof document.selection != 'undefined')
+		{
+		/* 
+		the following code for MSIE is adapted from http://the-stickman.com/web-development/javascript/finding-selection-cursor-position-in-a-textarea-in-internet-explorer/
+		
+		it is licensed unter the terms of the MIT-license
+		see: http://www.opensource.org/licenses/mit-license.php
+		Copyright (c) <year> <copyright holders>
+
+		Permission is hereby granted, free of charge, to any person obtaining
+		a copy of this software and associated documentation files (the "Software"),
+		to deal in the Software without restriction, including without limitation
+		the rights to use, copy, modify, merge, publish, distribute, sublicense,
+		and/or sell copies of the Software, and to permit persons to whom
+		the Software is furnished to do so, subject to the following conditions:
+		
+		The above copyright notice and this permission notice shall be included
+		in all copies or substantial portions of the Software.
+		
+		THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+		OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+		FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+		THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+		OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+		ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+		OR OTHER DEALINGS IN THE SOFTWARE.
+		*/
+		// The current selection
+		var range = opener.document.selection.createRange();
+		// We'll use this as a 'dummy'
+		var stored_range = range.duplicate();
+		// Select all text
+		stored_range.moveToElementText(input);
+		// Now move 'dummy' end point to end point of original range
+		stored_range.setEndPoint( 'EndToEnd', range );
+		// Now we can calculate start and end points
+		var position = input.selectionStart = stored_range.text.length - range.text.length;
+//	input.selectionEnd = input.selectionStart + range.text.length;
+
+		var txtbefore = input.value.substring(0,position);
+		var txtafter = input.value.substring(position, txtLen);
+		input.value = txtbefore + code + txtafter;
+		}
+	// for Mozilla
+	else if ((typeof input.selectionStart) != 'undefined')
+		{
+		var selEnd = input.selectionEnd;
+		var txtbefore = input.value.substring(0,selEnd);
+		var txtafter =  input.value.substring(selEnd, txtLen);
+		var oldScrollTop = input.scrollTop;
+		input.value = txtbefore + code + txtafter;
+		input.selectionStart = txtbefore.length + code.length;
+		input.selectionEnd = txtbefore.length + code.length;
+		input.scrollTop = oldScrollTop;
+		}
+	else
+		{
+		input.value += code;
+		}
+	input.focus();
+	self.close();
+	}
+}
+
+/* ]]> */
+</script>
 </head>
 <body>
 <h1><?php $lang['upload_image_title']; ?></h1>
@@ -245,16 +323,16 @@ switch($action)
 		echo '<img src="img/uploaded/'.$filename.'" alt="" height="100" border="1">'."\n";
 		echo '<p>'.$lang['paste_image'].'</p>'."\n";
 		echo '<p><button style="width:25px; height:25px;" title="'.outputLangDebugInAttributes($lang['insert_image_normal']);
-		echo '" onclick="opener.insert(\'[img]'.$uploaded_images_path.$filename.'[/img]\');';
-		echo ' window.close()"><img src="img/img_normal.gif" alt="'.outputLangDebugInAttributes($lang['insert_image_normal']);
+		echo '" onclick="insertCode(\'[img]'.$uploaded_images_path.$filename.'[/img]\');';
+		echo '"><img src="img/img_normal.png" alt="'.outputLangDebugInAttributes($lang['insert_image_normal']);
 		echo '" width="11" height="11" /></button>&nbsp;<button style="width:25px; height:25px;"';
-		echo ' title="'.outputLangDebugInAttributes($lang['insert_image_left']).'" onclick="opener.insert(\'[img|left]';
-		echo $uploaded_images_path.$filename.'[/img]\'); window.close()"><img';
-		echo ' src="img/img_left.gif" alt="'.outputLangDebugInAttributes($lang['insert_image_left']).'" width="11" height="11"';
+		echo ' title="'.outputLangDebugInAttributes($lang['insert_image_left']).'" onclick="insertCode(\'[img|left]';
+		echo $uploaded_images_path.$filename.'[/img]\');"><img';
+		echo ' src="img/img_left.png" alt="'.outputLangDebugInAttributes($lang['insert_image_left']).'" width="11" height="11"';
 		echo ' /></button>&nbsp;<button style="width:25px; height:25px;" title="';
-		echo outputLangDebugInAttributes($lang['insert_image_right']).'" onclick="opener.insert(\'[img|right]';
-		echo $uploaded_images_path.$filename.'[/img]\'); window.close()"><img';
-		echo ' src="img/img_right.gif" alt="'.outputLangDebugInAttributes($lang['insert_image_right']).'" width="11"';
+		echo outputLangDebugInAttributes($lang['insert_image_right']).'" onclick="insertCode(\'[img|right]';
+		echo $uploaded_images_path.$filename.'[/img]\');"><img';
+		echo ' src="img/img_right.png" alt="'.outputLangDebugInAttributes($lang['insert_image_right']).'" width="11"';
 		echo ' height="11" /></button></p>'."\n";
 	break;
 	case 'show_uploaded_images':
@@ -285,15 +363,16 @@ switch($action)
 		echo '<p>';
 		if ($p>1)
 			{
+			$pageDown = $p - 1;
 			echo '[ <a href="'.$_SERVER['SCRIPT_NAME'].'?action=show_uploaded_images';
-			echo '&amp;p='.$p-1.'">&laquo;</a> ] ';
+			echo '&amp;p='.$pageDown.'">&laquo;</a> ] ';
 			}
 		if ($p*$images_per_page < $images_count)
 			{
+			$pageUp = $p + 1;
 			echo '[ <a href="'.$_SERVER['SCRIPT_NAME'].'?action=show_uploaded_images';
-			echo '&amp;p='.$p+1.'">&raquo;</a> ] ';
+			echo '&amp;p='.$pageUp.'">&raquo;</a> ] ';
 			}
-		echo '[ <a href="'.$_SERVER['SCRIPT_NAME'].'">'.$lang['upload_image_title'].'</a> ]</p>'."\n";
 		echo '<hr /><p>';
 		if ($images_count > 0)
 			{

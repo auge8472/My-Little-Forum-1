@@ -40,20 +40,13 @@ $result_count = mysql_num_rows($result);
 $rss  = '';
 $rss .= '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 
-$rss .= '<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">'."\n";
+$rss .= '<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">'."\n";
 $rss .= ' <channel>'."\n";
 $rss .= '  <title>'.$settings['forum_name'].'</title>'."\n";
 $rss .= '  <link>'.$settings['forum_address'].'</link>'."\n";
 $rss .= '  <description>'.$settings['forum_name'].'</description>'."\n";
 $rss .= '  <language>'.$lang['language'].'</language>'."\n";
-/* Start: Testausgabe
-$rss .= '  <item>'."\n";
-$rss .= '   <title>Der Query</title>'."\n";
-$rss .= '   <content:encoded><![CDATA['.$rssQuery.']]></content:encoded>'."\n";
-$rss .= '   <link>'.$settings['forum_address'].'forum.php</link>'."\n";
-$rss .= '   <pubDate>Thu, 28 Jan 2267 20:33:00 +0100</pubDate>'."\n";
-$rss .= '  </item>'."\n";
-Ende: Testausgabe */
+$rss .= '  <atom:link href="'.$settings['forum_address'].'rss.php" rel="self" type="application/rss+xml" />'."\n";
 
 if ($result_count > 0
 && $settings['provide_rssfeed'] == 1
@@ -62,7 +55,7 @@ if ($result_count > 0
 	while ($zeile = mysql_fetch_assoc($result))
 		{
 		$ftext = outputXMLclearedString($zeile["text"]);
-		$ftext = htmlspecialchars($ftext);
+#		$ftext = htmlspecialchars($ftext);
 		$ftext = make_link($ftext);
 		$ftext = preg_replace("#\[msg\](.+?)\[/msg\]#is", "\\1", $ftext);
 		$ftext = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", "\\2 --> \\1", $ftext);
@@ -75,7 +68,7 @@ if ($result_count > 0
 		$name = htmlspecialchars($name);
 		$rss .= '  <item>'."\n";
 		$rss .= '   <title>'.$title.'</title>'."\n";
-		$rss .= '   <content:encoded><![CDATA[<i>';
+		$rss .= '   <description><![CDATA[<i>';
 		if ($zeile['pid']==0)
 			{
 			$rss_author_info = str_replace("[name]", $name, $lang['rss_posting_by']);
@@ -85,8 +78,10 @@ if ($result_count > 0
 			$rss_author_info = str_replace("[name]", $name, $lang['rss_reply_by']);
 			}
 		$rss .= str_replace("[time]", $zeile["xtime"], $rss_author_info);
-		$rss .= '</i><br /><br />'.$ftext.']]></content:encoded>'."\n";
+		$rss .= '</i><br /><br />'.$ftext.']]></description>'."\n";
 		$rss .= '   <link>'.$settings['forum_address'].'forum_entry.php?id='.$zeile['id'].'</link>'."\n";
+		$rss .= '   <guid>'.$settings['forum_address'].'forum_entry.php?id='.$zeile['id'].'</guid>'."\n";
+		$rss .= '   <dc:creator>'.$name.'</dc:creator>'."\n";
 		$rss .= '   <pubDate>'.date("r", $zeile['rss_time']).'</pubDate>'."\n";
 		$rss .= '  </item>'."\n";
 		}
@@ -96,6 +91,6 @@ $rss .= '</rss>'."\n";
 
 #header("Content-Type: text/html; charset: UTF-8");
 #echo '<pre>'.htmlspecialchars($rss).'</pre>';
-header("Content-Type: text/xml; charset: UTF-8");
+header("Content-Type: application/xml; charset: UTF-8");
 echo $rss;
 ?>

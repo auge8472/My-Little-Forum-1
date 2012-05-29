@@ -145,7 +145,7 @@ if ($settings['access_for_users_only'] == 1
 			tid,
 			pid,
 			user_id,
-			UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS p_time,
+			DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS posting_time,
 			UNIX_TIMESTAMP(time) AS time,
 			UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_time,
 			UNIX_TIMESTAMP(edited - INTERVAL ".$settings['edit_delay']." MINUTE) AS edited_diff,
@@ -160,7 +160,7 @@ if ($settings['access_for_users_only'] == 1
 			show_signature,
 			category,
 			locked,
-			ip
+			INET_NTOA(ip_addr) AS ip_address
 			FROM ".$db_settings['forum_table']."
 			WHERE id = ".$id." LIMIT 1";
 			$result_t = mysql_query($firstPostingQuery, $connid);
@@ -221,7 +221,7 @@ if ($settings['access_for_users_only'] == 1
 			tid,
 			pid,
 			user_id,
-			UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS p_time,
+			DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS posting_time,
 			UNIX_TIMESTAMP(time) AS time,
 			UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_time,
 			UNIX_TIMESTAMP(edited - INTERVAL ".$settings['edit_delay']." MINUTE) AS edited_diff,
@@ -235,7 +235,7 @@ if ($settings['access_for_users_only'] == 1
 			show_signature,
 			category,
 			locked,
-			ip
+			INET_NTOA(ip_addr) AS ip_address
 			FROM ".$db_settings['forum_table']."
 			WHERE tid = ".intval($id)." AND id != ".intval($id)."
 			ORDER BY time ".mysql_real_escape_string($da)."

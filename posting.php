@@ -681,7 +681,7 @@ if (($settings['access_for_users_only'] == 1
 					}
 				}
 			# check the given email address for format name@domain.tld
-			if (!empty($email) and !preg_match("/^[^@]+@.+\.\D{2,}$/", $email)) 
+			if (!empty($email) and !preg_match($validator['email'], $email)) 
 				{
 				$errors[] = $lang['error_email_wrong'];
 				}
@@ -825,7 +825,7 @@ if (($settings['access_for_users_only'] == 1
 						email = '". mysql_real_escape_string($email) ."',
 						hp = '". mysql_real_escape_string($hp) ."',
 						place = '". mysql_real_escape_string($place) ."',
-						ip = '". $_SERVER["REMOTE_ADDR"] ."',
+						ip_addr = INET_ATON('". $_SERVER["REMOTE_ADDR"] ."'),
 						text = '". mysql_real_escape_string($text) ."',
 						show_signature = ". intval($show_signature) .",
 						email_notify = ". intval($email_notify) .",
@@ -1521,7 +1521,7 @@ if (($settings['access_for_users_only'] == 1
 						or isset($_COOKIE['user_hp'])
 						or isset($_COOKIE['user_hp']))
 							{
-							echo '&nbsp;&nbsp;&nbsp;<a onclick="javascript:delete_cookie(); return false;"';
+							echo '&nbsp;&nbsp;&nbsp;<a onclick="javascript:createPopup(this.href, 200, 150); return false;"';
 							echo ' href="delete_cookie.php" title="'.outputLangDebugInAttributes($lang['delete_cookies_linktitle']).'"><img border="0"';
 							echo ' src="img/dc.png" name="dc" alt="" width="12" height="9">'.$lang['delete_cookies_linkname'].'</a>';
 							}

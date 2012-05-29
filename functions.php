@@ -49,15 +49,19 @@ return $value;
  *
  */
 function get_settings() {
-global $lang, $connid, $db_settings, $settings;
+global $lang, $connid, $db_settings;
+
+$r = array();
 
 $result = mysql_query("SELECT name, value FROM ".$db_settings['settings_table'], $connid);
 if (!$result) die($lang['db_error']);
 while ($line = mysql_fetch_assoc($result))
 	{
-	$settings[$line['name']] = $line['value'];
+	$r[$line['name']] = $line['value'];
 	}
 mysql_free_result($result);
+
+return $r;
 } # End: get_settings
 
 

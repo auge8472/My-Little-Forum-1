@@ -231,7 +231,7 @@ switch ($action)
 
 				# send mail with activating link:
 				$ip = $_SERVER["REMOTE_ADDR"];
-				$lang['pwf_activating_email_txt'] = str_replace("[name]", $field["user_name"], satrip_tags($lang['pwf_activating_email_txt']));
+				$lang['pwf_activating_email_txt'] = str_replace("[name]", $field["user_name"], strip_tags($lang['pwf_activating_email_txt']));
 				$lang['pwf_activating_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['pwf_activating_email_txt']);
 				$lang['pwf_activating_email_txt'] = str_replace("[activating_link]", $settings['forum_address']."login.php?activate=".$field["user_id"]."&code=".$pwf_code, $lang['pwf_activating_email_txt']);
 #				$lang['pwf_activating_email_txt'] = stripslashes($lang['pwf_activating_email_txt']);

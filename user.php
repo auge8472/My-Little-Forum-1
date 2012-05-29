@@ -91,15 +91,26 @@ if (isset($_GET['user_lock'])
 	&& ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
 	|| $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
 	{
-	$lock_result = mysql_query("SELECT user_lock, user_type FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_GET['user_lock'])." LIMIT 1", $connid);
+	$getUserLockedQuery = "SELECT
+	user_lock,
+	user_type
+	FROM ". $db_settings['userdata_table'] ."
+	WHERE user_id = ". intval($_GET['user_lock']) ."
+	LIMIT 1";
+	$lock_result = mysql_query($getUserLockedQuery, $connid);
 	if (!$lock_result) die($lang['db_error']);
 	$field = mysql_fetch_assoc($lock_result);
 	mysql_free_result($lock_result);
 	if ($field['user_type'] == "user")
 		{
-		if ($field['user_lock'] == 0) $new_lock = 1;
-		else $new_lock = 0;
-		$update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_lock='".$new_lock."', last_login=last_login, registered=registered WHERE user_id='".$_GET['user_lock']."' LIMIT 1", $connid);
+		$new_lock = ($field['user_lock'] == 0) ? 1 : 0;
+		$changeUserLockQuery = "UPDATE ". $db_settings['userdata_table'] ." SET
+		user_lock = '". $new_lock ."',
+		last_login = last_login,
+		registered = registered
+		WHERE user_id = '". intval($_GET['user_lock']) ."'
+		LIMIT 1";
+		$update_result = mysql_query($changeUserLockQuery, $connid);
 		}
 	$action="show users";
 	}
@@ -125,7 +136,15 @@ if (isset($_POST['change_email_submit']))
 	$new_email = trim($_POST['new_email']);
 	$pw_new_email = $_POST['pw_new_email'];
 	# Check data:
-	$email_result = mysql_query("SELECT user_id, user_name, user_pw, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+	$getUserHasNewEmailaddress = "SELECT
+	user_id,
+	user_name,
+	user_pw,
+	user_email
+	FROM ". $db_settings['userdata_table'] ."
+	WHERE user_id = ". intval($user_id) ."
+	LIMIT 1";
+	$email_result = mysql_query($getUserHasNewEmailaddress, $connid);
 	if (!$email_result) die($lang['db_error']);
 	$field = mysql_fetch_assoc($email_result);
 	mysql_free_result($email_result);
@@ -143,7 +162,7 @@ if (isset($_POST['change_email_submit']))
 			{
 			$errors[] = $lang['error_email_equal'];
 			}
-		if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $new_email))
+		if (!preg_match($validator['email'], $new_email))
 			{
 			$errors[] = $lang['error_email_wrong'];
 			}
@@ -174,12 +193,12 @@ if (isset($_POST['change_email_submit']))
 			}
 		if(empty($errors))
 			{
-			$updateUserEmailQuery = "UPDATE ".$db_settings['userdata_table']." SET
-			user_email='".mysql_real_escape_string($new_email)."',
-			last_login=last_login,
-			registered=registered,
-			activate_code = '".mysql_real_escape_string($activate_code)."'
-			WHERE user_id= ".intval($user_id);
+			$updateUserEmailQuery = "UPDATE ". $db_settings['userdata_table'] ." SET
+			user_email = '". mysql_real_escape_string($new_email) ."',
+			last_login = last_login,
+			registered = registered,
+			activate_code = '". mysql_real_escape_string($activate_code) ."'
+			WHERE user_id = ". intval($user_id);
 			@mysql_query($updateUserEmailQuery, $connid) or die($lang['db_error']);
 			header("location: ".$settings['forum_address']."login.php");
 			die("<a href=\"login.php\">further...</a>");
@@ -196,8 +215,8 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
 		$singleUserNameQuery = "SELECT
 		user_name
-		FROM ".$db_settings['userdata_table']."
-		WHERE user_id = ".intval($uid)."
+		FROM ". $db_settings['userdata_table'] ."
+		WHERE user_id = ". intval($uid) ."
 		LIMIT 1";
 		$userNameResult = @mysql_query($singleUserNameQuery, $connid) or die($lang['db_error']);
 		if (!$userNameResult) die($lang['db_error']);
@@ -327,21 +346,21 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 			if (empty($hide_email)) $hide_email = 0;
 			if (empty($errors))
 				{
-				$updateUserData = "UPDATE ".$db_settings['userdata_table']." SET
-				user_real_name='".mysql_real_escape_string($user_real_name)."',
-				hide_email='".$hide_email."',
-				user_hp='".mysql_real_escape_string($user_hp)."',
-				user_place='".mysql_real_escape_string($user_place)."',
-				profile='".mysql_real_escape_string($profile)."',
-				signature='".mysql_real_escape_string($signature)."',
-				last_login=last_login,
-				registered=registered,
-				user_view='".$user_view."',
-				new_posting_notify='".$new_posting_notify."',
-				new_user_notify='".$new_user_notify."',
-				personal_messages='".$personal_messages."',
-				time_difference='".$user_time_difference."'
-				WHERE user_id='".intval($user_id)."'
+				$updateUserData = "UPDATE ". $db_settings['userdata_table'] ." SET
+				user_real_name = '". mysql_real_escape_string($user_real_name) ."',
+				hide_email = '". $hide_email ."',
+				user_hp = '". mysql_real_escape_string($user_hp) ."',
+				user_place = '". mysql_real_escape_string($user_place) ."',
+				profile = '". mysql_real_escape_string($profile) ."',
+				signature = '". mysql_real_escape_string($signature) ."',
+				last_login = last_login,
+				registered = registered,
+				user_view = '". $user_view ."',
+				new_posting_notify = '". $new_posting_notify ."',
+				new_user_notify = '". $new_user_notify ."',
+				personal_messages = '". $personal_messages ."',
+				time_difference = '". $user_time_difference ."'
+				WHERE user_id = '". intval($user_id) ."'
 				LIMIT 1";
 				$update_result = mysql_query($updateUserData, $connid);
 				$_SESSION[$settings['session_prefix'].'user_view'] = $user_view;
@@ -352,7 +371,12 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 			else $action="edit";
 		break;
 		case "pw submited":
-			$pw_result = mysql_query("SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+			$getUserPassword = "SELECT
+			user_pw
+			FROM ". $db_settings['userdata_table'] ."
+			WHERE user_id = ". intval($user_id) ."
+			LIMIT 1";
+			$pw_result = mysql_query($getUserPassword, $connid);
 			if (!$pw_result) die($lang['db_error']);
 			$field = mysql_fetch_assoc($pw_result);
 			mysql_free_result($pw_result);
@@ -379,19 +403,38 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 			# Update, if no errors:
 			if (empty($errors))
 				{
-				$pw_update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_pw='".md5($new_pw)."', last_login=last_login, registered=registered WHERE user_id='".intval($user_id)."'", $connid);
-				header("location: ".$settings['forum_address']."user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']);
-				die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
+				$updateUserPassword = "UPDATE ". $db_settings['userdata_table'] ." SET
+				user_pw = '". md5($new_pw) ."',
+				last_login = last_login,
+				registered = registered
+				WHERE user_id = ". intval($user_id);
+				$pw_update_result = mysql_query($updateUserPassword, $connid);
+				header('location: '. $settings['forum_address'] .'user.php?id='. $_SESSION[$settings['session_prefix'].'user_id']);
+				die('<a href="user.php?id='. $_SESSION[$settings['session_prefix'].'user_id'] .'">further...</a>');
 				}
-			else $action="pw";
+			else $action = "pw";
 		break;
 		case "pm_sent":
-			$pms_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+			# data of the sender of an PM
+			$getUserPMSender = "SELECT
+			user_name,
+			user_email
+			FROM ". $db_settings['userdata_table'] ."
+			WHERE user_id = ". intval($user_id) ."
+			LIMIT 1";
+			$pms_result = mysql_query($getUserPMSender, $connid);
 			if (!$pms_result) die($lang['db_error']);
 			$sender = mysql_fetch_assoc($pms_result);
 			mysql_free_result($pms_result);
-
-			$pmr_result = mysql_query("SELECT user_name, user_email, personal_messages FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_POST['recipient_id'])." LIMIT 1", $connid);
+			# data of the receiver of an PM
+			$getUserPMReceiver = "SELECT
+			user_name,
+			user_email,
+			personal_messages
+			FROM ". $db_settings['userdata_table'] ."
+			WHERE user_id = ". intval($_POST['recipient_id']) ."
+			LIMIT 1";
+			$pmr_result = mysql_query($getUserPMReceiver, $connid);
 			if (!$pmr_result) die($lang['db_error']);
 			$recipient = mysql_fetch_assoc($pmr_result);
 			mysql_free_result($pmr_result);
@@ -475,41 +518,41 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		case "submit usersettings":
 			foreach ($_POST['usersetting'] as $key=>$val)
 				{
-				$putUserForumSetting = "INSERT INTO ".$db_settings['usersettings_table']." SET
-				user_id = ".intval($user_id).",
-				name = '".mysql_real_escape_string($key)."',
-				value = '".mysql_real_escape_string($val)."'
-				ON DUPLICATE KEY UPDATE value = '".mysql_real_escape_string($val)."'";
+				$putUserForumSetting = "INSERT INTO ". $db_settings['usersettings_table'] ." SET
+				user_id = ". intval($user_id) .",
+				name = '". mysql_real_escape_string($key) ."',
+				value = '". mysql_real_escape_string($val) ."'
+				ON DUPLICATE KEY UPDATE value = '". mysql_real_escape_string($val) ."'";
 				@mysql_query($putUserForumSetting, $connid);
 				}
 			$action = "usersettings";
 #		break;
 		case "usersettings":
-			$singleUserQuery = "SELECT
+			$getSingleUserQuery = "SELECT
 			user_id,
 			user_type,
 			user_name
-			FROM ".$db_settings['userdata_table']."
-			WHERE user_id = ".intval($user_id);
-			$result = mysql_query($singleUserQuery, $connid);
+			FROM ". $db_settings['userdata_table'] ."
+			WHERE user_id = ". intval($user_id);
+			$result = mysql_query($getSingleUserQuery, $connid);
 			if (!$result) die($lang['db_error']);
 			$field = mysql_fetch_assoc($result);
 			mysql_free_result($result);
-			$userSettingsQuery = "SELECT
+			$getUserSettingsQuery = "SELECT
 			name,
 			value,
 			type
-			FROM ".$db_settings['us_templates_table']."
+			FROM ". $db_settings['us_templates_table'] ."
 			ORDER BY name ASC";
-			$all_settings = mysql_query($userSettingsQuery, $connid);
+			$all_settings = mysql_query($getUserSettingsQuery, $connid);
 			if (!$all_settings) die($lang['db_error']);
-			$userOwnSettings = "SELECT
+			$userOwnSettingsQuery = "SELECT
 			name,
 			value
-			FROM ".$db_settings['usersettings_table']."
-			WHERE user_id = ".intval($user_id)."
+			FROM ". $db_settings['usersettings_table'] ."
+			WHERE user_id = ". intval($user_id) ."
 			ORDER BY name ASC";
-			$own_settings = mysql_query($userOwnSettings, $connid);
+			$own_settings = mysql_query($userOwnSettingsQuery, $connid);
 			if (!$own_settings) die($lang['db_error']);
 			$ownSet = array();
 			while ($row = mysql_fetch_assoc($own_settings))
@@ -522,30 +565,42 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 			$blablabla = '';
 			foreach ($_POST as $key => $val)
 				{
+				# the name of the form field was not empty and begun with "id-"
 				if (strpos($key, "id-") !== false)
 					{
 					$kCont = explode("-", $key);
 					$vCont = explode("-", $val);
+					# identic ID in key and value
 					if ($kCont[1] == $vCont[1])
 						{
+						# subscription to a posting
 						if ($vCont[0] === "posting")
 							{
 							# <input type="radio" name="id-235" value="posting-235-214" />
 							# delete thread subscription where a posting subscription is setted
-							$querySubscribe = "UPDATE ".$db_settings['forum_table']." SET
+							$changeThreadSubscribeQuery = "DELETE ". $db_settings['usersubscripts_table'] ."
+							WHERE tid = ". intval($vCont[2]) ."
+							AND user_id = ". intval($user_id) ."
+							LIMIT 1";
+							# set posting subscription
+							$updateSubscribeQuery = "UPDATE ". $db_settings['forum_table'] ." SET
 							email_notify = 1
-							WHERE id = ".intval($vCont[1])." AND user_id = ".intval($user_id);
+							WHERE id = ". intval($vCont[1]) ."
+							AND user_id = ". intval($user_id);
 							}
+						# subscription to a thread
 						else if ($vCont[0] === "thread")
 							{
 							# <input type="radio" name="id-214" value="thread-214-214" />
-							# delete posting subscriptions where the whole thread has a subscription
-							$queryUnsubscribe = "UPDATE ".$db_settings['forum_table']." SET
+							# delete posting subscriptions where the whole thread should be subscribed
+							$updateSubscribeQuery = "UPDATE ". $db_settings['forum_table'] ." SET
 							email_notify = 0
-							WHERE tid = ".intval($vCont[2])." AND user_id = ".intval($user_id);
-							$querySubscribe = "INSERT INTO ".$db_settings['usersubscripts_table']." SET
-							user_id = ".intval($user_id).",
-							tid = ".intval($vCont[2])."
+							WHERE tid = ". intval($vCont[2]) ."
+							AND user_id = ". intval($user_id);
+							# set thread subscription
+							$changeThreadSubscribeQuery = "INSERT INTO ". $db_settings['usersubscripts_table'] ." SET
+							user_id = ". intval($user_id) .",
+							tid = ". intval($vCont[2]) ."
 							ON DUPLICATE KEY UPDATE
 							user_id = user_id,
 							tid = tid";
@@ -555,41 +610,53 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 							# <input type="radio" name="id-235" value="none-235-214" />
 							# <input type="radio" name="id-214" value="none-214-214" />
 							# delete every possible subscription where subscription is setted to "none"
-							$querySearchPostingSubscription = "SELECT
+							$getSearchPostingSubscriptionQuery = "SELECT
 							email_notify
-							FROM ".$db_settings['forum_table']."
-							WHERE id = ".intval($vCont[1])." AND user_id = ".intval($user_id);
-							$resultSPS = mysql_query($querySearchPostingSubscription, $connid);
+							FROM ". $db_settings['forum_table'] ."
+							WHERE id = ". intval($vCont[1]) ."
+							AND user_id = ". intval($user_id);
+							$resultSPS = mysql_query($getSearchPostingSubscriptionQuery, $connid);
 							if (!$resultSPS) $querySubscribe = 'reading of '.$db_settings['forum_table'].' failed';
 							else $subscriptPosting = mysql_fetch_assoc($resultSPS);
-							$querySearchThreadSubscription = "SELECT
+							$getSearchThreadSubscriptionQuery = "SELECT
 							user_id,
 							tid
-							FROM ".$db_settings['usersubscripts_table']."
-							WHERE tid = ".intval($vCont[2])." AND user_id = ".intval($user_id);
-							$resultSTS = mysql_query($querySearchThreadSubscription, $connid);
+							FROM ". $db_settings['usersubscripts_table'] ."
+							WHERE tid = ". intval($vCont[2]) ."
+							AND user_id = ". intval($user_id);
+							$resultSTS = mysql_query($getSearchThreadSubscriptionQuery, $connid);
 							if (!$resultSTS) $querySubscribe = 'reading of '.$db_settings['usersubscripts_table'].' failed';
 							else $subscriptThread = mysql_fetch_assoc($resultSTS);
 							if (!empty($subscriptPosting)
 								and $subscriptPosting['email_notify'] == 1)
 								{
-								$querySubscribe = "UPDATE ".$db_settings['forum_table']." SET
+								$updateSubscribeQuery = "UPDATE ". $db_settings['forum_table'] ." SET
 								email_notify = 0
-								WHERE id = ".intval($vCont[1])." AND user_id = ".intval($user_id)." LIMIT 1";
+								WHERE id = ". intval($vCont[1]) ."
+								AND user_id = ". intval($user_id) ."
+								LIMIT 1";
 								}
 							else if (!empty($subscriptThread)
 								and ($subscriptThread['user_id'] == $user_id
 								and $subscriptThread['tid'] == $vCont[2]))
 								{
-								$querySubscribe = "DELETE FROM ".$db_settings['usersubscripts_table']."
-								WHERE tid = ".intval($vCont[2])." AND user_id = ".intval($user_id)." LIMIT 1";
+								$updateSubscribeQuery = "DELETE FROM ". $db_settings['usersubscripts_table'] ."
+								WHERE tid = ". intval($vCont[2]) ."
+								AND user_id = ". intval($user_id) ."
+								LIMIT 1";
 								}
 							}
-						if (!empty($querySubscribe))
+						if (!empty($updateSubscribeQuery))
 							{
-							$resultSS = mysql_query($querySubscribe, $connid);
+							$resultSS = mysql_query($updateSubscribeQuery, $connid);
 							if (!$resultSS) die($lang['db_error']);
-							unset($querySubscribe);
+							unset($updateSubscribeQuery);
+							}
+						if (!empty($changeThreadSubscribeQuery))
+							{
+							$resultTS = mysql_query($changeThreadSubscribeQuery, $connid);
+							if (!resultTS) die($lang['db_error']);
+							unset($changeThreadSubscribeQuery);
 							}
 						}
 					}
@@ -754,10 +821,10 @@ switch ($action)
 		logins,
 		signature,
 		profile,
-		UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS since_date,
-		UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS login_date
-		FROM ".$db_settings['userdata_table']."
-		WHERE user_id = ".intval($id);
+		UNIX_TIMESTAMP(registered + INTERVAL ". $time_difference ." HOUR) AS since_date,
+		UNIX_TIMESTAMP(last_login + INTERVAL ". $time_difference ." HOUR) AS login_date
+		FROM ". $db_settings['userdata_table'] ."
+		WHERE user_id = ". intval($id);
 		$result = mysql_query($singleUserQuery, $connid);
 		if (!$result) die($lang['db_error']);
 		$field = mysql_fetch_assoc($result);
@@ -969,7 +1036,7 @@ switch ($action)
 		if (empty($order)) $order="user_name";
 		if (empty($descasc)) $descasc="ASC";
 		$ul = $page * $settings['users_per_page'];
-		$allUserQuery  = "SELECT
+		$getAllUsersQuery  = "SELECT
 		user_id,
 		user_name,
 		user_type,
@@ -977,16 +1044,16 @@ switch ($action)
 		hide_email,
 		user_hp,
 		user_lock
-		FROM ".$db_settings['userdata_table'];
+		FROM ". $db_settings['userdata_table'];
 		if (isset($_GET['letter']))
 			{
 			$allUserQuery .= "
-			WHERE user_name LIKE '".$_GET['letter']."%'";
+			WHERE user_name LIKE '". mysql_real_escape_string($_GET['letter']) ."%'";
 			}
 		$allUserQuery .= "
-		ORDER BY ".$order." ".$descasc."
-		LIMIT ".$ul.", ".$settings['users_per_page'];
-		$result = mysql_query($allUserQuery, $connid);
+		ORDER BY ". $order ." ". $descasc."
+		LIMIT ". $ul .", ". $settings['users_per_page'];
+		$result = mysql_query($getAllUsersQuery, $connid);
 		if (!$result) die($lang['db_error']);
 
 		# Schauen, wer online ist:
@@ -1135,8 +1202,8 @@ switch ($action)
 		new_user_notify,
 		personal_messages,
 		time_difference
-		FROM ".$db_settings['userdata_table']."
-		WHERE user_id = ".intval($user_id);
+		FROM ". $db_settings['userdata_table'] ."
+		WHERE user_id = ". intval($user_id);
 		$result = mysql_query($singleUserDataQuery, $connid);
 		if (!$result) die($lang['db_error']);
 		$field = mysql_fetch_assoc($result);
@@ -1372,38 +1439,38 @@ switch ($action)
 		# there are categories and all categories should be shown
 		else if (is_array($categories))
 			{
-			$threadsQueryWhere = " AND category IN (".$category_ids_query.")";
+			$threadsQueryWhere = " AND category IN (". $category_ids_query .")";
 			}
-		$querySearchPostSubscr = "SELECT
+		$searchPostSubscrQuery = "SELECT
 		id,
 		tid,
 		pid,
-		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
-		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '%Y%m%d%H%i%s') AS sort,
+		DATE_FORMAT(time + INTERVAL ". $time_difference ." HOUR, '". $lang['time_format_sql'] ."') AS Uhrzeit,
+		DATE_FORMAT(time + INTERVAL ". $time_difference ." HOUR, '%Y%m%d%H%i%s') AS sort,
 		subject,
 		name,
 		email_notify
-		FROM ".$db_settings['forum_table']."
-		WHERE user_id = ".$_SESSION[$settings['session_prefix'].'user_id']."
-		AND email_notify = 1".$threadsQueryWhere."
+		FROM ". $db_settings['forum_table'] ."
+		WHERE user_id = ". $_SESSION[$settings['session_prefix'] .'user_id']."
+		AND email_notify = 1". $threadsQueryWhere ."
 		ORDER BY time DESC";
-		$resultSearchPostSubscr = mysql_query($querySearchPostSubscr, $connid);
-		$querySearchThreadSubscr = "SELECT
+		$resultSearchPostSubscr = mysql_query($searchPostSubscrQuery, $connid);
+		$searchThreadSubscrQuery = "SELECT
 		t1.user_id,
 		t1.tid,
 		t2.id,
 		t2.pid,
-		DATE_FORMAT(t2.time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
-		DATE_FORMAT(t2.time + INTERVAL ".$time_difference." HOUR, '%Y%m%d%H%i%s') AS sort,
+		DATE_FORMAT(t2.time + INTERVAL ". $time_difference ." HOUR, '". $lang['time_format_sql'] ."') AS Uhrzeit,
+		DATE_FORMAT(t2.time + INTERVAL ". $time_difference ." HOUR, '%Y%m%d%H%i%s') AS sort,
 		t2.subject,
 		t2.name,
 		t2.email_notify
-		FROM ".$db_settings['usersubscripts_table']." AS t1,
-		".$db_settings['forum_table']." AS t2
-		WHERE t1.user_id = ".$_SESSION[$settings['session_prefix'].'user_id']."
+		FROM ". $db_settings['usersubscripts_table'] ." AS t1,
+		". $db_settings['forum_table'] ." AS t2
+		WHERE t1.user_id = ". $_SESSION[$settings['session_prefix'].'user_id'] ."
 		AND t1.tid = t2.tid
 		AND t2.pid = 0";
-		$resultSearchThreadSubscr = mysql_query($querySearchThreadSubscr, $connid);
+		$resultSearchThreadSubscr = mysql_query($searchThreadSubscrQuery, $connid);
 		if (isset($errors))
 			{
 			echo errorMessages($errors);

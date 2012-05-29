@@ -228,7 +228,7 @@ if (isset($_POST['register_submit']))
 			profile = '',
 			last_login = NOW(),
 			last_logout = NOW(),
-			user_ip = '".mysql_real_escape_string($_SERVER["REMOTE_ADDR"])."',
+			ip_addr = INET_ATON('". $_SERVER["REMOTE_ADDR"] ."'),
 			registered = NOW(),
 			user_view = '".mysql_real_escape_string($settings['standard'])."',
 			personal_messages = '1',
@@ -243,7 +243,7 @@ if (isset($_POST['register_submit']))
 			mysql_free_result($new_user_id_result);
 
 			# send e-mail with activation key to new user:
-			$emailbody = strip_tags($lang['new_user_email_txt'])
+			$emailbody = strip_tags($lang['new_user_email_txt']);
 			$emailbody = str_replace("[name]", $new_user_name, $emailbody);
 			$emailbody = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$new_user_id."&key=".$activate_code, $emailbody);
 			$subject = strip_tags($lang['new_user_email_sj']);
