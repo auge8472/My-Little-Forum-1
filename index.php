@@ -61,76 +61,39 @@ if (isset($_GET['update'])
 	{
 	$_SESSION[$settings['session_prefix'].'newtime'] = time();
 	$update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET last_login=last_login, last_logout=NOW(), registered=registered WHERE user_id='".$_SESSION[$settings['session_prefix'].'user_id']."'", $connid);
-	if (empty($_GET['view']))
+	if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
+		and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
 		{
-		header("location: ".$settings['forum_address']."forum.php".$qs);
-		die("<a href=\"forum.php".$qsl."\">further...</a>");
+		$targetView = processView2Filename($_SESSION[$settings['session_prefix'].'curr_view']);
 		}
-	else if (isset($_GET['view']) && $_GET['view']=="board")
+	else if (!empty($_COOKIE['curr_view'])
+		and in_array($_COOKIE['curr_view'], $possViews))
 		{
-		header("location: ".$settings['forum_address']."board.php".$qs);
-		die("<a href=\"board.php".$qsl."\">further...</a>");
+		$targetView = processView2Filename($_COOKIE['curr_view']);
 		}
-	else if (isset($_GET['view']) && $_GET['view']=="mix")
+	else
 		{
-		header("location: ".$settings['forum_address']."mix.php".$qs);
-		die("<a href=\"mix.php".$qsl."\">further...</a>");
+		$targetView = processView2Filename($settings['standard']);
 		}
+	header("location: ".$settings['forum_address'].$targetView.$qs);
+	die('<a href="'. $targetView.$qsl .'">further...</a>');
 	}
 
-if (isset($_SESSION[$settings['session_prefix'].'user_view']))
+if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
 	{
-	if ($_SESSION[$settings['session_prefix'].'user_view'] == "board")
-		{
-		header("location: ".$settings['forum_address']."board.php".$qs);
-		die("<a href=\"board.php\">further...</a>");
-		}
-	else if ($_SESSION[$settings['session_prefix'].'user_view'] == "mix")
-		{
-		header("location: ".$settings['forum_address']."mix.php".$qs);
-		die("<a href=\"mix.php\">further...</a>");
-		}
-	else
-		{
-		header("location: ".$settings['forum_address']."forum.php".$qs);
-		die("<a href=\"forum.php\">further...</a>");
-		}
+	$targetView = processView2Filename($_SESSION[$settings['session_prefix'].'user_view']);
 	}
-else if (isset($_COOKIE['user_view']))
+else if (isset($_COOKIE['user_view'])
+	and in_array($_COOKIE['user_view'], $possViews))
 	{
-	if ($_COOKIE['user_view'] == "board")
-		{
-		header("location: ".$settings['forum_address']."board.php".$qs);
-		die("<a href=\"board.php\">further...</a>");
-		}
-	else if ($_COOKIE['user_view'] == "mix")
-		{
-		header("location: ".$settings['forum_address']."mix.php".$qs);
-		die("<a href=\"mix.php\">further...</a>");
-		}
-	else
-		{
-		header("location: ".$settings['forum_address']."forum.php".$qs);
-		die("<a href=\"forum.php\">further...</a>");
-		}
+	$targetView = processView2Filename($_COOKIE['user_view']);
 	}
 else
 	{
-	if ($settings['standard'] == "board")
-		{
-		header("location: ".$settings['forum_address']."board.php".$qs);
-		die("<a href=\"board.php\">further...</a>");
-		}
-	else if ($settings['standard'] == "mix")
-		{
-		header("location: ".$settings['forum_address']."mix.php".$qs);
-		die("<a href=\"mix.php\">further...</a>");
-		}
-	else
-		{
-		header("location: ".$settings['forum_address']."forum.php".$qs);
-		die("<a href=\"forum.php\">further...</a>");
-		}
+	$targetView = processView2Filename($settings['standard']);
 	}
+header("location: ".$settings['forum_address'].$targetView.$qs);
+die('<a href="'. $targetView.$qsl .'">further...</a>');
 
 ?>

@@ -504,4 +504,25 @@ else
 	}
 } # End: processStandardParametersGET
 
+
+
+/**
+ * process the view names to the according file names
+ *
+ * @param string $view
+ * @return string $filename
+ */
+function processView2Filename($view) {
+$fname = '';
+if ($view == 'thread')
+	{
+	$fname = 'forum.php';
+	}
+else
+	{
+	$fname = $view .'.php';
+	}
+return $fname;
+} #End: processView2Filename
+
 ?>
