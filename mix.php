@@ -108,7 +108,7 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
-		$url  = 'index.php?update=1&amp;view=mix';
+		$url  = 'index.php?update=1';
 		$url .= $cat;
 		$class = 'update-postings';
 		$title = outputLangDebugInAttributes($lang['update_time_linktitle']);
