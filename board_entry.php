@@ -177,7 +177,7 @@ if ($settings['access_for_users_only'] == 1
 				if (is_array($category_ids) && !in_array($thread['category'], $category_ids))
 					{
 					header("location: ".$settings['forum_address']."board.php");
-					die();
+					die('<a href="'. $settings['forum_address'] .'board.php">further...</a>');
 					}
 				}
 
