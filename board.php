@@ -41,10 +41,12 @@ if($settings['access_for_users_only']  == 1
 		{
 		setcookie("user_view","board",time()+(3600*24*30));
 		}
-
+	# process the standard parameters
+	# and put them into the session
+	processStandardParametersGET();
 	unset($zeile);
 
-	if (empty($page)) $page = 0;
+#	if (empty($page)) $page = 0;
 	if (empty($order)) $order="last_answer";
 	if (empty($descasc)) $descasc="DESC";
 	if (isset($descasc) && $descasc=="ASC")
@@ -56,7 +58,7 @@ if($settings['access_for_users_only']  == 1
 		$descasc = "DESC";
 		}
 
-	$ul = $page * $settings['topics_per_page'];
+	$ul = $_SESSION[$settings['session_prefix'].'page'] * $settings['topics_per_page'];
 
 	# database request
 	# no categories defined
@@ -65,16 +67,19 @@ if($settings['access_for_users_only']  == 1
 		$threadsQueryWhere = '';
 		}
 	# there are categories and all categories should be shown
-	else if (is_array($categories) && $category == 0)
+	else if (is_array($categories)
+		&& $_SESSION[$settings['session_prefix'].'category'] == 0)
 		{
 		$threadsQueryWhere = " AND category IN (".$category_ids_query.")";
 		}
 	# there are categories and only one category should be shown
-	else if (is_array($categories) && $category != 0 && in_array($category, $category_ids))
+	else if (is_array($categories)
+		&& $_SESSION[$settings['session_prefix'].'category'] != 0
+		&& in_array($_SESSION[$settings['session_prefix'].'category'], $category_ids))
 		{
-		$threadsQueryWhere = " AND category = '".mysql_real_escape_string($category)."'";
+		$threadsQueryWhere = " AND category = '".mysql_real_escape_string($_SESSION[$settings['session_prefix'].'category'])."'";
 		// how many entries?
-		$pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '".mysql_real_escape_string($category)."'", $connid);
+		$pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '".mysql_real_escape_string($_SESSION[$settings['session_prefix'].'category'])."'", $connid);
 		list($thread_count) = mysql_fetch_row($pid_result);
 		mysql_free_result($pid_result);
 		}
@@ -96,20 +101,18 @@ if($settings['access_for_users_only']  == 1
 			WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
 		FROM ".$db_settings['forum_table']." AS t1
 		WHERE pid = 0".$threadsQueryWhere."
-		ORDER BY fixed DESC, ".$order." ".$descasc."
+		ORDER BY fixed DESC, ".$order." ".$_SESSION[$settings['session_prefix'].'descasc']."
 		LIMIT ".$ul.", ".$settings['topics_per_page'];
 	$threadsResult = mysql_query($threadsQuery, $connid);
 	if (!$threadsResult) die($lang['db_error']);
 
-	$category = stripslashes($category);
-
-	$subnav_1 = outputPostingLink($category,"board");
-	$cat = ($category > 0) ? '&amp;category='.intval($category) : '';
+	$subnav_1 = outputPostingLink($_SESSION[$settings['session_prefix'].'category'], "board");
+	$pagination = ($_SESSION[$settings['session_prefix'].'page'] > 0) ? '&amp;page='.$_SESSION[$settings['session_prefix'].'page'] : '';
+	$cat = ($_SESSION[$settings['session_prefix'].'category'] > 0) ? '&amp;category='.intval($_SESSION[$settings['session_prefix'].'category']) : '';
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
-		$url  = 'index.php?update=1&amp;view=board';
-		$url .= $cat;
+		$url  = 'index.php?update=1'. $pagination.$cat;
 		$class = 'update-postings';
 		$title = outputLangDebugInAttributes($lang['update_time_linktitle']);
 		$linktext = $lang['update_time_linkname'];
@@ -133,8 +136,8 @@ if($settings['access_for_users_only']  == 1
 		$linktext = $lang['mix_view_linkname'];
 		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
-	$subnav_2 .= nav($page, $settings['topics_per_page'], $thread_count, $order, $descasc, $category);
-	$subnav_2 .= outputCategoriesList($categories, $category);
+	$subnav_2 .= nav($_SESSION[$settings['session_prefix'].'page'], $settings['topics_per_page'], $thread_count, $order, $_SESSION[$settings['session_prefix'].'descasc'], $_SESSION[$settings['session_prefix'].'category']);
+	$subnav_2 .= outputCategoriesList($categories, $_SESSION[$settings['session_prefix'].'category']);
 
 	parse_template();
 	echo $header;
@@ -146,11 +149,12 @@ echo '<pre>'. print_r($_COOKIE, true) .'</pre>';
 */
 	if ($thread_count > 0 && isset($threadsResult))
 		{
-		$currDescAsc = strtolower($descasc);
+		$currDescAsc = strtolower($_SESSION[$settings['session_prefix'].'descasc']);
 		echo '<table class="normaltab">'."\n";
 		echo '<tr class="titlerow">'."\n";
-		echo '<th><a href="board.php?category='.$category.'&amp;order=subject&amp;descasc=';
-		echo ($descasc=="ASC" && $order=="subject") ? 'DESC' : 'ASC';
+		echo '<th><a href="board.php?order=subject&amp;descasc=';
+		echo ($_SESSION[$settings['session_prefix'].'descasc']=="ASC" && $order=="subject") ? 'DESC' : 'ASC';
+		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_subject_headline'].'</a>';
 		if ($order=="subject")
 			{
@@ -159,8 +163,9 @@ echo '<pre>'. print_r($_COOKIE, true) .'</pre>';
 		echo '</th>'."\n";
 		if ($categories!=false && $category == 0)
 			{
-			echo '<th><a href="board.php?category='.$category.'&amp;order=category&amp;descasc=';
-			echo ($descasc=="ASC" && $order=="category") ? 'DESC' : 'ASC';
+			echo '<th><a href="board.php?order=category&amp;descasc=';
+			echo ($_SESSION[$settings['session_prefix'].'descasc']=="ASC" && $order=="category") ? 'DESC' : 'ASC';
+			echo $cat;
 			echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_category_headline'].'</a>';
 			if ($order=="category")
 				{
@@ -168,16 +173,18 @@ echo '<pre>'. print_r($_COOKIE, true) .'</pre>';
 				}
 			echo '</th>'."\n";
 			}
-		echo '<th><a href="board.php?category='.$category.'&amp;order=name&amp;descasc=';
-		echo ($descasc=="ASC" && $order=="name") ? 'DESC' : 'ASC';
+		echo '<th><a href="board.php?order=name&amp;descasc=';
+		echo ($_SESSION[$settings['session_prefix'].'descasc']=="ASC" && $order=="name") ? 'DESC' : 'ASC';
+		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_author_headline'].'</a>'."\n";
 		if ($order=="name")
 			{
 			echo outputImageDescAsc($currDescAsc);
 			}
 		echo '</th>'."\n";
-		echo '<th><a href="board.php?category='.$category.'&amp;order=time&amp;descasc=';
-		echo ($descasc=="DESC" && $order=="time") ? "ASC" : "DESC";
+		echo '<th><a href="board.php?order=time&amp;descasc=';
+		echo ($_SESSION[$settings['session_prefix'].'descasc']=="DESC" && $order=="time") ? "ASC" : "DESC";
+		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_date_headline'].'</a>'."\n";
 		if ($order=="time")
 			{
@@ -185,8 +192,9 @@ echo '<pre>'. print_r($_COOKIE, true) .'</pre>';
 			}
 		echo '</th>'."\n";
 		echo '<th>'.$lang['board_answers_headline'].'</th>'."\n";
-		echo '<th><a href="board.php?category='.$category.'&amp;order=last_answer&amp;descasc=';
-		echo ($descasc=="DESC" && $order=="last_answer") ? "ASC" : "DESC";
+		echo '<th><a href="board.php?order=last_answer&amp;descasc=';
+		echo ($_SESSION[$settings['session_prefix'].'descasc']=="DESC" && $order=="last_answer") ? "ASC" : "DESC";
+		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_last_answer_headline'].'</a>'."\n";
 		if ($order=="last_answer")
 			{
@@ -239,13 +247,8 @@ echo '<pre>'. print_r($_COOKIE, true) .'</pre>';
 				{
 				echo 'thread';
 				}
-			echo '" href="board_entry.php?id='.$zeile["tid"];
-			if ($page != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC")
-				{
-				echo '&amp;page='.$page.'&amp;category='.$category;
-				echo '&amp;order='.$order.'&amp;descasc='.$descasc;
-				}
-			echo '">'.htmlspecialchars($zeile["subject"]).'</a>'."\n";
+			echo '" href="board_entry.php?id='.$zeile["tid"].'">';
+			echo htmlspecialchars($zeile["subject"]).'</a>'."\n";
 			# show sign for fixed threads
 			if ($zeile["fixed"] == 1)
 				{
@@ -257,16 +260,14 @@ echo '<pre>'. print_r($_COOKIE, true) .'</pre>';
 				echo ' <span class="small">';
 				if ($settings['thread_view']==1)
 					{
-					echo '<a href="forum_entry.php?id='.$zeile["tid"].'&amp;view=thread';
-					echo ($category > 0) ? '&amp;category='.$category : '';
-					echo '"><img src="img/thread_d.png" alt="[Thread]" title="';
+					echo '<a href="forum_entry.php?id='.$zeile["tid"].$cat.'">';
+					echo '<img src="img/thread_d.png" alt="[Thread]" title="';
 					echo outputLangDebugInAttributes($lang['open_in_thread_linktitle']).'" width="12" height="9" /></a>';
 					}
 				if ($settings['mix_view'] == 1)
 					{
-					echo '<a href="mix_entry.php?id='.$zeile["tid"].'&amp;view=mix';
-					echo ($category > 0) ? '&amp;category='.$category : '';
-					echo '"><img src="img/mix_d.png" alt="[Mix]" title="';
+					echo '<a href="mix_entry.php?id='.$zeile["tid"].$cat.'">';
+					echo '<img src="img/mix_d.png" alt="[Mix]" title="';
 					echo outputLangDebugInAttributes($lang['open_in_mix_linktitle']).'" width="12" height="9" /></a>';
 					}
 				echo "</span>";
@@ -331,7 +332,7 @@ echo '<pre>'. print_r($_COOKIE, true) .'</pre>';
 				if ($settings['last_reply_link']==1)
 					{
 					echo '<a href="board_entry.php?id='.$zeile["tid"].'&amp;be_page=';
-					echo (ceil($answers_count / $settings['answers_per_topic'])-1).'&amp;page='.$page;
+					echo (ceil($answers_count / $settings['answers_per_topic'])-1).'&amp;page='.$_SESSION[$settings['session_prefix'].'page'];
 					echo ($category > 0) ? '&amp;category='.$category : '';
 					echo '&amp;order='.$order.'&amp;descasc='.$descasc.'#p'.$last_answer['id'];
 					echo '" title="'.str_replace("[name]", $last_answer['name'], outputLangDebugInAttributes($lang['last_reply_lt'])).'">';
@@ -360,7 +361,7 @@ echo '<pre>'. print_r($_COOKIE, true) .'</pre>';
 			&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
 				{
 				echo '<td><a href="admin.php?mark='.$zeile["tid"].'&amp;refer=';
-				echo basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$page;
+				echo basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$_SESSION[$settings['session_prefix'].'page'];
 				echo ($category > 0) ? '&amp;category='.$category : '';
 				echo '&amp;order='.$order.'">';
 				if ($zeile['marked']==1)

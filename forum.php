@@ -89,12 +89,12 @@ if ($settings['access_for_users_only'] == 1
 		}
 
 	$subnav_1 = outputPostingLink($category);
+	$pagination = ($_SESSION[$settings['session_prefix'].'page'] > 0) ? '&amp;page='.$_SESSION[$settings['session_prefix'].'page'] : '';
 	$cat = ($category > 0) ? '&amp;category='.intval($category) : '';
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
-		$url  = 'index.php?update=1';
-		$url .= $cat;
+		$url  = 'index.php?update=1'. $pagination.$cat;
 		$class = 'update-postings';
 		$title = outputLangDebugInAttributes($lang['update_time_linktitle']);
 		$linktext = $lang['update_time_linkname'];

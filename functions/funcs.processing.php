@@ -420,15 +420,109 @@ return $output;
 
 /**
  * process the standard parameters (category, page, order, descasc)
- *
+ * and compares theyre values against if needed
  *
  */
 function processStandardParametersGET() {
 global $settings;
-$_SESSION[$settings['session_prefix'].'page'] = !empty($_GET['page']) ? intval($_GET['page']) : 0;
-$_SESSION[$settings['session_prefix'].'order'] = !empty($_GET['order']) ? $_GET['order'] : "last_answer";
-$_SESSION[$settings['session_prefix'].'category'] = !empty($_GET['category']) ? intval($_GET['category']) : 0;
-$_SESSION[$settings['session_prefix'].'descasc'] = !empty($_GET['descasc']) ? $_GET['descasc'] : "DESC";
+$checkOrder = array('subject', 'category', 'name', 'time', 'last_answer');
+$checkDescAsc = array('DESC', 'ASC');
+
+if (isset($_GET['page']) and intval($_GET['page']) > -1)
+	{
+	if (!isset($_SESSION[$settings['session_prefix'].'page']))
+		{
+		$_SESSION[$settings['session_prefix'].'page'] = intval($_GET['page']);
+		}
+	else if (intval($_GET['page']) != $_SESSION[$settings['session_prefix'].'page'])
+		{
+		$_SESSION[$settings['session_prefix'].'page'] = intval($_GET['page']);
+		}
+	}
+else
+	{
+	if (!isset($_SESSION[$settings['session_prefix'].'page']))
+		{
+		$_SESSION[$settings['session_prefix'].'page'] = 0;
+		}
+	}
+if (isset($_GET['category']) and intval($_GET['category']) > -1)
+	{
+	if (!isset($_SESSION[$settings['session_prefix'].'category']))
+		{
+		$_SESSION[$settings['session_prefix'].'category'] = intval($_GET['category']);
+		}
+	else if (intval($_GET['category']) != $_SESSION[$settings['session_prefix'].'category'])
+		{
+		$_SESSION[$settings['session_prefix'].'category'] = intval($_GET['category']);
+		}
+	}
+else
+	{
+	if (!isset($_SESSION[$settings['session_prefix'].'category']))
+		{
+		$_SESSION[$settings['session_prefix'].'category'] = 0;
+		}
+	}
+if (!empty($_GET['order'])
+	and in_array(strtolower($_GET['order']), $checkOrder))
+	{
+	if (!isset($_SESSION[$settings['session_prefix'].'order']))
+		{
+		$_SESSION[$settings['session_prefix'].'order'] = strtolower($_GET['order']);
+		}
+	else if (strtolower($_GET['order']) != $_SESSION[$settings['session_prefix'].'order'])
+		{
+		$_SESSION[$settings['session_prefix'].'order'] = strtolower($_GET['order']);
+		}
+	}
+else
+	{
+	if (!isset($_SESSION[$settings['session_prefix'].'order']))
+		{
+		$_SESSION[$settings['session_prefix'].'order'] = 'last_answer';
+		}
+	}
+if (!empty($_GET['descasc'])
+	and in_array(strtoupper($_GET['descasc']), $checkDescAsc))
+	{
+	if (!isset($_SESSION[$settings['session_prefix'].'descasc']))
+		{
+		$_SESSION[$settings['session_prefix'].'descasc'] = strtoupper($_GET['descasc']);
+		}
+	else if (strtoupper($_GET['descasc']) != $_SESSION[$settings['session_prefix'].'descasc'])
+		{
+		$_SESSION[$settings['session_prefix'].'descasc'] = strtoupper($_GET['descasc']);
+		}
+	}
+else
+	{
+	if (!isset($_SESSION[$settings['session_prefix'].'descasc']))
+		{
+		$_SESSION[$settings['session_prefix'].'descasc'] = 'DESC';
+		}
+	}
 } # End: processStandardParametersGET
+
+
+
+/**
+ * process the view names to the according file names
+ *
+ * @param string $view
+ * @return string $filename
+ */
+function processView2Filename($view) {
+$fname = '';
+if ($view == 'thread')
+	{
+	$fname = 'forum.php';
+	}
+else
+	{
+	$fname = $view .'.php';
+	}
+return $fname;
+} #End: processView2Filename
 
 ?>
