@@ -45,19 +45,6 @@ if($settings['access_for_users_only']  == 1
 	# and put them into the session
 	processStandardParametersGET();
 	unset($zeile);
-
-#	if (empty($page)) $page = 0;
-	if (empty($order)) $order="last_answer";
-	if (empty($descasc)) $descasc="DESC";
-	if (isset($descasc) && $descasc=="ASC")
-		{
-		$descasc = "ASC";
-		}
-	else
-		{
-		$descasc = "DESC";
-		}
-
 	$ul = $_SESSION[$settings['session_prefix'].'page'] * $settings['topics_per_page'];
 
 	# database request
@@ -101,7 +88,7 @@ if($settings['access_for_users_only']  == 1
 			WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
 		FROM ".$db_settings['forum_table']." AS t1
 		WHERE pid = 0".$threadsQueryWhere."
-		ORDER BY fixed DESC, ".$order." ".$_SESSION[$settings['session_prefix'].'descasc']."
+		ORDER BY fixed DESC, ".$_SESSION[$settings['session_prefix'].'order']." ".$_SESSION[$settings['session_prefix'].'descasc']."
 		LIMIT ".$ul.", ".$settings['topics_per_page'];
 	$threadsResult = mysql_query($threadsQuery, $connid);
 	if (!$threadsResult) die($lang['db_error']);
@@ -153,50 +140,56 @@ echo '<pre>'. print_r($_COOKIE, true) .'</pre>';
 		echo '<table class="normaltab">'."\n";
 		echo '<tr class="titlerow">'."\n";
 		echo '<th><a href="board.php?order=subject&amp;descasc=';
-		echo ($_SESSION[$settings['session_prefix'].'descasc']=="ASC" && $order=="subject") ? 'DESC' : 'ASC';
+		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
+		&& $_SESSION[$settings['session_prefix'].'order'] == "subject") ? 'DESC' : 'ASC';
 		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_subject_headline'].'</a>';
-		if ($order=="subject")
+		if ($_SESSION[$settings['session_prefix'].'order'] == "subject")
 			{
 			echo outputImageDescAsc($currDescAsc);
 			}
 		echo '</th>'."\n";
-		if ($categories!=false && $category == 0)
+		if ($categories!=false
+		&& $_SESSION[$settings['session_prefix'].'category'] == 0)
 			{
 			echo '<th><a href="board.php?order=category&amp;descasc=';
-			echo ($_SESSION[$settings['session_prefix'].'descasc']=="ASC" && $order=="category") ? 'DESC' : 'ASC';
+			echo ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
+			&& $_SESSION[$settings['session_prefix'].'order'] == "category") ? 'DESC' : 'ASC';
 			echo $cat;
 			echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_category_headline'].'</a>';
-			if ($order=="category")
+			if ($_SESSION[$settings['session_prefix'].'order'] == "category")
 				{
 				echo outputImageDescAsc($currDescAsc);
 				}
 			echo '</th>'."\n";
 			}
 		echo '<th><a href="board.php?order=name&amp;descasc=';
-		echo ($_SESSION[$settings['session_prefix'].'descasc']=="ASC" && $order=="name") ? 'DESC' : 'ASC';
+		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
+		&& $_SESSION[$settings['session_prefix'].'order'] == "name") ? 'DESC' : 'ASC';
 		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_author_headline'].'</a>'."\n";
-		if ($order=="name")
+		if ($_SESSION[$settings['session_prefix'].'order'] == "name")
 			{
 			echo outputImageDescAsc($currDescAsc);
 			}
 		echo '</th>'."\n";
 		echo '<th><a href="board.php?order=time&amp;descasc=';
-		echo ($_SESSION[$settings['session_prefix'].'descasc']=="DESC" && $order=="time") ? "ASC" : "DESC";
+		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "DESC"
+		&& $_SESSION[$settings['session_prefix'].'order'] == "time") ? "ASC" : "DESC";
 		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_date_headline'].'</a>'."\n";
-		if ($order=="time")
+		if ($_SESSION[$settings['session_prefix'].'order'] == "time")
 			{
 			echo outputImageDescAsc($currDescAsc);
 			}
 		echo '</th>'."\n";
 		echo '<th>'.$lang['board_answers_headline'].'</th>'."\n";
 		echo '<th><a href="board.php?order=last_answer&amp;descasc=';
-		echo ($_SESSION[$settings['session_prefix'].'descasc']=="DESC" && $order=="last_answer") ? "ASC" : "DESC";
+		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "DESC"
+		&& $_SESSION[$settings['session_prefix'].'order'] == "last_answer") ? "ASC" : "DESC";
 		echo $cat;
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_last_answer_headline'].'</a>'."\n";
-		if ($order=="last_answer")
+		if ($_SESSION[$settings['session_prefix'].'order'] == "last_answer")
 			{
 			echo outputImageDescAsc($currDescAsc);
 			}
@@ -273,7 +266,8 @@ echo '<pre>'. print_r($_COOKIE, true) .'</pre>';
 				echo "</span>";
 				}
 			echo '</td>'."\n"; # end: subject
-			if ($categories!=false && $category == 0)
+			if ($categories!=false
+			&& $_SESSION[$settings['session_prefix'].'category'] == 0)
 				{
 				echo '<td class="info">'."\n"; # start: categories (if in use)
 				if (isset($categories[$zeile["category"]]) && $categories[$zeile["category"]]!='')
@@ -333,8 +327,8 @@ echo '<pre>'. print_r($_COOKIE, true) .'</pre>';
 					{
 					echo '<a href="board_entry.php?id='.$zeile["tid"].'&amp;be_page=';
 					echo (ceil($answers_count / $settings['answers_per_topic'])-1).'&amp;page='.$_SESSION[$settings['session_prefix'].'page'];
-					echo ($category > 0) ? '&amp;category='.$category : '';
-					echo '&amp;order='.$order.'&amp;descasc='.$descasc.'#p'.$last_answer['id'];
+					echo ($_SESSION[$settings['session_prefix'].'$category'] > 0) ? '&amp;category='.$_SESSION[$settings['session_prefix'].'category'] : '';
+					echo '&amp;order='. $_SESSION[$settings['session_prefix'].'order'] .'&amp;descasc='.$_SESSION[$settings['session_prefix'].'descasc'] .'#p'.$last_answer['id'];
 					echo '" title="'.str_replace("[name]", $last_answer['name'], outputLangDebugInAttributes($lang['last_reply_lt'])).'">';
 					}
 				echo $zeile["la_Uhrzeit"];
@@ -362,8 +356,8 @@ echo '<pre>'. print_r($_COOKIE, true) .'</pre>';
 				{
 				echo '<td><a href="admin.php?mark='.$zeile["tid"].'&amp;refer=';
 				echo basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$_SESSION[$settings['session_prefix'].'page'];
-				echo ($category > 0) ? '&amp;category='.$category : '';
-				echo '&amp;order='.$order.'">';
+				echo ($_SESSION[$settings['session_prefix'].'category'] > 0) ? '&amp;category='.$_SESSION[$settings['session_prefix'].'category'] : '';
+				echo '&amp;order='.$_SESSION[$settings['session_prefix'].'order'].'">';
 				if ($zeile['marked']==1)
 					{
 					echo '<img src="img/marked.png" alt="[x]" width="9" height="9" title="'.outputLangDebugInAttributes($lang['unmark_linktitle']).'" />';
