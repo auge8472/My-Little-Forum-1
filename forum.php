@@ -46,26 +46,17 @@ if ($settings['access_for_users_only'] == 1
 	# process the standard parameters
 	# and put them into the session
 	processStandardParametersGET();
-	/*
-	if (empty($page)) $page = 0;
-	if (empty($order)) $order="time";
-	if (isset($descasc) && $descasc=="ASC")
-		{
-		$descasc="DESC";
-		$page = 0;
-		}
-	else
-		{
-		$descasc="DESC";
-		}
-*/
+
 	if ($_SESSION[$settings['session_prefix'].'order'] != "time"
 	&& $_SESSION[$settings['session_prefix'].'order'] !="last_answer")
 		{
-		$page = 0;
-		$order="time";
+		$threadOrder="time";
 		}
-	$ul = $page * $settings['topics_per_page'];
+	else
+		{
+		$threadOrder = $_SESSION[$settings['session_prefix'].'order'];
+		}
+	$ul = $_SESSION[$settings['session_prefix'].'page'] * $settings['topics_per_page'];
 	unset($parent_array);
 	unset($child_array);
 
@@ -98,7 +89,7 @@ if ($settings['access_for_users_only'] == 1
 		tid
 		FROM ".$db_settings['forum_table']."
 		WHERE pid = 0 ". $threadsQueryWhere ."
-		ORDER BY fixed DESC, ".$_SESSION[$settings['session_prefix'].'order']." ".$_SESSION[$settings['session_prefix'].'descasc']."
+		ORDER BY fixed DESC, ".$threadOrder." DESC
 		LIMIT ".$ul.", ".$settings['topics_per_page'];
 	$result = mysql_query($getAllThreadsQuery, $connid);
 	if (!$result) die($lang['db_error']);
