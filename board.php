@@ -123,7 +123,7 @@ if($settings['access_for_users_only']  == 1
 		$linktext = $lang['mix_view_linkname'];
 		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
-	$subnav_2 .= nav($_SESSION[$settings['session_prefix'].'page'], $settings['topics_per_page'], $thread_count, $order, $_SESSION[$settings['session_prefix'].'descasc'], $_SESSION[$settings['session_prefix'].'category']);
+	$subnav_2 .= nav($_SESSION[$settings['session_prefix'].'page'], (int)$settings['topics_per_page'], $thread_count, $_SESSION[$settings['session_prefix'].'order'], $_SESSION[$settings['session_prefix'].'descasc'], $_SESSION[$settings['session_prefix'].'category']);
 	$subnav_2 .= outputCategoriesList($categories, $_SESSION[$settings['session_prefix'].'category']);
 
 	parse_template();
@@ -380,7 +380,7 @@ echo '<pre>'. print_r($_COOKIE, true) .'</pre>';
 		# import posting template
 		$output = file_get_contents('data/templates/locked.gen.html');
 		$output = str_replace('{locked_hl}', $lang['caution'], $output);
-		$langTemp = ($category!=0) ? $lang['no_messages_in_category'] : $lang['no_messages'];
+		$langTemp = ($_SESSION[$settings['session_prefix'].'category']!=0) ? $lang['no_messages_in_category'] : $lang['no_messages'];
 		$output = str_replace('{locked_txt}', $langTemp, $output);
 		echo $output;
 		}
