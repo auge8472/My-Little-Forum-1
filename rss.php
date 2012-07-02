@@ -7,7 +7,7 @@ if (isset($_GET['cat'])
 	and in_array($_GET['cat'], $category_ids))
 	{
 	$wherePart = "
-	WHERE category = ".intval($_GET['cat']);
+	WHERE category = ". intval($_GET['cat']);
 	}
 
 # database request
@@ -34,9 +34,26 @@ $rssQuery .= "
 ORDER BY time DESC
 LIMIT 15";
 $result = mysql_query($rssQuery, $connid);
-if (!$result) die($lang['db_error']."<br />".mysql_error());
-$result_count = mysql_num_rows($result);
-
+$data = array();
+if (!$result)
+	{
+	$timestamp = time();
+	$data[0]['id'] = 0;
+	$data[0]['pid'] = 0;
+	$data[0]['xtime'] = strftime($lang['time_format'], $timestamp);
+	$data[0]['rss_time'] = $timestamp;
+	$data[0]['name'] = $settings['forum_email'];
+	$data[0]['subject'] = $lang['error_headline'];
+	$data[0]['text'] = $lang['db_error'];
+	}
+else
+	{
+	while ($satz = mysql_fetch_assoc($result))
+		{
+		$data[] = $satz; 
+		}
+	}
+$result_count = count($data);
 $rss  = '';
 $rss .= '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 
@@ -52,7 +69,7 @@ if ($result_count > 0
 && $settings['provide_rssfeed'] == 1
 && $settings['access_for_users_only'] == 0)
 	{
-	while ($zeile = mysql_fetch_assoc($result))
+	foreach ($data as $zeile)
 		{
 		$ftext = outputXMLclearedString($zeile["text"]);
 #		$ftext = htmlspecialchars($ftext);
@@ -82,7 +99,7 @@ if ($result_count > 0
 		$rss .= '   <link>'.$settings['forum_address'].'forum_entry.php?id='.$zeile['id'].'</link>'."\n";
 		$rss .= '   <guid>'.$settings['forum_address'].'forum_entry.php?id='.$zeile['id'].'</guid>'."\n";
 		$rss .= '   <dc:creator>'.$name.'</dc:creator>'."\n";
-		$rss .= '   <pubDate>'.date("r", $zeile['rss_time']).'</pubDate>'."\n";
+		$rss .= '   <pubDate>'. @ date("r", $zeile['rss_time']) .'</pubDate>'."\n";
 		$rss .= '  </item>'."\n";
 		}
 	}
