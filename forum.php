@@ -43,24 +43,20 @@ if ($settings['access_for_users_only'] == 1
 		{
 		setcookie("user_view","thread",time()+(3600*24*30));
 		}
-	if (empty($page)) $page = 0;
-	if (empty($order)) $order="time";
-	if (isset($descasc) && $descasc=="ASC")
+	# process the standard parameters
+	# and put them into the session
+	processStandardParametersGET();
+
+	if ($_SESSION[$settings['session_prefix'].'order'] != "time"
+	&& $_SESSION[$settings['session_prefix'].'order'] !="last_answer")
 		{
-		$descasc="DESC";
-		$page = 0;
+		$threadOrder="time";
 		}
 	else
 		{
-		$descasc="DESC";
+		$threadOrder = $_SESSION[$settings['session_prefix'].'order'];
 		}
-
-	if ($order != "time" && $order !="last_answer")
-		{
-		$page = 0;
-		$order="time";
-		}
-	$ul = $page * $settings['topics_per_page'];
+	$ul = $_SESSION[$settings['session_prefix'].'page'] * $settings['topics_per_page'];
 	unset($parent_array);
 	unset($child_array);
 
@@ -68,29 +64,39 @@ if ($settings['access_for_users_only'] == 1
 	# no categories defined
 	if ($categories === false)
 		{
-		$result = mysql_query("SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE pid = 0 ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page'], $connid);
-		if (!$result) die($lang['db_error']);
+		$threadsQueryWhere = '';
 		}
 	# there are categories and all categories should be shown
-	else if (is_array($categories) && $category == 0)
+	else if (is_array($categories)
+		&& $_SESSION[$settings['session_prefix'].'category'] == 0)
 		{
-		$result = mysql_query("SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category IN (".$category_ids_query.") ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page'], $connid);
-		if (!$result) die($lang['db_error']);
+		$threadsQueryWhere = " AND category IN (". $category_ids_query .")";
 		}
 	# there are categories and only one category should be shown
-	else if (is_array($categories) && $category != 0 && in_array($category, $category_ids))
+	else if (is_array($categories)
+		&& $_SESSION[$settings['session_prefix'].'category'] != 0
+		&& in_array($_SESSION[$settings['session_prefix'].'category'], $category_ids))
 		{
-		$result = mysql_query("SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE category = '".mysql_real_escape_string($category)."' AND pid = 0 ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page'], $connid);
-		if (!$result) die($lang['db_error']);
+		$threadsQueryWhere = " AND category = '". intval($_SESSION[$settings['session_prefix'].'category']) ."'";
 		# how many entries?
-		$pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '".mysql_real_escape_string($category)."'", $connid);
+		$pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '".mysql_real_escape_string($_SESSION[$settings['session_prefix'].'category'])."'", $connid);
 		list($thread_count) = mysql_fetch_row($pid_result);
 		mysql_free_result($pid_result);
 		}
+	$getAllThreadsQuery = "SELECT
+		id,
+		pid,
+		tid
+		FROM ".$db_settings['forum_table']."
+		WHERE pid = 0 ". $threadsQueryWhere ."
+		ORDER BY fixed DESC, ".$threadOrder." DESC
+		LIMIT ".$ul.", ".$settings['topics_per_page'];
+	$result = mysql_query($getAllThreadsQuery, $connid);
+	if (!$result) die($lang['db_error']);
 
-	$subnav_1 = outputPostingLink($category);
+	$subnav_1 = outputPostingLink($_SESSION[$settings['session_prefix'].'category']);
 	$pagination = ($_SESSION[$settings['session_prefix'].'page'] > 0) ? '&amp;page='.$_SESSION[$settings['session_prefix'].'page'] : '';
-	$cat = ($category > 0) ? '&amp;category='.intval($category) : '';
+	$cat = ($_SESSION[$settings['session_prefix'].'category'] > 0) ? '&amp;category='.intval($_SESSION[$settings['session_prefix'].'category']) : '';
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
@@ -132,9 +138,8 @@ if ($settings['access_for_users_only'] == 1
 		$linktext = $lang['mix_view_linkname'];
 		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
-	$subnav_2 .= nav($page, (int)$settings['topics_per_page'], $thread_count, $order, $descasc, $category);
-
-	$subnav_2 .= outputCategoriesList($categories, $category);
+	$subnav_2 .= nav($_SESSION[$settings['session_prefix'].'page'], (int)$settings['topics_per_page'], $thread_count, $_SESSION[$settings['session_prefix'].'order'], $_SESSION[$settings['session_prefix'].'descasc'], $_SESSION[$settings['session_prefix'].'category']);
+	$subnav_2 .= outputCategoriesList($categories, $_SESSION[$settings['session_prefix'].'category']);
 
 	parse_template();
 	echo $header;
@@ -183,7 +188,7 @@ if ($settings['access_for_users_only'] == 1
 		# import posting template
 		$output = file_get_contents('data/templates/locked.gen.html');
 		$output = str_replace('{locked_hl}', $lang['caution'], $output);
-		$langTemp = ($category!=0) ? $lang['no_messages_in_category'] : $lang['no_messages'];
+		$langTemp = ($_SESSION[$settings['session_prefix'].'category']!=0) ? $lang['no_messages_in_category'] : $lang['no_messages'];
 		$output = str_replace('{locked_txt}', $langTemp, $output);
 		echo $output;
 		}
