@@ -178,7 +178,7 @@ if ($settings['access_for_users_only'] == 1
 		WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
 	FROM ".$db_settings['forum_table']."
 	WHERE tid = ".intval($entrydata["tid"])."
-	ORDER BY time DESC";
+	ORDER BY time ". $settings['thread_view_sorter'];
 	$result = mysql_query($threadQuery, $connid);
 	if (!$result) die($lang['db_error']);
 	while ($tmp = mysql_fetch_assoc($result))
