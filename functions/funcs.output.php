@@ -426,20 +426,27 @@ else if ($settings['user_edit']==1 and $settings['edit_period'] == 0)
 	
 $subscriptPresent = processSearchThreadSubscriptions($thread['tid'], $_SESSION[$settings['session_prefix'].'user_id']);
 
-if (($settings['user_edit'] == 1
-	and (isset($_SESSION[$settings['session_prefix'].'user_id'])
-	and $thread["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]
-	and $period === true))
+if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	or (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
 	or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
 	{
 	$r .= '<ul class="menu">'."\n";
-	$r .= '<li><a href="posting.php?action=edit&amp;id=';
-	$r .= $thread["id"].$view.'&amp;back='.$thread["tid"].'&amp;page='.$page;
-	$r .= '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
-	$r .= '" class="edit-posting" title="'.outputLangDebugInAttributes($lang['edit_linktitle']).'">';
-	$r .= $lang['edit_linkname'].'</a></li>'."\n";
+	# edit a posting
+	if (($settings['user_edit'] == 1
+		and (isset($_SESSION[$settings['session_prefix'].'user_id'])
+		and $thread["user_id"] == $_SESSION[$settings['session_prefix']."user_id"]
+		and $period === true))
+		or (isset($_SESSION[$settings['session_prefix'].'user_id'])
+		and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
+		or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
+		{
+		$r .= '<li><a href="posting.php?action=edit&amp;id=';
+		$r .= $thread["id"].$view.'&amp;back='.$thread["tid"].'&amp;page='.$page;
+		$r .= '&amp;order='.$order.'&amp;descasc='.$descasc.'&amp;category='.$category;
+		$r .= '" class="edit-posting" title="'.outputLangDebugInAttributes($lang['edit_linktitle']).'">';
+		$r .= $lang['edit_linkname'].'</a></li>'."\n";
+		}
 	# delete a posting
 	if (($settings['user_delete'] == 1
 		and (isset($_SESSION[$settings['session_prefix'].'user_id'])
