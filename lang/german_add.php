@@ -291,4 +291,11 @@ $lang_add['installation_complete'] =          "Installation erfolgreich abgeschl
 $lang_add['installation_complete_exp'] =      "Bitte jetzt sicherheitshalber die Datei <b>install.php</b> löschen, wenn das Forum über das Internet zugänglich ist und CHMOD von <b>db_settings.php</b> wieder auf 644 stellen!";
 $lang_add['update_complete'] =                "Update erfolgreich abgeschlossen!";
 $lang_add['installation_complete_link'] =     "&raquo; weiter zum Forum...";
+
+// admin area categories
+$lang_add['settings_cat']['general'] =        "Allgemeine Einstellungen";
+$lang_add['settings_cat']['views'] =          "Ansichtseinstellungen";
+$lang_add['settings_cat']['postings'] =       "Postingeinstellungen";
+$lang_add['settings_cat']['security'] =       "Sicherheitseinstellungen";
+$lang_add['settings_cat']['enhanced'] =       "Erweiterte Einstellungen";
 ?>

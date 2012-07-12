@@ -294,4 +294,11 @@ $lang_add['installation_complete'] =          "Installation successful!";
 $lang_add['installation_complete_exp'] =      "As a precaution please now delete <b>install.php</b> if the forum is accessible via the internet and set CHMOD of <b>db_settings.php</b> on 644 again!";
 $lang_add['update_complete'] =                "Update successful!";
 $lang_add['installation_complete_link'] =     "&raquo; Go to the forum...";
+
+// admin area categories
+$lang_add['settings_cat']['general'] =        "General Settings";
+$lang_add['settings_cat']['views'] =          "Forum Views Settings";
+$lang_add['settings_cat']['postings'] =       "Posting Settings";
+$lang_add['settings_cat']['security'] =       "Security Settings";
+$lang_add['settings_cat']['enhanced'] =       "Enhanced Settings";
 ?>
