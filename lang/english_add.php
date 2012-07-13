@@ -299,6 +299,7 @@ $lang_add['installation_complete_link'] =     "&raquo; Go to the forum...";
 $lang_add['settings_cat']['general'] =        "General Settings";
 $lang_add['settings_cat']['views'] =          "Forum Views Settings";
 $lang_add['settings_cat']['postings'] =       "Posting Settings";
+$lang_add['settings_cat']['sessions'] =       "Session Settings";
 $lang_add['settings_cat']['security'] =       "Security Settings";
 $lang_add['settings_cat']['enhanced'] =       "Enhanced Settings";
 ?>
