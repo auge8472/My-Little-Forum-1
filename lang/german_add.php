@@ -102,7 +102,7 @@ $lang_add['edit_period_d'] =                  "Wie lange können eigene Postings
 $lang_add['edit_delay'] =                     "Editier-Anzeigeverzögerung";
 $lang_add['edit_delay_d'] =                   "Falls Editieren angezeigt werden soll, kann hier die Zeit in Minuten festgelegt werden, innerhalb der Postings editiert werden können, ohne das es angezeigt wird";
 $lang_add['bbcode'] =                         "BB-Code";
-$lang_add['bbcode_d'] =                       "Sollen BB-Codes zum formatieren von Texten verwendet werden ([f]fett[/f], [i]kursiv[/i], [link]http://www.domain.de/[/link], [link=http://www.domain.tld/]Link[/link])?";
+$lang_add['bbcode_d'] =                       "Sollen BB-Codes zum formatieren von Texten verwendet werden ([b]fett[/b], [i]kursiv[/i], [link]http://www.domain.de/[/link], [link=http://www.domain.tld/]Link[/link])?";
 $lang_add['smilies'] =                        "Smilies";
 $lang_add['smilies_d'] =                      "Sollen Smilies durch Bilder ersetzt werden?";
 $lang_add['bbcode_img'] =                     "BB-Code für Bilder";
