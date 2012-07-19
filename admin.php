@@ -1132,8 +1132,8 @@ if (isset($_POST['settings_submitted']))
 			mysql_query("UPDATE ".$db_settings['settings_table']." SET value='".$val."' WHERE name='".$key."' LIMIT 1", $connid);
 			}
 		}
-	header('Location: '.$settings['forum_address'].'admin.php');
-	die('<a href="admin.php">further...</a>');
+	header('Location: '.$settings['forum_address'].'admin.php?action=settings&amp;settingsCat='. urlencode($GET['settingsCat']));
+	die('<a href="admin.php?action=settings&settingsCat='. urlencode($GET['settingsCat']) .'">further...</a>');
 	}
 
 if (isset($_POST['ar_username']))
