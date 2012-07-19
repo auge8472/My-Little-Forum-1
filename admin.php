@@ -2183,6 +2183,17 @@ switch ($action)
 				FROM ". $db_settings['settings_table'].$addit;
 				# get the result of the query
 				$resultSettings =  mysql_query($getAllSettingsQuery, $connid);
+				# the database request failed
+				if (!$resultSettings)
+					{
+					$output .= '<p>'. $lang['db_error'] .'</p>';
+					}
+				# the database request was successfull
+				else
+					{
+					$output .= '<h2>'. $catsName .'</h2>'."\n";
+					$output .= $menu;
+					}
 				}
 			echo '<form action="admin.php" method="post">'."\n";
 			echo '<table class="normaltab">'."\n";
