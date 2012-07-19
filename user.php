@@ -847,10 +847,10 @@ switch ($action)
 			{
 			$lang['user_info_hl'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['user_info_hl']);
 			echo '<h2>'.$lang['user_info_hl'].'</h2>'."\n";
-			echo '<table class="normaltab">'."\n";
+			echo '<table class="info admin">'."\n";
 			echo '<tr>'."\n";
-			echo '<td class="c">'.$lang['username_marking'].'</td>'."\n";
-			echo '<td class="d">'.htmlspecialchars($field["user_name"]);
+			echo '<td>'.$lang['username_marking'].'</td>'."\n";
+			echo '<td>'.htmlspecialchars($field["user_name"]);
 			if ($field["user_type"]=="admin") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_admin'].")</span>";
 			else if ($field["user_type"]=="mod") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_mod'].")</span>";
 			echo '</td>'."\n";
@@ -858,15 +858,15 @@ switch ($action)
 			if ($field["user_real_name"]!="")
 				{
 				echo '<tr>'."\n";
-				echo '<td class="c">'.$lang['user_real_name'].'</td>'."\n";
-				echo '<td class="d">'.htmlspecialchars($field['user_real_name']).'</td>'."\n";
+				echo '<td>'.$lang['user_real_name'].'</td>'."\n";
+				echo '<td>'.htmlspecialchars($field['user_real_name']).'</td>'."\n";
 				echo '</tr>';
 				}
 			if ($field["hide_email"]!=1)
 				{
 				echo '<tr>'."\n";
-				echo '<td class="c">'.$lang['user_email_marking'].'</td>'."\n";
-				echo '<td class="d"><a href="contact.php?uid='.$field['user_id'].'">';
+				echo '<td>'.$lang['user_email_marking'].'</td>'."\n";
+				echo '<td><a href="contact.php?uid='.$field['user_id'].'">';
 				echo '<img src="img/email.png" alt="'.outputLangDebugInAttributes($lang['email_alt']).'" title="';
 				echo str_replace('[name]', htmlspecialchars($field['user_name']), outputLangDebugInAttributes($lang['email_to_user_linktitle']));
 				echo '" width="13" height="10" /></a></td>'."\n";
@@ -876,8 +876,8 @@ switch ($action)
 				{
 				$field['user_hp'] = amendProtocol($field['user_hp']);
 				echo '<tr>'."\n";
-				echo '<td class="c">'.$lang['user_hp'].'</td>'."\n";
-				echo '<td class="d">';
+				echo '<td>'.$lang['user_hp'].'</td>'."\n";
+				echo '<td>';
 				echo '<a href="'.$field['user_hp'].'"><img src="img/homepage.png" alt="';
 				echo outputLangDebugInAttributes($lang['homepage_alt']).'" title="'.htmlspecialchars($field['user_hp']);
 				echo '" width="13" height="13" /></a></td>'."\n";
@@ -886,8 +886,8 @@ switch ($action)
 			if ($field["user_place"]!=="")
 				{
 				echo '<tr>'."\n";
-				echo '<td class="c">'.$lang['user_place'].'</td>'."\n";
-				echo '<td class="d">'.htmlspecialchars($field['user_place']).'</td>'."\n";
+				echo '<td>'.$lang['user_place'].'</td>'."\n";
+				echo '<td>'.htmlspecialchars($field['user_place']).'</td>'."\n";
 				echo '</tr>';
 				}
 			$days_reg = floor((time() - $field["since_date"])/86400);
@@ -896,16 +896,16 @@ switch ($action)
 			$lang['user_last_login_text'] = str_replace('[logins]',$field['logins'],$lang['user_last_login_text']);
 			$lang['user_last_login_text'] = str_replace('[log-per-day]',round($field['logins']/$days_reg,2),$lang['user_last_login_text']);
 			echo '<tr>'."\n";
-			echo '<td class="c">'.$lang['user_since'].'</td>'."\n";
-			echo '<td class="d">'.strftime($lang['time_format'],$field['since_date']);
+			echo '<td>'.$lang['user_since'].'</td>'."\n";
+			echo '<td>'.strftime($lang['time_format'],$field['since_date']);
 			echo $lang['user_since_text'].'</td>'."\n";
 			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang['user_last_login'].'</td>'."\n";
-			echo '<td class="d">'.strftime($lang['time_format'],$field["login_date"]);
+			echo '<td>'.$lang['user_last_login'].'</td>'."\n";
+			echo '<td>'.strftime($lang['time_format'],$field["login_date"]);
 			echo $lang['user_last_login_text'].'</td>'."\n";
 			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang['user_postings'].'</td>'."\n";
-			echo '<td class="d">'.$postings_count;
+			echo '<td>'.$lang['user_postings'].'</td>'."\n";
+			echo '<td>'.$postings_count;
 			if ($postings_count > 0)
 				{
 				$lang['user_posting_text'] = str_replace('[post-percent]', round($postings_count*100/$posting_count,1), $lang['user_posting_text']);
@@ -926,8 +926,8 @@ switch ($action)
 				if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
 				if ($settings['smilies'] == 1) $ftext = smilies($ftext);
 				echo '<tr>'."\n";
-				echo '<td class="c">'.$lang['user_profile'].'</td>'."\n";
-				echo '<td class="d">'.$ftext.'</td>'."\n";
+				echo '<td>'.$lang['user_profile'].'</td>'."\n";
+				echo '<td>'.$ftext.'</td>'."\n";
 				echo '</tr>';
 				}
 			if ($field["signature"]!=="")
@@ -939,8 +939,8 @@ switch ($action)
 				if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
 				if ($settings['smilies'] == 1) $ftext = smilies($ftext);
 				echo '<tr>'."\n";
-				echo '<td class="c">'.$lang['user_signature'].'</td>'."\n";
-				echo '<td class="d"><p class="signature">'.$ftext.'</p></td>'."\n";
+				echo '<td>'.$lang['user_signature'].'</td>'."\n";
+				echo '<td><p class="signature">'.$ftext.'</p></td>'."\n";
 				echo '</tr>';
 				}
 			echo '</table>'."\n";
