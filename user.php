@@ -750,6 +750,14 @@ if (!empty($action))
 			$lang['pers_msg_ln'] = str_replace("[name]", htmlspecialchars($userName["user_name"]), $lang['pers_msg_ln']);
 			$topnav .= '<span class="current-page">'.$lang['pers_msg_ln'].'</span>';
 			}
+		if ($action == "subscriptions")
+			{
+			$lang['user_info_hl'] = str_replace("[name]", htmlspecialchars($userName["user_name"]), $lang['user_info_hl']);
+			$topnav .= '<a class="textlink" href="user.php';
+			$topnav .= '?id='.intval($uid);
+			$topnav .= '">'.$lang['user_info_hl'].'</a>&nbsp;';
+			$topnav .= '<span class="current-page">'.$lang['edit_subscriptions_hl'].'</span>';
+			}
 		}
 	}
 
