@@ -44,6 +44,12 @@ $lang_add['delete_users_hl'] =                "User löschen";
 $lang_add['delete_user_conf'] =               "Sicher, dass dieser User gelöscht werden soll?";
 $lang_add['delete_users_conf'] =              "Sicher, dass folgende User gelöscht werden sollen?";
 $lang_add['debug_none'] =                     "Debugging: aus";
+
+$lang_add['0'] =                              "aus";
+$lang_add['1'] =                              "an";
+$lang_add['no'] =                             "nein";
+$lang_add['yes'] =                            "ja";
+
 $lang_add['forum_name'] =                     "Forumname";
 $lang_add['forum_name_d'] =                   "wird u.a. im Header angezeigt";
 $lang_add['forum_email'] =                    "Forum-E-Mail-Adresse";
@@ -58,11 +64,16 @@ $lang_add['mix_view'] =                       "Mix-Ansicht";
 $lang_add['mix_view_d'] =                     "Soll die Mix-Ansicht verwendet werden?";
 $lang_add['standard'] =                       "Standard-Ansicht";
 $lang_add['standard_d'] =                     "Welche Ansicht soll als Standard-Ansicht festgelegt sein?";
-$lang_add['standard_thread'] =                "Thread-A.";
-$lang_add['standard_board'] =                 "Board-A.";
-$lang_add['standard_mix'] =                   "Mix-A.";
+$lang_add['standard_thread'] =                "Thread-Ansicht";
+$lang_add['standard_board'] =                 "Board-Ansicht";
+$lang_add['standard_mix'] =                   "Mix-Ansicht";
+# old
 $lang_add['accession'] =                      "Zugangsberechtigung";
 $lang_add['accession_d'] =                    "Wer hat Zugang zum Forum?";
+# new
+$lang_add['access_for_users_only'] =          "Zugangsberechtigung";
+$lang_add['access_for_users_only_d'] =        "Wer hat Zugang zum Forum?";
+
 $lang_add['access_only_reg_users'] =          "nur registrierte Benutzer";
 $lang_add['access_all_users'] =               "alle";
 $lang_add['entry_perm'] =                     "Postings";
@@ -75,18 +86,46 @@ $lang_add['mark_reg_users'] =                 "Registrierte Benutzer kennzeichne
 $lang_add['mark_reg_users_d'] =               "Sollen registrierte Benutzer erkennbar sein?";
 $lang_add['forum_address'] =                  "Forum-Adresse";
 $lang_add['forum_address_d'] =                "URL des Forums in dieser Form: http://www.domain.tld/forum/";
+# old
 $lang_add['home_link'] =                      "Home-Link";
 $lang_add['home_link_d'] =                    "Link zur Homepage, z.B. \"http://www.domain.tld/\" oder \"../index.html\" (optional)";
+# new
+$lang_add['home_linkaddress'] =               "Home-Link";
+$lang_add['home_linkaddress_d'] =             "Link zur Homepage, z.B. \"http://www.domain.tld/\" oder \"../index.html\" (optional)";
+# old
 $lang_add['home_link_name'] =                 "Home-Linkname";
 $lang_add['home_link_name_d'] =               "Name des Home-Links, z.B. &quot;zurück zur Homepage&quot;";
+# new
+$lang_add['home_linkname'] =                  "Home-Linkname";
+$lang_add['home_linkname_d'] =                "Name des Home-Links, z.B. &quot;zurück zur Homepage&quot;";
+
 $lang_add['language_file'] =                  "Sprache";
 $lang_add['language_file_d'] =                "Sprache des Forums";
 $lang_add['topics_per_page'] =                "Threads/Topics pro Seite";
 $lang_add['topics_per_page_d'] =              "Wieviele Threads/Topics sollen pro Seite angezeigt werden?";
 $lang_add['forum_time_difference'] =          "Forums-Zeitunterschied";
 $lang_add['forum_time_difference_d'] =        "Unterschied zur Server-Zeit in Stunden";
+# old
 $lang_add['template_file'] =                  "Template-Datei";
 $lang_add['template_file_d'] =                "Template für das Seitenlayout";
+# new
+$lang_add['template'] =                       "Template-Datei";
+$lang_add['template_d'] =                     "Template für das Seitenlayout";
+$lang_add['user_edit'] =                      "Bearbeiten von Postings";
+$lang_add['user_edit_d'] =                    "Soll ein Benutzer sein eigenes Posting ändern können?";
+$lang_add['user_delete'] =                    "Löschen von Postings";
+$lang_add['user_delete_d'] =                  "Soll ein Benutzer sein eigenes Posting löschen können?";
+$lang_add['mail_parameter'] =                 "Mail Parameter";
+$lang_add['mail_parameter_d'] =               "Parameter, um über den Mailserver Emails versenden zu können (eventuell benötigt). Kontaktiere deinen Provider um Informationen zu erhalten.";
+$lang_add['session_prefix'] =                 "Sessionpräfix";
+$lang_add['session_prefix_d'] =               "Benutze den Präfix um die Forumssessions von Sessions anderer Anwendungen zu unterscheiden.";
+$lang_add['version'] =                        "Softwareversion";
+$lang_add['version_d'] =                      "Versionnummer der gegenwärtigen Installation.";
+$lang_add['server_timezone'] =                "Zeitzone des Servers";
+$lang_add['server_timezone_d'] =              "Zeitzone, die auf dem Webserver eingestellt ist.";
+$lang_add['autologin'] =                      "Automatisches Login";
+$lang_add['autologin_d'] =                    "Benutze Cookies, um den Benutzer beim Aufruf des Forums automatisch einzuloggen.";
+
 $lang_add['email_notification'] =             "E-Mail-Benachrichtigung an Posting-Autor";
 $lang_add['email_notification_d'] =           "Möglichkeit der E-Mail-Benachrichtigung an den Autor eines Postings, wenn darauf geantwortet wurde";
 $lang_add['edit_own_entries'] =               "Editieren eigener Postings";
@@ -102,7 +141,11 @@ $lang_add['edit_period_d'] =                  "Wie lange können eigene Postings
 $lang_add['edit_delay'] =                     "Editier-Anzeigeverzögerung";
 $lang_add['edit_delay_d'] =                   "Falls Editieren angezeigt werden soll, kann hier die Zeit in Minuten festgelegt werden, innerhalb der Postings editiert werden können, ohne das es angezeigt wird";
 $lang_add['bbcode'] =                         "BB-Code";
-$lang_add['bbcode_d'] =                       "Sollen BB-Codes zum formatieren von Texten verwendet werden ([f]fett[/f], [i]kursiv[/i], [link]http://www.domain.de/[/link], [link=http://www.domain.tld/]Link[/link])?";
+$lang_add['bbcode_d'] =                       "Sollen BB-Codes zum formatieren von Texten verwendet werden ([b]fett[/b], [i]kursiv[/i], [link]http://www.domain.de/[/link], [link=http://www.domain.tld/]Link[/link])?";
+
+$lang_add['asc'] =                            "neues Posting unten";
+$lang_add['desc'] =                           "neues Posting oben";
+
 $lang_add['smilies'] =                        "Smilies";
 $lang_add['smilies_d'] =                      "Sollen Smilies durch Bilder ersetzt werden?";
 $lang_add['bbcode_img'] =                     "BB-Code für Bilder";
@@ -178,7 +221,6 @@ $lang_add['entries_in_not_ex_cat'] =          "<strong>Hinweis:</strong> Es gibt
 $lang_add['entries_in_not_ex_cat_delete'] =   "löschen";
 $lang_add['entries_in_not_ex_cat_move'] =     "verschieben nach [category]";
 $lang_add['accessible_for'] =                 "zugänglich für:";
-$lang_add['advanced_settings'] =              "erweiterte Einstellungen";
 $lang_add['sql_complete'] =                   "Vollständiger SQL-Dump";
 $lang_add['sql_forum'] =                      "SQL-Dump der Forum-Einträge";
 $lang_add['sql_forum_marked'] =               "SQL-Dump der markierten Forum-Einträge";
@@ -291,4 +333,12 @@ $lang_add['installation_complete'] =          "Installation erfolgreich abgeschl
 $lang_add['installation_complete_exp'] =      "Bitte jetzt sicherheitshalber die Datei <b>install.php</b> löschen, wenn das Forum über das Internet zugänglich ist und CHMOD von <b>db_settings.php</b> wieder auf 644 stellen!";
 $lang_add['update_complete'] =                "Update erfolgreich abgeschlossen!";
 $lang_add['installation_complete_link'] =     "&raquo; weiter zum Forum...";
+
+// admin area categories
+$lang_add['settings_cat']['general'] =        "Allgemein";
+$lang_add['settings_cat']['views'] =          "Ansichten";
+$lang_add['settings_cat']['postings'] =       "Postings";
+$lang_add['settings_cat']['sessions'] =       "Sitzungen";
+$lang_add['settings_cat']['security'] =       "Sicherheit";
+$lang_add['settings_cat']['enhanced'] =       "Erweitert";
 ?>

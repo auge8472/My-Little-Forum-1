@@ -1132,8 +1132,8 @@ if (isset($_POST['settings_submitted']))
 			mysql_query("UPDATE ".$db_settings['settings_table']." SET value='".$val."' WHERE name='".$key."' LIMIT 1", $connid);
 			}
 		}
-	header('Location: '.$settings['forum_address'].'admin.php');
-	die('<a href="admin.php">further...</a>');
+	header('Location: '.$settings['forum_address'].'admin.php?action=settings&settingsCat='. urlencode($_GET['settingsCat']));
+	die('<a href="admin.php?action=settings&amp;settingsCat='. urlencode($_GET['settingsCat']) .'">further...</a>');
 	}
 
 if (isset($_POST['ar_username']))
@@ -1536,12 +1536,6 @@ if (!empty($action))
 		{
 		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
 		$topnav .= '<span class="current-page">'.$lang_add['forum_settings'] .'</span>';
-		}
-	if ($action == "advanced_settings")
-		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<a class="textlink" href="admin.php?action=settings">'.$lang_add['forum_settings'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['advanced_settings'].'</span>';
 		}
 	if ($action == "debug")
 		{
@@ -2121,328 +2115,197 @@ switch ($action)
 			echo '</form>'."\n";
 		break;
 		case "settings":
+			# initialize variables
+			$output = '';
+			$menu = '';
+			$settingsTable = array();
+			$catTable = array();
+			unset($errors);
 			$std = (isset($settings['time_difference'])) ? $settings['time_difference'] : 0;
-			echo '<form action="admin.php" method="post">'."\n";
-			echo '<table class="normaltab">'."\n";
-			echo '<tr>'."\n";
-			echo '<td class="c"><label for="forum-name">'.$lang_add['forum_name'].'</label><br />';
-			echo '<span class="info">'.$lang_add['forum_name_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="text" name="forum_name" id="forum-name" value="';
-			echo htmlspecialchars($settings['forum_name']).'" size="40" /></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c"><label for="forum-addr">'.$lang_add['forum_address'].'</label><br />';
-			echo '<span class="info">'.$lang_add['forum_address_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="text" name="forum_address" id="forum-addr" value="';
-			echo $settings['forum_address'].'" size="40" /></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c"><label for="forum-mail">'.$lang_add['forum_email'].'</label><br />';
-			echo '<span class="info">'.$lang_add['forum_email_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="text" name="forum_email" id="forum-mail" value="';
-			echo $settings['forum_email'].'" size="40" /></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c"><label for="home-link">'.$lang_add['home_link'].'</label><br />';
-			echo '<span class="info">'.$lang_add['home_link_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="text" name="home_linkaddress" id="home-link" value="';
-			echo $settings['home_linkaddress'].'" size="40" /></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c"><label for="home-linkname">'.$lang_add['home_link_name'].'</label><br />';
-			echo '<span class="info">'.$lang_add['home_link_name_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="text" name="home_linkname" id="home-linkname" value="';
-			echo htmlspecialchars($settings['home_linkname']).'" size="40" /></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c"><label for="forum-template">'.$lang_add['template_file'].'</label><br />';
-			echo '<span class="info">'.$lang_add['template_file_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="text" name="template" id="forum-template" value="';
-			echo $settings['template'].'" size="40" /></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c"><label for="forum-lang">'.$lang_add['language_file'].'</label><br />';
-			echo '<span class="info">'.$lang_add['language_file_d'].'</span></td>'."\n";
-			echo '<td class="d"><select name="language_file" id="forum-lang" size="1">'."\n";
-			$handle=opendir('./lang/');
-			while ($file = readdir($handle))
+			# read categories list from settings table
+			$getAllSettingsCatsQuery = "SELECT DISTINCT
+			cat
+			FROM ". $db_settings['settings_table'];
+			# getting the result of the query from the settings table
+			$resultCats = mysql_query($getAllSettingsCatsQuery, $connid);
+			# the database request failed
+			if (!$resultCats)
 				{
-				if (strrchr($file, ".") == ".php" && strrchr($file, "_") != "_add.php")
+				$output .= '<p>'. $lang['db_error'] .'</p>';
+				}
+			# the database request was successfull
+			else
+				{
+				# as first, generate the menu
+				$menu .= '<ul class="menulist">'."\n";
+				while ($category = mysql_fetch_assoc($resultCats))
 					{
-					echo '<option value="'.$file.'"';
-					echo ($settings['language_file'] == $file) ? ' selected="selected"' : '';
-					echo '>'.ucfirst(str_replace(".php","",$file)).'</option>'."\n";
+					$catTable[] = $category['cat'];
+					if ((empty($_GET['settingsCat']) and $category['cat'] == 'general')
+					or ($category['cat'] == $_GET['settingsCat']))
+						{
+						$menu .= '<li><span>';
+						$menu .= htmlspecialchars($lang_add['settings_cat'][$category['cat']]) .'</span></li>';
+						}
+					else
+						{
+						$menu .= '<li><a href="?action=settings&amp;settingsCat='. $category['cat'] .'">';
+						$menu .= htmlspecialchars($lang_add['settings_cat'][$category['cat']]) .'</a></li>';
+						}
+					}
+				$menu .= '</ul>'."\n";
+				# generate the GET-parameter dependant part of the query to read forum settings
+				if (in_array($_GET['settingsCat'], $catTable))
+					{
+					$catsName = $lang_add['settings_cat'][$_GET['settingsCat']];
+					$catParameter = $_GET['settingsCat'];
+					$addit = "
+					WHERE cat = '". mysql_real_escape_string($_GET['settingsCat']) ."'";
+					}
+				else
+					{
+					$catsName = $lang_add['settings_cat']['general'];
+					$catParameter = 'general';
+					$addit = "
+					WHERE cat = 'general'";
+					}
+				# the database query itself
+				$getAllSettingsQuery = "SELECT
+				name,
+				value,
+				cat,
+				type,
+				poss_values
+				FROM ". $db_settings['settings_table'].$addit;
+				# get the result of the query
+				$resultSettings =  mysql_query($getAllSettingsQuery, $connid);
+				# the database request failed
+				if (!$resultSettings)
+					{
+					$output .= '<p>'. $lang['db_error'] .'</p>';
+					}
+				# the database request was successfull
+				else
+					{
+					$output .= '<h2>'. $catsName .'</h2>'."\n";
+					$output .= $menu;
+					$output .= '<form action="admin.php?settingsCat='. urlencode($catParameter) .'" method="post">'."\n";
+					$output .= ' <table class="admin">'."\n".'  ';
+					while ($setting = mysql_fetch_assoc($resultSettings))
+						{
+						$output .= '<tr>'."\n";
+						$output .= '   <td>';
+						# debug information (interim solution)
+#						$output .= array_key_exists($setting['name'], $lang_add)? '<label for="'. htmlspecialchars($setting['name']) .'">'. $lang_add[$setting['name']] .'</label> ('. $setting['name'] .')' : $setting['name'];
+						$output .= array_key_exists($setting['name'], $lang_add)? '<label for="'. htmlspecialchars($setting['name']) .'">'. $lang_add[$setting['name']] .'</label>' : $setting['name'];
+						$output .= array_key_exists($setting['name'] .'_d', $lang_add)? '<br />'. $lang_add[$setting['name'] .'_d'] : '';
+						$output .= '</td>'."\n".'   <td>'."\n";
+						if ($setting['type'] == 'array')
+							{
+							# use select
+							$possible = explode(', ', $setting['poss_values']);
+							$posslength = count($possible);
+							# length of array is 1; it is a special case
+							if ($posslength == 1)
+								{
+								# read the text of the special case
+								$matcher = explode(':', $possible[0]);
+								# the possible values are not present,
+								# the list will be genertated in another way
+								unset($possible);
+								# reinitialze the variable
+								$possible = array();
+								# the values comes from a file list
+								if ($matcher[0] == 'file')
+									{
+									$handle = opendir($matcher[1]);
+									$c = 0;
+									while ($file = readdir($handle))
+										{
+										if (strrchr($file, ".") == ".php" && strrchr($file, "_") != "_add.php")
+											{
+											$possible[$c] = $file .':'. ucfirst(str_replace(".php","",$file));
+											$c++;
+											}
+										}
+									closedir($handle);
+									}
+								# the values comes from a function
+								if ($matcher[0] == 'function')
+									{
+									if ($matcher[1] == 'timezones')
+										{
+										$zones = timezone_identifiers_list();
+										$c = 0;
+										foreach ($zones as $tz)
+											{
+											$possible[$c] = $tz .':'. $tz;
+											$c++;
+											}
+										}
+									if ($matcher[1] == 'hours')
+										{
+										$c = 0;
+										for ($h = -24; $h <= 24; $h++)
+											{
+											$possible[$c] = $h .':'. $h;
+											$c++;
+											}
+										}
+									}
+								# read the length of the new generated array
+								$posslength = count($possible);
+								}
+							$output .= '    <select id="'. htmlspecialchars($setting['name']) .'" name="'. htmlspecialchars($setting['name']) .'">'."\n";
+							# generate the option elements
+							for ($i = 0; $i < $posslength; $i++)
+								{
+								# split the option, if possible
+								if (strpos($possible[$i], ':'))
+									{
+									$poss = explode(':', $possible[$i]);
+									}
+								# generate a surrogate array
+								else
+									{
+									$poss = array($possible[$i], $possible[$i]);
+									}
+								$output .= '     <option value="'. htmlspecialchars($poss[0]) .'"';
+								$output .= ($setting['value'] == $poss[0]) ? ' selected="selected"' : '';
+								# no language dependant text defined
+								if (!array_key_exists($poss[1], $lang_add))
+									{
+									$output .= '>'. htmlspecialchars($poss[1]);
+									}
+								# if text is present, use it
+								else
+									{
+									$output .= '>'. htmlspecialchars($lang_add[$poss[1]]);
+									}
+								$output .= '</option>'."\n";
+								unset($poss);
+								}
+							$output .= '    </select>'."\n";
+							}
+						else
+							{
+							# use input element, type text
+							# make input field longer or shorter, dependant from type (integer vs. string)
+							$length = ($setting['type'] == 'integer') ? 12 : 40;
+							# readonly field in special case of setting for version string
+							$readonly = ($setting['name'] == 'version') ? ' readonly="readonly"' : '';
+							$output .= '    <input type="text" id="'. htmlspecialchars($setting['name']).'" name="'. htmlspecialchars($setting['name']) .'" value="'. htmlspecialchars($setting['value']) .'" size="'. $length .'"'. $readonly .' />'."\n";
+							}
+						$output .= '   </td>'."\n";
+						$output .= '  </tr>';
+						}
+					$output .= "\n".' </table>'."\n";
+					$output .= '<p><input type="submit" name="settings_submitted"';
+					$output .= ' value="'.outputLangDebugInAttributes($lang_add['settings_sb']).'" /></p>'."\n";
+					$output .= '</form>'."\n";
 					}
 				}
-			closedir($handle);
-			echo '</select></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c"><label for="topic-pp">'.$lang_add['topics_per_page'].'</b><br />';
-			echo '<span class="info">'.$lang_add['topics_per_page_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="text" name="topics_per_page" id="topic-pp" value="';
-			echo $settings['topics_per_page'].'" size="5" /></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c"><label for="server-timediff">'.$lang_add['forum_time_difference'].'</b><br />';
-			echo '<span class="info">'.$lang_add['forum_time_difference_d'].'</span></td>'."\n";
-			echo '<td class="d"><select name="time_difference" id="server-timediff" size="1">'."\n";
-			for ($h = -24; $h <= 24; $h++)
-				{
-				echo '<option value="'.$h.'"';
-				echo ($std==$h) ? ' selected="selected"' : '';
-				echo '>'.$h.'</option>'."\n";
-				}
-			echo '</select></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['thread_view'].'<br />';
-			echo '<span class="info">'.$lang_add['thread_view_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="thread_view" id="view-thread-1" value="1"';
-			echo ($settings['thread_view']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="view-thread-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="thread_view" id="view-thread-0" value="0"';
-			echo ($settings['thread_view']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="view-thread-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['board_view'].'<br />';
-			echo '<span class="info">'.$lang_add['board_view_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="board_view" id="view-board-1" value="1"';
-			echo ($settings['board_view']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="view-board-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="board_view" id="view-board-0" value="0"';
-			echo ($settings['board_view']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="view-board-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['mix_view'].'<br />';
-			echo '<span class="info">'.$lang_add['mix_view_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="mix_view" id="view-mix-1" value="1"';
-			echo ($settings['mix_view']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="view-mix-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="mix_view" id="view-mix-0" value="0"';
-			echo ($settings['mix_view']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="view-mix-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['standard'].'<br />';
-			echo '<span class="info">'.$lang_add['standard_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="standard" id="standard-thread" value="thread"';
-			echo ($settings['standard']=="thread") ? ' checked="checked"' : '';
-			echo ' /><label for="standard-thread">'.$lang_add['standard_thread'].'</label>';
-			echo '<input type="radio" name="standard" id="standard-board" value="board"';
-			echo ($settings['standard']=="board") ? ' checked="checked"' : '';
-			echo ' /><label for="standard-board">'.$lang_add['standard_board'].'</label>';
-			echo '<input type="radio" name="standard" id="standard-mix" value="mix"';
-			echo ($settings['standard']=="mix") ? ' checked="checked"' : '';
-			echo ' /><label for="standard-mix">'.$lang_add['standard_mix'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['accession'].'<br />';
-			echo '<span class="info">'.$lang_add['accession_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="access_for_users_only" id="access-user" value="1"';
-			echo ($settings['access_for_users_only']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="access-user">'.$lang_add['access_only_reg_users'].'</label>';
-			echo '<input type="radio" name="access_for_users_only" id="access-all" value="0"';
-			echo ($settings['access_for_users_only']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="access-all">'.$lang_add['access_all_users'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['entry_perm'].'<br />';
-			echo '<span class="info">'.$lang_add['entry_perm_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="entries_by_users_only" id="entry-user" value="1"';
-			echo ($settings['entries_by_users_only']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="entry-user">'.$lang_add['access_only_reg_users'].'</label>';
-			echo '<input type="radio" name="entries_by_users_only" id="entry-all" value="0"';
-			echo ($settings['entries_by_users_only']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="entry-all">'.$lang_add['access_all_users'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['register_perm'].'<br />';
-			echo '<span class="info">'.$lang_add['register_perm_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="register_by_admin_only" id="regist-admin" value="1"';
-			echo ($settings['register_by_admin_only']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="regist-admin">'.$lang_add['register_only_admin'].'</label>';
-			echo '<input type="radio" name="register_by_admin_only" id="regist-self" value="0"';
-			echo ($settings['register_by_admin_only']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="regist-self">'. $lang_add['register_self'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['mark_reg_users'].'<br />';
-			echo '<span class="info">'.$lang_add['mark_reg_users_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="show_registered" id="mark-reg-1" value="1"';
-			echo ($settings['show_registered']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="mark-reg-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="show_registered" id="mark-reg-0" value="0"';
-			echo ($settings['show_registered']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="mark-reg-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['email_notification'].'<br />';
-			echo '<span class="info">'.$lang_add['email_notification_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="email_notification" id="notify-author-1" value="1"';
-			echo ($settings['email_notification']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="notify-author-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="email_notification" id="notify-author-0" value="0"';
-			echo ($settings['email_notification']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="notify-author-0">'.$lang['no'].'</td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['edit_own_entries'].'<br />';
-			echo '<span class="info">'.$lang_add['edit_own_entries_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="user_edit" id="edit-own-1" value="1"';
-			echo ($settings['user_edit']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="edit-own-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="user_edit" id="edit-own-0" value="0"';
-			echo ($settings['user_edit']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="edit-own-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c"><label for="edit-period">'.$lang_add['edit_period'].'</label><br />';
-			echo '<span class="info">'.$lang_add['edit_period_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="text" name="edit_period" id="edit-period" value="';
-			echo $settings['edit_period'].'" size="5" /></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['show_if_edited'].'<br />';
-			echo '<span class="info">'.$lang_add['show_if_edited_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="show_if_edited" id="display-edit-1" value="1"';
-			echo ($settings['show_if_edited']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="display-edit-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="show_if_edited" id="display-edit-0" value="0"';
-			echo ($settings['show_if_edited']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="display-edit-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c"><label for="edit-delay">'.$lang_add['edit_delay'].'</label><br />';
-			echo '<span class="info">'.$lang_add['edit_delay_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="text" name="edit_delay" id="edit-delay" value="';
-			echo $settings['edit_delay'].'" size="5" /></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['admin_unnoticeable_edit'].'<br />';
-			echo '<span class="info">'.$lang_add['admin_unnoticeable_edit_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="dont_reg_edit_by_admin" id="admin-edit-1" value="1"';
-			echo ($settings['dont_reg_edit_by_admin']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="admin-edit-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="dont_reg_edit_by_admin" id="admin-edit-0" value="0"';
-			echo ($settings['dont_reg_edit_by_admin']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="admin-edit-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['mod_unnoticeable_edit'].'<br />';
-			echo '<span class="info">'.$lang_add['mod_unnoticeable_edit_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="dont_reg_edit_by_mod" id="mod-edit-1" value="1"';
-			echo ($settings['dont_reg_edit_by_mod']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="mod-edit-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="dont_reg_edit_by_mod" id="mod-edit-0" value="0"';
-			echo ($settings['dont_reg_edit_by_mod']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="mod-edit-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['bbcode'].'<br />';
-			echo '<span class="info">'.$lang_add['bbcode_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="bbcode" id="bbcode-1" value="1"';
-			echo ($settings['bbcode']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="bbcode-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="bbcode" id="bbcode-0" value="0"';
-			echo ($settings['bbcode']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="bbcode-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['bbcode_img'].'<br />';
-			echo '<span class="info">'.$lang_add['bbcode_img_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="bbcode_img" id="bbimg-1" value="1"';
-			echo ($settings['bbcode_img']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="bbimg-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="bbcode_img" id="bbimg-0" value="0"';
-			echo ($settings['bbcode_img']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="bbimg-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['upload_images'].'<br />';
-			echo '<span class="info">'.$lang_add['upload_images_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="upload_images" id="upload-img-1" value="1"';
-			echo ($settings['upload_images']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="upload-img-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="upload_images" id="upload-img-0" value="0"';
-			echo ($settings['upload_images']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="upload-img-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['smilies'].'<br />';
-			echo '<span class="info">'.$lang_add['smilies_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="smilies" id="smilies-1" value="1"';
-			echo ($settings['smilies']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="smilies-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="smilies" id="smilies-0" value="0"';
-			echo ($settings['smilies']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="smilies-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['autolink'].'<br />';
-			echo '<span class="info">'.$lang_add['autolink_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="autolink" id="autolink-1" value="1"';
-			echo ($settings['autolink']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="autolink-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="autolink" id="autolink-0" value="0"';
-			echo ($settings['autolink']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="autolink-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['count_views'].'<br />';
-			echo '<span class="info">'.$lang_add['count_views_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="count_views" id="count-views-1" value="1"';
-			echo ($settings['count_views']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="count-views-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="count_views" id="count-views-0" value="0"';
-			echo ($settings['count_views']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="count-views-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['count_users_online'].'<br />';
-			echo '<span class="info">'.$lang_add['count_users_online_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="count_users_online" id="count-online-1" value="1"';
-			echo ($settings['count_users_online']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="count-online-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="count_users_online" id="count-online-0" value="0"';
-			echo ($settings['count_users_online']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="count-online-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['rss_feed'].'<br />';
-			echo '<span class="info">'.$lang_add['rss_feed_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="provide_rssfeed" id="rss-feed-1" value="1"';
-			echo ($settings['provide_rssfeed']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="rss-feed-1">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="provide_rssfeed" id="rss-feed-0" value="0"';
-			echo ($settings['provide_rssfeed']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="rss-feed-0">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['captcha'].'<br />';
-			echo '<span class="info">'.$lang_add['captcha_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="checkbox" name="captcha_posting" id="captcha-post" value="1"';
-			echo ($settings['captcha_posting']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="captcha-post">'.$lang_add['captcha_posting'].'</label><br />';
-			echo '<input type="checkbox" name="captcha_contact" id="captcha-contact" value="1"';
-			echo ($settings['captcha_contact']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="captcha-contact">'.$lang_add['captcha_contact'].'</label><br />';
-			echo '<input type="checkbox" name="captcha_register" id="captcha-reg" value="1"';
-			echo ($settings['captcha_register']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="captcha-reg">'.$lang_add['captcha_register'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['captcha_type'].'<br />';
-			echo '<span class="info">'.$lang_add['captcha_type_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="captcha_type" id="captcha-type-0" value="0"';
-			echo ($settings['captcha_type']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="captcha-type-0">'.$lang_add['captcha_type_math'].'</label><br />';
-			echo '<input type="radio" name="captcha_type" id="captcha-type-1" value="1"';
-			echo ($settings['captcha_type']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="captcha-type-1">'.$lang_add['captcha_type_image'].'</label></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['forum_disabled'].'<br />';
-			echo '<span class="info">'.$lang_add['forum_disabled_d'].'</span></td>'."\n";
-			echo '<td class="d"><input type="radio" name="forum_disabled" id="forum-disabled" value="1"';
-			echo ($settings['forum_disabled']==1) ? ' checked="checked"' : '';
-			echo ' /><label for="forum-disabled">'.$lang['yes'].'</label>';
-			echo '<input type="radio" name="forum_disabled" id="forum-enabled" value="0"';
-			echo ($settings['forum_disabled']==0) ? ' checked="checked"' : '';
-			echo ' /><label for="forum-enabled">'.$lang['no'].'</label></td>'."\n";
-			echo '</tr>'."\n";
-			echo '</table>'."\n";
-			echo '<p><input type="submit" name="settings_submitted"';
-			echo ' value="'.outputLangDebugInAttributes($lang_add['settings_sb']).'" /></p>'."\n";
-			echo '</form>'."\n";
-			echo '<ul class="linklist">'."\n";
-			echo '<li><a class="textlink" href="admin.php?action=advanced_settings">'.$lang_add['advanced_settings'].'</a></li>'."\n";
-			echo '</ul>'."\n";
-		break;
-		case "advanced_settings":
-			echo '<form action="admin.php" method="post">'."\n";
-			echo '<table class="normaltab">'."\n";
-			ksort($settings);
-			while (list($key, $val) = each($settings))
-				{
-				echo '<tr>'."\n";
-				echo '<td class="c"><b>'.$key.'</b></td>'."\n";
-				echo '<td class="d"><input type="text" name="'.htmlspecialchars($key);
-				echo '" value="'.htmlspecialchars($val).'" size="30" /></td>'."\n";
-				echo '</tr>';
-				}
-			echo "\n".'</table>'."\n";
-			echo '<p><input type="submit" name="settings_submitted" value="';
-			echo outputLangDebugInAttributes($lang_add['settings_sb']).'" />&nbsp;<input type="reset" value="';
-			echo outputLangDebugInAttributes($lang['reset_button']).'" /></p>'."\n".'</form>'."\n";
+			echo $output;
 		break;
 		case "delete_users_sure":
 			echo '<h2>'.$lang_add['delete_users_hl'].'</h2>'."\n";

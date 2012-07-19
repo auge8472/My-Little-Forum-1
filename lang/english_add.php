@@ -47,12 +47,79 @@ $lang_add['debug_none'] =                     "Debug mode: off";
 $lang_add['debug_none_d'] =                   "No debugging informations (normal behaviour)";
 $lang_add['debug_lang'] =                     "Debug mode: language";
 $lang_add['debug_lang_d'] =                   "Delivers debugging informations about language strings as tool tip";
+
+$lang_add['0'] =                              "off";
+$lang_add['1'] =                              "on";
+$lang_add['no'] =                             "no";
+$lang_add['yes'] =                            "yes";
+
+# general settings
 $lang_add['forum_name'] =                     "Forum name";
 $lang_add['forum_name_d'] =                   "will be (amongst others) shown in the header";
 $lang_add['forum_email'] =                    "Forum e-mail address";
 $lang_add['forum_email_d'] =                  "will be used as contact address and forwarding e-mail address for all e-mails sent by the forum";
 $lang_add['forum_disabled'] =                 "Disable forum";
 $lang_add['forum_disabled_d'] =               "Do you want to make the forum unavailable?";
+$lang_add['forum_address'] =                  "Forum address";
+$lang_add['forum_address_d'] =                "URL of the forum (use this format: http://www.domain.tld/forum/)";
+$lang_add['language_file'] =                  "Language";
+$lang_add['language_file_d'] =                "Language of the Forum";
+# old
+$lang_add['home_link'] =                      "Home link";
+$lang_add['home_link_d'] =                    "Link to your homepage, e.g. \"http://www.domain.tld/\" or \"../index.html\" (optional)";
+# new
+$lang_add['home_linkaddress'] =               "Home link";
+$lang_add['home_linkaddress_d'] =             "Link to your homepage, e.g. \"http://www.domain.tld/\" or \"../index.html\" (optional)";
+# old
+$lang_add['home_link_name'] =                 "Home link name";
+$lang_add['home_link_name_d'] =               "Name of the home link, e.g. &quot;Back to homepage&quot;";
+# new
+$lang_add['home_linkname'] =                  "Home link name";
+$lang_add['home_linkname_d'] =                "Name of the home link, e.g. &quot;Back to homepage&quot;";
+# old
+$lang_add['template_file'] =                  "Template file";
+$lang_add['template_file_d'] =                "Template for the page layout";
+# new
+$lang_add['template'] =                       "Template file";
+$lang_add['template_d'] =                     "Template for the page layout";
+# old
+$lang_add['rss_feed'] =                       "RSS feed:";
+$lang_add['rss_feed_d'] =                     "Should a RSS feed with the newest posts be offered (only possible if access permission (cp. above) has been set to \"Everyone\")?";
+#new
+$lang_add['provide_rssfeed'] =                "RSS feed:";
+$lang_add['provide_rssfeed_d'] =              "Should a RSS feed with the newest posts be offered (only possible if access permission (cp. above) has been set to \"Everyone\")?";
+# old
+$lang_add['forum_time_difference'] =          "Forum time difference";
+$lang_add['forum_time_difference_d'] =        "Time difference between server and forum time";
+# new
+$lang_add['time_difference'] =                "Forum time difference";
+$lang_add['time_difference_d'] =              "Time difference between server and forum time";
+# old
+$lang_add['accession'] =                      "Access permission";
+$lang_add['accession_d'] =                    "Who has access to the forum?";
+# new
+$lang_add['access_for_users_only'] =          "Access permission";
+$lang_add['access_for_users_only_d'] =        "Who has access to the forum?";
+
+$lang_add['access_only_reg_users'] =          "Only registered users";
+$lang_add['access_all_users'] =               "Everyone";
+
+$lang_add['user_edit'] =                      "Edit posting by user";
+$lang_add['user_edit_d'] =                    "Should a user be able to edit his posting?";
+$lang_add['user_delete'] =                    "Delete posting by user";
+$lang_add['user_delete_d'] =                  "Should a user be able to delete his posting?";
+$lang_add['mail_parameter'] =                 "Mail parameter";
+$lang_add['mail_parameter_d'] =               "Parameter to contact the mail server (maybe needed). Contact your provider for information.";
+$lang_add['session_prefix'] =                 "Session prefix";
+$lang_add['session_prefix_d'] =               "Use the prefix to distinguish the forum sessions from other systems sessions.";
+$lang_add['version'] =                        "Software version";
+$lang_add['version_d'] =                      "Version string of the current installation.";
+$lang_add['server_timezone'] =                "Server time zone";
+$lang_add['server_timezone_d'] =              "Time zone of the web server.";
+$lang_add['autologin'] =                      "Auto login";
+$lang_add['autologin_d'] =                    "Use cookies to log in automatically when a user opens the forum.";
+
+# view settings
 $lang_add['thread_view'] =                    "Thread view";
 $lang_add['thread_view_d'] =                  "Do you wish to use the thread view?";
 $lang_add['board_view'] =                     "Board view";
@@ -64,48 +131,71 @@ $lang_add['standard_d'] =                     "Which view should be used as defa
 $lang_add['standard_thread'] =                "Thread view";
 $lang_add['standard_board'] =                 "Board view";
 $lang_add['standard_mix'] =                   "Mix view";
-$lang_add['accession'] =                      "Access permission";
-$lang_add['accession_d'] =                    "Who has access to the forum?";
-$lang_add['access_only_reg_users'] =          "Only registered users";
-$lang_add['access_all_users'] =               "Everyone";
 $lang_add['entry_perm'] =                     "Entries";
 $lang_add['entry_perm_d'] =                   "Who is allowed to make entries?";
 $lang_add['register_perm'] =                  "User registration";
 $lang_add['register_only_admin'] =            "Only by admin";
 $lang_add['register_self'] =                  "Self";
 $lang_add['register_perm_d'] =                "Can users register themselves?";
+$lang_add['bbcode'] =                         "BB code";
+$lang_add['bbcode_d'] =                       "Should BB codes for formatting message texts be allowed ([b]bold[/b], [i]italic[/i], [link]http://www.domain.com/[/link], [link=http://www.domain.tld/]Link[/link])?";
+# old
 $lang_add['mark_reg_users'] =                 "Mark registered users";
 $lang_add['mark_reg_users_d'] =               "Should registered users be recognisable by a mark?";
-$lang_add['forum_address'] =                  "Forum address";
-$lang_add['forum_address_d'] =                "URL of the forum (use this format: http://www.domain.tld/forum/)";
-$lang_add['home_link'] =                      "Home link";
-$lang_add['home_link_d'] =                    "Link to your homepage, e.g. \"http://www.domain.tld/\" or \"../index.html\" (optional)";
-$lang_add['home_link_name'] =                 "Home link name";
-$lang_add['home_link_name_d'] =               "Name of the home link, e.g. &quot;Back to homepage&quot;";
-$lang_add['language_file'] =                  "Language";
-$lang_add['language_file_d'] =                "Language of the Forum";
+# new
+$lang_add['show_registered'] =                "Mark registered users";
+$lang_add['show_registered_d'] =              "Should registered users be recognisable by a mark?";
+
+$lang_add['last_reply_link'] =                "Direct link to last answer";
+$lang_add['last_reply_link_d'] =              "Link to the last answer in the board view";
+$lang_add['last_reply_name'] =                "Posters name of the last answer";
+$lang_add['last_reply_name_d'] =              "Refer the posters name of the last answer in the board view";
+$lang_add['show_posting_id'] =                "Show the posting ID";
+$lang_add['show_posting_id_d'] =              "Show the ID of a posting i.e. for use in links.";
+$lang_add['asc'] =                            "new posting bottom";
+$lang_add['desc'] =                           "new posting on top";
+
+$lang_add['all_views_direct'] =               "Direct access to all views";
+$lang_add['all_views_direct_d'] =             "Should an user be able to open a thread in all accessible views?";
+$lang_add['thread_depth_indent'] =            "Depth of thread indent";
+$lang_add['thread_depth_indent_d'] =          "In wich depth should the indention of threads end?";
+$lang_add['empty_postings_possible'] =        "Empty postings possible";
+$lang_add['empty_postings_possible_d'] =      "Should an user be able to post an empty posting?";
+$lang_add['admin_mod_highlight'] =            "Highlight admins and moderators";
+$lang_add['admin_mod_highlight_d'] =          "Mark admins and moderators names with differing colours.";
+$lang_add['user_highlight'] =                 "Highlight registered users";
+$lang_add['user_highlight_d'] =               "Mark names of registered users with differing colours.";
+$lang_add['thread_view_sorter'] =             "Sorting of answers in thread view";
+$lang_add['thread_view_sorter_d'] =           "Sets the sort order in thread view. The newest answers to a topic can be set to top or bottom of the thread.";
+
 $lang_add['topics_per_page'] =                "Threads/Topics per page";
 $lang_add['topics_per_page_d'] =              "How many threads/topics should be displayed per page?";
-$lang_add['forum_time_difference'] =          "Forum time difference";
-$lang_add['forum_time_difference_d'] =        "Time difference between server and forum time";
-$lang_add['template_file'] =                  "Template file";
-$lang_add['template_file_d'] =                "Template for the page layout";
 $lang_add['email_notification'] =             "E-mail notification to the posting author";
 $lang_add['email_notification_d'] =           "Option for e-mail notification to the posting author once a reply to this post has been submitted";
+
+# posting settings
 $lang_add['edit_own_entries'] =               "Editing own posts";
 $lang_add['edit_own_entries_d'] =             "Should registered users be allowed to edit their own posts?";
 $lang_add['show_if_edited'] =                 "Show editing";
 $lang_add['show_if_edited_d'] =               "Show whether, when and by whom a post has been edited?";
+
+# old
 $lang_add['admin_unnoticeable_edit'] =        "Unnoticed editing by admin";
 $lang_add['admin_unnoticeable_edit_d'] =      "Should admins be allowed to edit posts &quot;unnoticed&quot;?";
+# new
+$lang_add['dont_reg_edit_by_admin'] =         "Unnoticed editing by admin";
+$lang_add['dont_reg_edit_by_admin_d'] =       "Should admins be allowed to edit posts &quot;unnoticed&quot;?";
+# old
 $lang_add['mod_unnoticeable_edit'] =          "Unnoticed editing by moderators";
 $lang_add['mod_unnoticeable_edit_d'] =        "Should moderators be allowed to edit posts &quot;unnoticed&quot;?";
+# new
+$lang_add['dont_reg_edit_by_mod'] =           "Unnoticed editing by moderators";
+$lang_add['dont_reg_edit_by_mod_d'] =         "Should moderators be allowed to edit posts &quot;unnoticed&quot;?";
+
 $lang_add['edit_period'] =                    "Edit Period";
 $lang_add['edit_period_d'] =                  "How long can own entries be edited by users (in minutes, 0 for unlimited)?";
 $lang_add['edit_delay'] =                     "Edit delay";
 $lang_add['edit_delay_d'] =                   "If editing is to be shown, a time period (minutes) can be set within messages can be edited without showing it";
-$lang_add['bbcode'] =                         "BB code";
-$lang_add['bbcode_d'] =                       "Should BB codes for formatting message texts be allowed ([b]bold[/b], [i]italic[/i], [link]http://www.domain.com/[/link], [link=http://www.domain.tld/]Link[/link])?";
 $lang_add['smilies'] =                        "Smilies";
 $lang_add['smilies_d'] =                      "Should smilies be used?";
 $lang_add['bbcode_img'] =                     "BB code for images";
@@ -118,8 +208,6 @@ $lang_add['count_views'] =                    "Views counter";
 $lang_add['count_views_d'] =                  "Should post views (hits) be counted?";
 $lang_add['count_users_online'] =             "Users online counter";
 $lang_add['count_users_online_d'] =           "Count the users which are currently online?";
-$lang_add['rss_feed'] =                       "RSS feed:";
-$lang_add['rss_feed_d'] =                     "Should a RSS feed with the newest posts be offered (only possible if access permission (cp. above) has been set to \"Everyone\")?";
 $lang_add['captcha'] =                        "CAPTCHA:";
 $lang_add['captcha_d'] =                      "Which forms should be protected by a CAPTCHA (only for not registered users)?";
 $lang_add['captcha_posting'] =                "Posting form";
@@ -181,7 +269,6 @@ $lang_add['entries_in_not_ex_cat'] =          "<b>Notice:</b> There are entries 
 $lang_add['entries_in_not_ex_cat_delete'] =   "delete them";
 $lang_add['entries_in_not_ex_cat_move'] =     "move them into [category]";
 $lang_add['accessible_for'] =                 "Accessible for:";
-$lang_add['advanced_settings'] =              "Advanced settings";
 $lang_add['sql_complete'] =                   "Complete SQL dump";
 $lang_add['sql_forum'] =                      "SQL dump of entries";
 $lang_add['sql_forum_marked'] =               "SQL dump of marked entries";
@@ -294,4 +381,12 @@ $lang_add['installation_complete'] =          "Installation successful!";
 $lang_add['installation_complete_exp'] =      "As a precaution please now delete <b>install.php</b> if the forum is accessible via the internet and set CHMOD of <b>db_settings.php</b> on 644 again!";
 $lang_add['update_complete'] =                "Update successful!";
 $lang_add['installation_complete_link'] =     "&raquo; Go to the forum...";
+
+// admin area categories
+$lang_add['settings_cat']['general'] =        "General";
+$lang_add['settings_cat']['views'] =          "Forum Views";
+$lang_add['settings_cat']['postings'] =       "Postings";
+$lang_add['settings_cat']['sessions'] =       "Sessions";
+$lang_add['settings_cat']['security'] =       "Security";
+$lang_add['settings_cat']['enhanced'] =       "Enhanced";
 ?>
