@@ -2128,6 +2128,12 @@ switch ($action)
 			$catTable = array();
 			unset($errors);
 			$std = (isset($settings['time_difference'])) ? $settings['time_difference'] : 0;
+			# read categories list from settings table
+			$getAllSettingsCatsQuery = "SELECT DISTINCT
+			cat
+			FROM ". $db_settings['settings_table'];
+			# getting the result of the query from the settings table
+			$resultCats = mysql_query($getAllSettingsCatsQuery, $connid);
 			echo '<form action="admin.php" method="post">'."\n";
 			echo '<table class="normaltab">'."\n";
 			echo '<tr>'."\n";
