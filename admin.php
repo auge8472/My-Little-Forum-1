@@ -2160,6 +2160,29 @@ switch ($action)
 						}
 					}
 				$menu .= '</ul>'."\n";
+				# generate the GET-parameter dependant part of the query to read forum settings
+				if (in_array($_GET['settingsCat'], $catTable))
+					{
+					$catsName = $lang_add['settings_cat'][$_GET['settingsCat']];
+					$addit = "
+					WHERE cat = '". mysql_real_escape_string($_GET['settingsCat']) ."'";
+					}
+				else
+					{
+					$catsName = $lang_add['settings_cat']['general'];
+					$addit = "
+					WHERE cat = 'general'";
+					}
+				# the database query itself
+				$getAllSettingsQuery = "SELECT
+				name,
+				value,
+				cat,
+				type,
+				poss_values
+				FROM ". $db_settings['settings_table'].$addit;
+				# get the result of the query
+				$resultSettings =  mysql_query($getAllSettingsQuery, $connid);
 				}
 			echo '<form action="admin.php" method="post">'."\n";
 			echo '<table class="normaltab">'."\n";
