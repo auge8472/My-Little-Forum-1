@@ -336,10 +336,10 @@ $lang_add['update_complete'] =                "Update erfolgreich abgeschlossen!
 $lang_add['installation_complete_link'] =     "&raquo; weiter zum Forum...";
 
 // admin area categories
-$lang_add['settings_cat']['general'] =        "Allgemeine Einstellungen";
-$lang_add['settings_cat']['views'] =          "Ansichtseinstellungen";
-$lang_add['settings_cat']['postings'] =       "Postingeinstellungen";
-$lang_add['settings_cat']['sessions'] =       "Sitzungseinstellungen";
-$lang_add['settings_cat']['security'] =       "Sicherheitseinstellungen";
-$lang_add['settings_cat']['enhanced'] =       "Erweiterte Einstellungen";
+$lang_add['settings_cat']['general'] =        "Allgemein";
+$lang_add['settings_cat']['views'] =          "Ansichten";
+$lang_add['settings_cat']['postings'] =       "Postings";
+$lang_add['settings_cat']['sessions'] =       "Sitzungen";
+$lang_add['settings_cat']['security'] =       "Sicherheit";
+$lang_add['settings_cat']['enhanced'] =       "Erweitert";
 ?>

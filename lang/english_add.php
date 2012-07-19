@@ -384,10 +384,10 @@ $lang_add['update_complete'] =                "Update successful!";
 $lang_add['installation_complete_link'] =     "&raquo; Go to the forum...";
 
 // admin area categories
-$lang_add['settings_cat']['general'] =        "General Settings";
-$lang_add['settings_cat']['views'] =          "Forum Views Settings";
-$lang_add['settings_cat']['postings'] =       "Posting Settings";
-$lang_add['settings_cat']['sessions'] =       "Session Settings";
-$lang_add['settings_cat']['security'] =       "Security Settings";
-$lang_add['settings_cat']['enhanced'] =       "Enhanced Settings";
+$lang_add['settings_cat']['general'] =        "General";
+$lang_add['settings_cat']['views'] =          "Forum Views";
+$lang_add['settings_cat']['postings'] =       "Postings";
+$lang_add['settings_cat']['sessions'] =       "Sessions";
+$lang_add['settings_cat']['security'] =       "Security";
+$lang_add['settings_cat']['enhanced'] =       "Enhanced";
 ?>
