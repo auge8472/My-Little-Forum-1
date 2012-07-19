@@ -2155,7 +2155,7 @@ switch ($action)
 						}
 					else
 						{
-						$menu .= '<li><a href="?settingsCat='. $category['cat'] .'">';
+						$menu .= '<li><a href="?action=settings&amp;settingsCat='. $category['cat'] .'">';
 						$menu .= htmlspecialchars($lang_add['settings_cat'][$category['cat']]) .'</a></li>';
 						}
 					}
