@@ -2208,6 +2208,33 @@ switch ($action)
 							$possible = explode(', ', $setting['poss_values']);
 							$posslength = count($possible);
 							$output .= '    <select id="'. htmlspecialchars($setting['name']) .'" name="'. htmlspecialchars($setting['name']) .'">'."\n";
+							# generate the option elements
+							for ($i = 0; $i < $posslength; $i++)
+								{
+								# split the option, if possible
+								if (strpos($possible[$i], ':'))
+									{
+									$poss = explode(':', $possible[$i]);
+									}
+								# generate a surrogate array
+								else
+									{
+									$poss = array($possible[$i], $possible[$i]);
+									}
+								$output .= '     <option value="'. htmlspecialchars($poss[0]) .'"';
+								$output .= ($setting['value'] == $poss[0]) ? ' selected="selected"' : '';
+								# no language dependant text defined
+								if (!array_key_exists($poss[1], $lang_add))
+									{
+									$output .= '>'. htmlspecialchars($poss[1]);
+									}
+								# if text is present, use it
+								else
+									{
+									$output .= '>'. htmlspecialchars($lang_add[$poss[1]]);
+									}
+								$output .= '</option>'."\n";
+								}
 							$output .= '    </select>'."\n";
 							}
 						$output .= '   </td>'."\n";
