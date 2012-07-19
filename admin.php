@@ -2121,6 +2121,12 @@ switch ($action)
 			echo '</form>'."\n";
 		break;
 		case "settings":
+			# initialize variables
+			$output = '';
+			$menu = '';
+			$settingsTable = array();
+			$catTable = array();
+			unset($errors);
 			$std = (isset($settings['time_difference'])) ? $settings['time_difference'] : 0;
 			echo '<form action="admin.php" method="post">'."\n";
 			echo '<table class="normaltab">'."\n";
