@@ -2134,6 +2134,11 @@ switch ($action)
 			FROM ". $db_settings['settings_table'];
 			# getting the result of the query from the settings table
 			$resultCats = mysql_query($getAllSettingsCatsQuery, $connid);
+			# the database request failed
+			if (!$resultCats)
+				{
+				$output .= '<p>'. $lang['db_error'] .'</p>';
+				}
 			echo '<form action="admin.php" method="post">'."\n";
 			echo '<table class="normaltab">'."\n";
 			echo '<tr>'."\n";
