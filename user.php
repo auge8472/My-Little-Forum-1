@@ -847,6 +847,23 @@ switch ($action)
 			{
 			$lang['user_info_hl'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['user_info_hl']);
 			echo '<h2>'.$lang['user_info_hl'].'</h2>'."\n";
+			if ($user_id == $id)
+				{
+				echo '<ul class="menulist">';
+				echo '<li><span>'.$lang['user_info_hl'].'</span></li>';
+				echo '<li><a href="user.php?action=edit">';
+				echo $lang['edit_userdata_ln'].'</a></li>';
+				echo '<li><a href="user.php?action=subscriptions">';
+				echo $lang['edit_subscription_ln'].'</a></li>';
+				if ($settings['user_control_refresh'] == 1 or $settings['user_control_css'] == 1)
+					{
+					echo '<li><a href="user.php?action=usersettings">';
+					echo $lang['edit_users_settings'].'</a></li>';
+					}
+				echo '<li><a href="user.php?action=pw">';
+				echo $lang['edit_pw_ln'].'</a></li>';
+				echo '</ul>';
+				}
 			echo '<table class="info admin">'."\n";
 			echo '<tr>'."\n";
 			echo '<td>'.$lang['username_marking'].'</td>'."\n";
@@ -944,23 +961,7 @@ switch ($action)
 				echo '</tr>';
 				}
 			echo '</table>'."\n";
-			if ($user_id == $id)
-				{
-				echo '<ul class="linklist">'."\n";
-				echo '<li><a class="textlink" href="user.php?action=subscriptions">';
-				echo $lang['edit_subscription_ln'].'</a></li>'."\n";
-				if ($settings['user_control_refresh'] == 1 or $settings['user_control_css'] == 1)
-					{
-					echo '<li><a class="textlink" href="user.php?action=usersettings">';
-					echo $lang['edit_users_settings'].'</a></li>'."\n";
-					}
-				echo '<li><a class="textlink" href="user.php?action=edit">';
-				echo $lang['edit_userdata_ln'].'</a></li>'."\n";
-				echo '<li><a class="textlink" href="user.php?action=pw">';
-				echo $lang['edit_pw_ln'].'</a></li>'."\n";
-				echo '</ul>'."\n";
-				}
-			else
+			if ($user_id != $id)
 				{
 				$lang['pers_msg_ln'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['pers_msg_ln']);
 				echo '<ul class="linklist">'."\n";
