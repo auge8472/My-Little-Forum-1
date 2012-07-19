@@ -2280,6 +2280,15 @@ switch ($action)
 								}
 							$output .= '    </select>'."\n";
 							}
+						else
+							{
+							# use input element, type text
+							# make input field longer or shorter, dependant from type (integer vs. string)
+							$length = ($setting['type'] == 'integer') ? 12 : 40;
+							# readonly field in special case of setting for version string
+							$readonly = ($setting['name'] == 'version') ? ' readonly="readonly"' : '';
+							$output .= '    <input type="text" id="'. htmlspecialchars($setting['name']).'" name="'. htmlspecialchars($setting['name']) .'" value="'. htmlspecialchars($setting['value']) .'" size="'. $length .'"'. $readonly .' />'."\n";
+							}
 						$output .= '   </td>'."\n";
 						$output .= '  </tr>';
 						}
