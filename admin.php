@@ -2207,6 +2207,48 @@ switch ($action)
 							# use select
 							$possible = explode(', ', $setting['poss_values']);
 							$posslength = count($possible);
+							# length of array is 1; it is a special case
+							if ($posslength == 1)
+								{
+								# read the text of the special case
+								$matcher = explode(':', $possible[0]);
+								# the possible values are not present,
+								# the list will be genertated in another way
+								unset($possible);
+								# reinitialze the variable
+								$possible = array();
+								# the values comes from a file list
+								if ($matcher[0] == 'file')
+									{
+									$handle = opendir($matcher[1]);
+									$c = 0;
+									while ($file = readdir($handle))
+										{
+										if (strrchr($file, ".") == ".php" && strrchr($file, "_") != "_add.php")
+											{
+											$possible[$c] = $file .':'. ucfirst(str_replace(".php","",$file));
+											$c++;
+											}
+										}
+									closedir($handle);
+									}
+								# the values comes from a function
+								if ($matcher[0] == 'function')
+									{
+									if ($matcher[1] == 'timezones')
+										{
+										$zones = timezone_identifiers_list();
+										$c = 0;
+										foreach ($zones as $tz)
+											{
+											$possible[$c] = $tz .':'. $tz;
+											$c++;
+											}
+										}
+									}
+								# read the length of the new generated array
+								$posslength = count($possible);
+								}
 							$output .= '    <select id="'. htmlspecialchars($setting['name']) .'" name="'. htmlspecialchars($setting['name']) .'">'."\n";
 							# generate the option elements
 							for ($i = 0; $i < $posslength; $i++)
