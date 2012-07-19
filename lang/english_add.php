@@ -269,7 +269,6 @@ $lang_add['entries_in_not_ex_cat'] =          "<b>Notice:</b> There are entries 
 $lang_add['entries_in_not_ex_cat_delete'] =   "delete them";
 $lang_add['entries_in_not_ex_cat_move'] =     "move them into [category]";
 $lang_add['accessible_for'] =                 "Accessible for:";
-$lang_add['advanced_settings'] =              "Advanced settings";
 $lang_add['sql_complete'] =                   "Complete SQL dump";
 $lang_add['sql_forum'] =                      "SQL dump of entries";
 $lang_add['sql_forum_marked'] =               "SQL dump of marked entries";

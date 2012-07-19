@@ -1537,12 +1537,6 @@ if (!empty($action))
 		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
 		$topnav .= '<span class="current-page">'.$lang_add['forum_settings'] .'</span>';
 		}
-	if ($action == "advanced_settings")
-		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<a class="textlink" href="admin.php?action=settings">'.$lang_add['forum_settings'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['advanced_settings'].'</span>';
-		}
 	if ($action == "debug")
 		{
 		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
@@ -2312,26 +2306,6 @@ switch ($action)
 					}
 				}
 			echo $output;
-			echo '<ul class="linklist">'."\n";
-			echo '<li><a class="textlink" href="admin.php?action=advanced_settings">'.$lang_add['advanced_settings'].'</a></li>'."\n";
-			echo '</ul>'."\n";
-		break;
-		case "advanced_settings":
-			echo '<form action="admin.php" method="post">'."\n";
-			echo '<table class="normaltab">'."\n";
-			ksort($settings);
-			while (list($key, $val) = each($settings))
-				{
-				echo '<tr>'."\n";
-				echo '<td class="c"><b>'.$key.'</b></td>'."\n";
-				echo '<td class="d"><input type="text" name="'.htmlspecialchars($key);
-				echo '" value="'.htmlspecialchars($val).'" size="30" /></td>'."\n";
-				echo '</tr>';
-				}
-			echo "\n".'</table>'."\n";
-			echo '<p><input type="submit" name="settings_submitted" value="';
-			echo outputLangDebugInAttributes($lang_add['settings_sb']).'" />&nbsp;<input type="reset" value="';
-			echo outputLangDebugInAttributes($lang['reset_button']).'" /></p>'."\n".'</form>'."\n";
 		break;
 		case "delete_users_sure":
 			echo '<h2>'.$lang_add['delete_users_hl'].'</h2>'."\n";

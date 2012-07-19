@@ -221,7 +221,6 @@ $lang_add['entries_in_not_ex_cat'] =          "<strong>Hinweis:</strong> Es gibt
 $lang_add['entries_in_not_ex_cat_delete'] =   "löschen";
 $lang_add['entries_in_not_ex_cat_move'] =     "verschieben nach [category]";
 $lang_add['accessible_for'] =                 "zugänglich für:";
-$lang_add['advanced_settings'] =              "erweiterte Einstellungen";
 $lang_add['sql_complete'] =                   "Vollständiger SQL-Dump";
 $lang_add['sql_forum'] =                      "SQL-Dump der Forum-Einträge";
 $lang_add['sql_forum_marked'] =               "SQL-Dump der markierten Forum-Einträge";
