@@ -2164,12 +2164,14 @@ switch ($action)
 				if (in_array($_GET['settingsCat'], $catTable))
 					{
 					$catsName = $lang_add['settings_cat'][$_GET['settingsCat']];
+					$catParameter = $_GET['settingsCat'];
 					$addit = "
 					WHERE cat = '". mysql_real_escape_string($_GET['settingsCat']) ."'";
 					}
 				else
 					{
 					$catsName = $lang_add['settings_cat']['general'];
+					$catParameter = 'general';
 					$addit = "
 					WHERE cat = 'general'";
 					}
@@ -2193,7 +2195,7 @@ switch ($action)
 					{
 					$output .= '<h2>'. $catsName .'</h2>'."\n";
 					$output .= $menu;
-					$output .= '<form action="admin.php?settingsCat='. htmlspecialchars($_GET['settingsCat']) .'" method="post">'."\n";
+					$output .= '<form action="admin.php?settingsCat='. urlencode($catParameter) .'" method="post">'."\n";
 					$output .= ' <table class="admin">'."\n".'  ';
 					while ($setting = mysql_fetch_assoc($resultSettings))
 						{
