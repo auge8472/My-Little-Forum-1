@@ -2234,6 +2234,7 @@ switch ($action)
 									$output .= '>'. htmlspecialchars($lang_add[$poss[1]]);
 									}
 								$output .= '</option>'."\n";
+								unset($poss);
 								}
 							$output .= '    </select>'."\n";
 							}
