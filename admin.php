@@ -2193,6 +2193,19 @@ switch ($action)
 					{
 					$output .= '<h2>'. $catsName .'</h2>'."\n";
 					$output .= $menu;
+					$output .= '<form action="admin.php?settingsCat='. htmlspecialchars($_GET['settingsCat']) .'" method="post">'."\n";
+					$output .= ' <table class="admin">'."\n".'  ';
+					while ($setting = mysql_fetch_assoc($resultSettings))
+						{
+						$output .= '<tr>'."\n";
+						$output .= '   <td>';
+						$output .= '   </td>'."\n";
+						$output .= '  </tr>';
+						}
+					$output .= "\n".' </table>'."\n";
+					$output .= '<p><input type="submit" name="settings_submitted"';
+					$output .= ' value="'.outputLangDebugInAttributes($lang_add['settings_sb']).'" /></p>'."\n";
+					$output .= '</form>'."\n";
 					}
 				}
 			echo '<form action="admin.php" method="post">'."\n";
