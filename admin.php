@@ -2245,6 +2245,15 @@ switch ($action)
 											$c++;
 											}
 										}
+									if ($matcher[1] == 'hours')
+										{
+										$c = 0;
+										for ($h = -24; $h <= 24; $h++)
+											{
+											$possible[$c] = $h .':'. $h;
+											$c++;
+											}
+										}
 									}
 								# read the length of the new generated array
 								$posslength = count($possible);
