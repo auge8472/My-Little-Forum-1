@@ -340,7 +340,7 @@ $lang['lock_user_lt'] =                "Schreibsperre für [name] aktivieren";
 $lang['unlock_user_lt'] =              "Schreibsperre für [name] aufheben";
 $lang['no_users'] =                    "- keine Benutzer gefunden -";
 $lang['user_settings_link'] =          "Foreneinstellungen";
-$lang['edit_users_settings'] =         "Eigene Foreneinstellungen editieren";
+$lang['edit_users_settings'] =         "Eigene Foreneinstellungen";
 $lang['user_settings_hl'] =            "Foreneinstellungen für Benutzer [name]";
 $lang['submit_usersettings_button'] =  "Eigene Foreneinstellungen speichern";
 
