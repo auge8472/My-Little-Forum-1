@@ -2139,6 +2139,28 @@ switch ($action)
 				{
 				$output .= '<p>'. $lang['db_error'] .'</p>';
 				}
+			# the database request was successfull
+			else
+				{
+				# as first, generate the menu
+				$menu .= '<ul class="menulist">'."\n";
+				while ($category = mysql_fetch_assoc($resultCats))
+					{
+					$catTable[] = $category['cat'];
+					if ((empty($_GET['settingsCat']) and $category['cat'] == 'general')
+					or ($category['cat'] == $_GET['settingsCat']))
+						{
+						$menu .= '<li><span>';
+						$menu .= htmlspecialchars($lang_add['settings_cat'][$category['cat']]) .'</span></li>';
+						}
+					else
+						{
+						$menu .= '<li><a href="?settingsCat='. $category['cat'] .'">';
+						$menu .= htmlspecialchars($lang_add['settings_cat'][$category['cat']]) .'</a></li>';
+						}
+					}
+				$menu .= '</ul>'."\n";
+				}
 			echo '<form action="admin.php" method="post">'."\n";
 			echo '<table class="normaltab">'."\n";
 			echo '<tr>'."\n";
