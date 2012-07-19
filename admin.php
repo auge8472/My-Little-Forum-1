@@ -2202,6 +2202,14 @@ switch ($action)
 						$output .= array_key_exists($setting['name'], $lang_add)? '<label for="'. htmlspecialchars($setting['name']) .'">'. $lang_add[$setting['name']] .'</label>' : $setting['name'];
 						$output .= array_key_exists($setting['name'] .'_d', $lang_add)? '<br />'. $lang_add[$setting['name'] .'_d'] : '';
 						$output .= '</td>'."\n".'   <td>'."\n";
+						if ($setting['type'] == 'array')
+							{
+							# use select
+							$possible = explode(', ', $setting['poss_values']);
+							$posslength = count($possible);
+							$output .= '    <select id="'. htmlspecialchars($setting['name']) .'" name="'. htmlspecialchars($setting['name']) .'">'."\n";
+							$output .= '    </select>'."\n";
+							}
 						$output .= '   </td>'."\n";
 						$output .= '  </tr>';
 						}
