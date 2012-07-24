@@ -955,5 +955,23 @@ if ($type == 'posting') $entry = codeblock($entry);
 return $entry;
 }
 
+function outputUsersettingsMenu($id, $action = '') {
+global $lang, $settings;
+$r  = '';
+
+$r .= '<ul class="menulist">';
+$r .= (empty($action)) ? '<li><span>'. $lang['user_info'] .'</span></li>' : '<li><a href="user.php?id='. urlencode($id) .'">'. $lang['user_info'] .'</a></li>';
+$r .= ($action == 'edit') ? '<li><span>'. $lang['edit_userdata_ln'] .'</span></li>' : '<li><a href="user.php?action=edit">'. $lang['edit_userdata_ln'] .'</a></li>';
+if ($settings['user_control_refresh'] == 1
+	or $settings['user_control_css'] == 1)
+	{
+	$r .= ($action == 'usersettings') ? '<li><span>'. $lang['edit_users_settings'] .'</span></li>' : '<li><a href="user.php?action=usersettings">'. $lang['edit_users_settings'] .'</a></li>';
+	}
+$r .= ($action == 'subscriptions') ? '<li><span>'. $lang['edit_subscription_ln'] .'</span></li>' : '<li><a href="user.php?action=subscriptions">'. $lang['edit_subscription_ln'] .'</a></li>';
+$r .= ($action == 'pw') ? '<li><span>'. $lang['edit_pw_ln'] .'</span></li>' : '<li><a href="user.php?action=pw">'. $lang['edit_pw_ln'] .'</a></li>';
+$r .= '</ul>';
+
+return $r;
+}
 
 ?>
