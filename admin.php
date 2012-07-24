@@ -2198,7 +2198,7 @@ switch ($action)
 						# debug information (interim solution)
 #						$output .= array_key_exists($setting['name'], $lang_add)? '<label for="'. htmlspecialchars($setting['name']) .'">'. $lang_add[$setting['name']] .'</label> ('. $setting['name'] .')' : $setting['name'];
 						$output .= array_key_exists($setting['name'], $lang_add)? '<label for="'. htmlspecialchars($setting['name']) .'">'. $lang_add[$setting['name']] .'</label>' : $setting['name'];
-						$output .= array_key_exists($setting['name'] .'_d', $lang_add)? '<br />'. $lang_add[$setting['name'] .'_d'] : '';
+						$output .= array_key_exists($setting['name'] .'_d', $lang_add)? '<br /><span class="info">'. $lang_add[$setting['name'] .'_d'] .'</span>' : '';
 						$output .= '</td>'."\n".'   <td>'."\n";
 						if ($setting['type'] == 'array')
 							{
