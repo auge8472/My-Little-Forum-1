@@ -719,7 +719,7 @@ if (!empty($action))
 			$topnav .= '<a class="textlink" href="user.php';
 			$topnav .= '?id='.intval($uid);
 			$topnav .= '">'.$lang['user_info_hl'].'</a>&nbsp;';
-			$topnav .= '<span class="current-page">'.$lang['user_settings_link'].'</span>';
+			$topnav .= '<span class="current-page">'.$lang['edit_users_settings'].'</span>';
 			}
 		if ($action == "edit")
 			{
@@ -756,7 +756,7 @@ if (!empty($action))
 			$topnav .= '<a class="textlink" href="user.php';
 			$topnav .= '?id='.intval($uid);
 			$topnav .= '">'.$lang['user_info_hl'].'</a>&nbsp;';
-			$topnav .= '<span class="current-page">'.$lang['edit_subscriptions_hl'].'</span>';
+			$topnav .= '<span class="current-page">'.$lang['edit_subscription_ln'].'</span>';
 			}
 		}
 	}
@@ -849,20 +849,7 @@ switch ($action)
 			echo '<h2>'.$lang['user_info_hl'].'</h2>'."\n";
 			if ($user_id == $id)
 				{
-				echo '<ul class="menulist">';
-				echo '<li><span>'.$lang['user_info_hl'].'</span></li>';
-				echo '<li><a href="user.php?action=edit">';
-				echo $lang['edit_userdata_ln'].'</a></li>';
-				echo '<li><a href="user.php?action=subscriptions">';
-				echo $lang['edit_subscription_ln'].'</a></li>';
-				if ($settings['user_control_refresh'] == 1 or $settings['user_control_css'] == 1)
-					{
-					echo '<li><a href="user.php?action=usersettings">';
-					echo $lang['edit_users_settings'].'</a></li>';
-					}
-				echo '<li><a href="user.php?action=pw">';
-				echo $lang['edit_pw_ln'].'</a></li>';
-				echo '</ul>';
+				echo outputUsersettingsMenu($id);
 				}
 			echo '<table class="info admin">'."\n";
 			echo '<tr>'."\n";
@@ -984,8 +971,9 @@ switch ($action)
 				{
 				echo errorMessages($errors);
 				}
+			echo outputUsersettingsMenu($uid, 'usersettings');
 			echo '<form action="user.php" method="post">'."\n";
-			echo '<table class="normaltab">'."\n";
+			echo '<table class="info admin">'."\n";
 			while ($allSet = mysql_fetch_assoc($all_settings))
 				{
 				if (($settings['user_control_refresh'] == 1
@@ -1005,12 +993,12 @@ switch ($action)
 							}
 						}
 					echo '<tr>'."\n";
-					echo '<td class="c">';
+					echo '<td>';
 					echo ($allSet['type'] == 'string') ? '<label for="'.$allSet['name'].'">' : '';
 					echo $allSet['name'];
 					echo ($allSet['type'] == 'string') ? '</label>' : '';
 					echo '</td>'."\n";
-					echo '<td class="d">';
+					echo '<td>';
 					if ($allSet['type']=="string")
 						{
 						echo '<input type="text" name="usersetting['.$allSet['name'].']" value="';
@@ -1035,7 +1023,7 @@ switch ($action)
 			echo "\n".'</table>'."\n";
 			echo '<p><input type="hidden" name="action" value="submit usersettings" />';
 			echo '<input type="submit" name="us-submit" value="';
-			echo outputLangDebugInAttributes($lang['submit_usersettings_button']).'" /></p>';
+			echo outputLangDebugInAttributes($lang['userdata_subm_button']).'" /></p>';
 			echo '</form>'."\n";
 			mysql_free_result($all_settings);
 			}
@@ -1238,54 +1226,55 @@ switch ($action)
 			{
 			echo errorMessages($errors);
 			}
+		echo outputUsersettingsMenu($uid, 'edit');
 		echo '<form action="user.php" method="post">'."\n";
 		echo '<input type="hidden" name="action" value="edit submited">'."\n";
-		echo '<table class="normaltab">'."\n".'<tr>'."\n";
-		echo '<td class="c">'.$lang['username_marking'].'</td>'."\n";
-		echo '<td class="d">'.htmlspecialchars($field["user_name"]).'</td>'."\n";
+		echo '<table class="info admin">'."\n".'<tr>'."\n";
+		echo '<td>'.$lang['username_marking'].'</td>'."\n";
+		echo '<td>'.htmlspecialchars($field["user_name"]).'</td>'."\n";
 		echo '</tr><tr>'."\n";
-		echo '<td class="c">'.$lang['user_email_marking'].'</td>'."\n";
-		echo '<td class="d">'.htmlspecialchars($field["user_email"]);
+		echo '<td>'.$lang['user_email_marking'].'</td>'."\n";
+		echo '<td>'.htmlspecialchars($field["user_email"]);
 		echo '&nbsp;&nbsp;<span class="small">[ <a class="sln" href="user.php?';
 		echo 'action=email">'.$lang['edit_email_ln'].'</a> ]</span></td>'."\n";
 		echo '</tr><tr>'."\n";
-		echo '<td class="c"><b>'.$lang['user_show_email'].'</b><br />';
+		echo '<td><b>'.$lang['user_show_email'].'</b><br />';
 		echo '<span class="info">'.$lang['user_show_email_exp'].'</span></td>'."\n";
-		echo '<td class="d"><input type="radio" name="hide_email" id="hidemail-0" value="0"';
+		echo '<td><input type="radio" name="hide_email" id="hidemail-0" value="0"';
 		echo ($hide_email=="0") ? ' checked="checked"' : '';
 		echo '><label for="hidemail-0">'.$lang['yes'].'</label><br />';
 		echo '<input type="radio" name="hide_email" id="hidemail-1" value="1"';
 		echo ($hide_email=="1") ? ' checked="checked"' : '';
 		echo '><label for="hidemail-1">'.$lang['no'].'</label></td>'."\n";
 		echo '</tr><tr>'."\n";
-		echo '<td class="c"><label for="real-name">'.$lang['user_real_name'].'</label><br />';
+		echo '<td><label for="real-name">'.$lang['user_real_name'].'</label><br />';
 		echo '<span class="info">'.$lang['optional_marking'].'</span></td>'."\n";
-		echo '<td class="d"><input type="text" size="40" name="user_real_name" value="';
+		echo '<td><input type="text" size="40" name="user_real_name" value="';
 		echo htmlspecialchars($user_real_name).'" maxlength="';
 		echo $settings['name_maxlength'].'" id="real-name" /></td>'."\n";
 		echo '</tr><tr>'."\n";
-		echo '<td class="c"><label for="homepage">'.$lang['user_hp'].'</label><br />';
+		echo '<td><label for="homepage">'.$lang['user_hp'].'</label><br />';
 		echo '<span class="info">'.$lang['optional_marking'].'</span></td>'."\n";
-		echo '<td class="d"><input type="text" size="40" name="user_hp" value="';
+		echo '<td><input type="text" size="40" name="user_hp" value="';
 		echo htmlspecialchars($user_hp).'" maxlength="';
 		echo $settings['hp_maxlength'].'" id="homepage" /></td>'."\n";
 		echo '</tr><tr>'."\n";
-		echo '<td class="c"><label for="userplace">'.$lang['user_place'].'</label><br />';
+		echo '<td><label for="userplace">'.$lang['user_place'].'</label><br />';
 		echo '<span class="info">'.$lang['optional_marking'].'</span></td>'."\n";
-		echo '<td class="d"><input type="text" size="40" name="user_place" value="';
+		echo '<td><input type="text" size="40" name="user_place" value="';
 		echo htmlspecialchars($user_place).'" maxlength="';
 		echo $settings['place_maxlength'].'" id="userplace" /></td>'."\n";
 		echo '</tr><tr>'."\n";
-		echo '<td class="c"><label for="userprofile">'.$lang['user_profile'].'</label><br />';
+		echo '<td><label for="userprofile">'.$lang['user_profile'].'</label><br />';
 		echo '<span class="info">'.$lang['user_profile_exp'].'<br />';
 		echo $lang['optional_marking'].'</span></td>'."\n";
-		echo '<td class="d"><textarea cols="65" rows="10" name="profile" id="userprofile">';
+		echo '<td><textarea cols="65" rows="10" name="profile" id="userprofile">';
 		echo htmlspecialchars($profile).'</textarea></td>'."\n";
 		echo '</tr><tr>'."\n";
-		echo '<td class="c"><label for="usersignature">'.$lang['user_signature'].'</label><br />';
+		echo '<td><label for="usersignature">'.$lang['user_signature'].'</label><br />';
 		echo '<span class="info">'.$lang['user_sig_exp'].'<br />';
 		echo $lang['optional_marking'].'</span></td>'."\n";
-		echo '<td class="d"><textarea cols="65" rows="4" name="signature" id="usersignature">';
+		echo '<td><textarea cols="65" rows="4" name="signature" id="usersignature">';
 		echo htmlspecialchars($signature).'</textarea></td>'."\n";
 		echo '</tr>';
 		if ($settings['thread_view'] != 0
@@ -1296,8 +1285,8 @@ switch ($action)
 		&& $settings['mix_view'] != 0)
 			{
 			echo '<tr>'."\n";
-			echo '<td class="c">'.$lang['user_standard_view'].'</td>'."\n";
-			echo '<td class="d">'."\n";
+			echo '<td>'.$lang['user_standard_view'].'</td>'."\n";
+			echo '<td>'."\n";
 			if ($settings['thread_view'] == 1)
 				{
 				echo '<input type="radio" name="user_view" value="thread" id="view-thread"';
@@ -1320,18 +1309,18 @@ switch ($action)
 			echo '</tr>'."\n";
 			}
 		echo '<tr>'."\n";
-		echo '<td class="c">'.$lang['user_pers_msg'].'<br />';
+		echo '<td>'.$lang['user_pers_msg'].'<br />';
 		echo '<span class="info">'.$lang['user_pers_msg_exp'].'</span></td>'."\n";
-		echo '<td class="d"><input type="radio" name="personal_messages" value="1" id="persmess-1"';
+		echo '<td><input type="radio" name="personal_messages" value="1" id="persmess-1"';
 		echo ($personal_messages=="1") ? ' checked="checked"' : '';
 		echo ' /><label for="persmess-1">'.$lang['user_pers_msg_act'].'</label><br />'."\n";
 		echo '<input type="radio" name="personal_messages" value="0" id="persmess-0"';
 		echo ($personal_messages=="0") ? ' checked="checked"' : '';
 		echo '><label for="persmess-0">'.$lang['user_pers_msg_deact'].'</label></td>'."\n";
 		echo '</tr><tr>'."\n";
-		echo '<td class="c"><label for="timediff">'.$lang['user_time_diff'].'</label><br />';
+		echo '<td><label for="timediff">'.$lang['user_time_diff'].'</label><br />';
 		echo '<span class="info">'.$lang['user_time_diff_exp'].'</span></td>'."\n";
-		echo '<td class="d"><select name="user_time_difference" size="1" id="timediff">'."\n";
+		echo '<td><select name="user_time_difference" size="1" id="timediff">'."\n";
 		for ($h = -24; $h <= 24; $h++)
 			{
 			echo '<option value="'.$h.'"';
@@ -1344,9 +1333,9 @@ switch ($action)
 		if ($user_type=="admin" || $user_type=="mod")
 			{
 			echo '<tr>'."\n";
-			echo '<td class="c">'.$lang['admin_mod_notif'].'<br />';
+			echo '<td>'.$lang['admin_mod_notif'].'<br />';
 			echo '<span class="info">'.$lang['admin_mod_notif_exp'].'</span></td>'."\n";
-			echo '<td class="d"><input type="checkbox" name="new_posting_notify" value="1"';
+			echo '<td><input type="checkbox" name="new_posting_notify" value="1"';
 			echo ($new_posting_notify=="1") ? ' checked="checked"' : '';
 			echo ' id="notice-post" /><label for="notice-post">'.$lang['admin_mod_notif_np'].'</label><br />';
 			echo '<input type="checkbox" name="new_user_notify" value="1"';
@@ -1368,22 +1357,28 @@ switch ($action)
 			}
 	break;
 	case "pw":
+			$lang['change_pw_hl'] = str_replace("[name]", htmlspecialchars($userName["user_name"]), $lang['change_pw_hl']);
 		echo '<h2>'.$lang['change_pw_hl'].'</h2>'."\n";
 		if (isset($errors))
 			{
 			echo errorMessages($errors);
 			}
-		echo '<form action="user.php" method="post"><div>'."\n";
+		echo outputUsersettingsMenu($uid, 'pw');
+		echo '<form action="user.php" method="post">'."\n";
 		echo '<input type="hidden" name="action" value="pw submited">'."\n";
-		echo '<p><label for="old-pw">'.$lang['old_pw'].'</label><br />'."\n";
-		echo '<input type="password" size="25" name="old_pw" id="old-pw" maxlength="50"></p>'."\n";
-		echo '<p><label for ="new-pw">'.$lang['new_pw'].'</label><br />'."\n";
-		echo '<input type="password" size="25" name="new_pw" id="new-pw" maxlength="50"></p>'."\n";
-		echo '<p><label for="pw-conf">'.$lang['new_pw_conf'].'</label><br />'."\n";
-		echo '<input type="password" size="25" name="new_pw_conf" id="pw-conf" maxlength="50"></p>'."\n";
-		echo '<p><input type="submit" name="pw_submit" value="'.outputLangDebugInAttributes($lang['new_pw_subm_button']);
+		echo '<table class="info admin">'."\n".'<tr>'."\n";
+		echo '<td><label for="old-pw">'.$lang['old_pw'].'</label></td>'."\n";
+		echo '<td><input type="password" size="25" name="old_pw" id="old-pw" maxlength="50"></td>'."\n";
+		echo '</tr><tr>'."\n";
+		echo '<td><label for ="new-pw">'.$lang['new_pw'].'</label></td>'."\n";
+		echo '<td><input type="password" size="25" name="new_pw" id="new-pw" maxlength="50"></td>'."\n";
+		echo '</tr><tr>'."\n";
+		echo '<td><label for="pw-conf">'.$lang['new_pw_conf'].'</label></td>'."\n";
+		echo '<td><input type="password" size="25" name="new_pw_conf" id="pw-conf" maxlength="50"></td>'."\n";
+		echo '</tr>'."\n".'</table>'."\n";
+		echo '<p><input type="submit" name="pw_submit" value="'.outputLangDebugInAttributes($lang['userdata_subm_button']);
 		echo '" title="'.outputLangDebugInAttributes($lang['new_pw_subm_button_title']).'"></p>'."\n";
-		echo '</div></form>'."\n";
+		echo '</form>'."\n";
 	break;
 	case "email":
 		echo '<h2>'.$lang['change_email_hl'].'</h2>'."\n";
@@ -1401,7 +1396,7 @@ switch ($action)
 		echo '<p><label for="pw-email">'.$lang['password_marking'].'</label><br />'."\n";
 		echo '<input type="password" size="25" name="pw_new_email" id="pw-email" maxlength="50"></p>'."\n";
 		echo '<p><input type="submit" name="change_email_submit" value="';
-		echo outputLangDebugInAttributes($lang['submit_button_ok']).'"></p>'."\n";
+		echo outputLangDebugInAttributes($lang['userdata_subm_button']).'"></p>'."\n";
 		echo '</form>'."\n";
 	break;
 	case "personal_message":
@@ -1505,7 +1500,9 @@ switch ($action)
 			# in case of a thread subscription
 			$subscriptions = processSubscriptFilter($subscriptions);
 			array_multisort($sortDate, SORT_DESC, $subscriptions);
+			$lang['edit_subscriptions_hl'] = str_replace("[name]", htmlspecialchars($userName["user_name"]), $lang['edit_subscriptions_hl']);
 			echo '<h2>'.$lang['edit_subscriptions_hl'].'</h2>'."\n";
+			echo outputUsersettingsMenu($uid, 'subscriptions');
 			echo '<form action="user.php" method="post">'."\n";
 			echo '<input type="hidden" name="action" value="edit subscriptions">'."\n";
 			echo '<table class="normaltab">'."\n";
