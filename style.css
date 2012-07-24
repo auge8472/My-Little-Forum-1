@@ -818,6 +818,10 @@ background: linear-gradient(top, #f8ffb8 0%, #a0fec0 100%);
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8ffb8', endColorstr='#a0fec0',GradientType=0 );
 }
 
+span.info {
+font-weight: normal;
+font-size: 86%;
+}
 
 /* mix view: */
 div.mixdivl { }
