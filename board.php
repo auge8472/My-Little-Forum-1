@@ -64,9 +64,9 @@ if($settings['access_for_users_only']  == 1
 		&& $_SESSION[$settings['session_prefix'].'category'] != 0
 		&& in_array($_SESSION[$settings['session_prefix'].'category'], $category_ids))
 		{
-		$threadsQueryWhere = " AND category = '".mysql_real_escape_string($_SESSION[$settings['session_prefix'].'category'])."'";
+		$threadsQueryWhere = " AND category = '". mysql_real_escape_string($_SESSION[$settings['session_prefix'].'category']) ."'";
 		// how many entries?
-		$pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '".mysql_real_escape_string($_SESSION[$settings['session_prefix'].'category'])."'", $connid);
+		$pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '". mysql_real_escape_string($_SESSION[$settings['session_prefix'].'category']) ."'", $connid);
 		list($thread_count) = mysql_fetch_row($pid_result);
 		mysql_free_result($pid_result);
 		}
