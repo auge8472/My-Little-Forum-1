@@ -29,6 +29,7 @@ if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captch
 	$captcha = new captcha();
 	}
 
+# category is given from the form via POST
 if (isset($_POST['category'])) $category = intval($_POST['category']);
 if (isset($_POST['p_category'])) $p_category = intval($_POST['p_category']);
 
