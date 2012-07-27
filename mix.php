@@ -41,21 +41,11 @@ if ($settings['access_for_users_only'] == 1
 		{
 		setcookie("user_view","mix",time()+(3600*24*30));
 		}
-
+	# process the standard parameters
+	# and put them into the session
+	processStandardParametersGET();
 	unset($zeile);
-
-	if (empty($page)) $page = 0;
-	if (empty($order)) $order="last_answer";
-	if (empty($descasc)) $descasc="DESC";
-	if (isset($descasc) && $descasc=="ASC")
-		{
-		$descasc = "ASC";
-		}
-	else
-		{
-		$descasc = "DESC";
-		}
-	$ul = $page * $settings['topics_per_page'];
+	$ul = $_SESSION[$settings['session_prefix'].'page'] * $settings['topics_per_page'];
 
 	# Variablen korrekt (de)initialisieren
 	unset($parent_array);
