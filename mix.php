@@ -91,7 +91,7 @@ if ($settings['access_for_users_only'] == 1
 			WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
 		FROM ".$db_settings['forum_table']." AS t1
 		WHERE pid = 0".$threadsQueryWhere."
-		ORDER BY fixed DESC, ".$order." ".$descasc."
+		ORDER BY fixed DESC, ".$_SESSION[$settings['session_prefix'].'order']." ".$_SESSION[$settings['session_prefix'].'descasc']."
 		LIMIT ".$ul.", ".$settings['topics_per_page'];
 	$threadsResult = mysql_query($threadsQuery, $connid);
 	if (!$threadsResult) die($lang['db_error']);
