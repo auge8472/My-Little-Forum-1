@@ -823,6 +823,10 @@ font-weight: normal;
 font-size: 86%;
 }
 
+form table + p {
+margin: 0.5em 0 0 0;
+}
+
 /* mix view: */
 div.mixdivl { }
 div.mixthread {
