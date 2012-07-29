@@ -143,6 +143,7 @@ if ($settings['access_for_users_only'] == 1
 
 	parse_template();
 	echo $header;
+	echo outputDebugSession();
 
 	if ($thread_count > 0 && isset($result))
 		{

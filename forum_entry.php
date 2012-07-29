@@ -255,6 +255,7 @@ if ($settings['access_for_users_only'] == 1
 	$posting = str_replace('{threadheadline}', $lang['whole_thread_marking'], $posting);
 	$posting = str_replace('{thread}', outputThreads($postArray, $childArray, 'forum', 0), $posting);
 	echo $header;
+	echo outputDebugSession();
 	echo $posting;
 	echo $footer;
 	}

@@ -974,4 +974,25 @@ $r .= '</ul>';
 return $r;
 }
 
+
+/**
+ * generates output of the session and cookie values
+ *
+ * @return string
+ */
+function outputDebugSession() {
+global $settings;
+$r  = '';
+if ((isset($_SESSION[$settings['session_prefix'].'user_type'])
+	and $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
+	and $_SESSION[$settings['session_prefix'].'debug'] === 'session')
+	{
+	$r .= '<h2>SESSION</h2>';
+	$r .= '<pre>'. print_r($_SESSION, true) .'</pre>';
+	$r .= '<h2>COOKIE</h2>';
+	$r .= '<pre>'. print_r($_COOKIE, true) .'</pre>';
+	}
+return $r;
+} # End: outputDebugSession
+
 ?>
