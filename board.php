@@ -149,7 +149,7 @@ echo '<pre>'. print_r($_COOKIE, true) .'</pre>';
 			echo outputImageDescAsc($currDescAsc);
 			}
 		echo '</th>'."\n";
-		if ($categories!=false
+		if ($categories !== false
 		&& $_SESSION[$settings['session_prefix'].'category'] == 0)
 			{
 			echo '<th><a href="board.php?order=category&amp;descasc=';
