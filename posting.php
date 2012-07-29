@@ -1541,16 +1541,16 @@ if (($settings['access_for_users_only'] == 1
 							if ($key!=0)
 								{
 								echo '<option value="'.$key.'"';
-								if ((isset($category)
-								&& $category!=0
-								&& $key==$category
+								if ((isset($_SESSION[$settings['session_prefix'].'category'])
+								&& $_SESSION[$settings['session_prefix'].'category'] > 0
+								&& $key == $_SESSION[$settings['session_prefix'].'category']
 								&& empty($p_category))
 								|| (isset($p_category)
-								&& $key==$p_category))
+								&& $key == $p_category))
 									{
 									echo ' selected="selected"';
 									}
-								echo '>'.htmlspecialchars($val).'</option>'."\n";
+								echo '>'. htmlspecialchars($val) .'</option>'."\n";
 								}
 							}
 						}
