@@ -1602,7 +1602,7 @@ if (($settings['access_for_users_only'] == 1
 					echo '<tr>'."\n";
 					echo '<td colspan="2"><label for="show_signature"><input type="checkbox"';
 					echo ' name="show_signature" id="show_signature" value="1"';
-					echo (isset($show_signature) && $show_signature==1) ? 'checked="checked"' : '';
+					echo (isset($show_signature) && $show_signature==1) ? ' checked="checked"' : '';
 					echo ' />&nbsp;'.$lang['show_signature_cbm'].'</label></td>'."\n";
 					echo '</tr>';
 					}
@@ -1611,7 +1611,7 @@ if (($settings['access_for_users_only'] == 1
 					echo '<tr>'."\n";
 					echo '<td colspan="2"><label for="email_notify"><input type="checkbox"';
 					echo ' name="email_notify" id="email_notify" value="1"';
-					echo (isset($email_notify) && $email_notify==1) ? 'checked="checked"' : '';
+					echo (isset($email_notify) && $email_notify==1) ? ' checked="checked"' : '';
 					echo ' />&nbsp;'.$lang['email_notification_cbm'].'</label></td>'."\n";
 					echo '</tr>';
 					}
@@ -1627,7 +1627,7 @@ if (($settings['access_for_users_only'] == 1
 					echo '<tr>'."\n";
 					echo '<td colspan="2"><label for="fixed"><input type="checkbox"';
 					echo ' name="fixed" id="fixed" value="1"';
-					echo (isset($fixed) && $fixed==1) ? 'checked="checked"' : '';
+					echo (isset($fixed) && $fixed==1) ? ' checked="checked"' : '';
 					echo ' />&nbsp;'.$lang['fix_thread'].'</label></td>'."\n";
 					echo '</tr>';
 					}
