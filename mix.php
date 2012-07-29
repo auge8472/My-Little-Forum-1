@@ -130,6 +130,7 @@ if ($settings['access_for_users_only'] == 1
 
 	parse_template();
 	echo $header;
+	echo outputDebugSession();
 
 if ((isset($_SESSION[$settings['session_prefix'].'user_type'])
 	&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")

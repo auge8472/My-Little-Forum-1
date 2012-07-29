@@ -652,7 +652,7 @@ if (isset($_POST['delete_category_submit']))
  * sets debug type (standard: no)
  */
 if (isset($_POST['debug_submitted'])) {
-	$_SESSION['debug'] = $_POST['debug_type'];
+	$_SESSION[$settings['session_prefix'].'debug'] = $_POST['debug_type'];
 	$action = 'debug';
 	}
 
@@ -1677,18 +1677,24 @@ switch ($action)
 	break;
 	case "debug":
 		echo '<form action="admin.php" method="post">'."\n";
-		echo '<table class="normaltab">'."\n";
+		echo '<table class="admin info">'."\n";
 		echo '<tr>'."\n";
-		echo '<td class="c"><label for="debug-none">'.$lang_add['debug_none'].'</label><br />';
+		echo '<td><label for="debug-none">'.$lang_add['debug_none'].'</label><br />';
 		echo '<span class="info">'.$lang_add['debug_none_d'].'</span></td>'."\n";
-		echo '<td class="d"><input type="radio" name="debug_type" id="debug-none" value="no"';
-		echo ($_SESSION['debug'] == 'no') ? ' checked="checked"' : '';
+		echo '<td><input type="radio" name="debug_type" id="debug-none" value="no"';
+		echo ($_SESSION[$settings['session_prefix'].'debug'] == 'no') ? ' checked="checked"' : '';
 		echo ' /></td>'."\n";
 		echo '</tr><tr>'."\n";
-		echo '<td class="c"><label for="debug-lang">'.$lang_add['debug_lang'].'</label><br />';
+		echo '<td><label for="debug-lang">'.$lang_add['debug_lang'].'</label><br />';
 		echo '<span class="info">'.$lang_add['debug_lang_d'].'</span></td>'."\n";
-		echo '<td class="d"><input type="radio" name="debug_type" id="debug-lang" value="lang"';
-		echo ($_SESSION['debug'] == 'lang') ? ' checked="checked"' : '';
+		echo '<td><input type="radio" name="debug_type" id="debug-lang" value="lang"';
+		echo ($_SESSION[$settings['session_prefix'].'debug'] == 'lang') ? ' checked="checked"' : '';
+		echo ' /></td>'."\n";
+		echo '</tr><tr>'."\n";
+		echo '<td><label for="debug-session">'.$lang_add['debug_session'].'</label><br />';
+		echo '<span class="info">'.$lang_add['debug_session_d'].'</span></td>'."\n";
+		echo '<td><input type="radio" name="debug_type" id="debug-session" value="session"';
+		echo ($_SESSION[$settings['session_prefix'].'debug'] == 'session') ? ' checked="checked"' : '';
 		echo ' /></td>'."\n";
 		echo '</tr>'."\n";
 		echo '</table>'."\n";

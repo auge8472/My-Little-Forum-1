@@ -259,6 +259,7 @@ if ($settings['access_for_users_only'] == 1
 	# import posting template
 	$sPosting = file_get_contents('data/templates/posting.mix.html');
 	echo $header;
+	echo outputDebugSession();
 	thread($thread, $id);
 	echo $footer;
 	}

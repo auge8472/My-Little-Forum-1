@@ -47,6 +47,8 @@ $lang_add['debug_none'] =                     "Debug mode: off";
 $lang_add['debug_none_d'] =                   "No debugging informations (normal behaviour)";
 $lang_add['debug_lang'] =                     "Debug mode: language";
 $lang_add['debug_lang_d'] =                   "Delivers debugging informations about language strings as tool tip";
+$lang_add['debug_session'] =                  "Debug mode: session";
+$lang_add['debug_session_d'] =                "Delivers debugging informations about the session and cookies";
 
 $lang_add['0'] =                              "off";
 $lang_add['1'] =                              "on";

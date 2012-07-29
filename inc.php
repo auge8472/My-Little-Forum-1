@@ -51,6 +51,19 @@ if (get_magic_quotes_gpc())
 
 $connid = connect_db($db_settings['host'], $db_settings['user'], $db_settings['pw'], $db_settings['db']);
 $settings = get_settings();
+
+/**
+ * set default for debug mode (no)
+ * if visitor is not admin and debug mode
+ * is not setted manually to different value
+ */
+if (!isset($_SESSION[$settings['session_prefix'].'user_type'])
+or $_SESSION[$settings['session_prefix'].'user_type']!='admin'
+or ($_SESSION[$settings['session_prefix'].'user_type']=='admin'
+and empty($_SESSION[$settings['session_prefix'].'debug']))) {
+	$_SESSION[$settings['session_prefix'].'debug'] = 'no';
+	}
+
 include("lang/english.php");
 $lang = outputLangDebugOrNot($lang, "english.php");
 include("lang/".$settings['language_file']);
@@ -75,20 +88,6 @@ if (basename($_SERVER['SCRIPT_NAME'])!='login.php'
 	header('location: '.$settings['forum_address'].'info.php?info=1');
 	die('<a href="info.php?info=1">further...</a>');
 	}
-
-
-/**
- * set default for debug mode (no)
- * if visitor is not admin and debug mode
- * is not setted manually to different value
- */
-if (!isset($_SESSION[$settings['session_prefix'].'user_type'])
-or $_SESSION[$settings['session_prefix'].'user_type']!='admin'
-or ($_SESSION[$settings['session_prefix'].'user_type']=='admin'
-and empty($_SESSION[$settings['session_prefix'].'debug']))) {
-	$_SESSION[$settings['session_prefix'].'debug'] = 'no';
-	}
-
 
 /**
  * look if IP is banned
