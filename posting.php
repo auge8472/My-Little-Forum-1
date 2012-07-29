@@ -1688,11 +1688,6 @@ if (($settings['access_for_users_only'] == 1
 				echo '<form action="posting.php" method="post" accept-charset="UTF-8">'."\n";
 				echo '<input type="hidden" name="action" value="delete ok" />'."\n";
 				echo '<input type="hidden" name="id" value="'.intval($id).'" />'."\n";
-				echo (isset($view)) ? '<input type="hidden" name="view" value="'.$view.'" />'."\n" : '';
-				echo (isset($page)) ? '<input type="hidden" name="page" value="'.$page.'" />'."\n" : '';
-				echo (isset($order)) ? '<input type="hidden" name="order" value="'.$order.'" />'."\n" : '';
-				echo (isset($descasc)) ? '<input type="hidden" name="descasc" value="'.$descasc.'" />'."\n" : '';
-				echo (isset($category)) ? '<input type="hidden" name="category" value="'.$category.'" />'."\n" : '';
 				echo '<p><input type="submit" name="delete" value="'.$lang['delete_posting_ok'].'" /></p>'."\n";
 				echo '</form>'."\n";
 			break;
