@@ -43,9 +43,6 @@ if ($settings['access_for_users_only'] == 1
 		{
 		setcookie("user_view","thread",time()+(3600*24*30));
 		}
-	# process the standard parameters
-	# and put them into the session
-	processStandardParametersGET();
 
 	if ($_SESSION[$settings['session_prefix'].'order'] != "time"
 	&& $_SESSION[$settings['session_prefix'].'order'] !="last_answer")

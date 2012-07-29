@@ -121,9 +121,7 @@ if ($settings['access_for_users_only'] == 1
 	&& isset($_SESSION[$settings['session_prefix'].'user_name'])
 	|| $settings['access_for_users_only'] != 1)
 	{
-	# process the standard parameters
-	# and put them into the session
-	processStandardParametersGET();
+
 	if (empty($page)) $page = 0;
 	if (empty($order)) $order = "last_answer";
 	if (empty($descasc)) $descasc = "DESC";

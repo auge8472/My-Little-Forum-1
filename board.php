@@ -41,9 +41,7 @@ if($settings['access_for_users_only']  == 1
 		{
 		setcookie("user_view","board",time()+(3600*24*30));
 		}
-	# process the standard parameters
-	# and put them into the session
-	processStandardParametersGET();
+
 	unset($zeile);
 	$ul = $_SESSION[$settings['session_prefix'].'page'] * $settings['topics_per_page'];
 
