@@ -1259,6 +1259,7 @@ if (($settings['access_for_users_only'] == 1
 
 		parse_template();
 		echo $header;
+		echo outputDebugSession();
 
 		switch ($show)
 			{
