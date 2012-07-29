@@ -1254,7 +1254,6 @@ if (($settings['access_for_users_only'] == 1
 				$subnav1_href2 = 'forum.php';
 				}
 			$subnav_1 .= '<a class="textlink" href="'.$subnav1_href2;
-			$subnav_1 .= ($category > 0) ? '?category='.$category : '';
 			$subnav_1 .= '">'.$lang['back_to_overview_linkname'].'</a>';
 			}
 
