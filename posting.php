@@ -1474,13 +1474,8 @@ if (($settings['access_for_users_only'] == 1
 				echo '<input type="hidden" name="action" value="'.htmlspecialchars($action).'" />'."\n";
 				echo (isset($p_user_id)) ? '<input type="hidden" name="p_user_id" value="'.$p_user_id.'" />'."\n" : '';
 				echo (isset($aname)) ? '<input type="hidden" name="aname" value="'.htmlspecialchars($aname).'" />'."\n" : '';
-				echo (isset($view)) ? '<input type="hidden" name="view" value="'.$view.'" />'."\n" : '';
 				echo (isset($back)) ? '<input type="hidden" name="back" value="'.$back.'" />'."\n" : '';
 				echo (isset($thema)) ? '<input type="hidden" name="thema" value="'.$thema.'" />'."\n" : '';
-				echo (isset($page)) ? '<input type="hidden" name="page" value="'.$page.'" />'."\n" : '';
-				echo (isset($order)) ? '<input type="hidden" name="order" value="'.$order.'" />'."\n" : '';
-				echo (isset($descasc)) ? '<input type="hidden" name="descasc" value="'.$descasc.'" />'."\n" : '';
-				echo (isset($category)) ? '<input type="hidden" name="category" value="'.$category.'" />'."\n" : '';
 				echo '<table class="normal">'."\n";
 				# Formularfelder für unbekannte User bzw. wenn
 				# Posting unbekannter User editiert wird:
