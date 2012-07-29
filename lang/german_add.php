@@ -44,6 +44,11 @@ $lang_add['delete_users_hl'] =                "User löschen";
 $lang_add['delete_user_conf'] =               "Sicher, dass dieser User gelöscht werden soll?";
 $lang_add['delete_users_conf'] =              "Sicher, dass folgende User gelöscht werden sollen?";
 $lang_add['debug_none'] =                     "Debugging: aus";
+$lang_add['debug_none_d'] =                   "keine Ausgabe von zusätzlichen Informationen (Normalverhalten)";
+$lang_add['debug_lang'] =                     "Debugging: Sprachen";
+$lang_add['debug_lang_d'] =                   "gibt Informationen über die Texte als Tooltip aus";
+$lang_add['debug_session'] =                  "Debugging: Session";
+$lang_add['debug_session_d'] =                "gibt die in der Session und in Cookies gespeicherten Informationen aus";
 
 $lang_add['0'] =                              "aus";
 $lang_add['1'] =                              "an";
