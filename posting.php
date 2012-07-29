@@ -1354,7 +1354,8 @@ if (($settings['access_for_users_only'] == 1
 					$entry["edited_by"] = '';
 					$entry["e_time"] = '';
 					echo '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
-					if (isset($view))
+					if (isset($_SESSION[$settings['session_prefix'].'curr_view'])
+						and in_array($_SESSION[$settings['session_prefix'].'curr_view'], array('mix', 'board')))
 						{
 						echo '<table class="normaltab">'."\n";
 						echo '<tr>'."\n";
