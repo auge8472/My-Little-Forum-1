@@ -652,7 +652,7 @@ if (isset($_POST['delete_category_submit']))
  * sets debug type (standard: no)
  */
 if (isset($_POST['debug_submitted'])) {
-	$_SESSION['debug'] = $_POST['debug_type'];
+	$_SESSION[$settings['session_prefix'].'debug'] = $_POST['debug_type'];
 	$action = 'debug';
 	}
 
