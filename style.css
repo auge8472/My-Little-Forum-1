@@ -138,6 +138,11 @@ background: linear-gradient(to bottom, #ccd8ea 0%, #ecf2f8 100%); /* W3C new */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ccd8ea', endColorstr='#ecf2f8',GradientType=0 ); /* IE6-9 */
 }
 
+/* set all paragraphs in #top together to 0.86em */
+#top p {
+font-size: 0.86em;
+}
+
 #top div.left {
 margin:0;
 padding: 6px 0 5px 20px;
@@ -147,13 +152,11 @@ float: left;
 #top div.left .home {
 margin:0 0 3px 0;
 padding:0;
-font-size: 0.86em;
 }
 
 #top div.left .index {
 margin:0;
 padding:0;
-font-size: 0.86em;
 }
 
 #top div.right {
@@ -162,9 +165,8 @@ padding: 6px 20px 5px 0;
 text-align: right;
 }
 
-p.usermenu {
+#top p.usermenu {
 margin:0 0 13px 0;
-font-size: 0.86em;
 }
 
 #top h1 {
