@@ -653,7 +653,7 @@ if (($settings['access_for_users_only'] == 1
 					|| preg_match("/".$not_accepted_word."/i",$hp)
 					|| preg_match("/".$not_accepted_word."/i",$place)))
 						{
-						$errors[] = $lang['error_not_accepted_word'];
+						$errors[] = $lang['error_not_accepted_word'] ." »". mb_strtoupper($not_accepted_word) ."«";
 						break;
 						}
 					}
