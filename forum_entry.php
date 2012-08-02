@@ -28,7 +28,7 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 	&& isset($settings['autologin'])
 	&& $settings['autologin'] == 1)
 	{
-	$id = isset($_GET['id']) ? 'id='.intval($_GET['id']) : '';
+	$id = isset($_GET['id']) ? 'id='. intval($_GET['id']) : '';
 	if (!empty($id))
 		{
 		$lid = '&'.$id;
@@ -46,13 +46,14 @@ if ($settings['access_for_users_only'] == 1
 	unset($parent_array);
 	unset($child_array);
 
-	if (empty($page))
+	if ($_SESSION[$settings['session_prefix'].'order'] != "time"
+	&& $_SESSION[$settings['session_prefix'].'order'] !="last_answer")
 		{
-		$page = 0;
+		$threadOrder = "time";
 		}
-	if (empty($order))
+	else
 		{
-		$order="time";
+		$threadOrder = $_SESSION[$settings['session_prefix'].'order'];
 		}
 	if (isset($id))
 		{
@@ -84,7 +85,7 @@ if ($settings['access_for_users_only'] == 1
 		locked,
 		fixed
 		FROM ".$db_settings['forum_table']."
-		WHERE id = ".intval($id);
+		WHERE id = ". intval($id);
 		$result = mysql_query($postingQuery, $connid);
 		if (!$result) die($lang['db_error']);
 		if (mysql_num_rows($result) == 1)
@@ -92,7 +93,8 @@ if ($settings['access_for_users_only'] == 1
 			$entrydata = mysql_fetch_assoc($result);
 			mysql_free_result($result);
 			# category of this posting accessible by user?
-			if (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin"))
+			if (!(isset($_SESSION[$settings['session_prefix'].'user_type'])
+				&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin"))
 				{
 				if (is_array($category_ids) && !in_array($entrydata['category'], $category_ids))
 					{
@@ -101,9 +103,10 @@ if ($settings['access_for_users_only'] == 1
 					die();
 					}
 				}
-			if (isset($settings['count_views']) && $settings['count_views'] == 1)
+			if (isset($settings['count_views'])
+				&& $settings['count_views'] == 1)
 				{
-				mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE id=".intval($id), $connid);
+				mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE id=". intval($id), $connid);
 				}
 
 			if ($entrydata["user_id"] > 0)
@@ -117,7 +120,7 @@ if ($settings['access_for_users_only'] == 1
 				user_place,
 				signature
 				FROM ".$db_settings['userdata_table']."
-				WHERE user_id = ".intval($entrydata["user_id"]);
+				WHERE user_id = ". intval($entrydata["user_id"]);
 				$userdata_result = mysql_query($userDataQuery, $connid);
 				if (!$userdata_result) die($lang['db_error']);
 				$userdata = mysql_fetch_assoc($userdata_result);
@@ -177,7 +180,7 @@ if ($settings['access_for_users_only'] == 1
 		FROM ".$db_settings['userdata_table']."
 		WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
 	FROM ".$db_settings['forum_table']."
-	WHERE tid = ".intval($entrydata["tid"])."
+	WHERE tid = ". intval($entrydata["tid"])."
 	ORDER BY time ". $settings['thread_view_sorter'];
 	$result = mysql_query($threadQuery, $connid);
 	if (!$result) die($lang['db_error']);
@@ -191,15 +194,13 @@ if ($settings['access_for_users_only'] == 1
 	$category = intval($category);
 
 	$wo = $entrydata["subject"];
-	$subnav_1  = '<a class="textlink" href="forum.php?page='.$page;
-	$subnav_1 .= ($category > 0) ? '&amp;category='.$category : '';
-	$subnav_1 .= '&amp;order='.$order.'" title="';
+	$subnav_1  = '<a class="textlink" href="forum.php" title="';
 	$subnav_1 .= outputLangDebugInAttributes($lang['back_to_forum_linktitle']).'">'.$lang['back_to_forum_linkname'].'</a>';
 	$cat = ($category > 0) ? '&amp;category='.intval($category) : '';
 	$subnav_2 = "";
 	if ($settings['board_view']==1)
 		{
-		$url = 'board_entry.php?id='.$entrydata["tid"].'&amp;page='.$page.'&amp;order='.$order.$cat;
+		$url = 'board_entry.php?id='.$entrydata["tid"];
 		$class = 'board-view';
 		$title = outputLangDebugInAttributes($lang['board_view_linktitle']);
 		$linktext = $lang['board_view_linkname'];
@@ -207,7 +208,7 @@ if ($settings['access_for_users_only'] == 1
 		}
 	if ($settings['mix_view']==1)
 		{
-		$url = 'mix_entry.php?id='.$entrydata["tid"].'&amp;order='.$order.$cat;
+		$url = 'mix_entry.php?id='.$entrydata["tid"];
 		$class = 'mix-view';
 		$title = outputLangDebugInAttributes($lang['mix_view_linktitle']);
 		$linktext = $lang['mix_view_linkname'];
@@ -224,19 +225,14 @@ if ($settings['access_for_users_only'] == 1
 		$pHeadline .= ' <span class="category">('.$categories[$entrydata["category"]].')</span>';
 		}
 	$ftext = ($entrydata["text"]=="") ? $lang['no_text'] : outputPreparePosting($entrydata["text"]);
-	$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator'].$signature, 'signature').'</div>'."\n" : '';
+	$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator']."\n".$signature, 'signature').'</div>'."\n" : '';
 	if ($entrydata['locked'] == 0)
 		{
 		if ($settings['entries_by_users_only'] == 0
 			or ($settings['entries_by_users_only'] == 1
 			and isset($_SESSION[$settings['session_prefix'].'user_name'])))
 			{
-			$qs  = '';
-			$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
-			$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
-			$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
-			$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
-			$answerlink  = '<a class="textlink" href="posting.php?id='.$id.$qs;
+			$answerlink  = '<a class="textlink" href="posting.php?id='. intval($id);
 			$answerlink .= '" title="'.outputLangDebugInAttributes($lang['forum_answer_linktitle']).'">';
 			$answerlink .= $lang['forum_answer_linkname'].'</a>';
 			}

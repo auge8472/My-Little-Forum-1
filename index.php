@@ -30,8 +30,6 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 	die("<a href=\"login.php?referer=index.php\">further...</a>");
 	}
 
-processStandardParametersGET();
-
 if (!empty($_SESSION[$settings['session_prefix'].'category'])
 	and $_SESSION[$settings['session_prefix'].'category'] > 0)
 	{

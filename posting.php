@@ -29,6 +29,7 @@ if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captch
 	$captcha = new captcha();
 	}
 
+# category is given from the form via POST
 if (isset($_POST['category'])) $category = intval($_POST['category']);
 if (isset($_POST['p_category'])) $p_category = intval($_POST['p_category']);
 
@@ -1253,12 +1254,12 @@ if (($settings['access_for_users_only'] == 1
 				$subnav1_href2 = 'forum.php';
 				}
 			$subnav_1 .= '<a class="textlink" href="'.$subnav1_href2;
-			$subnav_1 .= ($category > 0) ? '?category='.$category : '';
 			$subnav_1 .= '">'.$lang['back_to_overview_linkname'].'</a>';
 			}
 
 		parse_template();
 		echo $header;
+		echo outputDebugSession();
 
 		switch ($show)
 			{
@@ -1353,7 +1354,8 @@ if (($settings['access_for_users_only'] == 1
 					$entry["edited_by"] = '';
 					$entry["e_time"] = '';
 					echo '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
-					if (isset($view))
+					if (isset($_SESSION[$settings['session_prefix'].'curr_view'])
+						and in_array($_SESSION[$settings['session_prefix'].'curr_view'], array('mix', 'board')))
 						{
 						echo '<table class="normaltab">'."\n";
 						echo '<tr>'."\n";
@@ -1474,13 +1476,8 @@ if (($settings['access_for_users_only'] == 1
 				echo '<input type="hidden" name="action" value="'.htmlspecialchars($action).'" />'."\n";
 				echo (isset($p_user_id)) ? '<input type="hidden" name="p_user_id" value="'.$p_user_id.'" />'."\n" : '';
 				echo (isset($aname)) ? '<input type="hidden" name="aname" value="'.htmlspecialchars($aname).'" />'."\n" : '';
-				echo (isset($view)) ? '<input type="hidden" name="view" value="'.$view.'" />'."\n" : '';
 				echo (isset($back)) ? '<input type="hidden" name="back" value="'.$back.'" />'."\n" : '';
 				echo (isset($thema)) ? '<input type="hidden" name="thema" value="'.$thema.'" />'."\n" : '';
-				echo (isset($page)) ? '<input type="hidden" name="page" value="'.$page.'" />'."\n" : '';
-				echo (isset($order)) ? '<input type="hidden" name="order" value="'.$order.'" />'."\n" : '';
-				echo (isset($descasc)) ? '<input type="hidden" name="descasc" value="'.$descasc.'" />'."\n" : '';
-				echo (isset($category)) ? '<input type="hidden" name="category" value="'.$category.'" />'."\n" : '';
 				echo '<table class="normal">'."\n";
 				# Formularfelder für unbekannte User bzw. wenn
 				# Posting unbekannter User editiert wird:
@@ -1541,16 +1538,16 @@ if (($settings['access_for_users_only'] == 1
 							if ($key!=0)
 								{
 								echo '<option value="'.$key.'"';
-								if ((isset($category)
-								&& $category!=0
-								&& $key==$category
+								if ((isset($_SESSION[$settings['session_prefix'].'category'])
+								&& $_SESSION[$settings['session_prefix'].'category'] > 0
+								&& $key == $_SESSION[$settings['session_prefix'].'category']
 								&& empty($p_category))
 								|| (isset($p_category)
-								&& $key==$p_category))
+								&& $key == $p_category))
 									{
 									echo ' selected="selected"';
 									}
-								echo '>'.htmlspecialchars($val).'</option>'."\n";
+								echo '>'. htmlspecialchars($val) .'</option>'."\n";
 								}
 							}
 						}
@@ -1601,7 +1598,7 @@ if (($settings['access_for_users_only'] == 1
 					echo '<tr>'."\n";
 					echo '<td colspan="2"><label for="show_signature"><input type="checkbox"';
 					echo ' name="show_signature" id="show_signature" value="1"';
-					echo (isset($show_signature) && $show_signature==1) ? 'checked="checked"' : '';
+					echo (isset($show_signature) && $show_signature==1) ? ' checked="checked"' : '';
 					echo ' />&nbsp;'.$lang['show_signature_cbm'].'</label></td>'."\n";
 					echo '</tr>';
 					}
@@ -1610,7 +1607,7 @@ if (($settings['access_for_users_only'] == 1
 					echo '<tr>'."\n";
 					echo '<td colspan="2"><label for="email_notify"><input type="checkbox"';
 					echo ' name="email_notify" id="email_notify" value="1"';
-					echo (isset($email_notify) && $email_notify==1) ? 'checked="checked"' : '';
+					echo (isset($email_notify) && $email_notify==1) ? ' checked="checked"' : '';
 					echo ' />&nbsp;'.$lang['email_notification_cbm'].'</label></td>'."\n";
 					echo '</tr>';
 					}
@@ -1626,7 +1623,7 @@ if (($settings['access_for_users_only'] == 1
 					echo '<tr>'."\n";
 					echo '<td colspan="2"><label for="fixed"><input type="checkbox"';
 					echo ' name="fixed" id="fixed" value="1"';
-					echo (isset($fixed) && $fixed==1) ? 'checked="checked"' : '';
+					echo (isset($fixed) && $fixed==1) ? ' checked="checked"' : '';
 					echo ' />&nbsp;'.$lang['fix_thread'].'</label></td>'."\n";
 					echo '</tr>';
 					}
@@ -1688,11 +1685,6 @@ if (($settings['access_for_users_only'] == 1
 				echo '<form action="posting.php" method="post" accept-charset="UTF-8">'."\n";
 				echo '<input type="hidden" name="action" value="delete ok" />'."\n";
 				echo '<input type="hidden" name="id" value="'.intval($id).'" />'."\n";
-				echo (isset($view)) ? '<input type="hidden" name="view" value="'.$view.'" />'."\n" : '';
-				echo (isset($page)) ? '<input type="hidden" name="page" value="'.$page.'" />'."\n" : '';
-				echo (isset($order)) ? '<input type="hidden" name="order" value="'.$order.'" />'."\n" : '';
-				echo (isset($descasc)) ? '<input type="hidden" name="descasc" value="'.$descasc.'" />'."\n" : '';
-				echo (isset($category)) ? '<input type="hidden" name="category" value="'.$category.'" />'."\n" : '';
 				echo '<p><input type="submit" name="delete" value="'.$lang['delete_posting_ok'].'" /></p>'."\n";
 				echo '</form>'."\n";
 			break;
