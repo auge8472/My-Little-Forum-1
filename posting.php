@@ -628,7 +628,7 @@ if (($settings['access_for_users_only'] == 1
 			if ($uniqid_count > 0)
 				{
 				header("location: ".$settings['forum_address']."index.php");
-				die("<a href=\"index.php\">further...</a>");
+				die('<a href="index.php">further...</a>');
 				}
 
 			# check for not accepted words:
