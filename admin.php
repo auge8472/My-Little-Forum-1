@@ -1919,10 +1919,7 @@ switch ($action)
 			$alphabet = range('A', 'Z');
 
 			echo '<h2>'. str_replace("[number]", $sel_user_count, $lang['num_reg_users']) .'</h2>'."\n";
-			echo '<table>'."\n";
-			echo '<tr>'."\n";
-			echo '<td>&nbsp;</td>'."\n";
-			echo '<td style="text-align:right;">'.$lang_add['search_user'];
+			echo '<div>'. $lang_add['search_user'] .'&nbsp;';
 			echo '<form action="'.$_SERVER['SCRIPT_NAME'].'" method="get" style="display:inline">'."\n";
 			echo '<input type="hidden" name="action" value="user" />'."\n";
 			echo '<input type="text" name="search_user" value="';
@@ -1945,9 +1942,7 @@ switch ($action)
 				echo '</select>&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;" /></form>'."\n";
 				echo nav($page, $settings['users_per_page'], $sel_user_count, $order, $descasc, $category, $action);
 				}
-			echo '</td>'."\n";
-			echo '</tr>'."\n";
-			echo '</table>'."\n";
+			echo '</div>'."\n";
 
 			if ($result_count > 0)
 				{
