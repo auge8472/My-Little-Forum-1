@@ -1918,9 +1918,10 @@ switch ($action)
 			if ($sel_user_count < $sam) $sam = $sel_user_count;
 			$alphabet = range('A', 'Z');
 
+			echo '<h2>'. str_replace("[number]", $sel_user_count, $lang['num_reg_users']) .'</h2>'."\n";
 			echo '<table>'."\n";
 			echo '<tr>'."\n";
-			echo '<td>'.str_replace("[number]", $sel_user_count, $lang['num_reg_users']).'</td>'."\n";
+			echo '<td>&nbsp;</td>'."\n";
 			echo '<td style="text-align:right;">'.$lang_add['search_user'];
 			echo '<form action="'.$_SERVER['SCRIPT_NAME'].'" method="get" style="display:inline">'."\n";
 			echo '<input type="hidden" name="action" value="user" />'."\n";
