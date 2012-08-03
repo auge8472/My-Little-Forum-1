@@ -1899,9 +1899,9 @@ switch ($action)
 			$result_count = mysql_num_rows($result);
 
 			# schauen, wieviele User vorhanden sind:
-			$user_count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
-			list($user_count) = mysql_fetch_row($user_count_result);
-			mysql_free_result($user_count_result);
+#			$user_count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
+#			list($user_count) = mysql_fetch_row($user_count_result);
+#			mysql_free_result($user_count_result);
 
 			if (isset($_GET['letter']) && $_GET['letter']!="")
 				{
@@ -1915,12 +1915,12 @@ switch ($action)
 			list($sel_user_count) = mysql_fetch_row($su_result);
 			mysql_free_result($su_result);
 
-			if ($user_count < $sam) $sam = $user_count;
+			if ($sel_user_count < $sam) $sam = $sel_user_count;
 			$alphabet = range('A', 'Z');
 
 			echo '<table>'."\n";
 			echo '<tr>'."\n";
-			echo '<td>'.str_replace("[number]", $user_count, $lang['num_reg_users']).'</td>'."\n";
+			echo '<td>'.str_replace("[number]", $sel_user_count, $lang['num_reg_users']).'</td>'."\n";
 			echo '<td style="text-align:right;">'.$lang_add['search_user'];
 			echo '<form action="'.$_SERVER['SCRIPT_NAME'].'" method="get" style="display:inline">'."\n";
 			echo '<input type="hidden" name="action" value="user" />'."\n";
