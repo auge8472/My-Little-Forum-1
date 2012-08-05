@@ -1875,27 +1875,10 @@ switch ($action)
 			if (!$result) die($lang['db_error']);
 			$result_count = mysql_num_rows($result);
 
-			# schauen, wieviele User vorhanden sind:
-#			$user_count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
-#			list($user_count) = mysql_fetch_row($user_count_result);
-#			mysql_free_result($user_count_result);
-
-			if (isset($_GET['letter']) && $_GET['letter']!="")
-				{
-				$su_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table']."
-				WHERE user_name LIKE '". mysql_real_escape_string($_GET['letter']) ."%'", $connid);
-				}
-			else
-				{
-				$su_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
-				}
-			list($sel_user_count) = mysql_fetch_row($su_result);
-			mysql_free_result($su_result);
-
-			if ($sel_user_count < $sam) $sam = $sel_user_count;
+			if ($result_count < $sam) $sam = $result_count;
 			$alphabet = range('A', 'Z');
 
-			echo '<h2>'. str_replace("[number]", $sel_user_count, $lang['num_reg_users']) .'</h2>'."\n";
+			echo '<h2>'. str_replace("[number]", $result_count, $lang['num_reg_users']) .'</h2>'."\n";
 			echo '<div><label for="search_user">'. $lang_add['search_user'] .'</label>&nbsp;';
 			echo '<form action="'.$_SERVER['SCRIPT_NAME'].'" method="get" style="display:inline">'."\n";
 			echo '<input type="hidden" name="action" value="user" />'."\n";
@@ -1917,7 +1900,7 @@ switch ($action)
 					echo '>'.$lett.'</option>'."\n";
 					}
 				echo '</select>&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;" /></form>'."\n";
-				echo nav($page, $settings['users_per_page'], $sel_user_count, $order, $descasc, $category, $action);
+				echo nav($page, $settings['users_per_page'], $result_count, $order, $descasc, $category, $action);
 				}
 			echo '</div>'."\n";
 
