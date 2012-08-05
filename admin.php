@@ -1919,10 +1919,10 @@ switch ($action)
 			$alphabet = range('A', 'Z');
 
 			echo '<h2>'. str_replace("[number]", $sel_user_count, $lang['num_reg_users']) .'</h2>'."\n";
-			echo '<div>'. $lang_add['search_user'] .'&nbsp;';
+			echo '<div><label for="search_user">'. $lang_add['search_user'] .'</label>&nbsp;';
 			echo '<form action="'.$_SERVER['SCRIPT_NAME'].'" method="get" style="display:inline">'."\n";
 			echo '<input type="hidden" name="action" value="user" />'."\n";
-			echo '<input type="text" name="search_user" value="';
+			echo '<input type="text" name="search_user" id="search_user" value="';
 			echo (isset($search_user)) ? htmlspecialchars($search_user) : '';
 			echo '" size="25">&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;" />';
 			echo '</form>'."\n";
