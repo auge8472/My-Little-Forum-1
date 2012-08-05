@@ -1843,58 +1843,35 @@ switch ($action)
 
 			if (isset($letter))
 				{
-				$userByLetterQuery = "SELECT
-				user_id,
-				user_name,
-				user_type,
-				user_email,
-				logins,
-				UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS last_login_time,
-				UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS registered_time,
-				INET_NTOA(ip_addr) AS ip_address,
-				user_lock
-				FROM ".$db_settings['userdata_table']."
-				WHERE user_name LIKE '".mysql_real_escape_string($_GET['letter'])."%'
-				ORDER BY ".$order." ".$descasc."
-				LIMIT ".$ul.", ".$settings['users_per_page'];
-				$result = mysql_query($userByLetterQuery, $connid);
+				$getUserWhere = "
+				WHERE user_name LIKE '". mysql_real_escape_string($_GET['letter']) ."%'
+				";
 				}
 			else if (isset($search_user))
 				{
-				$userByNameQuery = "SELECT
-				user_id,
-				user_name,
-				user_type,
-				user_email,
-				logins,
-				UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS last_login_time,
-				UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS registered_time,
-				INET_NTOA(ip_addr) AS ip_address,
-				user_lock
-				FROM ".$db_settings['userdata_table']."
-				WHERE user_name LIKE '".mysql_real_escape_string($search_user)."%'
-				OR user_email LIKE '".mysql_real_escape_string($search_user)."%'
-				ORDER BY ".$order." ".$descasc."
-				LIMIT ".$ul.", ".$settings['users_per_page'];
-				$result = mysql_query($userByNameQuery, $connid);
+				$getUserWhere = "
+				WHERE user_name LIKE '". mysql_real_escape_string($search_user) ."%'
+				OR user_email LIKE '". mysql_real_escape_string($search_user) ."%'
+				";
 				}
 			else
 				{
-				$userWOFilter = "SELECT
-				user_id,
-				user_name,
-				user_type,
-				user_email,
-				logins,
-				UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS last_login_time,
-				UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS registered_time,
-				INET_NTOA(ip_addr) AS ip_address,
-				user_lock
-				FROM ".$db_settings['userdata_table']."
-				ORDER BY ".$order." ".$descasc."
-				LIMIT ".$ul.", ".$settings['users_per_page'];
-				$result = mysql_query($userWOFilter, $connid);
+				$getUserWhere = "";
 				}
+			$getUserListQuery = "SELECT
+			user_id,
+			user_name,
+			user_type,
+			user_email,
+			logins,
+			UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS last_login_time,
+			UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS registered_time,
+			INET_NTOA(ip_addr) AS ip_address,
+			user_lock
+			FROM ". $db_settings['userdata_table'] . $getUserWhere ."
+			ORDER BY ". $order ." ". $descasc ."
+			LIMIT ". $ul .", ". $settings['users_per_page'];
+			$result = mysql_query($getUserListQuery, $connid);
 			if (!$result) die($lang['db_error']);
 			$result_count = mysql_num_rows($result);
 
