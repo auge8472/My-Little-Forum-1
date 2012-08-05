@@ -1883,7 +1883,7 @@ switch ($action)
 			if (isset($_GET['letter']) && $_GET['letter']!="")
 				{
 				$su_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table']."
-				WHERE user_name LIKE '".mysql_real_escape_string($_GET['letter'])."%'", $connid);
+				WHERE user_name LIKE '". mysql_real_escape_string($_GET['letter']) ."%'", $connid);
 				}
 			else
 				{
