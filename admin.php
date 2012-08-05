@@ -1926,7 +1926,7 @@ switch ($action)
 			echo (isset($search_user)) ? htmlspecialchars($search_user) : '';
 			echo '" size="25">&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;" />';
 			echo '</form>'."\n";
-			if (empty($serach_user) || trim($search_user==''))
+			if (empty($search_user) || trim($search_user) == '')
 				{
 				echo '&nbsp;';
 				echo '<form action="'.$_SERVER["SCRIPT_NAME"].'" method="get" style="display:inline">'."\n";
