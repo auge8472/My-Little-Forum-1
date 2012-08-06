@@ -1191,7 +1191,7 @@ if (isset($_POST['ar_username']))
 			$errors[] = $lang['error_name_reserved'];
 			}
 		# Überprüfung ob die Email-Adresse das Format name@domain.tld hat:
-		if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $ar_email))
+		if (!preg_match($validator['email'], $ar_email))
 			{
 			$errors[] = $lang['error_email_wrong'];
 			}
