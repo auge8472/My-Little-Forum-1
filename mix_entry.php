@@ -110,7 +110,7 @@ else
 		}
 	}
 $ftext = ($entrydata["text"]=="") ? $lang['no_text'] : outputPreparePosting($entrydata["text"]);
-$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator'].$signature, 'signature').'</div>'."\n" : '';
+$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator']."\n".$signature, 'signature').'</div>'."\n" : '';
 # generate HTML source code of posting
 $posting = $sPosting;
 $posting = str_replace('{postingID}', 'p'.$entrydata['id'], $posting);
