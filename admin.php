@@ -1306,15 +1306,6 @@ if (isset($_POST['ar_username']))
 		}
 	}
 
-if (isset($_POST['delete_category_confirmed']) && trim($_POST['delete_category']) != "")
-	{
-	$delCatConfirmedQuery = "DELETE FROM ". $db_settings['forum_table'] ."
-	WHERE category = '". $_POST['delete_category'] ."'";
-	mysql_query($delCatConfirmedQuery, $connid);
-	header('Location: '. $settings['forum_address'] .'admin.php');
-	die('<a href="admin.php">further...</a>');
-	}
-
 if (isset($_POST['banlists_submit']))
 	{
 	if (trim($_POST['banned_users']) != '')
