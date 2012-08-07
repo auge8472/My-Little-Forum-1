@@ -1306,37 +1306,6 @@ if (isset($_POST['ar_username']))
 		}
 	}
 
-if (isset($_POST['rename_category_submitted']) && trim($_POST['new_category']) != "")
-	{
-	$setRenamedCatQuery = "UPDATE ". $db_settings['forum_table'] ." SET
-	time = time,
-	last_answer = last_answer,
-	edited = edited,
-	category = '". $_POST['new_category'] ."'
-	WHERE category = '". $_POST['old_category'] ."'";
-	mysql_query($setRenamedCatQuery, $connid);
-	$data = file("db_settings.php");
-	$row_count = count($data);
-	$fp = fopen("db_settings.php", "w+");
-	flock($fp, 2);
-	for ($row=0; $row<$row_count; $row++)
-		{
-		if (mb_substr(trim($data[$row]),1,10) == "categories")
-			{
-			fwrite($fp, trim(str_replace($_POST['old_category'], $_POST['new_category'], $data[$row]))."\n");
-			}
-		else
-			{
-			fwrite($fp, trim($data[$row])."\n");
-			}
-		}
-	flock($fp, 3);
-	fclose($fp);
-
-	header('Location: '. $settings['forum_address'] .'admin.php');
-	die('<a href="admin.php">further...</a>');
-	}
-
 if (isset($_POST['delete_category_confirmed']) && trim($_POST['delete_category']) != "")
 	{
 	$delCatConfirmedQuery = "DELETE FROM ". $db_settings['forum_table'] ."
