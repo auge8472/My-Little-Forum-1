@@ -407,7 +407,7 @@ if ($settings['access_for_users_only'] == 1
 			$answerlink = '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />'.$lang['thread_locked'].'</span>';
 			}
 		$ftext = ($entrydata["text"]=="") ? $lang['no_text'] : outputPreparePosting($entrydata["text"]);
-		$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator'].$signature, 'signature').'</div>'."\n" : '';
+		$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator']."\n".$signature, 'signature').'</div>'."\n" : '';
 		# generate HTML source code of posting
 		$posting = str_replace('{postingID}', 'p'.$entrydata['id'], $posting);
 		$posting = str_replace('{postingheadline}', $pHeadline, $posting);
