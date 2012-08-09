@@ -248,7 +248,7 @@ list($user_count) = mysql_fetch_row($count_result);
 
 if ($settings['count_users_online'] == 1)
 	{
-	user_online();
+	processSetUsersOnline();
 	$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE user_id > 0", $connid);
 	list($useronline_count) = mysql_fetch_row($count_result);
 	$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE user_id = 0", $connid);
