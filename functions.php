@@ -567,11 +567,10 @@ $ip = isset($_SESSION[$settings['session_prefix'].'user_id']) ? "uid_".$_SESSION
 
 @mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE time < ".$diff, $connid);
 
-list($is_online) = @mysql_fetch_row(@mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE ip= '".mysql_real_escape_string($ip)."'", $connid));
-if ($is_online > 0) @mysql_query("UPDATE ".$db_settings['useronline_table']." SET time='".time()."', user_id='".$user_id."' WHERE ip='".$ip."'", $connid);
-else @mysql_query("INSERT INTO ".$db_settings['useronline_table']." SET time='".time()."', ip='".$ip."', user_id='".$user_id."'", $connid);
+list($is_online) = @mysql_fetch_row(@mysql_query("SELECT COUNT(*) FROM ". $db_settings['useronline_table'] ." WHERE ip= '". mysql_real_escape_string($ip) ."'", $connid));
+if ($is_online > 0) @mysql_query("UPDATE ". $db_settings['useronline_table'] ." SET time='". time() ."', user_id='". intval($user_id) ."' WHERE ip='". $ip ."'", $connid);
+else @mysql_query("INSERT INTO ". $db_settings['useronline_table'] ." SET time='". time() ."', ip='". $ip ."', user_id='". intval ($user_id)."'", $connid);
 
-#list($user_online) = @mysql_fetch_row(@mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table'], $connid));
 #return $user_online;
 } # End: user_online
 
