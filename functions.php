@@ -153,7 +153,7 @@ else return false;
  * @return bool false
  */
 function get_category_ids($categories) {
-if($categories!=false)
+if($categories !== false)
 	{
 	while(list($key) = each($categories))
 		{
