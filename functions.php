@@ -560,24 +560,10 @@ return $string;
 function user_online($user_online_period = 10) {
 global $connid, $db_settings, $settings;
 
-if (isset($_SESSION[$settings['session_prefix'].'user_id']))
-	{
-	$user_id = $_SESSION[$settings['session_prefix'].'user_id'];
-	}
-else
-	{
-	$user_id = 0;
-	}
+$user_id = isset($_SESSION[$settings['session_prefix'].'user_id']) ? $_SESSION[$settings['session_prefix'].'user_id'] : 0;
 $diff = time()-($user_online_period*60);
 
-if (isset($_SESSION[$settings['session_prefix'].'user_id']))
-	{
-	$ip = "uid_".$_SESSION[$settings['session_prefix'].'user_id'];
-	}
-else
-	{
-	$ip = $_SERVER['REMOTE_ADDR'];
-	}
+$ip = isset($_SESSION[$settings['session_prefix'].'user_id']) ? "uid_".$_SESSION[$settings['session_prefix'].'user_id'] : $_SERVER['REMOTE_ADDR'];
 
 @mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE time < ".$diff, $connid);
 
