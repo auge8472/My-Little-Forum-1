@@ -193,12 +193,39 @@ else
 	$posting_count = 0;
 	}
 
+$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
+list($user_count) = mysql_fetch_row($count_result);
+
+if ($settings['count_users_online'] == 1)
+	{
+	processSetUsersOnline();
+	$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE user_id > 0", $connid);
+	list($useronline_count) = mysql_fetch_row($count_result);
+	$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE user_id = 0", $connid);
+	list($guestsonline_count) = mysql_fetch_row($count_result);
+	$counter = str_replace("[postings]", $posting_count, $lang['counter_uo']);
+	$counter = str_replace("[threads]", $thread_count, $counter);
+	$counter = str_replace("[users]", $user_count, $counter);
+	$counter = str_replace("[total_online]", $useronline_count+$guestsonline_count, $counter);
+	$counter = str_replace("[user_online]", $useronline_count, $counter);
+	$counter = str_replace("[guests_online]", $guestsonline_count, $counter);
+	}
+else
+	{
+	$counter = str_replace("[forum_name]", '<a href="'.$settings['forum_address'].'">'.$settings['forum_name'].'</a>', $lang['counter']);
+	$counter = str_replace("[contact]", '<a href="contact.php?forum_contact=true">'.$lang['contact_linkname'].'</a>', $counter);
+	$counter = str_replace("[postings]", $posting_count, $counter);
+	$counter = str_replace("[threads]", $thread_count, $counter);
+	$counter = str_replace("[users]", $user_count, $counter);
+	}
+mysql_free_result($count_result);
+
 $possViews = array();
 if ($settings['board_view'] == 1) $possViews[] = 'board';
 if ($settings['thread_view'] == 1) $possViews[] = 'thread';
 if ($settings['mix_view'] == 1) $possViews[] = 'mix';
 
-# look for the current used view
+# look for the currently used view
 if (isset($_GET['view']) and in_array($_GET['view'], $possViews))
 	{
 	$curr_view = $_GET['view'];
@@ -242,33 +269,6 @@ else
 		setcookie('curr_view', $curr_view, time()+(3600*24*30));
 		}
 	}
-
-$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
-list($user_count) = mysql_fetch_row($count_result);
-
-if ($settings['count_users_online'] == 1)
-	{
-	processSetUsersOnline();
-	$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE user_id > 0", $connid);
-	list($useronline_count) = mysql_fetch_row($count_result);
-	$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE user_id = 0", $connid);
-	list($guestsonline_count) = mysql_fetch_row($count_result);
-	$counter = str_replace("[postings]", $posting_count, $lang['counter_uo']);
-	$counter = str_replace("[threads]", $thread_count, $counter);
-	$counter = str_replace("[users]", $user_count, $counter);
-	$counter = str_replace("[total_online]", $useronline_count+$guestsonline_count, $counter);
-	$counter = str_replace("[user_online]", $useronline_count, $counter);
-	$counter = str_replace("[guests_online]", $guestsonline_count, $counter);
-	}
-else
-	{
-	$counter = str_replace("[forum_name]", '<a href="'.$settings['forum_address'].'">'.$settings['forum_name'].'</a>', $lang['counter']);
-	$counter = str_replace("[contact]", '<a href="contact.php?forum_contact=true">'.$lang['contact_linkname'].'</a>', $counter);
-	$counter = str_replace("[postings]", $posting_count, $counter);
-	$counter = str_replace("[threads]", $thread_count, $counter);
-	$counter = str_replace("[users]", $user_count, $counter);
-	}
-mysql_free_result($count_result);
 
 $postingPages = array('posting.php','user.php');
 $additionalJS = '';
