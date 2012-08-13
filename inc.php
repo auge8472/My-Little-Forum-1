@@ -335,11 +335,11 @@ $time_difference = (isset($settings['time_difference'])) ? $settings['time_diffe
 
 if (isset($_SESSION[$settings['session_prefix'].'user_time_difference']))
 	{
-	$time_difference = $_SESSION[$settings['session_prefix'].'user_time_difference']+$time_difference;
+	$time_difference = $_SESSION[$settings['session_prefix'].'user_time_difference'] + $time_difference;
 	}
 else if (isset($_COOKIE['user_time_difference']))
 	{
-	$time_difference = $_COOKIE['user_time_difference']+$time_difference;
+	$time_difference = $_COOKIE['user_time_difference'] + $time_difference;
 	}
 
 ?>
