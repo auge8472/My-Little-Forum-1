@@ -48,8 +48,8 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 
 	if ($lock_result_array['user_lock'] > 0)
 		{
-		header("location: ".$settings['forum_address']."user.php");
-		die("<a href=\"user.php\">further...</a>");
+		header("location: ". $settings['forum_address'] ."user.php");
+		die('<a href="user.php">further...</a>');
 		}
 	} # End: if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 
