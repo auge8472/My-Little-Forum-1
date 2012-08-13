@@ -1820,13 +1820,13 @@ if (($settings['access_for_users_only'] == 1
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
 		{
-		header("location: ". $settings['forum_address'] ."login.php?msg=noentry");
-		die("<a href=\"login.php?msg=noentry\">further...</a>");
+		header("Location: ". $settings['forum_address'] ."login.php?msg=noentry");
+		die('<a href="login.php?msg=noentry">further...</a>');
 		}
 	} # End: if (($settings['access_for_users_only'] == 1 ...)
 else
 	{
-	header("location: ". $settings['forum_address'] ."login.php?msg=noaccess");
-	die("<a href=\"login.php?msg=noaccess\">further...</a>");
+	header("Location: ". $settings['forum_address'] ."login.php?msg=noaccess");
+	die('<a href="login.php?msg=noaccess">further...</a>');
 	}
 ?>
