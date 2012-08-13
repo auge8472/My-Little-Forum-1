@@ -39,7 +39,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 	{
 	$lockQuery = "SELECT user_lock
 	FROM ". $db_settings['userdata_table'] ."
-	WHERE user_id = '". $_SESSION[$settings['session_prefix'].'user_id'] ."'
+	WHERE user_id = '". intval($_SESSION[$settings['session_prefix'].'user_id']) ."'
 	LIMIT 1";
 	$lock_result = mysql_query($lockQuery, $connid);
 	if (!$lock_result) die($lang['db_error']);
