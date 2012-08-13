@@ -1570,9 +1570,9 @@ if (($settings['access_for_users_only'] == 1
 #					echo '<pre>'. print_r(htmlspecialchars($prTemplate), true) .'</pre>';
 					echo '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
 					echo $prTemplate;
+					echo '<hr class="entryline" />'."\n";
 					} # if (isset($preview) && empty($errors))
 				# End preview
-				echo '<hr class="entryline" />'."\n";
 				echo '<form action="posting.php" method="post" id="entryform" accept-charset="UTF-8">'."\n";
 				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
 				&& $settings['captcha_posting'] == 1)
