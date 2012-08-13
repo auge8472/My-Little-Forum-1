@@ -1454,7 +1454,7 @@ if (($settings['access_for_users_only'] == 1
 					$prTemplate = str_replace('{threadheadline}', $prThreadHeadline, $prTemplate);
 					$prTemplate = str_replace('{thread}', $prThread, $prTemplate);
 					$prTemplate = str_replace('{postingID}', $entry['user_id'], $prTemplate);
-					$prTemplate = ($isView == 'board') ? '<table class="normaltab">'. $prTemplate .'<table>' : $prTemplate;
+					$prTemplate = ($isView == 'board') ? '<table class="normaltab">'. $prTemplate .'</table>' : $prTemplate;
 #					echo '<pre>'. print_r(htmlspecialchars($prTemplate), true) .'</pre>';
 					echo '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
 					echo $prTemplate;
