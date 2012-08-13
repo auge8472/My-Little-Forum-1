@@ -157,7 +157,8 @@ and isset($_GET['back']))
 	else if ($_GET['subscribe'] == 'false')
 		{
 		$subscriptThread = processSearchThreadSubscriptions($_GET['back'], $_SESSION[$settings['session_prefix'].'user_id']);
-		if (($subscriptThread !== false and is_array($subscriptThread))
+		if (($subscriptThread !== false
+		and is_array($subscriptThread))
 		and ($subscriptThread['user_id'] == $_SESSION[$settings['session_prefix'].'user_id']
 		and $subscriptThread['tid'] == $_GET['back']))
 			{
@@ -649,7 +650,7 @@ if (($settings['access_for_users_only'] == 1
 
 			if (trim($data['list']) != '')
 				{
-				$not_accepted_words = explode(',',trim($data['list']));
+				$not_accepted_words = explode(',', trim($data['list']));
 				foreach ($not_accepted_words as $not_accepted_word)
 					{
 					if ($not_accepted_word!=''
@@ -809,9 +810,9 @@ if (($settings['access_for_users_only'] == 1
 			# CAPTCHA check:
 			if (isset($_POST['save_entry'])
 			&& empty($_SESSION[$settings['session_prefix'].'user_id'])
-			&& $settings['captcha_posting']==1)
+			&& $settings['captcha_posting'] == 1)
 				{
-				if($settings['captcha_type']==1)
+				if($settings['captcha_type'] == 1)
 					{
 					if ($captcha->check_captcha($_SESSION['captcha_session'],$_POST['captcha_code'])!=TRUE) $errors[] = $lang['captcha_code_invalid'];
 					}
@@ -1235,7 +1236,9 @@ if (($settings['access_for_users_only'] == 1
 				{
 				$subnav1_href1 = 'forum_entry.php';
 				}
-			if (isset($page) && isset($order) && isset($category))
+			if (isset($page)
+			&& isset($order)
+			&& isset($category))
 				{
 				$subnav1_query1  = '&amp;page='.$page.'&amp;order='.$order;
 				$subnav1_query1 .= ($category > 0) ? '&amp;category='.$category : '';
@@ -1388,7 +1391,7 @@ if (($settings['access_for_users_only'] == 1
 						echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
 						echo outputAuthorInfo($mark, $entry, $page, $order, $view, $category);
 						echo '</td>'."\n";
-						echo '<td class="titlecell"><h2>'.htmlspecialchars($subject).'</h2></td>'."\n";
+						echo '<td class="titlecell"><h2>'. htmlspecialchars($subject) .'</h2></td>'."\n";
 						echo '</tr><tr>';
 						echo '<td class="postingcell" valign="top">';
 						if ($text == "")
@@ -1493,7 +1496,8 @@ if (($settings['access_for_users_only'] == 1
 					} # if (isset($preview) && empty($errors))
 				# Ende Vorschau
 				echo '<form action="posting.php" method="post" id="entryform" accept-charset="UTF-8">'."\n";
-				if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_posting']==1)
+				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
+				&& $settings['captcha_posting'] == 1)
 					{
 					echo '<input type="hidden" name="'. session_name() .'" value="'. session_id() .'" />'."\n";
 					}
@@ -1605,7 +1609,8 @@ if (($settings['access_for_users_only'] == 1
 				echo '" maxlength="'. $settings['subject_maxlength'] .'" /></td>'."\n";
 				echo '</tr><tr>'."\n";
 				echo '<td colspan="2"><label for="text">'. $lang['text_marking'] .'</label>';
-				if ($action == "new" && $id != 0)
+				if ($action == "new"
+				&& $id != 0)
 					{
 					echo '&nbsp;&nbsp;<span id="delete-text" class="small">'. $lang['delete_quoted_text'] .'</span>';
 					}
