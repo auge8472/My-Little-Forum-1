@@ -200,7 +200,7 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_2 = "";
 	if ($settings['board_view']==1)
 		{
-		$url = 'board_entry.php?id='.$entrydata["tid"];
+		$url = 'board_entry.php?view=board&amp;id='.$entrydata["tid"];
 		$class = 'board-view';
 		$title = outputLangDebugInAttributes($lang['board_view_linktitle']);
 		$linktext = $lang['board_view_linkname'];
@@ -208,7 +208,7 @@ if ($settings['access_for_users_only'] == 1
 		}
 	if ($settings['mix_view']==1)
 		{
-		$url = 'mix_entry.php?id='.$entrydata["tid"];
+		$url = 'mix_entry.php?view=mix&amp;id='.$entrydata["tid"];
 		$class = 'mix-view';
 		$title = outputLangDebugInAttributes($lang['mix_view_linktitle']);
 		$linktext = $lang['mix_view_linkname'];

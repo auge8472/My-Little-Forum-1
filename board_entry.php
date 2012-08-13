@@ -279,7 +279,7 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 	if ($settings['thread_view']==1)
 		{
-		$url = 'forum_entry.php?id='.$thread["tid"].$cat;
+		$url = 'forum_entry.php?view=thread&amp;id='.$thread["tid"];
 		$class = 'thread-view';
 		$title = outputLangDebugInAttributes($lang['thread_view_linktitle']);
 		$linktext = $lang['thread_view_linkname'];
@@ -287,7 +287,7 @@ if ($settings['access_for_users_only'] == 1
 		}
 	if ($settings['mix_view']==1)
 		{
-		$url = 'mix_entry.php?id='.$thread["tid"].'&amp;order='.$order.'&amp;descasc='.$descasc.$cat;
+		$url = 'mix_entry.php?view=mix&amp;id='.$thread["tid"];
 		$class = 'mix-view';
 		$title = outputLangDebugInAttributes($lang['mix_view_linktitle']);
 		$linktext = $lang['mix_view_linkname'];
