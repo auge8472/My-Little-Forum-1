@@ -1421,7 +1421,7 @@ if (($settings['access_for_users_only'] == 1
 						if ($show_signature == 1
 						&& $pr_signature != "")
 							{
-							$pr_signature = $settings['signature_separator'].$pr_signature;
+							$pr_signature = $settings['signature_separator']."\n".$pr_signature;
 #							$pr_signature = htmlspecialchars($pr_signature);
 #							$pr_signature = nl2br($pr_signature);
 							if ($settings['autolink'] == 1)
@@ -1474,7 +1474,7 @@ if (($settings['access_for_users_only'] == 1
 						if ($show_signature == 1
 						&& $pr_signature != "")
 							{
-							$pr_signature = $settings['signature_separator'].$pr_signature;
+							$pr_signature = $settings['signature_separator']."\n".$pr_signature;
 #							$pr_signature = htmlspecialchars($pr_signature);
 #							$pr_signature = nl2br($pr_signature);
 							if ($settings['autolink'] == 1)
