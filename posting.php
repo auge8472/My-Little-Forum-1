@@ -1356,7 +1356,7 @@ if (($settings['access_for_users_only'] == 1
 						$hide_email = $field["hide_email"];
 						$pr_hp = $field["user_hp"];
 						$pr_place = $field["user_place"];
-						$pr_signature = $field["signature"];
+						$prSignature = $field["signature"];
 						} # End: if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 					if (empty($pr_name)) $pr_name = $name;
 					if (empty($pr_email)) $pr_email = $email;
@@ -1382,62 +1382,52 @@ if (($settings['access_for_users_only'] == 1
 					$entry["p_time"] = $pr_time;
 					$entry["edited_by"] = '';
 					$entry["e_time"] = '';
+					# generate content of preview
 					echo '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
+					$prAuthorinfo =  outputAuthorInfo($mark, $entry, $page, $order, $view, $category);
+					$prSubject = htmlspecialchars($subject);
+					if ($text == "")
+						{
+						$prText = $lang['no_text'];
+						}
+					else
+						{
+						$prText = $text;
+#						$prText = htmlspecialchars($prText);
+#						$prText = nl2br($prText);
+						$prText = ($settings['autolink'] == 1) ? make_link($prText) : $prText;
+						$prText = ($settings['bbcode'] == 1) ? bbcode($prText) : $prText;
+						$prText = ($settings['smilies'] == 1) ? smilies($prText) : $prText;
+						$prText = zitat($prText);
+						}
+					if ($show_signature == 1
+					&& $prSignature != "")
+						{
+						$prSignature = $settings['signature_separator']."\n".$prSignature;
+#						$prSignature = htmlspecialchars($prSignature);
+#						$prSignature = nl2br($prSignature);
+						$prSignature = ($settings['autolink'] == 1) ? make_link($prSignature) : $prSignature;
+						$prSignature = ($settings['bbcode'] == 1) ? bbcode($prSignature) : $prSignature;
+						$prSignature = ($settings['smilies'] == 1) ? smilies($prSignature) : $prSignature;
+						$prSignature = '<div class="signature">'.$prSignature.'</div>'."\n";
+						}
+					else
+						{
+						$prSignature = '';
+						}
 					if (isset($_SESSION[$settings['session_prefix'].'curr_view'])
 					and in_array($_SESSION[$settings['session_prefix'].'curr_view'], array('mix', 'board')))
 						{
 						echo '<table class="normaltab">'."\n";
 						echo '<tr>'."\n";
 						echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
-						echo outputAuthorInfo($mark, $entry, $page, $order, $view, $category);
+						echo $prAuthorinfo;
 						echo '</td>'."\n";
-						echo '<td class="titlecell"><h2>'. htmlspecialchars($subject) .'</h2></td>'."\n";
+						echo '<td class="titlecell"><h2>'. $prSubject .'</h2></td>'."\n";
 						echo '</tr><tr>';
 						echo '<td class="postingcell" valign="top">';
-						if ($text == "")
-							{
-							echo $lang['no_text'];
-							}
-						else
-							{
-							$pr_text = $text;
-#							$pr_text = htmlspecialchars($pr_text);
-#							$pr_text = nl2br($pr_text);
-							if ($settings['autolink'] == 1)
-								{
-								$pr_text = make_link($pr_text);
-								}
-							if ($settings['bbcode'] == 1)
-								{
-								$pr_text = bbcode($pr_text);
-								}
-							if ($settings['smilies'] == 1)
-								{
-								$pr_text = smilies($pr_text);
-								}
-							$pr_text = zitat($pr_text);
-							echo '<div class="postingboard">'.$pr_text.'</div>'."\n";
-							}
-						if ($show_signature == 1
-						&& $pr_signature != "")
-							{
-							$pr_signature = $settings['signature_separator']."\n".$pr_signature;
-#							$pr_signature = htmlspecialchars($pr_signature);
-#							$pr_signature = nl2br($pr_signature);
-							if ($settings['autolink'] == 1)
-								{
-								$pr_signature = make_link($pr_signature);
-								}
-							if ($settings['bbcode'] == 1)
-								{
-								$pr_signature = bbcode($pr_signature);
-								}
-							if ($settings['smilies'] == 1)
-								{
-								$pr_signature = smilies($pr_signature);
-								}
-							echo '<div class="signature">'.$pr_signature.'</div>'."\n";
-							}
+						echo '<div class="postingboard">'.$prText.'</div>'."\n";
+						echo $prSignature;
 						echo '</td>'."\n";
 						echo '</tr>'."\n";
 						echo '</table>'."\n";
@@ -1445,56 +1435,14 @@ if (($settings['access_for_users_only'] == 1
 					else
 						{
 						echo '<div class="preview">'."\n";
-						echo '<h2 class="postingheadline">'. htmlspecialchars($subject) .'</h2>'."\n";
-						echo outputAuthorInfo($mark, $entry, $page, $order, 'forum', $category);
-						if ($text == "")
-							{
-							echo $lang['no_text'];
-							}
-						else
-							{
-							$pr_text = $text;
-#							$pr_text = htmlspecialchars($pr_text);
-#							$pr_text = nl2br($pr_text);
-							if ($settings['autolink'] == 1)
-								{
-								$pr_text = make_link($pr_text);
-								}
-							if ($settings['bbcode'] == 1)
-								{
-								$pr_text = bbcode($pr_text);
-								}
-							if ($settings['smilies'] == 1)
-								{
-								$pr_text = smilies($pr_text);
-								}
-							$pr_text = zitat($pr_text);
-							echo '<div class="posting">'. $pr_text .'</div>'."\n";
-							} # End: if ($text == "") else
-						if ($show_signature == 1
-						&& $pr_signature != "")
-							{
-							$pr_signature = $settings['signature_separator']."\n".$pr_signature;
-#							$pr_signature = htmlspecialchars($pr_signature);
-#							$pr_signature = nl2br($pr_signature);
-							if ($settings['autolink'] == 1)
-								{
-								$pr_signature = make_link($pr_signature);
-								}
-							if ($settings['bbcode'] == 1)
-								{
-								$pr_signature = bbcode($pr_signature);
-								}
-							if ($settings['smilies'] == 1)
-								{
-								$pr_signature = smilies($pr_signature);
-								}
-							echo '<div class="signature">'.$pr_signature.'</div>'."\n";
-							}
+						echo '<h2 class="postingheadline">'. $prSubject .'</h2>'."\n";
+						echo $prAuthorinfo;
+						echo '<div class="posting">'. $prText .'</div>'."\n";
+						echo $prSignature;
 						echo '</div>'."\n";
 						}
 					} # if (isset($preview) && empty($errors))
-				# Ende Vorschau
+				# End preview
 				echo '<form action="posting.php" method="post" id="entryform" accept-charset="UTF-8">'."\n";
 				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
 				&& $settings['captcha_posting'] == 1)
