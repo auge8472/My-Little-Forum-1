@@ -77,21 +77,42 @@ or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
 	locked = '". $locker ."'
 	WHERE tid = ". intval($field['tid']);
 	@mysql_query($relockQuery, $connid);
-
-	if (empty($page)) $page = 0;
-	if (empty($order)) $order = "time";
-	if (empty($descasc)) $descasc = "DESC";
-	if (isset($_GET['view']))
+	if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
 		{
-		$header_href = ($view=="board") ? 'board_entry.php' : 'mix_entry.php';
-		$header_id = '?id='.$field['tid'];
+		if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'_entry.php?id='. $field['tid'];
+			}
+		}
+	else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+		{
+		if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php?id='. $field['tid'];
+			}
 		}
 	else
 		{
-		$header_href = 'forum_entry.php';
-		$header_id = '?id='.$id;
+		if ($setting['standard'] == 'thread')
+			{
+			$header_href = 'forum.php';
+			}
+		else
+			{
+			$header_href = $setting['standard'] .'.php';
+			}
 		}
-	header('location: '.$settings['forum_address'].$header_href.$header_id.'&page='.$page.'&order='.$order.'&descasc='.$descasc.'&category='.$category);
+	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['lock']) ...)
 
 
@@ -119,21 +140,42 @@ or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
 	fixed = '". intval($fixer) ."'
 	WHERE tid = ". intval($field['tid']);
 	@mysql_query($refixQuery, $connid);
-
-	if (empty($page)) $page = 0;
-	if (empty($order)) $order = "time";
-	if (empty($descasc)) $descasc = "DESC";
-	if (isset($_GET['view']))
+	if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
 		{
-		$header_href = ($view=="board") ? 'board_entry.php' : 'mix_entry.php';
-		$header_id = '?id='.$field['tid'];
+		if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'_entry.php?id='. $field['tid'];
+			}
+		}
+	else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+		{
+		if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php?id='. $field['tid'];
+			}
 		}
 	else
 		{
-		$header_href = 'forum_entry.php';
-		$header_id = '?id='.$id;
+		if ($setting['standard'] == 'thread')
+			{
+			$header_href = 'forum.php';
+			}
+		else
+			{
+			$header_href = $setting['standard'] .'.php';
+			}
 		}
-	header('location: '.$settings['forum_address'].$header_href.$header_id.'&page='.$page.'&order='.$order.'&descasc='.$descasc.'&category='.$category);
+	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['fix']) ...)
 
 
@@ -170,21 +212,42 @@ and isset($_GET['back']))
 		}
 	if (!empty($querySubscribe)) @mysql_query($querySubscribe, $connid);
 	if (!empty($queryUnsubscribePost)) @mysql_query($queryUnsubscribePost, $connid);
-
-	if (empty($page)) $page = 0;
-	if (empty($order)) $order = "time";
-	if (empty($descasc)) $descasc = "DESC";
-	if (isset($_GET['view']))
+	if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
 		{
-		$header_href = ($view == "board") ? 'board_entry.php' : 'mix_entry.php';
-		$header_id = '?id='. intval($_GET['back']);
+		if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'_entry.php?id='.  intval($_GET['back']);
+			}
+		}
+	else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+		{
+		if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php?id='.  intval($_GET['back']);
+			}
 		}
 	else
 		{
-		$header_href = 'forum_entry.php';
-		$header_id = '?id='. intval($_GET['id']);
+		if ($setting['standard'] == 'thread')
+			{
+			$header_href = 'forum.php';
+			}
+		else
+			{
+			$header_href = $setting['standard'] .'.php';
+			}
 		}
-	header('location: '.$settings['forum_address'].$header_href.$header_id.'&page='.$page.'&order='.$order.'&descasc='.$descasc.'&category='.$category);
+	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['subscribe'] ...)
 
 
@@ -506,29 +569,42 @@ if (($settings['access_for_users_only'] == 1
 							WHERE id = ". intval($id);
 							$delete_result = mysql_query($deleteMessageQuery,$connid);
 							} # if ($feld["pid"] == 0) else
-
-						if (isset($page)
-						&& isset($order)
-						&& isset($category)
-						&& isset($descasc)) 
+						if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
+						and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
 							{
-							$qs  = "?page=".$page."&amp;order=".$order."&amp;descasc=".$descasc;
-							$qs .= ($category > 0) ? "&amp;category=".$category : '';
+							if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
+								{
+								$header_href = 'forum.php';
+								}
+							else
+								{
+								$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'.php';
+								}
+							}
+						else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+						and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+							{
+							if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+								{
+								$header_href = 'forum.php';
+								}
+							else
+								{
+								$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'.php';
+								}
 							}
 						else
 							{
-							$qs = "";
+							if ($setting['standard'] == 'thread')
+								{
+								$header_href = 'forum.php';
+								}
+							else
+								{
+								$header_href = $setting['standard'] .'.php';
+								}
 							}
-
-						if (isset($view))
-							{
-							$header_href = ($view=='board') ? 'board.php' : 'mix.php';
-							}
-						else
-							{
-							$header_href = 'forum.php';
-							}
-						header('location: '.$settings['forum_address'].$header_href.$qs);
+						header('location: '.$settings['forum_address'].$header_href);
 						die('<a href="'.$header_href.$qs.'">further...</a>');
 						}
 					else
@@ -1030,7 +1106,14 @@ if (($settings['access_for_users_only'] == 1
 						$further_tid = $neu["tid"];
 						$further_id = $neu["id"];
 						$further_page = 0;
-						if ($curr_view == 'board')
+						if ((!empty($_SESSION[$setting['session_prefix'] .'curr_view'])
+						and $_SESSION[$setting['session_prefix'] .'curr_view'] == 'board')
+						or (!empty($_SESSION[$setting['session_prefix'] .'user_view'])
+						and $_SESSION[$setting['session_prefix'] .'user_view'] == 'board')
+						or (!empty($_COOKIE['curr_view'])
+						and $_COOKIE['curr_view'] == 'board')
+						or (!empty($_COOKIE['user_view'])
+						and $_COOKIE['user_view'] == 'board'))
 							{
 							# there are more postings in thread than
 							# the setting for postings per page allows
@@ -1133,7 +1216,14 @@ if (($settings['access_for_users_only'] == 1
 									}
 								$further_id = $id;
 								$further_page = 0;
-								if ($curr_view == 'board')
+								if ((!empty($_SESSION[$setting['session_prefix'] .'curr_view'])
+								and $_SESSION[$setting['session_prefix'] .'curr_view'] == 'board')
+								or (!empty($_SESSION[$setting['session_prefix'] .'user_view'])
+								and $_SESSION[$setting['session_prefix'] .'user_view'] == 'board')
+								or (!empty($_COOKIE['curr_view'])
+								and $_COOKIE['curr_view'] == 'board')
+								or (!empty($_COOKIE['user_view'])
+								and $_COOKIE['user_view'] == 'board'))
 									{
 									# there are more postings in thread than
 									# the setting for postings per page allows
@@ -1160,44 +1250,66 @@ if (($settings['access_for_users_only'] == 1
 				} # Ende "if (empty($errors) && empty($preview) && isset($_POST['save_entry']))"
 			else
 				{
-				$show="form";
+				$show = "form";
 				}
 
 			if (isset($refer))
 				{
-				if (isset($page)
-				&& isset($order)
-				&& isset($category)
-				&& isset($descasc))
+				$qs = '';
+				$qsl = '';
+				if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
+				and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
 					{
-					$qs  = '&page='.$page.'&order='.$order.'&descasc='.$descasc;
-					$qs .= ($category > 0) ? '&category='.$category : '';
-					}
-				else if (isset($category) and $category > 0)
-					{
-					$qs = '&category='.$category;
-					}
-				else
-					{
-					$qs = '';
-					}
-				if (!empty($view))
-					{
-					$header_href = ($view=='board') ? 'board_entry.php' : 'mix_entry.php';
-					$further = $further_tid;
-					if ($further_page > 0)
+					if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
 						{
-						$qs .= '&be_page='.$further_page;
+						$header_href = 'forum_entry.php';
+						$further = $further_id;
 						}
-					$qs .= '#p'.$further_id;
+					else
+						{
+						$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'_entry.php';
+						$further = $further_tid;
+						}
+					}
+				else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+				and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+					{
+					if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+						{
+						$header_href = 'forum_entry.php';
+						$further = $further_id;
+						}
+					else
+						{
+						$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php';
+						$further = $further_tid;
+						}
 					}
 				else
 					{
-					$header_href = 'forum_entry.php';
-					$further = $further_id;
+					if ($setting['standard'] == 'thread')
+						{
+						$header_href = 'forum_entry.php';
+						$further = $further_id;
+						}
+					else
+						{
+						$header_href = $setting['standard'] .'_entry.php';
+						$further = $further_tid;
+						}
+					}
+				if ($further_page > 0)
+					{
+					$qs .= '&be_page='.$further_page;
+					$qsl .= '&amp;be_page='.$further_page;
+					}
+				if ($header_href != 'forum_entry.php')
+					{
+					$qs .= '#p'.$further_id;
+					$qsl .= '#p'.$further_id;
 					}
 				header('location: '. $settings['forum_address'].$header_href .'?id='. $further.$qs);
-				die('<a href="'. $header_href .'?id='. $further.$qs .'">further...</a>');
+				die('<a href="'. $header_href .'?id='. $further.$qsl .'">further...</a>');
 				exit(); # Skript beenden
 				}
 			} # Ende "if (isset(form))"
