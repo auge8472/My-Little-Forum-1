@@ -1561,7 +1561,7 @@ if (($settings['access_for_users_only'] == 1
 						echo '</tr>';
 						}
 					}
-				if ($categories != false)
+				if ($categories !== false)
 					{
 					echo '<tr>'."\n";
 					echo '<td><label for="p_category">'. $lang['category_marking'] .'</label></td>'."\n";
