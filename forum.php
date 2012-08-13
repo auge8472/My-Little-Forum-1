@@ -116,7 +116,7 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 	if ($settings['board_view'] == 1)
 		{
-		$url = 'board.php';
+		$url = 'board.php?view=board';
 		$class = 'board-view';
 		$title = outputLangDebugInAttributes($lang['board_view_linktitle']);
 		$linktext = $lang['board_view_linkname'];
@@ -124,7 +124,7 @@ if ($settings['access_for_users_only'] == 1
 		}
 	if ($settings['mix_view']==1)
 		{
-		$url = 'mix.php';
+		$url = 'mix.php?view=mix';
 		$class = 'mix-view';
 		$title = outputLangDebugInAttributes($lang['mix_view_linktitle']);
 		$linktext = $lang['mix_view_linkname'];

@@ -227,7 +227,7 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_2 = "";
 	if ($settings['thread_view']==1)
 		{
-		$url = 'forum_entry.php?id='.$entrydata["tid"];
+		$url = 'forum_entry.php?view=thread&amp;id='.$entrydata["tid"];
 		$class = 'thread-view';
 		$title = outputLangDebugInAttributes($lang['thread_view_linktitle']);
 		$linktext = $lang['thread_view_linkname'];
@@ -235,7 +235,7 @@ if ($settings['access_for_users_only'] == 1
 		}
 	if ($settings['board_view']==1)
 		{
-		$url = 'board_entry.php?id='.$entrydata["tid"];
+		$url = 'board_entry.php?view=board&amp;id='.$entrydata["tid"];
 		$class = 'board-view';
 		$title = outputLangDebugInAttributes($lang['board_view_linktitle']);
 		$linktext = $lang['board_view_linkname'];
