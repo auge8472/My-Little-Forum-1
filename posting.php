@@ -1453,12 +1453,14 @@ if (($settings['access_for_users_only'] == 1
 					$prTemplate = str_replace('{signature}', $prSignature, $prTemplate);
 					$prTemplate = str_replace('{threadheadline}', $prThreadHeadline, $prTemplate);
 					$prTemplate = str_replace('{thread}', $prThread, $prTemplate);
-					$prTemplate = ($isView == 'board') ? '<table>'. $prTemplate .'<table>' : $prTemplate;
+					$prTemplate = str_replace('{postingID}', $entry['user_id'], $prTemplate);
+					$prTemplate = ($isView == 'board') ? '<table class="normaltab">'. $prTemplate .'<table>' : $prTemplate;
 #					echo '<pre>'. print_r(htmlspecialchars($prTemplate), true) .'</pre>';
 					echo '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
 					echo $prTemplate;
 					} # if (isset($preview) && empty($errors))
 				# End preview
+				echo '<hr class="entryline" />'."\n";
 				echo '<form action="posting.php" method="post" id="entryform" accept-charset="UTF-8">'."\n";
 				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
 				&& $settings['captcha_posting'] == 1)
