@@ -1383,7 +1383,35 @@ if (($settings['access_for_users_only'] == 1
 					$entry["edited_by"] = '';
 					$entry["e_time"] = '';
 					# generate content of preview
-					echo '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
+					if (isset($_SESSION[$settings['session_prefix'].'curr_view'])
+					and in_array($_SESSION[$settings['session_prefix'].'curr_view'], array('thread', 'mix', 'board')))
+						{
+						$prTemplate = file_get_contents('data/templates/posting.'. $_SESSION[$settings['session_prefix'].'curr_view'] .'.html');
+						$isView = $_SESSION[$settings['session_prefix'].'curr_view'];
+						}
+					else if (isset($_SESSION[$settings['session_prefix'].'user_view'])
+					and in_array($_SESSION[$settings['session_prefix'].'user_view'], array('thread', 'mix', 'board')))
+						{
+						$prTemplate = file_get_contents('data/templates/posting.'. $_SESSION[$settings['session_prefix'].'user_view'] .'.html');
+						$isView = $_SESSION[$settings['session_prefix'].'user_view'];
+						}
+					else if (isset($_COOKIE['curr_view'])
+					and in_array($_COOKIE['curr_view'], array('thread', 'mix', 'board')))
+						{
+						$prTemplate = file_get_contents('data/templates/posting.'. $_COOKIE['curr_view'] .'.html');
+						$isView = $_COOKIE['curr_view'];
+						}
+					else if (isset($_COOKIE['user_view'])
+					and in_array($_COOKIE['user_view'], array('thread', 'mix', 'board')))
+						{
+						$prTemplate = file_get_contents('data/templates/posting.'. $_COOKIE['user_view'] .'.html');
+						$isView = $_COOKIE['user_view'];
+						}
+					else
+						{
+						$prTemplate = file_get_contents('data/templates/posting.'. $settings['standard'] .'.html');
+						$isView = $settings['standard'];
+						}
 					$prAuthorinfo =  outputAuthorInfo($mark, $entry, $page, $order, $view, $category);
 					$prSubject = htmlspecialchars($subject);
 					if ($text == "")
@@ -1415,32 +1443,20 @@ if (($settings['access_for_users_only'] == 1
 						{
 						$prSignature = '';
 						}
-					if (isset($_SESSION[$settings['session_prefix'].'curr_view'])
-					and in_array($_SESSION[$settings['session_prefix'].'curr_view'], array('mix', 'board')))
-						{
-						echo '<table class="normaltab">'."\n";
-						echo '<tr>'."\n";
-						echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
-						echo $prAuthorinfo;
-						echo '</td>'."\n";
-						echo '<td class="titlecell"><h2>'. $prSubject .'</h2></td>'."\n";
-						echo '</tr><tr>';
-						echo '<td class="postingcell" valign="top">';
-						echo '<div class="postingboard">'.$prText.'</div>'."\n";
-						echo $prSignature;
-						echo '</td>'."\n";
-						echo '</tr>'."\n";
-						echo '</table>'."\n";
-						} # End: if (isset($view))
-					else
-						{
-						echo '<div class="preview">'."\n";
-						echo '<h2 class="postingheadline">'. $prSubject .'</h2>'."\n";
-						echo $prAuthorinfo;
-						echo '<div class="posting">'. $prText .'</div>'."\n";
-						echo $prSignature;
-						echo '</div>'."\n";
-						}
+					$prThreadHeadline = ($isView == 'thread') ? $lang['whole_thread_marking'] : '';
+					$prThread = ($isView == 'thread') ? '...' : '';
+					$prTemplate = str_replace('{postingheadline}', $prSubject, $prTemplate);
+					$prTemplate = str_replace('{authorinfo}', $prAuthorinfo, $prTemplate);
+					$prTemplate = str_replace('{editmenu}', '', $prTemplate);
+					$prTemplate = str_replace('{answer-locked}', '', $prTemplate);
+					$prTemplate = str_replace('{posting}', $prText, $prTemplate);
+					$prTemplate = str_replace('{signature}', $prSignature, $prTemplate);
+					$prTemplate = str_replace('{threadheadline}', $prThreadHeadline, $prTemplate);
+					$prTemplate = str_replace('{thread}', $prThread, $prTemplate);
+					$prTemplate = ($isView == 'board') ? '<table>'. $prTemplate .'<table>' : $prTemplate;
+#					echo '<pre>'. print_r(htmlspecialchars($prTemplate), true) .'</pre>';
+					echo '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
+					echo $prTemplate;
 					} # if (isset($preview) && empty($errors))
 				# End preview
 				echo '<form action="posting.php" method="post" id="entryform" accept-charset="UTF-8">'."\n";
