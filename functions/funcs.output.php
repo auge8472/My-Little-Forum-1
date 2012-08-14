@@ -40,7 +40,7 @@ global $settings,$lang;
 $r  = '';
 
 if (isset($_SESSION[$settings['session_prefix'].'user_type'])
-	and $_SESSION[$settings['session_prefix'].'user_type']=='admin')
+	and $_SESSION[$settings['session_prefix'].'user_type'] == 'admin')
 	{
 	$ref = (!empty($refer)) ? '&amp;refer='.$refer : '';
 	$r .= '<div class="marked-threads">'."\n";
@@ -80,20 +80,22 @@ global $lang;
 
 $r = '';
 
-if($categories != false && $categories != "not accessible")
+if($categories !== false
+	&& $categories != "not accessible")
 	{
-	$r .= "\n".'<form method="get" action="'.$_SERVER['SCRIPT_NAME'].'" title="'.outputLangDebugInAttributes($lang['choose_category_formtitle']).'">'."\n".'<div class="inline-form">'."\n";
+	$r .= "\n".'<form method="get" action="'. $_SERVER['SCRIPT_NAME'] .'" title="'. outputLangDebugInAttributes($lang['choose_category_formtitle']) .'">'."\n";
+	$r .='<div class="inline-form">'."\n";
 	$r .= '<select class="kat" size="1" name="category" onchange="this.form.submit();">'."\n";
 	$r .= '<option value="0"';
-	$r .= (isset($category) && $category==0) ? ' selected="selected"' : '';
-	$r .= '>'.$lang['show_all_categories'].'</option>'."\n";
+	$r .= (isset($category) && $category == 0) ? ' selected="selected"' : '';
+	$r .= '>'. $lang['show_all_categories'] .'</option>'."\n";
 	while(list($key, $val) = each($categories))
 		{
 		if($key!=0)
 			{
-			$r .= '<option value="'.$key.'"';
-			$r .= ($key==$category) ? ' selected="selected"' : '';
-			$r .= '>'.$val.'</option>'."\n";
+			$r .= '<option value="'. $key .'"';
+			$r .= ($key == $category) ? ' selected="selected"' : '';
+			$r .= '>'. $val .'</option>'."\n";
 			}
 		}
 	$r .= '</select>'."\n".'<noscript><p class="inline-form"> <input type="image" name="" value="" src="img/submit.png" alt="&raquo;" /></p></noscript></div>'."\n".'</form>'."\n";
@@ -115,7 +117,7 @@ function outputGetReplies($threadID, $connid) {
 global $db_settings;
 
 # as first count members of a thread including the opening posting
-$replyResult = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE tid = ".$threadID, $connid);
+$replyResult = mysql_query("SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE tid = ". $threadID, $connid);
 list($answers) = mysql_fetch_row($replyResult);
 # now reduce by 1 (the opening posting, it's by definition not a reply)
 $answers = $answers - 1;
@@ -136,7 +138,7 @@ return $answers;
 function outputGetLastReply($threadID, $connid) {
 global $db_settings;
 
-$la_result = mysql_query("SELECT name, id FROM ".$db_settings['forum_table']." WHERE tid = ".$threadID." ORDER BY time DESC LIMIT 1", $connid);
+$la_result = mysql_query("SELECT name, id FROM ". $db_settings['forum_table'] ." WHERE tid = ". $threadID ." ORDER BY time DESC LIMIT 1", $connid);
 $last_answer = mysql_fetch_assoc($la_result);
 mysql_free_result($la_result);
 
@@ -170,7 +172,7 @@ return $mark;
  * @param string $view (optional)
  * @return string $output
  */
-function outputPostingLink($category,$view='') {
+function outputPostingLink($category, $view = '') {
 global $lang;
 
 $r = '';
@@ -208,7 +210,7 @@ return $r;
  * @param integer $category
  * @return string $r
  */
-function outputAuthorInfo($mark, $entry, $page, $order, $view, $category=0) {
+function outputAuthorInfo($mark, $entry, $page, $order, $view, $category = 0) {
 global $lang, $settings;
 
 $r = '';
@@ -229,44 +231,48 @@ $editstring = $lang['forum_edited_marking'];
 # generate setting to show contact link if not present
 $entry["hide_email"] = empty($entry["hide_email"]) ? 0 : $entry["hide_email"];
 # generate string for posting ID
-$entryID .= ($settings['show_posting_id'] == 1) ? '<span class="postinginfo">Posting:&nbsp;#&nbsp;'.$entry['id'].'</span>' : '';
+$entryID .= ($settings['show_posting_id'] == 1) ? '<span class="postinginfo">Posting:&nbsp;#&nbsp;'. $entry['id'] .'</span>' : '';
 # generate string for name of the answered author
-$answer = (!empty($entry['answer'])) ? '<span class="postinginfo">@&nbsp;'.htmlspecialchars($entry['answer']).'</span>' : '';
+$answer = (!empty($entry['answer'])) ? '<span class="postinginfo">@&nbsp;'. htmlspecialchars($entry['answer']) .'</span>' : '';
 # generate HTML cource code for userdata (hp, email, location)
-if ($entry["email"]!="" && $entry["hide_email"] != 1 or $entry["hp"]!="")
+if ($entry["email"] != ""
+	&& $entry["hide_email"] != 1
+	or $entry["hp"] != "")
 	{
 	$email_hp .= " ";
 	}
-if ($entry["hp"]!="")
+if ($entry["hp"] != "")
 	{
-	$email_hp .= '<a href="'.amendProtocol($entry["hp"]).'" title="';
-	$email_hp .= htmlspecialchars($entry["hp"]).'"><img src="img/homepage.png" ';
-	$email_hp .= 'alt="'.outputLangDebugInAttributes($lang['homepage_alt']).'" width="13" height="13" /></a>';
+	$email_hp .= '<a href="'. amendProtocol($entry["hp"]) .'" title="';
+	$email_hp .= htmlspecialchars($entry["hp"]) .'"><img src="img/homepage.png" ';
+	$email_hp .= 'alt="'. outputLangDebugInAttributes($lang['homepage_alt']) .'" width="13" height="13" /></a>';
 	}
-if (($entry["email"]!="" && $entry["hide_email"] != 1)
-	and $entry["hp"]!=""
+if (($entry["email"] != ""
+	&& $entry["hide_email"] != 1)
+	and $entry["hp"] != ""
 	and (($settings['entries_by_users_only'] == 1
 	and isset($_SESSION[$settings['session_prefix'].'user_id']))
 	or $settings['entries_by_users_only'] == 0))
 	{
 	$email_hp .= "&nbsp;";
 	}
-if (($entry["email"]!="" && $entry["hide_email"] != 1)
+if (($entry["email"] != ""
+	&& $entry["hide_email"] != 1)
 	and (($settings['entries_by_users_only'] == 1
 	and isset($_SESSION[$settings['session_prefix'].'user_id']))
 	or $settings['entries_by_users_only'] == 0))
 	{
-	$email_hp .= '<a href="contact.php?id='.$entry["id"];
-	$email_hp .= !empty($page) ? '&amp;page='.intval($page) : '';
-	$email_hp .= !empty($order) ? '&amp;order='.$order : '';
-	$email_hp .= !empty($category) ? '&amp;category='.intval($category) : '';
+	$email_hp .= '<a href="contact.php?id='. $entry["id"];
+	$email_hp .= !empty($page) ? '&amp;page='. intval($page) : '';
+	$email_hp .= !empty($order) ? '&amp;order='. $order : '';
+	$email_hp .= !empty($category) ? '&amp;category='. intval($category) : '';
 	$email_hp .= '" rel="nofollow" title="';
-	$email_hp .= str_replace("[name]", htmlspecialchars($entry['name']), outputLangDebugInAttributes($lang['email_to_user_linktitle'])).'">';
-	$email_hp .= '<img src="img/email.png" alt="'.outputLangDebugInAttributes($lang['email_alt']).'" width="13" height="10" /></a>';
+	$email_hp .= str_replace("[name]", htmlspecialchars($entry['name']), outputLangDebugInAttributes($lang['email_to_user_linktitle'])) .'">';
+	$email_hp .= '<img src="img/email.png" alt="'. outputLangDebugInAttributes($lang['email_alt']) .'" width="13" height="10" /></a>';
 	}
 if ($entry["place"] != "")
 	{
-	$place .= htmlspecialchars($entry['place']).', ';
+	$place .= htmlspecialchars($entry['place']) .', ';
 	}
 # generate HTML source code of authors name
 $name = outputAuthorsName($entry['name'], $mark, $entry['user_id']);
@@ -275,8 +281,8 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	and $entry['user_id'] > 0)
 	{
 	$linktitle = str_replace("[name]", htmlspecialchars($entry['name']), outputLangDebugInAttributes($lang['show_userdata_linktitle']));
-	$uname .= '<a class="userlink" href="user.php?id='.$entry["user_id"].'"';
-	$uname .= ' rel="nofollow" title="'.$linktitle.'">'.$name.'</a>';
+	$uname .= '<a class="userlink" href="user.php?id='. $entry["user_id"] .'"';
+	$uname .= ' rel="nofollow" title="'. $linktitle .'">'. $name .'</a>';
 	}
 else
 	{
@@ -287,7 +293,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 	and ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
 	or $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
 	{
-	$entryIP = '<span class="postinginfo">'.$entry['ip_address'].'</span>';
+	$entryIP = '<span class="postinginfo">'. $entry['ip_address'] .'</span>';
 	}
 
 if ($entry["edited_diff"] > 0
@@ -296,25 +302,28 @@ if ($entry["edited_diff"] > 0
 	{
 	$editstring = str_replace("[name]", htmlspecialchars($entry["edited_by"]), $editstring);
 	$editstring = str_replace("[time]", strftime($lang['time_format'],$entry["e_time"]), $editstring);
-	$entryedit .= '<span class="postinginfo">'.$editstring.'</span>';
+	$entryedit .= '<span class="postinginfo">'. $editstring .'</span>';
 	}
 
-if ($view=='forum')
+if ($view == 'forum')
 	{
 	$authorstring = str_replace("[name]", $uname, $authorstring);
 	$authorstring = str_replace("[email_hp]", $email_hp, $authorstring);
 	$authorstring = str_replace("[place]", $place, $authorstring);
 	$authorstring = str_replace("[place]", $place, $authorstring);
 	$authorstring = str_replace("[time]", $entry["posting_time"], $authorstring);
-	$entryID = !empty($entryID) ? ' - '.$entryID : '';
-	$entryedit = (!empty($entryedit)) ? '<br />'.$entryedit : '';
-	$r .= $authorstring.'&nbsp;'.$entryIP.$answer.$entryID.$entryedit;
+	$entryID = !empty($entryID) ? ' - '. $entryID : '';
+	$entryedit = (!empty($entryedit)) ? '<br />'. $entryedit : '';
+	$r .= $authorstring .'&nbsp;'. $entryIP.$answer.$entryID.$entryedit;
 	}
-else if ($view=='board' or $view=='mix')
+else if ($view == 'board'
+	or $view == 'mix')
 	{
-	$place = (!empty($place)) ? '<br />'.$place : '';
-	$entryedit = (!empty($entryedit)) ? '<br />'.$entryedit : '';
-	if (!empty($entryIP) or !empty($entryID) or !empty($answer))
+	$place = (!empty($place)) ? '<br />'. $place : '';
+	$entryedit = (!empty($entryedit)) ? '<br />'. $entryedit : '';
+	if (!empty($entryIP)
+		or !empty($entryID)
+		or !empty($answer))
 		{
 		$separator = '<br /><br />';
 		if (!empty($entryIP))
@@ -330,14 +339,14 @@ else if ($view=='board' or $view=='mix')
 				}
 			}
 		}
-	$r .= $uname.'<br />'."\n".$email_hp.$place."\n<br />".$entry["posting_time"];
-	$r .= $entryedit.$separator.$entryIP.$answer.$entryID."\n";
+	$r .= $uname .'<br />'."\n". $email_hp.$place ."\n<br />". $entry["posting_time"];
+	$r .= $entryedit.$separator.$entryIP.$answer.$entryID ."\n";
 	}
 else
 	{
 	if (!empty($entryID))
 		{
-		$entryID = ' - '.$entryID;
+		$entryID = ' - '. $entryID;
 		}
 #	$r .= $name.$entryID;
 	$r .= $name;
@@ -356,40 +365,42 @@ return $r;
  * @param integer $user_id
  * @return string $output
  */
-function outputAuthorsName($username, $mark, $user_id=0) {
+function outputAuthorsName($username, $mark, $user_id = 0) {
 global $settings, $lang;
 
 $r = '';
 $name = '<span class="';
 $regimg = '';
 
-if ($mark['admin'] === 1 or $mark['mod'] === 1 or $mark['user'] === 1)
+if ($mark['admin'] === 1
+	or $mark['mod'] === 1
+	or $mark['user'] === 1)
 	{
 	if ($mark['admin'] === 1)
 		{
-		$name .= 'admin-highlight" title="'.outputLangDebugInAttributes($lang['ud_admin']);
+		$name .= 'admin-highlight" title="'. outputLangDebugInAttributes($lang['ud_admin']);
 		}
 	else if ($mark['mod'] === 1)
 		{
-		$name .= 'mod-highlight" title="'.outputLangDebugInAttributes($lang['ud_mod']);
+		$name .= 'mod-highlight" title="'. outputLangDebugInAttributes($lang['ud_mod']);
 		}
 	else if ($mark['user'] === 1)
 		{
-		$name .= 'user-highlight" title="'.outputLangDebugInAttributes($lang['ud_user']);
+		$name .= 'user-highlight" title="'. outputLangDebugInAttributes($lang['ud_user']);
 		}
 	}
 else
 	{
 	$name .= 'username';
 	}
-$name .= '">'.htmlspecialchars($username).'</span>';
+$name .= '">'. htmlspecialchars($username) .'</span>';
 
 # generate image for registered users
-if ($settings['show_registered'] ==1
+if ($settings['show_registered'] == 1
 	and isset($_SESSION[$settings['session_prefix'].'user_id'])
 	and $user_id > 0)
 	{
-	$regimg .= '<img src="img/registered.png" alt="(R)" width="10" height="10" title="'.outputLangDebugInAttributes($lang['registered_user_title']).'" />';
+	$regimg .= '<img src="img/registered.png" alt="(R)" width="10" height="10" title="'. outputLangDebugInAttributes($lang['registered_user_title']) .'" />';
 	}
 
 $r .= $name.$regimg;
@@ -413,12 +424,14 @@ global $settings, $lang;
 $r  = '';
 $period = false;
 
-if ($settings['user_edit']==1 and $settings['edit_period'] > 0)
+if ($settings['user_edit'] == 1
+	and $settings['edit_period'] > 0)
 	{
 	$editPeriodEnd = $thread['time'] + ($settings['edit_period'] * 60);
 	$period = ($editPeriodEnd > time()) ? true : false;
 	}
-else if ($settings['user_edit']==1 and $settings['edit_period'] == 0)
+else if ($settings['user_edit'] == 1
+	and $settings['edit_period'] == 0)
 	{
 	$period = true;
 	}
@@ -441,9 +454,9 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
 		{
 		$r .= '<li><a href="posting.php?action=edit&amp;id=';
-		$r .= $thread["id"].'&amp;back='.$thread["tid"];
-		$r .= '" class="edit-posting" title="'.outputLangDebugInAttributes($lang['edit_linktitle']).'">';
-		$r .= $lang['edit_linkname'].'</a></li>'."\n";
+		$r .= $thread["id"] .'&amp;back='. $thread["tid"];
+		$r .= '" class="edit-posting" title="'. outputLangDebugInAttributes($lang['edit_linktitle']) .'">';
+		$r .= $lang['edit_linkname'] .'</a></li>'."\n";
 		}
 	# delete a posting
 	if (($settings['user_delete'] == 1
@@ -455,13 +468,14 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
 		{
 		$r .= '<li><a href="posting.php?action=delete&amp;id=';
-		$r .= $thread["id"].'&amp;back='.$thread["tid"];
-		$r .= '" class="delete-posting" title="'.outputLangDebugInAttributes($lang['delete_linktitle']).'">';
-		$r .= $lang['delete_linkname'].'</a></li>'."\n";
+		$r .= $thread["id"] .'&amp;back='. $thread["tid"];
+		$r .= '" class="delete-posting" title="'. outputLangDebugInAttributes($lang['delete_linktitle']) .'">';
+		$r .= $lang['delete_linkname'] .'</a></li>'."\n";
 		}
 	# subscribe a thread
-	if ((!empty($first) and $first==='opener')
-	and isset($_SESSION[$settings['session_prefix'].'user_id']))
+	if ((!empty($first)
+		and $first === 'opener')
+		and isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
 		if (is_array($subscriptPresent))
 			{
@@ -477,11 +491,11 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 			$subTitle = $lang['subscribe_linktitle'];
 			$subName = $lang['subscribe_linkname'];
 			}
-		$r .= '<li><a href="posting.php?subscribe='.$subAction;
-		$r .= '&amp;id='.$thread["id"].'&amp;back='.$thread["tid"];
-		$r .= '" class="'.$subClass.'" title="';
-		$r .= outputLangDebugInAttributes($subTitle).'">';
-		$r .= $subName.'</a></li>'."\n";
+		$r .= '<li><a href="posting.php?subscribe='. $subAction;
+		$r .= '&amp;id='. $thread["id"] .'&amp;back='. $thread["tid"];
+		$r .= '" class="'. $subClass .'" title="';
+		$r .= outputLangDebugInAttributes($subTitle) .'">';
+		$r .= $subName .'</a></li>'."\n";
 		}
 	# lock a thread
 	if ((!empty($first) and $first==='opener')
@@ -497,14 +511,14 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		$r .= '</a></li>'."\n";
 		}
 	# pin a thread
-	if ((!empty($first) and $first==='opener')
+	if ((!empty($first) and $first === 'opener')
 		and (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
 		or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
 		{
 		$fixClass = ($thread['fixed'] == 1) ? 'unfix' : 'fix';
 		$r .= '<li><a href="posting.php?fix=true&amp;id='. intval($thread["id"]);
-		$r .= '" class="'.$fixClass.'-posting" title="';
+		$r .= '" class="'. $fixClass .'-posting" title="';
 		$r .= ($thread['fixed'] == 0) ? outputLangDebugInAttributes($lang['fix_thread_linktitle']) : outputLangDebugInAttributes($lang['unfix_thread_linktitle']);
 		$r .= '">';
 		$r .= ($thread['fixed'] == 0) ? $lang['fix_thread_link'] : $lang['unfix_thread_link'];
@@ -568,29 +582,31 @@ else
 	$mark['user'] = 0;
 	}
 
-if ($page != 0 and $category != 0 and $order != 'time')
+if ($page != 0
+	and $category != 0
+	and $order != 'time')
 	{
-	$urlParam = '&amp;page='.$page.'&amp;category='.intval($category).'&amp;order='.$order;
+	$urlParam = '&amp;page='. $page .'&amp;category='. intval($category) .'&amp;order='. $order;
 	}
 
 if ($v != 'mix'
-	&&$t[$c]['pid']==0
-	&& $category==0
+	&&$t[$c]['pid'] == 0
+	&& $category == 0
 	&& isset($categories[$t[$c]['category']])
-	&& $categories[$t[$c]['category']]!='')
+	&& $categories[$t[$c]['category']] != '')
 	{
 	# Is it a admin/mods-only category?
 	if (isset($category_accession[$t[$c]['category']])
 		&& $category_accession[$t[$c]['category']] == 2)
 		{
-		$titleAdd = ' '.outputLangDebugInAttributes($lang['admin_mod_category']);
+		$titleAdd = ' '. outputLangDebugInAttributes($lang['admin_mod_category']);
 		$catClassName = 'category-adminmod';
 		}
 	# Is it a registered users (including admins/mods) category?
 	else if (isset($category_accession[$t[$c]['category']])
 		&& $category_accession[$t[$c]["category"]] == 1)
 		{
-		$titleAdd = " ".outputLangDebugInAttributes($lang['registered_users_category']);
+		$titleAdd = " ". outputLangDebugInAttributes($lang['registered_users_category']);
 		$catClassName = 'category-regusers';
 		}
 	else
@@ -598,9 +614,9 @@ if ($v != 'mix'
 		$titleAdd = '';
 		$catClassName = 'category';
 		}
-	$catLink  = '&nbsp;<a title="'.str_replace('[category]', $categories[$t[$c]['category']], outputLangDebugInAttributes($lang['choose_category_linktitle'])).$titleAdd;
-	$catLink .= '" href="'.$v.'.php?category='.intval($t[$c]['category']).'"><span class="';
-	$catLink .= $catClassName.'">('.$categories[$t[$c]['category']].')</span></a>';
+	$catLink  = '&nbsp;<a title="'. str_replace('[category]', $categories[$t[$c]['category']], outputLangDebugInAttributes($lang['choose_category_linktitle'])). $titleAdd;
+	$catLink .= '" href="'.$v.'.php?category='. intval($t[$c]['category']) .'"><span class="';
+	$catLink .= $catClassName .'">('. $categories[$t[$c]['category']] .')</span></a>';
 	}
 else
 	{
@@ -611,36 +627,39 @@ if ($t[$c]["pid"]==0
 	and (isset($t[$c]["fixed"])
 	and $t[$c]["fixed"] == 1))
 	{
-	$fixed = ' <img src="img/fixed.png" width="9" height="9" title="'.outputLangDebugInAttributes($lang['fixed']).'" alt="*" />';
+	$fixed = ' <img src="img/fixed.png" width="9" height="9" title="'. outputLangDebugInAttributes($lang['fixed']) .'" alt="*" />';
 	}
 else
 	{
 	$fixed  = '';
 	}
 
-if ($t[$c]["pid"]==0 && $settings['all_views_direct'] == 1)
+if ($t[$c]["pid"] == 0
+	&& $settings['all_views_direct'] == 1)
 	{
 	$otherViews  = '&nbsp;';
-	if ($settings['board_view']==1)
+	if ($settings['board_view'] == 1)
 		{
-		$otherViews .= '<a href="board_entry.php?id='.$t[$c]['tid'];
-		$otherViews .= ($category > 0) ? '&amp;category='.intval($category) : '';
+		$otherViews .= '<a href="board_entry.php?id='. $t[$c]['tid'];
+		$otherViews .= ($category > 0) ? '&amp;category='. intval($category) : '';
 		$otherViews .= '&amp;view=board"><img src="img/board_d.png" alt="[Board]" title="';
-		$otherViews .= outputLangDebugInAttributes($lang['open_in_board_linktitle']).'" width="12" height="9" /></a>';
+		$otherViews .= outputLangDebugInAttributes($lang['open_in_board_linktitle']) .'" width="12" height="9" /></a>';
 		}
-	if ($settings['mix_view'] == 1 and $v != 'mix')
+	if ($settings['mix_view'] == 1
+		and $v != 'mix')
 		{
-		$otherViews .= '<a href="mix_entry.php?id='.$t[$c]['tid'];
-		$otherViews .= ($category > 0) ? '&amp;category='.intval($category) : '';
+		$otherViews .= '<a href="mix_entry.php?id='. $t[$c]['tid'];
+		$otherViews .= ($category > 0) ? '&amp;category='. intval($category) : '';
 		$otherViews .= '&amp;view=mix"><img src="img/mix_d.png" alt="[Mix]" title="';
-		$otherViews .= outputLangDebugInAttributes($lang['open_in_mix_linktitle']).'" width="12" height="9" /></a>';
+		$otherViews .= outputLangDebugInAttributes($lang['open_in_mix_linktitle']) .'" width="12" height="9" /></a>';
 		}
-	if ($settings['thread_view'] == 1 and $v != 'forum')
+	if ($settings['thread_view'] == 1
+		and $v != 'forum')
 		{
-		$otherViews .= '<a href="forum_entry.php?id='.$t[$c]['tid'];
-		$otherViews .= ($category > 0) ? '&amp;category='.intval($category) : '';
+		$otherViews .= '<a href="forum_entry.php?id='. $t[$c]['tid'];
+		$otherViews .= ($category > 0) ? '&amp;category='. intval($category) : '';
 		$otherViews .= '&amp;view=forum"><img src="img/thread_d.png" alt="[Forum]" title="';
-		$otherViews .= outputLangDebugInAttributes($lang['open_in_thread_linktitle']).'" width="12" height="9" /></a>';
+		$otherViews .= outputLangDebugInAttributes($lang['open_in_thread_linktitle']) .'" width="12" height="9" /></a>';
 		}
 	}
 else
@@ -652,17 +671,17 @@ if ($t[$c]["pid"]==0
 	&& isset($_SESSION[$settings['session_prefix'].'user_type'])
 	&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
 	{
-	$otherViews .= '<a href="admin.php?mark='.$t[$c]["tid"].'&amp;refer=';
-	$otherViews .= basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$page.'&amp;order='.$order;
-	$otherViews .= ($category > 0) ? '&amp;category='.intval($category) : '';
+	$otherViews .= '<a href="admin.php?mark='. $t[$c]["tid"] .'&amp;refer=';
+	$otherViews .= basename($_SERVER["SCRIPT_NAME"]) .'&amp;page='. $page .'&amp;order='. $order;
+	$otherViews .= ($category > 0) ? '&amp;category='. intval($category) : '';
 	$otherViews .= '"><img src="';
 	if ($t[$c]['marked']==1)
 		{
-		$otherViews .= 'img/marked.png" alt="[x]" title="'.outputLangDebugInAttributes($lang['demark_linktitle']).'"';
+		$otherViews .= 'img/marked.png" alt="[x]" title="'. outputLangDebugInAttributes($lang['demark_linktitle']) .'"';
 		}
 	else
 		{
-		$otherViews .= 'img/mark.png" alt="[-]" title="'.outputLangDebugInAttributes($lang['mark_linktitle']).'"';
+		$otherViews .= 'img/mark.png" alt="[-]" title="'. outputLangDebugInAttributes($lang['mark_linktitle']) .'"';
 		}
 	$otherViews .= ' width="9" height="9" /></a>';
 	}
@@ -681,30 +700,30 @@ else
 	$name = outputAuthorsName($t[$c]["name"], $mark, $t[$c]['user_id']);
 	if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		&& $t[$c]["user_id"] > 0
-		&& $settings['show_registered']==1)
+		&& $settings['show_registered'] == 1)
 		{
 		$sult = str_replace("[name]", htmlspecialchars($t[$c]["name"]), outputLangDebugInAttributes($lang['show_userdata_linktitle']));
-		$thread_info_a = str_replace("[name]", '<a href="user.php?id='.$t[$c]["user_id"].'" title="'.$sult.'">'.$name.'</a>', $lang['thread_info']);
+		$thread_info_a = str_replace("[name]", '<a href="user.php?id='. $t[$c]["user_id"] .'" title="'. $sult .'">'. $name .'</a>', $lang['thread_info']);
 		}
 	else $thread_info_a = str_replace("[name]", $name, $lang['thread_info']);
 	$append = str_replace("[time]", $t[$c]["Uhrzeit"], $thread_info_a);
-	if ((($t[$c]['pid']==0)
+	if ((($t[$c]['pid'] == 0)
 		&& isset($_SESSION[$settings['session_prefix'].'newtime'])
 		&& $_SESSION[$settings['session_prefix'].'newtime'] < $t[$c]['last_answer'])
-		|| (($t[$c]['pid']==0)
+		|| (($t[$c]['pid'] == 0)
 		&& empty($_SESSION[$settings['session_prefix'].'newtime'])
 		&& $t[$c]['last_answer'] > $last_visit))
 		{
 		$postClass = 'threadnew';
 		}
-	else if ($t[$c]['pid']==0)
+	else if ($t[$c]['pid'] == 0)
 		{
 		$postClass = 'thread';
 		}
-	else if ((($t[$c]['pid']!=0)
+	else if ((($t[$c]['pid'] != 0)
 		&& isset($_SESSION[$settings['session_prefix'].'newtime'])
 		&& $_SESSION[$settings['session_prefix'].'newtime'] < $t[$c]['time'])
-		|| (($t[$c]['pid']!=0)
+		|| (($t[$c]['pid'] != 0)
 		&& empty($_SESSION[$settings['session_prefix'].'newtime'])
 		&& $t[$c]['time'] > $last_visit))
 		{
@@ -715,20 +734,24 @@ else
 		$postClass = 'reply';
 		}
 	}
-$r .= str_repeat(" ", $d).'<li>';
-if (isset($_GET['id']) and $c == intval($_GET['id']) && $t[$c]["pid"]==0)
+$r .= str_repeat(" ", $d) .'<li>';
+if (isset($_GET['id'])
+	and $c == intval($_GET['id'])
+	&& $t[$c]["pid"] == 0)
 	{
-	$r .= '<span class="actthread">'.htmlspecialchars($t[$c]["subject"]).'</span> '.$append;
+	$r .= '<span class="actthread">'. htmlspecialchars($t[$c]["subject"]) .'</span> '. $append;
 	}
-else if (isset($_GET['id']) and $c == intval($_GET['id']) && $t[$c]["pid"]!=0)
+else if (isset($_GET['id'])
+	and $c == intval($_GET['id'])
+	&& $t[$c]["pid"] != 0)
 	{
-	$r .= '<span class="actreply">'.htmlspecialchars($t[$c]["subject"]).'</span> '.$append;
+	$r .= '<span class="actreply">'. htmlspecialchars($t[$c]["subject"]) .'</span> '. $append;
 	}
 else
 	{
-	$r .= '<a class="'.$postClass.'" href="'.$v.'_entry.php?id='.$t[$c]['id'];
-	$r .= ($v == 'mix') ? '#'.$t[$c]['id'] : '';
-	$r .= '"'.outputLangDebugInAttributes($title).'>'.htmlspecialchars($t[$c]['subject']).'</a> '.$append;
+	$r .= '<a class="'. $postClass .'" href="'. $v .'_entry.php?id='. $t[$c]['id'];
+	$r .= ($v == 'mix') ? '#'. $t[$c]['id'] : '';
+	$r .= '"'. outputLangDebugInAttributes($title) .'>'. htmlspecialchars($t[$c]['subject']) .'</a> '. $append;
 	}
 $r .= $catLink.$fixed.$otherViews;
 
@@ -736,12 +759,12 @@ $r .= $catLink.$fixed.$otherViews;
 if (isset($childs[$c]))
 	{
 	$dn = $d+1;
-	$r .= "\n".str_repeat(" ", $dn).'<ul class="reply">'."\n";
+	$r .= "\n". str_repeat(" ", $dn) .'<ul class="reply">'."\n";
 	foreach ($childs[$c] as $kind)
 		{
 		$r .= outputThreadTree($t, $childs, $kind, $v, false, $dn+1);
 		}
-	$r .= str_repeat(" ", $dn).'</ul>'."\n".str_repeat(" ", $d);
+	$r .= str_repeat(" ", $dn) .'</ul>'."\n". str_repeat(" ", $d);
 	}
 
 $r .= '</li>'."\n";
@@ -759,7 +782,7 @@ return $r;
  * @param integer $d optional depth for HTML source code (cosmetic)
  * @return string
  */
-function outputThreads($t, $c, $v='thread', $d=0) {
+function outputThreads($t, $c, $v = 'thread', $d = 0) {
 
 $r  = "";
 
@@ -767,9 +790,9 @@ if (is_array($c)) {
 	foreach ($c[0] as $cid) {
 		$dn = $d+1;
 		$r .= ($v == 'mix') ? "\n" : "";
-		$r .= str_repeat(" ", $d).'<ul class="thread">'."\n";
+		$r .= str_repeat(" ", $d) .'<ul class="thread">'."\n";
 		$r .= outputThreadTree($t, $c, $cid, $v, true, $dn);
-		$r .= str_repeat(" ", $d).'</ul>'."\n";
+		$r .= str_repeat(" ", $d) .'</ul>'."\n";
 		}
 	}
 
@@ -796,7 +819,7 @@ foreach ($lang as $key => $val) {
 			$str[$key]  = $val;
 			}
 		else {
-			$str[$key]  = $debug == 1 ? '<span title="key: ['.htmlspecialchars($key).'], file: '.htmlspecialchars($file).'">' : '';
+			$str[$key]  = $debug == 1 ? '<span title="key: ['. htmlspecialchars($key) .'], file: '. htmlspecialchars($file) .'">' : '';
 			$str[$key] .= strval($val);
 			$str[$key] .= $debug == 1 ? '</span>' : '';
 			}
@@ -842,7 +865,7 @@ return $string;
  * @return string
  */
 function outputImageDescAsc($curr) {
-$r = !empty($curr) ? '&nbsp;<img src="img/'.$curr.'.png" alt="['.$curr.']" width="5" height="9" border="0" />' : '';
+$r = !empty($curr) ? '&nbsp;<img src="img/'. $curr .'.png" alt="['. $curr .']" width="5" height="9" border="0" />' : '';
 return $r;
 } # End outputImageDescAsc
 
