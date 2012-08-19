@@ -369,31 +369,36 @@ function outputAuthorsName($username, $mark, $user_id = 0) {
 global $settings, $lang;
 
 $r = '';
-$name = '<span class="';
+$name = '<span class="{class}"{title}>{username}</span>';
 $regimg = '';
 
-if ($mark['admin'] === 1
-	or $mark['mod'] === 1
-	or $mark['user'] === 1)
+
+if (is_array($mark)
+	and $mark['admin'] === 1)
 	{
-	if ($mark['admin'] === 1)
-		{
-		$name .= 'admin-highlight" title="'. outputLangDebugInAttributes($lang['ud_admin']);
-		}
-	else if ($mark['mod'] === 1)
-		{
-		$name .= 'mod-highlight" title="'. outputLangDebugInAttributes($lang['ud_mod']);
-		}
-	else if ($mark['user'] === 1)
-		{
-		$name .= 'user-highlight" title="'. outputLangDebugInAttributes($lang['ud_user']);
-		}
+	$class = 'admin-highlight';
+	$title .= ' title="'. outputLangDebugInAttributes($lang['ud_admin']) .'"';
+	}
+else if (is_array($mark)
+	and $mark['mod'] === 1)
+	{
+	$class = 'mod-highlight';
+	$title .= ' title="'. outputLangDebugInAttributes($lang['ud_mod']) .'"';
+	}
+else if (is_array($mark)
+	and $mark['user'] === 1)
+	{
+	$class = 'user-highlight';
+	$title .= ' title="'. outputLangDebugInAttributes($lang['ud_user']) .'"';
 	}
 else
 	{
-	$name .= 'username';
+	$class = 'username';
+	$title = '';
 	}
-$name .= '">'. htmlspecialchars($username) .'</span>';
+$name = str_replace("{class}", $class, $name);
+$name = str_replace("{title}", $title, $name);
+$name = str_replace("{username}", htmlspecialchars($username), $name);
 
 # generate image for registered users
 if ($settings['show_registered'] == 1
