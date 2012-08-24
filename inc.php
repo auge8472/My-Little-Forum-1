@@ -269,7 +269,14 @@ else
 		setcookie('curr_view', $curr_view, time()+(3600*24*30));
 		}
 	}
-
+$cssLink = '<link rel="stylesheet" type="text/css" href="style.css" media="all" />';
+if ((!empty($_SESSION[$settings['session_prefix'].'debug'])
+		and $_SESSION[$settings['session_prefix'].'debug'] == 'css')
+	and ($_SESSION[$settings['session_prefix'].'user_type'] == 'admin'
+		or $_SESSION[$settings['session_prefix'].'user_type'] == 'mod'))
+	{
+	$cssLink = '<link rel="stylesheet" type="text/css" href="data/test.css" media="all" />';
+	}
 $postingPages = array('posting.php','user.php');
 $additionalJS = '';
 if (in_array(basename($_SERVER['SCRIPT_NAME']), $postingPages))

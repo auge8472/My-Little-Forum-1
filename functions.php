@@ -577,7 +577,7 @@ return $r;
  * 
  */
 function parse_template() {
-global $settings, $lang, $header, $additionalJS, $footer, $wo, $ao, $topnav, $subnav_1, $subnav_2, $footer_info_dump, $search, $show_postings, $counter;
+global $settings, $lang, $header, $cssLink, $additionalJS, $footer, $wo, $ao, $topnav, $subnav_1, $subnav_2, $footer_info_dump, $search, $show_postings, $counter;
 
 $template = implode("",file($settings['template']));
 
@@ -590,6 +590,7 @@ $title = isset($wo) ? $settings['forum_name']." - ".htmlspecialchars($wo) : $set
 $description = isset($wo) ? $settings['forum_name'].": ".htmlspecialchars($wo) : $settings['forum_name'];
 $template = str_replace("{TITLE}",$title,$template);
 $template = str_replace("{DESCRIPTION}",$description,$template);
+$template = str_replace("{LOAD-CSS}",$cssLink,$template);
 $template = str_replace('{ADD-JS}',$additionalJS,$template);
 $template = str_replace('{SCRIPT-VERSION-STRING}',$settings['version'],$template);
 $template = str_replace("{FORUM-NAME}",$settings['forum_name'],$template);

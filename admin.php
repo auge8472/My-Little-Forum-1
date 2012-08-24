@@ -638,7 +638,7 @@ if (isset($_POST['delete_category_submit']))
 			time = time,
 			last_answer = last_answer,
 			category = ". intval($_POST['move_category']) ."
-			WHERE category = ".;
+			WHERE category = ". intval($category_id);
 			mysql_query($movePostingsOfDeletedCatQuery, $connid);
 			}
 		header("location: ". $settings['forum_address'] ."admin.php?action=categories");
@@ -1221,7 +1221,7 @@ if (isset($_POST['ar_username']))
 		user_name
 		FROM ". $db_settings['userdata_table'] ."
 		WHERE user_name = '". mysql_real_escape_string($ar_username) ."'";
-		$name_result = mysql_query(, $connid);
+		$name_result = mysql_query($getNameReservedQuery, $connid);
 		if(!$name_result) die($lang['db_error']);
 		$field = mysql_fetch_assoc($name_result);
 		mysql_free_result($name_result);
@@ -1734,6 +1734,12 @@ switch ($action)
 		echo '<span class="info">'.$lang_add['debug_session_d'].'</span></td>'."\n";
 		echo '<td><input type="radio" name="debug_type" id="debug-session" value="session"';
 		echo ($_SESSION[$settings['session_prefix'].'debug'] == 'session') ? ' checked="checked"' : '';
+		echo ' /></td>'."\n";
+		echo '</tr><tr>'."\n";
+		echo '<td><label for="debug-css">'.$lang_add['debug_css'].'</label><br />';
+		echo '<span class="info">'.$lang_add['debug_css_d'].'</span></td>'."\n";
+		echo '<td><input type="radio" name="debug_type" id="debug-css" value="css"';
+		echo ($_SESSION[$settings['session_prefix'].'debug'] == 'css') ? ' checked="checked"' : '';
 		echo ' /></td>'."\n";
 		echo '</tr>'."\n";
 		echo '</table>'."\n";

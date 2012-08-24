@@ -49,6 +49,8 @@ $lang_add['debug_lang'] =                     "Debugging: Sprachen";
 $lang_add['debug_lang_d'] =                   "gibt Informationen über die Texte als Tooltip aus";
 $lang_add['debug_session'] =                  "Debugging: Session";
 $lang_add['debug_session_d'] =                "gibt die in der Session und in Cookies gespeicherten Informationen aus";
+$lang_add['debug_css'] =                      "Debugging: CSS";
+$lang_add['debug_css_d'] =                    "aktiviert eine CSS-Testdatei. Alle Standard-CSS-Regeln werden deaktiviert.";
 
 $lang_add['0'] =                              "aus";
 $lang_add['1'] =                              "an";
