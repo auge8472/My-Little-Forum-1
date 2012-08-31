@@ -69,7 +69,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 	if (isset($_COOKIE['user_email']) && empty($_POST["form_submitted"])) $sender_email = $_COOKIE['user_email'];
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']) && empty($_POST["form_submitted"]))
 		{
-		$ue_result = mysql_query("SELECT user_email FROM ".$db_settings['userdata_table']." WHERE user_id = '".intval($_SESSION[$settings['session_prefix'].'user_id'])."' LIMIT 1", $connid);
+		$ue_result = mysql_query("SELECT user_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = '". intval($_SESSION[$settings['session_prefix'].'user_id']) ."' LIMIT 1", $connid);
 		if (!$ue_result) die($lang['db_error']);
 		$ue_field = mysql_fetch_assoc($ue_result);
 		mysql_free_result($ue_result);
@@ -79,7 +79,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 
 	if (isset($id))
 		{
-		$result = mysql_query("SELECT tid, user_id, name, email, subject FROM ".$db_settings['forum_table']." WHERE id = '".intval($id)."' LIMIT 1", $connid);
+		$result = mysql_query("SELECT tid, user_id, name, email, subject FROM ". $db_settings['forum_table'] ." WHERE id = '". intval($id) ."' LIMIT 1", $connid);
 		if (!$result) die($lang['db_error']);
 		$field = mysql_fetch_assoc($result);
 		mysql_free_result($result);
@@ -88,7 +88,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 		}
 	else if (isset($uid))
 		{
-		$result = mysql_query("SELECT user_id, user_name, user_email, hide_email FROM ".$db_settings['userdata_table']." WHERE user_id = '".intval($uid)."' LIMIT 1", $connid);
+		$result = mysql_query("SELECT user_id, user_name, user_email, hide_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = '". intval($uid) ."' LIMIT 1", $connid);
 		if (!$result) die($lang['db_error']);
 		$field = mysql_fetch_assoc($result);
 		mysql_free_result($result);
@@ -99,7 +99,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 
 	if (isset($field['user_id']) && $field['user_id'] > 0 && empty($uid))
 		{
-		$user_result = mysql_query("SELECT user_email, hide_email FROM ".$db_settings['userdata_table']." WHERE user_id = '".intval($field['user_id'])."' LIMIT 1", $connid);
+		$user_result = mysql_query("SELECT user_email, hide_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = '". intval($field['user_id']) ."' LIMIT 1", $connid);
 		if (!$user_result) die($lang['db_error']);
 		$user_field = mysql_fetch_assoc($user_result);
 		mysql_free_result($user_result);
@@ -124,7 +124,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 		if (empty($_POST['text'])) $errors[] = $lang['error_no_text'];
 
 		# check for not accepted words:
-		$result = mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1", $connid);
+		$result = mysql_query("SELECT list FROM ". $db_settings['banlists_table'] ." WHERE name = 'words' LIMIT 1", $connid);
 		if (!$result) die($lang['db_error']);
 		$data = mysql_fetch_assoc($result);
 		mysql_free_result($result);
@@ -161,7 +161,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 					}
 				}
 			}
-    
+
 		if(empty($errors))
 			{
 			# process text content of the message
@@ -208,26 +208,26 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 $subnav_1 = '';
 if (isset($uid))
 	{
-	$subnav_1 .= '<a class="textlink" href="user.php?id='.intval($uid).'">'.$lang['back_linkname'].'</a>';
+	$subnav_1 .= '<a class="textlink" href="user.php?id='. intval($uid) .'">'. $lang['back_linkname'] .'</a>';
 	}
 else if (isset($forum_contact))
 	{
-	$subnav_1 .= '<a class="textlink" href="index.php">'.$lang['back_linkname'].'</a>';
+	$subnav_1 .= '<a class="textlink" href="index.php">'. $lang['back_linkname'] .'</a>';
 	}
 else if ($id == 0 || isset($no_message))
 	{
-	$subnav_1 .= '<a class="textlink" href="javascript:history.back(1)">'.$lang['back_linkname'].'</a>';
+	$subnav_1 .= '<a class="textlink" href="javascript:history.back(1)">'. $lang['back_linkname'] .'</a>';
 	}
 else
 	{
 	if (empty($view))
 		{
-		$subnav_1 .= '&nbsp;<a class="textlink" href="forum_entry.php?id='.$id.'&amp;page='.$page.'&amp;category='.intval($category).'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.str_replace("[name]", htmlspecialchars($field["name"]), $lang['back_to_posting_linkname']).'</a>';
+		$subnav_1 .= '&nbsp;<a class="textlink" href="forum_entry.php?id='. intval($id) .'">'. str_replace("[name]", htmlspecialchars($field["name"]), $lang['back_to_posting_linkname']) .'</a>';
 		}
 	else
 		{
-		$backURL = ($view=="board") ? 'board_entry.php' : 'mix_entry.php';
-		$subnav_1 .= '&nbsp;<a class="textlink" href="'.$backURL.'?id='.$field['tid'].'&amp;page='.$page.'&amp;category='.intval($category).'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_topic_linkname'].'</a>';
+		$backURL = ($view == "board") ? 'board_entry.php' : 'mix_entry.php';
+		$subnav_1 .= '&nbsp;<a class="textlink" href="'. $backURL .'?id='. intval($field['tid']) .'">'. $lang['back_to_topic_linkname'] .'</a>';
 		}
 	}
 
@@ -258,44 +258,44 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 		if(empty($_SESSION[$settings['session_prefix'].'user_id'])
 			&& $settings['captcha_contact']==1)
 			{
-			echo '<input type="hidden" name="'.session_name().'" value="'.session_id().'" />'."\n";
+			echo '<input type="hidden" name="'. session_name() .'" value="'. session_id() .'" />'."\n";
 			}
 		if (isset($id))
 			{
-			echo '<input type="hidden" name="id" value="'.intval($id).'" />'."\n";
+			echo '<input type="hidden" name="id" value="'. intval($id) .'" />'."\n";
 			}
 		else if (isset($uid))
 			{
-			echo '<input type="hidden" name="uid" value="'.intval($uid).'" />'."\n";
+			echo '<input type="hidden" name="uid" value="'. intval($uid) .'" />'."\n";
 			}
 		if (isset($view))
 			{
-			echo '<input type="hidden" name="view" value="'.htmlspecialchars($view).'" />'."\n";
+			echo '<input type="hidden" name="view" value="'. htmlspecialchars($view) .'" />'."\n";
 			}
 		if (isset($forum_contact))
 			{
-			echo '<input type="hidden" name="forum_contact" value="'.$forum_contact.'" />'."\n";
+			echo '<input type="hidden" name="forum_contact" value="'. $forum_contact .'" />'."\n";
 			}
 		if (isset($page) && isset($order) && isset($category) && isset($descasc))
 			{
-			echo '<input type="hidden" name="page" value="'.intval($page).'" />'."\n";
-			echo '<input type="hidden" name="order" value="'.htmlspecialchars($order).'" />'."\n";
-			echo '<input type="hidden" name="category" value="'.intval($category).'" />'."\n";
-			echo '<input type="hidden" name="descasc" value="'.htmlspecialchars($descasc).'" />'."\n";
+			echo '<input type="hidden" name="page" value="'. intval($page) .'" />'."\n";
+			echo '<input type="hidden" name="order" value="'. htmlspecialchars($order) .'" />'."\n";
+			echo '<input type="hidden" name="category" value="'. intval($category) .'" />'."\n";
+			echo '<input type="hidden" name="descasc" value="'. htmlspecialchars($descasc) .'" />'."\n";
 			}
 		echo '<table>'."\n";
 		echo '<tr>'."\n";
-		echo '<td><label for="sender_name">'.$lang['name_marking_msg'].'</label></td>'."\n";
+		echo '<td><label for="sender_name">'. $lang['name_marking_msg'] .'</label></td>'."\n";
 		echo '<td><input type="text" name="sender_name" value="';
 		echo isset($sender_name) ? htmlspecialchars($sender_name) : "";
 		echo '" size="40" id="sender_name" /></td>'."\n";
 		echo '</tr><tr>'."\n";
-		echo '<td><label for="sender_email">'.$lang['email_marking_msg'].'</label></td>'."\n";
+		echo '<td><label for="sender_email">'. $lang['email_marking_msg'] .'</label></td>'."\n";
 		echo '<td><input type="text" name="sender_email" value="';
 		echo isset($sender_email) ? htmlspecialchars($sender_email) : "";
 		echo '" size="40" id="sender_email" /></td>'."\n";
 		echo '</tr><tr>'."\n";
-		echo '<td><label for="subject">'.$lang['subject_marking'].'</label></td>'."\n";
+		echo '<td><label for="subject">'. $lang['subject_marking'] .'</label></td>'."\n";
 		echo '<td><input type="text" name="subject" value="';
 		echo isset($subject) ? htmlspecialchars($subject) : "";
 		echo '" size="40" id="subject" /></td>'."\n";
@@ -308,16 +308,16 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 			&& $settings['captcha_contact']==1)
 			{
 			echo '<tr>'."\n";
-			echo '<td colspan="2" class="bold">'.$lang['captcha_marking'].'</td>'."\n";
+			echo '<td colspan="2" class="bold">'. $lang['captcha_marking'] .'</td>'."\n";
 			echo '</tr>';
 			if($settings['captcha_type']==1)
 				{
 				echo '<tr>'."\n";
 				echo '<td colspan="2"><img class="captcha" src="captcha/captcha_image.php';
-				echo '?'.SID.'" alt="'.outputLangDebugInAttributes($lang['captcha_image_alt']);
+				echo '?'. SID .'" alt="'. outputLangDebugInAttributes($lang['captcha_image_alt']);
 				echo '" width="180" height="40"/></td>'."\n";
 				echo '</tr><tr>'."\n";
-				echo '<td colspan="2">'.$lang['captcha_expl_image'].'</td>'."\n";
+				echo '<td colspan="2">'. $lang['captcha_expl_image'] .'</td>'."\n";
 				echo '</tr><tr>'."\n";
 				echo '<td colspan="2"><input type="text" name="captcha_code" value="" size="10" /></td>'."\n";
 				echo '</tr>';
@@ -325,22 +325,22 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 			else
 				{
 				echo '<tr>'."\n";
-				echo '<td colspan="2">'.$lang['captcha_expl_math'].'</td>'."\n";
+				echo '<td colspan="2">'. $lang['captcha_expl_math'] .'</td>'."\n";
 				echo '</tr><tr>'."\n";
-				echo '<td colspan="2">'.$_SESSION['captcha_session'][0];
-				echo ' + '.$_SESSION['captcha_session'][1];
+				echo '<td colspan="2">'. $_SESSION['captcha_session'][0];
+				echo ' + '. $_SESSION['captcha_session'][1];
 				echo ' = <input type="text" name="captcha_code" value="" size="5" /></td>'."\n";
 				echo '</tr>';
 				}
 			}
 		echo '</table>'."\n";
 		echo '<p><input type="submit" name="form_submitted" value="';
-		echo outputLangDebugInAttributes($lang['pers_msg_subm_button']).'" /></p>'."\n";
+		echo outputLangDebugInAttributes($lang['pers_msg_subm_button']) .'" /></p>'."\n";
 		echo '</form>'."\n";
 		}
 	else if (empty($sent) && isset($no_message))
 		{
-		echo '<p>'.$lang['email_unknown'].'</p>'."\n";
+		echo '<p>'. $lang['email_unknown'] .'</p>'."\n";
 		}
 	else
 		{
