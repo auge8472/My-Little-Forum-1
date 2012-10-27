@@ -22,9 +22,9 @@
 include("inc.php");
 
 if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
-&& isset($_COOKIE['auto_login'])
-&& isset($settings['autologin'])
-&& $settings['autologin'] == 1)
+	&& isset($_COOKIE['auto_login'])
+	&& (isset($settings['autologin'])
+	&& $settings['autologin'] == 1))
 	{
 	header("location: ". $settings['forum_address'] ."login.php?referer=index.php");
 	die('<a href="login.php?referer=index.php">further...</a>');
