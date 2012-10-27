@@ -26,8 +26,8 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 && isset($settings['autologin'])
 && $settings['autologin'] == 1)
 	{
-	header("location: ".$settings['forum_address']."login.php?referer=index.php");
-	die("<a href=\"login.php?referer=index.php\">further...</a>");
+	header("location: ". $settings['forum_address'] ."login.php?referer=index.php");
+	die('<a href="login.php?referer=index.php">further...</a>');
 	}
 
 if (!empty($_SESSION[$settings['session_prefix'].'category'])
