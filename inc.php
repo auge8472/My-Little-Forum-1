@@ -102,6 +102,9 @@ if (trim($data['list']) != '')
 	$banned_ips_array = explode(',', trim($data['list']));
 	if (in_array($_SERVER["REMOTE_ADDR"], $banned_ips_array))
 		{
+		session_destroy();
+		setcookie("auto_login", "", 0);
+		header("location: ".$settings['forum_address']."login.php?msg=user_banned");
 		die($lang['ip_no_access']);
 		}
 	}
