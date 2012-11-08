@@ -548,4 +548,24 @@ else @mysql_query("INSERT INTO ". $db_settings['useronline_table'] ." SET time='
 
 } # End: processSetUsersOnline
 
+
+
+/**
+ * logs out a user
+ *
+ * @param string $forwardingURL
+ * @param string $message
+ */
+function processLogOutUser($url, $mess) {
+global $settings;
+$param = session_get_cookie_params();
+setcookie("auto_login", "", time() - 86401);
+setcookie("user_view", $settings['standard'], time() - 86401);
+setcookie("curr_view", $settings['standard'], time() - 86401);
+setcookie(session_name(), "", time() - 86401, $param["path"], $param["domain"], $param["secure"], $param["httponly"]);
+session_destroy();
+header("location: ".$settings['forum_address'].$url);
+die($mess);
+} # End: processLogOutUser
+
 ?>

@@ -102,10 +102,7 @@ if (trim($data['list']) != '')
 	$banned_ips_array = explode(',', trim($data['list']));
 	if (in_array($_SERVER["REMOTE_ADDR"], $banned_ips_array))
 		{
-		session_destroy();
-		setcookie("auto_login", "", 0);
-		header("location: ".$settings['forum_address']."login.php?msg=user_banned");
-		die($lang['ip_no_access']);
+		processLogOutUser("login.php?msg=user_banned", $lang['ip_no_access']);
 		}
 	}
 
@@ -123,10 +120,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_name']))
 		$banned_users_array = explode(',', mb_strtolower(trim($data['list'])));
 		if (in_array(mb_strtolower($_SESSION[$settings['session_prefix'].'user_name']),$banned_users_array) && $_SESSION[$settings['session_prefix'].'user_type']!='admin')
 			{
-			session_destroy();
-			setcookie("auto_login", "", 0);
-			header("location: ".$settings['forum_address']."login.php?msg=user_banned");
-			die($lang['user_banned']);
+			processLogOutUser("login.php?msg=user_banned", $lang['user_banned']);
 			}
 		}
 	}
