@@ -6,7 +6,7 @@
  * it's for one-time-use while updating the forum to version 1.8
  *
  * @author Heiko August <post@auge8472.de>
- * @since version 0.1
+ * @since version 1.8
  */
 
 include_once('../../functions/funcs.db.php');
