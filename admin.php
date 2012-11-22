@@ -2581,7 +2581,7 @@ switch ($action)
 			$data = mysql_fetch_assoc($result);
 			$banned_users = str_replace(',',', ',$data['list']);
 			mysql_free_result($result);
-			# get banned ips:
+			# get infos about banned ips:
 			$result = mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'ips' LIMIT 1", $connid);
 			if (!$result) die($lang['db_error']);
 			$data = mysql_fetch_assoc($result);
