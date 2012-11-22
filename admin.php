@@ -2582,10 +2582,26 @@ switch ($action)
 			$banned_users = str_replace(',',', ',$data['list']);
 			mysql_free_result($result);
 			# get infos about banned ips:
-			$result = mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'ips' LIMIT 1", $connid);
+			$queryGetBannedIps = "SELECT
+			COUNT('ip') AS counted_ips
+			FROM ". $db_settings['banned_ips_table'];
+			$result = mysql_query($queryGetBannedIps, $connid);
 			if (!$result) die($lang['db_error']);
 			$data = mysql_fetch_assoc($result);
-			$banned_ips = str_replace(',',', ',$data['list']);
+			$IPsBanned = $data['counted_ips'];
+			mysql_free_result($result);
+			$queryGetLongBannedIps = "SELECT
+			requests,
+			COUNT('requests') AS counted_ips
+			FROM ". $db_settings['banned_ips_table'] ."
+			WHERE requests <= 20
+			GROUP BY requests";
+			$result = mysql_query($queryGetLongBannedIps, $connid);
+			if (!$result) die($lang['db_error']);
+			while ($data = mysql_fetch_assoc($result))
+				{
+				$IPsBannedLong[] = $data;
+				}
 			mysql_free_result($result);
 			# get not accepted words:
 			$result = mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1", $connid);
@@ -2604,8 +2620,21 @@ switch ($action)
 			echo ' </tr><tr>'."\n";
 			echo '  <td class="c"><label for="bann-ip">'.$lang_add['banned_ips'].'</label><br />';
 			echo '<span class="info">'.$lang_add['banned_ips_d'].'</span></td>';
-			echo '  <td class="d"><textarea name="banned_ips" id="bann-ip" cols="50" rows="5">';
-			if (isset($banned_ips)) echo htmlspecialchars($banned_ips);
+			echo '  <td class="d">';
+			if (isset($IPsBanned) or isset($IPsBannedLong))
+				{
+				echo '   <ul>';
+				if (isset($IPsBanned)) echo '    <li>Anzahl der vorhandenen Einträge: <b>'. htmlspecialchars($IPsBanned) .'</b></li>';
+				if (isset($IPsBannedLong))
+					{
+					foreach ($IPsBannedLong as $IPsBannedCount)
+						{
+						echo '    <li>'. htmlspecialchars($IPsBannedCount["requests"]) .' Zugriffe: <b>'. htmlspecialchars($IPsBannedCount["counted_ips"]) .'</b></li>';
+						}
+					}
+				echo '   </ul>';
+				}
+			echo '<textarea name="banned_ips" id="bann-ip" cols="50" rows="5">';
 			echo '</textarea></td>'."\n";
 			echo ' </tr><tr>'."\n";
 			echo '  <td class="c"><label for="bann-word">'.$lang_add['not_accepted_words'].'</label><br />';
