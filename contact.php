@@ -122,6 +122,8 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 		if ($sender_email == "") $errors[] = $lang['error_no_email'];
 		if ($sender_email != "" and !preg_match($validator['email'], $sender_email)) $errors[] = $lang['error_email_wrong'];
 		if (empty($_POST['text'])) $errors[] = $lang['error_no_text'];
+		
+		# TODO check for banned IPs
 
 		# check for not accepted words:
 		$result = mysql_query("SELECT list FROM ". $db_settings['banlists_table'] ." WHERE name = 'words' LIMIT 1", $connid);
