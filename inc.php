@@ -112,10 +112,10 @@ if (mysql_num_rows($ip_result) > 0)
 		if ($data['requests'] < 20)
 			{
 			$querySetBannedIP .= ",
-		requests = requests + 1
-		";
+		requests = requests + 1";
 			}
-		$querySetBannedIP .= "WHERE ip = INET_ATON('". mysql_real_escape_string($_SERVER["REMOTE_ADDR"]) ."')";
+		$querySetBannedIP .= "
+		WHERE ip = INET_ATON('". mysql_real_escape_string($_SERVER["REMOTE_ADDR"]) ."')";
 		$ips_result = mysql_query($querySetBannedIP, $connid);
 		processLogOutUser("login.php?msg=user_banned", $lang['ip_no_access']);
 		}
