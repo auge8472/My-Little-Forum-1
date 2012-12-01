@@ -92,19 +92,35 @@ if (basename($_SERVER['SCRIPT_NAME'])!='login.php'
 /**
  * look if IP is banned
  */
-$ip_result = mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'ips' LIMIT 1", $connid);
+$queryGetBannedIP = "SELECT
+INET_NTOA(ip) AS match_ip,
+last_date,
+requests
+FROM ". $db_settings['banned_ips_table'] ."
+WHERE ip = INET_ATON('". mysql_real_escape_string($_SERVER["REMOTE_ADDR"]) ."')";
+$ip_result = mysql_query($queryGetBannedIP, $connid);
 if (!$ip_result) die($lang['db_error']);
-$data = mysql_fetch_assoc($ip_result);
-mysql_free_result($ip_result);
 
-if (trim($data['list']) != '')
+if (mysql_num_rows($ip_result) > 0)
 	{
-	$banned_ips_array = explode(',', trim($data['list']));
-	if (in_array($_SERVER["REMOTE_ADDR"], $banned_ips_array))
+	$data = mysql_fetch_assoc($ip_result);
+	if ($data['match_ip'] == $_SERVER["REMOTE_ADDR"])
 		{
+		$querySetBannedIP = "UPDATE ". $db_settings['banned_ips_table'] ." SET
+		ip = ip,
+		last_date = NOW()";
+		if ($data['requests'] < 20)
+			{
+			$querySetBannedIP .= ",
+		requests = requests + 1
+		";
+			}
+		$querySetBannedIP .= "WHERE ip = INET_ATON('". mysql_real_escape_string($_SERVER["REMOTE_ADDR"]) ."')";
+		$ips_result = mysql_query($querySetBannedIP, $connid);
 		processLogOutUser("login.php?msg=user_banned", $lang['ip_no_access']);
 		}
 	}
+mysql_free_result($ip_result);
 
 /**
  * look if user is banned:
