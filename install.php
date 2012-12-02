@@ -199,6 +199,14 @@ if (isset($_POST['form_submitted']))
 			name varchar(255) NOT NULL default '',
 			list text NOT NULL
 			) ENGINE=MyISAM  DEFAULT CHARSET=utf8";
+			# create banned IPs table
+			$table["banned_ips"]["name"] = $db_settings['banned_ips_table'];
+			$table["banned_ips"]["query"] = "CREATE TABLE ".$db_settings['banned_ips_table']." (
+			ip int(10) unsigned NOT NULL DEFAULT '0',
+			last_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+			requests smallint(2) unsigned NOT NULL DEFAULT '0',
+			UNIQUE KEY ip (ip)
+			) ENGINE=MyISAM  DEFAULT CHARSET=utf8";
 			#create useronline table
 			$table["useronline"]["name"] = $db_settings['useronline_table'];
 			$table["useronline"]["query"] = "CREATE TABLE ".$db_settings['useronline_table']." (
