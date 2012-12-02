@@ -313,13 +313,13 @@ if (isset($_POST['form_submitted']))
 		# insert banlists:
 		if (empty($errors))
 			{
-			$templateBanlist = array("users","ips","words");
+			$templateBanlist = array("users", "words");
 			foreach ($templateBanlist as $val)
 				{
-				$fillBanlist = "INSERT INTO ".$db_settings['banlists_table']." SET
-				name = '".mysql_real_escape_string($val)."',
+				$fillBanlist = "INSERT INTO ". $db_settings['banlists_table'] ." SET
+				name = '". mysql_real_escape_string($val) ."',
 				list = ''";
-				@mysql_query($fillBanlist, $connid) or $errors[] = str_replace("[setting]",$db_settings['banlists_table'],$lang_add['db_insert_settings_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+				@mysql_query($fillBanlist, $connid) or $errors[] = str_replace("[setting]",$db_settings['banlists_table'],$lang_add['db_insert_settings_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
 				# empty $fillBanlist for the next loop
 				$fillBanlist = "";
 				}
