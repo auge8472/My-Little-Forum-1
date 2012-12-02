@@ -105,8 +105,12 @@ if (isset($_POST['form_submitted']))
 			# create settings table
 			$table["settings"]["name"] = $db_settings['settings_table'];
 			$table["settings"]["query"] = "CREATE TABLE ".$db_settings['settings_table']." (
-			name varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL default '',
-			value varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL default ''
+			name varchar(255) NOT NULL default '',
+			value varchar(255) NOT NULL default '',
+			type varchar(30) NOT NULL default '',
+			poss_values varchar(160) NOT NULL default '',
+			standard varchar(80) NOT NULL default '',
+			cat varchar(20) NOT NULL default ''
 			) ENGINE=MyISAM  DEFAULT CHARSET=utf8";
 			# create posting table
 			$table["postings"]["name"] = $db_settings['forum_table'];
