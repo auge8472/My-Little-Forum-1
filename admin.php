@@ -1331,23 +1331,31 @@ if (isset($_POST['banlists_submit']))
 	if (trim($_POST['banned_ips']) != '')
 		{
 		$banned_ips_array = explode(',',$_POST['banned_ips']);
+		$checkDoubleIP = array();
+		$banned_ips = array();
 		foreach ($banned_ips_array as $banned_ip)
 			{
-			if (trim($banned_ip)!='')
+			$banned_ip = trim($banned_ip);
+			if (!empty($banned_ip)
+				and ip2long($banned_ip) !== false
+				and !in_array($banned_ip, $checkDoubleIP))
 				{
-				$banned_ips_array_checked[] = trim($banned_ip);
+				$banned_ips[] = "(INET_ATON('". mysql_real_escape_string(trim($banned_ip)) ."'), NOW(), 1)";
+				$checkDoubleIP[] = $banned_ip;
 				}
 			}
-		$banned_ips = implode(",", $banned_ips_array_checked);
 		}
-	else
+	if (!empty($banned_ips))
 		{
-		$banned_ips = '';
+		$completeSet = implode(', ', $banned_ips);
+		$setBannedIPsQuery = "INSERT INTO ". $db_settings['banned_ips_table'] ."
+		(ip, last_date, requests)
+		VALUES ". $completeSet ."
+		ON DUPLICATE KEY UPDATE
+		last_date = VALUES(last_date),
+		requests = requests + 1";
+		$queryTest = mysql_query($setBannedIPsQuery, $connid);
 		}
-	$setBannedIPsQuery = "UPDATE ".$db_settings['banlists_table']." SET
-	list = '". mysql_real_escape_string($banned_ips) ."'
-	WHERE name = 'ips'";
-	mysql_query($setBannedIPsQuery, $connid);
 	if (trim($_POST['not_accepted_words']) != '')
 		{
 		$not_accepted_words_array = explode(',',$_POST['not_accepted_words']);
