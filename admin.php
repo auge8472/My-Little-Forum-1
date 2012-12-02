@@ -2618,36 +2618,36 @@ switch ($action)
 			$not_accepted_words = str_replace(',',', ',$data['list']);
 			mysql_free_result($result);
 			echo '<form action="admin.php" method="post">'."\n";
-			echo '<table class="normaltab">'."\n";
+			echo '<table class="admin">'."\n";
 			echo ' <tr>'."\n";
-			echo '  <td class="c"><label for="bann-user">'.$lang_add['banned_users'].'</label><br />';
+			echo '  <td><label for="bann-user">'.$lang_add['banned_users'].'</label><br />';
 			echo '<span class="info">'.$lang_add['banned_users_d'].'</span></td>'."\n";
-			echo '  <td class="d"><textarea name="banned_users" id="bann-user" cols="50" rows="5">';
+			echo '  <td><textarea name="banned_users" id="bann-user" cols="50" rows="5">';
 			if (isset($banned_users)) echo htmlspecialchars($banned_users);
 			echo '</textarea></td>'."\n";
 			echo ' </tr><tr>'."\n";
-			echo '  <td class="c"><label for="bann-ip">'.$lang_add['banned_ips'].'</label><br />';
-			echo '<span class="info">'.$lang_add['banned_ips_d'].'</span></td>';
-			echo '  <td class="d">';
+			echo '  <td><label for="bann-ip">'.$lang_add['banned_ips'].'</label><br />';
+			echo '<span class="info">'.$lang_add['banned_ips_d'].'</span></td>'."\n";
+			echo '  <td>'."\n";
 			if (isset($IPsBanned) or isset($IPsBannedLong))
 				{
-				echo '   <ul>';
-				if (isset($IPsBanned)) echo '    <li>Anzahl der vorhandenen Einträge: <b>'. htmlspecialchars($IPsBanned) .'</b></li>';
+				echo '   <ul>'."\n";
+				if (isset($IPsBanned)) echo '    <li>Anzahl der vorhandenen Einträge: <b>'. htmlspecialchars($IPsBanned) .'</b></li>'."\n";
 				if (isset($IPsBannedLong))
 					{
 					foreach ($IPsBannedLong as $IPsBannedCount)
 						{
-						echo '    <li>'. htmlspecialchars($IPsBannedCount["requests"]) .' Zugriffe: <b>'. htmlspecialchars($IPsBannedCount["counted_ips"]) .'</b></li>';
+						echo '    <li>'. htmlspecialchars($IPsBannedCount["requests"]) .' Zugriffe: <b>'. htmlspecialchars($IPsBannedCount["counted_ips"]) .'</b></li>'."\n";
 						}
 					}
-				echo '   </ul>';
+				echo '   </ul>'."\n";
 				}
 			echo '<textarea name="banned_ips" id="bann-ip" cols="50" rows="5">';
 			echo '</textarea></td>'."\n";
 			echo ' </tr><tr>'."\n";
-			echo '  <td class="c"><label for="bann-word">'.$lang_add['not_accepted_words'].'</label><br />';
+			echo '  <td><label for="bann-word">'.$lang_add['not_accepted_words'].'</label><br />';
 			echo '<span class="info">'.$lang_add['not_accepted_words_d'].'</span></td>'."\n";
-			echo '  <td class="d"><textarea name="not_accepted_words" id="bann-word" cols="50" rows="5">';
+			echo '  <td><textarea name="not_accepted_words" id="bann-word" cols="50" rows="5">';
 			if (isset($not_accepted_words)) echo htmlspecialchars($not_accepted_words);
 			echo '</textarea></td>'."\n";
 			echo ' </tr>'."\n";
@@ -2829,14 +2829,14 @@ switch ($action)
 				}
 			echo '<form action="admin.php" method="post"><div>'."\n";
 			echo '<input type="hidden" name="edit_user_id" value="'.$edit_user_id.'" />'."\n";
-			echo '<table class="normaltab">'."\n";
+			echo '<table class="admin info">'."\n";
 			echo ' <tr>'."\n";
-			echo '  <td class="c"><label for="set-uname">'.$lang['username_marking'].'</label></td>'."\n";
-			echo '  <td class="d"><input type="text" size="40" name="edit_user_name"';
+			echo '  <td><label for="set-uname">'.$lang['username_marking'].'</label></td>'."\n";
+			echo '  <td><input type="text" size="40" name="edit_user_name"';
 			echo ' value="'.htmlspecialchars($edit_user_name).'" id="set-uname" /></td>'."\n";
 			echo ' </tr><tr>'."\n";
-			echo '  <td class="c">'.$lang_add['usertype_marking'].'</td>'."\n";
-			echo '  <td class="d"><input type="radio" name="edit_user_type" value="user"';
+			echo '  <td>'.$lang_add['usertype_marking'].'</td>'."\n";
+			echo '  <td><input type="radio" name="edit_user_type" value="user"';
 			echo ($edit_user_type=="user") ? ' checked="checked"' : '';
 			echo ' id="set-type-0" /><label for="set-type-0">'.$lang['ud_user'].'</label><br />';
 			echo '<input type="radio" name="edit_user_type" value="mod"';
@@ -2846,39 +2846,39 @@ switch ($action)
 			echo ($edit_user_type=="admin") ? ' checked="checked"' :'';
 			echo ' id="set-type-2" /><label for="set-type-2">'.$lang['ud_admin'].'</label></td>'."\n";
 			echo ' </tr><tr>'."\n";
-			echo '  <td class="c"><label for="set-email">'.$lang['user_email_marking'].'</label></td>'."\n";
-			echo '  <td class="d"><input type="text" size="40" name="user_email" ';
+			echo '  <td><label for="set-email">'.$lang['user_email_marking'].'</label></td>'."\n";
+			echo '  <td><input type="text" size="40" name="user_email" ';
 			echo 'value="'.htmlspecialchars($user_email).'" id="set-email" /></td>'."\n";
 			echo ' </tr><tr>'."\n";
-			echo '  <td class="c">'.$lang['user_show_email'].'</td>'."\n";
-			echo '  <td class="d"><input type="radio" name="hide_email" value="0"';
+			echo '  <td>'.$lang['user_show_email'].'</td>'."\n";
+			echo '  <td><input type="radio" name="hide_email" value="0"';
 			echo ($hide_email=="0") ? ' checked="checked"' : '';
 			echo ' id="show-mail-1" /><label for="show-mail-1">'.$lang['yes'].'</label><br />';
 			echo '<input type="radio" name="hide_email" value="1"';
 			echo ($hide_email=="1") ? ' checked="checked"' : '';
 			echo ' id="show-mail-0" /><label for="show-mail-0">'.$lang['no'].'</label></td>'."\n";
 			echo ' </tr><tr>'."\n";
-			echo '  <td class="c"><label for="set-r-name">'.$lang['user_real_name'].'</label></td>'."\n";
-			echo '  <td class="d"><input type="text" size="40" name="user_real_name"';
+			echo '  <td><label for="set-r-name">'.$lang['user_real_name'].'</label></td>'."\n";
+			echo '  <td><input type="text" size="40" name="user_real_name"';
 			echo ' value="'.htmlspecialchars($user_real_name).'" maxlength="';
 			echo $settings['name_maxlength'].'" id="set-r-name" /></td>'."\n";
 			echo ' </tr><tr>'."\n";
-			echo '  <td class="c"><label for="set-hp">'.$lang['user_hp'].'</label></td>'."\n";
-			echo '  <td class="d"><input type="text" size="40" name="user_hp" value="';
+			echo '  <td><label for="set-hp">'.$lang['user_hp'].'</label></td>'."\n";
+			echo '  <td><input type="text" size="40" name="user_hp" value="';
 			echo htmlspecialchars($user_hp).'" maxlength="';
 			echo $settings['hp_maxlength'].'" id="set-hp" /></td>'."\n";
 			echo ' </tr><tr>'."\n";
-			echo '  <td class="c"><label for="set-place">'.$lang['user_place'].'</label></td>'."\n";
-			echo '  <td class="d"><input type="text" size="40" name="user_place"';
+			echo '  <td><label for="set-place">'.$lang['user_place'].'</label></td>'."\n";
+			echo '  <td><input type="text" size="40" name="user_place"';
 			echo ' value="'.htmlspecialchars($user_place).'" maxlength="';
 			echo $settings['place_maxlength'].'" id="set-place" /></td>'."\n";
 			echo ' </tr><tr>'."\n";
-			echo '  <td class="c"><label for="set-profile">'.$lang['user_profile'].'</label></td>'."\n";
-			echo '  <td class="d"><textarea cols="65" rows="4" name="profile" id="set-profile">';
+			echo '  <td><label for="set-profile">'.$lang['user_profile'].'</label></td>'."\n";
+			echo '  <td><textarea cols="65" rows="4" name="profile" id="set-profile">';
 			echo htmlspecialchars($profile).'</textarea></td>'."\n";
 			echo ' </tr><tr>'."\n";
-			echo '  <td class="c"><label for="set-signature">'.$lang['user_signature'].'</label></td>'."\n";
-			echo '  <td class="d"><textarea cols="65" rows="4" name="signature" id="set-signature">';
+			echo '  <td><label for="set-signature">'.$lang['user_signature'].'</label></td>'."\n";
+			echo '  <td><textarea cols="65" rows="4" name="signature" id="set-signature">';
 			echo htmlspecialchars($signature).'</textarea></td>'."\n";
 			echo ' </tr>';
 			if ($settings['thread_view'] != 0
@@ -2889,8 +2889,8 @@ switch ($action)
 			&& $settings['mix_view'] != 0)
 				{
 				echo '<tr>'."\n";
-				echo '  <td class="c"><b>'.$lang['user_standard_view'].'</b></td>'."\n";
-				echo '  <td class="d">'."\n";
+				echo '  <td><b>'.$lang['user_standard_view'].'</b></td>'."\n";
+				echo '  <td>'."\n";
 				if ($settings['thread_view'] == 1)
 					{
 					echo '<input type="radio" name="user_view" id="view-thread" value="thread"';
@@ -2913,8 +2913,8 @@ switch ($action)
 				echo ' </tr>'."\n";
 				}
 			echo ' <tr>'."\n";
-			echo '  <td class="c">'.$lang['user_pers_msg'].'</td>'."\n";
-			echo '  <td class="d"><input type="radio" name="personal_messages" value="1"';
+			echo '  <td>'.$lang['user_pers_msg'].'</td>'."\n";
+			echo '  <td><input type="radio" name="personal_messages" value="1"';
 			echo ($personal_messages=="1") ? ' checked="checked"' : '';
 			echo ' id="pers-mess-1" /><label for="pers-mess-1">'.$lang['user_pers_msg_act'];
 			echo '</label><br />';
@@ -2923,8 +2923,8 @@ switch ($action)
 			echo '  id="pers-mess-0" /><label for="pers-mess-0">'.$lang['user_pers_msg_deact'];
 			echo '</label></td>'."\n";
 			echo ' </tr><tr>'."\n";
-			echo '  <td class="c"><label for="user-time-diff">'.$lang['user_time_diff'].'</b></td>'."\n";
-			echo '  <td class="d"><select name="user_time_difference" id="user-time-diff" size="1">'."\n";
+			echo '  <td><label for="user-time-diff">'.$lang['user_time_diff'].'</b></td>'."\n";
+			echo '  <td><select name="user_time_difference" id="user-time-diff" size="1">'."\n";
 			for ($h = -24; $h <= 24; $h++)
 				{
 				echo '<option value="'.htmlspecialchars($h).'"';
@@ -2936,8 +2936,8 @@ switch ($action)
 			if ($edit_user_type=="admin" || $edit_user_type=="mod")
 				{
 				echo '<tr>'."\n";
-				echo '  <td class="c">'.$lang['admin_mod_notif'].'</td>'."\n";
-				echo '  <td class="d"><input type="checkbox" name="new_posting_notify" value="1"';
+				echo '  <td>'.$lang['admin_mod_notif'].'</td>'."\n";
+				echo '  <td><input type="checkbox" name="new_posting_notify" value="1"';
 				echo ($new_posting_notify=="1") ? ' checked="checked"' : '';
 				echo ' id="new-post" /><label for="new-post">'.$lang['admin_mod_notif_np'].'</label><br />';
 				echo '  <input type="checkbox" name="new_user_notify" value="1"';
