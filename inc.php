@@ -109,7 +109,7 @@ if (mysql_num_rows($ip_result) > 0)
 		$querySetBannedIP = "UPDATE ". $db_settings['banned_ips_table'] ." SET
 		ip = ip,
 		last_date = NOW()";
-		if ($data['requests'] < 20)
+		if ($data['requests'] < 5)
 			{
 			$querySetBannedIP .= ",
 		requests = requests + 1";
@@ -117,7 +117,18 @@ if (mysql_num_rows($ip_result) > 0)
 		$querySetBannedIP .= "
 		WHERE ip = INET_ATON('". mysql_real_escape_string($_SERVER["REMOTE_ADDR"]) ."')";
 		$ips_result = mysql_query($querySetBannedIP, $connid);
-		processLogOutUser("login.php?msg=user_banned", $lang['ip_no_access']);
+		if ($data['requests'] >= 5)
+			{
+			# give back http status 503, if there are equal or more than 5 requests from a spam-IP
+			header('HTTP/1.1 503 Service Unavailable');
+			header("Status: 503 Service Unavailable");
+			header('Retry-After: 300');
+			header('Connection: close');
+			}
+		else
+			{
+			processLogOutUser("login.php?msg=user_banned", $lang['ip_no_access']);
+			}
 		}
 	}
 mysql_free_result($ip_result);
