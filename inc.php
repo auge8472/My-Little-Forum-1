@@ -122,8 +122,9 @@ if (mysql_num_rows($ip_result) > 0)
 			# give back http status 503, if there are equal or more than 5 requests from a spam-IP
 			header('HTTP/1.1 503 Service Unavailable');
 			header("Status: 503 Service Unavailable");
-			header('Retry-After: 300');
+			header('Retry-After: 600');
 			header('Connection: close');
+			exit();
 			}
 		else
 			{
