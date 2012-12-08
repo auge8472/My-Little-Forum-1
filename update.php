@@ -171,9 +171,9 @@ else
 				# End: debug output
 
 				$db_settings_file = @fopen("db_settings.php", "w") or $errors[] = str_replace("CHMOD",$chmod,$lang_add['no_writing_permission']);
-				flock($db_settings_file, 2);
+				flock($db_settings_file, LOCK_EX);
 				fwrite($db_settings_file, $SetCont);
-				flock($db_settings_file, 3);
+				flock($db_settings_file, LOCK_UN);
 				fclose($db_settings_file);
 				} # End: if (empty($errors) and empty($_POST['dont_overwrite_settings']))
 			# update procedure
