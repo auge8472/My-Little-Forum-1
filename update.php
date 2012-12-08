@@ -144,6 +144,8 @@ else
 
 				$db_settings['usersettings_table'] = $_POST['table_prefix'].'usersettings';
 				$db_settings['us_templates_table'] = $_POST['table_prefix'].'fu_settings';
+				$db_settings['banned_ips_table'] = $_POST['table_prefix'].'banned_ips';
+				$db_settings['usersubscripts_table'] = $_POST['table_prefix'].'subscripts';
 				# content of db_settings.php
 				$SetCont  = "<?php\n";
 				$SetCont .= "\$db_settings['host'] = \"".$db_settings['host']."\";\n";
@@ -156,9 +158,11 @@ else
 				$SetCont .= "\$db_settings['userdata_table'] = \"".$db_settings['userdata_table']."\";\n";
 				$SetCont .= "\$db_settings['smilies_table'] = \"".$db_settings['smilies_table']."\";\n";
 				$SetCont .= "\$db_settings['banlists_table'] = \"".$db_settings['banlists_table']."\";\n";
+				$SetCont .= "\$db_settings['banned_ips_table'] = \"".$db_settings['banned_ips_table']."\";\n";
 				$SetCont .= "\$db_settings['useronline_table'] = \"".$db_settings['useronline_table']."\";\n";
 				$SetCont .= "\$db_settings['usersettings_table'] = \"".$db_settings['usersettings_table']."\";\n";
 				$SetCont .= "\$db_settings['us_templates_table'] = \"".$db_settings['us_templates_table']."\";\n";
+				$SetCont .= "\$db_settings['usersubscripts_table'] = \"".$db_settings['usersubscripts_table']."\";\n";
 				$SetCont .= "?>";
 				# Start: debug output
 #				$output .= '<pre>';
