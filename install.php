@@ -386,7 +386,7 @@ if (empty($installed))
 	{
 	if ($version !== false and !empty($version))
 		{
-		# forum is installed, give link to update.php
+		# forum is installed, provide the link to update.php
 		$output .= '<h2>'.$lang_add['installation_mode_update'].'</h2>'."\n";
 		$output .= '<p>'.$lang_add['select_version'].': '.$version['installed_version'].'</p>'."\n";
 		if (floatval(substr($version['installed_version'],0,2)) < 1.7)
