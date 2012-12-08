@@ -56,10 +56,11 @@ if (isset($_POST['form_submitted']))
 		$db_settings['userdata_table'] = $_POST['table_prefix'].'userdata';
 		$db_settings['smilies_table'] = $_POST['table_prefix'].'smilies';
 		$db_settings['banlists_table'] = $_POST['table_prefix'].'banlists';
+		$db_settings['banned_ips_table'] = $_POST['table_prefix'].'banned_ips';
 		$db_settings['useronline_table'] = $_POST['table_prefix'].'useronline';
 		$db_settings['usersettings_table'] = $_POST['table_prefix'].'usersettings';
 		$db_settings['us_templates_table'] = $_POST['table_prefix'].'fu_settings';
-		$db_settings['usersubscripts_table'] = $_POST['table_prefix'].'forum_subscripts';
+		$db_settings['usersubscripts_table'] = $_POST['table_prefix'].'subscripts';
 		# content of db_settings.php
 		$fileSettingsContent  = "<?php\n";
 		$fileSettingsContent .= "\$db_settings['host'] = \"".$db_settings['host']."\";\n";
@@ -72,6 +73,7 @@ if (isset($_POST['form_submitted']))
 		$fileSettingsContent .= "\$db_settings['userdata_table'] = \"".$db_settings['userdata_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['smilies_table'] = \"".$db_settings['smilies_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['banlists_table'] = \"".$db_settings['banlists_table']."\";\n";
+		$fileSettingsContent .= "\$db_settings['banned_ips_table'] = \"".$db_settings['banned_ips_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['useronline_table'] = \"".$db_settings['useronline_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['usersettings_table'] = \"".$db_settings['usersettings_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['us_templates_table'] = \"".$db_settings['us_templates_table']."\";\n";
