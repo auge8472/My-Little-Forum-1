@@ -102,7 +102,7 @@ else
 				}
 			} # End: search version number of old forum
 		# include files for the language wich is stored in the old settings
-		include("lang/".$oldSettings['language_file'] );
+		include("lang/".$oldSettings['language_file']);
 		include("lang/".$lang['additional_language_file']);
 		# the form was submitted
 		if (isset($_POST['form_submitted'])) {
