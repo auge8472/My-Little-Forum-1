@@ -81,9 +81,9 @@ if (isset($_POST['form_submitted']))
 		$fileSettingsContent .= "?>";
 
 		$db_settings_file = @fopen("db_settings.php", "w") or $errors[] = str_replace("CHMOD",$chmod,$lang_add['no_writing_permission']);
-		flock($db_settings_file, 2);
+		flock($db_settings_file, LOCK_EX);
 		fwrite($db_settings_file, $fileSettingsContent);
-		flock($db_settings_file, 3);
+		flock($db_settings_file, LOCK_UN);
 		fclose($db_settings_file);
 		}
 
