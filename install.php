@@ -3,7 +3,7 @@
 include_once('functions/include.install.php');
 
 $version = false;
-$table_prefix = 'forum_';
+$table_prefix = 'mlf1_';
 
 if (isset($_POST['language']))
 	{
