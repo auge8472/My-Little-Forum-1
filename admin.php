@@ -1308,8 +1308,10 @@ if (isset($_POST['ar_username']))
 
 if (isset($_POST['banlists_submit']))
 	{
-	if (trim($_POST['banned_users']) != '')
+	if (!empty($_POST['banned_users'])
+		and trim($_POST['banned_users']) != '')
 		{
+		$paramView = 'settingsCat=ban_users';
 		$banned_users_array = explode(',',$_POST['banned_users']);
 		foreach($banned_users_array as $banned_user)
 			{
@@ -1324,12 +1326,17 @@ if (isset($_POST['banlists_submit']))
 		{
 		$banned_users = '';
 		}
-	$setBannedUserNamesQuery = "UPDATE ".$db_settings['banlists_table']." SET
-	list = '". mysql_real_escape_string($banned_users) ."'
-	WHERE name = 'users'";
-	mysql_query($setBannedUserNamesQuery, $connid);
-	if (trim($_POST['banned_ips']) != '')
+	if (!empty($banned_users))
 		{
+		$setBannedUserNamesQuery = "UPDATE ".$db_settings['banlists_table']." SET
+		list = '". mysql_real_escape_string($banned_users) ."'
+		WHERE name = 'users'";
+		mysql_query($setBannedUserNamesQuery, $connid);
+		}
+	if (!empty($_POST['banned_ips'])
+		and trim($_POST['banned_ips']) != '')
+		{
+		$paramView = 'settingsCat=ban_ips';
 		$banned_ips_array = explode(',',$_POST['banned_ips']);
 		$checkDoubleIP = array();
 		$banned_ips = array();
@@ -1356,8 +1363,10 @@ if (isset($_POST['banlists_submit']))
 		requests = IF(requests > 4, requests, requests + 1)";
 		$queryTest = mysql_query($setBannedIPsQuery, $connid);
 		}
-	if (trim($_POST['not_accepted_words']) != '')
+	if (!empty($_POST['not_accepted_words'])
+		and trim($_POST['not_accepted_words']) != '')
 		{
+		$paramView = 'settingsCat=ban_words';
 		$not_accepted_words_array = explode(',',$_POST['not_accepted_words']);
 		foreach ($not_accepted_words_array as $not_accepted_word)
 			{
@@ -1369,12 +1378,15 @@ if (isset($_POST['banlists_submit']))
 		{
 		$not_accepted_words = '';
 		}
-	$setBadWordsQuery = "UPDATE ".$db_settings['banlists_table']." SET
-	list = '". mysql_real_escape_string($not_accepted_words) ."'
-	WHERE name = 'words'";
-	mysql_query($setBadWordsQuery, $connid);
-	header('Location: '. $settings['forum_address'] .'admin.php');
-	die('<a href="admin.php">further...</a>');
+	if (!empty($not_accepted_words))
+		{
+		$setBadWordsQuery = "UPDATE ".$db_settings['banlists_table']." SET
+		list = '". mysql_real_escape_string($not_accepted_words) ."'
+		WHERE name = 'words'";
+		mysql_query($setBadWordsQuery, $connid);
+		}
+	header('Location: '. $settings['forum_address'] .'admin.php?action=banlists&'. $paramView);
+	die('<a href="admin.php?action=banlists&amp;'. $paramView .'">further...</a>');
 	}
 
 if (isset($_POST['smiley_file']))
