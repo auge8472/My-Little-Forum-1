@@ -1353,7 +1353,7 @@ if (isset($_POST['banlists_submit']))
 		VALUES ". $completeSet ."
 		ON DUPLICATE KEY UPDATE
 		last_date = VALUES(last_date),
-		requests = requests + 1";
+		requests = IF(requests > 4, requests, requests + 1)";
 		$queryTest = mysql_query($setBannedIPsQuery, $connid);
 		}
 	if (trim($_POST['not_accepted_words']) != '')
