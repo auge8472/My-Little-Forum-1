@@ -93,7 +93,8 @@ if (basename($_SERVER['SCRIPT_NAME'])!='login.php'
  * check for outdated IPs in the banlist
  */
 $queryCheckBannedIPs = "DELETE FROM ". $db_settings['banned_ips_table'] ."
-WHERE DATE_SUB(NOW(), INTERVAL 60 DAY) > last_date";
+WHERE DATE_SUB(NOW(), INTERVAL 60 DAY) > last_date
+AND requests < 3";
 @mysql_query($queryCheckBannedIPs, $connid);
 
 /**
