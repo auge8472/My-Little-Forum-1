@@ -1308,8 +1308,10 @@ if (isset($_POST['ar_username']))
 
 if (isset($_POST['banlists_submit']))
 	{
-	if (trim($_POST['banned_users']) != '')
+	if (!empty($_POST['banned_users'])
+		and trim($_POST['banned_users']) != '')
 		{
+		$paramView = 'settingsCat=ban_users';
 		$banned_users_array = explode(',',$_POST['banned_users']);
 		foreach($banned_users_array as $banned_user)
 			{
@@ -1324,12 +1326,17 @@ if (isset($_POST['banlists_submit']))
 		{
 		$banned_users = '';
 		}
-	$setBannedUserNamesQuery = "UPDATE ".$db_settings['banlists_table']." SET
-	list = '". mysql_real_escape_string($banned_users) ."'
-	WHERE name = 'users'";
-	mysql_query($setBannedUserNamesQuery, $connid);
-	if (trim($_POST['banned_ips']) != '')
+	if (!empty($banned_users))
 		{
+		$setBannedUserNamesQuery = "UPDATE ".$db_settings['banlists_table']." SET
+		list = '". mysql_real_escape_string($banned_users) ."'
+		WHERE name = 'users'";
+		mysql_query($setBannedUserNamesQuery, $connid);
+		}
+	if (!empty($_POST['banned_ips'])
+		and trim($_POST['banned_ips']) != '')
+		{
+		$paramView = 'settingsCat=ban_ips';
 		$banned_ips_array = explode(',',$_POST['banned_ips']);
 		$checkDoubleIP = array();
 		$banned_ips = array();
@@ -1353,11 +1360,13 @@ if (isset($_POST['banlists_submit']))
 		VALUES ". $completeSet ."
 		ON DUPLICATE KEY UPDATE
 		last_date = VALUES(last_date),
-		requests = requests + 1";
+		requests = IF(requests > 4, requests, requests + 1)";
 		$queryTest = mysql_query($setBannedIPsQuery, $connid);
 		}
-	if (trim($_POST['not_accepted_words']) != '')
+	if (!empty($_POST['not_accepted_words'])
+		and trim($_POST['not_accepted_words']) != '')
 		{
+		$paramView = 'settingsCat=ban_words';
 		$not_accepted_words_array = explode(',',$_POST['not_accepted_words']);
 		foreach ($not_accepted_words_array as $not_accepted_word)
 			{
@@ -1369,12 +1378,15 @@ if (isset($_POST['banlists_submit']))
 		{
 		$not_accepted_words = '';
 		}
-	$setBadWordsQuery = "UPDATE ".$db_settings['banlists_table']." SET
-	list = '". mysql_real_escape_string($not_accepted_words) ."'
-	WHERE name = 'words'";
-	mysql_query($setBadWordsQuery, $connid);
-	header('Location: '. $settings['forum_address'] .'admin.php');
-	die('<a href="admin.php">further...</a>');
+	if (!empty($not_accepted_words))
+		{
+		$setBadWordsQuery = "UPDATE ".$db_settings['banlists_table']." SET
+		list = '". mysql_real_escape_string($not_accepted_words) ."'
+		WHERE name = 'words'";
+		mysql_query($setBadWordsQuery, $connid);
+		}
+	header('Location: '. $settings['forum_address'] .'admin.php?action=banlists&'. $paramView);
+	die('<a href="admin.php?action=banlists&amp;'. $paramView .'">further...</a>');
 	}
 
 if (isset($_POST['smiley_file']))
@@ -2583,78 +2595,106 @@ switch ($action)
 			echo '</form>'."\n";
 		break;
 		case "banlists":
-			# get banned users:
-			$result = mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'users' LIMIT 1", $connid);
-			if (!$result) die($lang['db_error']);
-			$data = mysql_fetch_assoc($result);
-			$banned_users = str_replace(',',', ',$data['list']);
-			mysql_free_result($result);
-			# get infos about banned ips:
-			$queryGetBannedIps = "SELECT
-			COUNT('ip') AS counted_ips
-			FROM ". $db_settings['banned_ips_table'];
-			$result = mysql_query($queryGetBannedIps, $connid);
-			if (!$result) die($lang['db_error']);
-			$data = mysql_fetch_assoc($result);
-			$IPsBanned = $data['counted_ips'];
-			mysql_free_result($result);
-			$queryGetLongBannedIps = "SELECT
-			requests,
-			COUNT('requests') AS counted_ips
-			FROM ". $db_settings['banned_ips_table'] ."
-			WHERE requests <= 20
-			GROUP BY requests";
-			$result = mysql_query($queryGetLongBannedIps, $connid);
-			if (!$result) die($lang['db_error']);
-			while ($data = mysql_fetch_assoc($result))
+			# initialize variables
+			$output = '';
+			$menu = '';
+			$menuitems = array('ban_ips'=>array('title'=>$lang_add['banned_ips'], 'description'=>$lang_add['banned_ips_d'], 'field_name'=>'banned_ips'),
+			'ban_users'=>array('title'=>$lang_add['banned_users'], 'description'=>$lang_add['banned_users_d'], 'field_name'=>'banned_users'),
+			'ban_words'=>array('title'=>$lang_add['not_accepted_words'], 'description'=>$lang_add['not_accepted_words_d'], 'field_name'=>'not_accepted_words'));
+			$settingsTable = array();
+			$catTable = array();
+			unset($errors);
+			# as first, generate the menu
+			$menu .= '<ul class="menulist">'."\n";
+			foreach ($menuitems as $key=>$val)
 				{
-				$IPsBannedLong[] = $data;
+				if ((empty($_GET['settingsCat']) and $key == 'ban_ips')
+				or ($key == $_GET['settingsCat']))
+					{
+					$catTable = $key;
+					$menu .= '<li><span>';
+					$menu .= htmlspecialchars($val['title']) .'</span></li>';
+					}
+				else
+					{
+					$menu .= '<li><a href="?action=banlists&amp;settingsCat='. htmlspecialchars($key) .'">';
+					$menu .= htmlspecialchars($val['title']) .'</a></li>';
+					}
 				}
-			mysql_free_result($result);
-			# get not accepted words:
-			$result = mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1", $connid);
-			if (!$result) die($lang['db_error']);
-			$data = mysql_fetch_assoc($result);
-			$not_accepted_words = str_replace(',',', ',$data['list']);
-			mysql_free_result($result);
-			echo '<form action="admin.php" method="post">'."\n";
-			echo '<table class="admin">'."\n";
-			echo ' <tr>'."\n";
-			echo '  <td><label for="bann-user">'.$lang_add['banned_users'].'</label><br />';
-			echo '<span class="info">'.$lang_add['banned_users_d'].'</span></td>'."\n";
-			echo '  <td><textarea name="banned_users" id="bann-user" cols="50" rows="5">';
-			if (isset($banned_users)) echo htmlspecialchars($banned_users);
-			echo '</textarea></td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td><label for="bann-ip">'.$lang_add['banned_ips'].'</label><br />';
-			echo '<span class="info">'.$lang_add['banned_ips_d'].'</span></td>'."\n";
-			echo '  <td>'."\n";
+			$menu .= '</ul>'."\n";
+			if ($catTable == 'ban_users')
+				{
+				# get banned users:
+				$result = mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'users' LIMIT 1", $connid);
+				if (!$result) die($lang['db_error']);
+				$data = mysql_fetch_assoc($result);
+				$banned_value = str_replace(',',', ',$data['list']);
+				mysql_free_result($result);
+				}
+			if ($catTable == 'ban_ips')
+				{
+				# get infos about banned ips:
+				$queryGetBannedIps = "SELECT
+				COUNT('ip') AS counted_ips
+				FROM ". $db_settings['banned_ips_table'];
+				$result = mysql_query($queryGetBannedIps, $connid);
+				if (!$result) die($lang['db_error']);
+				$data = mysql_fetch_assoc($result);
+				$IPsBanned = $data['counted_ips'];
+				mysql_free_result($result);
+				$queryGetLongBannedIps = "SELECT
+				requests,
+				COUNT('requests') AS counted_ips
+				FROM ". $db_settings['banned_ips_table'] ."
+				WHERE requests <= 20
+				GROUP BY requests";
+				$result = mysql_query($queryGetLongBannedIps, $connid);
+				if (!$result) die($lang['db_error']);
+				while ($data = mysql_fetch_assoc($result))
+					{
+					$IPsBannedLong[] = $data;
+					}
+				mysql_free_result($result);
+				}
+			if ($catTable == 'ban_words')
+				{
+				# get not accepted words:
+				$result = mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1", $connid);
+				if (!$result) die($lang['db_error']);
+				$data = mysql_fetch_assoc($result);
+				$banned_value = str_replace(',',', ',$data['list']);
+				mysql_free_result($result);
+				}
+#			$output .= '<pre>'. print_r($menuitems, true) .'</pre>';
+			$output .= $menu;
+			$output .= '<form action="admin.php" method="post">'."\n";
+			$output .= '<table class="admin">'."\n";
+			$output .= ' <tr>'."\n";
+			$output .= '  <td><label for="ban-field">'. $menuitems[$catTable]['title'] .'</label><br />';
+			$output .= '<span class="info">'. $menuitems[$catTable]['description'] .'</span></td>'."\n";
+			$output .= '  <td>'."\n";
 			if (isset($IPsBanned) or isset($IPsBannedLong))
 				{
-				echo '   <ul>'."\n";
-				if (isset($IPsBanned)) echo '    <li>Anzahl der vorhandenen Einträge: <b>'. htmlspecialchars($IPsBanned) .'</b></li>'."\n";
+				$output .= '   <ul>'."\n";
+				if (isset($IPsBanned)) $output .= '    <li>Anzahl der vorhandenen Einträge: <b>'. htmlspecialchars($IPsBanned) .'</b></li>'."\n";
 				if (isset($IPsBannedLong))
 					{
 					foreach ($IPsBannedLong as $IPsBannedCount)
 						{
-						echo '    <li>'. htmlspecialchars($IPsBannedCount["requests"]) .' Zugriffe: <b>'. htmlspecialchars($IPsBannedCount["counted_ips"]) .'</b></li>'."\n";
+						$output .= '    <li>'. htmlspecialchars($IPsBannedCount["requests"]) .' Zugriffe: <b>'. htmlspecialchars($IPsBannedCount["counted_ips"]) .'</b></li>'."\n";
 						}
 					}
-				echo '   </ul>'."\n";
+				$output .= '   </ul>'."\n";
 				}
-			echo '<textarea name="banned_ips" id="bann-ip" cols="50" rows="5">';
-			echo '</textarea></td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td><label for="bann-word">'.$lang_add['not_accepted_words'].'</label><br />';
-			echo '<span class="info">'.$lang_add['not_accepted_words_d'].'</span></td>'."\n";
-			echo '  <td><textarea name="not_accepted_words" id="bann-word" cols="50" rows="5">';
-			if (isset($not_accepted_words)) echo htmlspecialchars($not_accepted_words);
-			echo '</textarea></td>'."\n";
-			echo ' </tr>'."\n";
-			echo '</table>'."\n";
-			echo '<p><input type="submit" name="banlists_submit" value="';
-			echo outputLangDebugInAttributes($lang_add['banlists_submit']).'" /></p>'."\n";
-			echo '</form>'."\n";
+			$output .= '<textarea name="'. $menuitems[$catTable]['field_name'] .'" id="ban-field" cols="50" rows="7">';
+			if (isset($banned_value)) $output .= htmlspecialchars($banned_value);
+			$output .= '</textarea></td>'."\n";
+			$output .= ' </tr>'."\n";
+			$output .= '</table>'."\n";
+			$output .= '<p><input type="submit" name="banlists_submit" value="';
+			$output .= outputLangDebugInAttributes($lang_add['banlists_submit']).'" /></p>'."\n";
+			$output .= '</form>'."\n";
+			echo $output;
 		break;
 		case "smilies":
 			if($settings['smilies'] == 1)

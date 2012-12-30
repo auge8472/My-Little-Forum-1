@@ -93,7 +93,8 @@ if (basename($_SERVER['SCRIPT_NAME'])!='login.php'
  * check for outdated IPs in the banlist
  */
 $queryCheckBannedIPs = "DELETE FROM ". $db_settings['banned_ips_table'] ."
-WHERE DATE_SUB(NOW(), INTERVAL 60 DAY) > last_date";
+WHERE DATE_SUB(NOW(), INTERVAL 60 DAY) > last_date
+AND requests < 3";
 @mysql_query($queryCheckBannedIPs, $connid);
 
 /**
@@ -115,13 +116,8 @@ if (mysql_num_rows($ip_result) > 0)
 		{
 		$querySetBannedIP = "UPDATE ". $db_settings['banned_ips_table'] ." SET
 		ip = ip,
-		last_date = NOW()";
-		if ($data['requests'] < 5)
-			{
-			$querySetBannedIP .= ",
-		requests = requests + 1";
-			}
-		$querySetBannedIP .= "
+		last_date = NOW(),
+		requests = IF(requests > 4, requests, requests + 1)
 		WHERE ip = INET_ATON('". mysql_real_escape_string($_SERVER["REMOTE_ADDR"]) ."')";
 		$ips_result = mysql_query($querySetBannedIP, $connid);
 		if ($data['requests'] >= 5)
