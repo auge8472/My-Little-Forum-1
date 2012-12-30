@@ -448,21 +448,45 @@ border-bottom: 0;
 height: 1px;
 }
 .marked-threads {
-margin:1em 0 0 0;
-padding:0;
+margin: 1em 0 0 0;
+padding: 0;
+border: 1px solid #aaa;
+border-radius: 5px;
+overflow: hidden;
+background: #ddd;
+background: -moz-linear-gradient(top, #eee 0%, #ccc 100%); /* FF3.6+ */
+background: -webkit-linear-gradient(top, #eee 0%, #ccc 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #eee 0%, #ccc 100%); /* Opera 11.10+ */
+background: linear-gradient(to bottom, #eee 0%, #ccc 100%); /* W3C new */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eee', endColorstr='#ccc',GradientType=0 ); /* IE6-9 */
 }
 .marked-threads h2 {
-display: inline;
-font-size: 0.86em;
+float: left;
+font-size: 1em;
+padding: 0.5em;
+margin: 0;
 }
 .marked-threads ul {
-display: inline;
+float: left;
 padding: 0;
+margin: 0;
+list-style: none;
 }
 .marked-threads li {
-display: inline;
-padding: 0 0 0 6px;
-font-size: 0.86em;
+/*display: inline;*/
+float: left;
+padding: 0;
+border-left: 1px solid #aaa;
+border-right: 1px solid #eee;
+}
+.marked-threads li a {
+display: block;
+padding: 0.5em;
+}
+.marked-threads li a:focus, .marked-threads li a:hover {
+color: #00b;
+text-shadow: 1px 1px 0px #fff;
+text-decoration: underline;
 }
 
 .admin-highlight { color: #b00; }
