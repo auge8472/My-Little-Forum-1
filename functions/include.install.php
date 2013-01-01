@@ -10,99 +10,106 @@ function update17to18($settings, $connid) {
 global $db_settings, $lang_add;
 
 # Alter settings table, set text rows and table to utf8, numeral rows to unsigned
-$alterTable["settings1"] = "ALTER TABLE ".$db_settings['settings_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-$alterTable["settings2"] = "ALTER TABLE ".$db_settings['settings_table']."
-CHANGE name name VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE value value VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
+$alterTable["settings"] = "ALTER TABLE ".$db_settings['settings_table']."
+DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci,
+CHANGE name name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE value value VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+ADD type VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+ADD poss_values VARCHAR(160) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+ADD standard VARCHAR(80) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+ADD cat VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
 # Alter banlist table, set text rows and table to utf8, numeral rows to unsigned
-$alterTable["banlist1"] = "ALTER TABLE ".$db_settings['banlists_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-$alterTable["banlist2"] = "ALTER TABLE ".$db_settings['banlists_table']."
-CHANGE name name VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+$alterTable["banlist"] = "ALTER TABLE ".$db_settings['banlists_table']."
+DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci,
+CHANGE name name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE list list TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
 # Alter smilies table, set text rows and table to utf8, numeral rows to unsigned
-$alterTable["smilies1"] = "ALTER TABLE ".$db_settings['smilies_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-$alterTable["smilies2"]	= "ALTER TABLE ".$db_settings['smilies_table']."
-CHANGE id id INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT,
-CHANGE order_id order_id INT( 11 ) UNSIGNED NOT NULL DEFAULT '0',
-CHANGE file file VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE code_1 code_1 VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE code_2 code_2 VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE code_3 code_3 VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE code_4 code_4 VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE code_5 code_5 VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE title title VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
-$alterTable["smilies3"] = "UPDATE ".$db_settings['smilies_table']." SET
+$alterTable["smilies"]	= "ALTER TABLE ".$db_settings['smilies_table']."
+DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci,
+CHANGE id id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+CHANGE order_id order_id INT(11) UNSIGNED NOT NULL DEFAULT '0',
+CHANGE file file VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE code_1 code_1 VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE code_2 code_2 VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE code_3 code_3 VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE code_4 code_4 VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE code_5 code_5 VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE title title VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
+$alterTable["smilies1"] = "UPDATE ".$db_settings['smilies_table']." SET
 code_2 = ''";
 # Alter user online table, set text rows and table to utf8, numeral rows to unsigned
-$alterTable["uonline1"] = "ALTER TABLE ".$db_settings['useronline_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-$alterTable["uonline2"] = "ALTER TABLE ".$db_settings['useronline_table']."
-CHANGE ip ip VARCHAR( 39 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE time time INT( 14 ) UNSIGNED NOT NULL DEFAULT '0',
-CHANGE user_id user_id INT( 11 ) UNSIGNED NULL DEFAULT '0'";
+$alterTable["uonline"] = "ALTER TABLE ".$db_settings['useronline_table']."
+DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci,
+CHANGE ip ip VARCHAR(39) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE time time INT(14) UNSIGNED NOT NULL DEFAULT '0',
+CHANGE user_id user_id INT(11) UNSIGNED NULL DEFAULT '0'";
 # Alter user data table, set text rows and table to utf8, numeral rows to unsigned
-$alterTable["userdat1"] = "ALTER TABLE ".$db_settings['userdata_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-$alterTable["userdat2"] = "ALTER TABLE ".$db_settings['userdata_table']."
+$alterTable["userdat"] = "ALTER TABLE ".$db_settings['userdata_table']."
+DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci,
 CHANGE user_id user_id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 CHANGE user_type user_type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE user_name user_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE user_real_name user_real_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE user_pw user_pw VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE user_email user_email VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE hide_email hide_email TINYINT(4) UNSIGNED NULL DEFAULT '0',
+CHANGE hide_email hide_email TINYINT(1) UNSIGNED NULL DEFAULT '0',
 CHANGE user_hp user_hp VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE user_place user_place VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE signature signature VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE profile profile TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE logins logins INT(11) UNSIGNED NOT NULL DEFAULT '0',
 CHANGE user_ip user_ip VARCHAR(39) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+ADD ip_addr INT(10) UNSIGNED NOT NULL DEFAULT '0',
 CHANGE user_view user_view VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE new_posting_notify new_posting_notify TINYINT(4) UNSIGNED NULL DEFAULT '0',
-CHANGE new_user_notify new_user_notify TINYINT(4) UNSIGNED NULL DEFAULT '0',
-CHANGE personal_messages personal_messages TINYINT(4) UNSIGNED NULL DEFAULT '0',
-CHANGE user_lock user_lock TINYINT(4) UNSIGNED NULL DEFAULT '0',
+CHANGE new_posting_notify new_posting_notify TINYINT(1) UNSIGNED NULL DEFAULT '0',
+CHANGE new_user_notify new_user_notify TINYINT(1) UNSIGNED NULL DEFAULT '0',
+CHANGE personal_messages personal_messages TINYINT(1) UNSIGNED NULL DEFAULT '0',
+ADD time_difference TINYINT(2) UNSIGNED NULL DEFAULT '0',
+CHANGE user_lock user_lock TINYINT(1) UNSIGNED NULL DEFAULT '0',
 CHANGE pwf_code pwf_code VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE activate_code activate_code VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
 # Alter posting table, set text rows and table to utf8, numeral rows to unsigned
-$alterTable["posting1"] = "ALTER TABLE ".$db_settings['forum_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-$alterTable["posting2"] = "ALTER TABLE ".$db_settings['forum_table']."
-CHANGE id id INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT,
-CHANGE pid pid INT( 11 ) UNSIGNED NOT NULL DEFAULT '0',
-CHANGE tid tid INT( 11 ) UNSIGNED NOT NULL DEFAULT '0',
-CHANGE uniqid uniqid VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+$alterTable["posting"] = "ALTER TABLE ".$db_settings['forum_table']."
+DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci,
+CHANGE id id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+CHANGE pid pid INT(11) UNSIGNED NOT NULL DEFAULT '0',
+CHANGE tid tid INT(11) UNSIGNED NOT NULL DEFAULT '0',
+CHANGE uniqid uniqid VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 CHANGE time time DATETIME NOT NULL,
-CHANGE edited_by edited_by VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE user_id user_id INT( 11 ) UNSIGNED NULL DEFAULT '0',
-CHANGE name name VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE subject subject VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE category category INT( 11 ) UNSIGNED NOT NULL DEFAULT '0',
-CHANGE email email VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE hp hp VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE place place VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE ip ip VARCHAR( 39 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE edited_by edited_by VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE user_id user_id INT(11) UNSIGNED NULL DEFAULT '0',
+CHANGE name name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE subject subject VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE category category INT(11) UNSIGNED NOT NULL DEFAULT '0',
+CHANGE email email VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE hp hp VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE place place VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE ip ip VARCHAR(39) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+ADD ip_addr INT(10) UNSIGNED NOT NULL DEFAULT '0',
 CHANGE text text TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE show_signature show_signature TINYINT( 4 ) UNSIGNED NULL DEFAULT '0',
-CHANGE email_notify email_notify TINYINT( 4 ) UNSIGNED NULL DEFAULT '0',
-CHANGE marked marked TINYINT( 4 ) UNSIGNED NULL DEFAULT '0',
-CHANGE locked locked TINYINT( 4 ) UNSIGNED NULL DEFAULT '0',
-CHANGE fixed fixed TINYINT( 4 ) UNSIGNED NULL DEFAULT '0',
-CHANGE views views INT( 11 ) UNSIGNED NULL DEFAULT '0'";
+CHANGE show_signature show_signature TINYINT(1) UNSIGNED NULL DEFAULT '0',
+CHANGE email_notify email_notify TINYINT(1) UNSIGNED NULL DEFAULT '0',
+CHANGE marked marked TINYINT(1) UNSIGNED NULL DEFAULT '0',
+CHANGE locked locked TINYINT(1) UNSIGNED NULL DEFAULT '0',
+CHANGE fixed fixed TINYINT(1) UNSIGNED NULL DEFAULT '0',
+CHANGE views views INT(11) UNSIGNED NULL DEFAULT '0'";
 # Alter category table, set text rows and table to utf8, numeral rows to unsigned
-$alterTable["category1"] = "ALTER TABLE ".$db_settings['category_table']." DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-$alterTable["category2"] = "ALTER TABLE ".$db_settings['category_table']."
-CHANGE id id INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT,
-CHANGE category_order category_order INT( 11 ) UNSIGNED NOT NULL,
-CHANGE category category VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE description description VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-CHANGE accession accession TINYINT( 4 ) UNSIGNED NOT NULL DEFAULT '0'";
+$alterTable["category"] = "ALTER TABLE ".$db_settings['category_table']."
+DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci,
+CHANGE id id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+CHANGE category_order category_order INT(11) UNSIGNED NOT NULL,
+CHANGE category category VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE description description VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+CHANGE accession accession TINYINT(3) UNSIGNED NOT NULL DEFAULT '0'";
 $newTable["user_settings"] = "CREATE TABLE ".$db_settings['usersettings_table']." (
 user_id int(12) unsigned NOT NULL,
-name varchar(60) NOT NULL default '',
-value varchar(40) NOT NULL default '',
+name varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL default '',
+value varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL default '',
 PRIMARY KEY  (user_id,name)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 $newTable['us_template'] = "CREATE TABLE ".$db_settings['us_templates_table']." (
-name varchar(60) NOT NULL,
-value varchar(40) NOT NULL,
+name varchar(60) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+value varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 type enum('string','bool') NOT NULL default 'string'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 $newTable['user_subscriptions'] = "CREATE TABLE ".$db_settings['usersubscripts_table']." (
@@ -110,6 +117,12 @@ user_id int(12) unsigned NOT NULL,
 tid int(12) unsigned NOT NULL,
 UNIQUE KEY user_thread (user_id,tid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+$newTable['banned_ips'] = "CREATE TABLE ".$db_settings['banned_ips_table']." (
+ip int(10) unsigned NOT NULL DEFAULT '0',
+last_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+requests tinyint(2) unsigned NOT NULL DEFAULT '0',
+UNIQUE KEY ip (ip)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 
 $newSetting["reply_name"] = "INSERT INTO ".$db_settings['settings_table']." SET
 name = 'last_reply_name',
@@ -132,106 +145,78 @@ value = 'false',
 type = 'bool'";
 
 
-# alter settings table (part 1)
-@mysql_query($alterTable["settings1"], $connid) or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
-# alter settings table (part 2)
+# alter settings table
+@mysql_query($alterTable["settings"], $connid) or $errors[] = str_replace("[table]", $db_settings['settings_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+# alter banlist table
 if (empty($errors))
 	{
-	@mysql_query($alterTable["settings2"], $connid) or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
-	}
-# alter banlist table (part 1)
-if (empty($errors))
-	{
-	@mysql_query($alterTable["banlist1"], $connid) or $errors[] = str_replace("[table]",$db_settings['banlists_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
-	}
-# alter banlist table (part 2)
-if (empty($errors))
-	{
-	@mysql_query($alterTable["banlist2"], $connid) or $errors[] = str_replace("[table]",$db_settings['banlists_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query($alterTable["banlist"], $connid) or $errors[] = str_replace("[table]", $db_settings['banlists_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
 	}
 # alter smilies table (part 1)
 if (empty($errors))
 	{
-	@mysql_query($alterTable["smilies1"], $connid) or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query($alterTable["smilies"], $connid) or $errors[] = str_replace("[table]", $db_settings['smilies_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
 	}
 # alter smilies table (part 2)
+if (empty($errors)
+	and (!empty($_POST["DeleteSmilies"])
+	and $_POST["DeleteSmilies"] == "delete"))
+	{
+	@mysql_query($alterTable["smilies1"], $connid) or $errors[] = str_replace("[table]", $db_settings['smilies_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+	}
+# alter user online table
 if (empty($errors))
 	{
-	@mysql_query($alterTable["smilies2"], $connid) or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query($alterTable["uonline"], $connid) or $errors[] = str_replace("[table]", $db_settings['useronline_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
 	}
-# alter smilies table (part 3)
-if (empty($errors) and (!empty($_POST["DeleteSmilies"]) and $_POST["DeleteSmilies"]=="delete"))
-	{
-	@mysql_query($alterTable["smilies3"], $connid) or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
-	}
-# alter user online table (part 1)
+# alter user data table
 if (empty($errors))
 	{
-	@mysql_query($alterTable["uonline1"], $connid) or $errors[] = str_replace("[table]",$db_settings['useronline_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query($alterTable["userdat"], $connid) or $errors[] = str_replace("[table]", $db_settings['userdata_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
 	}
-# alter user online table (part 2)
+# alter posting data table
 if (empty($errors))
 	{
-	@mysql_query($alterTable["uonline2"], $connid) or $errors[] = str_replace("[table]",$db_settings['useronline_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query($alterTable["posting"], $connid) or $errors[] = str_replace("[table]", $db_settings['forum_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
 	}
-# alter user data table (part 1)
+# alter category data table
 if (empty($errors))
 	{
-	@mysql_query($alterTable["userdat1"], $connid) or $errors[] = str_replace("[table]",$db_settings['userdata_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
-	}
-# alter user data table (part 2)
-if (empty($errors))
-	{
-	@mysql_query($alterTable["userdat2"], $connid) or $errors[] = str_replace("[table]",$db_settings['userdata_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
-	}
-# alter posting data table (part 1)
-if (empty($errors))
-	{
-	@mysql_query($alterTable["posting1"], $connid) or $errors[] = str_replace("[table]",$db_settings['forum_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
-	}
-# alter posting data table (part 2)
-if (empty($errors))
-	{
-	@mysql_query($alterTable["posting2"], $connid) or $errors[] = str_replace("[table]",$db_settings['forum_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
-	}
-# alter category data table (part 1)
-if (empty($errors))
-	{
-	@mysql_query($alterTable["category1"], $connid) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
-	}
-# alter category data table (part 2)
-if (empty($errors))
-	{
-	@mysql_query($alterTable["category2"], $connid) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query($alterTable["category1"], $connid) or $errors[] = str_replace("[table]", $db_settings['category_table'],$lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
 	}
 # create new table for users own forum settings
 if (empty($errors))
 	{
-	@mysql_query($newTable["user_settings"], $connid) or $errors[] = str_replace("[table]",$db_settings['usersettings_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query($newTable["user_settings"], $connid) or $errors[] = str_replace("[table]", $db_settings['usersettings_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
 	}
 # create new table for administrating users own forum settings
 if (empty($errors))
 	{
-	@mysql_query($newTable['us_template'], $connid) or $errors[] = str_replace("[table]",$db_settings['us_templates_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query($newTable['us_template'], $connid) or $errors[] = str_replace("[table]", $db_settings['us_templates_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
 	}
 # create new table for users own subscriptions
 if (empty($errors))
 	{
-	@mysql_query($newTable['user_subscriptions'], $connid) or $errors[] = str_replace("[table]",$db_settings['usersubscripts_table'],$lang_add['db_alter_table_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query($newTable['user_subscriptions'], $connid) or $errors[] = str_replace("[table]", $db_settings['usersubscripts_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+	}
+# create new table for banned IPs
+if (empty($errors))
+	{
+	@mysql_query($newTable['banned_ips'], $connid) or $errors[] = str_replace("[table]", $newTable['banned_ips'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
 	}
 # insert new settings
 if (empty($errors))
 	{
 	foreach ($newSetting as $Set)
 		{
-		@mysql_query($Set, $connid) or $errors[] = $lang_add['db_insert_settings_error']." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+		@mysql_query($Set, $connid) or $errors[] = $lang_add['db_insert_settings_error']." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
 		}
 	}
 
 # set value 1.8 for version string
 if (empty($errors))
 	{
-	@mysql_query("UPDATE ".$db_settings['settings_table']." SET value='1.8' WHERE name = 'version'", $connid) or $errors[] = $lang_add['db_update_error']. " (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+	@mysql_query("UPDATE ".$db_settings['settings_table']." SET value='1.8' WHERE name = 'version'", $connid) or $errors[] = $lang_add['db_update_error']. " (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
 	}
 
 $return = (!empty($errors)) ? $errors : false;
@@ -367,85 +352,85 @@ else
 
 
 // default settings:
-$settings['forum_name'] = 'my little forum';
-$settings['forum_email'] = '';
-$settings['forum_address'] = '';
-$settings['home_linkaddress'] = '/';
-$settings['home_linkname'] = '';
-$settings['language_file'] = 'english.php';
-$settings['template'] = 'template.html';
-$settings['access_for_users_only'] = 0;
-$settings['entries_by_users_only'] = 0;
-$settings['register_by_admin_only'] = 0;
-$settings['standard'] = "thread";
-$settings['thread_view'] = 1;
-$settings['board_view'] = 1;
-$settings['mix_view'] = 0;
-$settings['show_registered'] = 0;
-$settings['show_posting_id'] = 0;
-$settings['remember_userstandard'] = 1;
-$settings['remember_userdata'] = 1;
-$settings['remember_last_visit'] = 1;
-$settings['all_views_direct'] = 0;
-$settings['thread_depth_indent'] = 15;
-$settings['thread_indent_mix'] = 20;
-$settings['max_thread_indent_mix'] = 300;
-$settings['thread_indent_mix_topic'] = 30;
-$settings['max_thread_indent_mix_topic'] = 500;
-$settings['empty_postings_possible'] = 0;
-$settings['email_notification'] = 1;
-$settings['user_edit'] = 1;
-$settings['user_delete'] = 0;
-$settings['show_if_edited'] = 1;
-$settings['dont_reg_edit_by_admin'] = 1;
-$settings['dont_reg_edit_by_mod'] = 0;
-$settings['edit_period'] = 180;
-$settings['edit_delay'] = 5;
-$settings['bbcode'] = 1;
-$settings['bbcode_img'] = 0;
-$settings['upload_images'] = 0;
-$settings['smilies'] = 1;
-$settings['autolink'] = 1;
-$settings['count_views'] = 0;
-$settings['provide_rssfeed'] = 0;
-$settings['autologin'] = 1;
-$settings['admin_mod_highlight'] = 0;
-$settings['user_highlight'] = 0;
-$settings['topics_per_page'] = 40;
-$settings['users_per_page'] = 40;
-$settings['answers_per_topic'] = 50;
-$settings['search_results_per_page'] = 20;
-$settings['name_maxlength'] = 40;
-$settings['name_word_maxlength'] = 25;
-$settings['email_maxlength'] = 50;
-$settings['hp_maxlength'] = 70;
-$settings['place_maxlength'] = 40;
-$settings['place_word_maxlength'] = 25;
-$settings['subject_maxlength'] = 60;
-$settings['subject_word_maxlength'] = 25;
-$settings['text_maxlength'] = 5000;
-$settings['profile_maxlength'] = 5000;
-$settings['signature_maxlength'] = 255;
-$settings['text_word_maxlength'] = 70;
-$settings['signature_separator'] = '---<br />';
-$settings['quote_symbol'] = '»';
-$settings['count_users_online'] = 1;
-$settings['last_reply_link'] = 0;
-$settings['last_reply_name'] = 1;
-$settings['time_difference'] = 0;
-$settings['upload_max_img_size'] = 60;
-$settings['upload_max_img_width'] = 600;
-$settings['upload_max_img_height'] = 600;
-$settings['mail_parameter'] = '';
-$settings['forum_disabled'] = 0;
-$settings['session_prefix'] = 'mlf_';
-$settings['version'] = '1.8';
-$settings['captcha_posting'] = 0;
-$settings['captcha_contact'] = 0;
-$settings['captcha_register'] = 0;
-$settings['captcha_type'] = 0;
-$settings['user_control_refresh'] = 0;
-$settings['server_timezone'] = $server_tz;
+$settings['forum_name'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'my little forum', 'cat'=>'general');
+$settings['forum_email'] =  array('type'=>'string', 'poss_values'=>'', 'standard'=>'', 'cat'=>'general');
+$settings['forum_address'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'', 'cat'=>'general');
+$settings['home_linkaddress'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'/', 'cat'=>'general');
+$settings['home_linkname'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'', 'cat'=>'general');
+$settings['language_file'] = array('type'=>'string', 'poss_values'=>'file:./lang/', 'standard'=>'english.php', 'cat'=>'general');
+$settings['template'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'template.html', 'cat'=>'general');
+$settings['access_for_users_only'] = array('type'=>'array', 'poss_values'=>'0:access_all_users, 1:access_only_reg_user', 'standard'=>'1', 'cat'=>'general');
+$settings['entries_by_users_only'] = array('type'=>'array', 'poss_values'=>'0:access_all_users, 1:access_only_reg_user', 'standard'=>'1', 'cat'=>'security');
+$settings['register_by_admin_only'] = array('type'=>'array', 'poss_values'=>'0:access_all_users, 1:access_only_reg_user', 'standard'=>'1', 'cat'=>'security');
+$settings['standard'] = array('type'=>'array', 'poss_values'=>'thread:standard_thread, board:standard_board, mix:standard_mix', 'standard'=>'thread', 'cat'=>'views');
+$settings['thread_view'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'views');
+$settings['board_view'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'views');
+$settings['mix_view'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'views');
+$settings['show_registered'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'views');
+$settings['show_posting_id'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'views');
+$settings['remember_userstandard'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'sessions');
+$settings['remember_userdata'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'sessions');
+$settings['remember_last_visit'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'sessions');
+$settings['all_views_direct'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'views');
+$settings['thread_depth_indent'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'15', 'cat'=>'views');
+$settings['thread_indent_mix'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'15', 'cat'=>'views');
+$settings['max_thread_indent_mix'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'300', 'cat'=>'views');
+$settings['thread_indent_mix_topic'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'15', 'cat'=>'views');
+$settings['max_thread_indent_mix_topic'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'500', 'cat'=>'views');
+$settings['empty_postings_possible'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'views');
+$settings['email_notification'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'general');
+$settings['user_edit'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'general');
+$settings['user_delete'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'general');
+$settings['show_if_edited'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'postings');
+$settings['dont_reg_edit_by_admin'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'postings');
+$settings['dont_reg_edit_by_mod'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'postings');
+$settings['edit_period'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'180', 'cat'=>'security');
+$settings['edit_delay'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'5', 'cat'=>'security');
+$settings['bbcode'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'postings');
+$settings['bbcode_img'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'enhanced');
+$settings['upload_images'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'enhanced');
+$settings['smilies'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'enhanced');
+$settings['autolink'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'enhanced');
+$settings['count_views'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'postings');
+$settings['provide_rssfeed'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'general');
+$settings['autologin'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'general');
+$settings['admin_mod_highlight'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'views');
+$settings['user_highlight'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'views');
+$settings['topics_per_page'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'40', 'cat'=>'views');
+$settings['users_per_page'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'40', 'cat'=>'views');
+$settings['answers_per_topic'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'20', 'cat'=>'views');
+$settings['search_results_per_page'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'40', 'cat'=>'views');
+$settings['name_maxlength'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'40', 'cat'=>'views');
+$settings['name_word_maxlength'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'25', 'cat'=>'views');
+$settings['email_maxlength'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'100', 'cat'=>'postings');
+$settings['hp_maxlength'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'200', 'cat'=>'postings');
+$settings['place_maxlength'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'40', 'cat'=>'postings');
+$settings['place_word_maxlength'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'25', 'cat'=>'postings');
+$settings['subject_maxlength'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'60', 'cat'=>'postings');
+$settings['subject_word_maxlength'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'25', 'cat'=>'postings');
+$settings['text_maxlength'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'7500', 'cat'=>'postings');
+$settings['profile_maxlength'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'5000', 'cat'=>'postings');
+$settings['signature_maxlength'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'255', 'cat'=>'postings');
+$settings['text_word_maxlength'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'70', 'cat'=>'postings');
+$settings['signature_separator'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'---', 'cat'=>'postings');
+$settings['quote_symbol'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'>', 'cat'=>'postings');
+$settings['count_users_online'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'views');
+$settings['last_reply_link'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'views');
+$settings['last_reply_name'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'views');
+$settings['time_difference'] = array('type'=>'array', 'poss_values'=>'function:hours', 'standard'=>'0', 'cat'=>'general');
+$settings['upload_max_img_size'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'60', 'cat'=>'enhanced');
+$settings['upload_max_img_width'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'600', 'cat'=>'enhanced');
+$settings['upload_max_img_height'] = array('type'=>'integer', 'poss_values'=>'', 'standard'=>'600', 'cat'=>'enhanced');
+$settings['mail_parameter'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'', 'cat'=>'general');
+$settings['forum_disabled'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'general');
+$settings['session_prefix'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'mlf_', 'cat'=>'general');
+$settings['version'] = '1.8', array('type'=>'string', 'poss_values'=>'', 'standard'=>'cat'=>'general');
+$settings['captcha_posting'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'security');
+$settings['captcha_contact'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'security');
+$settings['captcha_register'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'security');
+$settings['captcha_type'] = array('type'=>'array', 'poss_values'=>'0:captcha_type_math, 1:captcha_type_image', 'standard'=>'0', 'cat'=>'security');
+$settings['user_control_refresh'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'enhanced');
+#$settings['server_timezone'] = $server_tz;
 #$settings['user_control_css'] = 0;
 
 

@@ -525,4 +525,47 @@ else
 return $fname;
 } #End: processView2Filename
 
+
+
+/**
+ * counts the users which are online
+ *
+ * @param integer $user_online_period (in minutes, optional)
+ * @return
+ */
+function processSetUsersOnline($user_online_period = 10) {
+global $connid, $db_settings, $settings;
+
+$user_id = isset($_SESSION[$settings['session_prefix'].'user_id']) ? $_SESSION[$settings['session_prefix'].'user_id'] : 0;
+$ip = isset($_SESSION[$settings['session_prefix'].'user_id']) ? "uid_".$_SESSION[$settings['session_prefix'].'user_id'] : $_SERVER['REMOTE_ADDR'];
+$diff = time() - ($user_online_period * 60);
+
+@mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE time < ". $diff, $connid);
+
+list($is_online) = @mysql_fetch_row(@mysql_query("SELECT COUNT(*) FROM ". $db_settings['useronline_table'] ." WHERE ip= '". mysql_real_escape_string($ip) ."'", $connid));
+if ($is_online > 0) @mysql_query("UPDATE ". $db_settings['useronline_table'] ." SET time='". time() ."', user_id='". intval($user_id) ."' WHERE ip='". $ip ."'", $connid);
+else @mysql_query("INSERT INTO ". $db_settings['useronline_table'] ." SET time='". time() ."', ip='". $ip ."', user_id='". intval ($user_id)."'", $connid);
+
+} # End: processSetUsersOnline
+
+
+
+/**
+ * logs out a user
+ *
+ * @param string $forwardingURL
+ * @param string $message
+ */
+function processLogOutUser($url, $mess) {
+global $settings;
+$param = session_get_cookie_params();
+setcookie("auto_login", "", time() - 86401);
+setcookie("user_view", $settings['standard'], time() - 86401);
+setcookie("curr_view", $settings['standard'], time() - 86401);
+setcookie(session_name(), "", time() - 86401, $param["path"], $param["domain"], $param["secure"], $param["httponly"]);
+session_destroy();
+header("location: ".$settings['forum_address'].$url);
+die($mess);
+} # End: processLogOutUser
+
 ?>

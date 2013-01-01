@@ -102,7 +102,7 @@ else
 				}
 			} # End: search version number of old forum
 		# include files for the language wich is stored in the old settings
-		include("lang/".$oldSettings['language_file'] );
+		include("lang/".$oldSettings['language_file']);
 		include("lang/".$lang['additional_language_file']);
 		# the form was submitted
 		if (isset($_POST['form_submitted'])) {
@@ -144,6 +144,8 @@ else
 
 				$db_settings['usersettings_table'] = $_POST['table_prefix'].'usersettings';
 				$db_settings['us_templates_table'] = $_POST['table_prefix'].'fu_settings';
+				$db_settings['banned_ips_table'] = $_POST['table_prefix'].'banned_ips';
+				$db_settings['usersubscripts_table'] = $_POST['table_prefix'].'subscripts';
 				# content of db_settings.php
 				$SetCont  = "<?php\n";
 				$SetCont .= "\$db_settings['host'] = \"".$db_settings['host']."\";\n";
@@ -156,9 +158,11 @@ else
 				$SetCont .= "\$db_settings['userdata_table'] = \"".$db_settings['userdata_table']."\";\n";
 				$SetCont .= "\$db_settings['smilies_table'] = \"".$db_settings['smilies_table']."\";\n";
 				$SetCont .= "\$db_settings['banlists_table'] = \"".$db_settings['banlists_table']."\";\n";
+				$SetCont .= "\$db_settings['banned_ips_table'] = \"".$db_settings['banned_ips_table']."\";\n";
 				$SetCont .= "\$db_settings['useronline_table'] = \"".$db_settings['useronline_table']."\";\n";
 				$SetCont .= "\$db_settings['usersettings_table'] = \"".$db_settings['usersettings_table']."\";\n";
 				$SetCont .= "\$db_settings['us_templates_table'] = \"".$db_settings['us_templates_table']."\";\n";
+				$SetCont .= "\$db_settings['usersubscripts_table'] = \"".$db_settings['usersubscripts_table']."\";\n";
 				$SetCont .= "?>";
 				# Start: debug output
 #				$output .= '<pre>';
@@ -167,9 +171,9 @@ else
 				# End: debug output
 
 				$db_settings_file = @fopen("db_settings.php", "w") or $errors[] = str_replace("CHMOD",$chmod,$lang_add['no_writing_permission']);
-				flock($db_settings_file, 2);
+				flock($db_settings_file, LOCK_EX);
 				fwrite($db_settings_file, $SetCont);
-				flock($db_settings_file, 3);
+				flock($db_settings_file, LOCK_UN);
 				fclose($db_settings_file);
 				} # End: if (empty($errors) and empty($_POST['dont_overwrite_settings']))
 			# update procedure

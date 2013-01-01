@@ -153,7 +153,7 @@ else return false;
  * @return bool false
  */
 function get_category_ids($categories) {
-if($categories!=false)
+if($categories !== false)
 	{
 	while(list($key) = each($categories))
 		{
@@ -552,46 +552,6 @@ return $string;
 
 
 /**
- * counts the users which are online
- *
- * @param integer $user_online_period (in minutes, optional)
- * @return
- */
-function user_online($user_online_period = 10) {
-global $connid, $db_settings, $settings;
-
-if (isset($_SESSION[$settings['session_prefix'].'user_id']))
-	{
-	$user_id = $_SESSION[$settings['session_prefix'].'user_id'];
-	}
-else
-	{
-	$user_id = 0;
-	}
-$diff = time()-($user_online_period*60);
-
-if (isset($_SESSION[$settings['session_prefix'].'user_id']))
-	{
-	$ip = "uid_".$_SESSION[$settings['session_prefix'].'user_id'];
-	}
-else
-	{
-	$ip = $_SERVER['REMOTE_ADDR'];
-	}
-
-@mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE time < ".$diff, $connid);
-
-list($is_online) = @mysql_fetch_row(@mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE ip= '".mysql_real_escape_string($ip)."'", $connid));
-if ($is_online > 0) @mysql_query("UPDATE ".$db_settings['useronline_table']." SET time='".time()."', user_id='".$user_id."' WHERE ip='".$ip."'", $connid);
-else @mysql_query("INSERT INTO ".$db_settings['useronline_table']." SET time='".time()."', ip='".$ip."', user_id='".$user_id."'", $connid);
-
-#list($user_online) = @mysql_fetch_row(@mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table'], $connid));
-#return $user_online;
-} # End: user_online
-
-
-
-/**
  * displays the error messages
  *
  * @param array $errors
@@ -617,7 +577,7 @@ return $r;
  * 
  */
 function parse_template() {
-global $settings, $lang, $header, $additionalJS, $footer, $wo, $ao, $topnav, $subnav_1, $subnav_2, $footer_info_dump, $search, $show_postings, $counter;
+global $settings, $lang, $header, $cssLink, $additionalJS, $footer, $wo, $ao, $topnav, $subnav_1, $subnav_2, $footer_info_dump, $search, $show_postings, $counter;
 
 $template = implode("",file($settings['template']));
 
@@ -630,6 +590,7 @@ $title = isset($wo) ? $settings['forum_name']." - ".htmlspecialchars($wo) : $set
 $description = isset($wo) ? $settings['forum_name'].": ".htmlspecialchars($wo) : $settings['forum_name'];
 $template = str_replace("{TITLE}",$title,$template);
 $template = str_replace("{DESCRIPTION}",$description,$template);
+$template = str_replace("{LOAD-CSS}",$cssLink,$template);
 $template = str_replace('{ADD-JS}',$additionalJS,$template);
 $template = str_replace('{SCRIPT-VERSION-STRING}',$settings['version'],$template);
 $template = str_replace("{FORUM-NAME}",$settings['forum_name'],$template);

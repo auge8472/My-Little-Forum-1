@@ -121,9 +121,7 @@ if ($settings['access_for_users_only'] == 1
 	&& isset($_SESSION[$settings['session_prefix'].'user_name'])
 	|| $settings['access_for_users_only'] != 1)
 	{
-	# process the standard parameters
-	# and put them into the session
-	processStandardParametersGET();
+
 	if (empty($page)) $page = 0;
 	if (empty($order)) $order = "last_answer";
 	if (empty($descasc)) $descasc = "DESC";
@@ -281,7 +279,7 @@ if ($settings['access_for_users_only'] == 1
 	$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 	if ($settings['thread_view']==1)
 		{
-		$url = 'forum_entry.php?id='.$thread["tid"].$cat;
+		$url = 'forum_entry.php?view=thread&amp;id='.$thread["tid"];
 		$class = 'thread-view';
 		$title = outputLangDebugInAttributes($lang['thread_view_linktitle']);
 		$linktext = $lang['thread_view_linkname'];
@@ -289,7 +287,7 @@ if ($settings['access_for_users_only'] == 1
 		}
 	if ($settings['mix_view']==1)
 		{
-		$url = 'mix_entry.php?id='.$thread["tid"].'&amp;order='.$order.'&amp;descasc='.$descasc.$cat;
+		$url = 'mix_entry.php?view=mix&amp;id='.$thread["tid"];
 		$class = 'mix-view';
 		$title = outputLangDebugInAttributes($lang['mix_view_linktitle']);
 		$linktext = $lang['mix_view_linkname'];
@@ -334,7 +332,7 @@ if ($settings['access_for_users_only'] == 1
 			$answerlink = '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />'.$lang['thread_locked'].'</span>';
 			}
 		$ftext = ($thread["text"]=="") ? $lang['no_text'] : outputPreparePosting($thread["text"]);
-		$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator'].$signature, 'signature').'</div>'."\n" : '';
+		$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator']."\n".$signature, 'signature').'</div>'."\n" : '';
 		# generate HTML source code of posting
 		$posting = str_replace('{postingID}', 'p'.$thread['id'], $posting);
 		$posting = str_replace('{postingheadline}', $pHeadline, $posting);
@@ -409,7 +407,7 @@ if ($settings['access_for_users_only'] == 1
 			$answerlink = '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />'.$lang['thread_locked'].'</span>';
 			}
 		$ftext = ($entrydata["text"]=="") ? $lang['no_text'] : outputPreparePosting($entrydata["text"]);
-		$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator'].$signature, 'signature').'</div>'."\n" : '';
+		$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator']."\n".$signature, 'signature').'</div>'."\n" : '';
 		# generate HTML source code of posting
 		$posting = str_replace('{postingID}', 'p'.$entrydata['id'], $posting);
 		$posting = str_replace('{postingheadline}', $pHeadline, $posting);

@@ -90,21 +90,52 @@ if (basename($_SERVER['SCRIPT_NAME'])!='login.php'
 	}
 
 /**
+ * check for outdated IPs in the banlist
+ */
+$queryCheckBannedIPs = "DELETE FROM ". $db_settings['banned_ips_table'] ."
+WHERE DATE_SUB(NOW(), INTERVAL 60 DAY) > last_date
+AND requests < 3";
+@mysql_query($queryCheckBannedIPs, $connid);
+
+/**
  * look if IP is banned
  */
-$ip_result = mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'ips' LIMIT 1", $connid);
+$queryGetBannedIP = "SELECT
+INET_NTOA(ip) AS match_ip,
+last_date,
+requests
+FROM ". $db_settings['banned_ips_table'] ."
+WHERE ip = INET_ATON('". mysql_real_escape_string($_SERVER["REMOTE_ADDR"]) ."')";
+$ip_result = mysql_query($queryGetBannedIP, $connid);
 if (!$ip_result) die($lang['db_error']);
-$data = mysql_fetch_assoc($ip_result);
-mysql_free_result($ip_result);
 
-if (trim($data['list']) != '')
+if (mysql_num_rows($ip_result) > 0)
 	{
-	$banned_ips_array = explode(',', trim($data['list']));
-	if (in_array($_SERVER["REMOTE_ADDR"], $banned_ips_array))
+	$data = mysql_fetch_assoc($ip_result);
+	if ($data['match_ip'] == $_SERVER["REMOTE_ADDR"])
 		{
-		die($lang['ip_no_access']);
+		$querySetBannedIP = "UPDATE ". $db_settings['banned_ips_table'] ." SET
+		ip = ip,
+		last_date = NOW(),
+		requests = IF(requests > 4, requests, requests + 1)
+		WHERE ip = INET_ATON('". mysql_real_escape_string($_SERVER["REMOTE_ADDR"]) ."')";
+		$ips_result = mysql_query($querySetBannedIP, $connid);
+		if ($data['requests'] >= 5)
+			{
+			# give back http status 503, if there are equal or more than 5 requests from a spam-IP
+			header('HTTP/1.1 503 Service Unavailable');
+			header("Status: 503 Service Unavailable");
+			header('Retry-After: 600');
+			header('Connection: close');
+			exit();
+			}
+		else
+			{
+			processLogOutUser("login.php?msg=user_banned", $lang['ip_no_access']);
+			}
 		}
 	}
+mysql_free_result($ip_result);
 
 /**
  * look if user is banned:
@@ -120,10 +151,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_name']))
 		$banned_users_array = explode(',', mb_strtolower(trim($data['list'])));
 		if (in_array(mb_strtolower($_SESSION[$settings['session_prefix'].'user_name']),$banned_users_array) && $_SESSION[$settings['session_prefix'].'user_type']!='admin')
 			{
-			session_destroy();
-			setcookie("auto_login", "", 0);
-			header("location: ".$settings['forum_address']."login.php?msg=user_banned");
-			die($lang['user_banned']);
+			processLogOutUser("login.php?msg=user_banned", $lang['user_banned']);
 			}
 		}
 	}
@@ -154,11 +182,13 @@ if (empty($_SESSION[$settings['session_prefix']."user_id"])
 
 $last_visit = (isset($c_last_visit)) ? $c_last_visit[0] : time();
 
-if (isset($_GET['category'])) $category = intval($_GET['category']);
+# process the standard parameters
+# and put them into the session
+processStandardParametersGET();
+
 $categories = get_categories();
 $category_ids = get_category_ids($categories);
 if ($category_ids !== false) $category_ids_query = implode(", ", $category_ids);
-if (empty($category)) $category=0;
 
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $category_accession = category_accession();
 
@@ -191,12 +221,39 @@ else
 	$posting_count = 0;
 	}
 
+$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
+list($user_count) = mysql_fetch_row($count_result);
+
+if ($settings['count_users_online'] == 1)
+	{
+	processSetUsersOnline();
+	$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE user_id > 0", $connid);
+	list($useronline_count) = mysql_fetch_row($count_result);
+	$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE user_id = 0", $connid);
+	list($guestsonline_count) = mysql_fetch_row($count_result);
+	$counter = str_replace("[postings]", $posting_count, $lang['counter_uo']);
+	$counter = str_replace("[threads]", $thread_count, $counter);
+	$counter = str_replace("[users]", $user_count, $counter);
+	$counter = str_replace("[total_online]", $useronline_count+$guestsonline_count, $counter);
+	$counter = str_replace("[user_online]", $useronline_count, $counter);
+	$counter = str_replace("[guests_online]", $guestsonline_count, $counter);
+	}
+else
+	{
+	$counter = str_replace("[forum_name]", '<a href="'.$settings['forum_address'].'">'.$settings['forum_name'].'</a>', $lang['counter']);
+	$counter = str_replace("[contact]", '<a href="contact.php?forum_contact=true">'.$lang['contact_linkname'].'</a>', $counter);
+	$counter = str_replace("[postings]", $posting_count, $counter);
+	$counter = str_replace("[threads]", $thread_count, $counter);
+	$counter = str_replace("[users]", $user_count, $counter);
+	}
+mysql_free_result($count_result);
+
 $possViews = array();
 if ($settings['board_view'] == 1) $possViews[] = 'board';
 if ($settings['thread_view'] == 1) $possViews[] = 'thread';
 if ($settings['mix_view'] == 1) $possViews[] = 'mix';
 
-# look for the current used view
+# look for the currently used view
 if (isset($_GET['view']) and in_array($_GET['view'], $possViews))
 	{
 	$curr_view = $_GET['view'];
@@ -240,34 +297,14 @@ else
 		setcookie('curr_view', $curr_view, time()+(3600*24*30));
 		}
 	}
-
-$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
-list($user_count) = mysql_fetch_row($count_result);
-
-if ($settings['count_users_online'] == 1)
+$cssLink = '<link rel="stylesheet" type="text/css" href="style.css" media="all" />';
+if ((!empty($_SESSION[$settings['session_prefix'].'debug'])
+		and $_SESSION[$settings['session_prefix'].'debug'] == 'css')
+	and ($_SESSION[$settings['session_prefix'].'user_type'] == 'admin'
+		or $_SESSION[$settings['session_prefix'].'user_type'] == 'mod'))
 	{
-	user_online();
-	$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE user_id > 0", $connid);
-	list($useronline_count) = mysql_fetch_row($count_result);
-	$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE user_id = 0", $connid);
-	list($guestsonline_count) = mysql_fetch_row($count_result);
-	$counter = str_replace("[postings]", $posting_count, $lang['counter_uo']);
-	$counter = str_replace("[threads]", $thread_count, $counter);
-	$counter = str_replace("[users]", $user_count, $counter);
-	$counter = str_replace("[total_online]", $useronline_count+$guestsonline_count, $counter);
-	$counter = str_replace("[user_online]", $useronline_count, $counter);
-	$counter = str_replace("[guests_online]", $guestsonline_count, $counter);
+	$cssLink = '<link rel="stylesheet" type="text/css" href="data/test.css" media="all" />';
 	}
-else
-	{
-	$counter = str_replace("[forum_name]", '<a href="'.$settings['forum_address'].'">'.$settings['forum_name'].'</a>', $lang['counter']);
-	$counter = str_replace("[contact]", '<a href="contact.php?forum_contact=true">'.$lang['contact_linkname'].'</a>', $counter);
-	$counter = str_replace("[postings]", $posting_count, $counter);
-	$counter = str_replace("[threads]", $thread_count, $counter);
-	$counter = str_replace("[users]", $user_count, $counter);
-	}
-mysql_free_result($count_result);
-
 $postingPages = array('posting.php','user.php');
 $additionalJS = '';
 if (in_array(basename($_SERVER['SCRIPT_NAME']), $postingPages))
@@ -333,11 +370,11 @@ $time_difference = (isset($settings['time_difference'])) ? $settings['time_diffe
 
 if (isset($_SESSION[$settings['session_prefix'].'user_time_difference']))
 	{
-	$time_difference = $_SESSION[$settings['session_prefix'].'user_time_difference']+$time_difference;
+	$time_difference = $_SESSION[$settings['session_prefix'].'user_time_difference'] + $time_difference;
 	}
 else if (isset($_COOKIE['user_time_difference']))
 	{
-	$time_difference = $_COOKIE['user_time_difference']+$time_difference;
+	$time_difference = $_COOKIE['user_time_difference'] + $time_difference;
 	}
 
 ?>

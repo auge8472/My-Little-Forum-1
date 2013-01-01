@@ -3,7 +3,7 @@
 include_once('functions/include.install.php');
 
 $version = false;
-$table_prefix = 'forum_';
+$table_prefix = 'mlf1_';
 
 if (isset($_POST['language']))
 	{
@@ -56,10 +56,11 @@ if (isset($_POST['form_submitted']))
 		$db_settings['userdata_table'] = $_POST['table_prefix'].'userdata';
 		$db_settings['smilies_table'] = $_POST['table_prefix'].'smilies';
 		$db_settings['banlists_table'] = $_POST['table_prefix'].'banlists';
+		$db_settings['banned_ips_table'] = $_POST['table_prefix'].'banned_ips';
 		$db_settings['useronline_table'] = $_POST['table_prefix'].'useronline';
 		$db_settings['usersettings_table'] = $_POST['table_prefix'].'usersettings';
 		$db_settings['us_templates_table'] = $_POST['table_prefix'].'fu_settings';
-		$db_settings['usersubscripts_table'] = $_POST['table_prefix'].'forum_subscripts';
+		$db_settings['usersubscripts_table'] = $_POST['table_prefix'].'subscripts';
 		# content of db_settings.php
 		$fileSettingsContent  = "<?php\n";
 		$fileSettingsContent .= "\$db_settings['host'] = \"".$db_settings['host']."\";\n";
@@ -72,6 +73,7 @@ if (isset($_POST['form_submitted']))
 		$fileSettingsContent .= "\$db_settings['userdata_table'] = \"".$db_settings['userdata_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['smilies_table'] = \"".$db_settings['smilies_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['banlists_table'] = \"".$db_settings['banlists_table']."\";\n";
+		$fileSettingsContent .= "\$db_settings['banned_ips_table'] = \"".$db_settings['banned_ips_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['useronline_table'] = \"".$db_settings['useronline_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['usersettings_table'] = \"".$db_settings['usersettings_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['us_templates_table'] = \"".$db_settings['us_templates_table']."\";\n";
@@ -79,9 +81,9 @@ if (isset($_POST['form_submitted']))
 		$fileSettingsContent .= "?>";
 
 		$db_settings_file = @fopen("db_settings.php", "w") or $errors[] = str_replace("CHMOD",$chmod,$lang_add['no_writing_permission']);
-		flock($db_settings_file, 2);
+		flock($db_settings_file, LOCK_EX);
 		fwrite($db_settings_file, $fileSettingsContent);
-		flock($db_settings_file, 3);
+		flock($db_settings_file, LOCK_UN);
 		fclose($db_settings_file);
 		}
 
@@ -105,8 +107,12 @@ if (isset($_POST['form_submitted']))
 			# create settings table
 			$table["settings"]["name"] = $db_settings['settings_table'];
 			$table["settings"]["query"] = "CREATE TABLE ".$db_settings['settings_table']." (
-			name varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL default '',
-			value varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL default ''
+			name varchar(255) NOT NULL default '',
+			value varchar(255) NOT NULL default '',
+			type varchar(30) NOT NULL default '',
+			poss_values varchar(160) NOT NULL default '',
+			standard varchar(80) NOT NULL default '',
+			cat varchar(20) NOT NULL default ''
 			) ENGINE=MyISAM  DEFAULT CHARSET=utf8";
 			# create posting table
 			$table["postings"]["name"] = $db_settings['forum_table'];
@@ -198,6 +204,14 @@ if (isset($_POST['form_submitted']))
 			$table["banlists"]["query"] = "CREATE TABLE ".$db_settings['banlists_table']." (
 			name varchar(255) NOT NULL default '',
 			list text NOT NULL
+			) ENGINE=MyISAM  DEFAULT CHARSET=utf8";
+			# create banned IPs table
+			$table["banned_ips"]["name"] = $db_settings['banned_ips_table'];
+			$table["banned_ips"]["query"] = "CREATE TABLE ".$db_settings['banned_ips_table']." (
+			ip int(10) unsigned NOT NULL DEFAULT '0',
+			last_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+			requests smallint(2) unsigned NOT NULL DEFAULT '0',
+			UNIQUE KEY ip (ip)
 			) ENGINE=MyISAM  DEFAULT CHARSET=utf8";
 			#create useronline table
 			$table["useronline"]["name"] = $db_settings['useronline_table'];
@@ -301,13 +315,13 @@ if (isset($_POST['form_submitted']))
 		# insert banlists:
 		if (empty($errors))
 			{
-			$templateBanlist = array("users","ips","words");
+			$templateBanlist = array("users", "words");
 			foreach ($templateBanlist as $val)
 				{
-				$fillBanlist = "INSERT INTO ".$db_settings['banlists_table']." SET
-				name = '".mysql_real_escape_string($val)."',
+				$fillBanlist = "INSERT INTO ". $db_settings['banlists_table'] ." SET
+				name = '". mysql_real_escape_string($val) ."',
 				list = ''";
-				@mysql_query($fillBanlist, $connid) or $errors[] = str_replace("[setting]",$db_settings['banlists_table'],$lang_add['db_insert_settings_error'])." (MySQL: ".mysql_errno($connid)."<br />".mysql_error($connid).")";
+				@mysql_query($fillBanlist, $connid) or $errors[] = str_replace("[setting]",$db_settings['banlists_table'],$lang_add['db_insert_settings_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
 				# empty $fillBanlist for the next loop
 				$fillBanlist = "";
 				}
@@ -372,7 +386,7 @@ if (empty($installed))
 	{
 	if ($version !== false and !empty($version))
 		{
-		# forum is installed, give link to update.php
+		# forum is installed, provide the link to update.php
 		$output .= '<h2>'.$lang_add['installation_mode_update'].'</h2>'."\n";
 		$output .= '<p>'.$lang_add['select_version'].': '.$version['installed_version'].'</p>'."\n";
 		if (floatval(substr($version['installed_version'],0,2)) < 1.7)

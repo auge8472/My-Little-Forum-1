@@ -43,14 +43,11 @@ if ($settings['access_for_users_only'] == 1
 		{
 		setcookie("user_view","thread",time()+(3600*24*30));
 		}
-	# process the standard parameters
-	# and put them into the session
-	processStandardParametersGET();
 
 	if ($_SESSION[$settings['session_prefix'].'order'] != "time"
 	&& $_SESSION[$settings['session_prefix'].'order'] !="last_answer")
 		{
-		$threadOrder="time";
+		$threadOrder = "time";
 		}
 	else
 		{
@@ -79,7 +76,7 @@ if ($settings['access_for_users_only'] == 1
 		{
 		$threadsQueryWhere = " AND category = '". intval($_SESSION[$settings['session_prefix'].'category']) ."'";
 		# how many entries?
-		$pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '".mysql_real_escape_string($_SESSION[$settings['session_prefix'].'category'])."'", $connid);
+		$pid_result = mysql_query("SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE pid = 0 AND category = '". mysql_real_escape_string($_SESSION[$settings['session_prefix'].'category']) ."'", $connid);
 		list($thread_count) = mysql_fetch_row($pid_result);
 		mysql_free_result($pid_result);
 		}
@@ -87,26 +84,24 @@ if ($settings['access_for_users_only'] == 1
 		id,
 		pid,
 		tid
-		FROM ".$db_settings['forum_table']."
+		FROM ". $db_settings['forum_table'] ."
 		WHERE pid = 0 ". $threadsQueryWhere ."
-		ORDER BY fixed DESC, ".$threadOrder." DESC
-		LIMIT ".$ul.", ".$settings['topics_per_page'];
+		ORDER BY fixed DESC, ". $threadOrder ." DESC
+		LIMIT ". $ul .", ". $settings['topics_per_page'];
 	$result = mysql_query($getAllThreadsQuery, $connid);
 	if (!$result) die($lang['db_error']);
 
 	$subnav_1 = outputPostingLink($_SESSION[$settings['session_prefix'].'category']);
-	$pagination = ($_SESSION[$settings['session_prefix'].'page'] > 0) ? '&amp;page='.$_SESSION[$settings['session_prefix'].'page'] : '';
-	$cat = ($_SESSION[$settings['session_prefix'].'category'] > 0) ? '&amp;category='.intval($_SESSION[$settings['session_prefix'].'category']) : '';
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
-		$url  = 'index.php?update=1'. $pagination.$cat;
+		$url  = 'index.php?update=1';
 		$class = 'update-postings';
 		$title = outputLangDebugInAttributes($lang['update_time_linktitle']);
 		$linktext = $lang['update_time_linkname'];
 		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 		}
-	if ($order=="time")
+	if ($threadOrder == "time")
 		{
 		$url = 'forum.php?order=last_answer';
 		$title = outputLangDebugInAttributes($lang['order_linktitle_1']);
@@ -116,14 +111,12 @@ if ($settings['access_for_users_only'] == 1
 		$url = 'forum.php?order=time';
 		$title = outputLangDebugInAttributes($lang['order_linktitle_2']);
 		}
-	$url .= $cat;
 	$class = 'order-postings';
 	$linktext = $lang['order_linkname'];
 	$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
 	if ($settings['board_view'] == 1)
 		{
 		$url = 'board.php?view=board';
-		$url .= $cat;
 		$class = 'board-view';
 		$title = outputLangDebugInAttributes($lang['board_view_linktitle']);
 		$linktext = $lang['board_view_linkname'];
@@ -132,7 +125,6 @@ if ($settings['access_for_users_only'] == 1
 	if ($settings['mix_view']==1)
 		{
 		$url = 'mix.php?view=mix';
-		$url .= $cat;
 		$class = 'mix-view';
 		$title = outputLangDebugInAttributes($lang['mix_view_linktitle']);
 		$linktext = $lang['mix_view_linkname'];
@@ -154,9 +146,9 @@ if ($settings['access_for_users_only'] == 1
 			pid,
 			tid,
 			t1.user_id AS posters_id,
-			DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
-			UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS time,
-			UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS last_answer,
+			DATE_FORMAT(time + INTERVAL ". $time_difference ." HOUR, '". $lang['time_format_sql'] ."') AS Uhrzeit,
+			UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS time,
+			UNIX_TIMESTAMP(last_answer + INTERVAL ". $time_difference ." HOUR) AS last_answer,
 			name,
 			subject,
 			category,
@@ -164,11 +156,11 @@ if ($settings['access_for_users_only'] == 1
 			fixed,
 			(SELECT
 				user_type
-				FROM ".$db_settings['userdata_table']."
-				WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
-			FROM ".$db_settings['forum_table']." AS t1
-			WHERE tid = ".$zeile["tid"]."
-			ORDER BY time DESC";
+				FROM ". $db_settings['userdata_table'] ."
+				WHERE ". $db_settings['userdata_table'] .".user_id = posters_id) AS user_type
+			FROM ". $db_settings['forum_table'] ." AS t1
+			WHERE tid = ". intval($zeile["tid"]) ."
+			ORDER BY time ". $settings['thread_view_sorter'];
 			$thread_result = @mysql_query($threadQuery, $connid);
 
 			# put result into arrays:

@@ -199,7 +199,7 @@ $lang['more_smilies_linktitle'] =      "more smilies";
 $lang['thread_locked_error'] =         "Thread is locked.";
 $lang['fix_thread'] =                  "Sticky";
 $lang['edit_period_over'] =            "Entry cannot be edited any longer after [minutes] minutes.";
-$lang['error_not_accepted_word'] =     "the posting contains at least one not accepted word";
+$lang['error_not_accepted_word'] =     "the posting contains a not accepted word";
 
 // E-mail texts
 $lang['email_subject'] =               "Reply to a post";

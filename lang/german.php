@@ -195,7 +195,7 @@ $lang['more_smilies_linktitle'] =      "mehr Smilies";
 $lang['thread_locked_error'] =         "Thread ist gesperrt.";
 $lang['fix_thread'] =                  "Thread fixieren";
 $lang['edit_period_over'] =            "Posting kann nach [minutes] Minuten nicht mehr editiert werden.";
-$lang['error_not_accepted_word'] =     "das Posting enthält mindestens ein nicht akzeptiertes Wort";
+$lang['error_not_accepted_word'] =     "das Posting enthält ein nicht akzeptiertes Wort";
 
 // E-Mail-Texte
 $lang['email_subject'] =               "Antwort auf Posting";

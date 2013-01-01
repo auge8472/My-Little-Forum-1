@@ -23,12 +23,14 @@ include_once("inc.php");
 include_once("functions/include.prepare.php");
 
 
-if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_posting']==1)
+if (empty($_SESSION[$settings['session_prefix'].'user_id'])
+&& $settings['captcha_posting'] == 1)
 	{
 	require('captcha/captcha.php');
 	$captcha = new captcha();
 	}
 
+# category is given from the form via POST
 if (isset($_POST['category'])) $category = intval($_POST['category']);
 if (isset($_POST['p_category'])) $p_category = intval($_POST['p_category']);
 
@@ -37,7 +39,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 	{
 	$lockQuery = "SELECT user_lock
 	FROM ". $db_settings['userdata_table'] ."
-	WHERE user_id = '". $_SESSION[$settings['session_prefix'].'user_id'] ."'
+	WHERE user_id = '". intval($_SESSION[$settings['session_prefix'].'user_id']) ."'
 	LIMIT 1";
 	$lock_result = mysql_query($lockQuery, $connid);
 	if (!$lock_result) die($lang['db_error']);
@@ -46,8 +48,8 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 
 	if ($lock_result_array['user_lock'] > 0)
 		{
-		header("location: ".$settings['forum_address']."user.php");
-		die("<a href=\"user.php\">further...</a>");
+		header("location: ". $settings['forum_address'] ."user.php");
+		die('<a href="user.php">further...</a>');
 		}
 	} # End: if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 
@@ -75,21 +77,42 @@ or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
 	locked = '". $locker ."'
 	WHERE tid = ". intval($field['tid']);
 	@mysql_query($relockQuery, $connid);
-
-	if (empty($page)) $page = 0;
-	if (empty($order)) $order = "time";
-	if (empty($descasc)) $descasc = "DESC";
-	if (isset($_GET['view']))
+	if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
 		{
-		$header_href = ($view=="board") ? 'board_entry.php' : 'mix_entry.php';
-		$header_id = '?id='.$field['tid'];
+		if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'_entry.php?id='. $field['tid'];
+			}
+		}
+	else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+		{
+		if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php?id='. $field['tid'];
+			}
 		}
 	else
 		{
-		$header_href = 'forum_entry.php';
-		$header_id = '?id='.$id;
+		if ($setting['standard'] == 'thread')
+			{
+			$header_href = 'forum.php';
+			}
+		else
+			{
+			$header_href = $setting['standard'] .'.php';
+			}
 		}
-	header('location: '.$settings['forum_address'].$header_href.$header_id.'&page='.$page.'&order='.$order.'&descasc='.$descasc.'&category='.$category);
+	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['lock']) ...)
 
 
@@ -111,27 +134,48 @@ or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
 
 	$fixer = ($field['fixed']==0) ? 1 : 0;
 	$refixQuery = "UPDATE ". $db_settings['forum_table'] ." SET
-	time=time,
-	last_answer=last_answer,
-	edited=edited,
-	fixed='". $fixer ."'
+	time = time,
+	last_answer = last_answer,
+	edited = edited,
+	fixed = '". intval($fixer) ."'
 	WHERE tid = ". intval($field['tid']);
 	@mysql_query($refixQuery, $connid);
-
-	if (empty($page)) $page = 0;
-	if (empty($order)) $order = "time";
-	if (empty($descasc)) $descasc = "DESC";
-	if (isset($_GET['view']))
+	if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
 		{
-		$header_href = ($view=="board") ? 'board_entry.php' : 'mix_entry.php';
-		$header_id = '?id='.$field['tid'];
+		if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'_entry.php?id='. $field['tid'];
+			}
+		}
+	else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+		{
+		if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php?id='. $field['tid'];
+			}
 		}
 	else
 		{
-		$header_href = 'forum_entry.php';
-		$header_id = '?id='.$id;
+		if ($setting['standard'] == 'thread')
+			{
+			$header_href = 'forum.php';
+			}
+		else
+			{
+			$header_href = $setting['standard'] .'.php';
+			}
 		}
-	header('location: '.$settings['forum_address'].$header_href.$header_id.'&page='.$page.'&order='.$order.'&descasc='.$descasc.'&category='.$category);
+	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['fix']) ...)
 
 
@@ -155,7 +199,8 @@ and isset($_GET['back']))
 	else if ($_GET['subscribe'] == 'false')
 		{
 		$subscriptThread = processSearchThreadSubscriptions($_GET['back'], $_SESSION[$settings['session_prefix'].'user_id']);
-		if (($subscriptThread !== false and is_array($subscriptThread))
+		if (($subscriptThread !== false
+		and is_array($subscriptThread))
 		and ($subscriptThread['user_id'] == $_SESSION[$settings['session_prefix'].'user_id']
 		and $subscriptThread['tid'] == $_GET['back']))
 			{
@@ -167,21 +212,42 @@ and isset($_GET['back']))
 		}
 	if (!empty($querySubscribe)) @mysql_query($querySubscribe, $connid);
 	if (!empty($queryUnsubscribePost)) @mysql_query($queryUnsubscribePost, $connid);
-
-	if (empty($page)) $page = 0;
-	if (empty($order)) $order = "time";
-	if (empty($descasc)) $descasc = "DESC";
-	if (isset($_GET['view']))
+	if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
 		{
-		$header_href = ($view=="board") ? 'board_entry.php' : 'mix_entry.php';
-		$header_id = '?id='. intval($_GET['back']);
+		if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'_entry.php?id='.  intval($_GET['back']);
+			}
+		}
+	else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+		{
+		if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php?id='.  intval($_GET['back']);
+			}
 		}
 	else
 		{
-		$header_href = 'forum_entry.php';
-		$header_id = '?id='. intval($_GET['id']);
+		if ($setting['standard'] == 'thread')
+			{
+			$header_href = 'forum.php';
+			}
+		else
+			{
+			$header_href = $setting['standard'] .'.php';
+			}
 		}
-	header('location: '.$settings['forum_address'].$header_href.$header_id.'&page='.$page.'&order='.$order.'&descasc='.$descasc.'&category='.$category);
+	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['subscribe'] ...)
 
 
@@ -203,7 +269,7 @@ if (($settings['access_for_users_only'] == 1
 		# delete array for error messages
 		unset($errors);
 		unset($Thread);
-		if (empty($descasc)) $descasc="DESC";
+		if (empty($descasc)) $descasc = "DESC";
 		# safety: forbid editing of postings
 		$edit_authorization = 0;
 		# safety: forbid deletion of postings
@@ -212,7 +278,9 @@ if (($settings['access_for_users_only'] == 1
 		if (empty($action)) $action = "new";
 
 		# Falls editiert oder gelöscht werden soll, schauen, ob der User dazu berechtigt ist:
-		if ($action=="edit" || $action == "delete" || $action == "delete ok")
+		if ($action == "edit"
+		|| $action == "delete"
+		|| $action == "delete ok")
 			{
 			$userIdQuery = "SELECT user_id
 			FROM ". $db_settings['forum_table'] ."
@@ -493,7 +561,7 @@ if (($settings['access_for_users_only'] == 1
 								$updateLastAnswerQuery = "UPDATE ". $db_settings['forum_table'] ." SET
 								time = time,
 								last_answer = '". $field2['time'] ."'
-								WHERE tid=". intval($field['tid']);
+								WHERE tid = ". intval($field['tid']);
 								$update_result = mysql_query($updateLastAnswerQuery, $connid);
 								}
 							# delete message:
@@ -501,26 +569,42 @@ if (($settings['access_for_users_only'] == 1
 							WHERE id = ". intval($id);
 							$delete_result = mysql_query($deleteMessageQuery,$connid);
 							} # if ($feld["pid"] == 0) else
-
-						if (isset($page) && isset($order) && isset($category) && isset($descasc)) 
+						if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
+						and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
 							{
-							$qs  = "?page=".$page."&amp;order=".$order."&amp;descasc=".$descasc;
-							$qs .= ($category > 0) ? "&amp;category=".$category : '';
+							if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
+								{
+								$header_href = 'forum.php';
+								}
+							else
+								{
+								$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'.php';
+								}
+							}
+						else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+						and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+							{
+							if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+								{
+								$header_href = 'forum.php';
+								}
+							else
+								{
+								$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'.php';
+								}
 							}
 						else
 							{
-							$qs = "";
+							if ($setting['standard'] == 'thread')
+								{
+								$header_href = 'forum.php';
+								}
+							else
+								{
+								$header_href = $setting['standard'] .'.php';
+								}
 							}
-
-						if (isset($view))
-							{
-							$header_href = ($view=='board') ? 'board.php' : 'mix.php';
-							}
-						else
-							{
-							$header_href = 'forum.php';
-							}
-						header('location: '.$settings['forum_address'].$header_href.$qs);
+						header('location: '.$settings['forum_address'].$header_href);
 						die('<a href="'.$header_href.$qs.'">further...</a>');
 						}
 					else
@@ -552,7 +636,7 @@ if (($settings['access_for_users_only'] == 1
 						tid,
 						locked
 						FROM ". $db_settings['forum_table'] ."
-						WHERE id=". intval($id);
+						WHERE id = ". intval($id);
 						$tid_result = mysql_query($threadIdQuery, $connid);
 						if (!$tid_result) die($lang['db_error']);
 
@@ -627,7 +711,7 @@ if (($settings['access_for_users_only'] == 1
 			if ($uniqid_count > 0)
 				{
 				header("location: ".$settings['forum_address']."index.php");
-				die("<a href=\"index.php\">further...</a>");
+				die('<a href="index.php">further...</a>');
 				}
 
 			# check for not accepted words:
@@ -642,7 +726,7 @@ if (($settings['access_for_users_only'] == 1
 
 			if (trim($data['list']) != '')
 				{
-				$not_accepted_words = explode(',',trim($data['list']));
+				$not_accepted_words = explode(',', trim($data['list']));
 				foreach ($not_accepted_words as $not_accepted_word)
 					{
 					if ($not_accepted_word!=''
@@ -653,7 +737,7 @@ if (($settings['access_for_users_only'] == 1
 					|| preg_match("/".$not_accepted_word."/i",$hp)
 					|| preg_match("/".$not_accepted_word."/i",$place)))
 						{
-						$errors[] = $lang['error_not_accepted_word'];
+						$errors[] = $lang['error_not_accepted_word'] ." »". mb_strtoupper($not_accepted_word) ."«";
 						break;
 						}
 					}
@@ -674,14 +758,16 @@ if (($settings['access_for_users_only'] == 1
 				$field = mysql_fetch_assoc($result);
 				mysql_free_result($result);
 
-				if ($name != "" and mb_strtolower($field["user_name"]) == mb_strtolower($name))
+				if ($name != ""
+				and mb_strtolower($field["user_name"]) == mb_strtolower($name))
 					{
 					$lang['error_name_reserved'] = str_replace("[name]", htmlspecialchars($name), $lang['error_name_reserved']);
 					$errors[] = $lang['error_name_reserved'];
 					}
 				}
 			# check the given email address for format name@domain.tld
-			if (!empty($email) and !preg_match($validator['email'], $email)) 
+			if (!empty($email)
+			and !preg_match($validator['email'], $email))
 				{
 				$errors[] = $lang['error_email_wrong'];
 				}
@@ -739,7 +825,8 @@ if (($settings['access_for_users_only'] == 1
 				$errors[] = $lang['error_text_too_long'];
 				}
 			$nameLength = processCountCharsInWords($name, $settings['name_word_maxlength'], $lang['error_name_word_too_long']);
-			if (!empty($nameLength) and is_array($nameLength))
+			if (!empty($nameLength)
+			and is_array($nameLength))
 				{
 				foreach ($nameLength as $message)
 					{
@@ -747,7 +834,8 @@ if (($settings['access_for_users_only'] == 1
 					}
 				}
 			$placeLength = processCountCharsInWords($place, $settings['place_word_maxlength'], $lang['error_place_word_too_long']);
-			if (!empty($placeLength) and is_array($placeLength))
+			if (!empty($placeLength)
+			and is_array($placeLength))
 				{
 				foreach ($placeLength as $message)
 					{
@@ -755,7 +843,8 @@ if (($settings['access_for_users_only'] == 1
 					}
 				}
 			$subjectLength = processCountCharsInWords($subject, $settings['subject_word_maxlength'], $lang['error_subject_word_too_long']);
-			if (!empty($subjectLength) and is_array($subjectLength))
+			if (!empty($subjectLength)
+			and is_array($subjectLength))
 				{
 				foreach ($subjectLength as $message)
 					{
@@ -773,7 +862,8 @@ if (($settings['access_for_users_only'] == 1
 				$text_arr = preg_replace("#\[url\](.+?)\[/url\]#is", "", $text_arr);
 				$text_arr = preg_replace("#\[url=(.+?)\](.+?)\[/url\]#is", "\\2", $text_arr);
 				}
-			if ($settings['bbcode_img'] == 1 && $settings['bbcode_img'] == 1)
+			if ($settings['bbcode_img'] == 1
+			&& $settings['bbcode_img'] == 1)
 				{
 				$text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr);
 				$text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr);
@@ -784,7 +874,8 @@ if (($settings['access_for_users_only'] == 1
 				$text_arr = text_check_link($text_arr);
 				}
 			$textLength = processCountCharsInWords($text_arr, $settings['text_word_maxlength'], $lang['error_text_word_too_long']);
-			if (!empty($textLength) and is_array($textLength))
+			if (!empty($textLength)
+			and is_array($textLength))
 				{
 				foreach ($textLength as $message)
 					{
@@ -795,9 +886,9 @@ if (($settings['access_for_users_only'] == 1
 			# CAPTCHA check:
 			if (isset($_POST['save_entry'])
 			&& empty($_SESSION[$settings['session_prefix'].'user_id'])
-			&& $settings['captcha_posting']==1)
+			&& $settings['captcha_posting'] == 1)
 				{
-				if($settings['captcha_type']==1)
+				if($settings['captcha_type'] == 1)
 					{
 					if ($captcha->check_captcha($_SESSION['captcha_session'],$_POST['captcha_code'])!=TRUE) $errors[] = $lang['captcha_code_invalid'];
 					}
@@ -808,7 +899,9 @@ if (($settings['access_for_users_only'] == 1
 				}
 			# end check data
 
-			if (empty($errors) && empty($preview) && isset($_POST['save_entry']))
+			if (empty($errors)
+			&& empty($preview)
+			&& isset($_POST['save_entry']))
 				{
 				switch ($action)
 					{
@@ -985,7 +1078,7 @@ if (($settings['access_for_users_only'] == 1
 #						$emailsubject = strip_tags($lang['admin_email_subject']);
 						$emailsubject = str_replace("[subject]", $subject, $lang['admin_email_subject']);
 						// Schauen, wer eine E-Mail-Benachrichtigung will:
-						$en_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_posting_notify='1'", $connid);
+						$en_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_posting_notify = '1'", $connid);
 						if (!$en_result) die($lang['db_error']);
 						while ($admin_array = mysql_fetch_assoc($en_result))
 							{
@@ -1013,7 +1106,14 @@ if (($settings['access_for_users_only'] == 1
 						$further_tid = $neu["tid"];
 						$further_id = $neu["id"];
 						$further_page = 0;
-						if ($curr_view == 'board')
+						if ((!empty($_SESSION[$setting['session_prefix'] .'curr_view'])
+						and $_SESSION[$setting['session_prefix'] .'curr_view'] == 'board')
+						or (!empty($_SESSION[$setting['session_prefix'] .'user_view'])
+						and $_SESSION[$setting['session_prefix'] .'user_view'] == 'board')
+						or (!empty($_COOKIE['curr_view'])
+						and $_COOKIE['curr_view'] == 'board')
+						or (!empty($_COOKIE['user_view'])
+						and $_COOKIE['user_view'] == 'board'))
 							{
 							# there are more postings in thread than
 							# the setting for postings per page allows
@@ -1029,8 +1129,8 @@ if (($settings['access_for_users_only'] == 1
 						if ($edit_authorization == 1
 						&& ($field['locked'] == 0
 						|| (isset($_SESSION[$settings['session_prefix'].'user_type'])
-						&& ($_SESSION[$settings['session_prefix'].'user_type']=='admin'
-						|| $_SESSION[$settings['session_prefix'].'user_type']=='mod'))))
+						&& ($_SESSION[$settings['session_prefix'].'user_type'] == 'admin'
+						|| $_SESSION[$settings['session_prefix'].'user_type'] == 'mod'))))
 							{
 							if (!($settings['edit_period'] > 0
 							&& $field["edit_diff"] > $field["time"]
@@ -1048,24 +1148,24 @@ if (($settings['access_for_users_only'] == 1
 								subject,
 								text
 								FROM ". $db_settings['forum_table'] ."
-								WHERE id = ".intval($id);
+								WHERE id = ". intval($id);
 								$tid_result = mysql_query($editPostingQuery, $connid);
 								if (!$tid_result) die($lang['db_error']);
 								$field = mysql_fetch_assoc($tid_result);
 								mysql_free_result($tid_result);
 								# unnoticed editing for admins and mods:
 								if (isset($_SESSION[$settings['session_prefix'].'user_type'])
-								&& $_SESSION[$settings['session_prefix'].'user_type']=="admin"
-								&& $settings['dont_reg_edit_by_admin']==1
+								&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin"
+								&& $settings['dont_reg_edit_by_admin'] == 1
 								|| isset($_SESSION[$settings['session_prefix'].'user_type'])
-								&& $_SESSION[$settings['session_prefix'].'user_type']=="mod"
-								&& $settings['dont_reg_edit_by_mod']==1
+								&& $_SESSION[$settings['session_prefix'].'user_type'] == "mod"
+								&& $settings['dont_reg_edit_by_mod'] == 1
 								|| ($field['text'] == $text
 								&& $field['subject'] == $subject
 								&& $field['name'] == $name
 								&& isset($_SESSION[$settings['session_prefix'].'user_type'])
-								&& ($_SESSION[$settings['session_prefix'].'user_type']=="admin"
-								|| $_SESSION[$settings['session_prefix'].'user_type']=="mod")))
+								&& ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
+								|| $_SESSION[$settings['session_prefix'].'user_type'] == "mod")))
 									{
 									$updatePostingQuery = "UPDATE ". $db_settings['forum_table'] ." SET
 									time = time,
@@ -1107,7 +1207,7 @@ if (($settings['access_for_users_only'] == 1
 								time = time,
 								last_answer = last_answer,
 								edited = edited,
-								category=". intval($p_category) ."
+								category = ". intval($p_category) ."
 								WHERE tid = '". $field["tid"] ."'", $connid);
 
 								if (isset($back))
@@ -1116,7 +1216,14 @@ if (($settings['access_for_users_only'] == 1
 									}
 								$further_id = $id;
 								$further_page = 0;
-								if ($curr_view == 'board')
+								if ((!empty($_SESSION[$setting['session_prefix'] .'curr_view'])
+								and $_SESSION[$setting['session_prefix'] .'curr_view'] == 'board')
+								or (!empty($_SESSION[$setting['session_prefix'] .'user_view'])
+								and $_SESSION[$setting['session_prefix'] .'user_view'] == 'board')
+								or (!empty($_COOKIE['curr_view'])
+								and $_COOKIE['curr_view'] == 'board')
+								or (!empty($_COOKIE['user_view'])
+								and $_COOKIE['user_view'] == 'board'))
 									{
 									# there are more postings in thread than
 									# the setting for postings per page allows
@@ -1143,41 +1250,66 @@ if (($settings['access_for_users_only'] == 1
 				} # Ende "if (empty($errors) && empty($preview) && isset($_POST['save_entry']))"
 			else
 				{
-				$show="form";
+				$show = "form";
 				}
 
 			if (isset($refer))
 				{
-				if (isset($page) && isset($order) && isset($category) && isset($descasc))
+				$qs = '';
+				$qsl = '';
+				if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
+				and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
 					{
-					$qs  = '&page='.$page.'&order='.$order.'&descasc='.$descasc;
-					$qs .= ($category > 0) ? '&category='.$category : '';
-					}
-				else if (isset($category) and $category > 0)
-					{
-					$qs = '&category='.$category;
-					}
-				else
-					{
-					$qs = '';
-					}
-				if (!empty($view))
-					{
-					$header_href = ($view=='board') ? 'board_entry.php' : 'mix_entry.php';
-					$further = $further_tid;
-					if ($further_page > 0)
+					if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
 						{
-						$qs .= '&be_page='.$further_page;
+						$header_href = 'forum_entry.php';
+						$further = $further_id;
 						}
-					$qs .= '#p'.$further_id;
+					else
+						{
+						$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'_entry.php';
+						$further = $further_tid;
+						}
+					}
+				else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+				and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+					{
+					if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+						{
+						$header_href = 'forum_entry.php';
+						$further = $further_id;
+						}
+					else
+						{
+						$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php';
+						$further = $further_tid;
+						}
 					}
 				else
 					{
-					$header_href = 'forum_entry.php';
-					$further = $further_id;
+					if ($setting['standard'] == 'thread')
+						{
+						$header_href = 'forum_entry.php';
+						$further = $further_id;
+						}
+					else
+						{
+						$header_href = $setting['standard'] .'_entry.php';
+						$further = $further_tid;
+						}
 					}
-				header('location: '.$settings['forum_address'].$header_href.'?id='.$further.$qs);
-				die('<a href="'.$header_href.'?id='.$further.$qs.'">further...</a>');
+				if ($further_page > 0)
+					{
+					$qs .= '&be_page='.$further_page;
+					$qsl .= '&amp;be_page='.$further_page;
+					}
+				if ($header_href != 'forum_entry.php')
+					{
+					$qs .= '#p'.$further_id;
+					$qsl .= '#p'.$further_id;
+					}
+				header('location: '. $settings['forum_address'].$header_href .'?id='. $further.$qs);
+				die('<a href="'. $header_href .'?id='. $further.$qsl .'">further...</a>');
 				exit(); # Skript beenden
 				}
 			} # Ende "if (isset(form))"
@@ -1203,7 +1335,10 @@ if (($settings['access_for_users_only'] == 1
 			}
 
 		$subnav_1 = '';
-		if ($action == "new" && $id != 0 || $action == "edit" || $action == "delete")
+		if ($action == "new"
+		&& $id != 0
+		|| $action == "edit"
+		|| $action == "delete")
 			{
 			if (!empty($view))
 				{
@@ -1213,7 +1348,9 @@ if (($settings['access_for_users_only'] == 1
 				{
 				$subnav1_href1 = 'forum_entry.php';
 				}
-			if (isset($page) && isset($order) && isset($category))
+			if (isset($page)
+			&& isset($order)
+			&& isset($category))
 				{
 				$subnav1_query1  = '&amp;page='.$page.'&amp;order='.$order;
 				$subnav1_query1 .= ($category > 0) ? '&amp;category='.$category : '';
@@ -1242,7 +1379,8 @@ if (($settings['access_for_users_only'] == 1
 					}
 				}
 			}
-		else if ($action == "new" && $id == 0)
+		else if ($action == "new"
+		&& $id == 0)
 			{
 			if (!empty($view))
 				{
@@ -1253,17 +1391,18 @@ if (($settings['access_for_users_only'] == 1
 				$subnav1_href2 = 'forum.php';
 				}
 			$subnav_1 .= '<a class="textlink" href="'.$subnav1_href2;
-			$subnav_1 .= ($category > 0) ? '?category='.$category : '';
 			$subnav_1 .= '">'.$lang['back_to_overview_linkname'].'</a>';
 			}
 
 		parse_template();
 		echo $header;
+		echo outputDebugSession();
 
 		switch ($show)
 			{
 			case "form":
-				if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_posting']==1)
+				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
+				&& $settings['captcha_posting'] == 1)
 					{
 					if($settings['captcha_type']==1)
 						{
@@ -1297,11 +1436,12 @@ if (($settings['access_for_users_only'] == 1
 					echo errorMessages($errors);
 					}
 				# preview:
-				if (isset($preview) && empty($errors))
+				if (isset($preview)
+				&& empty($errors))
 					{
 					if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 						{
-						if ($action=="edit")
+						if ($action == "edit")
 							{
 							$pr_id = $p_user_id;
 							}
@@ -1328,7 +1468,7 @@ if (($settings['access_for_users_only'] == 1
 						$hide_email = $field["hide_email"];
 						$pr_hp = $field["user_hp"];
 						$pr_place = $field["user_place"];
-						$pr_signature = $field["signature"];
+						$prSignature = $field["signature"];
 						} # End: if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 					if (empty($pr_name)) $pr_name = $name;
 					if (empty($pr_email)) $pr_email = $email;
@@ -1337,7 +1477,9 @@ if (($settings['access_for_users_only'] == 1
 					if (empty($pr_place)) $pr_place = $place;
 					# current time:
 					list($pr_time) = mysql_fetch_row(mysql_query("SELECT UNIX_TIMESTAMP(NOW() + INTERVAL ".$time_difference." HOUR)"));
-					$mark['admin'] = false; $mark['mod'] = false; $mark['user'] = false;
+					$mark['admin'] = false;
+					$mark['mod'] = false;
+					$mark['user'] = false;
 					$entry = array();
 					$entry['hide_email'] = $hide_email;
 					$entry['id'] = 0;
@@ -1352,211 +1494,183 @@ if (($settings['access_for_users_only'] == 1
 					$entry["p_time"] = $pr_time;
 					$entry["edited_by"] = '';
 					$entry["e_time"] = '';
-					echo '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
-					if (isset($view))
+					# generate content of preview
+					if (isset($_SESSION[$settings['session_prefix'].'curr_view'])
+					and in_array($_SESSION[$settings['session_prefix'].'curr_view'], array('thread', 'mix', 'board')))
 						{
-						echo '<table class="normaltab">'."\n";
-						echo '<tr>'."\n";
-						echo '<td class="autorcell" rowspan="2" valign="top">'."\n";
-						echo outputAuthorInfo($mark, $entry, $page, $order, $view, $category);
-						echo '</td>'."\n";
-						echo '<td class="titlecell"><h2>'.htmlspecialchars($subject).'</h2></td>'."\n";
-						echo '</tr><tr>';
-						echo '<td class="postingcell" valign="top">';
-						if ($text == "")
-							{
-							echo $lang['no_text'];
-							}
-						else
-							{
-							$pr_text = $text;
-#							$pr_text = htmlspecialchars($pr_text);
-#							$pr_text = nl2br($pr_text);
-							if ($settings['autolink'] == 1)
-								{
-								$pr_text = make_link($pr_text);
-								}
-							if ($settings['bbcode'] == 1)
-								{
-								$pr_text = bbcode($pr_text);
-								}
-							if ($settings['smilies'] == 1)
-								{
-								$pr_text = smilies($pr_text);
-								}
-							$pr_text = zitat($pr_text);
-							echo '<div class="postingboard">'.$pr_text.'</div>'."\n";
-							}
-						if ($show_signature == 1 && $pr_signature != "")
-							{
-							$pr_signature = $settings['signature_separator'].$pr_signature;
-#							$pr_signature = htmlspecialchars($pr_signature);
-#							$pr_signature = nl2br($pr_signature);
-							if ($settings['autolink'] == 1)
-								{
-								$pr_signature = make_link($pr_signature);
-								}
-							if ($settings['bbcode'] == 1)
-								{
-								$pr_signature = bbcode($pr_signature);
-								}
-							if ($settings['smilies'] == 1)
-								{
-								$pr_signature = smilies($pr_signature);
-								}
-							echo '<div class="signature">'.$pr_signature.'</div>'."\n";
-							}
-						echo '</td>'."\n";
-						echo '</tr>'."\n";
-						echo '</table>'."\n";
-						} # End: if (isset($view))
+						$prTemplate = file_get_contents('data/templates/posting.'. $_SESSION[$settings['session_prefix'].'curr_view'] .'.html');
+						$isView = $_SESSION[$settings['session_prefix'].'curr_view'];
+						}
+					else if (isset($_SESSION[$settings['session_prefix'].'user_view'])
+					and in_array($_SESSION[$settings['session_prefix'].'user_view'], array('thread', 'mix', 'board')))
+						{
+						$prTemplate = file_get_contents('data/templates/posting.'. $_SESSION[$settings['session_prefix'].'user_view'] .'.html');
+						$isView = $_SESSION[$settings['session_prefix'].'user_view'];
+						}
+					else if (isset($_COOKIE['curr_view'])
+					and in_array($_COOKIE['curr_view'], array('thread', 'mix', 'board')))
+						{
+						$prTemplate = file_get_contents('data/templates/posting.'. $_COOKIE['curr_view'] .'.html');
+						$isView = $_COOKIE['curr_view'];
+						}
+					else if (isset($_COOKIE['user_view'])
+					and in_array($_COOKIE['user_view'], array('thread', 'mix', 'board')))
+						{
+						$prTemplate = file_get_contents('data/templates/posting.'. $_COOKIE['user_view'] .'.html');
+						$isView = $_COOKIE['user_view'];
+						}
 					else
 						{
-						echo '<div class="preview">'."\n";
-						echo '<h2 class="postingheadline">'.htmlspecialchars($subject).'</h2>'."\n";
-						echo outputAuthorInfo($mark, $entry, $page, $order, 'forum', $category);
-						if ($text == "")
-							{
-							echo $lang['no_text'];
-							}
-						else
-							{
-							$pr_text = $text;
-#							$pr_text = htmlspecialchars($pr_text);
-#							$pr_text = nl2br($pr_text);
-							if ($settings['autolink'] == 1)
-								{
-								$pr_text = make_link($pr_text);
-								}
-							if ($settings['bbcode'] == 1)
-								{
-								$pr_text = bbcode($pr_text);
-								}
-							if ($settings['smilies'] == 1)
-								{
-								$pr_text = smilies($pr_text);
-								}
-							$pr_text = zitat($pr_text);
-							echo '<div class="posting">'.$pr_text.'</div>'."\n";
-							} # End: if ($text == "") else
-						if ($show_signature == 1 && $pr_signature != "")
-							{
-							$pr_signature = $settings['signature_separator'].$pr_signature;
-#							$pr_signature = htmlspecialchars($pr_signature);
-#							$pr_signature = nl2br($pr_signature);
-							if ($settings['autolink'] == 1)
-								{
-								$pr_signature = make_link($pr_signature);
-								}
-							if ($settings['bbcode'] == 1)
-								{
-								$pr_signature = bbcode($pr_signature);
-								}
-							if ($settings['smilies'] == 1)
-								{
-								$pr_signature = smilies($pr_signature);
-								}
-							echo '<div class="signature">'.$pr_signature.'</div>'."\n";
-							}
-						echo '</div>'."\n";
+						$prTemplate = file_get_contents('data/templates/posting.'. $settings['standard'] .'.html');
+						$isView = $settings['standard'];
 						}
+					$prAuthorinfo =  outputAuthorInfo($mark, $entry, $page, $order, $view, $category);
+					$prSubject = htmlspecialchars($subject);
+					if ($text == "")
+						{
+						$prText = $lang['no_text'];
+						}
+					else
+						{
+						$prText = $text;
+#						$prText = htmlspecialchars($prText);
+#						$prText = nl2br($prText);
+						$prText = ($settings['autolink'] == 1) ? make_link($prText) : $prText;
+						$prText = ($settings['bbcode'] == 1) ? bbcode($prText) : $prText;
+						$prText = ($settings['smilies'] == 1) ? smilies($prText) : $prText;
+						$prText = zitat($prText);
+						}
+					if ($show_signature == 1
+					&& $prSignature != "")
+						{
+						$prSignature = $settings['signature_separator']."\n".$prSignature;
+#						$prSignature = htmlspecialchars($prSignature);
+#						$prSignature = nl2br($prSignature);
+						$prSignature = ($settings['autolink'] == 1) ? make_link($prSignature) : $prSignature;
+						$prSignature = ($settings['bbcode'] == 1) ? bbcode($prSignature) : $prSignature;
+						$prSignature = ($settings['smilies'] == 1) ? smilies($prSignature) : $prSignature;
+						$prSignature = '<div class="signature">'.$prSignature.'</div>'."\n";
+						}
+					else
+						{
+						$prSignature = '';
+						}
+					$prThreadHeadline = ($isView == 'thread') ? $lang['whole_thread_marking'] : '';
+					$prThread = ($isView == 'thread') ? '...' : '';
+					$prTemplate = str_replace('{postingheadline}', $prSubject, $prTemplate);
+					$prTemplate = str_replace('{authorinfo}', $prAuthorinfo, $prTemplate);
+					$prTemplate = str_replace('{editmenu}', '', $prTemplate);
+					$prTemplate = str_replace('{answer-locked}', '', $prTemplate);
+					$prTemplate = str_replace('{posting}', $prText, $prTemplate);
+					$prTemplate = str_replace('{signature}', $prSignature, $prTemplate);
+					$prTemplate = str_replace('{threadheadline}', $prThreadHeadline, $prTemplate);
+					$prTemplate = str_replace('{thread}', $prThread, $prTemplate);
+					$prTemplate = str_replace('{postingID}', $entry['user_id'], $prTemplate);
+					$prTemplate = ($isView == 'board') ? '<table class="normaltab">'. $prTemplate .'</table>' : $prTemplate;
+#					echo '<pre>'. print_r(htmlspecialchars($prTemplate), true) .'</pre>';
+					echo '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
+					echo $prTemplate;
+					echo '<hr class="entryline" />'."\n";
 					} # if (isset($preview) && empty($errors))
-				# Ende Vorschau
+				# End preview
 				echo '<form action="posting.php" method="post" id="entryform" accept-charset="UTF-8">'."\n";
-				if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_posting']==1)
+				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
+				&& $settings['captcha_posting'] == 1)
 					{
-					echo '<input type="hidden" name="'.session_name().'" value="'.session_id().'" />'."\n";
+					echo '<input type="hidden" name="'. session_name() .'" value="'. session_id() .'" />'."\n";
 					}
 				echo '<input type="hidden" name="form" value="true" />'."\n";
-				echo '<input type="hidden" name="id" value="'.intval($id).'" />'."\n";
-				echo ($action == "edit") ? '<input type="hidden" name="pid" value="'.intval($pid).'" />'."\n" : '';
-				echo '<input type="hidden" name="uniqid" value="'.uniqid("").'" />'."\n";
-				echo '<input type="hidden" name="action" value="'.htmlspecialchars($action).'" />'."\n";
-				echo (isset($p_user_id)) ? '<input type="hidden" name="p_user_id" value="'.$p_user_id.'" />'."\n" : '';
-				echo (isset($aname)) ? '<input type="hidden" name="aname" value="'.htmlspecialchars($aname).'" />'."\n" : '';
-				echo (isset($view)) ? '<input type="hidden" name="view" value="'.$view.'" />'."\n" : '';
-				echo (isset($back)) ? '<input type="hidden" name="back" value="'.$back.'" />'."\n" : '';
-				echo (isset($thema)) ? '<input type="hidden" name="thema" value="'.$thema.'" />'."\n" : '';
-				echo (isset($page)) ? '<input type="hidden" name="page" value="'.$page.'" />'."\n" : '';
-				echo (isset($order)) ? '<input type="hidden" name="order" value="'.$order.'" />'."\n" : '';
-				echo (isset($descasc)) ? '<input type="hidden" name="descasc" value="'.$descasc.'" />'."\n" : '';
-				echo (isset($category)) ? '<input type="hidden" name="category" value="'.$category.'" />'."\n" : '';
+				echo '<input type="hidden" name="id" value="'. intval($id) .'" />'."\n";
+				echo ($action == "edit") ? '<input type="hidden" name="pid" value="'. intval($pid) .'" />'."\n" : '';
+				echo '<input type="hidden" name="uniqid" value="'. uniqid("") .'" />'."\n";
+				echo '<input type="hidden" name="action" value="'. htmlspecialchars($action) .'" />'."\n";
+				echo (isset($p_user_id)) ? '<input type="hidden" name="p_user_id" value="'. $p_user_id .'" />'."\n" : '';
+				echo (isset($aname)) ? '<input type="hidden" name="aname" value="'. htmlspecialchars($aname) .'" />'."\n" : '';
+				echo (isset($back)) ? '<input type="hidden" name="back" value="'. $back .'" />'."\n" : '';
+				echo (isset($thema)) ? '<input type="hidden" name="thema" value="'. $thema .'" />'."\n" : '';
 				echo '<table class="normal">'."\n";
 				# Formularfelder für unbekannte User bzw. wenn
 				# Posting unbekannter User editiert wird:
-				if (!isset($_SESSION[$settings['session_prefix'].'user_id']) or $action == "edit" && $p_user_id == 0)
+				if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
+				or $action == "edit"
+				&& $p_user_id == 0)
 					{
 					echo '<tr>'."\n";
-					echo '<td><label for="name">'.$lang['name_marking'].'</label"></td>'."\n";
+					echo '<td><label for="name">'. $lang['name_marking'] .'</label"></td>'."\n";
 					echo '<td><input type="text" size="40" name="name" id="name" value="';
 					echo (isset($name)) ? htmlspecialchars($name) : '';
-					echo '" maxlength="'.$settings['name_maxlength'].'" /></td>'."\n";
+					echo '" maxlength="'. $settings['name_maxlength'] .'" /></td>'."\n";
 					echo '</tr><tr>'."\n";
-					echo '<td><label for="email">'.$lang['email_marking'].'</label></td>'."\n";
+					echo '<td><label for="email">'. $lang['email_marking'] .'</label></td>'."\n";
 					echo '<td><input type="text" size="40" name="email" id="email" value="';
 					echo (isset($email)) ? htmlspecialchars($email) : '';
-					echo '" maxlength="'.$settings['email_maxlength'].'" />&nbsp;';
-					echo '<span class="xsmall">'.$lang['optional_marking'].'</span></td>'."\n";
+					echo '" maxlength="'. $settings['email_maxlength'] .'" />&nbsp;';
+					echo '<span class="xsmall">'. $lang['optional_marking'] .'</span></td>'."\n";
 					echo '</tr><tr>'."\n";
-					echo '<td><label for="hp">'.$lang['hp_marking'].'</label></td>'."\n";
+					echo '<td><label for="hp">'. $lang['hp_marking'] .'</label></td>'."\n";
 					echo '<td><input type="text" size="40" name="hp" id="hp" value="';
 					echo (isset($hp)) ? htmlspecialchars($hp) : '';
-					echo '" maxlength="'.$settings['hp_maxlength'].'&nbsp;';
-					echo '<span class="xsmall">'.$lang['optional_marking'].'</span></td>'."\n";
+					echo '" maxlength="'. $settings['hp_maxlength'] .'&nbsp;';
+					echo '<span class="xsmall">'. $lang['optional_marking'] .'</span></td>'."\n";
 					echo '</tr><tr>'."\n";
-					echo '<td><label for="place">'.$lang['place_marking'].'</label></td>'."\n";
+					echo '<td><label for="place">'. $lang['place_marking'] .'</label></td>'."\n";
 					echo '<td><input type="text" size="40" name="place" id="place" value="';
 					echo (isset($place)) ? htmlspecialchars($place) : '';
-					echo '" maxlength="'.$settings['place_maxlength'].'" />&nbsp;';
-					echo '<span class="xsmall">'.$lang['optional_marking'].'</span></td>'."\n";
+					echo '" maxlength="'. $settings['place_maxlength'] .'" />&nbsp;';
+					echo '<span class="xsmall">'. $lang['optional_marking'] .'</span></td>'."\n";
 					echo '</tr>';
-					if ($settings['remember_userdata'] == 1 && !isset($_SESSION[$settings['session_prefix'].'user_id']))
+					if ($settings['remember_userdata'] == 1
+					&& !isset($_SESSION[$settings['session_prefix'].'user_id']))
 						{
 						echo '<tr>'."\n";
 						echo '<td>&nbsp;</td><td><span class="small"><input type="checkbox" name="setcookie" value="1"';
 						echo (isset($setcookie) && $setcookie == 1) ? ' checked="checked"' : '';
-						echo ' />&nbsp;'.$lang['remember_userdata_cbm'];
+						echo ' />&nbsp;'. $lang['remember_userdata_cbm'];
 						if (isset($_COOKIE['user_name'])
 						|| isset($_COOKIE['user_email'])
 						or isset($_COOKIE['user_hp'])
 						or isset($_COOKIE['user_hp']))
 							{
 							echo '&nbsp;&nbsp;&nbsp;<a onclick="javascript:createPopup(this.href, 200, 150); return false;"';
-							echo ' href="delete_cookie.php" title="'.outputLangDebugInAttributes($lang['delete_cookies_linktitle']).'"><img border="0"';
-							echo ' src="img/dc.png" name="dc" alt="" width="12" height="9">'.$lang['delete_cookies_linkname'].'</a>';
+							echo ' href="delete_cookie.php" title="'. outputLangDebugInAttributes($lang['delete_cookies_linktitle']) .'"><img border="0"';
+							echo ' src="img/dc.png" name="dc" alt="" width="12" height="9">'. $lang['delete_cookies_linkname'] .'</a>';
 							}
 						echo '</span></td>'."\n";
 						echo '</tr>';
 						}
 					}
-				if ($categories != false)
+				if ($categories !== false)
 					{
 					echo '<tr>'."\n";
-					echo '<td><label for="p_category">'.$lang['category_marking'].'</label></td>'."\n";
+					echo '<td><label for="p_category">'. $lang['category_marking'] .'</label></td>'."\n";
 					echo '<td><select size="1" name="p_category" id="p_category">'."\n";
-					if (empty($id) || $id == 0 || $action=="edit" && isset($pid) && $pid == 0)
+					if (empty($id)
+					|| $id == 0
+					|| $action=="edit"
+					&& isset($pid)
+					&& $pid == 0)
 						{
 						while (list($key, $val) = each($categories))
 							{
-							if ($key!=0)
+							if ($key != 0)
 								{
-								echo '<option value="'.$key.'"';
-								if ((isset($category)
-								&& $category!=0
-								&& $key==$category
+								echo '<option value="'. $key .'"';
+								if ((isset($_SESSION[$settings['session_prefix'].'category'])
+								&& $_SESSION[$settings['session_prefix'].'category'] > 0
+								&& $key == $_SESSION[$settings['session_prefix'].'category']
 								&& empty($p_category))
 								|| (isset($p_category)
-								&& $key==$p_category))
+								&& $key == $p_category))
 									{
 									echo ' selected="selected"';
 									}
-								echo '>'.htmlspecialchars($val).'</option>'."\n";
+								echo '>'. htmlspecialchars($val) .'</option>'."\n";
 								}
 							}
 						}
 					else
 						{
-						echo '<option value="'.$p_category.'">';
+						echo '<option value="'. $p_category .'">';
 						if (isset($categories[$p_category]))
 							{
 							echo $categories[$p_category];
@@ -1567,15 +1681,16 @@ if (($settings['access_for_users_only'] == 1
 					echo '</tr>';
 					}
 				echo '<tr>'."\n";
-				echo '<td><label for="subject">'.$lang['subject_marking'].'</label></td>'."\n";
+				echo '<td><label for="subject">'. $lang['subject_marking'] .'</label></td>'."\n";
 				echo '<td><input type="text" size="50" name="subject" id="subject" value="';
 				echo (isset($subject)) ? htmlspecialchars($subject) : '';
-				echo '" maxlength="'.$settings['subject_maxlength'].'" /></td>'."\n";
+				echo '" maxlength="'. $settings['subject_maxlength'] .'" /></td>'."\n";
 				echo '</tr><tr>'."\n";
-				echo '<td colspan="2"><label for="text">'.$lang['text_marking'].'</label>';
-				if ($action == "new" && $id != 0)
+				echo '<td colspan="2"><label for="text">'. $lang['text_marking'] .'</label>';
+				if ($action == "new"
+				&& $id != 0)
 					{
-					echo '&nbsp;&nbsp;<span id="delete-text" class="small">'.$lang['delete_quoted_text'].'</span>';
+					echo '&nbsp;&nbsp;<span id="delete-text" class="small">'. $lang['delete_quoted_text'] .'</span>';
 					}
 				echo '</td>'."\n";
 				echo '</tr><tr>'."\n";
@@ -1589,20 +1704,21 @@ if (($settings['access_for_users_only'] == 1
 					}
 				echo '</textarea>'."\n";
 				echo '</td>'."\n";
-				echo '<td id="buttonspace">'.$lang['bbcode_marking_user'].'</td>'."\n";
+				echo '<td id="buttonspace">'. $lang['bbcode_marking_user'] .'</td>'."\n";
 				echo '</tr>'."\n".'</table>'."\n";
 				echo '</td>'."\n";
 				echo '</tr>'."\n";
 				if ((isset($_SESSION[$settings['session_prefix'].'user_id'])
 				&& $action=="new")
 				|| (isset($_SESSION[$settings['session_prefix'].'user_id'])
-				&& $action=="edit" && $p_user_id > 0))
+				&& $action=="edit"
+				&& $p_user_id > 0))
 					{
 					echo '<tr>'."\n";
 					echo '<td colspan="2"><label for="show_signature"><input type="checkbox"';
 					echo ' name="show_signature" id="show_signature" value="1"';
-					echo (isset($show_signature) && $show_signature==1) ? 'checked="checked"' : '';
-					echo ' />&nbsp;'.$lang['show_signature_cbm'].'</label></td>'."\n";
+					echo (isset($show_signature) && $show_signature==1) ? ' checked="checked"' : '';
+					echo ' />&nbsp;'. $lang['show_signature_cbm'] .'</label></td>'."\n";
 					echo '</tr>';
 					}
 				if ($settings['email_notification'] == 1)
@@ -1610,8 +1726,8 @@ if (($settings['access_for_users_only'] == 1
 					echo '<tr>'."\n";
 					echo '<td colspan="2"><label for="email_notify"><input type="checkbox"';
 					echo ' name="email_notify" id="email_notify" value="1"';
-					echo (isset($email_notify) && $email_notify==1) ? 'checked="checked"' : '';
-					echo ' />&nbsp;'.$lang['email_notification_cbm'].'</label></td>'."\n";
+					echo (isset($email_notify) && $email_notify == 1) ? ' checked="checked"' : '';
+					echo ' />&nbsp;'. $lang['email_notification_cbm'] .'</label></td>'."\n";
 					echo '</tr>';
 					}
 				else
@@ -1621,27 +1737,32 @@ if (($settings['access_for_users_only'] == 1
 				if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 				&& ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
 				|| $_SESSION[$settings['session_prefix'].'user_type'] == "mod")
-				&& (empty($id) || $id == 0 || $action=="edit" && isset($pid) && $pid == 0))
+				&& (empty($id)
+				|| $id == 0
+				|| $action=="edit"
+				&& isset($pid)
+				&& $pid == 0))
 					{
 					echo '<tr>'."\n";
 					echo '<td colspan="2"><label for="fixed"><input type="checkbox"';
 					echo ' name="fixed" id="fixed" value="1"';
-					echo (isset($fixed) && $fixed==1) ? 'checked="checked"' : '';
-					echo ' />&nbsp;'.$lang['fix_thread'].'</label></td>'."\n";
+					echo (isset($fixed) && $fixed == 1) ? ' checked="checked"' : '';
+					echo ' />&nbsp;'. $lang['fix_thread'] .'</label></td>'."\n";
 					echo '</tr>';
 					}
-				if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_posting']==1)
+				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
+				&& $settings['captcha_posting'] == 1)
 					{
 					echo '<tr>'."\n";
-					echo '<td colspan="2"><b>'.$lang['captcha_marking'].'</b></td>'."\n";
+					echo '<td colspan="2"><b>'. $lang['captcha_marking'] .'</b></td>'."\n";
 					echo '</tr>';
-					if($settings['captcha_type']==1)
+					if ($settings['captcha_type'] == 1)
 						{
 						echo '<tr>'."\n";
 						echo '<td colspan="2"><img class="captcha" src="captcha/captcha_image.php?';
-						echo SID.'" alt="'.outputLangDebugInAttributes($lang['captcha_image_alt']).'" width="180" height="40"/></td>'."\n";
+						echo SID.'" alt="'. outputLangDebugInAttributes($lang['captcha_image_alt']) .'" width="180" height="40"/></td>'."\n";
 						echo '</tr><tr>'."\n";
-						echo '<td colspan="2">'.$lang['captcha_expl_image'].'</td>'."\n";
+						echo '<td colspan="2">'. $lang['captcha_expl_image'] .'</td>'."\n";
 						echo '</tr><tr>'."\n";
 						echo '<td colspan="2"><input type="text" name="captcha_code" value="" size="10" /></td>'."\n";
 						echo '</tr>';
@@ -1649,51 +1770,48 @@ if (($settings['access_for_users_only'] == 1
 					else
 						{
 						echo '<tr>'."\n";
-						echo '<td colspan="2">'.$lang['captcha_expl_math'].'</td>'."\n";
+						echo '<td colspan="2">'. $lang['captcha_expl_math'] .'</td>'."\n";
 						echo '</tr><tr>'."\n";
-						echo '<td colspan="2">'.$_SESSION['captcha_session'][0].' + '.$_SESSION['captcha_session'][1].' = ';
+						echo '<td colspan="2">'. $_SESSION['captcha_session'][0] .' + '. $_SESSION['captcha_session'][1] .' = ';
 						echo '<input type="text" name="captcha_code" value="" size="5" /></td>'."\n";
 						echo '</tr>';
 						}
 					}
 				echo '<tr>'."\n";
 				echo '<td colspan="2"><input type="submit" name="save_entry" value="';
-				echo outputLangDebugInAttributes($lang['submit_button']).'" title="'.outputLangDebugInAttributes($lang['submit_button_title']).'" />&nbsp;';
+				echo outputLangDebugInAttributes($lang['submit_button']) .'" title="'. outputLangDebugInAttributes($lang['submit_button_title']) .'" />&nbsp;';
 				echo '<input type="submit" name="preview" value="';
-				echo outputLangDebugInAttributes($lang['preview_button']).'" title="'.outputLangDebugInAttributes($lang['preview_button_title']).'" />&nbsp;';
-				echo '<input type="reset" value="'.outputLangDebugInAttributes($lang['reset_button']).'" title="'.outputLangDebugInAttributes($lang['reset_button_title']).'" /></td>'."\n";
+				echo outputLangDebugInAttributes($lang['preview_button']) .'" title="'. outputLangDebugInAttributes($lang['preview_button_title']) .'" />&nbsp;';
+				echo '<input type="reset" value="'. outputLangDebugInAttributes($lang['reset_button']) .'" title="'. outputLangDebugInAttributes($lang['reset_button_title']) .'" /></td>'."\n";
 				echo "</tr>\n</table>\n</form>\n";
-				if (!isset($_SESSION[$settings['session_prefix'].'user_id']) || isset($_SESSION[$settings['session_prefix'].'user_id']) && $action=="edit" )
+				if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
+				|| isset($_SESSION[$settings['session_prefix'].'user_id'])
+				&& $action=="edit" )
 					{
-					echo '<p class="xsmall" style="margin-top: 30px;">'.$lang['email_exp'].'</p>'."\n";
+					echo '<p class="xsmall" style="margin-top: 30px;">'. $lang['email_exp'] .'</p>'."\n";
 					}
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
-				echo '<p class="caution">'.$lang['no_authorization'].'</p>'."\n";
+				echo '<p class="caution">'. $lang['no_authorization'] .'</p>'."\n";
 				if (isset($reason))
 					{
-					echo '<p>'.$reason.'</p>'."\n";
+					echo '<p>'. $reason .'</p>'."\n";
 					}
 			break;
 			# End: switch ($show)->case "no authorization"
 			case "delete form":
 				$lang['thread_info'] = str_replace("[name]", htmlspecialchars($field["name"]), $lang['thread_info']);
 				$lang['thread_info'] = str_replace("[time]", strftime($lang['time_format'],$field["tp_time"]), $lang['thread_info']);
-				echo '<h2>'.$lang['delete_marking'].'</h2>'."\n";
-				echo '<p>'.$lang['delete_posting_sure'];
-				echo ($field["pid"]==0) ? '<br />'.$lang['delete_whole_thread'] : '';
+				echo '<h2>'. $lang['delete_marking'] .'</h2>'."\n";
+				echo '<p>'. $lang['delete_posting_sure'];
+				echo ($field["pid"] == 0) ? '<br />'. $lang['delete_whole_thread'] : '';
 				echo '</p>'."\n";
-				echo '<p><b>'.htmlspecialchars($field["subject"]).'</b>&nbsp;'.$lang['thread_info'].'</p>'."\n";
+				echo '<p><b>'. htmlspecialchars($field["subject"]) .'</b>&nbsp;'. $lang['thread_info'] .'</p>'."\n";
 				echo '<form action="posting.php" method="post" accept-charset="UTF-8">'."\n";
 				echo '<input type="hidden" name="action" value="delete ok" />'."\n";
-				echo '<input type="hidden" name="id" value="'.intval($id).'" />'."\n";
-				echo (isset($view)) ? '<input type="hidden" name="view" value="'.$view.'" />'."\n" : '';
-				echo (isset($page)) ? '<input type="hidden" name="page" value="'.$page.'" />'."\n" : '';
-				echo (isset($order)) ? '<input type="hidden" name="order" value="'.$order.'" />'."\n" : '';
-				echo (isset($descasc)) ? '<input type="hidden" name="descasc" value="'.$descasc.'" />'."\n" : '';
-				echo (isset($category)) ? '<input type="hidden" name="category" value="'.$category.'" />'."\n" : '';
-				echo '<p><input type="submit" name="delete" value="'.$lang['delete_posting_ok'].'" /></p>'."\n";
+				echo '<input type="hidden" name="id" value="'. intval($id) .'" />'."\n";
+				echo '<p><input type="submit" name="delete" value="'. $lang['delete_posting_ok'] .'" /></p>'."\n";
 				echo '</form>'."\n";
 			break;
 			# End: switch ($show)->case "delete form"
@@ -1702,11 +1820,13 @@ if (($settings['access_for_users_only'] == 1
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
 		{
-		header("location: ".$settings['forum_address']."login.php?msg=noentry"); die("<a href=\"login.php?msg=noentry\">further...</a>");
+		header("Location: ". $settings['forum_address'] ."login.php?msg=noentry");
+		die('<a href="login.php?msg=noentry">further...</a>');
 		}
 	} # End: if (($settings['access_for_users_only'] == 1 ...)
 else
 	{
-	header("location: ".$settings['forum_address']."login.php?msg=noaccess"); die("<a href=\"login.php?msg=noaccess\">further...</a>");
+	header("Location: ". $settings['forum_address'] ."login.php?msg=noaccess");
+	die('<a href="login.php?msg=noaccess">further...</a>');
 	}
 ?>

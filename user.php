@@ -1046,10 +1046,10 @@ switch ($action)
 		FROM ". $db_settings['userdata_table'];
 		if (isset($_GET['letter']))
 			{
-			$allUserQuery .= "
+			$getAllUsersQuery .= "
 			WHERE user_name LIKE '". mysql_real_escape_string($_GET['letter']) ."%'";
 			}
-		$allUserQuery .= "
+		$getAllUserQuery .= "
 		ORDER BY ". $order ." ". $descasc."
 		LIMIT ". $ul .", ". $settings['users_per_page'];
 		$result = mysql_query($getAllUsersQuery, $connid);
