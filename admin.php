@@ -2014,15 +2014,8 @@ switch ($action)
 					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
-				echo '<th><a href="admin.php?action=user&amp;order=user_type&amp;descasc=';
-				echo ($descasc=="ASC" && $order=="user_type") ? "DESC" : "ASC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_type'].'</a>';
-				if ($order=="user_type")
-					{
-					echo outputImageDescAsc($currDescAsc);
-					}
-				echo '</th>'."\n";
-				echo '<th><a href="admin.php?action=user&amp;order=registered&amp;descasc=';
+				echo '<th>';
+				echo '<a href="admin.php?action=user&amp;order=registered&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="registered") ? "DESC" : "ASC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_registered'].'</a>';
 				if ($order=="registered")
@@ -2059,21 +2052,22 @@ switch ($action)
 				$i=0;
 				while ($zeile = mysql_fetch_assoc($result))
 					{
+					# highlight user, mods and admins:
+					if (($settings['admin_mod_highlight'] == 1
+					or $settings['user-highlight'] == 1)
+					&& $zeile["user_id"] > 0)
+						{
+						$mark = outputStatusMark($mark, $zeile['user_type'], $connid);
+						}
 					$rowClass = ($i % 2 == 0) ? "a" : "b";
 					echo '<tr class="'.$rowClass.'">'."\n";
 					echo '<td><input type="checkbox" name="selected[]" value="'.$zeile["user_id"].'" /></td>'."\n";
 					echo '<td class="info">'.$zeile["user_id"].'</td>'."\n";
-					echo '<td><a href="user.php?id='.$zeile["user_id"].'" title="';
-					echo str_replace("[name]", htmlspecialchars($zeile["user_name"]), $lang['show_userdata_linktitle']).'"><b>';
-					echo htmlspecialchars($zeile["user_name"]).'</b></a></td>'."\n";
+					echo '<td>';
+					echo outputAuthorsName(htmlspecialchars($zeile["user_name"]), $mark, $zeile["user_id"]).'</td>'."\n";
 					echo '<td class="info"><a href="mailto:'.$zeile["user_email"].'" title="';
 					echo str_replace("[name]", htmlspecialchars($zeile["user_name"]), $lang_add['mailto_user_lt']);
 					echo '">'.htmlspecialchars($zeile["user_email"]).'</a></td>'."\n";
-					echo '<td class="info">'."\n";
-					if ($zeile["user_type"] == "admin") echo $lang['ud_admin'];
-					elseif ($zeile["user_type"] == "mod") echo $lang['ud_mod'];
-					else echo $lang['ud_user'];
-					echo '</td>'."\n";
 					echo '<td class="info" title="'. htmlspecialchars($zeile['ip_address']);
 					echo '">'.strftime($lang['time_format'], $zeile["registered_time"]).'</td>'."\n";
 					echo '<td class="info">'.$zeile["logins"].'</td>'."\n";
