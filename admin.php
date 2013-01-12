@@ -2022,6 +2022,13 @@ switch ($action)
 					{
 					echo outputImageDescAsc($currDescAsc);
 					}
+				echo '/<a href="admin.php?action=user&amp;order=ip_addr&amp;descasc=';
+				echo ($descasc=="ASC" && $order=="registered") ? "DESC" : "ASC";
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">IP</a>';
+				if ($order=="ip_addr")
+					{
+					echo outputImageDescAsc($currDescAsc);
+					}
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=logins&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="logins") ? "DESC" : "ASC";
@@ -2068,8 +2075,17 @@ switch ($action)
 					echo '<td class="info"><a href="mailto:'.$zeile["user_email"].'" title="';
 					echo str_replace("[name]", htmlspecialchars($zeile["user_name"]), $lang_add['mailto_user_lt']);
 					echo '">'.htmlspecialchars($zeile["user_email"]).'</a></td>'."\n";
-					echo '<td class="info" title="'. htmlspecialchars($zeile['ip_address']);
-					echo '">'.strftime($lang['time_format'], $zeile["registered_time"]).'</td>'."\n";
+					if (isset($_GET['order'])
+						and $_GET['order'] == 'ip_addr')
+						{
+						echo '<td class="info" title="'. htmlspecialchars(strftime($lang['time_format'], $zeile["registered_time"]));
+						echo '">'. htmlspecialchars($zeile['ip_address']) .'</td>'."\n";
+						}
+					else
+						{
+						echo '<td class="info" title="'. htmlspecialchars($zeile['ip_address']);
+						echo '">'.strftime($lang['time_format'], $zeile["registered_time"]).'</td>'."\n";
+						}
 					echo '<td class="info">'.$zeile["logins"].'</td>'."\n";
 					echo '<td class="info">';
 					echo ($zeile["logins"] > 0) ? strftime($lang['time_format'], $zeile["last_login_time"]) : "&nbsp;";
