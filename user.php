@@ -979,9 +979,11 @@ switch ($action)
 			while ($allSet = mysql_fetch_assoc($all_settings))
 				{
 				if (($settings['user_control_refresh'] == 1
-					and $allSet['name']=='control_refresh')
+					and $allSet['name'] == 'control_refresh')
 					or ($settings['user_control_css'] == 1
-					and mb_substr($allSet['name'], 0, 5) == 'mark_'))
+					and mb_substr($allSet['name'], 0, 5) == 'mark_')
+					or ($settings['user_control_sort_thread_threads'] == 1
+					and $allSet['name'] == 'sort_threadview_threads'))
 					{
 					if (!empty($ownSet))
 						{
