@@ -1971,6 +1971,7 @@ switch ($action)
 
 			if ($result_count > 0)
 				{
+				$parLetter = !empty($letter) ? '&amp;letter='. urlencode($letter) : '';
 				$currDescAsc = strtolower($descasc);
 				if (isset($_GET['new_user']))
 					{
@@ -1992,7 +1993,7 @@ switch ($action)
 				echo '<th>&nbsp;</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=user_id&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_id") ? 'DESC' : 'ASC';
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_id'].'</a>';
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_id'].'</a>';
 				if ($order=="user_id")
 					{
 					echo outputImageDescAsc($currDescAsc);
@@ -2000,7 +2001,7 @@ switch ($action)
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=user_name&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_name") ? "DESC" : "ASC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_name'].'</a>';
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_name'].'</a>';
 				if ($order=="user_name")
 					{
 					echo outputImageDescAsc($currDescAsc);
@@ -2008,7 +2009,7 @@ switch ($action)
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=user_email&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_email") ? "DESC" : "ASC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_email'].'</a>';
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_email'].'</a>';
 				if ($order=="user_email")
 					{
 					echo outputImageDescAsc($currDescAsc);
@@ -2017,14 +2018,14 @@ switch ($action)
 				echo '<th>';
 				echo '<a href="admin.php?action=user&amp;order=registered&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="registered") ? "DESC" : "ASC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_registered'].'</a>';
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_registered'].'</a>';
 				if ($order=="registered")
 					{
 					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '/<a href="admin.php?action=user&amp;order=ip_addr&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="registered") ? "DESC" : "ASC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">IP</a>';
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">IP</a>';
 				if ($order=="ip_addr")
 					{
 					echo outputImageDescAsc($currDescAsc);
@@ -2032,7 +2033,7 @@ switch ($action)
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=logins&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="logins") ? "DESC" : "ASC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_logins'].'</a>';
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_logins'].'</a>';
 				if ($order=="logins")
 					{
 					echo outputImageDescAsc($currDescAsc);
@@ -2040,7 +2041,7 @@ switch ($action)
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=last_login&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="last_login") ? "DESC" : "ASC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['last_login'].'</a>';
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['last_login'].'</a>';
 				if ($order=="last_login")
 					{
 					echo outputImageDescAsc($currDescAsc);
@@ -2048,7 +2049,7 @@ switch ($action)
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=user_lock&amp;descasc=';
 				echo ($descasc=="DESC" && $order=="user_lock") ? "ASC" : "DESC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang['lock'].'</a>';
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang['lock'].'</a>';
 				if ($order=="user_lock")
 					{
 					echo outputImageDescAsc($currDescAsc);
