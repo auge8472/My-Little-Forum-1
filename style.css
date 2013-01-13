@@ -140,19 +140,29 @@ font-size: 0.86em;
 }
 
 #top div.left {
-margin:0;
+margin: 0;
 padding: 6px 0 5px 20px;
 float: left;
 }
 
 #top div.left .home {
-margin:0 0 3px 0;
-padding:0;
+margin: 0;
+padding: 0;
+float: left;
+}
+
+#top div.left h1 {
+font-size: 2em;
+font-weight: bold;
+margin: 0 0 4px 0.5em;
+padding: 0;
+float: left;
 }
 
 #top div.left .index {
-margin:0;
-padding:0;
+margin: 4px 0 0 0;
+padding: 0;
+clear: left;
 }
 
 #top div.right {

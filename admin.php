@@ -1971,6 +1971,7 @@ switch ($action)
 
 			if ($result_count > 0)
 				{
+				$parLetter = !empty($letter) ? '&amp;letter='. urlencode($letter) : '';
 				$currDescAsc = strtolower($descasc);
 				if (isset($_GET['new_user']))
 					{
@@ -1992,7 +1993,7 @@ switch ($action)
 				echo '<th>&nbsp;</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=user_id&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_id") ? 'DESC' : 'ASC';
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_id'].'</a>';
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_id'].'</a>';
 				if ($order=="user_id")
 					{
 					echo outputImageDescAsc($currDescAsc);
@@ -2000,7 +2001,7 @@ switch ($action)
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=user_name&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_name") ? "DESC" : "ASC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_name'].'</a>';
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_name'].'</a>';
 				if ($order=="user_name")
 					{
 					echo outputImageDescAsc($currDescAsc);
@@ -2008,31 +2009,31 @@ switch ($action)
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=user_email&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_email") ? "DESC" : "ASC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_email'].'</a>';
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_email'].'</a>';
 				if ($order=="user_email")
 					{
 					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
-				echo '<th><a href="admin.php?action=user&amp;order=user_type&amp;descasc=';
-				echo ($descasc=="ASC" && $order=="user_type") ? "DESC" : "ASC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_type'].'</a>';
-				if ($order=="user_type")
+				echo '<th>';
+				echo '<a href="admin.php?action=user&amp;order=registered&amp;descasc=';
+				echo ($descasc=="ASC" && $order=="registered") ? "DESC" : "ASC";
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_registered'].'</a>';
+				if ($order=="registered")
 					{
 					echo outputImageDescAsc($currDescAsc);
 					}
-				echo '</th>'."\n";
-				echo '<th><a href="admin.php?action=user&amp;order=registered&amp;descasc=';
+				echo '/<a href="admin.php?action=user&amp;order=ip_addr&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="registered") ? "DESC" : "ASC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_registered'].'</a>';
-				if ($order=="registered")
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">IP</a>';
+				if ($order=="ip_addr")
 					{
 					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=logins&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="logins") ? "DESC" : "ASC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_logins'].'</a>';
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_logins'].'</a>';
 				if ($order=="logins")
 					{
 					echo outputImageDescAsc($currDescAsc);
@@ -2040,7 +2041,7 @@ switch ($action)
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=last_login&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="last_login") ? "DESC" : "ASC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang_add['last_login'].'</a>';
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['last_login'].'</a>';
 				if ($order=="last_login")
 					{
 					echo outputImageDescAsc($currDescAsc);
@@ -2048,7 +2049,7 @@ switch ($action)
 				echo '</th>'."\n";
 				echo '<th><a href="admin.php?action=user&amp;order=user_lock&amp;descasc=';
 				echo ($descasc=="DESC" && $order=="user_lock") ? "ASC" : "DESC";
-				echo '&amp;ul='.$ul.'&amp;sam='.$sam.'" title="'.$lang['order_linktitle'].'">'.$lang['lock'].'</a>';
+				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang['lock'].'</a>';
 				if ($order=="user_lock")
 					{
 					echo outputImageDescAsc($currDescAsc);
@@ -2059,23 +2060,33 @@ switch ($action)
 				$i=0;
 				while ($zeile = mysql_fetch_assoc($result))
 					{
+					# highlight user, mods and admins:
+					if (($settings['admin_mod_highlight'] == 1
+					or $settings['user-highlight'] == 1)
+					&& $zeile["user_id"] > 0)
+						{
+						$mark = outputStatusMark($mark, $zeile['user_type'], $connid);
+						}
 					$rowClass = ($i % 2 == 0) ? "a" : "b";
 					echo '<tr class="'.$rowClass.'">'."\n";
 					echo '<td><input type="checkbox" name="selected[]" value="'.$zeile["user_id"].'" /></td>'."\n";
 					echo '<td class="info">'.$zeile["user_id"].'</td>'."\n";
-					echo '<td><a href="user.php?id='.$zeile["user_id"].'" title="';
-					echo str_replace("[name]", htmlspecialchars($zeile["user_name"]), $lang['show_userdata_linktitle']).'"><b>';
-					echo htmlspecialchars($zeile["user_name"]).'</b></a></td>'."\n";
+					echo '<td>';
+					echo outputAuthorsName(htmlspecialchars($zeile["user_name"]), $mark, $zeile["user_id"]).'</td>'."\n";
 					echo '<td class="info"><a href="mailto:'.$zeile["user_email"].'" title="';
 					echo str_replace("[name]", htmlspecialchars($zeile["user_name"]), $lang_add['mailto_user_lt']);
 					echo '">'.htmlspecialchars($zeile["user_email"]).'</a></td>'."\n";
-					echo '<td class="info">'."\n";
-					if ($zeile["user_type"] == "admin") echo $lang['ud_admin'];
-					elseif ($zeile["user_type"] == "mod") echo $lang['ud_mod'];
-					else echo $lang['ud_user'];
-					echo '</td>'."\n";
-					echo '<td class="info" title="'. htmlspecialchars($zeile['ip_address']);
-					echo '">'.strftime($lang['time_format'], $zeile["registered_time"]).'</td>'."\n";
+					if (isset($_GET['order'])
+						and $_GET['order'] == 'ip_addr')
+						{
+						echo '<td class="info" title="'. htmlspecialchars(strftime($lang['time_format'], $zeile["registered_time"]));
+						echo '">'. htmlspecialchars($zeile['ip_address']) .'</td>'."\n";
+						}
+					else
+						{
+						echo '<td class="info" title="'. htmlspecialchars($zeile['ip_address']);
+						echo '">'.strftime($lang['time_format'], $zeile["registered_time"]).'</td>'."\n";
+						}
 					echo '<td class="info">'.$zeile["logins"].'</td>'."\n";
 					echo '<td class="info">';
 					echo ($zeile["logins"] > 0) ? strftime($lang['time_format'], $zeile["last_login_time"]) : "&nbsp;";
