@@ -62,7 +62,7 @@ or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
 	tid,
 	locked
 	FROM ". $db_settings['forum_table'] ."
-	WHERE id = ". intval($id) ."
+	WHERE id = ". intval($_GET['id']) ."
 	LIMIT 1";
 	$lock_result = mysql_query($lockQuery, $connid);
 	if (!$lock_result) die($lang['db_error']);
