@@ -67,7 +67,8 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 	{
 	if (isset($_COOKIE['user_name']) && empty($_POST["form_submitted"])) $sender_name = $_COOKIE['user_name'];
 	if (isset($_COOKIE['user_email']) && empty($_POST["form_submitted"])) $sender_email = $_COOKIE['user_email'];
-	if (isset($_SESSION[$settings['session_prefix'].'user_id']) && empty($_POST["form_submitted"]))
+	if (isset($_SESSION[$settings['session_prefix'].'user_id'])
+		&& empty($_POST["form_submitted"]))
 		{
 		$ue_result = mysql_query("SELECT user_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = '". intval($_SESSION[$settings['session_prefix'].'user_id']) ."' LIMIT 1", $connid);
 		if (!$ue_result) die($lang['db_error']);
@@ -97,7 +98,9 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 		$hide_email = $field['hide_email'];
 		}
 
-	if (isset($field['user_id']) && $field['user_id'] > 0 && empty($uid))
+	if (isset($field['user_id'])
+		&& $field['user_id'] > 0
+		&& empty($uid))
 		{
 		$user_result = mysql_query("SELECT user_email, hide_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = '". intval($field['user_id']) ."' LIMIT 1", $connid);
 		if (!$user_result) die($lang['db_error']);
@@ -107,7 +110,12 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 		$hide_email = $user_field['hide_email'];
 		}
 
-	if (empty($forum_contact) && $field['user_id'] == 0 && $email == "" || empty($forum_contact) && $field['user_id'] > 0 && $hide_email == 1) $no_message = true;
+	if ((empty($forum_contact)
+		&& $field['user_id'] == 0
+		&& $email == "")
+		|| (empty($forum_contact)
+		&& $field['user_id'] > 0
+		&& $hide_email == 1)) $no_message = true;
 
 	if (isset($_POST["form_submitted"]))
 		{
@@ -122,8 +130,6 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 		if ($sender_email == "") $errors[] = $lang['error_no_email'];
 		if ($sender_email != "" and !preg_match($validator['email'], $sender_email)) $errors[] = $lang['error_email_wrong'];
 		if (empty($_POST['text'])) $errors[] = $lang['error_no_text'];
-		
-		# TODO check for banned IPs
 
 		# check for not accepted words:
 		$result = mysql_query("SELECT list FROM ". $db_settings['banlists_table'] ." WHERE name = 'words' LIMIT 1", $connid);
