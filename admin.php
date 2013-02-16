@@ -36,7 +36,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 
 	// remove not activated user accounts:
 	$delInactiveUserQuery = "DELETE FROM ".$db_settings['userdata_table']."
-	WHERE registered < (NOW() - INTERVAL 24 HOUR)
+	WHERE registered < (NOW() - INTERVAL 48 HOUR)
 	AND activate_code != ''
 	AND logins=0";
 	@mysql_query($delInactiveUserQuery, $connid);
