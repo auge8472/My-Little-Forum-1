@@ -393,4 +393,7 @@ $lang_add['settings_cat']['postings'] =       "Postings";
 $lang_add['settings_cat']['sessions'] =       "Sessions";
 $lang_add['settings_cat']['security'] =       "Security";
 $lang_add['settings_cat']['enhanced'] =       "Enhanced";
+$lang_add['settings_cat']['userdata'] =       "User Data";
+$lang_add['settings_cat']['logindata'] =      "Logins";
+$lang_add['settings_cat']['actions'] =        "Actions";
 ?>

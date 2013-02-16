@@ -1737,31 +1737,33 @@ switch ($action)
 	case "debug":
 		echo '<form action="admin.php" method="post">'."\n";
 		echo '<table class="admin info">'."\n";
-		echo '<tr>'."\n";
-		echo '<td><label for="debug-none">'.$lang_add['debug_none'].'</label><br />';
+		echo ' <tbody>'."\n";
+		echo '  <tr>'."\n";
+		echo '   <td><label for="debug-none">'.$lang_add['debug_none'].'</label><br />';
 		echo '<span class="info">'.$lang_add['debug_none_d'].'</span></td>'."\n";
-		echo '<td><input type="radio" name="debug_type" id="debug-none" value="no"';
+		echo '   <td><input type="radio" name="debug_type" id="debug-none" value="no"';
 		echo ($_SESSION[$settings['session_prefix'].'debug'] == 'no') ? ' checked="checked"' : '';
 		echo ' /></td>'."\n";
-		echo '</tr><tr>'."\n";
-		echo '<td><label for="debug-lang">'.$lang_add['debug_lang'].'</label><br />';
+		echo '  </tr><tr>'."\n";
+		echo '   <td><label for="debug-lang">'.$lang_add['debug_lang'].'</label><br />';
 		echo '<span class="info">'.$lang_add['debug_lang_d'].'</span></td>'."\n";
-		echo '<td><input type="radio" name="debug_type" id="debug-lang" value="lang"';
+		echo '   <td><input type="radio" name="debug_type" id="debug-lang" value="lang"';
 		echo ($_SESSION[$settings['session_prefix'].'debug'] == 'lang') ? ' checked="checked"' : '';
 		echo ' /></td>'."\n";
-		echo '</tr><tr>'."\n";
-		echo '<td><label for="debug-session">'.$lang_add['debug_session'].'</label><br />';
+		echo '  </tr><tr>'."\n";
+		echo '   <td><label for="debug-session">'.$lang_add['debug_session'].'</label><br />';
 		echo '<span class="info">'.$lang_add['debug_session_d'].'</span></td>'."\n";
-		echo '<td><input type="radio" name="debug_type" id="debug-session" value="session"';
+		echo '   <td><input type="radio" name="debug_type" id="debug-session" value="session"';
 		echo ($_SESSION[$settings['session_prefix'].'debug'] == 'session') ? ' checked="checked"' : '';
 		echo ' /></td>'."\n";
-		echo '</tr><tr>'."\n";
-		echo '<td><label for="debug-css">'.$lang_add['debug_css'].'</label><br />';
+		echo '  </tr><tr>'."\n";
+		echo '   <td><label for="debug-css">'.$lang_add['debug_css'].'</label><br />';
 		echo '<span class="info">'.$lang_add['debug_css_d'].'</span></td>'."\n";
-		echo '<td><input type="radio" name="debug_type" id="debug-css" value="css"';
+		echo '   <td><input type="radio" name="debug_type" id="debug-css" value="css"';
 		echo ($_SESSION[$settings['session_prefix'].'debug'] == 'css') ? ' checked="checked"' : '';
 		echo ' /></td>'."\n";
-		echo '</tr>'."\n";
+		echo '  </tr>'."\n";
+		echo ' </tbody>'."\n";
 		echo '</table>'."\n";
 		echo '<p><input type="submit" name="debug_submitted"';
 		echo ' value="'.outputLangDebugInAttributes($lang_add['settings_sb']).'" /></p>'."\n";
@@ -1825,14 +1827,17 @@ switch ($action)
 			if(!$result) die($lang['db_error']);
 			
 			echo '<table class="normaltab">'."\n";
-			echo '<tr class="titlerow">'."\n";
-			echo '<th>'.$lang_add['cat_hl'].'</th>'."\n";
-			echo '<th>'.$lang_add['cat_accessible'].'</th>'."\n";
-			echo '<th>'.$lang_add['cat_topics'].'</th>'."\n";
-			echo '<th>'.$lang_add['cat_entries'].'</th>'."\n";
-			echo '<th colspan="2">'.$lang_add['cat_actions'].'</th>'."\n";
-			echo '<th>'.$lang_add['cat_move'].'</th>'."\n";
-			echo '</tr>';
+			echo ' <thead>'."\n";
+			echo '  <tr>'."\n";
+			echo '   <th>'.$lang_add['cat_hl'].'</th>'."\n";
+			echo '   <th>'.$lang_add['cat_accessible'].'</th>'."\n";
+			echo '   <th>'.$lang_add['cat_topics'].'</th>'."\n";
+			echo '   <th>'.$lang_add['cat_entries'].'</th>'."\n";
+			echo '   <th colspan="2">'.$lang_add['cat_actions'].'</th>'."\n";
+			echo '   <th>'.$lang_add['cat_move'].'</th>'."\n";
+			echo '  </tr>'."\n";
+			echo ' </thead>'."\n";
+			echo ' <tbody>'."\n".'  ';
 
 			$i=0;
 			while ($line = mysql_fetch_assoc($result))
@@ -1843,155 +1848,204 @@ switch ($action)
 				$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE category = '".intval($line['id'])."'", $connid);
 				list($postings_in_category) = mysql_fetch_row($count_result);
 				mysql_free_result($count_result);
-				$rowClass = ($i % 2 == 0) ? "a" : "b";
-				echo '<tr class="'.$rowClass.'">'."\n";
-				echo '<td><b>'.$line['category'].'</b></td>'."\n";
-				echo '<td>'."\n";
+				echo '<tr>'."\n";
+				echo '   <td><b>'.$line['category'].'</b></td>'."\n";
+				echo '   <td>';
 				if ($line['accession']==2) echo $lang_add['cat_accession_mod_admin'];
 				else if ($line['accession']==1) echo $lang_add['cat_accession_reg_users'];
-				else echo $lang_add['cat_accession_all'].'</td>'."\n";
-				echo '<td>'.$threads_in_category.'</td>'."\n";
-				echo '<td>'.$postings_in_category.'</td>'."\n";
-				echo '<td><a href="admin.php?edit_category='.$line['id'].'">'.$lang_add['cat_edit'].'</a></td>'."\n";
-				echo '<td><a href="admin.php?delete_category='.$line['id'].'">'.$lang_add['cat_delete'].'</a></td>'."\n";
-				echo '<td><a href="admin.php?move_up_category='.$line['id'].'">'."\n";
+				else echo $lang_add['cat_accession_all'];
+				echo '</td>'."\n";
+				echo '   <td>'.$threads_in_category.'</td>'."\n";
+				echo '   <td>'.$postings_in_category.'</td>'."\n";
+				echo '   <td><a href="admin.php?edit_category='.$line['id'].'">'.$lang_add['cat_edit'].'</a></td>'."\n";
+				echo '   <td><a href="admin.php?delete_category='.$line['id'].'">'.$lang_add['cat_delete'].'</a></td>'."\n";
+				echo '   <td><a href="admin.php?move_up_category='.$line['id'].'">';
 				echo '<img src="img/up.png" alt="up" width="11" height="11" /></a>&nbsp;';
 				echo '<a href="admin.php?move_down_category='.$line['id'].'">';
 				echo '<img src="img/down.png" alt="down" width="11" height="11" /></a></td>'."\n";
-				echo '</tr>';
+				echo '  </tr>';
 				$i++;
 				}
-				mysql_free_result($result);
-				echo "\n".'</table>'."\n";
+			mysql_free_result($result);
+			echo "\n".' </tbody>'."\n".'</table>'."\n";
+			}
+		else
+			{
+			echo '<p><i>'.$lang_add['no_categories'].'</i></p>'."\n";
+			}
+		echo '<form action="admin.php" method="post"><div>'."\n";
+		echo '<label for="cat-name">'.$lang_add['new_category'].'</label><br />'."\n";
+		echo '<input type="text" name="new_category" id="cat-name" value="';
+		echo isset($new_category) ? htmlspecialchars($new_category) : '';
+		echo '" size="25" /><br />'."\n";
+		echo '<b>'.$lang_add['accessible_for'].'</b><br />'."\n";
+		echo '<input type="radio" name="accession" id="access-all" value="0"';
+		if (empty($accession) || isset($accession) && $accession == 0)
+			{
+			echo ' checked="ckecked"';
+			}
+		echo ' /><label for="access-all">'.$lang_add['cat_accession_all'].'</label><br />'."\n";
+		echo '<input type="radio" name="accession" id="access-user" value="1"';
+		if (isset($accession) && $accession == 1)
+			{
+			echo ' checked="ckecked"';
+			}
+		echo ' /><label for="access-user">'.$lang_add['cat_accession_reg_users'].'</label><br />'."\n";
+		echo '<input type="radio" name="accession" id="access-mod-admin" value="2"';
+		if (isset($accession) && $accession == 2)
+			{
+			echo ' checked="ckecked"';
+			}
+		echo ' /><label for="access-mod-admin">'.$lang_add['cat_accession_mod_admin'].'</label><br /><br />'."\n";
+		echo '<input type="submit" value="'.outputLangDebugInAttributes($lang['submit_button_ok']).'" /></div></form>'."\n";
+	break;
+	case "user":
+		$order = isset($_GET['order']) ? $_GET['order'] : "user_id";
+		$sam = isset($_GET['sam']) ? (int)$_GET['sam'] : 50;
+		$descasc = isset($_GET['descasc']) ? $_GET['descasc'] : "ASC";
+		$page = isset($_GET['page']) ? intval($_GET['page']) : 0;
+		$category = empty($category) ? 0 : intval($category);
+		if (isset($_GET['search_user'])) $search_user = $_GET['search_user'];
+		if (isset($_GET['letter'])) $letter = $_GET['letter'];
+
+		$ul = $page * $settings['users_per_page'];
+		# as first, generate the menu
+		$menuItems = array('userdata', 'logindata', 'actions');
+		$menu .= '<ul class="menulist">'."\n";
+		foreach ($menuItems as $item)
+			{
+			if ((empty($_GET['settingsCat']) and $item == 'userdata')
+				or ($item == $_GET['settingsCat']))
+				{
+				$menu .= '<li><span>';
+				$menu .= htmlspecialchars($lang_add['settings_cat'][$item]) .'</span></li>';
 				}
 			else
 				{
-				echo '<p><i>'.$lang_add['no_categories'].'</i></p>'."\n";
+				$menu .= '<li><a href="?action=user&amp;settingsCat='. $item .'">';
+				$menu .= htmlspecialchars($lang_add['settings_cat'][$item]) .'</a></li>';
 				}
-			echo '<form action="admin.php" method="post"><div>'."\n";
-			echo '<label for="cat-name">'.$lang_add['new_category'].'</label><br />'."\n";
-			echo '<input type="text" name="new_category" id="cat-name" value="';
-			echo isset($new_category) ? htmlspecialchars($new_category) : '';
-			echo '" size="25" /><br />'."\n";
-			echo '<b>'.$lang_add['accessible_for'].'</b><br />'."\n";
-			echo '<input type="radio" name="accession" id="access-all" value="0"';
-			if (empty($accession) || isset($accession) && $accession == 0)
-				{
-				echo ' checked="ckecked"';
-				}
-			echo ' /><label for="access-all">'.$lang_add['cat_accession_all'].'</label><br />'."\n";
-			echo '<input type="radio" name="accession" id="access-user" value="1"';
-			if (isset($accession) && $accession == 1)
-				{
-				echo ' checked="ckecked"';
-				}
-			echo ' /><label for="access-user">'.$lang_add['cat_accession_reg_users'].'</label><br />'."\n";
-			echo '<input type="radio" name="accession" id="access-mod-admin" value="2"';
-			if (isset($accession) && $accession == 2)
-				{
-				echo ' checked="ckecked"';
-				}
-			echo ' /><label for="access-mod-admin">'.$lang_add['cat_accession_mod_admin'].'</label><br /><br />'."\n";
-			echo '<input type="submit" value="'.outputLangDebugInAttributes($lang['submit_button_ok']).'" /></div></form>'."\n";
-		break;
-		case "user":
-			$order = isset($_GET['order']) ? $_GET['order'] : "user_id";
-			$sam = isset($_GET['sam']) ? (int)$_GET['sam'] : 50;
-			$descasc = isset($_GET['descasc']) ? $_GET['descasc'] : "ASC";
-			$page = isset($_GET['page']) ? intval($_GET['page']) : 0;
-			$category = empty($category) ? 0 : intval($category);
+			}
+		$menu .= '</ul>'."\n";
 
-			if (isset($_GET['search_user'])) $search_user = $_GET['search_user'];
-			if (isset($_GET['letter'])) $letter = $_GET['letter'];
-
-			$ul = $page * $settings['users_per_page'];
-
-			if (isset($letter))
-				{
-				$getUserWhere = "
-				WHERE user_name LIKE '". mysql_real_escape_string($_GET['letter']) ."%'
-				";
-				}
-			else if (isset($search_user))
-				{
-				$getUserWhere = "
-				WHERE user_name LIKE '". mysql_real_escape_string($search_user) ."%'
-				OR user_email LIKE '". mysql_real_escape_string($search_user) ."%'
-				";
-				}
-			else
-				{
-				$getUserWhere = "";
-				}
+		if (isset($letter))
+			{
+			$getUserWhere = "
+			WHERE user_name LIKE '". mysql_real_escape_string($_GET['letter']) ."%'
+			";
+			}
+		else if (isset($search_user))
+			{
+			$getUserWhere = "
+			WHERE user_name LIKE '". mysql_real_escape_string($search_user) ."%'
+			OR user_email LIKE '". mysql_real_escape_string($search_user) ."%'
+			";
+			}
+		else
+			{
+			$getUserWhere = "";
+			}
+		if (isset($_GET['settingsCat'])
+			and $_GET['settingsCat'] == 'logindata')
+			{
+			$getUserListQuery = "SELECT
+			user_id,
+			user_name,
+			user_type,
+			logins,
+			DATE_FORMAT(last_login + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS last_login_time
+			FROM ". $db_settings['userdata_table'] . $getUserWhere ."
+			ORDER BY ". $order ." ". $descasc ."
+			LIMIT ". $ul .", ". $settings['users_per_page'];
+			$currentRows = array('user_id', 'user_name', 'logins', 'last_login');
+			}
+		else if (isset($_GET['settingsCat'])
+			and $_GET['settingsCat'] == 'actions')
+			{
+			$getUserListQuery = "SELECT
+			user_id,
+			user_name,
+			user_type,
+			user_lock
+			FROM ". $db_settings['userdata_table'] . $getUserWhere ."
+			ORDER BY ". $order ." ". $descasc ."
+			LIMIT ". $ul .", ". $settings['users_per_page'];
+			$currentRows = array('user_id', 'user_name', 'user_lock', 'actions');
+			}
+		else
+			{
 			$getUserListQuery = "SELECT
 			user_id,
 			user_name,
 			user_type,
 			user_email,
-			logins,
-			UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS last_login_time,
-			UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS registered_time,
-			INET_NTOA(ip_addr) AS ip_address,
-			user_lock
+			DATE_FORMAT(registered + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS registered_time,
+			INET_NTOA(ip_addr) AS ip_address
 			FROM ". $db_settings['userdata_table'] . $getUserWhere ."
 			ORDER BY ". $order ." ". $descasc ."
 			LIMIT ". $ul .", ". $settings['users_per_page'];
-			$result = mysql_query($getUserListQuery, $connid);
-			if (!$result) die($lang['db_error']);
-			$result_count = mysql_num_rows($result);
+			$currentRows = array('user_id', 'user_name', 'user_email', 'registered', 'ip');
+			}
+		$result = mysql_query($getUserListQuery, $connid);
+		if (!$result) die($lang['db_error']);
+		$result_count = mysql_num_rows($result);
 
-			if ($result_count < $sam) $sam = $result_count;
-			$alphabet = range('A', 'Z');
+		if ($result_count < $sam) $sam = $result_count;
+		$alphabet = range('A', 'Z');
 
-			echo '<h2>'. str_replace("[number]", $result_count, $lang['num_reg_users']) .'</h2>'."\n";
-			echo '<div><label for="search_user">'. $lang_add['search_user'] .'</label>&nbsp;';
-			echo '<form action="'.$_SERVER['SCRIPT_NAME'].'" method="get" style="display:inline">'."\n";
+		echo '<h2>'. str_replace("[number]", $result_count, $lang['num_reg_users']) .'</h2>'."\n";
+		echo '<div><label for="search_user">'. $lang_add['search_user'] .'</label>&nbsp;';
+		echo '<form action="'.$_SERVER['SCRIPT_NAME'].'" method="get" style="display:inline">'."\n";
+		echo '<input type="hidden" name="action" value="user" />'."\n";
+		echo '<input type="text" name="search_user" id="search_user" value="';
+		echo (isset($search_user)) ? htmlspecialchars($search_user) : '';
+		echo '" size="25">&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;" />';
+		echo '</form>'."\n";
+		if (empty($search_user) || trim($search_user) == '')
+			{
+			echo '&nbsp;';
+			echo '<form action="'.$_SERVER["SCRIPT_NAME"].'" method="get" style="display:inline">'."\n";
 			echo '<input type="hidden" name="action" value="user" />'."\n";
-			echo '<input type="text" name="search_user" id="search_user" value="';
-			echo (isset($search_user)) ? htmlspecialchars($search_user) : '';
-			echo '" size="25">&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;" />';
-			echo '</form>'."\n";
-			if (empty($search_user) || trim($search_user) == '')
+			echo '<select class="kat" size="1" name="letter" onchange="this.form.submit();">'."\n";
+			echo '<option value="">A-Z</option>'."\n";
+			foreach ($alphabet as $lett)
 				{
-				echo '&nbsp;';
-				echo '<form action="'.$_SERVER["SCRIPT_NAME"].'" method="get" style="display:inline">'."\n";
-				echo '<input type="hidden" name="action" value="user" />'."\n";
-				echo '<select class="kat" size="1" name="letter" onchange="this.form.submit();">'."\n";
-				echo '<option value="">A-Z</option>'."\n";
-				foreach ($alphabet as $lett)
-					{
-					echo '<option value="'.$lett.'"';
-					echo (isset($_GET['letter']) && $_GET['letter'] == $lett) ? ' selected="selected"' : '';
+				echo '<option value="'.$lett.'"';
+				echo (isset($_GET['letter']) && $_GET['letter'] == $lett) ? ' selected="selected"' : '';
 					echo '>'.$lett.'</option>'."\n";
-					}
-				echo '</select>&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;" /></form>'."\n";
-				echo nav($page, $settings['users_per_page'], $result_count, $order, $descasc, $category, $action);
 				}
-			echo '</div>'."\n";
+			echo '</select>&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;" /></form>'."\n";
+			echo nav($page, $settings['users_per_page'], $result_count, $order, $descasc, $category, $action);
+			}
+		echo '</div>'."\n";
 
-			if ($result_count > 0)
+		if ($result_count > 0)
+			{
+			$parLetter = !empty($letter) ? '&amp;letter='. urlencode($letter) : '';
+			$currDescAsc = strtolower($descasc);
+			if (isset($_GET['new_user']))
 				{
-				$parLetter = !empty($letter) ? '&amp;letter='. urlencode($letter) : '';
-				$currDescAsc = strtolower($descasc);
-				if (isset($_GET['new_user']))
+				echo '<p class="caution">';
+				echo str_replace("[name]", htmlspecialchars(urldecode($_GET['new_user'])), $lang_add['new_user_registered']);
+				if (isset($_GET['send_error']))
 					{
-					echo '<p class="caution">';
-					echo str_replace("[name]", htmlspecialchars(urldecode($_GET['new_user'])), $lang_add['new_user_registered']);
-					if (isset($_GET['send_error']))
-						{
-						echo '<br />'.$lang_add['userdata_send_error'];
-						}
-					echo '</p>'."\n".'<p><a class="textlink" href="admin.php?action=register">'.$lang_add['reg_another_user'].'</a></p>'."\n";
+					echo '<br />'.$lang_add['userdata_send_error'];
 					}
-				if (isset($no_users_in_selection))
-					{
-					echo '<p class="caution">'.$lang_add['no_users_in_sel'].'</p>'."\n";
-					}
-				echo '<form action="admin.php" method="post">'."\n";
-				echo '<table class="normaltab">'."\n";
-				echo '<tr class="titlerow">'."\n";
-				echo '<th>&nbsp;</th>'."\n";
-				echo '<th><a href="admin.php?action=user&amp;order=user_id&amp;descasc=';
+				echo '</p>'."\n".'<p><a class="textlink" href="admin.php?action=register">'.$lang_add['reg_another_user'].'</a></p>'."\n";
+				}
+			if (isset($no_users_in_selection))
+				{
+				echo '<p class="caution">'.$lang_add['no_users_in_sel'].'</p>'."\n";
+				}
+			echo $menu;
+			echo '<form action="admin.php" method="post">'."\n";
+			echo '<table class="normaltab">'."\n";
+			echo ' <thead>'."\n";
+			echo '  <tr>'."\n";
+			echo '   <th>&nbsp;</th>'."\n";
+			if (in_array('user_id', $currentRows))
+				{
+				echo '   <th><a href="admin.php?action=user&amp;order=user_id&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_id") ? 'DESC' : 'ASC';
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_id'].'</a>';
 				if ($order=="user_id")
@@ -1999,7 +2053,10 @@ switch ($action)
 					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
-				echo '<th><a href="admin.php?action=user&amp;order=user_name&amp;descasc=';
+				}
+			if (in_array('user_name', $currentRows))
+				{
+				echo '   <th><a href="admin.php?action=user&amp;order=user_name&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_name") ? "DESC" : "ASC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_name'].'</a>';
 				if ($order=="user_name")
@@ -2007,7 +2064,10 @@ switch ($action)
 					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
-				echo '<th><a href="admin.php?action=user&amp;order=user_email&amp;descasc=';
+				}
+			if (in_array('user_email', $currentRows))
+				{
+				echo '   <th><a href="admin.php?action=user&amp;order=user_email&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="user_email") ? "DESC" : "ASC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_email'].'</a>';
 				if ($order=="user_email")
@@ -2015,7 +2075,10 @@ switch ($action)
 					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
-				echo '<th>';
+				}
+			if (in_array('registered', $currentRows))
+				{
+				echo '   <th>';
 				echo '<a href="admin.php?action=user&amp;order=registered&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="registered") ? "DESC" : "ASC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_registered'].'</a>';
@@ -2023,7 +2086,12 @@ switch ($action)
 					{
 					echo outputImageDescAsc($currDescAsc);
 					}
-				echo '/<a href="admin.php?action=user&amp;order=ip_addr&amp;descasc=';
+				echo '</th>'."\n";
+				}
+			if (in_array('ip', $currentRows))
+				{
+				echo '   <th>';
+				echo '<a href="admin.php?action=user&amp;order=ip_addr&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="registered") ? "DESC" : "ASC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">IP</a>';
 				if ($order=="ip_addr")
@@ -2031,7 +2099,10 @@ switch ($action)
 					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
-				echo '<th><a href="admin.php?action=user&amp;order=logins&amp;descasc=';
+				}
+			if (in_array('logins', $currentRows))
+				{
+				echo '   <th><a href="admin.php?action=user&amp;order=logins&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="logins") ? "DESC" : "ASC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['user_logins'].'</a>';
 				if ($order=="logins")
@@ -2039,7 +2110,10 @@ switch ($action)
 					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
-				echo '<th><a href="admin.php?action=user&amp;order=last_login&amp;descasc=';
+				}
+			if (in_array('last_login', $currentRows))
+				{
+				echo '   <th><a href="admin.php?action=user&amp;order=last_login&amp;descasc=';
 				echo ($descasc=="ASC" && $order=="last_login") ? "DESC" : "ASC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang_add['last_login'].'</a>';
 				if ($order=="last_login")
@@ -2047,7 +2121,10 @@ switch ($action)
 					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
-				echo '<th><a href="admin.php?action=user&amp;order=user_lock&amp;descasc=';
+				}
+			if (in_array('user_lock', $currentRows))
+				{
+				echo '   <th><a href="admin.php?action=user&amp;order=user_lock&amp;descasc=';
 				echo ($descasc=="DESC" && $order=="user_lock") ? "ASC" : "DESC";
 				echo '&amp;ul='.$ul.'&amp;sam='.$sam.$parLetter.'" title="'.$lang['order_linktitle'].'">'.$lang['lock'].'</a>';
 				if ($order=="user_lock")
@@ -2055,43 +2132,58 @@ switch ($action)
 					echo outputImageDescAsc($currDescAsc);
 					}
 				echo '</th>'."\n";
-				echo '<th colspan="2">&nbsp;</th>'."\n";
-				echo '</tr>'."\n";
-				$i=0;
-				while ($zeile = mysql_fetch_assoc($result))
+				}
+			echo in_array('actions', $currentRows) ?'   <th colspan="2">&nbsp;</th>'."\n" : '';
+			echo '  </tr>'."\n";
+			echo ' </thead>'."\n".' <tbody>'."\n".'  ';
+			$i=0;
+			while ($zeile = mysql_fetch_assoc($result))
+				{
+				# highlight user, mods and admins:
+				if (($settings['admin_mod_highlight'] == 1
+				or $settings['user-highlight'] == 1)
+				&& $zeile["user_id"] > 0)
 					{
-					# highlight user, mods and admins:
-					if (($settings['admin_mod_highlight'] == 1
-					or $settings['user-highlight'] == 1)
-					&& $zeile["user_id"] > 0)
-						{
-						$mark = outputStatusMark($mark, $zeile['user_type'], $connid);
-						}
-					$rowClass = ($i % 2 == 0) ? "a" : "b";
-					echo '<tr class="'.$rowClass.'">'."\n";
-					echo '<td><input type="checkbox" name="selected[]" value="'.$zeile["user_id"].'" /></td>'."\n";
-					echo '<td class="info">'.$zeile["user_id"].'</td>'."\n";
-					echo '<td>';
+					$mark = outputStatusMark($mark, $zeile['user_type'], $connid);
+					}
+				echo '<tr>'."\n";
+				echo '   <td><input type="checkbox" name="selected[]" value="'.$zeile["user_id"].'" /></td>'."\n";
+				if (in_array('user_id', $currentRows))
+					{
+					echo '   <td class="info">'.$zeile["user_id"].'</td>'."\n";
+					}
+				if (in_array('user_name', $currentRows))
+					{
+					echo '   <td>';
 					echo outputAuthorsName(htmlspecialchars($zeile["user_name"]), $mark, $zeile["user_id"]).'</td>'."\n";
-					echo '<td class="info"><a href="mailto:'.$zeile["user_email"].'" title="';
+					}
+				if (in_array('user_email', $currentRows))
+					{
+					echo '   <td class="info"><a href="mailto:'.$zeile["user_email"].'" title="';
 					echo str_replace("[name]", htmlspecialchars($zeile["user_name"]), $lang_add['mailto_user_lt']);
-					echo '">'.htmlspecialchars($zeile["user_email"]).'</a></td>'."\n";
-					if (isset($_GET['order'])
-						and $_GET['order'] == 'ip_addr')
-						{
-						echo '<td class="info" title="'. htmlspecialchars(strftime($lang['time_format'], $zeile["registered_time"]));
-						echo '">'. htmlspecialchars($zeile['ip_address']) .'</td>'."\n";
-						}
-					else
-						{
-						echo '<td class="info" title="'. htmlspecialchars($zeile['ip_address']);
-						echo '">'.strftime($lang['time_format'], $zeile["registered_time"]).'</td>'."\n";
-						}
-					echo '<td class="info">'.$zeile["logins"].'</td>'."\n";
-					echo '<td class="info">';
-					echo ($zeile["logins"] > 0) ? strftime($lang['time_format'], $zeile["last_login_time"]) : "&nbsp;";
+					echo '">'. htmlspecialchars($zeile["user_email"]) .'</a></td>'."\n";
+					}
+				if (in_array('registered', $currentRows))
+					{
+					echo '   <td class="info">'. htmlspecialchars($zeile["registered_time"]) .'</td>'."\n";
+					}
+				if (in_array('ip', $currentRows))
+					{
+					echo '   <td class="info">'. htmlspecialchars($zeile['ip_address']) .'</td>'."\n";
+					}
+				if (in_array('logins', $currentRows))
+					{
+					echo '   <td class="info">'.$zeile["logins"].'</td>'."\n";
+					}
+				if (in_array('last_login', $currentRows))
+					{
+					echo '   <td class="info">';
+					echo ($zeile["logins"] > 0) ? htmlspecialchars($zeile["last_login_time"]) : "&nbsp;";
 					echo '</td>'."\n";
-					echo '<td class="info">';
+					}
+				if (in_array('user_lock', $currentRows))
+					{
+					echo '   <td class="info">';
 					if ($zeile["user_lock"] == 0)
 						{
 						echo '<a href="admin.php?user_lock='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc=';
@@ -2107,30 +2199,34 @@ switch ($action)
 						echo '">'.$lang['locked'].'</a>';
 						}
 					echo '</td>'."\n";
-					echo '<td class="info"><a href="admin.php?edit_user='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
-					echo '&amp;ul='.$ul.'&amp;sam='.$sam.'">'.$lang_add['edit_link'].'</a></td>'."\n";
-					echo '<td class="info"><a href="admin.php?delete_user='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
-					echo '&amp;ul='.$ul.'&amp;sam='.$sam.'">'.$lang_add['delete_link'].'</a></td>'."\n";
-					echo '</tr>'."\n";
-					$i++;
 					}
-				mysql_free_result($result);
-				echo '</table>'."\n";
-				echo '<div style="margin:5px 0px 0px 7px; padding:0px;"><img src="img/selected_arrow.png" alt="" width="35"';
-				echo ' height="20" border="0"><input type="submit" name="delete_user" value="'.outputLangDebugInAttributes($lang_add['delete_users_sb']);
-				echo '" title="'.$lang_add['delete_users_sb_title'].'" /></div>'."\n".'</form>'."\n";
+				if (in_array('actions', $currentRows))
+					{
+					echo '   <td class="info"><a href="admin.php?edit_user='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
+					echo '&amp;ul='.$ul.'&amp;sam='.$sam.'">'.$lang_add['edit_link'].'</a></td>'."\n";
+					echo '   <td class="info"><a href="admin.php?delete_user='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
+					echo '&amp;ul='.$ul.'&amp;sam='.$sam.'">'.$lang_add['delete_link'].'</a></td>'."\n";
+					}
+				echo '  </tr>';
+				$i++;
 				}
-			else
-				{
-				echo '<p><i>'.$lang['no_users'].'</i></p>'."\n";
-				}
-			echo '<ul class="linklist">'."\n";
-			echo '<li><a class="textlink" href="admin.php?action=register">'.$lang_add['reg_user'].'</a></li>'."\n";
-			echo '<li><a class="textlink" href="admin.php?action=email_list">'.$lang_add['email_list'].'</a></li>'."\n";
-			echo '<li><a class="textlink" href="admin.php?action=clear_userdata">'.$lang_add['clear_userdata'].'</a></li>'."\n";
-			echo '</ul>'."\n";
-		break;
-		case "register":
+			mysql_free_result($result);
+			echo "\n".' </tbody>'."\n".'</table>'."\n";
+			echo '<div style="margin:5px 0px 0px 7px; padding:0px;"><img src="img/selected_arrow.png" alt="" width="35"';
+			echo ' height="20" border="0"><input type="submit" name="delete_user" value="'.outputLangDebugInAttributes($lang_add['delete_users_sb']);
+			echo '" title="'.$lang_add['delete_users_sb_title'].'" /></div>'."\n".'</form>'."\n";
+			}
+		else
+			{
+			echo '<p><i>'.$lang['no_users'].'</i></p>'."\n";
+			}
+		echo '<ul class="linklist">'."\n";
+		echo '<li><a class="textlink" href="admin.php?action=register">'.$lang_add['reg_user'].'</a></li>'."\n";
+		echo '<li><a class="textlink" href="admin.php?action=email_list">'.$lang_add['email_list'].'</a></li>'."\n";
+		echo '<li><a class="textlink" href="admin.php?action=clear_userdata">'.$lang_add['clear_userdata'].'</a></li>'."\n";
+		echo '</ul>'."\n";
+	break;
+	case "register":
 			echo '<p>'.$lang_add['register_exp'].'</p>'."\n";
 			if (isset($errors)) { errorMessages($errors); }
 			echo '<form action="admin.php" method="post">'."\n";
