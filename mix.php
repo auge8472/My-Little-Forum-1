@@ -198,7 +198,6 @@ if ($settings['access_for_users_only'] == 1
 		echo '  </tr>'."\n";
 		echo ' </thead>'."\n".' <tbody>'."\n".'  ';
 
-		$i = 0;
 		while ($zeile = mysql_fetch_assoc($threadsResult))
 			{
 			# read entries of thread
@@ -240,7 +239,6 @@ if ($settings['access_for_users_only'] == 1
 				{
 				$markA = outputStatusMark($mark, $zeile['user_type'], $connid);
 				}
-			$rowClass = ($i % 2 == 0) ? "a" : "b";
 			echo '<tr>'."\n";
 			echo '   <td>'.outputThreads($postArray, $childArray, 'mix', 4).'   </td>'."\n";
 			if ($categories !== false
@@ -347,7 +345,6 @@ if ($settings['access_for_users_only'] == 1
 				}
 			echo '  </tr>'."\n";
 			unset($rawresult, $childArray, $postArray);
-			$i++;
 			}
 		echo "\n".' </tbody>'."\n".'</table>'."\n";
 		mysql_free_result($threadsResult);
