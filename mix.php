@@ -134,8 +134,9 @@ if ($settings['access_for_users_only'] == 1
 		{
 		$currDescAsc = strtolower($_SESSION[$settings['session_prefix'].'descasc']);
 		echo '<table class="normaltab">'."\n";
-		echo '<tr class="titlerow">'."\n";
-		echo '<th><a href="mix.php?order=subject&amp;descasc=';
+		echo ' <thead>'."\n";
+		echo '  <tr>'."\n";
+		echo '   <th><a href="mix.php?order=subject&amp;descasc=';
 		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
 		&& $_SESSION[$settings['session_prefix'].'order'] == "subject") ? 'DESC' : 'ASC';
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_subject_headline'].'</a>';
@@ -147,7 +148,7 @@ if ($settings['access_for_users_only'] == 1
 		if ($categories !== false
 		&& $_SESSION[$settings['session_prefix'].'category'] == 0)
 			{
-			echo '<th><a href="mix.php?order=category&amp;descasc=';
+			echo '   <th><a href="mix.php?order=category&amp;descasc=';
 			echo ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
 			&& $_SESSION[$settings['session_prefix'].'order'] == "category") ? 'DESC' : 'ASC';
 			echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_category_headline'].'</a>';
@@ -157,7 +158,7 @@ if ($settings['access_for_users_only'] == 1
 				}
 			echo '</th>'."\n";
 			}
-		echo '<th><a href="mix.php?order=name&amp;descasc=';
+		echo '   <th><a href="mix.php?order=name&amp;descasc=';
 		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
 		&& $_SESSION[$settings['session_prefix'].'order'] == "name") ? 'DESC' : 'ASC';
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_author_headline'].'</a>';
@@ -166,7 +167,7 @@ if ($settings['access_for_users_only'] == 1
 			echo outputImageDescAsc($currDescAsc);
 			}
 		echo '</th>'."\n";
-		echo '<th><a href="mix.php?order=time&amp;descasc=';
+		echo '   <th><a href="mix.php?order=time&amp;descasc=';
 		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "DESC"
 		&& $_SESSION[$settings['session_prefix'].'order'] == "time") ? "ASC" : "DESC";
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_date_headline'].'</a>';
@@ -175,8 +176,8 @@ if ($settings['access_for_users_only'] == 1
 			echo outputImageDescAsc($currDescAsc);
 			}
 		echo '</th>'."\n";
-		echo '<th>'.$lang['board_answers_headline'].'</th>'."\n";
-		echo '<th><a href="mix.php?order=last_answer&amp;descasc=';
+		echo '   <th>'.$lang['board_answers_headline'].'</th>'."\n";
+		echo '   <th><a href="mix.php?order=last_answer&amp;descasc=';
 		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "DESC"
 		&& $_SESSION[$settings['session_prefix'].'order'] == "last_answer") ? 'ASC' : 'DESC';
 		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_last_answer_headline'].'</a>';
@@ -187,14 +188,15 @@ if ($settings['access_for_users_only'] == 1
 		echo '</th>'."\n";
 		if (isset($settings['count_views']) && $settings['count_views'] == 1)
 			{
-			echo '<th>'.$lang['views_headline'].'</th>'."\n";
+			echo '   <th>'.$lang['views_headline'].'</th>'."\n";
 			}
 		if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 		&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
 			{
-			echo '<th>&nbsp;</th>'."\n";
+			echo '   <th>&nbsp;</th>'."\n";
 			}
-		echo '</tr>';
+		echo '  </tr>'."\n";
+		echo ' </thead>'."\n".' <tbody>'."\n".'  ';
 
 		$i = 0;
 		while ($zeile = mysql_fetch_assoc($threadsResult))
@@ -239,12 +241,12 @@ if ($settings['access_for_users_only'] == 1
 				$markA = outputStatusMark($mark, $zeile['user_type'], $connid);
 				}
 			$rowClass = ($i % 2 == 0) ? "a" : "b";
-			echo '<tr class="'.$rowClass.'">'."\n";
-			echo ' <td>'.outputThreads($postArray, $childArray, 'mix', 2).'</td>'."\n";
+			echo '<tr>'."\n";
+			echo '   <td>'.outputThreads($postArray, $childArray, 'mix', 4).'   </td>'."\n";
 			if ($categories !== false
 			&& $_SESSION[$settings['session_prefix'].'category'] == 0)
 				{
-				echo '<td class="info">'."\n"; #categories
+				echo '   <td class="info">'; #categories
 				if (isset($categories[$zeile["category"]]) && $categories[$zeile["category"]]!='')
 					{
 					echo '<a title="'.str_replace("[category]", $categories[$zeile["category"]], outputLangDebugInAttributes($lang['choose_category_linktitle']));
@@ -282,7 +284,7 @@ if ($settings['access_for_users_only'] == 1
 				echo '</td>'."\n";
 				}
 			# author op
-			echo '<td class="info">'."\n";
+			echo '   <td class="info">';
 			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
 				{
 				$sult = str_replace("[name]", htmlspecialchars($zeile["name"]), outputLangDebugInAttributes($lang['show_userdata_linktitle']));
@@ -295,11 +297,11 @@ if ($settings['access_for_users_only'] == 1
 				}
 			echo '</td>'."\n";
 			# time op
-			echo '<td class="info">'.$zeile["Uhrzeit"].'</td>'."\n";
+			echo '   <td class="info">'.$zeile["Uhrzeit"].'</td>'."\n";
 			# number of answers
-			echo '<td class="number-cell">'.$answers_count.'</td>'."\n";
+			echo '   <td class="number-cell">'.$answers_count.'</td>'."\n";
 			# date last answer
-			echo '<td class="info">';
+			echo '   <td class="info">';
 			if ($answers_count > 0)
 				{
 				if ($settings['last_reply_link']==1)
@@ -321,13 +323,13 @@ if ($settings['access_for_users_only'] == 1
 			if (isset($settings['count_views']) && $settings['count_views'] == 1)
 				{
 				# number of views
-				echo '<td class="number-cell">'.$zeile['views'].'</td>'."\n";
+				echo '   <td class="number-cell">'.$zeile['views'].'</td>'."\n";
 				}
 			if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 			&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
 				{
 				# marker for admin
-				echo '<td><a href="admin.php?mark='.$zeile["tid"].'&amp;refer=';
+				echo '   <td><a href="admin.php?mark='.$zeile["tid"].'&amp;refer=';
 				echo basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$page;
 				echo ($category > 0) ? '&amp;category='.$category : '';
 				echo '&amp;order='.$order.'">';
@@ -343,11 +345,11 @@ if ($settings['access_for_users_only'] == 1
 					}
 				echo '</a></td>'."\n";
 				}
-			echo '</tr>'."\n";
+			echo '  </tr>'."\n";
 			unset($rawresult, $childArray, $postArray);
 			$i++;
 			}
-		echo "\n".'</table>'."\n";
+		echo "\n".' </tbody>'."\n".'</table>'."\n";
 		mysql_free_result($threadsResult);
 		echo outputManipulateMarked('mix');
 		}

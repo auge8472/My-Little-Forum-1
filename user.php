@@ -1072,8 +1072,9 @@ switch ($action)
 			{
 			$currDescAsc = strtolower($descasc);
 			$output .= '<table class="normaltab">'."\n";
-			$output .= '<tr class="titlerow">'."\n";
-			$output .= '<th><a href="user.php?action=show+users&amp;order=user_name&amp;descasc=';
+			$output .= ' <thead>'."\n";
+			$output .= '  <tr>'."\n";
+			$output .= '   <th><a href="user.php?action=show+users&amp;order=user_name&amp;descasc=';
 			$output .= ($descasc=="ASC" && $order=="user_name") ? 'DESC' : 'ASC';
 			$output .= '&amp;ul='. $ul .'" title="'. outputLangDebugInAttributes($lang['order_linktitle']) .'">'. $lang['userlist_name'] .'</a>';
 			if ($order=="user_name")
@@ -1081,7 +1082,7 @@ switch ($action)
 				$output .= outputImageDescAsc($currDescAsc);
 				}
 			$output .= '</th>'."\n";
-			$output .= '<th><a href="user.php?action=show+users&amp;order=user_type&amp;descasc=';
+			$output .= '   <th><a href="user.php?action=show+users&amp;order=user_type&amp;descasc=';
 			$output .= ($descasc=="ASC" && $order=="user_type") ? 'DESC' : 'ASC';
 			$output .= '&amp;ul='. $ul .'" title="'. outputLangDebugInAttributes($lang['order_linktitle']) .'">'. $lang['userlist_type'] .'</a>';
 			if ($order=="user_type")
@@ -1089,8 +1090,8 @@ switch ($action)
 				$output .= outputImageDescAsc($currDescAsc);
 				}
 			$output .= '</th>'."\n";
-			$output .= '<th>'. $lang['userlist_email'] .'</th>'."\n";
-			$output .= '<th>'. $lang['userlist_hp'] .'</th>'."\n";
+			$output .= '   <th>'. $lang['userlist_email'] .'</th>'."\n";
+			$output .= '   <th>'. $lang['userlist_hp'] .'</th>'."\n";
 			if ($settings['count_users_online'] == 1)
 				{
 				$output .= '<th>'. $lang['userlist_online'] .'</th>'."\n";
@@ -1099,7 +1100,7 @@ switch ($action)
 			&& ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
 			|| $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
 				{
-				$output .= '<th><a href="user.php?action=show+users&amp;order=user_lock&amp;descasc=';
+				$output .= '   <th><a href="user.php?action=show+users&amp;order=user_lock&amp;descasc=';
 				$output .= ($descasc=="ASC" && $order=="user_lock") ? 'DESC' : 'ASC';
 				$output .= '&amp;ul='. $ul .'" title="'. outputLangDebugInAttributes($lang['order_linktitle']) .'">'. $lang['lock'] .'</a>';
 				if ($order=="user_lock")
@@ -1108,21 +1109,20 @@ switch ($action)
 					}
 				$output .= '</th>'."\n";
 				}
-			$output .= '</tr>';
-			$i=0;
+			$output .= '</tr>'."\n";
+			$output .= ' </thead>'."\n".' <tbody>'."\n".'  ';
 			while ($field = mysql_fetch_assoc($result))
 				{
-				$rowClass = ($i % 2 == 0) ? "a" : "b";
-				$output .= '<tr class="'.$rowClass.'">'."\n";
-				$output .= '  <td><a href="user.php?id='.$field['user_id'].'" title="';
+				$output .= '<tr>'."\n";
+				$output .= '   <td><a href="user.php?id='.$field['user_id'].'" title="';
 				$output .= str_replace("[name]", htmlspecialchars($field["user_name"]), outputLangDebugInAttributes($lang['show_userdata_linktitle']));
 				$output .= '"><b>'. htmlspecialchars($field['user_name']) .'</b></a></td>'."\n";
-				$output .= '  <td class="info">';
+				$output .= '   <td class="info">';
 				if ($field["user_type"] == "admin") $output .= $lang['ud_admin'];
 				elseif ($field["user_type"] == "mod") $output .= $lang['ud_mod'];
 				else $output .= $lang['ud_user'];
 				$output .= '</td>'."\n";
-				$output .= '  <td class="info">';
+				$output .= '   <td class="info">';
 				if ($field["hide_email"]!=1)
 					{
 					$output .= '<a href="contact.php?uid='.$field['user_id'].'"><img src="img/email.png"';
@@ -1132,7 +1132,7 @@ switch ($action)
 					}
 				else $output .= "&nbsp;";
 				$output .= '</td>'."\n";
-				$output .= '  <td class="info">';
+				$output .= '   <td class="info">';
 				if ($field["user_hp"] != '')
 					{
 					$field["user_hp"] = amendProtocol($field["user_hp"]);
@@ -1144,7 +1144,7 @@ switch ($action)
 				$output .= '</td>'."\n";
 				if ($settings['count_users_online'] == 1)
 					{
-					$output .= '  <td class="info">';
+					$output .= '   <td class="info">';
 					if ($settings['count_users_online'] == 1
 					&& in_array($field['user_id'], $useronline_array))
 						{
@@ -1157,7 +1157,7 @@ switch ($action)
 				&& ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
 				|| $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
 					{
-					$output .= '  <td class="info">';
+					$output .= '   <td class="info">';
 					if ($field["user_type"]=="user")
 						{
 						if ($field["user_lock"] == 0)
@@ -1178,10 +1178,9 @@ switch ($action)
 					else $output .= "&nbsp;";
 					$output .= '</td>'."\n";
 					}
-				$output .= ' </tr>';
-				$i++;
+				$output .= '  </tr>';
 				}
-			$output .= "\n".'</table>'."\n";
+			$output .= "\n".' </tbody>'."\n".'</table>'."\n";
 			}
 		else
 			{

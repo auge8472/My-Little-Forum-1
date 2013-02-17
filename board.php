@@ -132,8 +132,9 @@ if($settings['access_for_users_only']  == 1
 		{
 		$currDescAsc = strtolower($_SESSION[$settings['session_prefix'].'descasc']);
 		echo '<table class="normaltab">'."\n";
-		echo '<tr class="titlerow">'."\n";
-		echo '<th><a href="board.php?order=subject&amp;descasc=';
+		echo ' <thead>'."\n";
+		echo '  <tr>'."\n";
+		echo '   <th><a href="board.php?order=subject&amp;descasc=';
 		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
 		&& $_SESSION[$settings['session_prefix'].'order'] == "subject") ? 'DESC' : 'ASC';
 		echo $cat;
@@ -146,7 +147,7 @@ if($settings['access_for_users_only']  == 1
 		if ($categories !== false
 		&& $_SESSION[$settings['session_prefix'].'category'] == 0)
 			{
-			echo '<th><a href="board.php?order=category&amp;descasc=';
+			echo '   <th><a href="board.php?order=category&amp;descasc=';
 			echo ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
 			&& $_SESSION[$settings['session_prefix'].'order'] == "category") ? 'DESC' : 'ASC';
 			echo $cat;
@@ -157,32 +158,32 @@ if($settings['access_for_users_only']  == 1
 				}
 			echo '</th>'."\n";
 			}
-		echo '<th><a href="board.php?order=name&amp;descasc=';
+		echo '   <th><a href="board.php?order=name&amp;descasc=';
 		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
 		&& $_SESSION[$settings['session_prefix'].'order'] == "name") ? 'DESC' : 'ASC';
 		echo $cat;
-		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_author_headline'].'</a>'."\n";
+		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_author_headline'].'</a>';
 		if ($_SESSION[$settings['session_prefix'].'order'] == "name")
 			{
 			echo outputImageDescAsc($currDescAsc);
 			}
 		echo '</th>'."\n";
-		echo '<th><a href="board.php?order=time&amp;descasc=';
+		echo '   <th><a href="board.php?order=time&amp;descasc=';
 		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "DESC"
 		&& $_SESSION[$settings['session_prefix'].'order'] == "time") ? "ASC" : "DESC";
 		echo $cat;
-		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_date_headline'].'</a>'."\n";
+		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_date_headline'].'</a>';
 		if ($_SESSION[$settings['session_prefix'].'order'] == "time")
 			{
 			echo outputImageDescAsc($currDescAsc);
 			}
 		echo '</th>'."\n";
-		echo '<th>'.$lang['board_answers_headline'].'</th>'."\n";
-		echo '<th><a href="board.php?order=last_answer&amp;descasc=';
+		echo '   <th>'.$lang['board_answers_headline'].'</th>'."\n";
+		echo '   <th><a href="board.php?order=last_answer&amp;descasc=';
 		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "DESC"
 		&& $_SESSION[$settings['session_prefix'].'order'] == "last_answer") ? "ASC" : "DESC";
 		echo $cat;
-		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_last_answer_headline'].'</a>'."\n";
+		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_last_answer_headline'].'</a>';
 		if ($_SESSION[$settings['session_prefix'].'order'] == "last_answer")
 			{
 			echo outputImageDescAsc($currDescAsc);
@@ -190,14 +191,15 @@ if($settings['access_for_users_only']  == 1
 		echo '</th>'."\n";
 		if (isset($settings['count_views']) && $settings['count_views'] == 1)
 			{
-			echo '<th>'.$lang['views_headline'].'</th>';
+			echo '   <th>'.$lang['views_headline'].'</th>'."\n";
 			}
 		if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 		&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
 			{
-			echo '<th>&nbsp;</th>'."\n";
+			echo '   <th>&nbsp;</th>'."\n";
 			}
-		echo '</tr>';
+		echo '  </tr>'."\n";
+		echo ' </thead>'."\n".' <tbody>'."\n".'  ';
 
 		$i=0;
 		while ($zeile = mysql_fetch_assoc($threadsResult))
@@ -218,10 +220,9 @@ if($settings['access_for_users_only']  == 1
 				{
 				$mark = outputStatusMark($mark, $zeile['user_type'], $connid);
 				}
-			$rowClass = ($i % 2 == 0) ? "a" : "b";
-			echo '<tr class="'.$rowClass.'">'."\n";
-			echo '<td>'."\n"; # start: subject
-			echo '<a class="';
+			echo '<tr>'."\n";
+			# start: subject
+			echo '   <td><a class="';
 			if ((isset($_SESSION[$settings['session_prefix'].'newtime'])
 			&& $_SESSION[$settings['session_prefix'].'newtime'] < $zeile["last_answer"])
 			|| (($zeile["pid"]==0)
@@ -263,7 +264,8 @@ if($settings['access_for_users_only']  == 1
 			if ($categories!=false
 			&& $_SESSION[$settings['session_prefix'].'category'] == 0)
 				{
-				echo '<td class="info">'."\n"; # start: categories (if in use)
+				# start: categories (if in use)
+				echo '   <td class="info">';
 				if (isset($categories[$zeile["category"]]) && $categories[$zeile["category"]]!='')
 					{
 					echo '<a title="'.str_replace("[category]", $categories[$zeile["category"]], outputLangDebugInAttributes($lang['choose_category_linktitle']));
@@ -300,7 +302,8 @@ if($settings['access_for_users_only']  == 1
 					}
 				echo '</td>'."\n"; # end: categories
 				}
-			echo '<td class="info">'."\n"; # start: authors names
+			# start: authors names
+			echo '   <td class="info">';
 			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["posters_id"] > 0)
 				{
 				$sult = str_replace("[name]", htmlspecialchars($zeile["name"]), outputLangDebugInAttributes($lang['show_userdata_linktitle']));
@@ -312,9 +315,9 @@ if($settings['access_for_users_only']  == 1
 				echo '</a>';
 				}
 			echo '</td>'."\n"; # end: authors names
-			echo '<td class="info">'.$zeile["Uhrzeit"].'</td>'."\n";
-			echo '<td class="number-cell">'.$answers_count.'</td>'."\n";
-			echo '<td class="info">'; # start: last reply
+			echo '   <td class="info">'.$zeile["Uhrzeit"].'</td>'."\n";
+			echo '   <td class="number-cell">'.$answers_count.'</td>'."\n";
+			echo '   <td class="info">'; # start: last reply
 			if ($answers_count > 0)
 				{
 				if ($settings['last_reply_link']==1)
@@ -343,12 +346,12 @@ if($settings['access_for_users_only']  == 1
 			if ($settings['count_views'] == 1)
 				{
 				# number of views
-				echo '<td class="number-cell">'.$zeile['views'].'</td>'."\n";
+				echo '   <td class="number-cell">'.$zeile['views'].'</td>'."\n";
 				}
 			if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 			&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
 				{
-				echo '<td><a href="admin.php?mark='.$zeile["tid"].'&amp;refer=';
+				echo '   <td><a href="admin.php?mark='.$zeile["tid"].'&amp;refer=';
 				echo basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$_SESSION[$settings['session_prefix'].'page'];
 				echo ($_SESSION[$settings['session_prefix'].'category'] > 0) ? '&amp;category='.$_SESSION[$settings['session_prefix'].'category'] : '';
 				echo '&amp;order='.$_SESSION[$settings['session_prefix'].'order'].'">';
@@ -365,7 +368,7 @@ if($settings['access_for_users_only']  == 1
 			echo '</tr>';
 			$i++;
 			} # End: while ()
-		echo "\n".'</table>'."\n";
+		echo "\n".' </tbody>'."\n".'</table>'."\n";
 		mysql_free_result($threadsResult);
 		echo outputManipulateMarked('board');
 		} # End: if ($thread_count > 0 && isset($result))

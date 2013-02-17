@@ -2133,10 +2133,9 @@ switch ($action)
 					}
 				echo '</th>'."\n";
 				}
-			echo in_array('actions', $currentRows) ?'   <th colspan="2">&nbsp;</th>'."\n" : '';
+			echo in_array('actions', $currentRows) ? '   <th colspan="3">&nbsp;</th>'."\n" : '';
 			echo '  </tr>'."\n";
 			echo ' </thead>'."\n".' <tbody>'."\n".'  ';
-			$i=0;
 			while ($zeile = mysql_fetch_assoc($result))
 				{
 				# highlight user, mods and admins:
@@ -2206,9 +2205,10 @@ switch ($action)
 					echo '&amp;ul='.$ul.'&amp;sam='.$sam.'">'.$lang_add['edit_link'].'</a></td>'."\n";
 					echo '   <td class="info"><a href="admin.php?delete_user='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
 					echo '&amp;ul='.$ul.'&amp;sam='.$sam.'">'.$lang_add['delete_link'].'</a></td>'."\n";
+					echo '   <td class="info"><a href="admin.php?delete_user='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
+					echo '&amp;ul='.$ul.'&amp;sam='.$sam.'">'.$lang_add['delete_link'].'</a></td>'."\n";
 					}
 				echo '  </tr>';
-				$i++;
 				}
 			mysql_free_result($result);
 			echo "\n".' </tbody>'."\n".'</table>'."\n";
@@ -2823,14 +2823,15 @@ switch ($action)
 					$result = mysql_query("SELECT id, file, code_1, code_2, code_3, code_4, code_5, title FROM ".$db_settings['smilies_table']." ORDER BY order_id ASC", $connid);
 					if (!$result) die($lang['db_error']);
 					echo '<table class="normaltab">'."\n";
-					echo ' <tr class="titlerow">'."\n";
-					echo '  <th>'.$lang_add['edit_smilies_smiley'].'</th>'."\n";
-					echo '  <th>'.$lang_add['edit_smilies_codes'].'</th>'."\n";
-					echo '  <th>'.$lang_add['edit_smilies_title'].'</th>'."\n";
-					echo '  <th colspan="2">'.$lang_add['edit_smilies_action'].'</th>'."\n";
-					echo '  <th>'.$lang_add['edit_smilies_order'].'</th>'."\n";
-					echo ' </tr>'."\n";
-					$i=0;
+					echo ' <thead>'."\n";
+					echo '  <tr>'."\n";
+					echo '   <th>'.$lang_add['edit_smilies_smiley'].'</th>'."\n";
+					echo '   <th>'.$lang_add['edit_smilies_codes'].'</th>'."\n";
+					echo '   <th>'.$lang_add['edit_smilies_title'].'</th>'."\n";
+					echo '   <th colspan="2">'.$lang_add['edit_smilies_action'].'</th>'."\n";
+					echo '   <th>'.$lang_add['edit_smilies_order'].'</th>'."\n";
+					echo '  </tr>'."\n";
+					echo ' </thead>'."\n".' <tbody>'."\n".'  ';
 					while ($line = mysql_fetch_assoc($result))
 						{
 						# remove used smilies from smiley array:
@@ -2851,25 +2852,24 @@ switch ($action)
 						if (trim($line['code_4'])!='') $codes[] = stripslashes($line['code_4']);
 						if (trim($line['code_5'])!='') $codes[] = stripslashes($line['code_5']);
 						$codes_disp = implode(' &nbsp;',$codes);
-						$rowClass = ($i % 2 == 0) ? "a" : "b";
-						echo '<tr class="'.$rowClass.'">'."\n";
-						echo '<td><img src="img/smilies/'.$line['file'].'" alt="'.$line['code_1'].'"';
+						echo '<tr>'."\n";
+						echo '   <td><img src="img/smilies/'.$line['file'].'" alt="'.$line['code_1'].'"';
 						echo ($line['title']!='') ? 'title="'.$line['title'].'"' : '';
 						echo '/></td>'."\n";
-						echo '<td>'.$codes_disp.'</td>'."\n";
-						echo '<td>'.$line['title'].'</td>'."\n";
-						echo '<td><a href="admin.php?edit_smiley='.$line['id'].'">';
+						echo '   <td>'.$codes_disp.'</td>'."\n";
+						echo '   <td>'.$line['title'].'</td>'."\n";
+						echo '   <td><a href="admin.php?edit_smiley='.$line['id'].'">';
 						echo $lang_add['edit_link'].'</a></td>'."\n";
-						echo '<td><a href="admin.php?delete_smiley='.$line['id'].'">';
+						echo '   <td><a href="admin.php?delete_smiley='.$line['id'].'">';
 						echo $lang_add['delete_link'].'</a></td>'."\n";
-						echo '<td><a href="admin.php?move_up_smiley='.$line['id'];
+						echo '   <td><a href="admin.php?move_up_smiley='.$line['id'];
 						echo '"><img src="img/up.png" alt="up" width="11" height="11" /></a>';
 						echo '&nbsp;<a href="admin.php?move_down_smiley='.$line['id'];
 						echo '"><img src="img/down.png" alt="down" width="11" height="11" /></a></td>'."\n";
-						echo '</tr>'."\n";
-						$i++;
+						echo '  </tr>';
 						}
 					mysql_free_result($result);
+					echo "\n".' </tbody>'."\n";
 					echo '</table>'."\n";
 					}
 				else
@@ -2928,10 +2928,10 @@ switch ($action)
 			if (isset($errors)) { echo errorMessages($errors); }
 			echo '<form action="admin.php" method="post">'."\n";
 			echo '<input type="hidden" name="id" value="'.$id.'" />'."\n";
-			echo '<table class="normaltab">'."\n";
-			echo '<tr>'."\n";
-			echo '<td class="c"><label for="smiley-file">'.$lang_add['edit_smilies_smiley'].'</label></td>'."\n";
-			echo '<td class="d"><select name="file" id="smiley-file" size="1">'."\n";
+			echo '<table class="admin">'."\n";
+			echo ' <tr>'."\n";
+			echo '  <td><label for="smiley-file">'.$lang_add['edit_smilies_smiley'].'</label></td>'."\n";
+			echo '  <td><select name="file" id="smiley-file" size="1">'."\n";
 			$fp=opendir('img/smilies/');
 			while ($dirfile = readdir($fp))
 				{
@@ -2946,9 +2946,9 @@ switch ($action)
 				}
 			closedir($fp);
 			echo '</select></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c">'.$lang_add['edit_smilies_codes'].'</td>'."\n";
-			echo '<td class="d"><input type="text" name="code_1" size="7" value="';
+			echo ' </tr><tr>'."\n";
+			echo '  <td>'.$lang_add['edit_smilies_codes'].'</td>'."\n";
+			echo '  <td><input type="text" name="code_1" size="7" value="';
 			if (isset($code_1)) echo htmlspecialchars($code_1);
 			echo '" /> <input type="text" name="code_2" size="7" value="';
 			if (isset($code_2)) echo htmlspecialchars($code_2);
@@ -2959,12 +2959,12 @@ switch ($action)
 			echo '" /> <input type="text" name="code_5" size="7" value="';
 			if (isset($code_5)) echo htmlspecialchars($code_5);
 			echo '" /></td>'."\n";
-			echo '</tr><tr>'."\n";
-			echo '<td class="c"><label for="smiley-title">'.$lang_add['edit_smilies_title'].'</b></td>'."\n";
-			echo '<td class="d"><input type="text" name="title" id="smiley-title" value="';
+			echo ' </tr><tr>'."\n";
+			echo '  <td><label for="smiley-title">'.$lang_add['edit_smilies_title'].'</b></td>'."\n";
+			echo '  <td><input type="text" name="title" id="smiley-title" value="';
 			if (isset($title)) echo htmlspecialchars($title);
 			echo '" size="25" /></td>'."\n";
-			echo '</tr>'."\n";
+			echo ' </tr>'."\n";
 			echo '</table>'."\n";
 			echo '<p><input type="submit" name="edit_smiley_submit" value="';
 			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></p>'."\n";
