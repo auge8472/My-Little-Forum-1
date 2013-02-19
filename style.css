@@ -732,6 +732,9 @@ table.normaltab td.info,
 table.normaltab td.number-cell,
 table.normaltab td .info,
 .small { font-size: 0.86em; }
+table.normaltab .checkrow { width: 2em; }
+table.normaltab .id { width: 5em; }
+table.normaltab .name, table.normaltab .email { width: 18em; }
 
 table.admin {
 width: 100%;
