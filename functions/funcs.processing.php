@@ -537,14 +537,20 @@ function processSetUsersOnline($user_online_period = 10) {
 global $connid, $db_settings, $settings;
 
 $user_id = isset($_SESSION[$settings['session_prefix'].'user_id']) ? $_SESSION[$settings['session_prefix'].'user_id'] : 0;
-$ip = isset($_SESSION[$settings['session_prefix'].'user_id']) ? "uid_".$_SESSION[$settings['session_prefix'].'user_id'] : $_SERVER['REMOTE_ADDR'];
-$diff = time() - ($user_online_period * 60);
+$diff = $user_online_period * 60;
+$queryDeleteOutdatedRequests = "DELETE FROM ".$db_settings['useronline_table']."
+WHERE requestdate < DATE_SUB(NOW(), INTERVAL ". intval($diff) ." SECOND)";
 
-@mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE time < ". $diff, $connid);
+@mysql_query($queryDeleteOutdatedRequests, $connid);
 
-list($is_online) = @mysql_fetch_row(@mysql_query("SELECT COUNT(*) FROM ". $db_settings['useronline_table'] ." WHERE ip= '". mysql_real_escape_string($ip) ."'", $connid));
-if ($is_online > 0) @mysql_query("UPDATE ". $db_settings['useronline_table'] ." SET time='". time() ."', user_id='". intval($user_id) ."' WHERE ip='". $ip ."'", $connid);
-else @mysql_query("INSERT INTO ". $db_settings['useronline_table'] ." SET time='". time() ."', ip='". $ip ."', user_id='". intval ($user_id)."'", $connid);
+$querySetUserOnline = "INSERT INTO ". $db_settings['useronline_table'] ." SET
+ip_addr = INET_ATON('". mysql_real_escape_string($_SERVER["REMOTE_ADDR"]) ."'),
+requestdate = NOW(),
+user_id = ". intval($user_id) ."
+ON DUPLICATE KEY UPDATE
+requestdate = NOW()";
+
+@mysql_query($querySetUserOnline, $connid);
 
 } # End: processSetUsersOnline
 

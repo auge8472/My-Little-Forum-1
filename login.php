@@ -124,7 +124,7 @@ switch ($action)
 					$update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET logins=logins+1, last_login=NOW(), last_logout=NOW(), registered=registered WHERE user_id='".$user_id."'", $connid);
 					if ($db_settings['useronline_table'] != "")
 						{
-						@mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE ip = '".$_SERVER['REMOTE_ADDR']."'", $connid);
+						@mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE ip_addr = INET_ATON('". mysql_real_escape_string($_SERVER['REMOTE_ADDR']) ."')", $connid);
 						}
 					header('Location: '.$settings['forum_address'].'index.php');
 					die('<a href="index.php">further...</a>');
@@ -180,7 +180,7 @@ switch ($action)
 					setcookie("auto_login",$_COOKIE['auto_login'],time()+(3600*24*30));
 					if ($db_settings['useronline_table'] != "")
 						{
-						@mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE ip = '".$_SERVER['REMOTE_ADDR']."'", $connid);
+						@mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE ip_addr = INET_ATON('". mysql_real_escape_string($_SERVER['REMOTE_ADDR']) ."')", $connid);
 						}
 					}
 				else setcookie("auto_login","",0);
@@ -209,7 +209,7 @@ switch ($action)
 		setcookie("auto_login","",0);
 		if ($db_settings['useronline_table'] != "")
 			{
-			@mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE ip = 'uid_".$user_id."'", $connid);
+			@mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE user_id = ". intval($user_id) , $connid);
 			}
 		header('Location: '.$settings['forum_address'].'index.php');
 		die('<a href="index.php">further...</a>');
