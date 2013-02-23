@@ -1249,7 +1249,7 @@ if (isset($_POST['ar_username']))
 			$laenge = mb_strlen($text_arr[$i]);
 			if ($laenge > $settings['name_word_maxlength'])
 				{
-				$error_nwtl = str_replace("[word]", htmlspecialcharsmb_(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
+				$error_nwtl = str_replace("[word]", htmlspecialchars(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
 				$errors[] = $error_nwtl;
 				}
 			}
