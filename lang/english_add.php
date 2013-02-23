@@ -315,6 +315,7 @@ $lang_add['edit_link'] =                      "edit";
 $lang_add['delete_link'] =                    "delete";
 $lang_add['delete_user'] =                    "Delete user";
 $lang_add['edit_user'] =                      "Edit user";
+$lang_add['delete_ban_link'] =                "Delete & ban IP";
 $lang_add['usertype_marking'] =               "User Type:";
 
 // timedifference:

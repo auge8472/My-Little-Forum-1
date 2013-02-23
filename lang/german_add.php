@@ -270,6 +270,7 @@ $lang_add['edit_link'] =                      "bearbeiten";
 $lang_add['delete_link'] =                    "löschen";
 $lang_add['delete_user'] =                    "Benutzer löschen";
 $lang_add['edit_user'] =                      "Benutzer bearbeiten";
+$lang_add['delete_ban_link'] =                "löschen & IP bannen";
 $lang_add['usertype_marking'] =               "Benutzertyp:";
 
 // timedifference:

@@ -701,6 +701,43 @@ if (isset($_POST['delete_user']))
 		}
 	}
 
+
+if (isset($_GET['delete_user_ip']))
+	{
+	$user_id = intval($_GET['delete_user_ip']);
+	$getUserToDeleteQuery = "SELECT
+	ip_addr
+	FROM ". $db_settings['userdata_table'] ."
+	WHERE user_id = '". intval($_GET['delete_user_ip']) ."'
+	LIMIT 1";
+	$user_result = mysql_query($getUserToDeleteQuery, $connid);
+	if (!$user_result) die($lang['db_error']);
+	$user = mysql_fetch_assoc($user_result);
+	mysql_free_result($user_result);
+	echo "<pre>". print_r($user, true) ."</pre>\n";
+	if (is_array($user)
+		and is_numeric($user['ip_addr']))
+		{
+		echo "<pre>". print_r($user['ip_addr'], true) ."</pre>\n";
+		$putBanIPQuery = "INSERT INTO ". $db_settings['banned_ips_table'] ." SET
+		ip = ". intval($user['ip_addr']) .",
+		last_date = NOW(),
+		requests = 1
+		ON DUPLICATE KEY UPDATE
+		last_date = VALUES(last_date),
+		requests = IF(requests > 4, requests, requests + 1)";
+		$ban_result = mysql_query($putBanIPQuery, $connid);
+		if ($ban_result !== false)
+			{
+			$deleteUserQuery = "DELETE FROM ". $db_settings['userdata_table'] ."
+			WHERE user_id = ". intval($_GET['delete_user_ip']);
+			$ban_result = mysql_query($deleteUserQuery, $connid);
+			}
+		}
+	$action="user";
+	header("Location: ". $settings['forum_address'] ."admin.php?action=user&settingsCat=actions");
+	}
+
 if (isset($_POST['clear_userdata']))
 	{
 	switch ($_POST['clear_userdata'])
@@ -2205,8 +2242,8 @@ switch ($action)
 					echo '&amp;ul='.$ul.'&amp;sam='.$sam.'">'.$lang_add['edit_link'].'</a></td>'."\n";
 					echo '   <td class="info"><a href="admin.php?delete_user='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
 					echo '&amp;ul='.$ul.'&amp;sam='.$sam.'">'.$lang_add['delete_link'].'</a></td>'."\n";
-					echo '   <td class="info"><a href="admin.php?delete_user='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
-					echo '&amp;ul='.$ul.'&amp;sam='.$sam.'">'.$lang_add['delete_link'].'</a></td>'."\n";
+					echo '   <td class="info"><a href="admin.php?delete_user_ip='.$zeile["user_id"].'&amp;order='.$order.'&amp;descasc='.$descasc;
+					echo '&amp;ul='.$ul.'&amp;sam='.$sam.'">'.$lang_add['delete_ban_link'].'</a></td>'."\n";
 					}
 				echo '  </tr>';
 				}
