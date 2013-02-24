@@ -352,7 +352,7 @@ else
 
 
 // default settings:
-$settings['forum_name'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'my little forum', 'cat'=>'general');
+$settings['forum_name'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'my little forum 1', 'cat'=>'general');
 $settings['forum_email'] =  array('type'=>'string', 'poss_values'=>'', 'standard'=>'', 'cat'=>'general');
 $settings['forum_address'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'', 'cat'=>'general');
 $settings['home_linkaddress'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'/', 'cat'=>'general');
@@ -424,7 +424,7 @@ $settings['upload_max_img_height'] = array('type'=>'integer', 'poss_values'=>'',
 $settings['mail_parameter'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'', 'cat'=>'general');
 $settings['forum_disabled'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'general');
 $settings['session_prefix'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'mlf_', 'cat'=>'general');
-$settings['version'] = '1.8', array('type'=>'string', 'poss_values'=>'', 'standard'=>'cat'=>'general');
+$settings['version'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'1.8 beta', 'cat'=>'general');
 $settings['captcha_posting'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'security');
 $settings['captcha_contact'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'security');
 $settings['captcha_register'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'security');
