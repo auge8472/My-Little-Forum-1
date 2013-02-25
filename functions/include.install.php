@@ -357,11 +357,11 @@ $settings['forum_email'] =  array('type'=>'string', 'poss_values'=>'', 'standard
 $settings['forum_address'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'', 'cat'=>'general');
 $settings['home_linkaddress'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'/', 'cat'=>'general');
 $settings['home_linkname'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'', 'cat'=>'general');
-$settings['language_file'] = array('type'=>'string', 'poss_values'=>'file:./lang/', 'standard'=>'english.php', 'cat'=>'general');
+$settings['language_file'] = array('type'=>'array', 'poss_values'=>'file:./lang/', 'standard'=>'english.php', 'cat'=>'general');
 $settings['template'] = array('type'=>'string', 'poss_values'=>'', 'standard'=>'template.html', 'cat'=>'general');
-$settings['access_for_users_only'] = array('type'=>'array', 'poss_values'=>'0:access_all_users, 1:access_only_reg_user', 'standard'=>'1', 'cat'=>'general');
-$settings['entries_by_users_only'] = array('type'=>'array', 'poss_values'=>'0:access_all_users, 1:access_only_reg_user', 'standard'=>'1', 'cat'=>'security');
-$settings['register_by_admin_only'] = array('type'=>'array', 'poss_values'=>'0:access_all_users, 1:access_only_reg_user', 'standard'=>'1', 'cat'=>'security');
+$settings['access_for_users_only'] = array('type'=>'array', 'poss_values'=>'0:access_all_users, 1:access_only_reg_users', 'standard'=>'1', 'cat'=>'general');
+$settings['entries_by_users_only'] = array('type'=>'array', 'poss_values'=>'0:access_all_users, 1:access_only_reg_users', 'standard'=>'1', 'cat'=>'security');
+$settings['register_by_admin_only'] = array('type'=>'array', 'poss_values'=>'0:access_all_users, 1:access_only_reg_users', 'standard'=>'1', 'cat'=>'security');
 $settings['standard'] = array('type'=>'array', 'poss_values'=>'thread:standard_thread, board:standard_board, mix:standard_mix', 'standard'=>'thread', 'cat'=>'views');
 $settings['thread_view'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'views');
 $settings['board_view'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'views');
@@ -430,6 +430,8 @@ $settings['captcha_contact'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1',
 $settings['captcha_register'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'1', 'cat'=>'security');
 $settings['captcha_type'] = array('type'=>'array', 'poss_values'=>'0:captcha_type_math, 1:captcha_type_image', 'standard'=>'0', 'cat'=>'security');
 $settings['user_control_refresh'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'enhanced');
+$settings['user_control_sort_thread_threads'] = array('type'=>'array', 'poss_values'=>'0:0, 1:1', 'standard'=>'0', 'cat'=>'enhanced');
+$settings['thread_view_sorter'] = array('type'=>'array', 'poss_values'=>'ASC:asc, DESC:desc', 'standard'=>'ASC', 'cat'=>'views');
 #$settings['server_timezone'] = $server_tz;
 #$settings['user_control_css'] = 0;
 
