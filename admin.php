@@ -2711,22 +2711,17 @@ switch ($action)
 			echo implode(", ",$email_list).'</textarea>'."\n";
 		break;
 		case "clear_userdata":
-			$output  = '';
 			$xmlFile = dirname($_SERVER["SCRIPT_FILENAME"]) .'/data/templates/admin.menu.clear.userdata.xml';
 			$xml = simplexml_load_file($xmlFile, null, LIBXML_NOCDATA);
 			$tBody = $xml->body;
+			$tBody = str_replace('{Description}', htmlspecialchars($lang_add['clear_userdata_expl']), $tBody);
 			$tBody = str_replace('{Order1}', htmlspecialchars($lang_add['clear_users_1']), $tBody);
 			$tBody = str_replace('{Order2}', htmlspecialchars($lang_add['clear_users_2']), $tBody);
 			$tBody = str_replace('{Order3}', htmlspecialchars($lang_add['clear_users_3']), $tBody);
 			$tBody = str_replace('{Order4}', htmlspecialchars($lang_add['clear_users_4']), $tBody);
 			$tBody = str_replace('{Order5}', htmlspecialchars($lang_add['clear_users_5']), $tBody);
-			$output .= '<p>'.$lang_add['clear_userdata_expl'].'</p>'."\n";
-			$output .= '<form action="admin.php" method="post">'."\n";
-			$output .= $tBody;
-			$output .= '<p><input type="submit" value="';
-			$output .= outputLangDebugInAttributes($lang['submit_button_ok']).'" /></p>'."\n";
-			$output .= '</form>'."\n";
-			echo $output;
+			$tBody = str_replace('{Submit}', outputLangDebugInAttributes($lang['submit_button_ok']), $tBody);
+			echo $tBody;
 		break;
 		case "banlists":
 			# initialize variables
