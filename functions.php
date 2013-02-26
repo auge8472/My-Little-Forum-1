@@ -388,8 +388,8 @@ function shorten_link($url) {
 global $settings;
 
 $t = $url;
-if (strlen($url) > $settings['text_word_maxlength'])
-$t = substr($url, 0, ($settings['text_word_maxlength']/2)) . "..." . substr($url, - ($settings['text_word_maxlength']-3-$settings['text_word_maxlength']/2));
+#if (strlen($url) > $settings['text_word_maxlength'])
+#$t = substr($url, 0, ($settings['text_word_maxlength']/2)) . "..." . substr($url, - ($settings['text_word_maxlength']-3-$settings['text_word_maxlength']/2));
 
 return $t;
 } # End: shorten_link
