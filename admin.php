@@ -2678,22 +2678,24 @@ switch ($action)
 			echo '</ul>'."\n";
 		break;
 		case "import_sql":
-			echo '<p class="caution">'.$lang['caution'].'</p>'."\n";
-			echo '<p class="normal">'.$lang_add['import_sql_note'].'</p>'."\n";
+			$xmlFile = dirname($_SERVER["SCRIPT_FILENAME"]) .'/data/templates/admin.sql.import.html';
+			$tBody = file_get_contents($xmlFile);
+			$tBody = str_replace('{Caution}', htmlspecialchars($lang['caution']), $tBody);
 			if (isset($errors))
 				{
-				echo errorMessages($errors);
+				$description = errorMessages($errors);
 				}
-			echo '<form action="admin.php" method="post">'."\n";
-			echo '<p><b>'.$lang_add['sql_dump'].'</b><br />'."\n";
-			echo '<textarea name="sql" cols="70" rows="15">';
-			echo (isset($sql)) ? htmlspecialchars($sql) : '';
-			echo '</textarea></p>'."\n";
-			echo '<p><label for="sql_pw">'.$lang['password_marking'].'</label><br />';
-			echo '<input type="password" size="25" name="sql_pw" id="sql_pw" /></p>'."\n";
-			echo '<p><input type="submit" name="sql_submit" value="';
-			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></p>'."\n";
-			echo '</form>'."\n";
+			else
+				{
+				$description = '<p class="normal">'. htmlspecialchars($lang_add['import_sql_note']) .'</p>';
+				}
+			$tBody = str_replace('{Description}', $description, $tBody);
+			$tBody = str_replace('{Notice}', htmlspecialchars($lang_add['sql_dump']), $tBody);
+			$sqlDump = (isset($sql)) ? $sql : '';
+			$tBody = str_replace('{SQL-Dump}', htmlspecialchars($sqlDump), $tBody);
+			$tBody = str_replace('{Password}', htmlspecialchars($lang['password_marking']), $tBody);
+			$tBody = str_replace('{Submit}', htmlspecialchars(outputLangDebugInAttributes($lang['submit_button_ok'])), $tBody);
+			echo $tBody;
 		break;
 		case "import_sql_ok":
 			echo '<p>'.$lang_add['import_sql_ok'].'</p>'."\n";
