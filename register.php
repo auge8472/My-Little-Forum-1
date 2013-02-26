@@ -161,7 +161,7 @@ if (isset($_POST['register_submit']))
 				$errors[] = str_replace("[e-mail]", htmlspecialchars($new_user_email), $lang['error_email_reserved']);
 				}
 			# e-mail correct?
-			if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $new_user_email))
+			if (!preg_match($validator['email'], $new_user_email))
 				{
 				$errors[] = $lang['error_email_wrong'];
 				}
