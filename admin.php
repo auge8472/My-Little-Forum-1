@@ -1302,7 +1302,7 @@ if (isset($_POST['ar_username']))
 		hide_email = 1,
 		last_login = NOW(),
 		last_logout = NOW(),
-		user_ip = '". $_SERVER["REMOTE_ADDR"] ."',
+		user_ip = INET_ATON('". $_SERVER['REMOTE_ADDR'] ."'),
 		registered = NOW(),
 		user_view = '". $settings['standard'] ."',
 		personal_messages = 1";
@@ -1313,14 +1313,13 @@ if (isset($_POST['ar_username']))
 		$send_error = '';
 		if (isset($ar_send_userdata))
 			{
-			$ip = $_SERVER["REMOTE_ADDR"];
 			$lang['new_user_email_txt_a'] = str_replace("[name]", $ar_username, strip_tags($lang['new_user_email_txt_a']));
 			$lang['new_user_email_txt_a'] = str_replace("[password]", $ar_pw, $lang['new_user_email_txt_a']);
 			$lang['new_user_email_txt_a'] = str_replace("[login_link]", $settings['forum_address']."login.php?username=".urlencode($ar_username)."&userpw=".$ar_pw, $lang['new_user_email_txt_a']);
 			$lang['new_user_email_txt_a'] = $lang['new_user_email_txt_a'];
 			$header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
 			$header .= "X-Mailer: Php/" . phpversion(). "\n";
-			$header .= "X-Sender-ip: ".$_SERVER["REMOTE_ADDR"]."\n";
+			$header .= "X-Sender-ip: ".$_SERVER['REMOTE_ADDR']."\n";
 			$header .= "Content-Type: text/plain";
 			$new_user_mailto = $ar_username." <".$ar_email.">";
 			if ($settings['mail_parameter']!='')
