@@ -714,11 +714,9 @@ if (isset($_GET['delete_user_ip']))
 	if (!$user_result) die($lang['db_error']);
 	$user = mysql_fetch_assoc($user_result);
 	mysql_free_result($user_result);
-	echo "<pre>". print_r($user, true) ."</pre>\n";
 	if (is_array($user)
 		and is_numeric($user['ip_addr']))
 		{
-		echo "<pre>". print_r($user['ip_addr'], true) ."</pre>\n";
 		$putBanIPQuery = "INSERT INTO ". $db_settings['banned_ips_table'] ." SET
 		ip = ". intval($user['ip_addr']) .",
 		last_date = NOW(),
