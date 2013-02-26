@@ -1,0 +1,27 @@
+<?xml version='1.0' standalone='yes'?>
+<template>
+ <wholetable><![CDATA[<table class="normaltab">
+ <thead>
+{tp-Headline}</thead>
+ <tbody>
+{tp-Rows}</tbody>
+</table>]]>
+ </wholetable>
+ <header><![CDATA[ <tr>
+   <th>{th-Image}</th>
+   <th>{th-Codes}</th>
+   <th>{th-Title}</th>
+   <th colspan="2">{th-Action}</th>
+   <th>{th-Order}</th>
+  </tr>]]>
+ </header>
+ <body><![CDATA[ <tr>
+   <td>{Image}</td>
+   <td>{Code}</td>
+   <td>{Title}</td>
+   <td>{Action1}</td>
+   <td>{Action2}</td>
+   <td>{Order}</td>
+  </tr>]]>
+ </body>
+</template>

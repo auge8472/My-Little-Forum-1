@@ -2854,18 +2854,19 @@ switch ($action)
 				closedir($fp);
 				if ($smilies_count > 0)
 					{
+					$xmlFile = dirname($_SERVER["SCRIPT_FILENAME"]) .'/data/templates/admin.list.smilies.xml';
+					$xml = simplexml_load_file($xmlFile, null, LIBXML_NOCDATA);
+					$templAll = $xml->wholetable;
+					$tHeader = $xml->header;
+					$tBody = $xml->body;
 					$result = mysql_query("SELECT id, file, code_1, code_2, code_3, code_4, code_5, title FROM ".$db_settings['smilies_table']." ORDER BY order_id ASC", $connid);
 					if (!$result) die($lang['db_error']);
-					echo '<table class="normaltab">'."\n";
-					echo ' <thead>'."\n";
-					echo '  <tr>'."\n";
-					echo '   <th>'.$lang_add['edit_smilies_smiley'].'</th>'."\n";
-					echo '   <th>'.$lang_add['edit_smilies_codes'].'</th>'."\n";
-					echo '   <th>'.$lang_add['edit_smilies_title'].'</th>'."\n";
-					echo '   <th colspan="2">'.$lang_add['edit_smilies_action'].'</th>'."\n";
-					echo '   <th>'.$lang_add['edit_smilies_order'].'</th>'."\n";
-					echo '  </tr>'."\n";
-					echo ' </thead>'."\n".' <tbody>'."\n".'  ';
+					$tHeader = str_replace('{th-Image}', htmlspecialchars($lang_add['edit_smilies_smiley']), $tHeader);
+					$tHeader = str_replace('{th-Codes}', htmlspecialchars($lang_add['edit_smilies_codes']), $tHeader);
+					$tHeader = str_replace('{th-Title}', htmlspecialchars($lang_add['edit_smilies_title']), $tHeader);
+					$tHeader = str_replace('{th-Action}', htmlspecialchars($lang_add['edit_smilies_action']), $tHeader);
+					$tHeader = str_replace('{th-Order}', htmlspecialchars($lang_add['edit_smilies_order']), $tHeader);
+					$r = '';
 					while ($line = mysql_fetch_assoc($result))
 						{
 						# remove used smilies from smiley array:
@@ -2880,31 +2881,33 @@ switch ($action)
 							else unset($smiley_files);
 							}
 						unset($codes);
-						if (trim($line['code_1'])!='') $codes[] = stripslashes($line['code_1']);
-						if (trim($line['code_2'])!='') $codes[] = stripslashes($line['code_2']);
-						if (trim($line['code_3'])!='') $codes[] = stripslashes($line['code_3']);
-						if (trim($line['code_4'])!='') $codes[] = stripslashes($line['code_4']);
-						if (trim($line['code_5'])!='') $codes[] = stripslashes($line['code_5']);
+						if (trim($line['code_1'])!='') $codes[] = $line['code_1'];
+						if (trim($line['code_2'])!='') $codes[] = $line['code_2'];
+						if (trim($line['code_3'])!='') $codes[] = $line['code_3'];
+						if (trim($line['code_4'])!='') $codes[] = $line['code_4'];
+						if (trim($line['code_5'])!='') $codes[] = $line['code_5'];
 						$codes_disp = implode(' &nbsp;',$codes);
-						echo '<tr>'."\n";
-						echo '   <td><img src="img/smilies/'.$line['file'].'" alt="'.$line['code_1'].'"';
-						echo ($line['title']!='') ? 'title="'.$line['title'].'"' : '';
-						echo '/></td>'."\n";
-						echo '   <td>'.$codes_disp.'</td>'."\n";
-						echo '   <td>'.$line['title'].'</td>'."\n";
-						echo '   <td><a href="admin.php?edit_smiley='.$line['id'].'">';
-						echo $lang_add['edit_link'].'</a></td>'."\n";
-						echo '   <td><a href="admin.php?delete_smiley='.$line['id'].'">';
-						echo $lang_add['delete_link'].'</a></td>'."\n";
-						echo '   <td><a href="admin.php?move_up_smiley='.$line['id'];
-						echo '"><img src="img/up.png" alt="up" width="11" height="11" /></a>';
-						echo '&nbsp;<a href="admin.php?move_down_smiley='.$line['id'];
-						echo '"><img src="img/down.png" alt="down" width="11" height="11" /></a></td>'."\n";
-						echo '  </tr>';
+						$tRow = $tBody;
+						$row['image']  = '<img src="img/smilies/'. $line['file'] .'" alt="'. $line['code_1'] .'"';
+						$row['image'] .= ($line['title']!='') ? 'title="'. $line['title'] .'"' : '';
+						$row['image'] .= ' />';
+						$row['action1']  = '<a href="admin.php?edit_smiley='. $line['id'] .'">'. htmlspecialchars($lang_add['edit_link']) .'</a>';
+						$row['action2']  = '<a href="admin.php?delete_smiley='. $line['id'] .'">'. htmlspecialchars($lang_add['delete_link']) .'</a>';
+						$row['order']  = '<a href="admin.php?move_up_smiley='. $line['id'] .'"><img src="img/up.png" alt="up" width="11" height="11" /></a>';
+						$row['order'] .= '&nbsp;<a href="admin.php?move_down_smiley='. $line['id'] .'"><img src="img/down.png" alt="down" width="11" height="11" /></a>';
+						$tRow = str_replace('{Image}', $row['image'], $tRow);
+						$tRow = str_replace('{Code}', htmlspecialchars($codes_disp), $tRow);
+						$tRow = str_replace('{Title}', htmlspecialchars($line['title']), $tRow);
+						$tRow = str_replace('{Action1}', $row['action1'], $tRow);
+						$tRow = str_replace('{Action2}', $row['action2'], $tRow);
+						$tRow = str_replace('{Order}', $row['order'], $tRow);
+						$r .= $tRow;
+						unset($row['image'], $row['action1'], $row['action2'], $row['order'], $row);
 						}
 					mysql_free_result($result);
-					echo "\n".' </tbody>'."\n";
-					echo '</table>'."\n";
+					$templAll = str_replace('{tp-Headline}', $tHeader, $templAll);
+					$templAll = str_replace('{tp-Rows}', $r, $templAll);
+					echo "\n". $templAll;
 					}
 				else
 					{
