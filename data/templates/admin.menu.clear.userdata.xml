@@ -1,0 +1,11 @@
+<?xml version='1.0' standalone='yes'?>
+<template>
+ <body><![CDATA[ <ul>
+   <li><input type="radio" name="clear_userdata" id="cu1" value="1" checked="checked" /><label for="cu1">{Order1}</label></li>
+   <li><input type="radio" name="clear_userdata" id="cu2" value="2" /><label for="cu2">{Order2}</label></li>
+   <li><input type="radio" name="clear_userdata" id="cu3" value="3" /><label for="cu3">{Order3}</label></li>
+   <li><input type="radio" name="clear_userdata" id="cu4" value="4" /><label for="cu4">{Order4}</label></li>
+   <li><input type="radio" name="clear_userdata" id="cu5" value="5" /><label for="cu5">{Order5}</label></li>
+  </ul>]]>
+ </body>
+</template>

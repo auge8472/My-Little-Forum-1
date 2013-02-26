@@ -2711,29 +2711,22 @@ switch ($action)
 			echo implode(", ",$email_list).'</textarea>'."\n";
 		break;
 		case "clear_userdata":
-			echo '<p>'.$lang_add['clear_userdata_expl'].'</p>'."\n";
-			echo '<form action="admin.php" method="post">'."\n";
-			echo '<table>'."\n";
-			echo ' <tr>'."\n";
-			echo '  <td><input type="radio" name="clear_userdata" value="1" checked="checked" /></td>'."\n";
-			echo '  <td>'.$lang_add['clear_users_1'].'</td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td><input type="radio" name="clear_userdata" value="2" /></td>'."\n";
-			echo '  <td>'.$lang_add['clear_users_2'].'</td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td><input type="radio" name="clear_userdata" value="3" /></td>'."\n";
-			echo '  <td>'.$lang_add['clear_users_3'].'</td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td><input type="radio" name="clear_userdata" value="4" /></td>'."\n";
-			echo '  <td>'.$lang_add['clear_users_4'].'</td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td><input type="radio" name="clear_userdata" value="5" /></td>'."\n";
-			echo '  <td>'.$lang_add['clear_users_5'].'</td>'."\n";
-			echo ' </tr>'."\n";
-			echo '</table>'."\n";
-			echo '<p><input type="submit" value="';
-			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></p>'."\n";
-			echo '</form>'."\n";
+			$output  = '';
+			$xmlFile = dirname($_SERVER["SCRIPT_FILENAME"]) .'/data/templates/admin.menu.clear.userdata.xml';
+			$xml = simplexml_load_file($xmlFile, null, LIBXML_NOCDATA);
+			$tBody = $xml->body;
+			$tBody = str_replace('{Order1}', htmlspecialchars($lang_add['clear_users_1']), $tBody);
+			$tBody = str_replace('{Order2}', htmlspecialchars($lang_add['clear_users_2']), $tBody);
+			$tBody = str_replace('{Order3}', htmlspecialchars($lang_add['clear_users_3']), $tBody);
+			$tBody = str_replace('{Order4}', htmlspecialchars($lang_add['clear_users_4']), $tBody);
+			$tBody = str_replace('{Order5}', htmlspecialchars($lang_add['clear_users_5']), $tBody);
+			$output .= '<p>'.$lang_add['clear_userdata_expl'].'</p>'."\n";
+			$output .= '<form action="admin.php" method="post">'."\n";
+			$output .= $tBody;
+			$output .= '<p><input type="submit" value="';
+			$output .= outputLangDebugInAttributes($lang['submit_button_ok']).'" /></p>'."\n";
+			$output .= '</form>'."\n";
+			echo $output;
 		break;
 		case "banlists":
 			# initialize variables
