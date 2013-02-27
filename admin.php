@@ -2496,18 +2496,14 @@ switch ($action)
 			echo '</form>'."\n";
 		break;
 		case "empty":
-			if (isset($errors))
-				{
-				echo errorMessages($errors);
-				}
-			echo '<p class="caution">'.$lang['caution'].'</p>'."\n";
-			echo '<p>'.$lang_add['empty_forum_note'].'</p>'."\n";
-			echo '<form action="admin.php" method="post">'."\n";
-			echo '<b>'.$lang['password_marking'].'</b><br /><input type="password"';
-			echo ' size="25" name="delete_all_postings_confirm_pw" /><br /><br />';
-			echo '<input type="submit" name="delete_all_postings_confirmed" value="';
-			echo outputLangDebugInAttributes($lang_add['empty_forum_sb']).'" />'."\n";
-			echo '</form>'."\n";
+			$xmlFile = dirname($_SERVER["SCRIPT_FILENAME"]) .'/data/templates/admin.sql.empty.html';
+			$tBody = file_get_contents($xmlFile);
+			$tBody = str_replace('{Caution}', htmlspecialchars($lang['caution']), $tBody);
+			$description = (isset($errors)) ? errorMessages($errors) : '<p class="normal">'. htmlspecialchars($lang_add['empty_forum_note']) .'</p>';
+			$tBody = str_replace('{Description}', $description, $tBody);
+			$tBody = str_replace('{Password}', htmlspecialchars($lang['password_marking']), $tBody);
+			$tBody = str_replace('{Submit}', outputLangDebugInAttributes($lang_add['empty_forum_sb']), $tBody);
+			echo $tBody;
 		break;
 		case "uninstall":
 			if (isset($errors))
@@ -2681,14 +2677,7 @@ switch ($action)
 			$xmlFile = dirname($_SERVER["SCRIPT_FILENAME"]) .'/data/templates/admin.sql.import.html';
 			$tBody = file_get_contents($xmlFile);
 			$tBody = str_replace('{Caution}', htmlspecialchars($lang['caution']), $tBody);
-			if (isset($errors))
-				{
-				$description = errorMessages($errors);
-				}
-			else
-				{
-				$description = '<p class="normal">'. htmlspecialchars($lang_add['import_sql_note']) .'</p>';
-				}
+			$description = (isset($errors)) ? errorMessages($errors) : '<p class="normal">'. htmlspecialchars($lang_add['import_sql_note']) .'</p>';
 			$tBody = str_replace('{Description}', $description, $tBody);
 			$tBody = str_replace('{Notice}', htmlspecialchars($lang_add['sql_dump']), $tBody);
 			$sqlDump = (isset($sql)) ? $sql : '';
