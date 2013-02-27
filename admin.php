@@ -2656,22 +2656,21 @@ switch ($action)
 			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></div></form>'."\n";
 		break;
 		case "backup":
-			echo '<h2>'.$lang_add['backup_restore'].'</h2>';
-			echo '<h3>'.$lang_add['backup'].'</h3>'."\n";
-			echo '<ul class="linklist">'."\n";
-			echo '<li><a class="textlink" href="admin.php?backup=1">'.$lang_add['sql_complete'].'</a></li>'."\n";
-			echo '<li><a class="textlink" href="admin.php?backup=2">'.$lang_add['sql_forum'].'</a></li>'."\n";
-			echo '<li><a class="textlink" href="admin.php?backup=3">'.$lang_add['sql_forum_marked'].'</a></li>'."\n";
-			echo '<li><a class="textlink" href="admin.php?backup=4">'.$lang_add['sql_userdata'].'</a></li>'."\n";
-			echo '<li><a class="textlink" href="admin.php?backup=5">'.$lang_add['sql_categories'].'</a></li>'."\n";
-			echo '<li><a class="textlink" href="admin.php?backup=6">'.$lang_add['sql_settings'].'</a></li>'."\n";
-			echo '<li><a class="textlink" href="admin.php?backup=7">'.$lang_add['sql_smilies'].'</a></li>'."\n";
-			echo '<li><a class="textlink" href="admin.php?backup=8">'.$lang_add['sql_banlists'].'</a></li>'."\n";
-			echo '</ul>'."\n";
-			echo '<h3>'.$lang_add['restore'].'</h3>'."\n";
-			echo '<ul class="linklist">'."\n";
-			echo '<li><a class="textlink" href="admin.php?action=import_sql">'.$lang_add['import_sql'].'</a></li>'."\n";
-			echo '</ul>'."\n";
+			$xmlFile = dirname($_SERVER["SCRIPT_FILENAME"]) .'/data/templates/admin.sql.backup.html';
+			$tBody = file_get_contents($xmlFile);
+			$tBody = str_replace('{H-BR}', htmlspecialchars($lang_add['backup_restore']), $tBody);
+			$tBody = str_replace('{Backup}', htmlspecialchars($lang_add['backup']), $tBody);
+			$tBody = str_replace('{BU-Complete}', htmlspecialchars($lang_add['sql_complete']), $tBody);
+			$tBody = str_replace('{BU-Forum}', htmlspecialchars($lang_add['sql_forum']), $tBody);
+			$tBody = str_replace('{BU-Marked}', htmlspecialchars($lang_add['sql_forum_marked']), $tBody);
+			$tBody = str_replace('{BU-Userdata}', htmlspecialchars($lang_add['sql_userdata']), $tBody);
+			$tBody = str_replace('{BU-Categories}', htmlspecialchars($lang_add['sql_categories']), $tBody);
+			$tBody = str_replace('{BU-Settings}', htmlspecialchars($lang_add['sql_settings']), $tBody);
+			$tBody = str_replace('{BU-Smilies}', htmlspecialchars($lang_add['sql_smilies']), $tBody);
+			$tBody = str_replace('{BU-Banlists}', htmlspecialchars($lang_add['sql_banlists']), $tBody);
+			$tBody = str_replace('{Restore}', htmlspecialchars($lang_add['restore']), $tBody);
+			$tBody = str_replace('{Import}', htmlspecialchars($lang_add['import_sql']), $tBody);
+			echo $tBody;
 		break;
 		case "import_sql":
 			$xmlFile = dirname($_SERVER["SCRIPT_FILENAME"]) .'/data/templates/admin.sql.import.html';
