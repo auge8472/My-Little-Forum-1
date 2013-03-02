@@ -1,0 +1,20 @@
+<form action="admin.php" method="post">
+<table class="admin info">
+ <tbody>
+  <tr>
+   <td><label for="debug-none">{DebugNone}</label><br /><span class="info">{DebugNoneD}</span></td>
+   <td><input type="radio" name="debug_type" id="debug-none" value="no"{CheckNone} /></td>
+  </tr><tr>
+   <td><label for="debug-lang">{DebugLang}</label><br /><span class="info">{DebugLangD}</span></td>
+   <td><input type="radio" name="debug_type" id="debug-lang" value="lang"{CheckLang} /></td>
+  </tr><tr>
+   <td><label for="debug-session">{DebugSession}</label><br /><span class="info">{DebugSessionD}</span></td>
+   <td><input type="radio" name="debug_type" id="debug-session" value="session"{CheckSession} /></td>
+  </tr><tr>
+   <td><label for="debug-css">{DebugCSS}</label><br /><span class="info">{DebugCSSD}</span></td>
+   <td><input type="radio" name="debug_type" id="debug-css" value="css"{CheckCSS} /></td>
+  </tr>
+ </tbody>
+</table>
+<p><input type="submit" name="debug_submitted" value="{Submit}" /></p>
+</form>
