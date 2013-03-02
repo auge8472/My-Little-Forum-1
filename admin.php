@@ -1862,19 +1862,24 @@ switch ($action)
 			while ($line = mysql_fetch_assoc($result))
 				{
 				$tRow = $tBody;
-				$count_result = mysql_query("SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE category = '". intval($line['id']) ."' AND pid = 0", $connid);
-				list($threads_in_category) = mysql_fetch_row($count_result);
-				mysql_free_result($count_result);
-				$count_result = mysql_query("SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE category = '". intval($line['id']) ."'", $connid);
-				list($postings_in_category) = mysql_fetch_row($count_result);
+				$queryCountEntries = "SELECT DISTINCT
+				(SELECT COUNT(*)
+					FROM ". $db_settings['forum_table'] ."
+					WHERE category = ". intval($line['id']) ." AND pid = 0) AS threads,
+				(SELECT COUNT(*)
+					FROM ". $db_settings['forum_table'] ."
+					WHERE category = ". intval($line['id']) .") AS postings
+				FROM ". $db_settings['forum_table'];
+				$count_result = mysql_query($queryCountEntries, $connid);
+				$inCategory = mysql_fetch_assoc($count_result);
 				mysql_free_result($count_result);
 				$tRow = str_replace('{Category}', htmlspecialchars($line['category']), $tRow);
 				if ($line['accession']==2) $la = $lang_add['cat_accession_mod_admin'];
 				else if ($line['accession']==1) $la = $lang_add['cat_accession_reg_users'];
 				else $la = $lang_add['cat_accession_all'];
 				$tRow = str_replace('{Access}', htmlspecialchars($la), $tRow);
-				$tRow = str_replace('{Threads}', htmlspecialchars($threads_in_category), $tRow);
-				$tRow = str_replace('{Postings}', htmlspecialchars($postings_in_category), $tRow);
+				$tRow = str_replace('{Threads}', htmlspecialchars($inCategory['threads']), $tRow);
+				$tRow = str_replace('{Postings}', htmlspecialchars($inCategory['postings']), $tRow);
 				$tRow = str_replace('{Action1}', htmlspecialchars($lang_add['cat_edit']), $tRow);
 				$tRow = str_replace('{Action2}', htmlspecialchars($lang_add['cat_delete']), $tRow);
 				$tRow = str_replace('{CategoryID}', urlencode($line['id']), $tRow);
