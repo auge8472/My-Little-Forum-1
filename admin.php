@@ -1845,51 +1845,45 @@ switch ($action)
 			}
 		if ($categories_count > 0)
 			{
+			$xmlFile = dirname($_SERVER["SCRIPT_FILENAME"]) .'/data/templates/admin.list.categories.xml';
+			$xml = simplexml_load_file($xmlFile, null, LIBXML_NOCDATA);
+			$templAll = $xml->wholetable;
+			$tHeader = $xml->header;
+			$tBody = $xml->body;
 			$result = mysql_query("SELECT id, category_order, category, accession FROM ".$db_settings['category_table']." ORDER BY category_order ASC", $connid);
 			if(!$result) die($lang['db_error']);
-			
-			echo '<table class="normaltab">'."\n";
-			echo ' <thead>'."\n";
-			echo '  <tr>'."\n";
-			echo '   <th>'.$lang_add['cat_hl'].'</th>'."\n";
-			echo '   <th>'.$lang_add['cat_accessible'].'</th>'."\n";
-			echo '   <th>'.$lang_add['cat_topics'].'</th>'."\n";
-			echo '   <th>'.$lang_add['cat_entries'].'</th>'."\n";
-			echo '   <th colspan="2">'.$lang_add['cat_actions'].'</th>'."\n";
-			echo '   <th>'.$lang_add['cat_move'].'</th>'."\n";
-			echo '  </tr>'."\n";
-			echo ' </thead>'."\n";
-			echo ' <tbody>'."\n".'  ';
-
-			$i=0;
+			$tHeader = str_replace('{th-Category}', htmlspecialchars($lang_add['cat_hl']), $tHeader);
+			$tHeader = str_replace('{th-Access}', htmlspecialchars($lang_add['cat_accessible']), $tHeader);
+			$tHeader = str_replace('{th-Threads}', htmlspecialchars($lang_add['cat_topics']), $tHeader);
+			$tHeader = str_replace('{th-Postings}', htmlspecialchars($lang_add['cat_entries']), $tHeader);
+			$tHeader = str_replace('{th-Action}', htmlspecialchars($lang_add['cat_actions']), $tHeader);
+			$tHeader = str_replace('{th-Order}', htmlspecialchars($lang_add['cat_move']), $tHeader);
+			$r = '';
 			while ($line = mysql_fetch_assoc($result))
 				{
-				$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE category = '".intval($line['id'])."' AND pid = 0", $connid);
+				$tRow = $tBody;
+				$count_result = mysql_query("SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE category = '". intval($line['id']) ."' AND pid = 0", $connid);
 				list($threads_in_category) = mysql_fetch_row($count_result);
 				mysql_free_result($count_result);
-				$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE category = '".intval($line['id'])."'", $connid);
+				$count_result = mysql_query("SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE category = '". intval($line['id']) ."'", $connid);
 				list($postings_in_category) = mysql_fetch_row($count_result);
 				mysql_free_result($count_result);
-				echo '<tr>'."\n";
-				echo '   <td><b>'.$line['category'].'</b></td>'."\n";
-				echo '   <td>';
-				if ($line['accession']==2) echo $lang_add['cat_accession_mod_admin'];
-				else if ($line['accession']==1) echo $lang_add['cat_accession_reg_users'];
-				else echo $lang_add['cat_accession_all'];
-				echo '</td>'."\n";
-				echo '   <td>'.$threads_in_category.'</td>'."\n";
-				echo '   <td>'.$postings_in_category.'</td>'."\n";
-				echo '   <td><a href="admin.php?edit_category='.$line['id'].'">'.$lang_add['cat_edit'].'</a></td>'."\n";
-				echo '   <td><a href="admin.php?delete_category='.$line['id'].'">'.$lang_add['cat_delete'].'</a></td>'."\n";
-				echo '   <td><a href="admin.php?move_up_category='.$line['id'].'">';
-				echo '<img src="img/up.png" alt="up" width="11" height="11" /></a>&nbsp;';
-				echo '<a href="admin.php?move_down_category='.$line['id'].'">';
-				echo '<img src="img/down.png" alt="down" width="11" height="11" /></a></td>'."\n";
-				echo '  </tr>';
-				$i++;
+				$tRow = str_replace('{Category}', htmlspecialchars($line['category']), $tRow);
+				if ($line['accession']==2) $la = $lang_add['cat_accession_mod_admin'];
+				else if ($line['accession']==1) $la = $lang_add['cat_accession_reg_users'];
+				else $la = $lang_add['cat_accession_all'];
+				$tRow = str_replace('{Access}', htmlspecialchars($la), $tRow);
+				$tRow = str_replace('{Threads}', htmlspecialchars($threads_in_category), $tRow);
+				$tRow = str_replace('{Postings}', htmlspecialchars($postings_in_category), $tRow);
+				$tRow = str_replace('{Action1}', htmlspecialchars($lang_add['cat_edit']), $tRow);
+				$tRow = str_replace('{Action2}', htmlspecialchars($lang_add['cat_delete']), $tRow);
+				$tRow = str_replace('{CategoryID}', urlencode($line['id']), $tRow);
+				$r .= $tRow;
 				}
 			mysql_free_result($result);
-			echo "\n".' </tbody>'."\n".'</table>'."\n";
+			$templAll = str_replace('{tp-Headline}', $tHeader, $templAll);
+			$templAll = str_replace('{tp-Rows}', $r, $templAll);
+			echo "\n". $templAll;
 			}
 		else
 			{
