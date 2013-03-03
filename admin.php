@@ -2972,133 +2972,122 @@ switch ($action)
 			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></p>'."\n";
 		break;
 		case 'edit_user':
+			$xmlFile = dirname($_SERVER["SCRIPT_FILENAME"]) .'/data/templates/admin.edit.user.xml';
+			$xmlBody = simplexml_load_file($xmlFile, null, LIBXML_NOCDATA);
+			$tBody = $xmlBody->wholetable;
+			$xmlSelect = dirname($_SERVER["SCRIPT_FILENAME"]) .'/data/templates/general.select.xml';
+			$xmlSel = simplexml_load_file($xmlSelect, null, LIBXML_NOCDATA);
+			$sAll = $xmlSel->wholeselect;
+			$sBody = $xmlSel->body;
 			if (isset($errors))
 				{
 				echo errorMessages($errors);
 				}
-			echo '<form action="admin.php" method="post"><div>'."\n";
-			echo '<input type="hidden" name="edit_user_id" value="'.$edit_user_id.'" />'."\n";
-			echo '<table class="admin info">'."\n";
-			echo ' <tr>'."\n";
-			echo '  <td><label for="set-uname">'.$lang['username_marking'].'</label></td>'."\n";
-			echo '  <td><input type="text" size="40" name="edit_user_name"';
-			echo ' value="'.htmlspecialchars($edit_user_name).'" id="set-uname" /></td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td>'.$lang_add['usertype_marking'].'</td>'."\n";
-			echo '  <td><input type="radio" name="edit_user_type" value="user"';
-			echo ($edit_user_type=="user") ? ' checked="checked"' : '';
-			echo ' id="set-type-0" /><label for="set-type-0">'.$lang['ud_user'].'</label><br />';
-			echo '<input type="radio" name="edit_user_type" value="mod"';
-			echo ($edit_user_type=="mod") ? ' checked="checked"' : '';
-			echo ' id="set-type-1" /><label for="set-type-1">'.$lang['ud_mod'].'</label><br />';
-			echo '<input type="radio" name="edit_user_type" value="admin"';
-			echo ($edit_user_type=="admin") ? ' checked="checked"' :'';
-			echo ' id="set-type-2" /><label for="set-type-2">'.$lang['ud_admin'].'</label></td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td><label for="set-email">'.$lang['user_email_marking'].'</label></td>'."\n";
-			echo '  <td><input type="text" size="40" name="user_email" ';
-			echo 'value="'.htmlspecialchars($user_email).'" id="set-email" /></td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td>'.$lang['user_show_email'].'</td>'."\n";
-			echo '  <td><input type="radio" name="hide_email" value="0"';
-			echo ($hide_email=="0") ? ' checked="checked"' : '';
-			echo ' id="show-mail-1" /><label for="show-mail-1">'.$lang['yes'].'</label><br />';
-			echo '<input type="radio" name="hide_email" value="1"';
-			echo ($hide_email=="1") ? ' checked="checked"' : '';
-			echo ' id="show-mail-0" /><label for="show-mail-0">'.$lang['no'].'</label></td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td><label for="set-r-name">'.$lang['user_real_name'].'</label></td>'."\n";
-			echo '  <td><input type="text" size="40" name="user_real_name"';
-			echo ' value="'.htmlspecialchars($user_real_name).'" maxlength="';
-			echo $settings['name_maxlength'].'" id="set-r-name" /></td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td><label for="set-hp">'.$lang['user_hp'].'</label></td>'."\n";
-			echo '  <td><input type="text" size="40" name="user_hp" value="';
-			echo htmlspecialchars($user_hp).'" maxlength="';
-			echo $settings['hp_maxlength'].'" id="set-hp" /></td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td><label for="set-place">'.$lang['user_place'].'</label></td>'."\n";
-			echo '  <td><input type="text" size="40" name="user_place"';
-			echo ' value="'.htmlspecialchars($user_place).'" maxlength="';
-			echo $settings['place_maxlength'].'" id="set-place" /></td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td><label for="set-profile">'.$lang['user_profile'].'</label></td>'."\n";
-			echo '  <td><textarea cols="65" rows="4" name="profile" id="set-profile">';
-			echo htmlspecialchars($profile).'</textarea></td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td><label for="set-signature">'.$lang['user_signature'].'</label></td>'."\n";
-			echo '  <td><textarea cols="65" rows="4" name="signature" id="set-signature">';
-			echo htmlspecialchars($signature).'</textarea></td>'."\n";
-			echo ' </tr>';
-			if ($settings['thread_view'] != 0
-			&& $settings['board_view'] != 0
-			|| $settings['board_view'] != 0
-			&& $settings['mix_view'] != 0
-			|| $settings['thread_view'] != 0
-			&& $settings['mix_view'] != 0)
+			$tBody = str_replace('{UserID}', intval($edit_user_id), $tBody);
+			$tBody = str_replace('{UserName}', htmlspecialchars($lang['username_marking']), $tBody);
+			$tBody = str_replace('{Name}', htmlspecialchars($edit_user_name), $tBody);
+			$tBody = str_replace('{UserType}', htmlspecialchars($lang_add['usertype_marking']), $tBody);
+			$r = '';
+			foreach (array('user', 'mod', 'admin') as $type)
 				{
-				echo '<tr>'."\n";
-				echo '  <td><b>'.$lang['user_standard_view'].'</b></td>'."\n";
-				echo '  <td>'."\n";
-				if ($settings['thread_view'] == 1)
-					{
-					echo '<input type="radio" name="user_view" id="view-thread" value="thread"';
-					echo ($user_view=="thread") ? ' checked="checked"' : '';
-					echo ' /><label for="view-thread">'.$lang['thread_view_linkname'].'</label><br />';
-					}
-				if ($settings['board_view'] == 1)
-					{
-					echo '<input type="radio" name="user_view" id="view-board" value="board"';
-					echo ($user_view=="board") ? ' checked="checked"' : '';
-					echo ' /><label for="view-board">'.$lang['board_view_linkname'].'</label><br />';
-					}
-				if ($settings['mix_view'] == 1)
-					{
-					echo '<input type="radio" name="user_view" id="view-mix" value="mix"';
-					echo ($user_view=="mix") ? ' checked="checked"' : '';
-					echo ' /><label for="view-mix">'.$lang['mix_view_linkname'].'</label>';
-					}
-				echo '</td>'."\n";
-				echo ' </tr>'."\n";
+				$uType = $sBody;
+				$uType = str_replace('{FormValue}', htmlspecialchars($type), $uType);
+				$checktype = ($edit_user_type == $type) ? ' selected="selected"' : '';
+				$uType = str_replace('{Check}', $checktype, $uType);
+				$uType = str_replace('{FormText}', htmlspecialchars($lang['ud_'. $type]), $uType);
+				$r .= $uType;
 				}
-			echo ' <tr>'."\n";
-			echo '  <td>'.$lang['user_pers_msg'].'</td>'."\n";
-			echo '  <td><input type="radio" name="personal_messages" value="1"';
-			echo ($personal_messages=="1") ? ' checked="checked"' : '';
-			echo ' id="pers-mess-1" /><label for="pers-mess-1">'.$lang['user_pers_msg_act'];
-			echo '</label><br />';
-			echo '<input type="radio" name="personal_messages" value="0"';
-			echo ($personal_messages=="0") ? ' checked="checked"' : '';
-			echo '  id="pers-mess-0" /><label for="pers-mess-0">'.$lang['user_pers_msg_deact'];
-			echo '</label></td>'."\n";
-			echo ' </tr><tr>'."\n";
-			echo '  <td><label for="user-time-diff">'.$lang['user_time_diff'].'</b></td>'."\n";
-			echo '  <td><select name="user_time_difference" id="user-time-diff" size="1">'."\n";
+			$uTypeList = str_replace('{Options}', $r, $sAll);
+			$uTypeList = str_replace('{SelName}', 'edit_user_type', $uTypeList);
+			$uTypeList = str_replace('{SelID}', 'set-utype', $uTypeList);
+			$uTypeList = str_replace('{SelSize}', '1', $uTypeList);
+			$tBody = str_replace('{UserTypeMenu}', $uTypeList, $tBody);
+			$tBody = str_replace('{UserEmail}', htmlspecialchars($lang['user_email_marking']), $tBody);
+			$tBody = str_replace('{Email}', htmlspecialchars($user_email), $tBody);
+			$tBody = str_replace('{ShowEmail}', htmlspecialchars($lang['user_show_email']), $tBody);
+			$checkHideNo = ($hide_email == "0") ? ' checked="checked"' : '';
+			$tBody = str_replace('{CheckShowEmailYes}', $checkHideNo, $tBody);
+			$tBody = str_replace('{ShowEmailYes}', htmlspecialchars($lang['yes']), $tBody);
+			$checkHideYes = ($hide_email == "1") ? ' checked="checked"' : '';
+			$tBody = str_replace('{CheckShowEmailNo}', $checkHideYes, $tBody);
+			$tBody = str_replace('{ShowEmailNo}', htmlspecialchars($lang['no']), $tBody);
+			$tBody = str_replace('{UserRealName}', htmlspecialchars($lang['user_real_name']), $tBody);
+			$tBody = str_replace('{RealName}', htmlspecialchars($user_real_name), $tBody);
+			$tBody = str_replace('{RN-Max}', intval($settings['name_maxlength']), $tBody);
+			$tBody = str_replace('{UserHomepage}', htmlspecialchars($lang['user_hp']), $tBody);
+			$tBody = str_replace('{Homepage}', htmlspecialchars($user_hp), $tBody);
+			$tBody = str_replace('{HP-Max}', intval($settings['hp_maxlength']), $tBody);
+			$tBody = str_replace('{UserPlace}', htmlspecialchars($lang['user_place']), $tBody);
+			$tBody = str_replace('{Place}', htmlspecialchars($user_place), $tBody);
+			$tBody = str_replace('{P-Max}', intval($settings['place_maxlength']), $tBody);
+			$tBody = str_replace('{UserProfile}', htmlspecialchars($lang['user_profile']), $tBody);
+			$tBody = str_replace('{Profile}', htmlspecialchars($profile), $tBody);
+			$tBody = str_replace('{UserSignature}', htmlspecialchars($lang['user_signature']), $tBody);
+			$tBody = str_replace('{Signature}', htmlspecialchars($signature), $tBody);
+			$tBody = str_replace('{UserPersonalMessages}', htmlspecialchars($lang['user_pers_msg']), $tBody);
+			$checkPMYes = ($personal_messages == "1") ? ' checked="checked"' : '';
+			$tBody = str_replace('{CheckPersMessYes}', $checkPMYes, $tBody);
+			$tBody = str_replace('{PersMessYes}', htmlspecialchars($lang['user_pers_msg_act']), $tBody);
+			$checkPMNo = ($personal_messages == "0") ? ' checked="checked"' : '';
+			$tBody = str_replace('{CheckPersMessNo}', $checkPMNo, $tBody);
+			$tBody = str_replace('{PersMessNo}', htmlspecialchars($lang['user_pers_msg_deact']), $tBody);
+			$tBody = str_replace('{UserTimeDifference}', htmlspecialchars($lang['user_time_diff']), $tBody);
+			$r = '';
 			for ($h = -24; $h <= 24; $h++)
 				{
-				echo '<option value="'.htmlspecialchars($h).'"';
-				echo ($user_time_difference==$h) ? ' selected="selected"' : '';
-				echo ' />'.htmlspecialchars($h).'</option>'."\n";
+				$uType = $sBody;
+				$uType = str_replace('{FormValue}', htmlspecialchars($h), $uType);
+				$checktype = ($user_time_difference == $h) ? ' selected="selected"' : '';
+				$uType = str_replace('{Check}', $checktype, $uType);
+				$uType = str_replace('{FormText}', htmlspecialchars($h), $uType);
+				$r .= $uType;
 				}
-			echo '</select></td>'."\n";
-			echo ' </tr>';
+			$uTypeList = str_replace('{Options}', $r, $sAll);
+			$uTypeList = str_replace('{SelName}', 'user_time_difference', $uTypeList);
+			$uTypeList = str_replace('{SelID}', 'user-time-diff', $uTypeList);
+			$uTypeList = str_replace('{SelSize}', '1', $uTypeList);
+			$tBody = str_replace('{UserTimeDiffMenu}', $uTypeList, $tBody);
+			$activeViews = array();
+			if ($settings['thread_view'] == 1) { $activeViews[] = 'thread'; }
+			if ($settings['board_view'] == 1) { $activeViews[] = 'board'; }
+			if ($settings['mix_view'] == 1) { $activeViews[] = 'mix'; }
+			if (count($activeViews) > 1)
+				{
+				$tOptV = $xmlBody->optviews;
+				$tOptV = str_replace('{UserStandardView}', htmlspecialchars($lang['user_standard_view']), $tOptV);
+				$r = '';
+				foreach ($activeViews as $view)
+					{
+					$uType = $sBody;
+					$uType = str_replace('{FormValue}', htmlspecialchars($view), $uType);
+					$checktype = ($user_view == $view) ? ' selected="selected"' : '';
+					$uType = str_replace('{Check}', $checktype, $uType);
+					$uType = str_replace('{FormText}', htmlspecialchars($lang[$view .'_view_linkname']), $uType);
+					$r .= $uType;
+					}
+				$uTypeList = str_replace('{Options}', $r, $sAll);
+				$uTypeList = str_replace('{SelName}', 'user_view', $uTypeList);
+				$uTypeList = str_replace('{SelID}', 'user-view', $uTypeList);
+				$uTypeList = str_replace('{SelSize}', '1', $uTypeList);
+				$tOptV = str_replace('{UserViewMenu}', $uTypeList, $tOptV);
+				}
+			$OptView = (!empty($tOptV)) ? $tOptV : '';
+			$tBody = str_replace('{OptionViews}', $OptView, $tBody);
 			if ($edit_user_type=="admin" || $edit_user_type=="mod")
 				{
-				echo '<tr>'."\n";
-				echo '  <td>'.$lang['admin_mod_notif'].'</td>'."\n";
-				echo '  <td><input type="checkbox" name="new_posting_notify" value="1"';
-				echo ($new_posting_notify=="1") ? ' checked="checked"' : '';
-				echo ' id="new-post" /><label for="new-post">'.$lang['admin_mod_notif_np'].'</label><br />';
-				echo '  <input type="checkbox" name="new_user_notify" value="1"';
-				echo ($new_user_notify=="1") ? ' checked=" checked"' : '';
-				echo ' id="new-user" /><label for="new-user">'.$lang['admin_mod_notif_nu'].'</label></td>'."\n";
-				echo ' </tr>';
+				$tOptA = $xmlBody->optadmin;
+				$tOptA = str_replace('{AdminModNotify}', htmlspecialchars($lang['admin_mod_notif']), $tOptA);
+				$checkNotifyPost = ($new_posting_notify == "1") ? ' checked="checked"' : '';
+				$tOptA = str_replace('{CheckNotifyPost}', $checkNotifyPost, $tOptA);
+				$tOptA = str_replace('{NotifyPost}', htmlspecialchars($lang['admin_mod_notif_np']), $tOptA);
+				$checkNotifyUser = ($new_user_notify == "1") ? ' checked=" checked"' : '';
+				$tOptA = str_replace('{CheckNotifyUser}', $checkNotifyUser, $tOptA);
+				$tOptA = str_replace('{NotifyUser}', htmlspecialchars($lang['admin_mod_notif_nu']), $tOptA);
 				}
-			echo "\n".'</table>'."\n";
-			echo '<p><input type="submit" name="edit_user_submit" value="';
-			echo outputLangDebugInAttributes($lang['userdata_subm_button']).'" />&nbsp;<input type="reset" value="';
-			echo outputLangDebugInAttributes($lang['reset_button']).'" /></p>'."\n";
-			echo '</div></form>'."\n";
+			$OptAdmin = (!empty($tOptA)) ? $tOptA : '';
+			$tBody = str_replace('{OptionAdminNotify}', $OptAdmin, $tBody);
+			$tBody = str_replace('{Submit}', outputLangDebugInAttributes($lang['userdata_subm_button']), $tBody);
+			echo $tBody;
 		break;
 		}
 	echo $footer;
