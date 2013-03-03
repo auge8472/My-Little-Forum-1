@@ -304,6 +304,7 @@ $lang['user_pers_msg_exp'] =           "Sollen persönliche Nachrichten registri
 $lang['user_pers_msg_act'] =           "aktiviert";
 $lang['user_pers_msg_deact'] =         "deaktiviert";
 $lang['userdata_subm_button'] =        "OK - Daten speichern";
+$lang['userdata_subm_title'] =         "neuen Benutzer speichern";
 $lang['new_email'] =                   "neue E-Mail-Adresse:";
 $lang['change_pw_hl'] =                "Passwort ändern: [name]";
 $lang['old_pw'] =                      "altes Passwort:";

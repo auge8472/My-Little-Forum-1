@@ -308,6 +308,7 @@ $lang['user_pers_msg_exp'] =           "Do you wish to accept personal messages 
 $lang['user_pers_msg_act'] =           "Activated";
 $lang['user_pers_msg_deact'] =         "Deactivated";
 $lang['userdata_subm_button'] =        "OK - Save data";
+$lang['userdata_subm_title'] =         "Register new user";
 $lang['new_email'] =                   "New e-mail address:";
 $lang['change_pw_hl'] =                "Change password: [name]";
 $lang['old_pw'] =                      "Old password:";

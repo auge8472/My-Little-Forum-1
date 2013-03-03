@@ -2260,13 +2260,13 @@ switch ($action)
 		$useremail = (isset($ar_email)) ? $ar_email : '';
 		$tBody = str_replace('{Email}', htmlspecialchars($useremail), $tBody);
 		$tBody = str_replace('{E-Max}', $email_maxlength, $tBody);
-		$tBody = str_replace('{Password1}', htmlspecialchars($lang_add['pw_marking']), $tBody);
-		$tBody = str_replace('{Password2}', htmlspecialchars($lang_add['pw_conf_marking']), $tBody);
+		$tBody = str_replace('{Password1}', htmlspecialchars($lang['reg_pw']), $tBody);
+		$tBody = str_replace('{Password2}', htmlspecialchars($lang['reg_pw_conf']), $tBody);
 		$checker = (isset($ar_send_userdata)) ? ' checked="checked"' : '';
 		$tBody = str_replace('{Check}', $checker, $tBody);
 		$tBody = str_replace('{SendData}', htmlspecialchars($lang_add['ar_send_userdata']), $tBody);
-		$tBody = str_replace('{Submit}', htmlspecialchars($lang['new_pw_subm_button']), $tBody);
-		$tBody = str_replace('{SubmitTitle}', htmlspecialchars($lang['new_pw_subm_button_title']), $tBody);
+		$tBody = str_replace('{Submit}', htmlspecialchars($lang['userdata_subm_button']), $tBody);
+		$tBody = str_replace('{SubmitTitle}', htmlspecialchars($lang['userdata_subm_title']), $tBody);
 		echo $tBody;
 	break;
 	case "settings":
