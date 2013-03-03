@@ -1,0 +1,29 @@
+<?xml version='1.0' standalone='yes'?>
+<template>
+ <wholetable><![CDATA[<table class="normaltab">
+ <thead>
+{tp-Headline}</thead>
+ <tbody>
+{tp-Rows}</tbody>
+</table>]]>
+ </wholetable>
+ <header><![CDATA[ <tr>
+   <th>{th-Category}</th>
+   <th>{th-Access}</th>
+   <th>{th-Threads}</th>
+   <th>{th-Postings}</th>
+   <th colspan="2">{th-Action}</th>
+   <th>{th-Order}</th>
+  </tr>]]>
+ </header>
+ <body><![CDATA[ <tr>
+   <td><b>{Category}</b></td>
+   <td>{Access}</td>
+   <td>{Threads}</td>
+   <td>{Postings}</td>
+   <td><a href="admin.php?edit_category={CategoryID}">{Action1}</a></td>
+   <td><a href="admin.php?delete_category={CategoryID}">{Action2}</a></td>
+   <td><a href="admin.php?move_up_category={CategoryID}"><img src="img/up.png" alt="up" width="11" height="11" /></a>&nbsp;<a href="admin.php?move_down_category={CategoryID}"><img src="img/down.png" alt="down" width="11" height="11" /></a></td>
+  </tr>]]>
+ </body>
+</template>
