@@ -2248,28 +2248,30 @@ switch ($action)
 		echo '</ul>'."\n";
 	break;
 	case "register":
-			echo '<p>'.$lang_add['register_exp'].'</p>'."\n";
-			if (isset($errors)) { errorMessages($errors); }
-			echo '<form action="admin.php" method="post">'."\n";
-			echo '<input type="hidden" name="action" value="register">'."\n";
-			echo '<b>'.$lang['username_marking'].'</b><br />'."\n";
-			echo '<input type="text" size="25" name="ar_username" value="';
-			echo (isset($ar_username)) ? htmlspecialchars($ar_username) : '';
-			echo '" maxlength="'.$name_maxlength.'" /><br /><br /><b>'.$lang['user_email_marking'].'</b><br />'."\n";
-			echo '<input type="text" size="25" name="ar_email" value="';
-			echo (isset($ar_email)) ? htmlspecialchars($ar_email) : '';
-			echo '" maxlength="'.$email_maxlength.'" /><br /><br /><b>'.$lang_add['pw_marking'].'</b><br />'."\n";
-			echo '<input type="password" size="25" name="ar_pw" maxlength="50"><br /><br /><b>';
-			echo $lang_add['pw_conf_marking'].'</b><br />'."\n";
-			echo '<input type="password" size="25" name="ar_pw_conf" maxlength="50"><br /><br />'."\n";
-			echo '<input type="checkbox" name="ar_send_userdata" value="true"';
-			echo (isset($ar_send_userdata)) ? ' checked="checked"' : '';
-			echo ' />'.$lang_add['ar_send_userdata'].'<br /><br />'."\n";
-			echo '<input type="submit" name="pw_submit" value="'.$lang['new_pw_subm_button'];
-			echo '" title="'.$lang['new_pw_subm_button_title'].'">'."\n";
-			echo '</form>'."\n";
-		break;
-		case "settings":
+		$xmlFile = dirname($_SERVER["SCRIPT_FILENAME"]) .'/data/templates/admin.register.user.html';
+		$tBody = file_get_contents($xmlFile);
+		$tBody = str_replace('{h-Register}', htmlspecialchars($lang_add['reg_user']), $tBody);
+		if (isset($errors)) { $description = errorMessages($errors); }
+		else { $description = '<p>'.$lang_add['register_exp'].'</p>'."\n"; }
+		$tBody = str_replace('{Description}', $description, $tBody);
+		$tBody = str_replace('{UserName}', htmlspecialchars($lang['username_marking']), $tBody);
+		$username = (isset($ar_username)) ? $ar_username : '';
+		$tBody = str_replace('{Name}', htmlspecialchars($username), $tBody);
+		$tBody = str_replace('{N-Max}', $name_maxlength, $tBody);
+		$tBody = str_replace('{UserEmail}', htmlspecialchars($lang['user_email_marking']), $tBody);
+		$useremail = (isset($ar_email)) ? $ar_email : '';
+		$tBody = str_replace('{Email}', htmlspecialchars($useremail), $tBody);
+		$tBody = str_replace('{E-Max}', $email_maxlength, $tBody);
+		$tBody = str_replace('{Password1}', htmlspecialchars($lang_add['pw_marking']), $tBody);
+		$tBody = str_replace('{Password2}', htmlspecialchars($lang_add['pw_conf_marking']), $tBody);
+		$checker = (isset($ar_send_userdata)) ? ' checked="checked"' : '';
+		$tBody = str_replace('{Check}', $checker, $tBody);
+		$tBody = str_replace('{SendData}', htmlspecialchars($lang_add['ar_send_userdata']), $tBody);
+		$tBody = str_replace('{Submit}', htmlspecialchars($lang['new_pw_subm_button']), $tBody);
+		$tBody = str_replace('{SubmitTitle}', htmlspecialchars($lang['new_pw_subm_button_title']), $tBody);
+		echo $tBody;
+	break;
+	case "settings":
 			# initialize variables
 			$output = '';
 			$menu = '';

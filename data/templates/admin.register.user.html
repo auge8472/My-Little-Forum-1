@@ -1,0 +1,29 @@
+<h2>{h-Register}</h2>
+{Description}
+<form action="admin.php" method="post">
+ <input type="hidden" name="action" value="register">
+ <table class="normaltab">
+  <tbody>
+   <tr>
+    <td><label for="UserSetName">{UserName}</label></td>
+    <td><input type="text" size="25" name="ar_username" id="UserSetName" value="{Name}" maxlength="{N-Max}" /></td>
+   </tr>
+   <tr>
+    <td><label for="UserSetEmail">{UserEmail}</label></td>
+    <td><input type="text" size="25" name="ar_email" id="UserSetEmail" value="{Email}" maxlength="{E-Max}" /></td>
+   </tr>
+   <tr>
+    <td><label for="UserPass1">{Password1}</label></td>
+    <td><input type="password" size="25" name="ar_pw" id="UserPass1" maxlength="50"></td>
+   </tr>
+   <tr>
+    <td><label for="UserPass2">{Password2}</label></td>
+    <td><input type="password" size="25" name="ar_pw_conf" id="UserPass2" maxlength="50"></td>
+   </tr>
+   <tr>
+    <td colspan="2"><input type="checkbox" name="ar_send_userdata" id="UserSendData" value="true"{Check} /><label for="UserSendData">{SendData}</label></td>
+   </tr>
+  </tbody>
+ </table>
+ <p><input type="submit" name="pw_submit" value="{Submit}" title="{SubmitTitle}" /></p>
+</form>
