@@ -1815,8 +1815,7 @@ switch ($action)
 					{
 					if ($key!=0)
 						{
-						$cat_select .= '<option value="'.intval($key);
-						$cat_select .= '">'.htmlspecialchars($val).'</option>'."\n";
+						$cat_select .= '<option value="'. intval($key) .'">'. htmlspecialchars($val) .'</option>'."\n";
 						}
 					}
 				}
@@ -1825,7 +1824,6 @@ switch ($action)
 				$cat_select .= '<option value="0">-</option>'."\n";
 				}
 			$cat_select .= '</select>'."\n";
-			# <div style="margin:0px 0px 20px 0px; padding:10px; border:1px dotted red;">
 			echo '<form action="admin.php" method="post">'."\n";
 			echo '<p>'.$lang_add['entries_in_not_ex_cat'].'</p>'."\n";
 			echo '<p><input type="radio" name="mode" value="delete" checked="checked" />';
