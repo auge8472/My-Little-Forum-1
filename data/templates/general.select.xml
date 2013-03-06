@@ -1,0 +1,8 @@
+<?xml version='1.0' standalone='yes'?>
+<template>
+ <wholeselect><![CDATA[ <select name="{SelName}" id="{SelID}" size="{SelSize}">
+{Options}</select>]]>
+ </wholeselect>
+ <body><![CDATA[  <option value="{FormValue}"{Check}>{FormText}</option>]]>
+ </body>
+</template>
