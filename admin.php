@@ -211,11 +211,11 @@ if (isset($_POST['new_category']))
 
 if (isset($_GET['edit_user']))
 	{
-	$edit_user_id = intval($_GET['edit_user']);
 	$getOneUserQuery = "SELECT
+	user_id,
 	user_type,
 	user_name,
-	user_real_name,
+	user_real_name AS real_name,
 	user_email,
 	hide_email,
 	user_hp,
@@ -223,29 +223,15 @@ if (isset($_GET['edit_user']))
 	signature,
 	profile,
 	user_view,
-	new_posting_notify,
-	new_user_notify,
-	personal_messages,
+	new_posting_notify AS posting_notify,
+	new_user_notify AS user_notify,
+	personal_messages AS pers_mess,
 	time_difference
 	FROM ". $db_settings['userdata_table'] ."
-	WHERE user_id = '". $edit_user_id ."'";
+	WHERE user_id = '". intval($_GET['edit_user']) ."'";
 	$result = mysql_query($getOneUserQuery, $connid) or die($lang['db_error']);
 	$field = mysql_fetch_assoc($result);
 	mysql_free_result($result);
-	$edit_user_type = $field["user_type"];
-	$user_email = $field["user_email"];
-	$hide_email = $field["hide_email"];
-	$edit_user_name = $field["user_name"];
-	$user_real_name = $field["user_real_name"];
-	$user_hp = $field["user_hp"];
-	$user_place = $field["user_place"];
-	$profile = $field["profile"];
-	$signature = $field["signature"];
-	$user_view = $field["user_view"];
-	$user_time_difference = $field["time_difference"];
-	$new_posting_notify = $field["new_posting_notify"];
-	$new_user_notify = $field["new_user_notify"];
-	$personal_messages = $field["personal_messages"];
 	$action = 'edit_user';
 	}
 
@@ -450,10 +436,6 @@ if (isset($_GET['edit_category']))
 	if (!$category_result) die($lang['db_error']);
 	$field = mysql_fetch_assoc($category_result);
 	mysql_free_result($category_result);
-
-	$id = $field['id'];
-	$category = $field['category'];
-	$accession = $field['accession'];
 	$action = "edit_category";
 	}
 
@@ -469,9 +451,6 @@ if (isset($_GET['delete_category']))
 	if (!$category_result) die($lang['db_error']);
 	$field = mysql_fetch_assoc($category_result);
 	mysql_free_result($category_result);
-
-	$category_id = $field['id'];
-	$category_name = $field['category'];
 	$action = "delete_category";
 	}
 
@@ -1495,14 +1474,6 @@ if(isset($_GET['edit_smiley']))
 	if(!$result) die($lang['db_error']);
 	$data = mysql_fetch_assoc($result);
 	mysql_free_result($result);
-	$id = $data['id'];
-	$file = $data['file'];
-	$code_1 = $data['code_1'];
-	$code_2 = $data['code_2'];
-	$code_3 = $data['code_3'];
-	$code_4 = $data['code_4'];
-	$code_5 = $data['code_5'];
-	$title = $data['title'];
 	$action='edit_smiley';
 	}
 
@@ -1521,11 +1492,11 @@ if(isset($_POST['edit_smiley_submit']))
 		{
 		$errors[] = $lang_add['smiley_file_doesnt_exist'];
 		}
-	if($code_1=='' && $code_2=='' && $code_3=='' && $code_4=='' && $code_5=='')
+	if ($code_1=='' && $code_2=='' && $code_3=='' && $code_4=='' && $code_5=='')
 		{
 		$errors[] = $lang_add['smiley_code_error'];
 		}
-	if(empty($errors))
+	if (empty($errors))
 		{
 		$editSmileyUpdateQuery = "UPDATE ". $db_settings['smilies_table'] ." SET
 		file='". mysql_real_escape_string($file) ."',
@@ -1546,14 +1517,14 @@ if(isset($_POST['edit_smiley_submit']))
 		}
 	}
 
-if(isset($_GET['enable_smilies']))
+if (isset($_GET['enable_smilies']))
 	{
 	mysql_query("UPDATE ". $db_settings['settings_table'] ." SET value=1 WHERE name='smilies'", $connid);
 	header('Location: '. $settings['forum_address'] .'admin.php?action=smilies');
 	die();
 	}
 
-if(isset($_GET['disable_smilies']))
+if (isset($_GET['disable_smilies']))
 	{
 	mysql_query("UPDATE ". $db_settings['settings_table'] ." SET value=0 WHERE name='smilies'", $connid);
 	header('Location: '. $settings['forum_address'] .'admin.php?action=smilies');
@@ -2598,11 +2569,11 @@ switch ($action)
 					}
 				$cat_select .= '</select>'."\n";
 				}
-			echo '<h2>'.str_replace("[category]",$category_name,$lang_add['del_cat_hl']).'</h2>'."\n";
+			echo '<h2>'. str_replace("[category]", $field['category'], $lang_add['del_cat_hl']) .'</h2>'."\n";
 			echo '<p class="caution">'.$lang['caution'].'</p>'."\n";
-			echo '<form action="admin.php" method="post" style="display: inline;">'."\n";
+			echo '<form action="admin.php" method="post">'."\n";
 			echo '<input type="hidden" name="category_id" value="';
-			echo $category_id.'" />'."\n";
+			echo $field['id'] .'" />'."\n";
 			if (count($categories) <= 1)
 				{
 				echo '<input type="hidden" name="move_category" value="0" />'."\n";
@@ -2625,19 +2596,19 @@ switch ($action)
 				echo errorMessages($errors);
 				}
 			echo '<form action="admin.php" method="post"><div>'."\n";
-			echo '<input type="hidden" name="id" value="'.$id.'" />'."\n";
+			echo '<input type="hidden" name="id" value="'. intval($field['id']) .'" />'."\n";
 			echo '<label for="cat-name">'.$lang_add['edit_category']."\n";
 			echo '<input type="text" name="category" id="cat-name" value="';
-			echo htmlspecialchars($category).'" size="25" /></label><br />'."\n";
+			echo htmlspecialchars($field['category']) .'" size="25" /></label><br />'."\n";
 			echo '<b>'.$lang_add['accessible_for'].'</b><br />'."\n";
 			echo '<input type="radio" name="accession" id="access-all" value="0"';
-			echo ($accession==0) ? ' checked="ckecked"' : '';
+			echo ($field['accession'] == 0) ? ' checked="ckecked"' : '';
 			echo ' /><label for="access-all">'.$lang_add['cat_accession_all'].'</label><br />'."\n";
 			echo '<input type="radio" name="accession" id="access-user" value="1"';
-			echo ($accession==1) ? ' checked="ckecked"' : '';
+			echo ($field['accession'] == 1) ? ' checked="ckecked"' : '';
 			echo ' /><label for="access-user">'.$lang_add['cat_accession_reg_users'].'</label><br />'."\n";
 			echo '<input type="radio" name="accession" id="access-mod-admin" value="2"';
-			echo ($accession==2) ? ' checked="ckecked"' : '';
+			echo ($field['accession'] == 2) ? ' checked="ckecked"' : '';
 			echo ' /><label for="access-mod-admin">'.$lang_add['cat_accession_mod_admin'].'</label><br /><br />'."\n";
 			echo '<input type="submit" name="edit_category_submit" value="';
 			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></div></form>'."\n";
@@ -2929,42 +2900,42 @@ switch ($action)
 		case 'edit_smiley':
 			if (isset($errors)) { echo errorMessages($errors); }
 			echo '<form action="admin.php" method="post">'."\n";
-			echo '<input type="hidden" name="id" value="'.$id.'" />'."\n";
+			echo '<input type="hidden" name="id" value="'.$data['id'].'" />'."\n";
 			echo '<table class="admin">'."\n";
 			echo ' <tr>'."\n";
 			echo '  <td><label for="smiley-file">'.$lang_add['edit_smilies_smiley'].'</label></td>'."\n";
 			echo '  <td><select name="file" id="smiley-file" size="1">'."\n";
-			$fp=opendir('img/smilies/');
+			$fp = opendir('img/smilies/');
 			while ($dirfile = readdir($fp))
 				{
-				if(preg_match('/\.gif$/i', $dirfile)
+				if (preg_match('/\.gif$/i', $dirfile)
 				|| preg_match('/\.png$/i', $dirfile)
 				|| preg_match('/\.jpg$/i', $dirfile))
 					{
 					echo '<option value="'.$dirfile.'"';
-					echo ($dirfile == $file) ? ' selected="selected"' : '';
+					echo ($dirfile == $data['file']) ? ' selected="selected"' : '';
 					echo '>'.$dirfile.'</option>'."\n";
 					}
 				}
 			closedir($fp);
 			echo '</select></td>'."\n";
 			echo ' </tr><tr>'."\n";
-			echo '  <td>'.$lang_add['edit_smilies_codes'].'</td>'."\n";
-			echo '  <td><input type="text" name="code_1" size="7" value="';
-			if (isset($code_1)) echo htmlspecialchars($code_1);
+			echo '  <td><label for="smiley-code-1">'.$lang_add['edit_smilies_codes'].'</label></td>'."\n";
+			echo '  <td><input type="text" name="code_1" id="smiley-code-1" size="7" value="';
+			if (isset($data['code_1'])) echo htmlspecialchars($data['code_1']);
 			echo '" /> <input type="text" name="code_2" size="7" value="';
-			if (isset($code_2)) echo htmlspecialchars($code_2);
+			if (isset($data['code_2'])) echo htmlspecialchars($data['code_2']);
 			echo '" /> <input type="text" name="code_3" size="7" value="';
-			if (isset($code_3)) echo htmlspecialchars($code_3);
+			if (isset($data['code_3'])) echo htmlspecialchars($data['code_3']);
 			echo '" /> <input type="text" name="code_4" size="7" value="';
-			if (isset($code_4)) echo htmlspecialchars($code_4);
+			if (isset($data['code_4'])) echo htmlspecialchars($data['code_4']);
 			echo '" /> <input type="text" name="code_5" size="7" value="';
-			if (isset($code_5)) echo htmlspecialchars($code_5);
+			if (isset($data['code_5'])) echo htmlspecialchars($data['code_5']);
 			echo '" /></td>'."\n";
 			echo ' </tr><tr>'."\n";
-			echo '  <td><label for="smiley-title">'.$lang_add['edit_smilies_title'].'</b></td>'."\n";
+			echo '  <td><label for="smiley-title">'.$lang_add['edit_smilies_title'].'</label></td>'."\n";
 			echo '  <td><input type="text" name="title" id="smiley-title" value="';
-			if (isset($title)) echo htmlspecialchars($title);
+			if (isset($data['title'])) echo htmlspecialchars($data['title']);
 			echo '" size="25" /></td>'."\n";
 			echo ' </tr>'."\n";
 			echo '</table>'."\n";
@@ -2983,16 +2954,16 @@ switch ($action)
 				{
 				echo errorMessages($errors);
 				}
-			$tBody = str_replace('{UserID}', intval($edit_user_id), $tBody);
+			$tBody = str_replace('{UserID}', intval($field['user_id']), $tBody);
 			$tBody = str_replace('{UserName}', htmlspecialchars($lang['username_marking']), $tBody);
-			$tBody = str_replace('{Name}', htmlspecialchars($edit_user_name), $tBody);
+			$tBody = str_replace('{Name}', htmlspecialchars($field['user_name']), $tBody);
 			$tBody = str_replace('{UserType}', htmlspecialchars($lang_add['usertype_marking']), $tBody);
 			$r = '';
 			foreach (array('user', 'mod', 'admin') as $type)
 				{
 				$uType = $sBody;
 				$uType = str_replace('{FormValue}', htmlspecialchars($type), $uType);
-				$checktype = ($edit_user_type == $type) ? ' selected="selected"' : '';
+				$checktype = ($field['user_type'] == $type) ? ' selected="selected"' : '';
 				$uType = str_replace('{Check}', $checktype, $uType);
 				$uType = str_replace('{FormText}', htmlspecialchars($lang['ud_'. $type]), $uType);
 				$r .= $uType;
@@ -3003,32 +2974,32 @@ switch ($action)
 			$uTypeList = str_replace('{SelSize}', '1', $uTypeList);
 			$tBody = str_replace('{UserTypeMenu}', $uTypeList, $tBody);
 			$tBody = str_replace('{UserEmail}', htmlspecialchars($lang['user_email_marking']), $tBody);
-			$tBody = str_replace('{Email}', htmlspecialchars($user_email), $tBody);
+			$tBody = str_replace('{Email}', htmlspecialchars($field['user_email']), $tBody);
 			$tBody = str_replace('{ShowEmail}', htmlspecialchars($lang['user_show_email']), $tBody);
-			$checkHideNo = ($hide_email == "0") ? ' checked="checked"' : '';
+			$checkHideNo = ($field['hide_email'] == "0") ? ' checked="checked"' : '';
 			$tBody = str_replace('{CheckShowEmailYes}', $checkHideNo, $tBody);
 			$tBody = str_replace('{ShowEmailYes}', htmlspecialchars($lang['yes']), $tBody);
-			$checkHideYes = ($hide_email == "1") ? ' checked="checked"' : '';
+			$checkHideYes = ($field['hide_email'] == "1") ? ' checked="checked"' : '';
 			$tBody = str_replace('{CheckShowEmailNo}', $checkHideYes, $tBody);
 			$tBody = str_replace('{ShowEmailNo}', htmlspecialchars($lang['no']), $tBody);
 			$tBody = str_replace('{UserRealName}', htmlspecialchars($lang['user_real_name']), $tBody);
-			$tBody = str_replace('{RealName}', htmlspecialchars($user_real_name), $tBody);
+			$tBody = str_replace('{RealName}', htmlspecialchars($field['real_name']), $tBody);
 			$tBody = str_replace('{RN-Max}', intval($settings['name_maxlength']), $tBody);
 			$tBody = str_replace('{UserHomepage}', htmlspecialchars($lang['user_hp']), $tBody);
-			$tBody = str_replace('{Homepage}', htmlspecialchars($user_hp), $tBody);
+			$tBody = str_replace('{Homepage}', htmlspecialchars($field['user_hp']), $tBody);
 			$tBody = str_replace('{HP-Max}', intval($settings['hp_maxlength']), $tBody);
 			$tBody = str_replace('{UserPlace}', htmlspecialchars($lang['user_place']), $tBody);
-			$tBody = str_replace('{Place}', htmlspecialchars($user_place), $tBody);
+			$tBody = str_replace('{Place}', htmlspecialchars($field['user_place']), $tBody);
 			$tBody = str_replace('{P-Max}', intval($settings['place_maxlength']), $tBody);
 			$tBody = str_replace('{UserProfile}', htmlspecialchars($lang['user_profile']), $tBody);
-			$tBody = str_replace('{Profile}', htmlspecialchars($profile), $tBody);
+			$tBody = str_replace('{Profile}', htmlspecialchars($field['profile']), $tBody);
 			$tBody = str_replace('{UserSignature}', htmlspecialchars($lang['user_signature']), $tBody);
-			$tBody = str_replace('{Signature}', htmlspecialchars($signature), $tBody);
+			$tBody = str_replace('{Signature}', htmlspecialchars($field['signature']), $tBody);
 			$tBody = str_replace('{UserPersonalMessages}', htmlspecialchars($lang['user_pers_msg']), $tBody);
-			$checkPMYes = ($personal_messages == "1") ? ' checked="checked"' : '';
+			$checkPMYes = ($field['pers_mess'] == "1") ? ' checked="checked"' : '';
 			$tBody = str_replace('{CheckPersMessYes}', $checkPMYes, $tBody);
 			$tBody = str_replace('{PersMessYes}', htmlspecialchars($lang['user_pers_msg_act']), $tBody);
-			$checkPMNo = ($personal_messages == "0") ? ' checked="checked"' : '';
+			$checkPMNo = ($field['pers_mess'] == "0") ? ' checked="checked"' : '';
 			$tBody = str_replace('{CheckPersMessNo}', $checkPMNo, $tBody);
 			$tBody = str_replace('{PersMessNo}', htmlspecialchars($lang['user_pers_msg_deact']), $tBody);
 			$tBody = str_replace('{UserTimeDifference}', htmlspecialchars($lang['user_time_diff']), $tBody);
@@ -3037,7 +3008,7 @@ switch ($action)
 				{
 				$uType = $sBody;
 				$uType = str_replace('{FormValue}', htmlspecialchars($h), $uType);
-				$checktype = ($user_time_difference == $h) ? ' selected="selected"' : '';
+				$checktype = ($field['time_difference'] == $h) ? ' selected="selected"' : '';
 				$uType = str_replace('{Check}', $checktype, $uType);
 				$uType = str_replace('{FormText}', htmlspecialchars($h), $uType);
 				$r .= $uType;
@@ -3060,7 +3031,7 @@ switch ($action)
 					{
 					$uType = $sBody;
 					$uType = str_replace('{FormValue}', htmlspecialchars($view), $uType);
-					$checktype = ($user_view == $view) ? ' selected="selected"' : '';
+					$checktype = ($field['user_view'] == $view) ? ' selected="selected"' : '';
 					$uType = str_replace('{Check}', $checktype, $uType);
 					$uType = str_replace('{FormText}', htmlspecialchars($lang[$view .'_view_linkname']), $uType);
 					$r .= $uType;
@@ -3073,14 +3044,14 @@ switch ($action)
 				}
 			$OptView = (!empty($tOptV)) ? $tOptV : '';
 			$tBody = str_replace('{OptionViews}', $OptView, $tBody);
-			if ($edit_user_type=="admin" || $edit_user_type=="mod")
+			if ($field['user_type'] == "admin" || $field['user_type'] == "mod")
 				{
 				$tOptA = $xmlBody->optadmin;
 				$tOptA = str_replace('{AdminModNotify}', htmlspecialchars($lang['admin_mod_notif']), $tOptA);
-				$checkNotifyPost = ($new_posting_notify == "1") ? ' checked="checked"' : '';
+				$checkNotifyPost = ($field['posting_notify'] == "1") ? ' checked="checked"' : '';
 				$tOptA = str_replace('{CheckNotifyPost}', $checkNotifyPost, $tOptA);
 				$tOptA = str_replace('{NotifyPost}', htmlspecialchars($lang['admin_mod_notif_np']), $tOptA);
-				$checkNotifyUser = ($new_user_notify == "1") ? ' checked=" checked"' : '';
+				$checkNotifyUser = ($field['user_notify'] == "1") ? ' checked=" checked"' : '';
 				$tOptA = str_replace('{CheckNotifyUser}', $checkNotifyUser, $tOptA);
 				$tOptA = str_replace('{NotifyUser}', htmlspecialchars($lang['admin_mod_notif_nu']), $tOptA);
 				}
