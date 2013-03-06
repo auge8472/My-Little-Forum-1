@@ -29,7 +29,7 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 && $settings['autologin'] == 1)
 	{
 	header("location: ".$settings['forum_address']."login.php?referer=board.php");
-	die("<a href=\"login.php?referer=board.php\">further...</a>");
+	die('<a href="login.php?referer=board.php">further...</a>');
 	}
 
 if($settings['access_for_users_only']  == 1
