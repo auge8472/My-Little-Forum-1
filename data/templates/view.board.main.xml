@@ -1,0 +1,32 @@
+<?xml version='1.0' standalone='yes'?>
+<template>
+ <wholetable><![CDATA[<table class="normaltab">
+ <thead>
+{tp-Headline}</thead>
+ <tbody>
+{tp-Rows}</tbody>
+</table>]]>
+ </wholetable>
+ <header><![CDATA[ <tr>
+   <th><a href="board.php?{QuerySortSubject}" title="{SortTitleSubject}">{Subject}</a>{SorterSubject}</th>{thCategory}
+   <th><a href="board.php?{QuerySortAuthor}" title="{SortTitleAuthor}">{Author}</a>{SorterAuthor}</th>
+   <th><a href="board.php?{QuerySortDate}" title="{SortTitleDate}">{Date}</a>{SorterDate}</th>
+   <th>{CountAnswers}</th>
+   <th><a href="board.php?{QuerySortLastAnswer}" title="{SortTitleLastAnswer}">{LastAnswer}</a>{SorterLastAnswer}</th>{thViews}{thMarker}
+  </tr>]]>
+ </header>
+ <optheadercats><![CDATA[   <th><a href="board.php?{QuerySortCategory}" title="{SortTitleCategory}">{Category}</a>{SorterCategory}</th>]]></optheadercats>
+ <optheaderviews><![CDATA[   <th>{Views}</th>]]></optheaderviews>
+ <optheadermarker><![CDATA[   <th>&nbsp;</th>]]></optheadermarker>
+ <body><![CDATA[ <tr>
+   <td><a class="{ThreadNewPosting}" href="board_entry.php?id={ThreadID}">{ThreadSubject}</a>{Tips}</td>{trCategory}
+   <td class="info">{ThreadAuthor}</td>
+   <td class="info">{ThreadDate}</td>
+   <td class="number-cell">{ThreadAnswers}</td>
+   <td class="info">{ThreadLastAnswer}</td>{trViews}{trMarker}
+  </tr>]]>
+ </body>
+ <optbodycats><![CDATA[   <td class="info">{ThreadCategory}</td>]]></optbodycats>
+ <optbodyviews><![CDATA[   <td class="number-cell">{ThreadViews}</td>]]></optbodyviews>
+ <optbodymarker><![CDATA[   <td><a href="admin.php?mark={MarkID}&amp;refer={MarkRefer}&amp;page={MarkPage}&amp;order={MarkOrder}{MarkCategory}"><img src="{MarkSrc}" alt="{markAlt}" width="9" height="9" title="{MarkTitle}" /></a></td>]]></optbodymarker>
+</template>

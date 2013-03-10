@@ -130,89 +130,91 @@ if($settings['access_for_users_only']  == 1
 
 	if ($thread_count > 0 && isset($threadsResult))
 		{
+		$xmlFile = dirname($_SERVER["SCRIPT_FILENAME"]) .'/data/templates/view.board.main.xml';
+		$xml = simplexml_load_file($xmlFile, null, LIBXML_NOCDATA);
+		$templAll = $xml->wholetable;
+		$tHeader = $xml->header;
+		$tBody = $xml->body;
 		$currDescAsc = strtolower($_SESSION[$settings['session_prefix'].'descasc']);
-		echo '<table class="normaltab">'."\n";
-		echo ' <thead>'."\n";
-		echo '  <tr>'."\n";
-		echo '   <th><a href="board.php?order=subject&amp;descasc=';
-		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
+		# generate output for subject
+		$ordSubject = ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
 		&& $_SESSION[$settings['session_prefix'].'order'] == "subject") ? 'DESC' : 'ASC';
-		echo $cat;
-		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_subject_headline'].'</a>';
-		if ($_SESSION[$settings['session_prefix'].'order'] == "subject")
-			{
-			echo outputImageDescAsc($currDescAsc);
-			}
-		echo '</th>'."\n";
+		$qsSubject = 'order=subject&amp;descasc='. $ordSubject.$cat;
+		$tHeader = str_replace('{QuerySortSubject}', $qsSubject, $tHeader);
+		$tHeader = str_replace('{SortTitleSubject}', outputLangDebugInAttributes($lang['order_linktitle']), $tHeader);
+		$tHeader = str_replace('{Subject}', htmlspecialchars($lang['board_subject_headline']), $tHeader);
+		$sorterSubject = ($_SESSION[$settings['session_prefix'].'order'] == "subject") ? outputImageDescAsc($currDescAsc) : '';
+		$tHeader = str_replace('{SorterSubject}', $sorterSubject, $tHeader);
+		# generate output for author
+		$ordAuthor = ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
+		&& $_SESSION[$settings['session_prefix'].'order'] == "name") ? 'DESC' : 'ASC';
+		$qsAuthor = 'order=name&amp;descasc='. $ordAuthor.$cat;
+		$tHeader = str_replace('{QuerySortAuthor}', $qsAuthor, $tHeader);
+		$tHeader = str_replace('{SortTitleAuthor}', outputLangDebugInAttributes($lang['order_linktitle']), $tHeader);
+		$tHeader = str_replace('{Author}', htmlspecialchars($lang['board_author_headline']), $tHeader);
+		$sorterAuthor = ($_SESSION[$settings['session_prefix'].'order'] == "name") ? outputImageDescAsc($currDescAsc) : '';
+		$tHeader = str_replace('{SorterAuthor}', $sorterAuthor, $tHeader);
+		# generate output for date
+		$ordDate = ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
+		&& $_SESSION[$settings['session_prefix'].'order'] == "time") ? 'DESC' : 'ASC';
+		$qsDate = 'order=time&amp;descasc='. $ordDate.$cat;
+		$tHeader = str_replace('{QuerySortDate}', $qsDate, $tHeader);
+		$tHeader = str_replace('{SortTitleDate}', outputLangDebugInAttributes($lang['order_linktitle']), $tHeader);
+		$tHeader = str_replace('{Date}', htmlspecialchars($lang['board_date_headline']), $tHeader);
+		$sorterDate = ($_SESSION[$settings['session_prefix'].'order'] == "time") ? outputImageDescAsc($currDescAsc) : '';
+		$tHeader = str_replace('{SorterDate}', $sorterDate, $tHeader);
+		# generate output for answers quantity
+		$tHeader = str_replace('{CountAnswers}', htmlspecialchars($lang['board_answers_headline']), $tHeader);
+		# generate output for last answer
+		$ordLastAnswer = ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
+		&& $_SESSION[$settings['session_prefix'].'order'] == "last_answer") ? 'DESC' : 'ASC';
+		$qsLastAnswer = 'order=last_answer&amp;descasc='. $ordLastAnswer.$cat;
+		$tHeader = str_replace('{QueryLastAnswer}', $qsLastAnswer, $tHeader);
+		$tHeader = str_replace('{SortTitleLastAnswer}', outputLangDebugInAttributes($lang['order_linktitle']), $tHeader);
+		$tHeader = str_replace('{LastAnswer}', htmlspecialchars($lang['board_last_answer_headline']), $tHeader);
+		$sorterLastAnswer = ($_SESSION[$settings['session_prefix'].'order'] == "last_answer") ? outputImageDescAsc($currDescAsc) : '';
+		$tHeader = str_replace('{SorterLastAnswer}', $sorterLastAnswer, $tHeader);
+		# generate output for category (if categories are defined and if no category is picked)
 		if ($categories !== false
 		&& $_SESSION[$settings['session_prefix'].'category'] == 0)
 			{
-			echo '   <th><a href="board.php?order=category&amp;descasc=';
-			echo ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
+			$tCat = $xml->optheadercats;
+			$ordCategories = ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
 			&& $_SESSION[$settings['session_prefix'].'order'] == "category") ? 'DESC' : 'ASC';
-			echo $cat;
-			echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_category_headline'].'</a>';
-			if ($_SESSION[$settings['session_prefix'].'order'] == "category")
-				{
-				echo outputImageDescAsc($currDescAsc);
-				}
-			echo '</th>'."\n";
+			$qsCategories = 'order=category&amp;descasc='. $ordCategories.$cat;
+			$tCat = str_replace('{QuerySortCategory}', $qsCategories, $tCat);
+			$tCat = str_replace('{SortTitleCategory}', outputLangDebugInAttributes($lang['order_linktitle']), $tCat);
+			$tCat = str_replace('{Category}', htmlspecialchars($lang['board_category_headline']), $tCat);
+			$sorterCategories = ($_SESSION[$settings['session_prefix'].'order'] == "category") ? outputImageDescAsc($currDescAsc) : '';
+			$tCat = str_replace('{SorterCategory}', $sorterCategories, $tCat);
 			}
-		echo '   <th><a href="board.php?order=name&amp;descasc=';
-		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "ASC"
-		&& $_SESSION[$settings['session_prefix'].'order'] == "name") ? 'DESC' : 'ASC';
-		echo $cat;
-		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_author_headline'].'</a>';
-		if ($_SESSION[$settings['session_prefix'].'order'] == "name")
-			{
-			echo outputImageDescAsc($currDescAsc);
-			}
-		echo '</th>'."\n";
-		echo '   <th><a href="board.php?order=time&amp;descasc=';
-		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "DESC"
-		&& $_SESSION[$settings['session_prefix'].'order'] == "time") ? "ASC" : "DESC";
-		echo $cat;
-		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_date_headline'].'</a>';
-		if ($_SESSION[$settings['session_prefix'].'order'] == "time")
-			{
-			echo outputImageDescAsc($currDescAsc);
-			}
-		echo '</th>'."\n";
-		echo '   <th>'.$lang['board_answers_headline'].'</th>'."\n";
-		echo '   <th><a href="board.php?order=last_answer&amp;descasc=';
-		echo ($_SESSION[$settings['session_prefix'].'descasc'] == "DESC"
-		&& $_SESSION[$settings['session_prefix'].'order'] == "last_answer") ? "ASC" : "DESC";
-		echo $cat;
-		echo '" title="'.outputLangDebugInAttributes($lang['order_linktitle']).'">'.$lang['board_last_answer_headline'].'</a>';
-		if ($_SESSION[$settings['session_prefix'].'order'] == "last_answer")
-			{
-			echo outputImageDescAsc($currDescAsc);
-			}
-		echo '</th>'."\n";
+		# generate output for views quantity (if activated)
 		if (isset($settings['count_views']) && $settings['count_views'] == 1)
 			{
-			echo '   <th>'.$lang['views_headline'].'</th>'."\n";
+			$tViews = $xml->optheaderviews;
+			$tViews = str_replace('{Views}', htmlspecialchars($lang['views_headline']), $tViews);
 			}
 		if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 		&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
 			{
-			echo '   <th>&nbsp;</th>'."\n";
+			$tMark = $xml->optheadermarker;
 			}
-		echo '  </tr>'."\n";
-		echo ' </thead>'."\n".' <tbody>'."\n".'  ';
-
-		$i=0;
+		$headerCat = (!empty($tCat)) ? $tCat : '';
+		$headerViews = (!empty($tViews)) ? $tViews : '';
+		$headerMark = (!empty($tMark)) ? $tMark : '';
+		$tHeader = str_replace('{thCategory}', "\n".$headerCat, $tHeader);
+		$tHeader = str_replace('{thViews}', "\n".$headerViews, $tHeader);
+		$tHeader = str_replace('{thMarker}', "\n".$headerMark, $tHeader);
+		$r = '';
 		while ($zeile = mysql_fetch_assoc($threadsResult))
 			{
 			# count replies:
 			$answers_count = outputGetReplies($zeile["tid"], $connid);
-
 			# data for link to last reply:
 			if ($settings['last_reply_link'] == 1 or $settings['last_reply_name'] == 1)
 				{
 				$last_answer = outputGetLastReply($zeile["tid"], $connid);
 				}
-
 			# highlight user, mods and admins:
 			if (($settings['admin_mod_highlight'] == 1
 			or $settings['user-highlight'] == 1)
@@ -220,156 +222,185 @@ if($settings['access_for_users_only']  == 1
 				{
 				$mark = outputStatusMark($mark, $zeile['user_type'], $connid);
 				}
-			echo '<tr>'."\n";
-			# start: subject
-			echo '   <td><a class="';
+			$tRow = $tBody;
+			# generate output for thread subject
 			if ((isset($_SESSION[$settings['session_prefix'].'newtime'])
 			&& $_SESSION[$settings['session_prefix'].'newtime'] < $zeile["last_answer"])
 			|| (($zeile["pid"]==0)
 			&& empty($_SESSION[$settings['session_prefix'].'newtime'])
 			&& $zeile["last_answer"] > $last_visit))
 				{
-				echo 'threadnew';
+				$newPosting = 'threadnew';
 				}
 			else
 				{
-				echo 'thread';
+				$newPosting = 'thread';
 				}
-			echo '" href="board_entry.php?id='.$zeile["tid"].'">';
-			echo htmlspecialchars($zeile["subject"]).'</a>'."\n";
+			$tRow = str_replace('{ThreadNewPosting}', $newPosting, $tRow);
+			$tRow = str_replace('{ThreadID}', intval($zeile["tid"]), $tRow);
+			$tRow = str_replace('{ThreadSubject}', htmlspecialchars($zeile["subject"]), $tRow);
 			# show sign for fixed threads
+			$tips = '';
 			if ($zeile["fixed"] == 1)
 				{
-				echo ' <img src="img/fixed.png" width="9" height="9" title="';
-				echo outputLangDebugInAttributes($lang['fixed']).'" alt="*" />';
+				$tips .= ' <img src="img/fixed.png" width="9" height="9" title="'. outputLangDebugInAttributes($lang['fixed']) .'" alt="*" />';
 				}
 			if ($settings['all_views_direct'] == 1)
 				{
-				echo ' <span class="small">';
+				$Targets = array('{Target}', '{Query}', '{Image}', '{Alt}', '{Title}');
+				$otherViews = '<a href="{Target}{Query}"><img src="{Image}" alt="{Alt}" title="{Title}" width="12" height="9" /></a>';
+				$tips .= ' <span class="small">';
 				if ($settings['thread_view']==1)
 					{
-					echo '<a href="forum_entry.php?id='.$zeile["tid"].$cat.'">';
-					echo '<img src="img/thread_d.png" alt="[Thread]" title="';
-					echo outputLangDebugInAttributes($lang['open_in_thread_linktitle']).'" width="12" height="9" /></a>';
+					$tipp = $otherViews;
+					$Strikes = array(
+					'forum_entry.php',
+					'?id='. intval($zeile["tid"]),
+					'img/thread_d.png',
+					'[Thread]',
+					outputLangDebugInAttributes($lang['open_in_thread_linktitle']));
+					$tips .= str_replace($Targets, $Strikes, $tipp);
 					}
 				if ($settings['mix_view'] == 1)
 					{
-					echo '<a href="mix_entry.php?id='.$zeile["tid"].$cat.'">';
-					echo '<img src="img/mix_d.png" alt="[Mix]" title="';
-					echo outputLangDebugInAttributes($lang['open_in_mix_linktitle']).'" width="12" height="9" /></a>';
+					$tipp = $otherViews;
+					$Strikes = array(
+					'mix_entry.php',
+					'?id='. intval($zeile["tid"]),
+					'img/mix_d.png',
+					'[Mix]',
+					outputLangDebugInAttributes($lang['open_in_mix_linktitle']));
+					$tips .= str_replace($Targets, $Strikes, $tipp);
 					}
-				echo "</span>";
+				$tips .= "</span>";
 				}
-			echo '</td>'."\n"; # end: subject
-			if ($categories!=false
-			&& $_SESSION[$settings['session_prefix'].'category'] == 0)
-				{
-				# start: categories (if in use)
-				echo '   <td class="info">';
-				if (isset($categories[$zeile["category"]]) && $categories[$zeile["category"]]!='')
-					{
-					echo '<a title="'.str_replace("[category]", $categories[$zeile["category"]], outputLangDebugInAttributes($lang['choose_category_linktitle']));
-					if (isset($category_accession[$zeile["category"]])
-					&& $category_accession[$zeile["category"]] == 2)
-						{
-						echo " ".outputLangDebugInAttributes($lang['admin_mod_category']);
-						}
-					else if (isset($category_accession[$zeile["category"]])
-					&& $category_accession[$zeile["category"]] == 1)
-						{
-						echo " ".outputLangDebugInAttributes($lang['registered_users_category']);
-						}
-					echo '" href="board.php?category='.$zeile["category"].'"><span class="';
-					if (isset($category_accession[$zeile["category"]])
-					&& $category_accession[$zeile["category"]] == 2)
-						{
-						echo "category-adminmod-b";
-						}
-					elseif (isset($category_accession[$zeile["category"]])
-					&& $category_accession[$zeile["category"]] == 1)
-						{
-						echo "category-regusers-b";
-						}
-					else
-						{
-						echo "category-b";
-						}
-					echo '">'.$categories[$zeile["category"]].'</span></a>';
-					}
-				else
-					{
-					echo "&nbsp;";
-					}
-				echo '</td>'."\n"; # end: categories
-				}
-			# start: authors names
-			echo '   <td class="info">';
+			$tRow = str_replace('{Tips}', $tips, $tRow);
+			# generate output for thread author
+			$tAuthor = '';
 			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["posters_id"] > 0)
 				{
 				$sult = str_replace("[name]", htmlspecialchars($zeile["name"]), outputLangDebugInAttributes($lang['show_userdata_linktitle']));
-				echo '<a href="user.php?id='.$zeile["posters_id"].'" title="'.$sult.'">';
+				$tAuthor .= '<a href="user.php?id='.$zeile["posters_id"].'" title="'.$sult.'">';
 				}
-			echo outputAuthorsName($zeile["name"], $mark, $zeile["posters_id"]);
+			$tAuthor .= outputAuthorsName($zeile["name"], $mark, $zeile["posters_id"]);
 			if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["posters_id"] > 0)
 				{
-				echo '</a>';
+				$tAuthor .= '</a>';
 				}
-			echo '</td>'."\n"; # end: authors names
-			echo '   <td class="info">'.$zeile["Uhrzeit"].'</td>'."\n";
-			echo '   <td class="number-cell">'.$answers_count.'</td>'."\n";
-			echo '   <td class="info">'; # start: last reply
+			$tRow = str_replace('{ThreadAuthor}', $tAuthor, $tRow);
+			# generate output for thread date
+			$tRow = str_replace('{ThreadDate}', htmlspecialchars($zeile["Uhrzeit"]), $tRow);
+			# generate output for threads answers quantity
+			$tRow = str_replace('{ThreadAnswers}', htmlspecialchars($answers_count), $tRow);
+			# generate output for link to the last reply
+			$tLastAnswer = '';
 			if ($answers_count > 0)
 				{
 				if ($settings['last_reply_link']==1)
 					{
-					echo '<a href="board_entry.php?id='.$zeile["tid"].'&amp;be_page=';
-					echo (ceil($answers_count / $settings['answers_per_topic'])-1).'&amp;page='.$_SESSION[$settings['session_prefix'].'page'];
-					echo ($_SESSION[$settings['session_prefix'].'$category'] > 0) ? '&amp;category='.$_SESSION[$settings['session_prefix'].'category'] : '';
-					echo '&amp;order='. $_SESSION[$settings['session_prefix'].'order'] .'&amp;descasc='.$_SESSION[$settings['session_prefix'].'descasc'] .'#p'.$last_answer['id'];
-					echo '" title="'.str_replace("[name]", $last_answer['name'], outputLangDebugInAttributes($lang['last_reply_lt'])).'">';
+					$tLastAnswer .= '<a href="board_entry.php?id='.$zeile["tid"].'&amp;be_page=';
+					$tLastAnswer .= (ceil($answers_count / $settings['answers_per_topic'])-1);
+					$tLastAnswer .= '&amp;order='. $_SESSION[$settings['session_prefix'].'order'] .'#p'.$last_answer['id'];
+					$tLastAnswer .= '" title="'. str_replace("[name]", $last_answer['name'], outputLangDebugInAttributes($lang['last_reply_lt'])).'">';
 					}
-				echo $zeile["la_Uhrzeit"];
+				$tLastAnswer .= $zeile["la_Uhrzeit"];
 				if ($settings['last_reply_name'] == 1)
 					{
-					echo (!empty($last_answer['name'])) ? ' ('.$last_answer['name'].')' : '';
+					$tLastAnswer .= (!empty($last_answer['name'])) ? ' ('. htmlspecialchars($last_answer['name']) .')' : '';
 					}
 				if ($settings['last_reply_link']==1)
 					{
-					echo '</a>';
+					$tLastAnswer .= '</a>';
 					}
 				}
 			else
 				{
-				echo "&nbsp;";
+				$tLastAnswer .= "&nbsp;";
 				}
-			echo '</td>'."\n"; # end: last reply
+			$tRow = str_replace('{ThreadLastAnswer}', $tLastAnswer, $tRow);
+			# generate output for category og the thread
+			if ($categories!=false
+			&& $_SESSION[$settings['session_prefix'].'category'] == 0)
+				{
+				# start: categories (if in use)
+				$tCat = $xml->optbodycats;
+				if (isset($categories[$zeile["category"]]) && $categories[$zeile["category"]]!='')
+					{
+					$tCategory = '<a title="'. str_replace("[category]", $categories[$zeile["category"]], outputLangDebugInAttributes($lang['choose_category_linktitle']));
+					if (isset($category_accession[$zeile["category"]])
+					&& $category_accession[$zeile["category"]] == 2)
+						{
+						$tCategory .= " ". outputLangDebugInAttributes($lang['admin_mod_category']);
+						}
+					else if (isset($category_accession[$zeile["category"]])
+					&& $category_accession[$zeile["category"]] == 1)
+						{
+						$tCategory .= " ". outputLangDebugInAttributes($lang['registered_users_category']);
+						}
+					$tCategory .= '" href="board.php?category='.$zeile["category"].'"><span class="';
+					if (isset($category_accession[$zeile["category"]])
+					&& $category_accession[$zeile["category"]] == 2)
+						{
+						$tCategory .= "category-adminmod-b";
+						}
+					elseif (isset($category_accession[$zeile["category"]])
+					&& $category_accession[$zeile["category"]] == 1)
+						{
+						$tCategory .= "category-regusers-b";
+						}
+					else
+						{
+						$tCategory .= "category-b";
+						}
+					$tCategory .= '">'.$categories[$zeile["category"]].'</span></a>';
+					}
+				else
+					{
+					$tCategory = '&nbsp;';
+					}
+				$tCat = str_replace('{ThreadCategory}', $tCategory, $tCat);
+				}
 			if ($settings['count_views'] == 1)
 				{
 				# number of views
-				echo '   <td class="number-cell">'.$zeile['views'].'</td>'."\n";
+				$tViews = $xml->optbodyviews;
+				$tViews = str_replace('{ThreadViews}', htmlspecialchars($zeile['views']), $tViews);
 				}
 			if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 			&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
 				{
-				echo '   <td><a href="admin.php?mark='.$zeile["tid"].'&amp;refer=';
-				echo basename($_SERVER["SCRIPT_NAME"]).'&amp;page='.$_SESSION[$settings['session_prefix'].'page'];
-				echo ($_SESSION[$settings['session_prefix'].'category'] > 0) ? '&amp;category='.$_SESSION[$settings['session_prefix'].'category'] : '';
-				echo '&amp;order='.$_SESSION[$settings['session_prefix'].'order'].'">';
+				$tMark = $xml->optbodymarker;
+				$tMark = str_replace('{MarkID}', intval($zeile["tid"]), $tMark);
+				$tMark = str_replace('{MarkRefer}', urlencode(basename($_SERVER["SCRIPT_NAME"])), $tMark);
+				$tMark = str_replace('{MarkPage}', intval($_SESSION[$settings['session_prefix'].'page']), $tMark);
+				$tMark = str_replace('{MarkOrder}', urlencode($_SESSION[$settings['session_prefix'].'order']), $tMark);
+				$markCat = ($_SESSION[$settings['session_prefix'].'category'] > 0) ? '&amp;category='. urlencode($_SESSION[$settings['session_prefix'].'category']) : '';
+				$tMark = str_replace('{MarkCategory}', $markCat, $tMark);
 				if ($zeile['marked']==1)
 					{
-					echo '<img src="img/marked.png" alt="[x]" width="9" height="9" title="'.outputLangDebugInAttributes($lang['unmark_linktitle']).'" />';
+					$tMark = str_replace('{MarkSrc}', 'img/marked.png', $tMark);
+					$tMark = str_replace('{MarkAlt}', '[x]', $tMark);
+					$tMark = str_replace('{MarkTitle}', outputLangDebugInAttributes($lang['unmark_linktitle']), $tMark);
 					}
 				else
 					{
-					echo '<img src="img/mark.png" alt="[-]" title="'.outputLangDebugInAttributes($lang['mark_linktitle']).'" width="9" height="9" />';
+					$tMark = str_replace('{MarkSrc}', 'img/mark.png', $tMark);
+					$tMark = str_replace('{MarkAlt}', '[-]', $tMark);
+					$tMark = str_replace('{MarkTitle}', outputLangDebugInAttributes($lang['mark_linktitle']), $tMark);
 					}
-				echo '</a></td>'."\n";
 				}
-			echo '</tr>';
-			$i++;
+			$rowCat = (!empty($tCat)) ? $tCat : '';
+			$rowViews = (!empty($tViews)) ? $tViews : '';
+			$rowMark = (!empty($tMark)) ? $tMark : '';
+			$tRow = str_replace('{trCategory}', "\n".$rowCat, $tRow);
+			$tRow = str_replace('{trViews}', "\n".$rowViews, $tRow);
+			$tRow = str_replace('{trMarker}', "\n".$rowMark, $tRow);
+			$r .= $tRow;
 			} # End: while ()
-		echo "\n".' </tbody>'."\n".'</table>'."\n";
 		mysql_free_result($threadsResult);
+		$templAll = str_replace('{tp-Headline}', $tHeader, $templAll);
+		$templAll = str_replace('{tp-Rows}', $r, $templAll);
+		echo $templAll;
 		echo outputManipulateMarked('board');
 		} # End: if ($thread_count > 0 && isset($result))
 	else
