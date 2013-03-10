@@ -47,10 +47,9 @@ if ($entry_count > $entries_per_page)
 	$new_index_after = $be_page + 1;
 	if ($new_index_before >= 0)
 		{
-		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?&amp;id='.$id.'&amp;be_page=';
-		$output .= $new_index_before.'&amp;da='.$da.'&amp;page='.$page;
-		$output .= ($category > 0) ? '&amp;category='.$category : '';
-		$output .= '&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
+		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?id='.$id.'&amp;be_page=';
+		$output .= $new_index_before.'&amp;da='.$da;
+		$output .= '&amp;descasc='.$descasc.'" title="';
 		$output .= outputLangDebugInAttributes($lang['previous_page_linktitle']).'"><img src="img/prev.png" alt="&laquo;"';
 		$output .= 'width="12" height="9" onmouseover="this.src=\'img/prev_mo.png\';"';
 		$output .= ' onmouseout="this.src=\'img/prev.png\';" /></a>';
@@ -61,10 +60,9 @@ if ($entry_count > $entries_per_page)
 		}
 	if ($new_index_after < $countPages)
 		{
-		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?&amp;id='.$id.'&amp;be_page=';
-		$output .= $new_index_after.'&amp;da='.$da.'&amp;page='.$page;
-		$output .= ($category > 0) ? '&amp;category='.$category : '';
-		$output .= '&amp;order='.$order.'&amp;descasc='.$descasc.'" title="';
+		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?id='.$id.'&amp;be_page=';
+		$output .= $new_index_after.'&amp;da='.$da;
+		$output .= '&amp;descasc='.$descasc.'" title="';
 		$output .= outputLangDebugInAttributes($lang['next_page_linktitle']).'"><img src="img/next.png" alt="&laquo;"';
 		$output .= 'width="12" height="9" onmouseover="this.src=\'img/next_mo.png\';"';
 		$output .= ' onmouseout="this.src=\'img/next.png\';" /></a>';
@@ -264,8 +262,7 @@ if ($settings['access_for_users_only'] == 1
 		$order_title = $lang['order_linktitle_4'];
 		$linktext  = $lang['order_linkname'];
 		}
-	$url  = 'board_entry.php?id='.$thread["tid"].'&amp;da='.$order_order.'&amp;page='.$page.'&amp;order='.$order.'&amp;descasc='.$descasc;
-	$url .= $cat;
+	$url  = 'board_entry.php?id='.$thread["tid"].'&amp;da='.$order_order.'&amp;order='.$order.'&amp;descasc='.$descasc;
 	$class = 'order-postings';
 	$title = outputLangDebugInAttributes($order_title);
 	$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
@@ -310,12 +307,10 @@ if ($settings['access_for_users_only'] == 1
 				and isset($_SESSION[$settings['session_prefix'].'user_name'])))
 				{
 				$qs  = '';
-				$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
-				$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
-				$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
-				$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
+				$qs .= !empty($order) ? '&amp;order='. urlencode($order) : '';
+				$qs .= !empty($descasc) ? '&amp;descasc='. urlencode($descasc) : '';
 				$answerlink  = '<a class="textlink" href="posting.php?id='.$thread["id"].$qs;
-				$answerlink .= '&amp;view=board" title="'.outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
+				$answerlink .= '&amp;view=board" title="'. outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
 				$answerlink .= $lang['board_answer_linkname'].'</a>';
 				}
 			}
@@ -385,12 +380,10 @@ if ($settings['access_for_users_only'] == 1
 				and isset($_SESSION[$settings['session_prefix'].'user_name'])))
 				{
 				$qs  = '';
-				$qs .= !empty($page) ? '&amp;page='.intval($page) : '';
-				$qs .= !empty($order) ? '&amp;order='.urlencode($order) : '';
-				$qs .= !empty($descasc) ? '&amp;descasc='.urlencode($descasc) : '';
-				$qs .= ($category > 0) ? '&amp;category='.intval($category) : '';
+				$qs .= !empty($order) ? '&amp;order='. urlencode($order) : '';
+				$qs .= !empty($descasc) ? '&amp;descasc='. urlencode($descasc) : '';
 				$answerlink  = '<a class="textlink" href="posting.php?id='.$entrydata["id"].$qs;
-				$answerlink .= '&amp;view=board" title="'.outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
+				$answerlink .= '&amp;view=board" title="'. outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
 				$answerlink .= $lang['board_answer_linkname'].'</a>';
 				}
 			}
