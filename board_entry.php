@@ -80,11 +80,6 @@ if ($entry_count > $entries_per_page)
 		{
 		$output .= '<input type="hidden" name="da" value="'.$da.'">'."\n";
 		}
-	$output .= '<input type="hidden" name="page" value="'.$page.'">'."\n";
-	if ($category > 0)
-		{
-		$output .= '<input type="hidden" name="category" value="'.$category.'">'."\n";
-		}
 	$output .= '<input type="hidden" name="order" value="'.$order.'">'."\n";
 	$output .= '<input type="hidden" name="descasc" value ="'.$descasc.'">'."\n";
 	$output .= '<select class="kat" size="1" name="be_page" onchange="this.form.submit();">'."\n";
