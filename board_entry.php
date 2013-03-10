@@ -88,10 +88,7 @@ if ($entry_count > $entries_per_page)
 	$output .= '<input type="hidden" name="order" value="'.$order.'">'."\n";
 	$output .= '<input type="hidden" name="descasc" value ="'.$descasc.'">'."\n";
 	$output .= '<select class="kat" size="1" name="be_page" onchange="this.form.submit();">'."\n";
-	$output .= '<option value="0"';
-	$output .= ($be_page == 0) ? ' selected="selected"' : '';
-	$output .= '>1</option>'."\n";
-	for ($a = 1; $a < $countPages; $a++)
+	for ($a = 0; $a < $countPages; $a++)
 		{
 		$output .= '<option value="'.$a.'"';
 		$output .= ($be_page == $a) ? ' selected="selected"' : '';
