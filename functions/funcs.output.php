@@ -262,10 +262,7 @@ if (($entry["email"] != ""
 	and isset($_SESSION[$settings['session_prefix'].'user_id']))
 	or $settings['entries_by_users_only'] == 0))
 	{
-	$email_hp .= '<a href="contact.php?id='. $entry["id"];
-	$email_hp .= !empty($page) ? '&amp;page='. intval($page) : '';
-	$email_hp .= !empty($order) ? '&amp;order='. $order : '';
-	$email_hp .= !empty($category) ? '&amp;category='. intval($category) : '';
+	$email_hp .= '<a href="contact.php?id='. $entry["posters_id"];
 	$email_hp .= '" rel="nofollow" title="';
 	$email_hp .= str_replace("[name]", htmlspecialchars($entry['name']), outputLangDebugInAttributes($lang['email_to_user_linktitle'])) .'">';
 	$email_hp .= '<img src="img/email.png" alt="'. outputLangDebugInAttributes($lang['email_alt']) .'" width="13" height="10" /></a>';
