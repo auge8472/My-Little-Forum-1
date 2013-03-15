@@ -104,7 +104,7 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 		$did = '&amp;'.$id;
 		}
 	header("location: ".$settings['forum_address']."login.php?referer=board_entry.php".$lid);
-	die("<a href=\"login.php?referer=board_entry.php".$did."\">further...</a>");
+	die('<a href="login.php?referer=board_entry.php'.$did.'">further...</a>');
 	}
 
 if ($settings['access_for_users_only'] == 1
