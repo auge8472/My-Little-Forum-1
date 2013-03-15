@@ -159,7 +159,7 @@ if ($settings['access_for_users_only'] == 1
 			WHERE t1.id = ". intval($id) ." AND t1.user_id = t2.user_id
 			LIMIT 1";
 			$result_t = mysql_query($firstPostingQuery, $connid);
-			if (!$result_t) die($lang['db_error'] .'<pre>'. mysql_error() .'</pre>');
+			if (!$result_t) die($lang['db_error']);
 			$thread = mysql_fetch_assoc($result_t);
 			mysql_free_result($result_t);
 
