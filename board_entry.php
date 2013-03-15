@@ -129,29 +129,37 @@ if ($settings['access_for_users_only'] == 1
 		if ($id > 0)
 			{
 			$firstPostingQuery = "SELECT
-			id,
+			t1.id,
 			tid,
 			pid,
-			user_id,
-			DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS posting_time,
+			t1.user_id AS posters_id,
+			DATE_FORMAT(time + INTERVAL ". $time_difference ." HOUR, '". $lang['time_format_sql'] ."') AS posting_time,
 			UNIX_TIMESTAMP(time) AS time,
-			UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_time,
-			UNIX_TIMESTAMP(edited - INTERVAL ".$settings['edit_delay']." MINUTE) AS edited_diff,
+			UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_time,
+			UNIX_TIMESTAMP(edited - INTERVAL ". $settings['edit_delay'] ." MINUTE) AS edited_diff,
 			edited_by,
-			user_id,
-			name,
-			email,
+			t1.name,
+			t1.email,
 			subject,
-			hp,
-			place,
+			t1.hp,
+			t1.place,
 			text,
 			show_signature,
 			category,
 			locked,
-			INET_NTOA(ip_addr) AS ip_address
-			FROM ".$db_settings['forum_table']."
-			WHERE id = ".$id." LIMIT 1";
+			INET_NTOA(t1.ip_addr) AS ip_address,
+			t2.user_type,
+			t2.user_name,
+			t2.user_email AS email,
+			hide_email,
+			t2.user_hp AS hp,
+			t2.user_place AS place,
+			t2.signature
+			FROM ". $db_settings['forum_table'] ." AS t1, ". $db_settings['userdata_table'] ." AS t2
+			WHERE t1.id = ". intval($id) ." AND t1.user_id = t2.user_id
+			LIMIT 1";
 			$result_t = mysql_query($firstPostingQuery, $connid);
+			if (!$result_t) die($lang['db_error'] .'<pre>'. mysql_error() .'</pre>');
 			$thread = mysql_fetch_assoc($result_t);
 			mysql_free_result($result_t);
 
@@ -178,59 +186,49 @@ if ($settings['access_for_users_only'] == 1
 				mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=".$id, $connid);
 				}
 
-			if ($thread["user_id"] > 0)
+			if ($thread["posters_id"] > 0)
 				{
-				$userdataByIdQuery = "SELECT
-				user_name,
-				user_type,
-				user_email,
-				hide_email,
-				user_hp,
-				user_place,
-				signature
-				FROM ".$db_settings['userdata_table']."
-				WHERE user_id = ".intval($thread["user_id"]);
-				$userdata_result_t = mysql_query($userdataByIdQuery, $connid);
-				if (!$userdata_result_t) die($lang['db_error']);
-				$userdata = mysql_fetch_assoc($userdata_result_t);
-				mysql_free_result($userdata_result_t);
-				$thread["email"] = $userdata["user_email"];
-				$thread["hide_email"] = $userdata["hide_email"];
-				$thread["place"] = $userdata["user_place"];
-				$thread["hp"] = $userdata["user_hp"];
-				$mark = outputStatusMark($mark, $userdata["user_type"], $connid);
+				$mark = outputStatusMark($mark, $thread["user_type"], $connid);
 				if ($thread["show_signature"]==1)
 					{
 					$signature = $userdata["signature"];
 					}
 				} # End: if ($thread["user_id"] > 0)
 			$allPostingsQuery = "SELECT
-			id,
+			t1.id,
 			tid,
 			pid,
-			user_id,
-			DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS posting_time,
+			t1.user_id AS posters_id,
+			DATE_FORMAT(time + INTERVAL ". $time_difference ." HOUR, '". $lang['time_format_sql'] ."') AS posting_time,
 			UNIX_TIMESTAMP(time) AS time,
-			UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_time,
-			UNIX_TIMESTAMP(edited - INTERVAL ".$settings['edit_delay']." MINUTE) AS edited_diff,
+			UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_time,
+			UNIX_TIMESTAMP(edited - INTERVAL ". $settings['edit_delay'] ." MINUTE) AS edited_diff,
 			edited_by,
-			name,
-			email,
+			t1.name,
+			t1.email,
 			subject,
-			hp,
-			place,
+			t1.hp,
+			t1.place,
 			text,
 			show_signature,
 			category,
 			locked,
-			INET_NTOA(ip_addr) AS ip_address
-			FROM ".$db_settings['forum_table']."
-			WHERE tid = ".intval($id)." AND id != ".intval($id)."
-			ORDER BY time ".mysql_real_escape_string($da)."
-			LIMIT ".$ul.", ".$settings['answers_per_topic'];
+			INET_NTOA(t1.ip_addr) AS ip_address,
+			t2.user_type,
+			t2.user_name,
+			t2.user_email AS email,
+			hide_email,
+			t2.user_hp AS hp,
+			t2.user_place AS place,
+			t2.signature
+			FROM ". $db_settings['forum_table'] ." AS t1, ". $db_settings['userdata_table'] ." AS t2
+			WHERE tid = ". intval($id) ." AND t1.id != ". intval($id) ." AND t1.user_id = t2.user_id
+			ORDER BY time ". mysql_real_escape_string($da) ."
+			LIMIT ". $ul .", ". $settings['answers_per_topic'];
 			$result = mysql_query($allPostingsQuery, $connid);
+			if(!$result) die($lang['db_error']);
 			$result_c = mysql_query("SELECT tid FROM ".$db_settings['forum_table']." WHERE tid = ".$id." AND id != ".$id, $connid);
-			if(!$result or !$result_t) die($lang['db_error']);
+			if(!$result_c) die($lang['db_error']);
 			$thread_count = mysql_num_rows($result_c);
 			mysql_free_result($result_c);
 			}
@@ -330,7 +328,6 @@ if ($settings['access_for_users_only'] == 1
 		$posting = str_replace('{editmenu}', outputPostingEditMenu($thread, 'board', 'opener'), $posting);
 		echo $posting;
 		}
-	$i=0;
 	while ($entrydata = mysql_fetch_assoc($result))
 		{
 		unset($signature);
@@ -338,30 +335,12 @@ if ($settings['access_for_users_only'] == 1
 		$mark['admin'] = 0;
 		$mark['mod'] = 0;
 		$mark['user'] = 0;
-		if ($entrydata["user_id"] > 0)
+		if ($entrydata["posters_id"] > 0)
 			{
-			$userdataPerPostingQuery = "SELECT
-			user_name,
-			user_type,
-			user_email,
-			hide_email,
-			user_hp,
-			user_place,
-			signature
-			FROM ".$db_settings['userdata_table']."
-			WHERE user_id = ".intval($entrydata["user_id"]);
-			$userdata_result = mysql_query($userdataPerPostingQuery, $connid);
-			if (!$userdata_result) die($lang['db_error']);
-			$userdata = mysql_fetch_assoc($userdata_result);
-			mysql_free_result($userdata_result);
-			$entrydata["email"] = $userdata["user_email"];
-			$entrydata["hide_email"] = $userdata["hide_email"];
-			$entrydata["place"] = $userdata["user_place"];
-			$entrydata["hp"] = $userdata["user_hp"];
-			$mark = outputStatusMark($mark, $userdata["user_type"], $connid);
-			if ($entrydata["show_signature"]==1)
+			$mark = outputStatusMark($mark, $entrydata["user_type"], $connid);
+			if ($entrydata["show_signature"] == 1)
 				{
-				$signature = $userdata["signature"];
+				$signature = $entrydata["signature"];
 				}
 			}
 
