@@ -34,8 +34,8 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 		$lid = '&'.$id;
 		$did = '&amp;'.$id;
 		}
-	header("location: ".$settings['forum_address']."login.php?referer=forum_entry.php".$lid);
-	die("<a href=\"login.php?referer=forum_entry.php".$did."\">further...</a>");
+	header("location: ". $settings['forum_address'] ."login.php?referer=forum_entry.php".$lid);
+	die('<a href="login.php?referer=forum_entry.php'. intval($did) .'">further...</a>');
 	}
 
 if ($settings['access_for_users_only'] == 1
@@ -67,10 +67,10 @@ if ($settings['access_for_users_only'] == 1
 		pid,
 		tid,
 		user_id,
-		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS posting_time,
+		DATE_FORMAT(time + INTERVAL ". $time_difference ." HOUR, '". $lang['time_format_sql'] ."') AS posting_time,
 		UNIX_TIMESTAMP(time) AS time,
-		UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_time,
-		UNIX_TIMESTAMP(edited - INTERVAL ".$settings['edit_delay']." MINUTE) AS edited_diff,
+		UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_time,
+		UNIX_TIMESTAMP(edited - INTERVAL ". $settings['edit_delay'] ." MINUTE) AS edited_diff,
 		edited_by,
 		user_id,
 		name,
@@ -84,7 +84,7 @@ if ($settings['access_for_users_only'] == 1
 		category,
 		locked,
 		fixed
-		FROM ".$db_settings['forum_table']."
+		FROM ". $db_settings['forum_table'] ."
 		WHERE id = ". intval($id);
 		$result = mysql_query($postingQuery, $connid);
 		if (!$result) die($lang['db_error']);
@@ -98,15 +98,14 @@ if ($settings['access_for_users_only'] == 1
 				{
 				if (is_array($category_ids) && !in_array($entrydata['category'], $category_ids))
 					{
-					header("location: ".$settings['forum_address']."forum.php");
-					# Abbruch mit Fehlermeldung ergänzen!
-					die();
+					header("location: ". $settings['forum_address'] ."forum.php");
+					die('<a href="forum.php">further...</a>');
 					}
 				}
 			if (isset($settings['count_views'])
 				&& $settings['count_views'] == 1)
 				{
-				mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE id=". intval($id), $connid);
+				mysql_query("UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE id=". intval($id), $connid);
 				}
 
 			if ($entrydata["user_id"] > 0)
@@ -150,14 +149,14 @@ if ($settings['access_for_users_only'] == 1
 			}
 		else
 			{
-			header("location: ".$settings['forum_address']."forum.php");
-			die();
+			header("location: ". $settings['forum_address'] ."forum.php");
+			die('<a href="forum.php">further...</a>');
 			}
 		}
 	else
 		{
-		header("location: ".$settings['forum_address']."forum.php");
-		die();
+		header("location: ". $settings['forum_address'] ."forum.php");
+		die('<a href="forum.php">further...</a>');
 		}
 
 	# thread-data:
@@ -195,8 +194,8 @@ if ($settings['access_for_users_only'] == 1
 
 	$wo = $entrydata["subject"];
 	$subnav_1  = '<a class="textlink" href="forum.php" title="';
-	$subnav_1 .= outputLangDebugInAttributes($lang['back_to_forum_linktitle']).'">'.$lang['back_to_forum_linkname'].'</a>';
-	$cat = ($category > 0) ? '&amp;category='.intval($category) : '';
+	$subnav_1 .= outputLangDebugInAttributes($lang['back_to_forum_linktitle']) .'">'. $lang['back_to_forum_linkname'] .'</a>';
+	$cat = ($category > 0) ? '&amp;category='. intval($category) : '';
 	$subnav_2 = "";
 	if ($settings['board_view']==1)
 		{
@@ -222,10 +221,10 @@ if ($settings['access_for_users_only'] == 1
 	$pHeadline  = htmlspecialchars($entrydata["subject"]);
 	if (isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='')
 		{
-		$pHeadline .= ' <span class="category">('.$categories[$entrydata["category"]].')</span>';
+		$pHeadline .= ' <span class="category">('. $categories[$entrydata["category"]] .')</span>';
 		}
 	$ftext = ($entrydata["text"]=="") ? $lang['no_text'] : outputPreparePosting($entrydata["text"]);
-	$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator']."\n".$signature, 'signature').'</div>'."\n" : '';
+	$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'. outputPreparePosting($settings['signature_separator']."\n".$signature, 'signature') .'</div>'."\n" : '';
 	if ($entrydata['locked'] == 0)
 		{
 		if ($settings['entries_by_users_only'] == 0
@@ -233,7 +232,7 @@ if ($settings['access_for_users_only'] == 1
 			and isset($_SESSION[$settings['session_prefix'].'user_name'])))
 			{
 			$answerlink  = '<a class="textlink" href="posting.php?id='. intval($id);
-			$answerlink .= '" title="'.outputLangDebugInAttributes($lang['forum_answer_linktitle']).'">';
+			$answerlink .= '" title="'. outputLangDebugInAttributes($lang['forum_answer_linktitle']) .'">';
 			$answerlink .= $lang['forum_answer_linkname'].'</a>';
 			}
 		}
@@ -258,6 +257,6 @@ if ($settings['access_for_users_only'] == 1
 else
 	{
 	header("location: ".$settings['forum_address']."login.php?msg=noaccess");
-	die("<a href=\"login.php?msg=noaccess\">further...</a>");
+	die('<a href="login.php?msg=noaccess">further...</a>');
 	}
 ?>
