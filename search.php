@@ -134,7 +134,7 @@ return $output;
 if ($settings['access_for_users_only'] == 1 && !isset($_SESSION[$settings['session_prefix'].'user_id']))
 	{
 	header("location: ".$settings['forum_address']."login.php?msg=noaccess");
-	die("<a href=\"login.php?msg=noaccess\">further...</a>");
+	die('<a href="login.php?msg=noaccess">further...</a>');
 	}
 
 $page = !empty($_GET['page']) ? intval($_GET['page']) : 0;
