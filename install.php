@@ -27,13 +27,14 @@ if (isset($_POST['form_submitted']))
 	foreach ($_POST as $post)
 		{
 		if (trim($post) == "")
-			{			
+			{
 			$errors[] = $lang['error_form_uncompl'];
 			break;
 			}
 		}
 
-	if (empty($errors) && $installation_mode=='installation')
+	if (empty($errors)
+		and (!empty($installation_mode) and $installation_mode=='installation'))
 		{
 		if ($_POST['admin_pw'] != $_POST['admin_pw_conf']) $errors[] = $lang_add['inst_pw_conf_error'];
 		}
