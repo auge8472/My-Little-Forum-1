@@ -2268,7 +2268,8 @@ switch ($action)
 					{
 					$catTable[] = $category['cat'];
 					if ((empty($_GET['settingsCat']) and $category['cat'] == 'general')
-					or ($category['cat'] == $_GET['settingsCat']))
+					or (!empty($_GET['settingsCat'])
+						and $category['cat'] == $_GET['settingsCat']))
 						{
 						$menu .= '<li><span>';
 						$menu .= htmlspecialchars($lang_add['settings_cat'][$category['cat']]) .'</span></li>';
@@ -2281,7 +2282,8 @@ switch ($action)
 					}
 				$menu .= '</ul>'."\n";
 				# generate the GET-parameter dependant part of the query to read forum settings
-				if (in_array($_GET['settingsCat'], $catTable))
+				if (!empty($_GET['settingsCat'])
+				and in_array($_GET['settingsCat'], $catTable))
 					{
 					$catsName = $lang_add['settings_cat'][$_GET['settingsCat']];
 					$catParameter = $_GET['settingsCat'];
