@@ -125,7 +125,7 @@ or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
 	tid,
 	fixed
 	FROM ". $db_settings['forum_table'] ."
-	WHERE id = ". intval($id) ."
+	WHERE id = ". intval($_GET['id']) ."
 	LIMIT 1";
 	$fix_result = mysql_query($fixQuery, $connid);
 	if (!$fix_result) die($lang['db_error']);
@@ -284,7 +284,7 @@ if (($settings['access_for_users_only'] == 1
 			{
 			$userIdQuery = "SELECT user_id
 			FROM ". $db_settings['forum_table'] ."
-			WHERE id = ". intval($id) ."
+			WHERE id = ". intval($_GET['id']) ."
 			LIMIT 1";
 			$user_id_result = mysql_query($userIdQuery, $connid);
 			if (!$user_id_result) die($lang['db_error']);
@@ -332,7 +332,7 @@ if (($settings['access_for_users_only'] == 1
 			} # Ende Überprüfung der Berechtigung
 
 		# wenn das Formular noch nicht abgeschickt wurde:
-		if (empty($form))
+		if (empty($_POST['form']))
 			{
 			switch ($action)
 				{
@@ -521,7 +521,7 @@ if (($settings['access_for_users_only'] == 1
 						{
 						$postingIdQuery = "SELECT pid
 						FROM ". $db_settings['forum_table'] ."
-						WHERE id = ". intval($id);
+						WHERE id = ". intval($_GET['id']);
 						$pid_result = mysql_query($postingIdQuery,$connid);
 						if (!$pid_result) die($lang['db_error']);
 						$feld = mysql_fetch_assoc($pid_result);
@@ -529,7 +529,7 @@ if (($settings['access_for_users_only'] == 1
 						if ($feld["pid"] == 0)
 							{
 							$deleteThreadQuery = "DELETE FROM ". $db_settings['forum_table'] ."
-							WHERE tid = ". intval($id);
+							WHERE tid = ". intval($_GET['id']);
 							$delete_result = mysql_query($deleteThreadQuery, $connid);
 							}
 						else
@@ -539,7 +539,7 @@ if (($settings['access_for_users_only'] == 1
 							time,
 							last_answer
 							FROM ". $db_settings['forum_table'] ."
-							WHERE id = ". intval($id);
+							WHERE id = ". intval($_GET['id']);
 							$last_answer_result = mysql_query($allLastAnswersQuery, $connid);
 							$field = mysql_fetch_assoc($last_answer_result);
 							mysql_free_result($last_answer_result);
@@ -566,7 +566,7 @@ if (($settings['access_for_users_only'] == 1
 								}
 							# delete message:
 							$deleteMessageQuery = "DELETE FROM ". $db_settings['forum_table'] ."
-							WHERE id = ". intval($id);
+							WHERE id = ". intval($_GET['id']);
 							$delete_result = mysql_query($deleteMessageQuery,$connid);
 							} # if ($feld["pid"] == 0) else
 						if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
@@ -613,10 +613,10 @@ if (($settings['access_for_users_only'] == 1
 						}
 				break;
 				}
-			} #if (empty($form))
+			} #if (empty($_POST['form']))
 
 		# form submitted:
-		else if (isset($form))
+		else if (isset($_POST['form']))
 			{
 			$fixed = (empty($_POST['fixed'])) ? 0 : $_POST['fixed'];
 			switch ($action)
@@ -630,13 +630,13 @@ if (($settings['access_for_users_only'] == 1
 						}
 
 					# if the posting is an answer, search the thread-ID:
-					if ($id != 0)
+					if ($_POST['id'] != 0)
 						{
 						$threadIdQuery = "SELECT
 						tid,
 						locked
 						FROM ". $db_settings['forum_table'] ."
-						WHERE id = ". intval($id);
+						WHERE id = ". intval($_POST['id']);
 						$tid_result = mysql_query($threadIdQuery, $connid);
 						if (!$tid_result) die($lang['db_error']);
 
@@ -671,7 +671,7 @@ if (($settings['access_for_users_only'] == 1
 					UNIX_TIMESTAMP(time) AS time,
 					UNIX_TIMESTAMP(NOW() - INTERVAL ". $settings['edit_period'] ." MINUTE) AS edit_diff
 					FROM ". $db_settings['forum_table'] ."
-					WHERE id = ". intval($id);
+					WHERE id = ". intval($_POST['id']);
 					$edit_result = mysql_query($postingQuery, $connid);
 					if (!$edit_result) die($lang['db_error']);
 					$field = mysql_fetch_assoc($edit_result);
@@ -684,19 +684,16 @@ if (($settings['access_for_users_only'] == 1
 				}
 
 			# trim and complete data:
-			$email = empty($email) ? "" : $email;
-			$hp = empty($hp) ? "" : $hp;
-			$place = empty($place) ? "" : $place;
-			$show_signature = empty($show_signature) ? 0 : $show_signature;
-			$user_id = empty($user_id) ? 0 : $user_id;
-			$email_notify = empty($email_notify) ? 0 : $email_notify;
-			$p_category = empty($p_category) ? 0 : $p_category;
-			if (isset($name)) $name = trim($name);
-			if (isset($subject)) $subject = trim($subject);
-			if (isset($text)) $text = trim($text);
-			if (isset($email)) $email = trim($email);
-			if (isset($hp)) $hp = trim($hp);
-			if (isset($place)) $place = trim($place);
+			$email = empty($_POST['email']) ? "" : trim($_POST['email']);
+			$hp = empty($_POST['hp']) ? "" : trim($_POST['hp']);
+			$place = empty($_POST['place']) ? "" : trim($_POST['place']);
+			$show_signature = empty($_POST['show_signature']) ? 0 : $_POST['show_signature'];
+			$user_id = empty($_POST['user_id']) ? 0 : $_POST['user_id'];
+			$email_notify = empty($_POST['email_notify']) ? 0 : $_POST['email_notify'];
+			$p_category = empty($_POST['p_category']) ? 0 : $_POST['p_category'];
+			$name = empty($_POST['name']) ? "" : trim($_POST['name']);
+			$subject = empty($_POST['subject']) ? "" : trim($_POST['subject']);
+			$text = empty($_POST['text']) ? "" : trim($_POST['text']);
 			# end trim and complete data
 
 			# check data:
@@ -1808,7 +1805,7 @@ if (($settings['access_for_users_only'] == 1
 				echo ($field["pid"] == 0) ? '<br />'. $lang['delete_whole_thread'] : '';
 				echo '</p>'."\n";
 				echo '<p><b>'. htmlspecialchars($field["subject"]) .'</b>&nbsp;'. $lang['thread_info'] .'</p>'."\n";
-				echo '<form action="posting.php" method="post" accept-charset="UTF-8">'."\n";
+				echo '<form action="posting.php" method="get" accept-charset="UTF-8">'."\n";
 				echo '<input type="hidden" name="action" value="delete ok" />'."\n";
 				echo '<input type="hidden" name="id" value="'. intval($id) .'" />'."\n";
 				echo '<p><input type="submit" name="delete" value="'. $lang['delete_posting_ok'] .'" /></p>'."\n";
