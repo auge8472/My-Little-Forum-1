@@ -189,6 +189,13 @@ if (($settings['access_for_users_only'] == 1
 			header('location: '.$settings['forum_address'].'index.php');
 			die('<a href="index.php">further...</a>');
 			}
+
+		# delete arrays if present
+		if (isset($errors)) unset($errors);
+		if (isset($Thread)) unset($Thread);
+		# safety: forbid editing and deletion of postings
+		$edit_authorization = 0;
+		$delete_authorization = 0;
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
 		{
