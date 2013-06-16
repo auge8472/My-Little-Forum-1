@@ -53,17 +53,32 @@ else
 		$data[] = $satz; 
 		}
 	}
-$result_count = count($data);
-$rss  = '';
-$rss .= '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 
-$rss .= '<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">'."\n";
-$rss .= ' <channel>'."\n";
-$rss .= '  <title>'.$settings['forum_name'].'</title>'."\n";
-$rss .= '  <link>'.$settings['forum_address'].'</link>'."\n";
-$rss .= '  <description>'.$settings['forum_name'].'</description>'."\n";
-$rss .= '  <language>'.$lang['language'].'</language>'."\n";
+$rss1 = new DOMDocument('1.0', 'UTF-8');
+$rss1->formatOutput = true;
+$root = $rss1->createElement('rss');
+	$root->setAttribute('version', '2.0');
+	$root->setAttribute('xmlns:dc', 'http://purl.org/dc/elements/1.1/');
+	$rss1->appendChild($root);
+$chan = $rss1->createElement('channel');
+	$root->appendChild($chan); 
+$head = $rss1->createElement('title', utf8_encode($settings['forum_name']));
+	$chan->appendChild($head);
+$head = $rss1->createElement('description', utf8_encode($settings['forum_name']));
+	$chan->appendChild($head);
+$head = $rss1->createElement('language', utf8_encode($lang['language']));
+	$chan->appendChild($head);
+$head = $rss1->createElement('link', htmlentities($settings['forum_address']));
+	$chan->appendChild($head);
+$head = $rss1->createElement('lastBuildDate', utf8_encode(date("D, j M Y H:i:s ").'GMT'));
+	$chan->appendChild($head);
+
+$result_count = count($data);
+
+/*
+$rss  = '';
 $rss .= '  <atom:link href="'.$settings['forum_address'].'rss.php" rel="self" type="application/rss+xml" />'."\n";
+*/
 
 if ($result_count > 0
 && $settings['provide_rssfeed'] == 1
@@ -72,20 +87,16 @@ if ($result_count > 0
 	foreach ($data as $zeile)
 		{
 		$ftext = outputXMLclearedString($zeile["text"]);
-#		$ftext = htmlspecialchars($ftext);
+		$ftext = htmlspecialchars($ftext);
 		$ftext = make_link($ftext);
 		$ftext = preg_replace("#\[msg\](.+?)\[/msg\]#is", "\\1", $ftext);
 		$ftext = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", "\\2 --> \\1", $ftext);
 		$ftext = bbcode($ftext);
-		$ftext = nl2br($ftext);
 		$ftext = rss_quote($ftext);
 		$title = outputXMLclearedString($zeile['subject']);
 		$title = htmlspecialchars($title);
 		$name = outputXMLclearedString($zeile['name']);
 		$name = htmlspecialchars($name);
-		$rss .= '  <item>'."\n";
-		$rss .= '   <title>'.$title.'</title>'."\n";
-		$rss .= '   <description><![CDATA[<i>';
 		if ($zeile['pid']==0)
 			{
 			$rss_author_info = str_replace("[name]", $name, $lang['rss_posting_by']);
@@ -93,21 +104,29 @@ if ($result_count > 0
 		else
 			{
 			$rss_author_info = str_replace("[name]", $name, $lang['rss_reply_by']);
-			}
-		$rss .= str_replace("[time]", $zeile["xtime"], $rss_author_info);
-		$rss .= '</i><br /><br />'.$ftext.']]></description>'."\n";
-		$rss .= '   <link>'.$settings['forum_address'].'forum_entry.php?id='.$zeile['id'].'</link>'."\n";
-		$rss .= '   <guid>'.$settings['forum_address'].'forum_entry.php?id='.$zeile['id'].'</guid>'."\n";
-		$rss .= '   <dc:creator>'.$name.'</dc:creator>'."\n";
-		$rss .= '   <pubDate>'. @ date("r", $zeile['rss_time']) .'</pubDate>'."\n";
-		$rss .= '  </item>'."\n";
+			}			
+		$rssItem = '';
+		$rssItem .= str_replace("[time]", $zeile["xtime"], $rss_author_info);
+		$rssItem .= "\n\n". $ftext;
+		$item = $rss1->createElement('item');
+			$chan->appendChild($item);
+		$data = $rss1->createElement('title', $title);
+			$item->appendChild($data);
+		$data = $rss1->createElement('description', $rssItem);
+			$item->appendChild($data);
+		$data = $rss1->createElement('pubDate', @ date("r", $zeile['rss_time']));
+			$item->appendChild($data);
+		$data = $rss1->createElement('link', htmlentities($settings['forum_address'].'forum_entry.php?id='.$zeile['id']));
+			$item->appendChild($data);
+		$data = $rss1->createElement('guid', htmlentities($settings['forum_address'].'forum_entry.php?id='.$zeile['id']));
+			$item->appendChild($data);
+		$data = $rss1->createElement('dc:creator', $name);
+			$item->appendChild($data);
 		}
 	}
-$rss .= ' </channel>'."\n";
-$rss .= '</rss>'."\n";
 
 #header("Content-Type: text/html; charset: UTF-8");
-#echo '<pre>'.htmlspecialchars($rss).'</pre>';
+#echo '<pre>'. htmlspecialchars($rss) .'</pre>';
 header("Content-Type: application/xml; charset: UTF-8");
-echo $rss;
+echo $rss1->saveXML();
 ?>
