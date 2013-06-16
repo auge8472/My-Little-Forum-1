@@ -183,6 +183,12 @@ if (($settings['access_for_users_only'] == 1
 		and isset($_SESSION[$settings['session_prefix'].'user_name']))
 		or $settings['entries_by_users_only'] != 1)
 		{
+		if (is_array($categories)
+			and !in_array($_SESSION[$settings['session_prefix'].'mlf_category'], $categories))
+			{
+			header('location: '.$settings['forum_address'].'index.php');
+			die('<a href="index.php">further...</a>');
+			}
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
 		{
