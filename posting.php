@@ -171,3 +171,27 @@ if (isset($_GET['subscribe'])
 /**
  * End: block for special cases
  */
+
+/**
+ * processing of normal script requests
+ */
+if (($settings['access_for_users_only'] == 1
+	and isset($_SESSION[$settings['session_prefix'].'user_name']))
+	or $settings['access_for_users_only'] != 1)
+	{
+	if (($settings['entries_by_users_only'] == 1
+		and isset($_SESSION[$settings['session_prefix'].'user_name']))
+		or $settings['entries_by_users_only'] != 1)
+		{
+		} # End: if (($settings['entries_by_users_only'] == 1 ...)
+	else
+		{
+		header("Location: ". $settings['forum_address'] ."login.php?msg=noentry");
+		die('<a href="login.php?msg=noentry">further...</a>');
+		}
+	} # End: if (($settings['access_for_users_only'] == 1 ...)
+else
+	{
+	header("Location: ". $settings['forum_address'] ."login.php?msg=noaccess");
+	die('<a href="login.php?msg=noaccess">further...</a>');
+	}
