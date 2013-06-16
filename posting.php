@@ -282,6 +282,17 @@ if (($settings['access_for_users_only'] == 1
 		|| $action == "delete"
 		|| $action == "delete ok")
 			{
+			$queryAuthUser = "SELECT
+			t1.user_type
+			FROM ". $db_settings['userdata_table'] ." AS t1, ". $db_settings['forum_table'] ." AS t2
+			WHERE t2.id = ". intval($_GET['id']) ."
+				AND t2.user_id = t1.user_id
+			LIMIT 1";
+			$userAuthResult = mysql_query($queryAuthUser, $connid);
+			if (!$userAuthResult) die($lang['db_error']);
+			$resultAuth = mysql_fetch_assoc($userAuthResult);
+			mysql_free_result($userAuthResult);
+			/*
 			$userIdQuery = "SELECT user_id
 			FROM ". $db_settings['forum_table'] ."
 			WHERE id = ". intval($_GET['id']) ."
@@ -299,7 +310,7 @@ if (($settings['access_for_users_only'] == 1
 			if (!$user_type_result) die($lang['db_error']);
 			$user_result_array = mysql_fetch_array($user_type_result);
 			mysql_free_result($user_type_result);
-
+			*/
 			# ist da jemand bekanntes?
 			if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 				{
@@ -312,7 +323,7 @@ if (($settings['access_for_users_only'] == 1
 				# Moderator darf alles außer Postings von Admins editieren/löschen:
 				else if ($_SESSION[$settings['session_prefix'].'user_type'] == "mod")
 					{
-					if ($user_result_array["user_type"] != "admin")
+					if ($resultAuth["user_type"] != "admin")
 						{
 						$edit_authorization = 1;
 						$delete_authorization = 1;
@@ -322,7 +333,7 @@ if (($settings['access_for_users_only'] == 1
 				else if ($_SESSION[$settings['session_prefix'].'user_type'] == "user")
 					{
 					# Schauen, ob es sich um einen eigenen Eintrag handelt:
-					if ($result_array["user_id"] == $_SESSION[$settings['session_prefix'].'user_id'])
+					if ($resultAuth["user_id"] == $_SESSION[$settings['session_prefix'].'user_id'])
 						{
 						if ($settings['user_edit'] == 1) $edit_authorization = 1;
 						if ($settings['user_delete'] == 1) $delete_authorization = 1;
@@ -622,13 +633,6 @@ if (($settings['access_for_users_only'] == 1
 			switch ($action)
 				{
 				case "new":
-					# is it a registered user?
-					if (isset($_SESSION[$settings['session_prefix'].'user_id']))
-						{
-						$user_id = $_SESSION[$settings['session_prefix'].'user_id'];
-						$name = $_SESSION[$settings['session_prefix'].'user_name'];
-						}
-
 					# if the posting is an answer, search the thread-ID:
 					if ($_POST['id'] != 0)
 						{
@@ -688,12 +692,41 @@ if (($settings['access_for_users_only'] == 1
 			$hp = empty($_POST['hp']) ? "" : trim($_POST['hp']);
 			$place = empty($_POST['place']) ? "" : trim($_POST['place']);
 			$show_signature = empty($_POST['show_signature']) ? 0 : $_POST['show_signature'];
-			$user_id = empty($_POST['user_id']) ? 0 : $_POST['user_id'];
 			$email_notify = empty($_POST['email_notify']) ? 0 : $_POST['email_notify'];
 			$p_category = empty($_POST['p_category']) ? 0 : $_POST['p_category'];
-			$name = empty($_POST['name']) ? "" : trim($_POST['name']);
 			$subject = empty($_POST['subject']) ? "" : trim($_POST['subject']);
 			$text = empty($_POST['text']) ? "" : trim($_POST['text']);
+			if (empty($_POST['name']))
+				{
+				if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+					{
+					$name = $_SESSION[$settings['session_prefix'].'user_name'];
+					}
+				else
+					{
+					$name = "";
+					}
+				}
+			else
+				{
+				trim($_POST['name']);
+				}
+			if (empty($_POST['user_id']))
+				{
+				if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+					{
+					$user_id = $_SESSION[$settings['session_prefix'].'user_id'];
+					}
+				else
+					{
+					$user_id = 0;
+					}
+				}
+			else
+				{
+				$user_id = intval($_POST['user_id']);
+				}
+				
 			# end trim and complete data
 
 			# check data:
