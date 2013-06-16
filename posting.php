@@ -80,3 +80,35 @@ if (isset($_GET['lock'])
 		}
 	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['lock']) ...)
+
+# pin or unpin threads to the top of the views
+if (isset($_GET['fix'])
+	and isset($_SESSION[$settings['session_prefix'].'user_id'])
+	and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
+		or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
+	{
+	$fixQuery = "UPDATE ". $db_settings['forum_table'] ." SET
+	time = time,
+	last_answer = last_answer,
+	edited = edited,
+	fixed = IF(fixed = 0, 1, 0)
+	WHERE tid = ". intval($_GET['id']);
+	@mysql_query($fixQuery, $connid);
+	if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+		and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+		{
+		if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php?id='. intval($_GET['id']);
+			}
+		}
+	else
+		{
+		$header_href = ($setting['standard'] == 'thread') ? 'forum.php' : $setting['standard'] .'.php';
+		}
+	header('location: '.$settings['forum_address'].$header_href);
+	} # if (isset($_GET['fix']) ...)
