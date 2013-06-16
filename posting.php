@@ -112,3 +112,56 @@ if (isset($_GET['fix'])
 		}
 	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['fix']) ...)
+
+# subscribe or unsubscribe threads
+if (isset($_GET['subscribe'])
+	and isset($_SESSION[$settings['session_prefix'].'user_id'])
+	and isset($_GET['back']))
+	{
+	if ($_GET['subscribe'] == 'true')
+		{
+		$querySubscribe = "INSERT INTO ". $db_settings['usersubscripts_table'] ." SET
+		user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) .",
+		tid = ". intval($_GET['back']) ."
+		ON DUPLICATE KEY UPDATE
+		user_id = user_id,
+		tid = tid";
+		$queryUnsubscribePost = "UPDATE ". $db_settings['forum_table'] ." SET
+		email_notify = 0
+		WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ."
+		AND tid = ". intval($_GET['id']);
+		}
+	else if ($_GET['subscribe'] == 'false')
+		{
+		$subscriptThread = processSearchThreadSubscriptions($_GET['back'], $_SESSION[$settings['session_prefix'].'user_id']);
+		if (($subscriptThread !== false
+		and is_array($subscriptThread))
+		and ($subscriptThread['user_id'] == $_SESSION[$settings['session_prefix'].'user_id']
+		and $subscriptThread['tid'] == $_GET['back']))
+			{
+			$querySubscribe = "DELETE FROM ". $db_settings['usersubscripts_table'] ."
+			WHERE tid = ". intval($_GET['back']) ."
+			AND user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ."
+			LIMIT 1";
+			}
+		}
+	if (!empty($querySubscribe)) @mysql_query($querySubscribe, $connid);
+	if (!empty($queryUnsubscribePost)) @mysql_query($queryUnsubscribePost, $connid);
+	if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+	and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+		{
+		if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php?id='.  intval($_GET['back']);
+			}
+		}
+	else
+		{
+		$header_href = ($setting['standard'] == 'thread') ? 'forum.php' : $setting['standard'] .'.php';
+		}
+	header('location: '.$settings['forum_address'].$header_href);
+	} # if (isset($_GET['subscribe'] ...)
