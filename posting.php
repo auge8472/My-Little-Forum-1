@@ -25,7 +25,7 @@ include_once("functions/include.prepare.php");
 # generate captcha if captcha is on
 # and a not logged user wants to post
 if (empty($_SESSION[$settings['session_prefix'].'user_id'])
-&& $settings['captcha_posting'] == 1)
+	and $settings['captcha_posting'] == 1)
 	{
 	require('captcha/captcha.php');
 	$captcha = new captcha();
