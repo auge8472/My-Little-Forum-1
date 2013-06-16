@@ -49,6 +49,9 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		}
 	} # End: if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 
+/**
+ * Start: block for special cases
+ */
 # lock or unlock a thread (forbid or allow answers to a thread)
 if (isset($_GET['lock'])
 	and isset($_SESSION[$settings['session_prefix'].'user_id'])
@@ -165,3 +168,6 @@ if (isset($_GET['subscribe'])
 		}
 	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['subscribe'] ...)
+/**
+ * End: block for special cases
+ */
