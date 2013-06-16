@@ -30,3 +30,21 @@ if (empty($_SESSION[$settings['session_prefix'].'user_id'])
 	require('captcha/captcha.php');
 	$captcha = new captcha();
 	}
+
+# look for banned user:
+if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+	{
+	$lockQuery = "SELECT user_lock
+	FROM ". $db_settings['userdata_table'] ."
+	WHERE user_id = '". intval($_SESSION[$settings['session_prefix'].'user_id']) ."'
+	LIMIT 1";
+	$lockResult = mysql_query($lockQuery, $connid);
+	if ($lockResult === false) die($lang['db_error']);
+	$lockResultArray = mysql_fetch_assoc($lockResult);
+	mysql_free_result($lockResult);
+	if ($lockResultArray['user_lock'] > 0)
+		{
+		header("location: ". $settings['forum_address'] ."user.php");
+		die('<a href="user.php">further...</a>');
+		}
+	} # End: if (isset($_SESSION[$settings['session_prefix'].'user_id']))
