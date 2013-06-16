@@ -61,7 +61,7 @@ if (isset($_GET['lock'])
 	edited = edited,
 	locked = IF(locked = 0, 1, 0)
 	WHERE tid = ". intval($_GET['id']);
-	@mysql_query($relockQuery, $connid);
+	@mysql_query($lockQuery, $connid);
 	if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
 		and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
 		{
