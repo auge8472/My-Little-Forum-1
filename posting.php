@@ -196,6 +196,54 @@ if (($settings['access_for_users_only'] == 1
 		# safety: forbid editing and deletion of postings
 		$edit_authorization = 0;
 		$delete_authorization = 0;
+		# if a posting should be edited or deleted, check for authorisation
+		if (isset($_GET['id']) and is_numeric($_GET['id'])
+			and ((!empty($_GET['edit']) and $_GET['edit'] == "true")
+				or (!empty($_GET['delete']) and $_GET['delete'] == "true")
+				or (!empty($_GET['delete_ok']) and $_GET['delete_ok'] == "true"))
+			{
+			$queryAuthUser = "SELECT
+			t2.user_id,
+			t1.user_type
+			FROM ". $db_settings['userdata_table'] ." AS t1, ". $db_settings['forum_table'] ." AS t2
+			WHERE t2.id = ". intval($_GET['id']) ."
+				AND t2.user_id = t1.user_id
+			LIMIT 1";
+			$userAuthResult = mysql_query($queryAuthUser, $connid);
+			if (!$userAuthResult) die($lang['db_error']);
+			$resultAuth = mysql_fetch_assoc($userAuthResult);
+			mysql_free_result($userAuthResult);
+
+			# is there anyone known?
+			if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+				{
+				# admin is permitted to do everything:
+				if ($_SESSION[$settings['session_prefix'].'user_type'] == "admin")
+					{
+					$edit_authorization = 1;
+					$delete_authorization = 1;
+					}
+				# moderator is permitted to do everything except edit or delete an admins posts:
+				else if ($_SESSION[$settings['session_prefix'].'user_type'] == "mod")
+					{
+					if ($resultAuth["user_type"] != "admin")
+						{
+						$edit_authorization = 1;
+						$delete_authorization = 1;
+						}
+					}
+				# user is permitted (if active) to edit or delete his own posting:
+				else if ($_SESSION[$settings['session_prefix'].'user_type'] == "user")
+					{
+					# Schauen, ob es sich um einen eigenen Eintrag handelt:
+					if ($resultAuth["user_id"] == $_SESSION[$settings['session_prefix'].'user_id'])
+						{
+						if ($settings['user_edit'] == 1) $edit_authorization = 1;
+						if ($settings['user_delete'] == 1) $delete_authorization = 1;
+						}
+					}
+				}
+			} # Ende Überprüfung der Berechtigung
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
 		{
