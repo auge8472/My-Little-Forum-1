@@ -48,3 +48,35 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		die('<a href="user.php">further...</a>');
 		}
 	} # End: if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+
+# lock or unlock a thread (forbid or allow answers to a thread)
+if (isset($_GET['lock'])
+	and isset($_SESSION[$settings['session_prefix'].'user_id'])
+	and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
+		or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
+	{
+	$lockQuery = "UPDATE ". $db_settings['forum_table'] ." SET
+	time = time,
+	last_answer = last_answer,
+	edited = edited,
+	locked = IF(locked = 0, 1, 0)
+	WHERE tid = ". intval($_GET['id']);
+	@mysql_query($relockQuery, $connid);
+	if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+		and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+		{
+		if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+			{
+			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
+			}
+		else
+			{
+			$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php?id='. intval($_GET['id']);
+			}
+		}
+	else
+		{
+		$header_href = ($setting['standard'] == 'thread') ? 'forum.php' : $setting['standard'] .'.php';
+		}
+	header('location: '.$settings['forum_address'].$header_href);
+	} # if (isset($_GET['lock']) ...)
