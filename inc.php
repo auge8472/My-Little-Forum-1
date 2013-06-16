@@ -289,6 +289,10 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
 		$_SESSION[$settings['session_prefix'].'curr_view'] = $curr_view;
 		}
+	if ($curr_view != $_COOKIE['curr_view'])
+		{
+		setcookie('curr_view', $curr_view, time()+(3600*24*30));
+		}
 	}
 else
 	{
