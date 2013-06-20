@@ -283,7 +283,8 @@ if (($settings['access_for_users_only'] == 1
 		|| $action == "delete ok")
 			{
 			$queryAuthUser = "SELECT
-			t1.user_type
+			t1.user_type,
+			t1.user_id
 			FROM ". $db_settings['userdata_table'] ." AS t1, ". $db_settings['forum_table'] ." AS t2
 			WHERE t2.id = ". intval($_GET['id']) ."
 				AND t2.user_id = t1.user_id
