@@ -574,4 +574,63 @@ header("location: ".$settings['forum_address'].$url);
 die($mess);
 } # End: processLogOutUser
 
+
+
+/**
+ * checks for authorisation to edit a posting
+ *
+ * @param integer $posting_id
+ * @param array $authorisation
+ * @param resource $connid
+ * @return array $authorisation
+ * @return bool false
+ */
+function processCheckAuthorisation($posting_id, $auth, $connid) {
+global $settings, $db_settings;
+
+$queryAuthUser = "SELECT
+t2.user_id,
+t1.user_type
+FROM ". $db_settings['userdata_table'] ." AS t1, ". $db_settings['forum_table'] ." AS t2
+WHERE t2.id = ". $posting_id ."
+	AND t2.user_id = t1.user_id
+LIMIT 1";
+$userAuthResult = mysql_query($queryAuthUser, $connid);
+if (!$userAuthResult) return false;
+$resultAuth = mysql_fetch_assoc($userAuthResult);
+mysql_free_result($userAuthResult);
+
+# is there anyone known?
+if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+	{
+	# admin is permitted to do everything:
+	if ($_SESSION[$settings['session_prefix'].'user_type'] == "admin")
+		{
+		$auth['edit'] = 1;
+		$auth['delete'] = 1;
+		}
+	# moderator is permitted to do everything except edit or delete an admins posts:
+	else if ($_SESSION[$settings['session_prefix'].'user_type'] == "mod")
+		{
+		if ($resultAuth["user_type"] != "admin")
+			{
+			$auth['edit'] = 1;
+			$auth['delete'] = 1;
+			}
+		}
+	# user is permitted (if active) to edit or delete his own posting:
+	else if ($_SESSION[$settings['session_prefix'].'user_type'] == "user")
+		{
+		# Schauen, ob es sich um einen eigenen Eintrag handelt:
+		if ($resultAuth["user_id"] == $_SESSION[$settings['session_prefix'].'user_id'])
+			{
+			if ($settings['user_edit'] == 1) $auth['edit'] = 1;
+			if ($settings['user_delete'] == 1) $auth['delete'] = 1;
+			}
+		}
+	}
+return $auth;
+} # End: processCheckAuthorisation
+
+
 ?>
