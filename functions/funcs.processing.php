@@ -6,6 +6,10 @@
  */
 $validator['email'] = "/^[^@]+@.+\.\D{2,}$/";
 
+/**
+ * general arrays
+ */
+$separators = array("new line"=>"\n", "comma"=>",");
 
 
 /**
