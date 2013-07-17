@@ -1350,7 +1350,17 @@ if (isset($_POST['banlists_submit']))
 		and trim($_POST['banned_ips']) != '')
 		{
 		$paramView = 'settingsCat=ban_ips';
-		$banned_ips_array = explode(',',$_POST['banned_ips']);
+		if (!empty($_POST['listSeparator'])
+			and array_key_exists($_POST['listSeparator'], $separators))
+			{
+			$listSeparator = $separators[$_POST['listSeparator']];
+			}
+		else
+			{
+			$listSeparator = "\n";
+			}
+		$_POST['banned_ips'] = convertLineBreaks($_POST['banned_ips']);
+		$banned_ips_array = explode($listSeparator,$_POST['banned_ips']);
 		$checkDoubleIP = array();
 		$banned_ips = array();
 		foreach ($banned_ips_array as $banned_ip)
@@ -1360,7 +1370,7 @@ if (isset($_POST['banlists_submit']))
 				and ip2long($banned_ip) !== false
 				and !in_array($banned_ip, $checkDoubleIP))
 				{
-				$banned_ips[] = "(INET_ATON('". mysql_real_escape_string(trim($banned_ip)) ."'), NOW(), 1)";
+				$banned_ips[] = "(INET_ATON('". mysql_real_escape_string($banned_ip) ."'), NOW(), 1)";
 				$checkDoubleIP[] = $banned_ip;
 				}
 			}
@@ -2765,7 +2775,13 @@ switch ($action)
 					}
 				$output .= '   </ul>'."\n";
 				}
-			$output .= '<textarea name="'. $menuitems[$catTable]['field_name'] .'" id="ban-field" cols="50" rows="7">';
+			$output .= '<div><select name="listSeparator" size="1">'."\n";
+			foreach ($separators as $key=>$val)
+				{
+				$output .= ' <option value="'. htmlspecialchars($key) .'">'. htmlspecialchars($key) .'</option>'."\n";
+				}
+			$output .= '</select></div>'."\n";
+			$output .= '<textarea name="'. $menuitems[$catTable]['field_name'] .'" id="ban-field" cols="55" rows="7">';
 			if (isset($banned_value)) $output .= htmlspecialchars($banned_value);
 			$output .= '</textarea></td>'."\n";
 			$output .= ' </tr>'."\n";
