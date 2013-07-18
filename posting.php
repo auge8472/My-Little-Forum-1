@@ -205,6 +205,13 @@ if (($settings['access_for_users_only'] == 1
 			{
 			$authorisation =  processCheckAuthorisation(intval($_GET['id']), $authorisation, $connid);
 			} # End: check for authorisation if called via GET parameter
+		# if a posting should be edited (no deleting possible)
+		# check call via POST parameter
+		if (isset($_POST['id']) and is_numeric($_POST['id'])
+			and (!empty($_POST['action']) and $_POST['action'] == "edit"))
+			{
+			$authorisation =  processCheckAuthorisation(intval($_POST['id']), $authorisation, $connid);
+			} # End: check for authorisation if called via POST parameter
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
 		{
