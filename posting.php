@@ -196,6 +196,13 @@ if (($settings['access_for_users_only'] == 1
 		# safety: forbid editing and deletion of postings
 		$authorisation['edit'] = 0;
 		$authorisation['delete'] = 0;
+		# $action can only be submitted via POST, is set
+		# to standard value or it will be changed during
+		# the script run (i.e. by checking GET parameters)
+		$action = (!empty($_POST['action']) and in_array($_POST['action'], $allowSubmittedActions)) ? $_POST['action'] : "new";
+		$action = (!empty($_GET['edit']) and $_GET['edit'] == "true") ? "edit" : $action;
+		$action = (!empty($_GET['delete']) and $_GET['delete'] == "true") ? "delete" : $action;
+		$action = (!empty($_GET['delete_ok']) and $_GET['delete_ok'] == "true") ? "delete ok" : $action;
 		# if a posting should be edited or deleted, check for authorisation
 		# check call via GET parameter
 		if (isset($_GET['id']) and is_numeric($_GET['id'])
