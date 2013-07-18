@@ -204,21 +204,15 @@ if (($settings['access_for_users_only'] == 1
 		$action = (!empty($_GET['delete']) and $_GET['delete'] == "true") ? "delete" : $action;
 		$action = (!empty($_GET['delete_ok']) and $_GET['delete_ok'] == "true") ? "delete ok" : $action;
 		# if a posting should be edited or deleted, check for authorisation
-		# check call via GET parameter
-		if (isset($_GET['id']) and is_numeric($_GET['id'])
-			and ((!empty($_GET['edit']) and $_GET['edit'] == "true")
-				or (!empty($_GET['delete']) and $_GET['delete'] == "true")
-				or (!empty($_GET['delete_ok']) and $_GET['delete_ok'] == "true")))
+		# check call via GET or POST parameter
+		if ((isset($_GET['id']) and is_numeric($_GET['id']))
+			or (isset($_POST['id']) and is_numeric($_POST['id']))
+			and ($action == "edit"
+				or $action == "delete"
+				or $action == "delete ok"))
 			{
-			$authorisation =  processCheckAuthorisation(intval($_GET['id']), $authorisation, $connid);
-			} # End: check for authorisation if called via GET parameter
-		# if a posting should be edited (no deleting possible)
-		# check call via POST parameter
-		if (isset($_POST['id']) and is_numeric($_POST['id'])
-			and (!empty($_POST['action']) and $_POST['action'] == "edit"))
-			{
-			$authorisation =  processCheckAuthorisation(intval($_POST['id']), $authorisation, $connid);
-			} # End: check for authorisation if called via POST parameter
+			$authorisation =  processCheckAuthorisation(isset($_POST['id']) ? $_GET['id'] : $_POST['id'], $authorisation, $connid);
+			} # End: check for authorisation if called via GET or POST parameter
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
 		{

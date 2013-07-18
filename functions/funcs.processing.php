@@ -597,7 +597,7 @@ $queryAuthUser = "SELECT
 t2.user_id,
 t1.user_type
 FROM ". $db_settings['userdata_table'] ." AS t1, ". $db_settings['forum_table'] ." AS t2
-WHERE t2.id = ". $posting_id ."
+WHERE t2.id = ". intval($posting_id) ."
 	AND t2.user_id = t1.user_id
 LIMIT 1";
 $userAuthResult = mysql_query($queryAuthUser, $connid);
