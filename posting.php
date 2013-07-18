@@ -211,7 +211,7 @@ if (($settings['access_for_users_only'] == 1
 				or $action == "delete"
 				or $action == "delete ok"))
 			{
-			$authorisation =  processCheckAuthorisation(isset($_POST['id']) ? $_GET['id'] : $_POST['id'], $authorisation, $connid);
+			$authorisation =  processCheckAuthorisation(isset($_GET['id']) ? $_GET['id'] : $_POST['id'], $authorisation, $connid);
 			} # End: check for authorisation if called via GET or POST parameter
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
