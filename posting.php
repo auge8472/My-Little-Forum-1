@@ -213,6 +213,72 @@ if (($settings['access_for_users_only'] == 1
 			{
 			$authorisation =  processCheckAuthorisation(isset($_GET['id']) ? $_GET['id'] : $_POST['id'], $authorisation, $connid);
 			} # End: check for authorisation if called via GET or POST parameter
+		# if form was submitted (old file: line 618)
+		if (isset($_POST['form']))
+			{
+			$_POST['id'] = empty($_POST['id']) ? 0 : intval($_POST['id']);
+			switch ($action)
+				{
+				case "new":
+					# is it a registered user?
+					if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+						{
+						$user_id = $_SESSION[$settings['session_prefix'].'user_id'];
+						$name = $_SESSION[$settings['session_prefix'].'user_name'];
+						}
+					# if the posting is an answer, search the thread-ID:
+					if ($_POST['id'] > 0)
+						{
+						$threadIdQuery = "SELECT
+						tid,
+						locked
+						FROM ". $db_settings['forum_table'] ."
+						WHERE id = ". intval($_POST['id']);
+						$threadIdResult = mysql_query($threadIdQuery, $connid);
+						if (!$threadIdResult) die($lang['db_error']);
+
+						if (mysql_num_rows($threadIdResult) != 1)
+							{
+							die($lang['db_error']);
+							}
+						else
+							{
+							$field = mysql_fetch_assoc($threadIdResult);
+							$Thread = $field['tid'];
+							if ($field['locked'] > 0)
+								{
+								unset($action);
+								$show = "no authorization";
+								$reason = $lang['thread_locked_error'];
+								}
+							}
+						mysql_free_result($threadIdResult);
+						}
+					else if ($_POST['id'] == 0)
+						{
+						$Thread = 0;
+						}
+				break;
+				case "edit";
+					# fetch missing data from database:
+					$postingQuery = "SELECT
+					name,
+					locked,
+					UNIX_TIMESTAMP(time) AS time,
+					UNIX_TIMESTAMP(NOW() - INTERVAL ". $settings['edit_period'] ." MINUTE) AS edit_diff
+					FROM ". $db_settings['forum_table'] ."
+					WHERE id = ". intval($_POST['id']);
+					$edit_result = mysql_query($postingQuery, $connid);
+					if (!$edit_result) die($lang['db_error']);
+					$field = mysql_fetch_assoc($edit_result);
+					mysql_free_result($edit_result);
+					if (empty($name))
+						{
+						$name = $field["name"];
+						}
+				break;
+				} # End: switch ($action)
+			} # End: if (isset($_POST['form']))
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
 		{
