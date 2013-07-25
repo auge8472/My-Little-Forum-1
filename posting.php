@@ -314,6 +314,27 @@ if (($settings['access_for_users_only'] == 1
 					$errors[] = $lang['error_name_reserved'];
 					}
 				}
+			# check the given email address for format name@example.com
+			# regular expression: see functions/funcs.processing.php
+			if (!empty($_POST['email']))
+				and !preg_match($validator['email'], $_POST['email']))
+				{
+				$errors[] = $lang['error_email_wrong'];
+				}
+			# check for presence of email address in case of
+			# notification about answers to the current posting
+			if ((empty($_POST['email'])
+				and isset($_POST['email_notify'])
+				and $_POST['email_notify'] == 1
+				and !isset($_SESSION[$settings['session_prefix'].'user_id']))
+				or (empty($_POST['email'])
+				and isset($_POST['email_notify'])
+				and $_POST['email_notify'] == 1
+				and isset($p_user_id) // <== check for source of the variable!
+				and $p_user_id == 0))
+				{
+				$errors[] = $lang['error_no_email_to_notify'];
+				}
 			} # End: if (isset($_POST['form']))
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
