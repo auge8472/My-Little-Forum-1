@@ -439,6 +439,15 @@ if (($settings['access_for_users_only'] == 1
 						fixed = ". intval($_POST['fixed']);
 						$result = mysql_query($newPostingQuery, $connid);
 						if (!$result) die($lang['db_error']);
+						# get the id of the saved posting
+						$getNewIDQuery = "SELECT
+						id
+						FROM ". $db_settings['forum_table'] ."
+						WHERE id = LAST_INSERT_id()";
+						$result = mysql_query($getNewIDQuery, $connid);
+						if (!$result) die($lang['db_error']);
+						$newID = mysql_fetch_assoc($result);
+						$newID = $newID['id'];
 					break;
 					}
 				} # End: if (empty($errors) and empty($_POST['preview']) and ...)
