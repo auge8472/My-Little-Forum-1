@@ -573,6 +573,33 @@ if (($settings['access_for_users_only'] == 1
 								}
 							mysql_free_result($threadNotifyResult);
 							}
+						# send message to admins and moderators:
+						$emailbody = (intval($id) > 0) ? strip_tags($lang['admin_email_text_reply']) : strip_tags($lang['admin_email_text']);
+						$emailbody = str_replace("[name]", $name, $emailbody);
+						$emailbody = str_replace("[subject]", $subject, $emailbody);
+						$emailbody = str_replace("[text]", $mail_text, $emailbody);
+						$emailbody = str_replace("[posting_address]", $PostAddress, $emailbody);
+						$emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
+						$emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
+						$emailsubject = str_replace("[subject]", $subject, $lang['admin_email_subject']);
+						// Schauen, wer eine E-Mail-Benachrichtigung will:
+						$listAdminModEmailQuery = "SELECT
+						user_name,
+						user_email
+						FROM ".$db_settings['userdata_table']."
+						WHERE user_type IN('admin', 'mod')
+							AND new_posting_notify = '1'";
+						$en_result = mysql_query(, $connid);
+						if (!$en_result) die($lang['db_error']);
+						while ($admin_array = mysql_fetch_assoc($en_result))
+							{
+							$ind_emailbody = str_replace("[admin]", $admin_array['user_name'], $emailbody);
+							$an = mb_encode_mimeheader($admin_array['user_name'],"UTF-8")." <".$admin_array['user_email'].">";
+							$sent2[] = processEmail($an, $emailsubject, $ind_emailbody);
+							unset($ind_emailbody);
+							unset($an);
+							}
+						mysql_free_result($en_result);
 
 						# for redirect:
 						$further_tid = $redirect["counter"];
