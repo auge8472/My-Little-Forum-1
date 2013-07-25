@@ -415,6 +415,32 @@ if (($settings['access_for_users_only'] == 1
 				and (isset($_POST['save_entry'])
 					and $_POST['save_entry'] == outputLangDebugInAttributes($lang['submit_button'])))
 				{
+				switch ($action)
+					{
+					case "new":
+						# save new entry
+						$newPostingQuery = "INSERT INTO ". $db_settings['forum_table'] ." SET
+						pid = ". intval($_POST['id']) .",
+						tid = ". intval($Thread) .",
+						uniqid = '". mysql_real_escape_string($_POST['uniqid']) ."',
+						time = NOW(),
+						last_answer = NOW(),
+						user_id = ". intval($_POST['user_id']) .",
+						name = '". mysql_real_escape_string($_POST['name']) ."',
+						subject = '". mysql_real_escape_string($_POST['subject']) ."',
+						email = '". mysql_real_escape_string($_POST['email']) ."',
+						hp = '". mysql_real_escape_string($_POST['hp']) ."',
+						place = '". mysql_real_escape_string($_POST['place']) ."',
+						ip_addr = INET_ATON('". mysql_real_escape_string($_SERVER["REMOTE_ADDR"]) ."'),
+						text = '". mysql_real_escape_string($_POST['text']) ."',
+						show_signature = ". intval($_POST['show_signature']) .",
+						email_notify = ". intval($_POST['email_notify']) .",
+						category = ". intval($_POST['p_category']) .",
+						fixed = ". intval($_POST['fixed']);
+						$result = mysql_query($newPostingQuery, $connid);
+						if (!$result) die($lang['db_error']);
+					break;
+					}
 				} # End: if (empty($errors) and empty($_POST['preview']) and ...)
 			else
 				{
