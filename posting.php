@@ -487,7 +487,8 @@ if (($settings['access_for_users_only'] == 1
 						# check for wished email notification:
 						if ($settings['email_notification'] == 1)
 							{
-							$PostAddress  = $settings['forum_address'];
+							$mail_text = unbbcode($_POST['text']);
+							$PostAddress = $settings['forum_address'];
 							if ($settings['standard'] == "board")
 								{
 								$PostAddress .= "board_entry.php?id=".$redirect["counter"]."#p".$redirect["id"];
