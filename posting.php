@@ -335,6 +335,11 @@ if (($settings['access_for_users_only'] == 1
 				{
 				$errors[] = $lang['error_no_email_to_notify'];
 				}
+			# check for empty subject
+			if (empty($_POST['subject']))
+				{
+				$errors[] = $lang['error_no_subject'];
+				}
 			} # End: if (isset($_POST['form']))
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
