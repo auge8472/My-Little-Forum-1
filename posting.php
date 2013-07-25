@@ -1288,21 +1288,7 @@ if (($settings['access_for_users_only'] == 1
 				{
 				$qs = '';
 				$qsl = '';
-				if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
-				and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
-					{
-					if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
-						{
-						$header_href = 'forum_entry.php';
-						$further = $further_id;
-						}
-					else
-						{
-						$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'_entry.php';
-						$further = $further_tid;
-						}
-					}
-				else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+				if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
 				and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
 					{
 					if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
