@@ -516,10 +516,10 @@ if (($settings['access_for_users_only'] == 1
 							if (mysql_num_rows($emailParentUserResult) == 1)
 								{
 								$parent = mysql_fetch_assoc($emailParentUserResult);
-								$emailbody = $lang['email_text'];
+								$emailbody = $lang['email_text'].$lang['email_original_post'];
 								$emailbody = str_replace("[recipient]", $parent["name"], $emailbody);
-								$emailbody = str_replace("[name]", name, $emailbody);
-								$emailbody = str_replace("[subject]", $subject, $emailbody);
+								$emailbody = str_replace("[name]", $_POST['name'], $emailbody);
+								$emailbody = str_replace("[subject]", $_POST['subject'], $emailbody);
 								$emailbody = str_replace("[text]", $mail_text, $emailbody);
 								$emailbody = str_replace("[posting_address]", $PostAddress, $emailbody);
 								$emailbody = str_replace("[original_subject]", $parent["subject"], $emailbody);
@@ -551,22 +551,16 @@ if (($settings['access_for_users_only'] == 1
 							while ($field = mysql_fetch_assoc($threadNotifyResult))
 								{
 								$emailbody = str_replace("[recipient]", $field["name"], $lang['email_text']);
-								$emailbody = str_replace("[name]", $name, $emailbody);
-								$emailbody = str_replace("[subject]", $subject, $emailbody);
+								$emailbody = str_replace("[name]", $_POST['name'], $emailbody);
+								$emailbody = str_replace("[subject]", $_POST['subject'], $emailbody);
 								$emailbody = str_replace("[text]", $mail_text, $emailbody);
 								$emailbody = str_replace("[posting_address]", $PostAddress, $emailbody);
-								$emailbody = str_replace("[original_subject]", $parent["subject"], $emailbody);
-								$emailbody = str_replace("[original_text]", unbbcode($parent["text"]), $emailbody);
 								$emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
 								$emailbody = stripslashes($emailbody);
 								$emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
 								$an = mb_encode_mimeheader($field["name"],"UTF-8")." <".$field["email"].">";
 								$emailsubject = strip_tags($lang['email_subject']);
-								$sent1 = processEmail($an, $emailsubject, $emailbody);
-								if ($sent1 === true)
-									{
-									$sent1 = "ok";
-									}
+								$sent1[] = processEmail($an, $emailsubject, $emailbody);
 								unset($emailsubject);
 								unset($emailbody);
 								unset($an);
@@ -575,8 +569,8 @@ if (($settings['access_for_users_only'] == 1
 							}
 						# send message to admins and moderators:
 						$emailbody = (intval($id) > 0) ? strip_tags($lang['admin_email_text_reply']) : strip_tags($lang['admin_email_text']);
-						$emailbody = str_replace("[name]", $name, $emailbody);
-						$emailbody = str_replace("[subject]", $subject, $emailbody);
+						$emailbody = str_replace("[name]", $_POST['name'], $emailbody);
+						$emailbody = str_replace("[subject]", $_POST['subject'], $emailbody);
 						$emailbody = str_replace("[text]", $mail_text, $emailbody);
 						$emailbody = str_replace("[posting_address]", $PostAddress, $emailbody);
 						$emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
