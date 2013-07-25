@@ -483,7 +483,25 @@ if (($settings['access_for_users_only'] == 1
 						FROM ". $db_settings['forum_table'] ."
 						WHERE id = ". $newID;
 						$redirectResult = mysql_query($redirectQuery, $connid);
-						$redirect = mysql_fetch_assoc($redirectResult);
+						$redirect = mysql_fetch_assoc($redirectResult);						
+						# check for wished email notification:
+						if ($settings['email_notification'] == 1)
+							{
+							$PostAddress  = $settings['forum_address'];
+							if ($settings['standard'] == "board")
+								{
+								$PostAddress .= "board_entry.php?id=".$redirect["counter"]."#p".$redirect["id"];
+								}
+							else if ($settings['standard'] == "mix")
+								{
+								$PostAddress .= "mix_entry.php?id=".$redirect["counter"]."#p".$redirect["id"];
+								}
+							else
+								{
+								$PostAddress .= "forum_entry.php?id=".$redirect["id"];
+								}
+							}
+
 						# for redirect:
 						$further_tid = $redirect["counter"];
 						$further_id = $redirect["id"];
