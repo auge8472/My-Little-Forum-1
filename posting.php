@@ -1295,12 +1295,12 @@ if (($settings['access_for_users_only'] == 1
 						or $_SESSION[$settings['session_prefix'].'user_view'] == 'mix')
 						{
 						$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php';
-						$further = $further_id;
+						$further = $further_tid;
 						}
 					else
 						{
 						$header_href = 'forum_entry.php';
-						$further = $further_tid;
+						$further = $further_id;
 						}
 					}
 				else
