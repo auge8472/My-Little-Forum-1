@@ -395,6 +395,21 @@ if (($settings['access_for_users_only'] == 1
 				{
 				$_POST['p_category'] = 0;
 				}
+			# CAPTCHA check:
+			if (isset($_POST['save_entry'])
+			&& empty($_SESSION[$settings['session_prefix'].'user_id'])
+			&& $settings['captcha_posting'] == 1)
+				{
+				if($settings['captcha_type'] == 1)
+					{
+					if ($captcha->check_captcha($_SESSION['captcha_session'], $_POST['captcha_code']) !== TRUE) $errors[] = $lang['captcha_code_invalid'];
+					}
+				else
+					{
+					if ($captcha->check_math_captcha($_SESSION['captcha_session'][2], $_POST['captcha_code']) !== TRUE) $errors[] = $lang['captcha_code_invalid'];
+					}
+				} # End: CAPTCHA check
+			# end check data
 			} # End: if (isset($_POST['form']))
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
