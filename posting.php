@@ -350,6 +350,39 @@ if (($settings['access_for_users_only'] == 1
 					$errors[] = $lang['error_no_text'];
 					}
 				}
+			# check submitted strings for string length exceeding
+			if (!empty($_POST['name'])
+				and mb_strlen($_POST['name']) > $settings['name_maxlength'])
+				{
+				$errors[] = $lang['name_marking']." ".$lang['error_input_too_long'];
+				}
+			if (!empty($_POST['email'])
+				and mb_strlen($_POST['email']) > $settings['email_maxlength'])
+				{
+				$errors[] = $lang['email_marking']." ".$lang['error_input_too_long'];
+				}
+			if (!empty($_POST['hp'])
+				and mb_strlen($_POST['hp']) > $settings['hp_maxlength'])
+				{
+				$errors[] = $lang['hp_marking'] . " " .$lang['error_input_too_long'];
+				}
+			if (!empty($_POST['place'])
+				and mb_strlen($_POST['place']) > $settings['place_maxlength'])
+				{
+				$errors[] = $lang['place_marking'] . " " .$lang['error_input_too_long'];
+				}
+			if (!empty($_POST['subject'])
+				and mb_strlen($_POST['subject']) > $settings['subject_maxlength'])
+				{
+				$errors[] = $lang['subject_marking'] . " " .$lang['error_input_too_long'];
+				}
+			if (!empty($_POST['text'])
+				and mb_strlen($_POST['text']) > $settings['text_maxlength'])
+				{
+				$lang['error_text_too_long'] = str_replace("[length]", mb_strlen($_POST['text']), $lang['error_text_too_long']);
+				$lang['error_text_too_long'] = str_replace("[maxlength]", $settings['text_maxlength'], $lang['error_text_too_long']);
+				$errors[] = $lang['error_text_too_long'];
+				}
 			} # End: if (isset($_POST['form']))
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
