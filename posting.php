@@ -448,6 +448,19 @@ if (($settings['access_for_users_only'] == 1
 						if (!$result) die($lang['db_error']);
 						$newID = mysql_fetch_assoc($result);
 						$newID = $newID['id'];
+						# set the thread id for a new thread
+						# derive it from the posting id
+						if (intval($_POST['id']) == 0)
+							{
+							$newPostingUpdateQuery = "UPDATE ". $db_settings['forum_table'] ." SET
+							tid = id,
+							time = time
+							WHERE id = ". $newID;
+							if (!mysql_query($newPostingUpdateQuery, $connid))
+								{
+								die($lang['db_error']);
+								}
+							}
 					break;
 					}
 				} # End: if (empty($errors) and empty($_POST['preview']) and ...)
