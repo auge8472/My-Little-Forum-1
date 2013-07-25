@@ -340,6 +340,16 @@ if (($settings['access_for_users_only'] == 1
 				{
 				$errors[] = $lang['error_no_subject'];
 				}
+			# check for empty posting text (if it is not allowed)
+			if (empty($settings['empty_postings_possible'])
+			|| (isset($settings['empty_postings_possible'])
+			&& $settings['empty_postings_possible'] != 1))
+				{
+				if (empty($_POST['text']))
+					{
+					$errors[] = $lang['error_no_text'];
+					}
+				}
 			} # End: if (isset($_POST['form']))
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
