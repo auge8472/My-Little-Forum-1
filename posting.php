@@ -473,6 +473,38 @@ if (($settings['access_for_users_only'] == 1
 								die($lang['db_error']);
 								}
 							}
+						# get last entry (to redirect to it):
+						$redirectQuery = "SELECT
+						tid AS counter,
+						pid,
+						id,
+						(SELECT COUNT(*) FROM ". $db_settings['forum_table'] ."
+							WHERE tid = counter) AS count
+						FROM ". $db_settings['forum_table'] ."
+						WHERE id = ". $newID;
+						$redirectResult = mysql_query($redirectQuery, $connid);
+						$redirect = mysql_fetch_assoc($redirectResult);
+						# for redirect:
+						$further_tid = $redirect["counter"];
+						$further_id = $redirect["id"];
+						$further_page = 0;
+						if ((!empty($_SESSION[$setting['session_prefix'] .'curr_view'])
+								and $_SESSION[$setting['session_prefix'] .'curr_view'] == 'board')
+							or (!empty($_SESSION[$setting['session_prefix'] .'user_view'])
+								and $_SESSION[$setting['session_prefix'] .'user_view'] == 'board')
+							or (!empty($_COOKIE['curr_view'])
+								and $_COOKIE['curr_view'] == 'board')
+							or (!empty($_COOKIE['user_view'])
+								and $_COOKIE['user_view'] == 'board'))
+							{
+							# there are more postings in the thread than
+							# the setting for postings per page allows
+							if ($redirect['count'] > $settings['answers_per_topic'])
+								{
+								$further_page = floor($redirect['count']/$settings['answers_per_topic']);
+								}
+							}
+						$refer = 1;
 					break;
 					}
 				} # End: if (empty($errors) and empty($_POST['preview']) and ...)
