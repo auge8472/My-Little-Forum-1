@@ -293,6 +293,27 @@ if (($settings['access_for_users_only'] == 1
 				header("location: ".$settings['forum_address']."index.php");
 				die('<a href="index.php">further...</a>');
 				}
+			if (empty($_POST['name']))
+				{
+				$errors[] = $lang['error_no_name'];
+				}
+			# name reserved?
+			if (!isset($_SESSION[$settings['session_prefix'].'user_id']))
+				{
+				$reservedUsernameQuery = "SELECT user_name
+				FROM ". $db_settings['userdata_table'] ."
+				WHERE user_name = '". mysql_real_escape_string($_POST['name']) ."'";
+				$reservedUsernameResult = mysql_query($reservedUsernameQuery,$connid);
+				if (!$reservedUsernameResult) die($lang['db_error']);
+				$field = mysql_fetch_assoc($reservedUsernameResult);
+				mysql_free_result($reservedUsernameResult);
+				if (!empty($_POST['name'])
+					and mb_strtolower($field["user_name"]) == mb_strtolower($_POST['name']))
+					{
+					$lang['error_name_reserved'] = str_replace("[name]", htmlspecialchars($_POST['name']), $lang['error_name_reserved']);
+					$errors[] = $lang['error_name_reserved'];
+					}
+				}
 			} # End: if (isset($_POST['form']))
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
