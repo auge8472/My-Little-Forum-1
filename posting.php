@@ -410,6 +410,16 @@ if (($settings['access_for_users_only'] == 1
 					}
 				} # End: CAPTCHA check
 			# end check data
+			if (empty($errors)
+				and empty($_POST['preview'])
+				and (isset($_POST['save_entry'])
+					and $_POST['save_entry'] == outputLangDebugInAttributes($lang['submit_button'])))
+				{
+				} # End: if (empty($errors) and empty($_POST['preview']) and ...)
+			else
+				{
+				$show = "form";
+				}
 			} # End: if (isset($_POST['form']))
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
