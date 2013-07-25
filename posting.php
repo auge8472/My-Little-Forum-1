@@ -539,6 +539,39 @@ if (($settings['access_for_users_only'] == 1
 								unset($an);
 								mysql_free_result($emailParentUserResult);
 								}
+							$threadNotifyQuery = "SELECT
+							t1.user_name AS name,
+							t1.user_email AS email,
+							t2.user_id
+							FROM ". $db_settings['userdata_table'] ." AS t1,
+							". $db_settings['usersubscripts_table'] ." AS t2
+							WHERE t1.user_id = t2.user_id AND t2.tid = ". $redirect["counter"];
+							$threadNotifyResult = mysql_query($threadNotifyQuery, $connid);
+							if (!$threadNotifyResult) die($lang['db_error']);
+							while ($field = mysql_fetch_assoc($threadNotifyResult))
+								{
+								$emailbody = str_replace("[recipient]", $field["name"], $lang['email_text']);
+								$emailbody = str_replace("[name]", $name, $emailbody);
+								$emailbody = str_replace("[subject]", $subject, $emailbody);
+								$emailbody = str_replace("[text]", $mail_text, $emailbody);
+								$emailbody = str_replace("[posting_address]", $PostAddress, $emailbody);
+								$emailbody = str_replace("[original_subject]", $parent["subject"], $emailbody);
+								$emailbody = str_replace("[original_text]", unbbcode($parent["text"]), $emailbody);
+								$emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
+								$emailbody = stripslashes($emailbody);
+								$emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
+								$an = mb_encode_mimeheader($field["name"],"UTF-8")." <".$field["email"].">";
+								$emailsubject = strip_tags($lang['email_subject']);
+								$sent1 = processEmail($an, $emailsubject, $emailbody);
+								if ($sent1 === true)
+									{
+									$sent1 = "ok";
+									}
+								unset($emailsubject);
+								unset($emailbody);
+								unset($an);
+								}
+							mysql_free_result($threadNotifyResult);
 							}
 
 						# for redirect:
