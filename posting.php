@@ -278,6 +278,21 @@ if (($settings['access_for_users_only'] == 1
 						}
 				break;
 				} # End: switch ($action)
+			# check for new or edited posting is complete
+			# now check submitted data:
+			# double entry?
+			$uniqueIdQuery = "SELECT COUNT(*)
+			FROM ". $db_settings['forum_table'] ."
+			WHERE uniqid = '". mysql_real_escape_string($_POST['uniqid']) ."'
+			AND time > NOW()-10000";
+			$uniqueIdResult = mysql_query($uniqueIdQuery, $connid);
+			list($uniqidCount) = mysql_fetch_row($uniqueIdResult);
+			mysql_free_result($uniqueIdResult);
+			if ($uniqidCount > 0)
+				{
+				header("location: ".$settings['forum_address']."index.php");
+				die('<a href="index.php">further...</a>');
+				}
 			} # End: if (isset($_POST['form']))
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
