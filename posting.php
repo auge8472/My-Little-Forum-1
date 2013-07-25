@@ -461,6 +461,18 @@ if (($settings['access_for_users_only'] == 1
 								die($lang['db_error']);
 								}
 							}
+						# actualise time stamp of last answer for all postings in the thread
+						if (intval($_POST['id']) != 0)
+							{
+							$updateLastAnswerQuery = "UPDATE ".$db_settings['forum_table']." SET
+							time = time,
+							last_answer = NOW()
+							WHERE tid = ". $Thread;
+							if (!mysql_query($updateLastAnswerQuery, $connid))
+								{
+								die($lang['db_error']);
+								}
+							}
 					break;
 					}
 				} # End: if (empty($errors) and empty($_POST['preview']) and ...)
