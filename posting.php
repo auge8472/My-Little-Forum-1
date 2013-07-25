@@ -1291,14 +1291,15 @@ if (($settings['access_for_users_only'] == 1
 				if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
 				and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
 					{
-					if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+					if ($_SESSION[$settings['session_prefix'].'user_view'] == 'board'
+						or $_SESSION[$settings['session_prefix'].'user_view'] == 'mix')
 						{
-						$header_href = 'forum_entry.php';
+						$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php';
 						$further = $further_id;
 						}
 					else
 						{
-						$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php';
+						$header_href = 'forum_entry.php';
 						$further = $further_tid;
 						}
 					}
