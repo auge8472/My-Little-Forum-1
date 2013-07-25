@@ -473,8 +473,8 @@ if (($settings['access_for_users_only'] == 1
 						$email_notify = $field["email_notify"];
 						$show_signature = $field["show_signature"];
 						$fixed = $field["fixed"];
-						if ($field['locked'] > 0 &&
-						(empty($_SESSION[$settings['session_prefix'].'user_type'])
+						if ($field['locked'] > 0
+						&& (empty($_SESSION[$settings['session_prefix'].'user_type'])
 						|| (isset($_SESSION[$settings['session_prefix'].'user_type'])
 						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'admin'
 						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'mod')))
