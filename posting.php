@@ -707,6 +707,7 @@ if (($settings['access_for_users_only'] == 1
 									WHERE id = ". intval($_POST['id']);
 									}
 								$postingUpdateResult = mysql_query($updatePostingQuery, $connid);
+								if (!$postingUpdateResult) die($lang['db_error']);
 								}
 							else
 								{
