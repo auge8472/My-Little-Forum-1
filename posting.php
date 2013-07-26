@@ -776,8 +776,21 @@ if (($settings['access_for_users_only'] == 1
 						}
 					$show_signature = 1;
 					# if message is a reply:
-					if ($_GET['id'] != 0)
+					if (intval($_GET['id']) > 0)
 						{
+						$oldMessageQuery = "SELECT
+						tid,
+						pid,
+						name,
+						subject,
+						category,
+						text,
+						locked
+						FROM ". $db_settings['forum_table'] ."
+						WHERE id = ". intval($_GET['id']);
+						$oldMessageResult = mysql_query($oldMessageQuery, $connid);
+						if (!$oldMessageResult) die($lang['db_error']);
+						$field = mysql_fetch_assoc($oldMessageResult);
 						}
 					else
 						{
