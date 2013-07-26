@@ -286,32 +286,13 @@ if (($settings['access_for_users_only'] == 1
 			t1.user_type,
 			t1.user_id
 			FROM ". $db_settings['userdata_table'] ." AS t1, ". $db_settings['forum_table'] ." AS t2
-			WHERE t2.id = ". intval($_GET['id']) ."
+			WHERE t2.id = ". intval(isset($_POST['id']) ? $_POST['id'] : $_GET['id']) ."
 				AND t2.user_id = t1.user_id
 			LIMIT 1";
 			$userAuthResult = mysql_query($queryAuthUser, $connid);
 			if (!$userAuthResult) die($lang['db_error']);
 			$resultAuth = mysql_fetch_assoc($userAuthResult);
 			mysql_free_result($userAuthResult);
-			/*
-			$userIdQuery = "SELECT user_id
-			FROM ". $db_settings['forum_table'] ."
-			WHERE id = ". intval($_GET['id']) ."
-			LIMIT 1";
-			$user_id_result = mysql_query($userIdQuery, $connid);
-			if (!$user_id_result) die($lang['db_error']);
-			$result_array = mysql_fetch_assoc($user_id_result);
-			mysql_free_result($user_id_result);
-
-			$userTypeQuery = "SELECT user_type
-			FROM ". $db_settings['userdata_table'] ."
-			WHERE user_id = ". intval($result_array["user_id"]) ."
-			LIMIT 1";
-			$user_type_result = mysql_query($userTypeQuery, $connid);
-			if (!$user_type_result) die($lang['db_error']);
-			$user_result_array = mysql_fetch_array($user_type_result);
-			mysql_free_result($user_type_result);
-			*/
 			# ist da jemand bekanntes?
 			if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 				{
