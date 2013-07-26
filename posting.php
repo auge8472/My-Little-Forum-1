@@ -643,6 +643,20 @@ if (($settings['access_for_users_only'] == 1
 							&& $_SESSION[$settings['session_prefix'].'user_type'] != 'admin'
 							&& $_SESSION[$settings['session_prefix'].'user_type'] != 'mod'))))
 								{
+								$editPostingQuery = "SELECT
+								tid,
+								tid AS counter,
+								(SELECT COUNT(*) FROM ". $db_settings['forum_table'] ."
+									WHERE tid = counter) AS count,
+								name,
+								subject,
+								text
+								FROM ". $db_settings['forum_table'] ."
+								WHERE id = ". intval($_POST['id']);
+								$editPostingResult = mysql_query($editPostingQuery, $connid);
+								if (!$editPostingResult) die($lang['db_error']);
+								$field = mysql_fetch_assoc($editPostingResult);
+								mysql_free_result($editPostingResult);
 								}
 							else
 								{
