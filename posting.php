@@ -1286,14 +1286,14 @@ if (($settings['access_for_users_only'] == 1
 					}
 				else
 					{
-					if ($setting['standard'] == 'thread')
+					if ($settings['standard'] == 'thread')
 						{
 						$header_href = 'forum_entry.php';
 						$further = $further_id;
 						}
 					else
 						{
-						$header_href = $setting['standard'] .'_entry.php';
+						$header_href = $settings['standard'] .'_entry.php';
 						$further = $further_tid;
 						}
 					}
