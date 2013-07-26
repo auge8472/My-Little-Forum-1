@@ -748,6 +748,21 @@ if (($settings['access_for_users_only'] == 1
 				$show = "form";
 				}
 			} # End: if (isset($_POST['form']))
+		else
+			{
+			# the page was requested to add a new or to edit or delete an existing posting
+			switch ($action)
+				{
+				case "new":
+				break;
+				case "edit":
+				break;
+				case "delete":
+				break;
+				case "delete ok":
+				break;
+				}
+			}
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
 		{
