@@ -644,7 +644,6 @@ if (($settings['access_for_users_only'] == 1
 							&& $_SESSION[$settings['session_prefix'].'user_type'] != 'mod'))))
 								{
 								$editPostingQuery = "SELECT
-								tid,
 								tid AS counter,
 								(SELECT COUNT(*) FROM ". $db_settings['forum_table'] ."
 									WHERE tid = counter) AS count,
@@ -708,6 +707,27 @@ if (($settings['access_for_users_only'] == 1
 									}
 								$postingUpdateResult = mysql_query($updatePostingQuery, $connid);
 								if (!$postingUpdateResult) die($lang['db_error']);
+								# generate code for redirection
+								$further_tid = $field['counter'];
+								$further_id = $_POST['id'];
+								$further_page = 0;
+								if ((!empty($_SESSION[$setting['session_prefix'] .'curr_view'])
+								and $_SESSION[$setting['session_prefix'] .'curr_view'] == 'board')
+								or (!empty($_SESSION[$setting['session_prefix'] .'user_view'])
+								and $_SESSION[$setting['session_prefix'] .'user_view'] == 'board')
+								or (!empty($_COOKIE['curr_view'])
+								and $_COOKIE['curr_view'] == 'board')
+								or (!empty($_COOKIE['user_view'])
+								and $_COOKIE['user_view'] == 'board'))
+									{
+									# there are more postings in thread than
+									# the setting for postings per page allows
+									if ($field['count'] > $settings['answers_per_topic'])
+										{
+										$further_page = floor($field['count']/$settings['answers_per_topic']);
+										}
+									}
+								$refer = 1;
 								}
 							else
 								{
