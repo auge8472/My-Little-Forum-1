@@ -636,6 +636,19 @@ if (($settings['access_for_users_only'] == 1
 						&& ($_SESSION[$settings['session_prefix'].'user_type'] == 'admin'
 						|| $_SESSION[$settings['session_prefix'].'user_type'] == 'mod'))))
 							{
+							if (!($settings['edit_period'] > 0
+							&& $field["edit_diff"] > $field["time"]
+							&& (empty($_SESSION[$settings['session_prefix'].'user_type'])
+							|| (isset($_SESSION[$settings['session_prefix'].'user_type'])
+							&& $_SESSION[$settings['session_prefix'].'user_type'] != 'admin'
+							&& $_SESSION[$settings['session_prefix'].'user_type'] != 'mod'))))
+								{
+								}
+							else
+								{
+								$show = "no authorization";
+								$reason = str_replace('[minutes]',$settings['edit_period'],$lang['edit_period_over']);
+								}
 							}
 						else
 							{
