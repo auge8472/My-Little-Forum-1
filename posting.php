@@ -657,6 +657,56 @@ if (($settings['access_for_users_only'] == 1
 								if (!$editPostingResult) die($lang['db_error']);
 								$field = mysql_fetch_assoc($editPostingResult);
 								mysql_free_result($editPostingResult);
+								# unnoticed editing for admins and mods:
+								if (isset($_SESSION[$settings['session_prefix'].'user_type'])
+								&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin"
+								&& $settings['dont_reg_edit_by_admin'] == 1
+								|| isset($_SESSION[$settings['session_prefix'].'user_type'])
+								&& $_SESSION[$settings['session_prefix'].'user_type'] == "mod"
+								&& $settings['dont_reg_edit_by_mod'] == 1
+								|| ($field['text'] == $_POST['text']
+								&& $field['subject'] == $_POST['subject']
+								&& $field['name'] == $_POST['name']
+								&& isset($_SESSION[$settings['session_prefix'].'user_type'])
+								&& ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
+								|| $_SESSION[$settings['session_prefix'].'user_type'] == "mod")))
+									{
+									$updatePostingQuery = "UPDATE ". $db_settings['forum_table'] ." SET
+									time = time,
+									last_answer = last_answer,
+									edited = edited,
+									name = '". mysql_real_escape_string($_POST['name']) ."',
+									subject = '". mysql_real_escape_string($_POST['subject']) ."',
+									category = ". intval($_POST['p_category']) .",
+									email = '". mysql_real_escape_string($_POST['email']) ."',
+									hp = '". mysql_real_escape_string($_POST['hp']) ."',
+									place = '". mysql_real_escape_string($_POST['place']) ."',
+									text = '". mysql_real_escape_string($_POST['text']) ."',
+									email_notify = '". intval($_POST['email_notify']) ."',
+									show_signature = '". intval($_POST['show_signature']) ."',
+									fixed = ". intval($_POST['fixed']) ."
+									WHERE id = ". intval($_POST['id']);
+									}
+								else
+									{
+									$updatePostingQuery = "UPDATE ". $db_settings['forum_table'] ." SET
+									time = time,
+									last_answer = last_answer,
+									edited = NOW(),
+									edited_by = '". mysql_real_escape_string($_SESSION[$settings['session_prefix']."user_name"]) ."',
+									name = '". mysql_real_escape_string($_POST['name']) ."',
+									subject = '". mysql_real_escape_string($_POST['subject']) ."',
+									category = ". intval($_POST['p_category']) .",
+									email = '". mysql_real_escape_string($_POST['email']) ."',
+									hp = '". mysql_real_escape_string($_POST['hp']) ."',
+									place = '". mysql_real_escape_string($_POST['place']) ."',
+									text = '". mysql_real_escape_string($_POST['text']) ."',
+									email_notify = '". intval($_POST['email_notify']) ."',
+									show_signature = '". intval($_POST['show_signature']) ."',
+									fixed = ". intval($_POST['fixed']) ."
+									WHERE id = ". intval($_POST['id']);
+									}
+								$posting_update_result = mysql_query($updatePostingQuery, $connid);
 								}
 							else
 								{
