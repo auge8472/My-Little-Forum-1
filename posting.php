@@ -775,6 +775,14 @@ if (($settings['access_for_users_only'] == 1
 							}
 						}
 					$show_signature = 1;
+					# if message is a reply:
+					if ($_GET['id'] != 0)
+						{
+						}
+					else
+						{
+						$show = "form";
+						}
 				break;
 				case "edit":
 				break;
