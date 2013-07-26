@@ -706,7 +706,7 @@ if (($settings['access_for_users_only'] == 1
 									fixed = ". intval($_POST['fixed']) ."
 									WHERE id = ". intval($_POST['id']);
 									}
-								$posting_update_result = mysql_query($updatePostingQuery, $connid);
+								$postingUpdateResult = mysql_query($updatePostingQuery, $connid);
 								}
 							else
 								{
