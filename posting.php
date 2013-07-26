@@ -629,6 +629,20 @@ if (($settings['access_for_users_only'] == 1
 							}
 						$refer = 1;
 					break;
+					case "edit":
+						if ($authorisation['edit'] == 1
+						&& ($field['locked'] == 0
+						|| (isset($_SESSION[$settings['session_prefix'].'user_type'])
+						&& ($_SESSION[$settings['session_prefix'].'user_type'] == 'admin'
+						|| $_SESSION[$settings['session_prefix'].'user_type'] == 'mod'))))
+							{
+							}
+						else
+							{
+							$show = "no authorization";
+							$reason = $lang['thread_locked_error'];
+							}
+					break;
 					}
 				} # End: if (empty($errors) and empty($_POST['preview']) and ...)
 			else
