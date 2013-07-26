@@ -754,6 +754,26 @@ if (($settings['access_for_users_only'] == 1
 			switch ($action)
 				{
 				case "new":
+				# in case of a not logged in user, read the cookies with userdata
+					if (!isset($_SESSION[$settings['session_prefix'].'user_id']))
+						{
+						if (isset($_COOKIE['user_name']))
+							{
+							$name = $_COOKIE['user_name']; $setcookie = 1;
+							}
+						if (isset($_COOKIE['user_email']))
+							{
+							$email = $_COOKIE['user_email'];
+							}
+						if (isset($_COOKIE['user_hp']))
+							{
+							$hp = $_COOKIE['user_hp'];
+							}
+						if (isset($_COOKIE['user_place']))
+							{
+							$place = $_COOKIE['user_place'];
+							}
+						}
 				break;
 				case "edit":
 				break;
