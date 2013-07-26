@@ -774,6 +774,7 @@ if (($settings['access_for_users_only'] == 1
 							$place = $_COOKIE['user_place'];
 							}
 						}
+					$show_signature = 1;
 				break;
 				case "edit":
 				break;
