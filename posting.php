@@ -799,6 +799,19 @@ if (($settings['access_for_users_only'] == 1
 							$oldMessage = mysql_fetch_assoc($oldMessageResult);
 							# Zitatzeichen an den Anfang jeder Zeile stellen:
 							$oldMessage['text'] = preg_replace("/^/m", $settings['quote_symbol']." ", $oldMessage['text']);
+							if ($oldMessage['locked'] > 0
+							&& (empty($_SESSION[$settings['session_prefix'].'user_type'])
+							|| (isset($_SESSION[$settings['session_prefix'].'user_type'])
+							&& $_SESSION[$settings['session_prefix'].'user_type'] != 'admin'
+							&& $_SESSION[$settings['session_prefix'].'user_type'] != 'mod')))
+								{
+								$show = "no authorization";
+								$reason = $lang['thread_locked_error'];
+								}
+							else
+								{
+								$show = "form";
+								}
 							}
 						mysql_free_result($oldMessageResult);
 						}
