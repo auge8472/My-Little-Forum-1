@@ -909,7 +909,13 @@ if (($settings['access_for_users_only'] == 1
 						WHERE id = ". intval($_GET['id']);
 						$parentIdResult = mysql_query($parentIdQuery,$connid);
 						if (!$parentIdResult) die($lang['db_error']);
-						$field = mysql_fetch_assoc($parentIdResult);
+						$parentId = mysql_fetch_assoc($parentIdResult);
+						if ($parentId["pid"] == 0)
+							{
+							$deleteThreadQuery = "DELETE FROM ". $db_settings['forum_table'] ."
+							WHERE tid = ". intval($_GET['id']);
+							$deleteThreadResult = mysql_query($deleteThreadQuery, $connid);
+							}
 						}
 					else
 						{
