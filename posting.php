@@ -790,7 +790,17 @@ if (($settings['access_for_users_only'] == 1
 						WHERE id = ". intval($_GET['id']);
 						$oldMessageResult = mysql_query($oldMessageQuery, $connid);
 						if (!$oldMessageResult) die($lang['db_error']);
-						$field = mysql_fetch_assoc($oldMessageResult);
+						if (mysql_num_rows($oldMessageResult) != 1)
+							{
+							$postingID = 0;
+							}
+						else
+							{
+							$oldMessage = mysql_fetch_assoc($oldMessageResult);
+							# Zitatzeichen an den Anfang jeder Zeile stellen:
+							$oldMessage['text'] = preg_replace("/^/m", $settings['quote_symbol']." ", $oldMessage['text']);
+							}
+						mysql_free_result($oldMessageResult);
 						}
 					else
 						{
