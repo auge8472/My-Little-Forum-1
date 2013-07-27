@@ -900,6 +900,13 @@ if (($settings['access_for_users_only'] == 1
 						}
 				break;
 				case "delete ok":
+					if ($authorisation['delete'] == 1)
+						{
+						}
+					else
+						{
+						$show = "no authorization";
+						}
 				break;
 				}
 			}
