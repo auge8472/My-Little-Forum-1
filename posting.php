@@ -793,6 +793,7 @@ if (($settings['access_for_users_only'] == 1
 						if (mysql_num_rows($oldMessageResult) != 1)
 							{
 							$postingID = 0;
+							$show = "form";
 							}
 						else
 							{
