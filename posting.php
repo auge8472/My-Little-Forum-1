@@ -953,6 +953,32 @@ if (($settings['access_for_users_only'] == 1
 							WHERE id = ". intval($_GET['id']);
 							$delete_result = mysql_query($deleteMessageQuery,$connid);
 							} # if ($parentId["pid"] == 0) else
+						if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+							and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+							{
+							if ($_SESSION[$settings['session_prefix'].'user_view'] == 'board'
+								or $_SESSION[$settings['session_prefix'].'user_view'] == 'mix')
+								{
+								$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'.php';
+								}
+							else
+								{
+								$header_href = 'forum.php';
+								}
+							}
+						else
+							{
+							if ($setting['standard'] == 'thread')
+								{
+								$header_href = 'forum.php';
+								}
+							else
+								{
+								$header_href = $setting['standard'] .'.php';
+								}
+							}
+						header('location: '. $settings['forum_address'] . $header_href);
+						die('<a href="'. $header_href .'">further...</a>');
 						}
 					else
 						{
