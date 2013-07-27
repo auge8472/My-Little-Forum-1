@@ -822,6 +822,60 @@ if (($settings['access_for_users_only'] == 1
 						}
 				break;
 				case "edit":
+					if ($authorisation['edit'] == 1)
+						{
+						# fetch data of message which should be edited:
+						$editMessageQuery = "SELECT
+						tid,
+						pid,
+						user_id,
+						name,
+						email,
+						hp,
+						place,
+						subject,
+						category,
+						text,
+						email_notify,
+						show_signature,
+						locked,
+						fixed,
+						UNIX_TIMESTAMP(time) AS time,
+						UNIX_TIMESTAMP(NOW() - INTERVAL ". $settings['edit_period'] ." MINUTE) AS edit_diff
+						FROM ". $db_settings['forum_table'] ."
+						WHERE id = ". intval($_GET['id']);
+						$editMessageResult = mysql_query($editMessageQuery, $connid);
+						if (!$editMessageResult) die($lang['db_error']);
+						$oldMessage = mysql_fetch_assoc($editMessageResult);
+						mysql_free_result($editMessageResult);
+						if ($oldMessage['locked'] > 0 &&
+						(empty($_SESSION[$settings['session_prefix'].'user_type'])
+						|| (isset($_SESSION[$settings['session_prefix'].'user_type'])
+						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'admin'
+						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'mod')))
+							{
+							$show = "no authorization";
+							$reason = $lang['thread_locked_error'];
+							}
+						else if ($settings['edit_period'] > 0
+						&& $oldMessage["edit_diff"] > $oldMessage["time"]
+						&& (empty($_SESSION[$settings['session_prefix'].'user_type'])
+						|| (isset($_SESSION[$settings['session_prefix'].'user_type'])
+						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'admin'
+						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'mod')))
+							{
+							$show = "no authorization";
+							$reason = str_replace('[minutes]',$settings['edit_period'],$lang['edit_period_over']);
+							}
+						else
+							{
+							$show = "form";
+							}
+						}
+					else
+						{
+						$show = "no authorization";
+						}
 				break;
 				case "delete":
 				break;
