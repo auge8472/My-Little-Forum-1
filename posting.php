@@ -902,6 +902,14 @@ if (($settings['access_for_users_only'] == 1
 				case "delete ok":
 					if ($authorisation['delete'] == 1)
 						{
+						# select parent posting
+						$parentIdQuery = "SELECT
+						pid
+						FROM ". $db_settings['forum_table'] ."
+						WHERE id = ". intval($_GET['id']);
+						$parentIdResult = mysql_query($parentIdQuery,$connid);
+						if (!$parentIdResult) die($lang['db_error']);
+						$field = mysql_fetch_assoc($parentIdResult);
 						}
 					else
 						{
