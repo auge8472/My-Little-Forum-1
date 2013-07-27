@@ -1003,6 +1003,11 @@ if (($settings['access_for_users_only'] == 1
 			break;
 			}
 		$wo = strip_tags($wo);
+		if (!empty($oldMessage['name']))
+			{
+			$lang['back_to_posting_linkname'] = str_replace("[name]", htmlspecialchars($oldMessage['name']), $lang['back_to_posting_linkname']);
+			$lang['answer_on_posting_marking'] = str_replace("[name]", htmlspecialchars($oldMessage['name']), $lang['answer_on_posting_marking']);
+			}
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
 		{
