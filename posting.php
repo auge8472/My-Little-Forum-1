@@ -878,6 +878,26 @@ if (($settings['access_for_users_only'] == 1
 						}
 				break;
 				case "delete":
+					if ($authorisation['delete'] == 1)
+						{
+						$deleteQuery = "SELECT
+						tid,
+						pid,
+						UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS tp_time,
+						name,
+						subject,
+						category
+						FROM ". $db_settings['forum_table'] ."
+						WHERE id = ". intval($_GET['id']);
+						$deleteResult = mysql_query($deleteQuery, $connid);
+						if(!$deleteResult) die($lang['db_error']);
+						$deletePosting = mysql_fetch_assoc($deleteResult);
+						$show = "delete form";
+						}
+					else
+						{
+						$show = "no authorization";
+						}
 				break;
 				case "delete ok":
 				break;
