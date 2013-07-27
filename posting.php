@@ -916,6 +916,43 @@ if (($settings['access_for_users_only'] == 1
 							WHERE tid = ". intval($_GET['id']);
 							$deleteThreadResult = mysql_query($deleteThreadQuery, $connid);
 							}
+						else
+							{
+							$allLastAnswersQuery = "SELECT
+							tid,
+							time,
+							last_answer
+							FROM ". $db_settings['forum_table'] ."
+							WHERE id = ". intval($_GET['id']);
+							$allLastAnswersResult = mysql_query($allLastAnswersQuery, $connid);
+							$allLastAnswers = mysql_fetch_assoc($allLastAnswersResult);
+							mysql_free_result($allLastAnswersResult);
+
+							# if message is newest in topic:
+							if ($allLastAnswers['time'] == $allLastAnswers['last_answer'])
+								{
+								# search last answer and actualise "last_answer":
+								$lastAnswerQuery = "SELECT
+								time
+								FROM ". $db_settings['forum_table'] ."
+								WHERE tid = ". intval($allLastAnswers['tid']) ."
+								AND time < '". $allLastAnswers['time'] ."'
+								ORDER BY time DESC
+								LIMIT 1";
+								$lastAnswerResult = mysql_query($lastAnswerQuery, $connid);
+								$lastAnswer = mysql_fetch_assoc($lastAnswerResult);
+								mysql_free_result($lastAnswerResult);
+								$updateLastAnswerQuery = "UPDATE ". $db_settings['forum_table'] ." SET
+								time = time,
+								last_answer = '". $lastAnswer['time'] ."'
+								WHERE tid = ". intval($allLastAnswers['tid']);
+								$update_result = mysql_query($updateLastAnswerQuery, $connid);
+								}
+							# delete message:
+							$deleteMessageQuery = "DELETE FROM ". $db_settings['forum_table'] ."
+							WHERE id = ". intval($_GET['id']);
+							$delete_result = mysql_query($deleteMessageQuery,$connid);
+							} # if ($parentId["pid"] == 0) else
 						}
 					else
 						{
