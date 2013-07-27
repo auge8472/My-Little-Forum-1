@@ -811,6 +811,7 @@ if (($settings['access_for_users_only'] == 1
 								}
 							else
 								{
+								$postingID = $oldMessage['pid'];
 								$show = "form";
 								}
 							}
@@ -818,6 +819,7 @@ if (($settings['access_for_users_only'] == 1
 						}
 					else
 						{
+						$postingID = 0;
 						$show = "form";
 						}
 				break;
@@ -987,6 +989,20 @@ if (($settings['access_for_users_only'] == 1
 				break;
 				}
 			}
+
+		switch ($action)
+			{
+			case "new":
+				$wo = ($postingID == 0) ? $lang['new_entry_marking'] : $lang['answer_marking'];
+			break;
+			case "edit";
+				$wo = $lang['edit_marking'];
+			break;
+			case "delete";
+				$wo = $lang['delete_marking'];
+			break;
+			}
+		$wo = strip_tags($wo);
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
 		{
