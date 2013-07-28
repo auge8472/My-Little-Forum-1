@@ -79,7 +79,7 @@ if (isset($_GET['lock'])
 		}
 	else
 		{
-		$header_href = ($setting['standard'] == 'thread') ? 'forum.php' : $setting['standard'] .'.php';
+		$header_href = ($settings['standard'] == 'thread') ? 'forum.php' : $settings['standard'] .'.php';
 		}
 	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['lock']) ...)
@@ -111,7 +111,7 @@ if (isset($_GET['fix'])
 		}
 	else
 		{
-		$header_href = ($setting['standard'] == 'thread') ? 'forum.php' : $setting['standard'] .'.php';
+		$header_href = ($settings['standard'] == 'thread') ? 'forum.php' : $settings['standard'] .'.php';
 		}
 	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['fix']) ...)
@@ -164,7 +164,7 @@ if (isset($_GET['subscribe'])
 		}
 	else
 		{
-		$header_href = ($setting['standard'] == 'thread') ? 'forum.php' : $setting['standard'] .'.php';
+		$header_href = ($settings['standard'] == 'thread') ? 'forum.php' : $settings['standard'] .'.php';
 		}
 	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['subscribe'] ...)
@@ -599,10 +599,10 @@ if (($settings['access_for_users_only'] == 1
 						$further_tid = $redirect["counter"];
 						$further_id = $redirect["id"];
 						$further_page = 0;
-						if ((!empty($_SESSION[$setting['session_prefix'] .'curr_view'])
-								and $_SESSION[$setting['session_prefix'] .'curr_view'] == 'board')
-							or (!empty($_SESSION[$setting['session_prefix'] .'user_view'])
-								and $_SESSION[$setting['session_prefix'] .'user_view'] == 'board')
+						if ((!empty($_SESSION[$settings['session_prefix'] .'curr_view'])
+								and $_SESSION[$settings['session_prefix'] .'curr_view'] == 'board')
+							or (!empty($_SESSION[$settings['session_prefix'] .'user_view'])
+								and $_SESSION[$settings['session_prefix'] .'user_view'] == 'board')
 							or (!empty($_COOKIE['curr_view'])
 								and $_COOKIE['curr_view'] == 'board')
 							or (!empty($_COOKIE['user_view'])
@@ -711,10 +711,10 @@ if (($settings['access_for_users_only'] == 1
 								$further_tid = $field['counter'];
 								$further_id = $_POST['id'];
 								$further_page = 0;
-								if ((!empty($_SESSION[$setting['session_prefix'] .'curr_view'])
-								and $_SESSION[$setting['session_prefix'] .'curr_view'] == 'board')
-								or (!empty($_SESSION[$setting['session_prefix'] .'user_view'])
-								and $_SESSION[$setting['session_prefix'] .'user_view'] == 'board')
+								if ((!empty($_SESSION[$settings['session_prefix'] .'curr_view'])
+								and $_SESSION[$settings['session_prefix'] .'curr_view'] == 'board')
+								or (!empty($_SESSION[$settings['session_prefix'] .'user_view'])
+								and $_SESSION[$settings['session_prefix'] .'user_view'] == 'board')
 								or (!empty($_COOKIE['curr_view'])
 								and $_COOKIE['curr_view'] == 'board')
 								or (!empty($_COOKIE['user_view'])
@@ -972,13 +972,13 @@ if (($settings['access_for_users_only'] == 1
 							}
 						else
 							{
-							if ($setting['standard'] == 'thread')
+							if ($settings['standard'] == 'thread')
 								{
 								$header_href = 'forum.php';
 								}
 							else
 								{
-								$header_href = $setting['standard'] .'.php';
+								$header_href = $settings['standard'] .'.php';
 								}
 							}
 						header('location: '. $settings['forum_address'] . $header_href);
@@ -1034,7 +1034,7 @@ if (($settings['access_for_users_only'] == 1
 				}
 			else
 				{
-				$subnav1['href'] = ($setting['standard'] == 'thread') ? 'forum_entry.php' : $setting['standard'] .'_entry.php';
+				$subnav1['href'] = ($settings['standard'] == 'thread') ? 'forum_entry.php' : $settings['standard'] .'_entry.php';
 				$subnav1['linktext'] = !empty($oldMessage['name']) ? $lang['back_to_posting_linkname'] : $lang['back_linkname'];
 				}
 			$subnav['href'] .= !empty($_POST['id']) ? '?id='. intval($_POST['id']) : '?id='. intval($_GET['id']);
@@ -1058,26 +1058,26 @@ if (($settings['access_for_users_only'] == 1
 				}
 			else
 				{
-				if ($setting['standard'] == 'thread')
+				if ($settings['standard'] == 'thread')
 					{
 					$subnav1['href'] = 'forum.php';
 					}
 				else
 					{
-					$subnav1['href'] = $setting['standard'] .'.php';
+					$subnav1['href'] = $settings['standard'] .'.php';
 					}
 				}
 			$subnav1['linktext'] = $lang['back_to_overview_linkname'];
 			}
 		else
 			{
-			if ($setting['standard'] == 'thread')
+			if ($settings['standard'] == 'thread')
 				{
 				$subnav1['href'] = 'forum.php';
 				}
 			else
 				{
-				$subnav1['href'] = $setting['standard'] .'.php';
+				$subnav1['href'] = $settings['standard'] .'.php';
 				}
 			$subnav1['linktext'] = $lang['back_to_overview_linkname'];
 			}
