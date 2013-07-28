@@ -1119,6 +1119,11 @@ if (($settings['access_for_users_only'] == 1
 						$pageHeader = $lang['new_entry_marking'];
 						}
 					}
+				# error messages, if present:
+				if (isset($errors))
+					{
+					$errorMessages = errorMessages($errors);
+					}
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
