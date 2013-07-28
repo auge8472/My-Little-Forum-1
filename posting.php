@@ -1088,6 +1088,19 @@ if (($settings['access_for_users_only'] == 1
 		switch ($show)
 			{
 			case "form":
+				# generate a captcha in case of not signed on user and setting is on
+				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
+					&& $settings['captcha_posting'] == 1)
+					{
+					if ($settings['captcha_type'] == 1)
+						{
+						$_SESSION['captcha_session'] = $captcha->generate_code();
+						}
+					else
+						{
+						$_SESSION['captcha_session'] = $captcha->generate_math_captcha();
+						}
+					}
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
