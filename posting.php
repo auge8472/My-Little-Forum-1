@@ -1168,6 +1168,10 @@ if (($settings['access_for_users_only'] == 1
 						$prTemplate = file_get_contents('data/templates/posting.'. $settings['standard'] .'.html');
 						$isView = $settings['standard'];
 						}
+					$mark['admin'] = false;
+					$mark['mod'] = false;
+					$mark['user'] = false;
+					$prAuthorinfo = outputAuthorInfo($mark, $_POST, 0, 0, $isView);
 					} # End: if (isset($preview) && empty($errors))
 			break;
 			# End: switch ($show)->case "form"
