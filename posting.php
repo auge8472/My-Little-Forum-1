@@ -1172,6 +1172,7 @@ if (($settings['access_for_users_only'] == 1
 					$mark['mod'] = false;
 					$mark['user'] = false;
 					$prAuthorinfo = outputAuthorInfo($mark, $_POST, 0, 0, $isView);
+					$prSubject = htmlspecialchars($subject);
 					if (empty($_POST['text']))
 						{
 						$prText = $lang['no_text'];
