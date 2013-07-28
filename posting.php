@@ -1008,6 +1008,78 @@ if (($settings['access_for_users_only'] == 1
 			$lang['back_to_posting_linkname'] = str_replace("[name]", htmlspecialchars($oldMessage['name']), $lang['back_to_posting_linkname']);
 			$lang['answer_on_posting_marking'] = str_replace("[name]", htmlspecialchars($oldMessage['name']), $lang['answer_on_posting_marking']);
 			}
+		$subnav_1 = '';
+		if (($action == "new"
+		&& ((isset($_GET['id']) and $_GET['id'] > 0)
+			or (isset($_POST['id']) and $_POST['id'] > 0)))
+		|| $action == "edit"
+		|| $action == "delete")
+			{
+			if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+				and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+				{
+				if ($_SESSION[$settings['session_prefix'].'user_view'] == 'board'
+					or $_SESSION[$settings['session_prefix'].'user_view'] == 'mix')
+					{
+					$subnav1['href'] = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php';
+					$subnav1['linktext'] = $lang['back_to_topic_linkname'];
+					}
+				else
+					{
+					$subnav1['href'] = 'forum_entry.php';
+					$subnav1['linktext'] = !empty($oldMessage['name']) ? $lang['back_to_posting_linkname'] : $lang['back_linkname'];
+					}
+				}
+			else
+				{
+				$subnav1['href'] = ($setting['standard'] == 'thread') ? 'forum_entry.php' : $setting['standard'] .'_entry.php';
+				$subnav1['linktext'] = !empty($oldMessage['name']) ? $lang['back_to_posting_linkname'] : $lang['back_linkname'];
+				}
+			$subnav['href'] .= !empty($_POST['id']) ? '?id='. intval($_POST['id']) : '?id='. intval($_GET['id']);
+			}
+		else if ($action == "new"
+		&& ((isset($_GET['id']) and $_GET['id'] == 0)
+			or (isset($_POST['id']) and $_POST['id'] == 0)))
+			{
+			if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+				and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+				{
+				if ($_SESSION[$settings['session_prefix'].'user_view'] == 'board'
+					or $_SESSION[$settings['session_prefix'].'user_view'] == 'mix')
+					{
+					$subnav1['href'] = $_SESSION[$settings['session_prefix'].'user_view'] .'.php';
+					}
+				else
+					{
+					$subnav1['href'] = 'forum.php';
+					}
+				}
+			else
+				{
+				if ($setting['standard'] == 'thread')
+					{
+					$subnav1['href'] = 'forum.php';
+					}
+				else
+					{
+					$subnav1['href'] = $setting['standard'] .'.php';
+					}
+				}
+			$subnav1['linktext'] = $lang['back_to_overview_linkname'];
+			}
+		else
+			{
+			if ($setting['standard'] == 'thread')
+				{
+				$subnav1['href'] = 'forum.php';
+				}
+			else
+				{
+				$subnav1['href'] = $setting['standard'] .'.php';
+				}
+			$subnav1['linktext'] = $lang['back_to_overview_linkname'];
+			}
+		$subnav_1 = '<a class="textlink" href="'. $subnav1['href'].$subnav['query'] .'">'. htmlspecialchars($subnav1['linktext']) .'</a>';
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
 		{
