@@ -1101,6 +1101,24 @@ if (($settings['access_for_users_only'] == 1
 						$_SESSION['captcha_session'] = $captcha->generate_math_captcha();
 						}
 					}
+				# page header
+				if ($action == "edit")
+					{
+					$pageHeader = $lang['edit_marking'];
+					}
+				else
+					{
+					if ((isset($_GET['id']) and $_GET['id'] > 0)
+						or (isset($_POST['id']) and $_POST['id'] > 0))
+						{
+						$pageHeader = $lang['answer_marking'];
+						$addInfo = '<p class="postingforma">'.$lang['answer_on_posting_marking'].'</p>';
+						}
+					else
+						{
+						$pageHeader = $lang['new_entry_marking'];
+						}
+					}
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
