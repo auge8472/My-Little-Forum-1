@@ -1184,6 +1184,20 @@ if (($settings['access_for_users_only'] == 1
 						$prText = ($settings['smilies'] == 1) ? smilies($prText) : $prText;
 						$prText = zitat($prText);
 						}
+					if ($show_signature == 1
+					&& !empty($previewUserData['signature']))
+						{
+						$prSignature = $previewUserData['signature'];
+						$prSignature = $settings['signature_separator']."\n".$prSignature;
+						$prSignature = ($settings['autolink'] == 1) ? make_link($prSignature) : $prSignature;
+						$prSignature = ($settings['bbcode'] == 1) ? bbcode($prSignature) : $prSignature;
+						$prSignature = ($settings['smilies'] == 1) ? smilies($prSignature) : $prSignature;
+						$prSignature = '<div class="signature">'. $prSignature .'</div>'."\n";
+						}
+					else
+						{
+						$prSignature = '';
+						}
 					} # End: if (isset($preview) && empty($errors))
 			break;
 			# End: switch ($show)->case "form"
