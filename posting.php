@@ -1210,6 +1210,10 @@ if (($settings['access_for_users_only'] == 1
 					$prTemplate = str_replace('{threadheadline}', $prThreadHeadline, $prTemplate);
 					$prTemplate = str_replace('{thread}', $prThread, $prTemplate);
 					$prTemplate = str_replace('{postingID}', $entry['user_id'], $prTemplate);
+					$prTemplate = ($isView == 'board') ? '<table class="normaltab">'. $prTemplate .'</table>' : $prTemplate;
+					$previewOutput  = '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
+					$previewOutput .= $prTemplate;
+					$previewOutput .= '<hr class="entryline" />'."\n";
 					} # End: if (isset($preview) && empty($errors))
 			break;
 			# End: switch ($show)->case "form"
