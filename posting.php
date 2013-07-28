@@ -1126,6 +1126,31 @@ if (($settings['access_for_users_only'] == 1
 					{
 					$errorMessages = errorMessages($errors);
 					}
+				# preview:
+				if (isset($preview)
+				&& empty($errors))
+					{
+					if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+						{
+						if ($action != "edit")
+							{
+							$previewQuery = "SELECT
+							user_name,
+							user_email,
+							hide_email,
+							user_hp,
+							user_place,
+							signature
+							FROM ". $db_settings['userdata_table'] ."
+							WHERE user_id = '". intval($_SESSION[$settings['session_prefix']."user_id"]) ."'
+							LIMIT 1";
+							$previewResult = mysql_query($previewQuery, $connid);
+							if (!$preview_result) die($lang['db_error']);
+							$previewUserData = mysql_fetch_assoc($previewResult);
+							mysql_free_result($previewResult);
+							} # End: if ($action != "edit")
+						} # End: if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+					} # End: if (isset($preview) && empty($errors))
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
