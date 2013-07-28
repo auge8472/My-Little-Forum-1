@@ -1080,6 +1080,12 @@ if (($settings['access_for_users_only'] == 1
 			$subnav1['linktext'] = $lang['back_to_overview_linkname'];
 			}
 		$subnav_1 = '<a class="textlink" href="'. $subnav1['href'].$subnav['query'] .'">'. htmlspecialchars($subnav1['linktext']) .'</a>';
+
+		parse_template();
+		echo $header;
+		echo outputDebugSession();
+
+		echo $footer;
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
 		{
