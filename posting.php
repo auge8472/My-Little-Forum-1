@@ -1091,6 +1091,11 @@ if (($settings['access_for_users_only'] == 1
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
+				$output .= '<p class="caution">'. $lang['no_authorization'] .'</p>'."\n";
+				if (isset($reason))
+					{
+					$output .= '<p>'. $reason .'</p>'."\n";
+					}
 			break;
 			# End: switch ($show)->case "no authorization"
 			case "delete form":
