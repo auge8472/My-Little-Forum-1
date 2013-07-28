@@ -1103,6 +1103,8 @@ if (($settings['access_for_users_only'] == 1
 						$_SESSION['captcha_session'] = $captcha->generate_math_captcha();
 						}
 					}
+				# load template for posting form
+				$postingTemplate = file_get_contents('data/templates/posting.new.html');
 				# page header
 				if ($action == "edit")
 					{
