@@ -1084,7 +1084,20 @@ if (($settings['access_for_users_only'] == 1
 		parse_template();
 		echo $header;
 		echo outputDebugSession();
-
+		$output = '';
+		switch ($show)
+			{
+			case "form":
+			break;
+			# End: switch ($show)->case "form"
+			case "no authorization":
+			break;
+			# End: switch ($show)->case "no authorization"
+			case "delete form":
+			break;
+			# End: switch ($show)->case "delete form"
+			}
+		echo $output;
 		echo $footer;
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
