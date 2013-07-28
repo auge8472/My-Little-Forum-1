@@ -1201,6 +1201,15 @@ if (($settings['access_for_users_only'] == 1
 						}
 					$prThreadHeadline = ($isView == 'thread') ? $lang['whole_thread_marking'] : '';
 					$prThread = ($isView == 'thread') ? '...' : '';
+					$prTemplate = str_replace('{postingheadline}', $prSubject, $prTemplate);
+					$prTemplate = str_replace('{authorinfo}', $prAuthorinfo, $prTemplate);
+					$prTemplate = str_replace('{editmenu}', '', $prTemplate);
+					$prTemplate = str_replace('{answer-locked}', '', $prTemplate);
+					$prTemplate = str_replace('{posting}', $prText, $prTemplate);
+					$prTemplate = str_replace('{signature}', $prSignature, $prTemplate);
+					$prTemplate = str_replace('{threadheadline}', $prThreadHeadline, $prTemplate);
+					$prTemplate = str_replace('{thread}', $prThread, $prTemplate);
+					$prTemplate = str_replace('{postingID}', $entry['user_id'], $prTemplate);
 					} # End: if (isset($preview) && empty($errors))
 			break;
 			# End: switch ($show)->case "form"
