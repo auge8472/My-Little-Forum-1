@@ -830,11 +830,12 @@ if (($settings['access_for_users_only'] == 1
 						$editMessageQuery = "SELECT
 						tid,
 						pid,
-						user_id,
-						name,
-						email,
-						hp,
-						place,
+						t1.user_id,
+						IF(t1.user_id > 0, t2.user_name, t1.name) AS name,
+						IF(t1.user_id > 0, t2.user_email, t1.email) AS email,
+						IF(t1.user_id > 0, t2.user_hp, t1.hp) AS hp,
+						IF(t1.user_id > 0, t2.user_place, t1.place) AS place,
+						IF(t1.user_id > 0, t2.signature, '') AS signature,
 						subject,
 						category,
 						text,
@@ -844,8 +845,9 @@ if (($settings['access_for_users_only'] == 1
 						fixed,
 						UNIX_TIMESTAMP(time) AS time,
 						UNIX_TIMESTAMP(NOW() - INTERVAL ". $settings['edit_period'] ." MINUTE) AS edit_diff
-						FROM ". $db_settings['forum_table'] ."
-						WHERE id = ". intval($_GET['id']);
+						FROM ". $db_settings['forum_table'] ." AS t1 LEFT JOIN ". $db_settings['userdata_table'] ." AS t2
+							ON t2.user_id = t1.user_id
+						WHERE t1.id = ". intval($_GET['id']);
 						$editMessageResult = mysql_query($editMessageQuery, $connid);
 						if (!$editMessageResult) die($lang['db_error']);
 						$oldMessage = mysql_fetch_assoc($editMessageResult);
