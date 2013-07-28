@@ -1150,6 +1150,24 @@ if (($settings['access_for_users_only'] == 1
 							mysql_free_result($previewResult);
 							} # End: if ($action != "edit")
 						} # End: if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+					# load one of the templates for the preview
+					if (isset($_SESSION[$settings['session_prefix'].'user_view'])
+					and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+						{
+						$prTemplate = file_get_contents('data/templates/posting.'. $_SESSION[$settings['session_prefix'].'user_view'] .'.html');
+						$isView = $_SESSION[$settings['session_prefix'].'user_view'];
+						}
+					else if (isset($_COOKIE['user_view'])
+					and in_array($_COOKIE['user_view'], $possViews))
+						{
+						$prTemplate = file_get_contents('data/templates/posting.'. $_COOKIE['user_view'] .'.html');
+						$isView = $_COOKIE['user_view'];
+						}
+					else
+						{
+						$prTemplate = file_get_contents('data/templates/posting.'. $settings['standard'] .'.html');
+						$isView = $settings['standard'];
+						}
 					} # End: if (isset($preview) && empty($errors))
 			break;
 			# End: switch ($show)->case "form"
