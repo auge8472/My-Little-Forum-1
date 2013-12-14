@@ -11,7 +11,7 @@
 <input type="hidden" name="action" value="{postingAction}" />
 {fieldPID}{fieldUID}{fieldParentName}{fieldTID}{fieldSID}
 <table class="normal">
-{forUnregistered}{cookieBlock}{categorySelect}
+{forUnregistered}{categorySelect}
 <tr>
 <td><label for="subject">{labelSubject}</label></td>
 <td><input type="text" size="50" name="subject" id="subject" value="{postingSubject}" maxlength="{maxLenSubject}" /></td>
@@ -20,7 +20,7 @@
 </tr><tr>
 <td colspan="2"><div id="buttonspace">{bbCodeMarking}</div>
 <textarea cols="78" rows="20" name="text" id="text">{postingText}</textarea></td>
-</tr>{showSigature}{emailNotification}{fixThread}{showCaptcha}<tr>
+</tr>{showSignature}{emailNotification}{fixThread}{showCaptcha}<tr>
 <td colspan="2"><input type="submit" name="save_entry" value="{formSubmitValue}" title="{formSubmitTitle}" />&nbsp;
 <input type="submit" name="preview" value="{formPreviewValue}" title="{formPreviewTitle}" />&nbsp;
 <input type="reset" value="{formResetValue}" title="{formResetTitle}" /></td>
@@ -40,7 +40,7 @@
 </tr><tr>
 <td><label for="place">{labelPlace}</label></td>
 <td><input type="text" size="40" name="place" id="place" value="{postingPlace}" maxlength="{maxLenPlace}" />&nbsp;<span class="xsmall">{markOption}</span></td>
-</tr>]]>
+</tr>{cookieBlock}]]>
  </unregistered>
  <category><![CDATA[<tr>
 <td><label for="p_category">{labelCategory}</label></td>
@@ -65,9 +65,11 @@
  </privacyexp>
  <cookies><![CDATA[<tr>
 <td>&nbsp;</td>
-<td><span class="small"><input type="checkbox" name="setcookie" value="1" {formCheckSetCookie} />&nbsp;{rememberUserData}&nbsp;&nbsp;<a onclick="javascript:createPopup(this.href, 200, 150); return false;" href="delete_cookie.php" title="{deleteCookieTitle}"><img border="0" src="img/dc.png" name="dc" alt="" width="12" height="9" />{deleteCookieName}</a></span></td>
+<td><span class="small"><input type="checkbox" name="setcookie" value="1" {formCheckSetCookie} />&nbsp;{rememberUserData}{deleteExistingCookies}</span></td>
 </tr>]]>
  </cookies>
+ <deletecookies><![CDATA[&nbsp;&nbsp;<a onclick="javascript:createPopup(this.href, 200, 150); return false;" href="delete_cookie.php" title="{deleteCookieTitle}"><img border="0" src="img/delete.png" name="dc" alt="" width="12" height="9" />{deleteCookieName}</a>]]>
+ </deletecookies>
  <signature><![CDATA[<tr>
 <td colspan="2"><label for="show_signature"><input type="checkbox" name="show_signature" id="show_signature" value="1" {formCheckShowSignature} />&nbsp;{showSignatureName}</label></td>
 </tr>]]>
