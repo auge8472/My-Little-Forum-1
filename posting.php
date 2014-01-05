@@ -1104,7 +1104,9 @@ if (($settings['access_for_users_only'] == 1
 						}
 					}
 				# load template for posting form
-				$postingTemplate = file_get_contents('data/templates/posting.new.html');
+				$postingTFile = 'data/templates/posting.new.xml';
+				$postingTemplate = simplexml_load_file($postingTFile, null, LIBXML_NOCDATA);
+				$tBody = $xml->body;
 				# page header
 				if ($action == "edit")
 					{
