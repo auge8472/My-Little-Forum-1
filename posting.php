@@ -1229,6 +1229,14 @@ if (($settings['access_for_users_only'] == 1
 				$tBody = str_replace('{postingID}', isset($_GET['id']) ? intval($_GET['id']) : (isset($_POST['id']) ? intval($_POST['id']) : 0), $tBody);
 				$tBody = str_replace('{postingUniqueID}', uniqid(""), $tBody);
 				$tBody = str_replace('{postingAction}', htmlspecialchars($action), $tBody);
+				# set parents id if posting should be edited
+				$tParentID = '';
+				if ($action == 'edit')
+					{
+					$tParentID = $xml->parentid;
+					$tParentID = str_replace('{parentID}', isset($oldMessage['pid']) ? intval($oldMessage['pid']) : (isset($_POST['pid']) ? intval($_POST['pid']) : 0), $tParentID);
+					}
+				$tBody = str_replace('{fieldPID}', $tParentID, $tBody);
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
