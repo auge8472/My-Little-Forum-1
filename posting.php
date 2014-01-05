@@ -1226,6 +1226,9 @@ if (($settings['access_for_users_only'] == 1
 					$previewOutput .= '<hr class="entryline" />'."\n";
 					} # End: if (isset($preview) && empty($errors))
 				$tBody = str_replace('{preview}', $previewOutput, $tBody);
+				$tBody = str_replace('{postingID}', isset($_GET['id']) ? intval($_GET['id']) : (isset($_POST['id']) ? intval($_POST['id']) : 0), $tBody);
+				$tBody = str_replace('{postingUniqueID}', uniqid(""), $tBody);
+				$tBody = str_replace('{postingAction}', htmlspecialchars($action), $tBody);
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
