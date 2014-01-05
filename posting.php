@@ -1108,6 +1108,7 @@ if (($settings['access_for_users_only'] == 1
 				$postingTemplate = simplexml_load_file($postingTFile, null, LIBXML_NOCDATA);
 				$tBody = $xml->body;
 				# page header
+				$addInfo = '';
 				if ($action == "edit")
 					{
 					$pageHeader = $lang['edit_marking'];
@@ -1125,6 +1126,8 @@ if (($settings['access_for_users_only'] == 1
 						$pageHeader = $lang['new_entry_marking'];
 						}
 					}
+				$tBody = str_replace('{pageHeader}', $pageHeader, $tBody);
+				$tBody = str_replace('{additionalInfo}', $addInfo, $tBody);
 				# error messages, if present:
 				if (isset($errors))
 					{
