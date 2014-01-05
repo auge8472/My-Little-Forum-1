@@ -1245,7 +1245,7 @@ if (($settings['access_for_users_only'] == 1
 					$tParentUID = str_replace('{parentUserID}', !empty($oldMessage['user_id']) ? intval($oldMessage['user_id']) : 0, $tParentUID);
 					}
 				$tBody = str_replace('{fieldUID}', $tParentUID, $tBody);
-				# set user name of the parent posting if current one should be edited			
+				# set user name of the parent posting if current one should be edited
 				$tParentName = '';
 				if (isset($oldMessage['name']))
 					{
@@ -1253,6 +1253,14 @@ if (($settings['access_for_users_only'] == 1
 					$tParentName = str_replace('{parentName}', htmlspecialchars($oldMessage['name']), $tParentName);
 					}
 				$tBody = str_replace('{fieldParentName}', $tParentName, $tBody);
+				# set thread id if current postingis an answer or should be edited
+				$tThreadID = '';
+				if (isset($oldMessage['tid']))
+					{
+					$tThreadID = $xml->threadid;
+					$tThreadID = str_replace('{threadID}', intval($oldMessage['tid']), $tThreadID);
+					}
+				$tBody = str_replace('{fieldTID}', $tThreadID, $tBody);
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
