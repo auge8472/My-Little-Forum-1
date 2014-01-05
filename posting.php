@@ -1288,10 +1288,10 @@ if (($settings['access_for_users_only'] == 1
 					$tUnreg = str_replace('{maxLenEmail}', intval($settings['email_maxlength']), $tUnreg);
 					$tUnreg = str_replace('{maxLenHomepage}', intval($settings['hp_maxlength']), $tUnreg);
 					$tUnreg = str_replace('{maxLenPlace}', intval($settings['place_maxlength']), $tUnreg);
-					$tUnreg = str_replace('{postingName}', !empty($_POST['name']) : htmlspecialchars($_POST['name']) : '', $tUnreg);
-					$tUnreg = str_replace('{postingEmail}', !empty($_POST['email']) : htmlspecialchars($_POST['email']) : '', $tUnreg);
-					$tUnreg = str_replace('{postingHomepage}', !empty($_POST['hp']) : htmlspecialchars($_POST['hp']) : '', $tUnreg);
-					$tUnreg = str_replace('{postingPlace}', !empty($_POST['place']) : htmlspecialchars($_POST['place']) : '', $tUnreg);
+					$tUnreg = str_replace('{postingName}', !empty($_POST['name']) ? htmlspecialchars($_POST['name']) : '', $tUnreg);
+					$tUnreg = str_replace('{postingEmail}', !empty($_POST['email']) ? htmlspecialchars($_POST['email']) : '', $tUnreg);
+					$tUnreg = str_replace('{postingHomepage}', !empty($_POST['hp']) ? htmlspecialchars($_POST['hp']) : '', $tUnreg);
+					$tUnreg = str_replace('{postingPlace}', !empty($_POST['place']) ? htmlspecialchars($_POST['place']) : '', $tUnreg);
 					# cookies controls
 					$tCookies = '';
 					if ($settings['remember_userdata'] == 1
