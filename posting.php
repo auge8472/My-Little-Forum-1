@@ -1271,6 +1271,51 @@ if (($settings['access_for_users_only'] == 1
 					$tSessionID = str_replace('{sessionID}', session_id(), $tSessionID);
 					}
 				$tBody = str_replace('{fieldSID}', $tSessionID, $tBody);
+				# form fields for a new posting of an unregistered visitor
+				# respectively editing a posting of an unregistered visitor
+				$tUnreg = '';
+				if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
+					or ($action == "edit"
+					and $oldMessage['user_id'] == 0))
+					{
+					$tUnreg = $xml->unregistered;
+					$tUnreg = str_replace('{markOption}', $lang['optional_marking'], $tUnreg);
+					$tUnreg = str_replace('{labelName}', $lang['name_marking'], $tUnreg);
+					$tUnreg = str_replace('{labelEmail}', $lang['email_marking'], $tUnreg);
+					$tUnreg = str_replace('{labelHomepage}', $lang['hp_marking'], $tUnreg);
+					$tUnreg = str_replace('{labelPlace}', $lang['place_marking'], $tUnreg);
+					$tUnreg = str_replace('{maxLenName}', intval($settings['name_maxlength']), $tUnreg);
+					$tUnreg = str_replace('{maxLenEmail}', intval($settings['email_maxlength']), $tUnreg);
+					$tUnreg = str_replace('{maxLenHomepage}', intval($settings['hp_maxlength']), $tUnreg);
+					$tUnreg = str_replace('{maxLenPlace}', intval($settings['place_maxlength']), $tUnreg);
+					$tUnreg = str_replace('{postingName}', !empty($_POST['name']) : htmlspecialchars($_POST['name']) : '', $tUnreg);
+					$tUnreg = str_replace('{postingEmail}', !empty($_POST['email']) : htmlspecialchars($_POST['email']) : '', $tUnreg);
+					$tUnreg = str_replace('{postingHomepage}', !empty($_POST['hp']) : htmlspecialchars($_POST['hp']) : '', $tUnreg);
+					$tUnreg = str_replace('{postingPlace}', !empty($_POST['place']) : htmlspecialchars($_POST['place']) : '', $tUnreg);
+					# cookies controls
+					$tCookies = '';
+					if ($settings['remember_userdata'] == 1
+					&& !isset($_SESSION[$settings['session_prefix'].'user_id']))
+						{
+						$tCookies = $xml->cookies;
+						$tCookies = str_replace('{formCheckSetCookie}', (isset($_POST['setcookie']) && $_POST['setcookie'] == 1) ? ' checked="checked"' : '', $tCookies);
+						$tCookies = str_replace('{rememberUserData}', $lang['remember_userdata_cbm'], $tCookies);
+						# cookies content, if cookies was set before
+						$tCookiesDel = '';
+						if (isset($_COOKIE['user_name'])
+							or isset($_COOKIE['user_email'])
+							or isset($_COOKIE['user_hp'])
+							or isset($_COOKIE['user_hp']))
+							{
+							$tCookiesDel = $xml->deletecookies;
+							$tCookiesDel = str_replace('{deleteCookieTitle}', outputLangDebugInAttributes($lang['delete_cookies_linktitle']), $tCookiesDel);
+							$tCookiesDel = str_replace('{deleteCookieName}', $lang['delete_cookies_linkname'], $tCookiesDel);
+							} # End: if (isset($_COOKIE['user_name']) ...)
+						$tCookies = str_replace('{deleteExistingCookies}', $tCookiesDel, $tCookies);
+						} # End: if ($settings['remember_userdata'] == 1 ...)
+					$tUnreg = str_replace('{cookieBlock}', $tCookies, $tUnreg);
+					} # End: if (!isset($_SESSION[$settings['session_prefix'].'user_id']) ...)
+				$tBody = str_replace('{forUnregistered}', $tUnreg, $tBody);
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
