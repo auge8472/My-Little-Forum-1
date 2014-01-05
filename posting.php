@@ -1129,10 +1129,12 @@ if (($settings['access_for_users_only'] == 1
 				$tBody = str_replace('{pageHeader}', $pageHeader, $tBody);
 				$tBody = str_replace('{additionalInfo}', $addInfo, $tBody);
 				# error messages, if present:
+				$errorMessages = '';
 				if (isset($errors))
 					{
 					$errorMessages = errorMessages($errors);
 					}
+				$tBody = str_replace('{errorMessages}', $errorMessages, $tBody);
 				# preview:
 				if (isset($preview)
 				&& empty($errors))
