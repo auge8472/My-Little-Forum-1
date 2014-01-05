@@ -1106,7 +1106,7 @@ if (($settings['access_for_users_only'] == 1
 				# load template for posting form
 				$postingTFile = 'data/templates/posting.new.xml';
 				$postingTemplate = simplexml_load_file($postingTFile, null, LIBXML_NOCDATA);
-				$tBody = $xml->body;
+				$tBody = $postingTemplate->body;
 				# page header
 				$addInfo = '';
 				if ($action == "edit")
@@ -1233,7 +1233,7 @@ if (($settings['access_for_users_only'] == 1
 				$tParentID = '';
 				if ($action == 'edit')
 					{
-					$tParentID = $xml->parentid;
+					$tParentID = $postingTemplate->parentid;
 					$tParentID = str_replace('{parentID}', isset($oldMessage['pid']) ? intval($oldMessage['pid']) : (isset($_POST['pid']) ? intval($_POST['pid']) : 0), $tParentID);
 					}
 				$tBody = str_replace('{fieldPID}', $tParentID, $tBody);
@@ -1241,7 +1241,7 @@ if (($settings['access_for_users_only'] == 1
 				$tParentUID = '';
 				if (isset($oldMessage['user_id']))
 					{
-					$tParentUID = $xml->parentuserid;
+					$tParentUID = $postingTemplate->parentuserid;
 					$tParentUID = str_replace('{parentUserID}', !empty($oldMessage['user_id']) ? intval($oldMessage['user_id']) : 0, $tParentUID);
 					}
 				$tBody = str_replace('{fieldUID}', $tParentUID, $tBody);
@@ -1249,7 +1249,7 @@ if (($settings['access_for_users_only'] == 1
 				$tParentName = '';
 				if (isset($oldMessage['name']))
 					{
-					$tParentName = $xml->parentname;
+					$tParentName = $postingTemplate->parentname;
 					$tParentName = str_replace('{parentName}', htmlspecialchars($oldMessage['name']), $tParentName);
 					}
 				$tBody = str_replace('{fieldParentName}', $tParentName, $tBody);
@@ -1257,7 +1257,7 @@ if (($settings['access_for_users_only'] == 1
 				$tThreadID = '';
 				if (isset($oldMessage['tid']))
 					{
-					$tThreadID = $xml->threadid;
+					$tThreadID = $postingTemplate->threadid;
 					$tThreadID = str_replace('{threadID}', intval($oldMessage['tid']), $tThreadID);
 					}
 				$tBody = str_replace('{fieldTID}', $tThreadID, $tBody);
@@ -1266,7 +1266,7 @@ if (($settings['access_for_users_only'] == 1
 				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
 					and $settings['captcha_posting'] == 1)
 					{
-					$tSessionID = $xml->sessionid;
+					$tSessionID = $postingTemplate->sessionid;
 					$tSessionID = str_replace('{sessionName}', session_name(), $tSessionID);
 					$tSessionID = str_replace('{sessionID}', session_id(), $tSessionID);
 					}
@@ -1278,7 +1278,7 @@ if (($settings['access_for_users_only'] == 1
 					or ($action == "edit"
 					and $oldMessage['user_id'] == 0))
 					{
-					$tUnreg = $xml->unregistered;
+					$tUnreg = $postingTemplate->unregistered;
 					$tUnreg = str_replace('{markOption}', $lang['optional_marking'], $tUnreg);
 					$tUnreg = str_replace('{labelName}', $lang['name_marking'], $tUnreg);
 					$tUnreg = str_replace('{labelEmail}', $lang['email_marking'], $tUnreg);
@@ -1297,7 +1297,7 @@ if (($settings['access_for_users_only'] == 1
 					if ($settings['remember_userdata'] == 1
 					&& !isset($_SESSION[$settings['session_prefix'].'user_id']))
 						{
-						$tCookies = $xml->cookies;
+						$tCookies = $postingTemplate->cookies;
 						$tCookies = str_replace('{formCheckSetCookie}', (isset($_POST['setcookie']) && $_POST['setcookie'] == 1) ? ' checked="checked"' : '', $tCookies);
 						$tCookies = str_replace('{rememberUserData}', $lang['remember_userdata_cbm'], $tCookies);
 						# cookies content, if cookies was set before
@@ -1307,7 +1307,7 @@ if (($settings['access_for_users_only'] == 1
 							or isset($_COOKIE['user_hp'])
 							or isset($_COOKIE['user_hp']))
 							{
-							$tCookiesDel = $xml->deletecookies;
+							$tCookiesDel = $postingTemplate->deletecookies;
 							$tCookiesDel = str_replace('{deleteCookieTitle}', outputLangDebugInAttributes($lang['delete_cookies_linktitle']), $tCookiesDel);
 							$tCookiesDel = str_replace('{deleteCookieName}', $lang['delete_cookies_linkname'], $tCookiesDel);
 							} # End: if (isset($_COOKIE['user_name']) ...)
