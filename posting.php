@@ -1261,6 +1261,16 @@ if (($settings['access_for_users_only'] == 1
 					$tThreadID = str_replace('{threadID}', intval($oldMessage['tid']), $tThreadID);
 					}
 				$tBody = str_replace('{fieldTID}', $tThreadID, $tBody);
+				# set the session id if necessary
+				$tSessionID = '';
+				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
+					and $settings['captcha_posting'] == 1)
+					{
+					$tSessionID = $xml->sessionid;
+					$tSessionID = str_replace('{sessionName}', session_name(), $tSessionID);
+					$tSessionID = str_replace('{sessionID}', session_id(), $tSessionID);
+					}
+				$tBody = str_replace('{fieldSID}', $tSessionID, $tBody);
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
