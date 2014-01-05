@@ -583,7 +583,7 @@ if (($settings['access_for_users_only'] == 1
 						FROM ".$db_settings['userdata_table']."
 						WHERE user_type IN('admin', 'mod')
 							AND new_posting_notify = '1'";
-						$en_result = mysql_query(, $connid);
+						$en_result = mysql_query($listAdminModEmailQuery, $connid);
 						if (!$en_result) die($lang['db_error']);
 						while ($admin_array = mysql_fetch_assoc($en_result))
 							{
