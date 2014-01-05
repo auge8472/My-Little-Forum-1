@@ -316,7 +316,7 @@ if (($settings['access_for_users_only'] == 1
 				}
 			# check the given email address for format name@example.com
 			# regular expression: see functions/funcs.processing.php
-			if (!empty($_POST['email']))
+			if (!empty($_POST['email'])
 				and !preg_match($validator['email'], $_POST['email']))
 				{
 				$errors[] = $lang['error_email_wrong'];
