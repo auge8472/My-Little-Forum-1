@@ -1136,6 +1136,7 @@ if (($settings['access_for_users_only'] == 1
 					}
 				$tBody = str_replace('{errorMessages}', $errorMessages, $tBody);
 				# preview:
+				$previewOutput = '';
 				if (isset($preview)
 				&& empty($errors))
 					{
@@ -1220,10 +1221,11 @@ if (($settings['access_for_users_only'] == 1
 					$prTemplate = str_replace('{thread}', $prThread, $prTemplate);
 					$prTemplate = str_replace('{postingID}', $entry['user_id'], $prTemplate);
 					$prTemplate = ($isView == 'board') ? '<table class="normaltab">'. $prTemplate .'</table>' : $prTemplate;
-					$previewOutput  = '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
+					$previewOutput .= '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
 					$previewOutput .= $prTemplate;
 					$previewOutput .= '<hr class="entryline" />'."\n";
 					} # End: if (isset($preview) && empty($errors))
+				$tBody = str_replace('{preview}', $previewOutput, $tBody);
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
