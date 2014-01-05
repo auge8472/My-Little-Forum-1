@@ -1245,6 +1245,14 @@ if (($settings['access_for_users_only'] == 1
 					$tParentUID = str_replace('{parentUserID}', !empty($oldMessage['user_id']) ? intval($oldMessage['user_id']) : 0, $tParentUID);
 					}
 				$tBody = str_replace('{fieldUID}', $tParentUID, $tBody);
+				# set user name of the parent posting if current one should be edited			
+				$tParentName = '';
+				if (isset($oldMessage['name']))
+					{
+					$tParentName = $xml->parentname;
+					$tParentName = str_replace('{parentName}', htmlspecialchars($oldMessage['name']), $tParentName);
+					}
+				$tBody = str_replace('{fieldParentName}', $tParentName, $tBody);
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
