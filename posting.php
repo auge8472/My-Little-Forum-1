@@ -1345,6 +1345,10 @@ if (($settings['access_for_users_only'] == 1
 					$tCats = str_replace('{selectCategory}', $categorySelect, $tCats);
 					}
 				$tBody = str_replace('{categorySelect}', $tCats, $tBody);
+				# set subject fields
+				$tBody = str_replace('{labelSubject}', htmlspecialchars($lang['subject_marking']), $tBody);
+				$tBody = str_replace('{maxLenSubject}', htmlspecialchars($settings['subject_maxlength']), $tBody);
+				$tBody = str_replace('{postingSubject}', isset($oldMessage['subject']) ? htmlspecialchars($oldMessage['subject']) : (!empty($_POST['subject']) ? htmlspecialchars($_POST['subject']) : ''), $tBody);
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
