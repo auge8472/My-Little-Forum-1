@@ -1349,6 +1349,11 @@ if (($settings['access_for_users_only'] == 1
 				$tBody = str_replace('{labelSubject}', htmlspecialchars($lang['subject_marking']), $tBody);
 				$tBody = str_replace('{maxLenSubject}', htmlspecialchars($settings['subject_maxlength']), $tBody);
 				$tBody = str_replace('{postingSubject}', isset($oldMessage['subject']) ? htmlspecialchars($oldMessage['subject']) : (!empty($_POST['subject']) ? htmlspecialchars($_POST['subject']) : ''), $tBody);
+				# set posting text
+				$tBody = str_replace('{labelText}', htmlspecialchars($lang['text_marking']), $tBody);
+				$tBody = str_replace('{deleteOldPostingText}', htmlspecialchars($lang['delete_quoted_text']), $tBody);
+				$tBody = str_replace('{bbCodeMarking}', $lang['bbcode_marking_user'], $tBody);
+				$tBody = str_replace('{postingText}', isset($oldMessage['text']) ? htmlspecialchars($oldMessage['text']) : (!empty($_POST['text']) ? htmlspecialchars($_POST['text']) : ''), $tBody);
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
