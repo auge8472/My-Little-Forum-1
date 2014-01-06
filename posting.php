@@ -1316,6 +1316,35 @@ if (($settings['access_for_users_only'] == 1
 					$tUnreg = str_replace('{cookieBlock}', $tCookies, $tUnreg);
 					} # End: if (!isset($_SESSION[$settings['session_prefix'].'user_id']) ...)
 				$tBody = str_replace('{forUnregistered}', $tUnreg, $tBody);
+				# category select in presence of categories				
+				$tCats = '';
+				if ($categories !== false)
+					{
+					# temporary array for categories for use in function outputMakeSelect
+					$tempCategories = array();
+					if ((empty($_GET['id']) or $_GET['id'] == 0)
+						or (empty($_POST['id']) or $_POST['id'] == 0)
+						or ($action == "edit" and isset($oldMessage['pid']) and $oldMessage['pid'] == 0))
+						{
+						foreach ($categories as $key => $val)
+							{
+							if ($key > 0)
+								{
+								$tempCategories[] = array('id' => $key, 'name' => $val);
+								}
+							}
+						}
+					else
+						{
+						$tempCategories[] = array('id' => $oldMessage['category'], 'name' => $categories[$oldMessage['category']]);
+						}
+					$selectedCategory =  isset($oldMessage['category']) ? intval($oldMessage['category']) : (!empty($_POST['p_category']) ? intval($_POST['p_category']) : '');
+					$categorySelect = outputMakeSelect($tempCategories, 'p_category', $selectedCategory);
+					$tCats = $postingTemplate->category;
+					$tCats = str_replace('{labelCategory}', $lang['category_marking'], $tCats);
+					$tCats = str_replace('{selectCategory}', $categorySelect, $tCats);
+					}
+				$tBody = str_replace('{categorySelect}', $tCats, $tBody);
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
