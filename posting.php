@@ -1354,6 +1354,20 @@ if (($settings['access_for_users_only'] == 1
 				$tBody = str_replace('{deleteOldPostingText}', htmlspecialchars($lang['delete_quoted_text']), $tBody);
 				$tBody = str_replace('{bbCodeMarking}', $lang['bbcode_marking_user'], $tBody);
 				$tBody = str_replace('{postingText}', isset($oldMessage['text']) ? htmlspecialchars($oldMessage['text']) : (!empty($_POST['text']) ? htmlspecialchars($_POST['text']) : ''), $tBody);
+				$tSignature = '';
+				if (($show_signature == 1
+					and (isset($_SESSION[$settings['session_prefix'].'user_id'])
+						and $action == "new"))
+					or (isset($_SESSION[$settings['session_prefix'].'user_id'])
+						and $action == "edit"
+						and $oldMessage['show_signature'] == 1))
+					{
+					$tSignature = $postingTemplate->signature;
+					$signatureCheck = ($show_signature == 1 or (isset($oldMessage['show_signature']) && $oldMessage['show_signature'] == 1) or (!empty($_POST['show_signature']) and $_POST['show_signature'] == 1)) ? ' checked="checked"' : '';
+					$tSignature = str_replace('{formCheckShowSignature}', $signatureCheck, $tSignature);
+					$tSignature = str_replace('{showSignatureName}', htmlspecialchars($lang['show_signature_cbm']), $tSignature);
+					}
+				$tBody = str_replace('{showSignature}', $tSignature, $tBody);
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
