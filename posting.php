@@ -1377,6 +1377,16 @@ if (($settings['access_for_users_only'] == 1
 					$tNotify = str_replace('{labelEmailNotify}', htmlspecialchars($lang['email_notification_cbm']), $tNotify);
 					}
 				$tBody = str_replace('{emailNotification}', $tNotify, $tBody);
+				# set the privacy explanation
+				$tPrivacy = '';
+				if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
+					or (isset($_SESSION[$settings['session_prefix'].'user_id'])
+						and $action == "edit"))
+					{
+					$tPrivacy = $postingTemplate->privacyexp;
+					$tPrivacy = str_replace('{emailPrivacyExplanation}', htmlspecialchars($lang['email_exp']), $tPrivacy);
+					}
+				$tBody = str_replace('{privacyExplanation}', $tPrivacy, $tBody);
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
