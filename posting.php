@@ -1354,6 +1354,7 @@ if (($settings['access_for_users_only'] == 1
 				$tBody = str_replace('{deleteOldPostingText}', htmlspecialchars($lang['delete_quoted_text']), $tBody);
 				$tBody = str_replace('{bbCodeMarking}', $lang['bbcode_marking_user'], $tBody);
 				$tBody = str_replace('{postingText}', isset($oldMessage['text']) ? htmlspecialchars($oldMessage['text']) : (!empty($_POST['text']) ? htmlspecialchars($_POST['text']) : ''), $tBody);
+				# set the switch for signature
 				$tSignature = '';
 				if (($show_signature == 1
 					and (isset($_SESSION[$settings['session_prefix'].'user_id'])
@@ -1368,6 +1369,7 @@ if (($settings['access_for_users_only'] == 1
 					$tSignature = str_replace('{showSignatureName}', htmlspecialchars($lang['show_signature_cbm']), $tSignature);
 					}
 				$tBody = str_replace('{showSignature}', $tSignature, $tBody);
+				# set the switch for email notification about answers
 				$tNotify = '';
 				if ($settings['email_notification'] == 1)
 					{
