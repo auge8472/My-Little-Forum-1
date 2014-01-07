@@ -1368,6 +1368,15 @@ if (($settings['access_for_users_only'] == 1
 					$tSignature = str_replace('{showSignatureName}', htmlspecialchars($lang['show_signature_cbm']), $tSignature);
 					}
 				$tBody = str_replace('{showSignature}', $tSignature, $tBody);
+				$tNotify = '';
+				if ($settings['email_notification'] == 1)
+					{
+					$tNotify = $postingTemplate->notification;
+					$notificationCheck = ((isset($oldMessage['email_notify']) and $oldMessage['email_notify'] == 1) or (isset($_POST['email_notify']) and $_POST['email_notify'] == 1)) ? ' checked="checked"' : '';
+					$tNotify = str_replace('{formCheckEmailNotify}', $notificationCheck, $tNotify);
+					$tNotify = str_replace('{labelEmailNotify}', htmlspecialchars($lang['email_notification_cbm']), $tNotify);
+					}
+				$tBody = str_replace('{emailNotification}', $tNotify, $tBody);
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
