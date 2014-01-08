@@ -1392,6 +1392,13 @@ if (($settings['access_for_users_only'] == 1
 					$tFixed = str_replace('{labelFixThread}', htmlspecialchars($lang['fix_thread']), $tFixed);
 					}
 				$tBody = str_replace('{fixThread}', $tFixed, $tBody);
+				# label the buttons
+				$tBody = str_replace('{formSubmitValue}', outputLangDebugInAttributes($lang['submit_button']), $tBody);
+				$tBody = str_replace('{formSubmitTitle}', outputLangDebugInAttributes($lang['submit_button_title']), $tBody);
+				$tBody = str_replace('{formPreviewValue}', outputLangDebugInAttributes($lang['preview_button']), $tBody);
+				$tBody = str_replace('{formPreviewTitle}', outputLangDebugInAttributes($lang['preview_button_title']), $tBody);
+				$tBody = str_replace('{formResetValue}', outputLangDebugInAttributes($lang['reset_button']), $tBody);
+				$tBody = str_replace('{formResetTitle}', outputLangDebugInAttributes($lang['reset_button_title']), $tBody);
 				# set the privacy explanation
 				$tPrivacy = '';
 				if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
