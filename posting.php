@@ -1379,6 +1379,19 @@ if (($settings['access_for_users_only'] == 1
 					$tNotify = str_replace('{labelEmailNotify}', htmlspecialchars($lang['email_notification_cbm']), $tNotify);
 					}
 				$tBody = str_replace('{emailNotification}', $tNotify, $tBody);
+				# set the switch to fix threads
+				$tFixed = '';
+				if (isset($_SESSION[$settings['session_prefix'].'user_type'])
+					and ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
+						or $_SESSION[$settings['session_prefix'].'user_type'] == "mod")
+					and $postingID == 0)
+					{
+					$tFixed = $postingTemplate->fixthread;
+					$fixedCheck = ((isset($oldMessage['fixed']) and $oldMessage['fixed'] == 1) or (isset($_POST['fixed']) and $_POST['fixed'] == 1)) ? ' checked="checked"' : '';
+					$tFixed = str_replace('{formCheckFixThread}', $fixedCheck, $tFixed);
+					$tFixed = str_replace('{labelFixThread}', htmlspecialchars($lang['fix_thread']), $tFixed);
+					}
+				$tBody = str_replace('{fixThread}', $tFixed, $tBody);
 				# set the privacy explanation
 				$tPrivacy = '';
 				if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
