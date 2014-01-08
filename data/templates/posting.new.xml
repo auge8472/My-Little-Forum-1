@@ -71,15 +71,15 @@
  <deletecookies><![CDATA[&nbsp;&nbsp;<a onclick="javascript:createPopup(this.href, 200, 150); return false;" href="delete_cookie.php" title="{deleteCookieTitle}"><img border="0" src="img/delete.png" name="dc" alt="" width="12" height="9" />{deleteCookieName}</a>]]>
  </deletecookies>
  <signature><![CDATA[<tr>
-<td colspan="2"><label for="show_signature"><input type="checkbox" name="show_signature" id="show_signature" value="1" {formCheckShowSignature} />&nbsp;{showSignatureName}</label></td>
+<td colspan="2"><label for="show_signature"><input type="checkbox" name="show_signature" id="show_signature" value="1"{formCheckShowSignature} />&nbsp;{showSignatureName}</label></td>
 </tr>]]>
  </signature>
  <notification><![CDATA[<tr>
-<td colspan="2"><label for="email_notify"><input type="checkbox" name="email_notify" id="email_notify" value="1" {formCheckEmailNotify} />&nbsp;{labelEmailNotify}</label></td>
+<td colspan="2"><label for="email_notify"><input type="checkbox" name="email_notify" id="email_notify" value="1"{formCheckEmailNotify} />&nbsp;{labelEmailNotify}</label></td>
 </tr>]]>
  </notification>
  <fixthread><![CDATA[<tr>
-<td colspan="2"><label for="fixed"><input type="checkbox" name="fixed" id="fixed" value="1" {formCheckFixThread} />&nbsp;{labelFixThread}</label></td>
+<td colspan="2"><label for="fixed"><input type="checkbox" name="fixed" id="fixed" value="1"{formCheckFixThread} />&nbsp;{labelFixThread}</label></td>
 </tr>]]>
  </fixthread>
  <sessionid><![CDATA[<input type="hidden" name="{sessionName}" value="{sessionID}" />]]>
