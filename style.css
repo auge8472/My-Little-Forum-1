@@ -127,8 +127,7 @@ form { display: inline; }
 margin:0;
 overflow: hidden;
 background: #ecf2f8;
-background: -moz-linear-gradient(top, #ccd8ea 0%, #ecf2f8 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ccd8ea), color-stop(100%,#ecf2f8)); /* Chrome,Safari4+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ccd8ea), color-stop(100%,#ecf2f8)); /* Chrome, Safari4+ */
 background: -webkit-linear-gradient(top, #ccd8ea 0%, #ecf2f8 100%); /* Chrome10+, Safari5.1+ */
 background: -o-linear-gradient(top, #ccd8ea 0%, #ecf2f8 100%); /* Opera 11.10+ */
 background: linear-gradient(to bottom, #ccd8ea 0%, #ecf2f8 100%); /* W3C new */
@@ -231,7 +230,6 @@ margin: 0;
 padding: 0;
 color: #000;
 background: #ecf2f8;
-background: -moz-linear-gradient(top, #ecf2f8 0%, #ccd8ea 100%);
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ecf2f8), color-stop(100%,#ccd8ea));
 background: -webkit-linear-gradient(top, #ecf2f8 0%, #ccd8ea 100%);
 background: -o-linear-gradient(top, #ecf2f8 0%, #ccd8ea 100%);
@@ -458,7 +456,6 @@ border: 1px solid #aaa;
 border-radius: 5px;
 overflow: hidden;
 background: #ddd;
-background: -moz-linear-gradient(top, #eee 0%, #ccc 100%);
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eee), color-stop(100%,#ccc));
 background: -webkit-linear-gradient(top, #eee 0%, #ccc 100%);
 background: -o-linear-gradient(top, #eee 0%, #ccc 100%);
@@ -619,7 +616,6 @@ width: 10em;
 padding: 5px 7px 5px 7px;
 color: #000;
 background:#d2ddea;
-background: -moz-linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
 background: -webkit-gradient(linear, left top, right top, color-stop(0%,#d2ddea), color-stop(100%,#ecf2f8));
 background: -webkit-linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
 background: -o-linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
@@ -635,7 +631,6 @@ height:1.6em;
 font-size: 1em;
 color: #000;
 background: #d2ddea;
-background: -moz-linear-gradient(top, #d2ddea 0%, #ecf2f8 100%);
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d2ddea), color-stop(100%,#ecf2f8));
 background: -webkit-linear-gradient(top, #d2ddea 0%, #ecf2f8 100%);
 background: -o-linear-gradient(top, #d2ddea 0%, #ecf2f8 100%);
@@ -696,7 +691,6 @@ border-collapse: collapse;
 }
 table.normaltab thead {
 background: #ecf2f8;
-background: -moz-linear-gradient(top, #ccd8ea 0%, #ecf2f8 100%);
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ccd8ea), color-stop(100%,#ecf2f8));
 background: -webkit-linear-gradient(top, #ccd8ea 0%, #ecf2f8 100%);
 background: -o-linear-gradient(top, #ccd8ea 0%, #ecf2f8 100%);
@@ -750,7 +744,6 @@ padding: 3px;
 table.admin td:first-child {
 width:18em;
 background: #d2ddea;
-background: -moz-linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
 background: -webkit-gradient(linear, left top, right top, color-stop(0%,#d2ddea), color-stop(100%,#ecf2f8));
 background: -webkit-linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
 background: -o-linear-gradient(left, #d2ddea 0%, #ecf2f8 100%);
@@ -782,7 +775,6 @@ border-bottom: none;
 border-radius: 8px 8px 0 0;
 color: #004;
 background: #ecf2f8;
-background: -moz-linear-gradient(top, #ecf2f8 0%, #ccd8ea 100%);
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ecf2f8), color-stop(100%,#ccd8ea));
 background: -webkit-linear-gradient(top, #ecf2f8 0%, #ccd8ea 100%);
 background: -o-linear-gradient(top, #ecf2f8 0%, #ccd8ea 100%);
@@ -796,7 +788,6 @@ color: #00b;
 text-shadow: 1px 1px 0px #fff;
 text-decoration: underline;
 background: #f0f6ff;
-background: -moz-linear-gradient(top, #f0f6ff 0%, #d5dcf2 100%);
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f0f6ff), color-stop(100%,#d5dcf2));
 background: -webkit-linear-gradient(top, #f0f6ff 0%, #d5dcf2 100%);
 background: -o-linear-gradient(top, #f0f6ff 0%, #d5dcf2 100%);
@@ -812,7 +803,6 @@ border-radius: 8px 8px 0 0;
 color: #000;
 text-shadow: 1px 1px 0px #fff;
 background: #f8ffb8;
-background: -moz-linear-gradient(top, #f8ffb8 0%, #a0fec0 100%);
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f8ffb8), color-stop(100%,#a0fec0));
 background: -webkit-linear-gradient(top, #f8ffb8 0%, #a0fec0 100%);
 background: -o-linear-gradient(top, #f8ffb8 0%, #a0fec0 100%);
