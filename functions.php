@@ -622,9 +622,7 @@ $template = str_replace("{USER-MENU}",$user_menu,$template);
 
 // Search:
 $search_dump = "\n".'<form action="search.php" method="get" title="'.strip_tags($lang['search_formtitle']).'"><div class="search">'."\n";
-$search_dump .= '<label for="search">'.$lang['search_marking'].'&nbsp;</label>';
-# if (isset($search)) $search_match = htmlspecialchars(stripslashes($search)); else $search_match = "";
-$search_dump .= '<input class="searchfield" type="text" id="search" name="search" value="" size="20" />&nbsp;<input type="image" name="" src="img/submit.gif" alt="&raquo;" /></div></form>'."\n";
+$search_dump .= '<input class="searchfield" type="text" id="search" name="search" value="" size="20" /><button type="submit" name=""><span class="fa fa-search">&nbsp;</span>'.$lang['search_marking'].'</button></div></form>'."\n";
 $template = str_replace("{SEARCH}",$search_dump,$template);
 
 // Sub navigation:
@@ -642,7 +640,7 @@ $template = str_replace("{COUNTER}",$counter,$template);
 if ($settings['provide_rssfeed'] == 1 && $settings['access_for_users_only'] == 0) 
 	{ 
 	$rss_feed_link = '<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="rss.php" />';
-	$rss_feed_button = '<a href="rss.php"><img src="img/rss.png" width="14" height="14" alt="RSS Feed" /></a><br />'; 
+	$rss_feed_button = '<a href="rss.php"><span class="fa fa-rss-square">&nbsp;</span>RSS Feed</a><br />'; 
 	}
 else 
 	{
