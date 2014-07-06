@@ -776,7 +776,7 @@ if (($settings['access_for_users_only'] == 1
 						}
 					$show_signature = 1;
 					# if message is a reply:
-					if (intval($_GET['id']) > 0)
+					if (!empty($_GET['id']) and intval($_GET['id']) > 0)
 						{
 						$oldMessageQuery = "SELECT
 						tid,
