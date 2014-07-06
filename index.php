@@ -59,15 +59,15 @@ if (isset($_GET['update'])
 	{
 	$_SESSION[$settings['session_prefix'].'newtime'] = time();
 	$update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET last_login=last_login, last_logout=NOW(), registered=registered WHERE user_id='".$_SESSION[$settings['session_prefix'].'user_id']."'", $connid);
-	if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
-		and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
+	if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+		and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
 		{
-		$targetView = processView2Filename($_SESSION[$settings['session_prefix'].'curr_view']);
+		$targetView = processView2Filename($_SESSION[$settings['session_prefix'].'user_view']);
 		}
-	else if (!empty($_COOKIE['curr_view'])
-		and in_array($_COOKIE['curr_view'], $possViews))
+	else if (!empty($_COOKIE['user_view'])
+		and in_array($_COOKIE['user_view'], $possViews))
 		{
-		$targetView = processView2Filename($_COOKIE['curr_view']);
+		$targetView = processView2Filename($_COOKIE['user_view']);
 		}
 	else
 		{

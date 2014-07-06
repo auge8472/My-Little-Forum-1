@@ -1580,20 +1580,20 @@ if (isset($_GET['move_down_smiley']))
 if (empty($action)) $action="main";
 
 $topnav = '<a class="textlink" href="';
-if (!empty($_SESSION[$settings['session_prefix'].'curr_view']))
+if (!empty($_SESSION[$settings['session_prefix'].'user_view']))
 	{
-	if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
+	if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
 		{
 		$topnav .= 'forum.php';
 		}
 	else
 		{
-		$topnav .= $_SESSION[$settings['session_prefix'].'curr_view'].'.php';
+		$topnav .= $_SESSION[$settings['session_prefix'].'user_view'].'.php';
 		}
 	}
-else if (!empty($_COOKIE['curr_view']) and in_array($_COOKIE['curr_view'], $possViews))
+else if (!empty($_COOKIE['user_view']) and in_array($_COOKIE['user_view'], $possViews))
 	{
-	$topnav .= $_COOKIE['curr_view'].'.php';
+	$topnav .= $_COOKIE['user_view'].'.php';
 	}
 else
 	{
