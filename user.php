@@ -1052,7 +1052,7 @@ switch ($action)
 			$getAllUsersQuery .= "
 			WHERE user_name LIKE '". mysql_real_escape_string($_GET['letter']) ."%'";
 			}
-		$getAllUserQuery .= "
+		$getAllUsersQuery .= "
 		ORDER BY ". $order ." ". $descasc."
 		LIMIT ". $ul .", ". $settings['users_per_page'];
 		$result = mysql_query($getAllUsersQuery, $connid);
