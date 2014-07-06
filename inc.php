@@ -253,54 +253,6 @@ if ($settings['board_view'] == 1) $possViews[] = 'board';
 if ($settings['thread_view'] == 1) $possViews[] = 'thread';
 if ($settings['mix_view'] == 1) $possViews[] = 'mix';
 
-# look for the currently used view
-if (isset($_GET['view']) and in_array($_GET['view'], $possViews))
-	{
-	$curr_view = $_GET['view'];
-	}
-else if (isset($_POST['view']) and in_array($_POST['view'], $possViews))
-	{
-	$curr_view = $_POST['view'];
-	}
-else if (isset($_SESSION[$settings['session_prefix'].'curr_view'])
-	and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
-	{
-	$curr_view = $_SESSION[$settings['session_prefix'].'curr_view'];
-	}
-else if (isset($_COOKIE['curr_view']) and in_array($_COOKIE['curr_view'], $possViews))
-	{
-	$curr_view = $_COOKIE['curr_view'];
-	}
-else
-	{
-	if (isset($_SESSION[$settings['session_prefix']."user_view"]))
-		{
-		$curr_view = $_SESSION[$settings['session_prefix']."user_view"];
-		}
-	else
-		{
-		$curr_view = $settings['standard'];
-		}
-	}
-# save the current used view into the session or a cookie
-if (isset($_SESSION[$settings['session_prefix'].'user_id']))
-	{
-	if ($curr_view != $_SESSION[$settings['session_prefix'].'curr_view'])
-		{
-		$_SESSION[$settings['session_prefix'].'curr_view'] = $curr_view;
-		}
-	if ($curr_view != $_COOKIE['curr_view'])
-		{
-		setcookie('curr_view', $curr_view, time()+(3600*24*30));
-		}
-	}
-else
-	{
-	if ($curr_view != $_COOKIE['curr_view'])
-		{
-		setcookie('curr_view', $curr_view, time()+(3600*24*30));
-		}
-	}
 $cssLink = '<link rel="stylesheet" type="text/css" href="style.css" media="all" />';
 if ((!empty($_SESSION[$settings['session_prefix'].'debug'])
 		and $_SESSION[$settings['session_prefix'].'debug'] == 'css')
