@@ -800,18 +800,7 @@ if ($action == "show users")
 
 parse_template();
 echo $header;
-
-#echo "<h2>SESSION</h2>\n";
-#echo "<pre>".print_r($_SESSION, true)."</pre>\n";
-#echo "<h2>COOKIE</h2>\n";
-#echo "<pre>".print_r($_COOKIE, true)."</pre>\n";
-#echo "<h2>GET</h2>\n";
-#echo "<pre>".print_r($_GET, true)."</pre>\n";
-#echo "<h2>POST</h2>\n";
-#echo "<pre>".print_r($_POST, true)."</pre>\n";
-#echo "<h2>Infos</h2>\n";
-#echo "<pre>".print_r($curr_view, true)."</pre>\n";
-#echo "<pre>".print_r($userName, true)."</pre>\n";
+echo outputDebugSession();
 
 $output = '';
 
