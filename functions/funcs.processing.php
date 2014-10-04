@@ -246,6 +246,9 @@ return preg_replace("/[^\n]/", '', $string);
 /**
  * returns a string of a link from a given link-bbcode
  *
+ * Origin of code inside "if ($action == 'validate')" is jlog 1.1.3
+ * see: http://jeenaparadies.net/webdesign/jlog/
+ *
  * @param string $action
  * @param array $attributes
  * @param string $content
@@ -254,26 +257,38 @@ return preg_replace("/[^\n]/", '', $string);
  * @return string
  */
 function bbcodeDoURL($action, $attributes, $content, $params, $node_object) {
+// get URL by parameters
+$url = isset($attributes['default']) ? $attributes['default'] : $content;
 
-/**
- * Origin of code inside "if ($action == 'validate')" is jlog 1.1.3
- * see: http://jeenaparadies.net/webdesign/jlog/
- */
 if ($action == 'validate')
 	{
-	if (preg_match('#^(http://|ftp://|news:|mailto:|/)#i', $url)) return true; 
-	# Some people just write www.example.org, skipping the http://
-	# We're going to be gentle a prefix this link with the protocoll.
-	# However, example.org (without www) will not be recognized
-	else if (substr($url, 0, 4) == 'www.') return true;
+	if (!empty($url))
+		{
+		if (preg_match('#^(http://|ftp://|news:|mailto:|/)#i', $url)) return true; 
+		# Some people just write www.example.org, skipping the http://
+		# We're going to be gentle a prefix this link with the protocoll.
+		# However, example.org (without www) will not be recognized
+		else if (substr($url, 0, 4) == 'www.') return true;
+		}
 	# all other links will be ignored
 	return true;
 	}
-if (!isset ($attributes['default']))
-	{
-	return '<a rel="nofollow" href="'.htmlspecialchars($content).'">'.htmlspecialchars(shorten_link($content)).'</a>';
-	}
-return '<a rel="nofollow" href="'.htmlspecialchars($attributes['default']).'">'.$content.'</a>';
+else
+  {
+  # prefix URL with http:// if the protocoll was skipped
+  if (substr($url, 0, 4) == 'www.')
+    {
+    $url = 'http://' . $url;
+    }
+  # in case a relative url is given without a link text, we display
+  # the full URI as link text, not just the relative path
+  if (!isset($attributes['default']) and substr($url, 0, 1) == '/')
+    {
+    $content = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $url;
+    }
+  # build link
+  return '<a rel="nofollow" href="' . htmlspecialchars($url) . '">' . htmlspecialchars(shorten_link($content)) . '</a>';
+  }
 } #End: bbcodeDoURL
 
 
