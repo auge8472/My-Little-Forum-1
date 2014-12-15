@@ -1013,4 +1013,29 @@ if ((isset($_SESSION[$settings['session_prefix'].'user_type'])
 return $r;
 } # End: outputDebugSession
 
+
+
+/**
+ * generates a select form control
+ *
+ * @param array $res
+ * @param string $fieldname
+ * @param integer $selected (optional)
+ * @param integer $size (optional)
+ * @return string
+ */
+function outputMakeSelect($res, $fieldname, $selected = '', $size = 1) {
+if (!is_array($res)) return false;
+$size = (intval($size) == 0) ? 1 : $size;
+$r  = '';
+$r .= '<select size="'. intval($size) .'" id="'. htmlspecialchars($fieldname) .'" name="'. htmlspecialchars($fieldname) .'">'. "\n";
+foreach ($res as $row) {
+	$r .= '  <option value="'. htmlspecialchars($row['id']) .'"';
+	$r .= (!empty($selected) and $selected == $row['id']) ? ' selected="selected"' : '';
+	$r .= '>'. htmlspecialchars($row['name']) .'</option>'. "\n";
+	}
+$r .= ' </select>'. "\n";
+return $r;
+} # End: outputMakeSelect
+
 ?>

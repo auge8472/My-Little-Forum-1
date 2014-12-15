@@ -1,8 +1,8 @@
 <?php
 ###############################################################################
-# my little forum                                                             #
-# Copyright (C) 2005 Alex                                                     #
-# http://www.mylittlehomepage.net/                                            #
+# my little forum 1                                                            #
+# Copyright (C) 2013 Heiko August                                             #
+# http://www.auge8472.de/                                                     #
 #                                                                             #
 # This program is free software; you can redistribute it and/or               #
 # modify it under the terms of the GNU General Public License                 #
@@ -22,17 +22,14 @@
 include_once("inc.php");
 include_once("functions/include.prepare.php");
 
-
+# generate captcha if captcha is on
+# and a not logged user wants to post
 if (empty($_SESSION[$settings['session_prefix'].'user_id'])
-&& $settings['captcha_posting'] == 1)
+	and $settings['captcha_posting'] == 1)
 	{
 	require('captcha/captcha.php');
 	$captcha = new captcha();
 	}
-
-# category is given from the form via POST
-if (isset($_POST['category'])) $category = intval($_POST['category']);
-if (isset($_POST['p_category'])) $p_category = intval($_POST['p_category']);
 
 # look for banned user:
 if (isset($_SESSION[$settings['session_prefix'].'user_id']))
@@ -41,56 +38,35 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 	FROM ". $db_settings['userdata_table'] ."
 	WHERE user_id = '". intval($_SESSION[$settings['session_prefix'].'user_id']) ."'
 	LIMIT 1";
-	$lock_result = mysql_query($lockQuery, $connid);
-	if (!$lock_result) die($lang['db_error']);
-	$lock_result_array = mysql_fetch_assoc($lock_result);
-	mysql_free_result($lock_result);
-
-	if ($lock_result_array['user_lock'] > 0)
+	$lockResult = mysql_query($lockQuery, $connid);
+	if ($lockResult === false) die($lang['db_error']);
+	$lockResultArray = mysql_fetch_assoc($lockResult);
+	mysql_free_result($lockResult);
+	if ($lockResultArray['user_lock'] > 0)
 		{
 		header("location: ". $settings['forum_address'] ."user.php");
 		die('<a href="user.php">further...</a>');
 		}
 	} # End: if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 
+/**
+ * Start: block for special cases
+ */
+# lock or unlock a thread (forbid or allow answers to a thread)
 if (isset($_GET['lock'])
-and isset($_SESSION[$settings['session_prefix'].'user_id'])
-and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
-or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
+	and isset($_SESSION[$settings['session_prefix'].'user_id'])
+	and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
+		or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
 	{
-	$lockQuery = "SELECT
-	tid,
-	locked
-	FROM ". $db_settings['forum_table'] ."
-	WHERE id = ". intval($_GET['id']) ."
-	LIMIT 1";
-	$lock_result = mysql_query($lockQuery, $connid);
-	if (!$lock_result) die($lang['db_error']);
-	$field = mysql_fetch_assoc($lock_result);
-	mysql_free_result($lock_result);
-
-	$locker = ($field['locked']==0) ? 1 : 0;
-	$relockQuery = "UPDATE ". $db_settings['forum_table'] ." SET
+	$lockQuery = "UPDATE ". $db_settings['forum_table'] ." SET
 	time = time,
 	last_answer = last_answer,
 	edited = edited,
-	locked = '". $locker ."'
-	WHERE tid = ". intval($field['tid']);
-	@mysql_query($relockQuery, $connid);
-	if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
-	and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
-		{
-		if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
-			{
-			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
-			}
-		else
-			{
-			$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'_entry.php?id='. $field['tid'];
-			}
-		}
-	else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
-	and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+	locked = IF(locked = 0, 1, 0)
+	WHERE tid = ". intval($_GET['id']);
+	@mysql_query($lockQuery, $connid);
+	if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+		and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
 		{
 		if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
 			{
@@ -98,62 +74,31 @@ or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
 			}
 		else
 			{
-			$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php?id='. $field['tid'];
+			$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php?id='. intval($_GET['id']);
 			}
 		}
 	else
 		{
-		if ($setting['standard'] == 'thread')
-			{
-			$header_href = 'forum.php';
-			}
-		else
-			{
-			$header_href = $setting['standard'] .'.php';
-			}
+		$header_href = ($settings['standard'] == 'thread') ? 'forum.php' : $settings['standard'] .'.php';
 		}
 	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['lock']) ...)
 
-
+# pin or unpin threads to the top of the views
 if (isset($_GET['fix'])
-and isset($_SESSION[$settings['session_prefix'].'user_id'])
-and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
-or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
+	and isset($_SESSION[$settings['session_prefix'].'user_id'])
+	and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
+		or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
 	{
-	$fixQuery = "SELECT
-	tid,
-	fixed
-	FROM ". $db_settings['forum_table'] ."
-	WHERE id = ". intval($_GET['id']) ."
-	LIMIT 1";
-	$fix_result = mysql_query($fixQuery, $connid);
-	if (!$fix_result) die($lang['db_error']);
-	$field = mysql_fetch_assoc($fix_result);
-	mysql_free_result($fix_result);
-
-	$fixer = ($field['fixed']==0) ? 1 : 0;
-	$refixQuery = "UPDATE ". $db_settings['forum_table'] ." SET
+	$fixQuery = "UPDATE ". $db_settings['forum_table'] ." SET
 	time = time,
 	last_answer = last_answer,
 	edited = edited,
-	fixed = '". intval($fixer) ."'
-	WHERE tid = ". intval($field['tid']);
-	@mysql_query($refixQuery, $connid);
-	if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
-	and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
-		{
-		if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
-			{
-			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
-			}
-		else
-			{
-			$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'_entry.php?id='. $field['tid'];
-			}
-		}
-	else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
-	and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+	fixed = IF(fixed = 0, 1, 0)
+	WHERE tid = ". intval($_GET['id']);
+	@mysql_query($fixQuery, $connid);
+	if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+		and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
 		{
 		if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
 			{
@@ -161,27 +106,20 @@ or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
 			}
 		else
 			{
-			$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php?id='. $field['tid'];
+			$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php?id='. intval($_GET['id']);
 			}
 		}
 	else
 		{
-		if ($setting['standard'] == 'thread')
-			{
-			$header_href = 'forum.php';
-			}
-		else
-			{
-			$header_href = $setting['standard'] .'.php';
-			}
+		$header_href = ($settings['standard'] == 'thread') ? 'forum.php' : $settings['standard'] .'.php';
 		}
 	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['fix']) ...)
 
-
+# subscribe or unsubscribe threads
 if (isset($_GET['subscribe'])
-and isset($_SESSION[$settings['session_prefix'].'user_id'])
-and isset($_GET['back']))
+	and isset($_SESSION[$settings['session_prefix'].'user_id'])
+	and isset($_GET['back']))
 	{
 	if ($_GET['subscribe'] == 'true')
 		{
@@ -212,19 +150,7 @@ and isset($_GET['back']))
 		}
 	if (!empty($querySubscribe)) @mysql_query($querySubscribe, $connid);
 	if (!empty($queryUnsubscribePost)) @mysql_query($queryUnsubscribePost, $connid);
-	if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
-	and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
-		{
-		if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
-			{
-			$header_href = 'forum_entry.php?id='. intval($_GET['id']);
-			}
-		else
-			{
-			$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'_entry.php?id='.  intval($_GET['back']);
-			}
-		}
-	else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+	if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
 	and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
 		{
 		if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
@@ -238,50 +164,54 @@ and isset($_GET['back']))
 		}
 	else
 		{
-		if ($setting['standard'] == 'thread')
-			{
-			$header_href = 'forum.php';
-			}
-		else
-			{
-			$header_href = $setting['standard'] .'.php';
-			}
+		$header_href = ($settings['standard'] == 'thread') ? 'forum.php' : $settings['standard'] .'.php';
 		}
 	header('location: '.$settings['forum_address'].$header_href);
 	} # if (isset($_GET['subscribe'] ...)
+/**
+ * End: block for special cases
+ */
 
-
+/**
+ * processing of normal script requests
+ */
 if (($settings['access_for_users_only'] == 1
-&& isset($_SESSION[$settings['session_prefix'].'user_name']))
-|| $settings['access_for_users_only'] != 1)
+	and isset($_SESSION[$settings['session_prefix'].'user_name']))
+	or $settings['access_for_users_only'] != 1)
 	{
 	if (($settings['entries_by_users_only'] == 1
-	&& isset($_SESSION[$settings['session_prefix'].'user_name']))
-	|| $settings['entries_by_users_only'] != 1)
+		and isset($_SESSION[$settings['session_prefix'].'user_name']))
+		or $settings['entries_by_users_only'] != 1)
 		{
-		$categories = get_categories();
-		if ($categories == "not accessible")
+		if (is_array($categories)
+			and !in_array($_SESSION[$settings['session_prefix'].'category'], $categories))
 			{
 			header('location: '.$settings['forum_address'].'index.php');
 			die('<a href="index.php">further...</a>');
 			}
 
-		# delete array for error messages
-		unset($errors);
-		unset($Thread);
-		if (empty($descasc)) $descasc = "DESC";
-		# safety: forbid editing of postings
-		$edit_authorization = 0;
-		# safety: forbid deletion of postings
-		$delete_authorization = 0;
-
-		if (empty($action)) $action = "new";
-
-		# Falls editiert oder gelöscht werden soll, schauen, ob der User dazu berechtigt ist:
-		if ($action == "edit"
-		|| $action == "delete"
-		|| $action == "delete ok")
+		# delete arrays if present
+		if (isset($errors)) unset($errors);
+		if (isset($Thread)) unset($Thread);
+		# safety: forbid editing and deletion of postings
+		$authorisation['edit'] = 0;
+		$authorisation['delete'] = 0;
+		# $action can only be submitted via POST, is set
+		# to standard value or it will be changed during
+		# the script run (i.e. by checking GET parameters)
+		$action = (!empty($_POST['action']) and in_array($_POST['action'], $allowSubmittedActions)) ? $_POST['action'] : "new";
+		$action = (!empty($_GET['edit']) and $_GET['edit'] == "true") ? "edit" : $action;
+		$action = (!empty($_GET['delete']) and $_GET['delete'] == "true") ? "delete" : $action;
+		$action = (!empty($_GET['delete_ok']) and $_GET['delete_ok'] == "true") ? "delete ok" : $action;
+		# if a posting should be edited or deleted, check for authorisation
+		# check call via GET or POST parameter
+		if ((isset($_GET['id']) and is_numeric($_GET['id']))
+			or (isset($_POST['id']) and is_numeric($_POST['id']))
+			and ($action == "edit"
+				or $action == "delete"
+				or $action == "delete ok"))
 			{
+<<<<<<< HEAD
 			$queryAuthUser = "SELECT
 			t1.user_type,
 			t1.user_id
@@ -610,29 +540,44 @@ if (($settings['access_for_users_only'] == 1
 
 		# form submitted:
 		else if (isset($_POST['form']))
+=======
+			$authorisation =  processCheckAuthorisation(isset($_GET['id']) ? $_GET['id'] : $_POST['id'], $authorisation, $connid);
+			} # End: check for authorisation if called via GET or POST parameter
+		# if form was submitted (old file: line 618)
+		if (isset($_POST['form']))
+>>>>>>> posting
 			{
-			$fixed = (empty($_POST['fixed'])) ? 0 : $_POST['fixed'];
+			$_POST['id'] = empty($_POST['id']) ? 0 : intval($_POST['id']);
 			switch ($action)
 				{
 				case "new":
+<<<<<<< HEAD
+=======
+					# is it a registered user?
+					if (isset($_SESSION[$settings['session_prefix'].'user_id']))
+						{
+						$user_id = $_SESSION[$settings['session_prefix'].'user_id'];
+						$name = $_SESSION[$settings['session_prefix'].'user_name'];
+						}
+>>>>>>> posting
 					# if the posting is an answer, search the thread-ID:
-					if ($_POST['id'] != 0)
+					if ($_POST['id'] > 0)
 						{
 						$threadIdQuery = "SELECT
 						tid,
 						locked
 						FROM ". $db_settings['forum_table'] ."
 						WHERE id = ". intval($_POST['id']);
-						$tid_result = mysql_query($threadIdQuery, $connid);
-						if (!$tid_result) die($lang['db_error']);
+						$threadIdResult = mysql_query($threadIdQuery, $connid);
+						if (!$threadIdResult) die($lang['db_error']);
 
-						if (mysql_num_rows($tid_result) != 1)
+						if (mysql_num_rows($threadIdResult) != 1)
 							{
 							die($lang['db_error']);
 							}
 						else
 							{
-							$field = mysql_fetch_assoc($tid_result);
+							$field = mysql_fetch_assoc($threadIdResult);
 							$Thread = $field['tid'];
 							if ($field['locked'] > 0)
 								{
@@ -641,14 +586,13 @@ if (($settings['access_for_users_only'] == 1
 								$reason = $lang['thread_locked_error'];
 								}
 							}
-						mysql_free_result($tid_result);
+						mysql_free_result($threadIdResult);
 						}
-					else if ($id == 0)
+					else if ($_POST['id'] == 0)
 						{
 						$Thread = 0;
 						}
 				break;
-
 				case "edit";
 					# fetch missing data from database:
 					$postingQuery = "SELECT
@@ -667,6 +611,7 @@ if (($settings['access_for_users_only'] == 1
 						$name = $field["name"];
 						}
 				break;
+<<<<<<< HEAD
 				}
 
 			# trim and complete data:
@@ -712,50 +657,25 @@ if (($settings['access_for_users_only'] == 1
 			# end trim and complete data
 
 			# check data:
+=======
+				} # End: switch ($action)
+			# check for new or edited posting is complete
+			# now check submitted data:
+>>>>>>> posting
 			# double entry?
 			$uniqueIdQuery = "SELECT COUNT(*)
 			FROM ". $db_settings['forum_table'] ."
-			WHERE uniqid = '". $uniqid ."'
+			WHERE uniqid = '". mysql_real_escape_string($_POST['uniqid']) ."'
 			AND time > NOW()-10000";
-			$uniqid_result = mysql_query($uniqueIdQuery, $connid);
-			list($uniqid_count) = mysql_fetch_row($uniqid_result);
-			mysql_free_result($uniqid_result);
-			if ($uniqid_count > 0)
+			$uniqueIdResult = mysql_query($uniqueIdQuery, $connid);
+			list($uniqidCount) = mysql_fetch_row($uniqueIdResult);
+			mysql_free_result($uniqueIdResult);
+			if ($uniqidCount > 0)
 				{
 				header("location: ".$settings['forum_address']."index.php");
 				die('<a href="index.php">further...</a>');
 				}
-
-			# check for not accepted words:
-			$badWordQuery = "SELECT list
-			FROM ". $db_settings['banlists_table'] ."
-			WHERE name = 'words'
-			LIMIT 1";
-			$result = mysql_query($badWordQuery, $connid);
-			if (!$result) die($lang['db_error']);
-			$data = mysql_fetch_assoc($result);
-			mysql_free_result($result);
-
-			if (trim($data['list']) != '')
-				{
-				$not_accepted_words = explode(',', trim($data['list']));
-				foreach ($not_accepted_words as $not_accepted_word)
-					{
-					if ($not_accepted_word!=''
-					&& (preg_match("/".$not_accepted_word."/i",$name)
-					|| preg_match("/".$not_accepted_word."/i",$text)
-					|| preg_match("/".$not_accepted_word."/i",$subject)
-					|| preg_match("/".$not_accepted_word."/i",$email)
-					|| preg_match("/".$not_accepted_word."/i",$hp)
-					|| preg_match("/".$not_accepted_word."/i",$place)))
-						{
-						$errors[] = $lang['error_not_accepted_word'] ." »". mb_strtoupper($not_accepted_word) ."«";
-						break;
-						}
-					}
-				}
-
-			if (!isset($name) || $name == "")
+			if (empty($_POST['name']))
 				{
 				$errors[] = $lang['error_no_name'];
 				}
@@ -764,137 +684,99 @@ if (($settings['access_for_users_only'] == 1
 				{
 				$reservedUsernameQuery = "SELECT user_name
 				FROM ". $db_settings['userdata_table'] ."
-				WHERE user_name = '". mysql_real_escape_string($name) ."'";
-				$result = mysql_query($reservedUsernameQuery,$connid);
-				if (!$result) die($lang['db_error']);
-				$field = mysql_fetch_assoc($result);
-				mysql_free_result($result);
-
-				if ($name != ""
-				and mb_strtolower($field["user_name"]) == mb_strtolower($name))
+				WHERE user_name = '". mysql_real_escape_string($_POST['name']) ."'";
+				$reservedUsernameResult = mysql_query($reservedUsernameQuery,$connid);
+				if (!$reservedUsernameResult) die($lang['db_error']);
+				$field = mysql_fetch_assoc($reservedUsernameResult);
+				mysql_free_result($reservedUsernameResult);
+				if (!empty($_POST['name'])
+					and mb_strtolower($field["user_name"]) == mb_strtolower($_POST['name']))
 					{
-					$lang['error_name_reserved'] = str_replace("[name]", htmlspecialchars($name), $lang['error_name_reserved']);
+					$lang['error_name_reserved'] = str_replace("[name]", htmlspecialchars($_POST['name']), $lang['error_name_reserved']);
 					$errors[] = $lang['error_name_reserved'];
 					}
 				}
-			# check the given email address for format name@domain.tld
-			if (!empty($email)
-			and !preg_match($validator['email'], $email))
+			# check the given email address for format name@example.com
+			# regular expression: see functions/funcs.processing.php
+			if (!empty($_POST['email'])
+				and !preg_match($validator['email'], $_POST['email']))
 				{
 				$errors[] = $lang['error_email_wrong'];
 				}
-			# if (!empty($hp) and !preg_match("[hier fehlt noch die Reg-Ex]", $hp))
-			# $errors[] = $lang['error_hp_wrong'];
-			if (($email == ""
-			&& isset($email_notify)
-			&& $email_notify == 1
-			&& !isset($_SESSION[$settings['session_prefix'].'user_id']))
-			|| ($email == ""
-			&& isset($email_notify)
-			&& $email_notify == 1
-			&& isset($p_user_id)
-			&& $p_user_id == 0))
+			# check for presence of email address in case of
+			# notification about answers to the current posting
+			if ((empty($_POST['email'])
+				and isset($_POST['email_notify'])
+				and $_POST['email_notify'] == 1
+				and !isset($_SESSION[$settings['session_prefix'].'user_id']))
+				or (empty($_POST['email'])
+				and isset($_POST['email_notify'])
+				and $_POST['email_notify'] == 1
+				and isset($p_user_id) // <== check for source of the variable!
+				and $p_user_id == 0))
 				{
 				$errors[] = $lang['error_no_email_to_notify'];
 				}
-			if (empty($subject))
+			# check for empty subject
+			if (empty($_POST['subject']))
 				{
 				$errors[] = $lang['error_no_subject'];
 				}
+			# check for empty posting text (if it is not allowed)
 			if (empty($settings['empty_postings_possible'])
 			|| (isset($settings['empty_postings_possible'])
 			&& $settings['empty_postings_possible'] != 1))
 				{
-				if (empty($text))
+				if (empty($_POST['text']))
 					{
 					$errors[] = $lang['error_no_text'];
 					}
 				}
-			if (mb_strlen($name) > $settings['name_maxlength'])
+			# check submitted strings for string length exceeding
+			if (!empty($_POST['name'])
+				and mb_strlen($_POST['name']) > $settings['name_maxlength'])
 				{
 				$errors[] = $lang['name_marking']." ".$lang['error_input_too_long'];
 				}
-			if (mb_strlen($email) > $settings['email_maxlength'])
+			if (!empty($_POST['email'])
+				and mb_strlen($_POST['email']) > $settings['email_maxlength'])
 				{
 				$errors[] = $lang['email_marking']." ".$lang['error_input_too_long'];
 				}
-			if (mb_strlen($hp) > $settings['hp_maxlength'])
+			if (!empty($_POST['hp'])
+				and mb_strlen($_POST['hp']) > $settings['hp_maxlength'])
 				{
 				$errors[] = $lang['hp_marking'] . " " .$lang['error_input_too_long'];
 				}
-			if (mb_strlen($place) > $settings['place_maxlength'])
+			if (!empty($_POST['place'])
+				and mb_strlen($_POST['place']) > $settings['place_maxlength'])
 				{
 				$errors[] = $lang['place_marking'] . " " .$lang['error_input_too_long'];
 				}
-			if (mb_strlen($subject) > $settings['subject_maxlength'])
+			if (!empty($_POST['subject'])
+				and mb_strlen($_POST['subject']) > $settings['subject_maxlength'])
 				{
 				$errors[] = $lang['subject_marking'] . " " .$lang['error_input_too_long'];
 				}
-			if (mb_strlen($text) > $settings['text_maxlength'])
+			if (!empty($_POST['text'])
+				and mb_strlen($_POST['text']) > $settings['text_maxlength'])
 				{
-				$lang['error_text_too_long'] = str_replace("[length]", mb_strlen($text), $lang['error_text_too_long']);
+				$lang['error_text_too_long'] = str_replace("[length]", mb_strlen($_POST['text']), $lang['error_text_too_long']);
 				$lang['error_text_too_long'] = str_replace("[maxlength]", $settings['text_maxlength'], $lang['error_text_too_long']);
 				$errors[] = $lang['error_text_too_long'];
 				}
-			$nameLength = processCountCharsInWords($name, $settings['name_word_maxlength'], $lang['error_name_word_too_long']);
-			if (!empty($nameLength)
-			and is_array($nameLength))
+			# trim and complete data:
+			$_POST['fixed'] = empty($_POST['fixed']) ? 0 : 1;
+			$_POST['show_signature'] = empty($_POST['show_signature']) ? 0 : 1;
+			$_POST['user_id'] = empty($_POST['user_id']) ? 0 : intval($_POST['user_id']);
+			$_POST['email_notify'] = empty($_POST['email_notify']) ? 0 : 1;
+			$_POST['hp'] = empty($_POST['hp']) ? "" : trim($_POST['hp']);
+			$_POST['place'] = empty($_POST['place']) ? "" : trim($_POST['place']);
+			if (empty($_POST['p_category'])
+				 or !array_key_exists($_POST['p_category'], $categories))
 				{
-				foreach ($nameLength as $message)
-					{
-					$errors[] = $message;
-					}
+				$_POST['p_category'] = 0;
 				}
-			$placeLength = processCountCharsInWords($place, $settings['place_word_maxlength'], $lang['error_place_word_too_long']);
-			if (!empty($placeLength)
-			and is_array($placeLength))
-				{
-				foreach ($placeLength as $message)
-					{
-					$errors[] = $message;
-					}
-				}
-			$subjectLength = processCountCharsInWords($subject, $settings['subject_word_maxlength'], $lang['error_subject_word_too_long']);
-			if (!empty($subjectLength)
-			and is_array($subjectLength))
-				{
-				foreach ($subjectLength as $message)
-					{
-					$errors[] = $message;
-					}
-				}
-			$text_arr = str_replace("\n", " ", $text);
-			if ($settings['bbcode'] == 1)
-				{
-				$text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr);
-				$text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr);
-				$text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr);
-				$text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "", $text_arr);
-				$text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr);
-				$text_arr = preg_replace("#\[url\](.+?)\[/url\]#is", "", $text_arr);
-				$text_arr = preg_replace("#\[url=(.+?)\](.+?)\[/url\]#is", "\\2", $text_arr);
-				}
-			if ($settings['bbcode_img'] == 1
-			&& $settings['bbcode_img'] == 1)
-				{
-				$text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr);
-				$text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr);
-				$text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr);
-				}
-			if ($settings['autolink'] == 1)
-				{
-				$text_arr = text_check_link($text_arr);
-				}
-			$textLength = processCountCharsInWords($text_arr, $settings['text_word_maxlength'], $lang['error_text_word_too_long']);
-			if (!empty($textLength)
-			and is_array($textLength))
-				{
-				foreach ($textLength as $message)
-					{
-					$errors[] = $message;
-					}
-				}
-
 			# CAPTCHA check:
 			if (isset($_POST['save_entry'])
 			&& empty($_SESSION[$settings['session_prefix'].'user_id'])
@@ -902,131 +784,124 @@ if (($settings['access_for_users_only'] == 1
 				{
 				if($settings['captcha_type'] == 1)
 					{
-					if ($captcha->check_captcha($_SESSION['captcha_session'],$_POST['captcha_code'])!=TRUE) $errors[] = $lang['captcha_code_invalid'];
+					if ($captcha->check_captcha($_SESSION['captcha_session'], $_POST['captcha_code']) !== TRUE) $errors[] = $lang['captcha_code_invalid'];
 					}
 				else
 					{
-					if ($captcha->check_math_captcha($_SESSION['captcha_session'][2],$_POST['captcha_code'])!=TRUE) $errors[] = $lang['captcha_code_invalid'];
+					if ($captcha->check_math_captcha($_SESSION['captcha_session'][2], $_POST['captcha_code']) !== TRUE) $errors[] = $lang['captcha_code_invalid'];
 					}
-				}
+				} # End: CAPTCHA check
 			# end check data
-
 			if (empty($errors)
-			&& empty($preview)
-			&& isset($_POST['save_entry']))
+				and empty($_POST['preview'])
+				and (isset($_POST['save_entry'])
+					and $_POST['save_entry'] == outputLangDebugInAttributes($lang['submit_button'])))
 				{
 				switch ($action)
 					{
 					case "new":
+						# save new entry
 						$newPostingQuery = "INSERT INTO ". $db_settings['forum_table'] ." SET
-						pid = ". intval($id) .",
+						pid = ". intval($_POST['id']) .",
 						tid = ". intval($Thread) .",
-						uniqid = '". $uniqid ."',
+						uniqid = '". mysql_real_escape_string($_POST['uniqid']) ."',
 						time = NOW(),
 						last_answer = NOW(),
-						user_id = ". intval($user_id) .",
-						name = '". mysql_real_escape_string($name) ."',
-						subject = '". mysql_real_escape_string($subject) ."',
-						email = '". mysql_real_escape_string($email) ."',
-						hp = '". mysql_real_escape_string($hp) ."',
-						place = '". mysql_real_escape_string($place) ."',
-						ip_addr = INET_ATON('". $_SERVER["REMOTE_ADDR"] ."'),
-						text = '". mysql_real_escape_string($text) ."',
-						show_signature = ". intval($show_signature) .",
-						email_notify = ". intval($email_notify) .",
-						category = ". intval($p_category) .",
-						fixed = ". intval($fixed);
+						user_id = ". intval($_POST['user_id']) .",
+						name = '". mysql_real_escape_string($_POST['name']) ."',
+						subject = '". mysql_real_escape_string($_POST['subject']) ."',
+						email = '". mysql_real_escape_string($_POST['email']) ."',
+						hp = '". mysql_real_escape_string($_POST['hp']) ."',
+						place = '". mysql_real_escape_string($_POST['place']) ."',
+						ip_addr = INET_ATON('". mysql_real_escape_string($_SERVER["REMOTE_ADDR"]) ."'),
+						text = '". mysql_real_escape_string($_POST['text']) ."',
+						show_signature = ". intval($_POST['show_signature']) .",
+						email_notify = ". intval($_POST['email_notify']) .",
+						category = ". intval($_POST['p_category']) .",
+						fixed = ". intval($_POST['fixed']);
 						$result = mysql_query($newPostingQuery, $connid);
 						if (!$result) die($lang['db_error']);
-						# set the thread id for the new thread
-						if ($id == 0)
+						# get the id of the saved posting
+						$getNewIDQuery = "SELECT
+						id
+						FROM ". $db_settings['forum_table'] ."
+						WHERE id = LAST_INSERT_id()";
+						$result = mysql_query($getNewIDQuery, $connid);
+						if (!$result) die($lang['db_error']);
+						$newID = mysql_fetch_assoc($result);
+						$newID = $newID['id'];
+						# set the thread id for a new thread
+						# derive it from the posting id
+						if (intval($_POST['id']) == 0)
 							{
-							if (!mysql_query("UPDATE ". $db_settings['forum_table'] ." SET
+							$newPostingUpdateQuery = "UPDATE ". $db_settings['forum_table'] ." SET
 							tid = id,
 							time = time
-							WHERE id = LAST_INSERT_id()", $connid))
+							WHERE id = ". $newID;
+							if (!mysql_query($newPostingUpdateQuery, $connid))
 								{
 								die($lang['db_error']);
 								}
 							}
-						# wann auf Thread als letztes geantwortet wurde aktualisieren (für Board-Ansicht):
-						if ($id != 0)
+						# actualise time stamp of last answer for all postings in the thread
+						if (intval($_POST['id']) != 0)
 							{
-							if (!mysql_query("UPDATE ".$db_settings['forum_table']." SET
+							$updateLastAnswerQuery = "UPDATE ".$db_settings['forum_table']." SET
 							time = time,
 							last_answer = NOW()
-							WHERE tid = ". $Thread, $connid))
+							WHERE tid = ". $Thread;
+							if (!mysql_query($updateLastAnswerQuery, $connid))
 								{
 								die($lang['db_error']);
 								}
 							}
-						# letzten Eintrag ermitteln (um darauf umzuleiten):
+						# get last entry (to redirect to it):
 						$redirectQuery = "SELECT
-						tid,
 						tid AS counter,
 						pid,
 						id,
 						(SELECT COUNT(*) FROM ". $db_settings['forum_table'] ."
 							WHERE tid = counter) AS count
 						FROM ". $db_settings['forum_table'] ."
-						WHERE id = LAST_INSERT_ID()";
-						$result_neu = mysql_query($redirectQuery, $connid);
-						$neu = mysql_fetch_assoc($result_neu);
-						$ip = $_SERVER["REMOTE_ADDR"];
-						$mail_text = unbbcode($text);
-
-						# Schauen, ob eine E-Mail-Benachrichtigung versendet werden soll:
+						WHERE id = ". $newID;
+						$redirectResult = mysql_query($redirectQuery, $connid);
+						$redirect = mysql_fetch_assoc($redirectResult);						
+						# check for wished email notification:
 						if ($settings['email_notification'] == 1)
 							{
-							$PostAddress  = $settings['forum_address'];
+							$mail_text = unbbcode($_POST['text']);
+							$PostAddress = $settings['forum_address'];
 							if ($settings['standard'] == "board")
 								{
-								$PostAddress .= "board_entry.php?id=".$neu["tid"]."#p".$neu["id"];
+								$PostAddress .= "board_entry.php?id=".$redirect["counter"]."#p".$redirect["id"];
 								}
 							else if ($settings['standard'] == "mix")
 								{
-								$PostAddress .= "mix_entry.php?id=".$neu["tid"]."#p".$neu["id"];
+								$PostAddress .= "mix_entry.php?id=".$redirect["counter"]."#p".$redirect["id"];
 								}
 							else
 								{
-								$PostAddress .= "forum_entry.php?id=".$neu["id"];
+								$PostAddress .= "forum_entry.php?id=".$redirect["id"];
 								}
-							$emailUserQuery = "SELECT
-							user_id,
-							name,
-							email,
-							subject,
-							text,
-							email_notify
-							FROM ". $db_settings['forum_table'] ."
-							WHERE id = ". intval($id) ."
+							$emailParentUserQuery = "SELECT
+							t1.user_id,
+							IF(t1.user_id > 0, t2.user_name, t1.name) AS name,
+							IF(t1.user_id > 0, t2.user_email, t1.email) AS email,
+							t1.subject,
+							t1.text
+							FROM ". $db_settings['forum_table'] ." AS t1 LEFT JOIN ". $db_settings['userdata_table'] ." AS t2
+							ON t2.user_id = t1.user_id
+							WHERE t1.id = ". intval($_POST['id']) ."
+								AND t1.email_notify = 1
 							LIMIT 1";
-							$parent_result = mysql_query($emailUserQuery, $connid);
-							$parent = mysql_fetch_assoc($parent_result);
-							if ($parent["email_notify"] == 1)
+							$emailParentUserResult = mysql_query($emailParentUserQuery, $connid);
+							if (mysql_num_rows($emailParentUserResult) == 1)
 								{
-								# wenn das Posting von einem registrierten User stammt,
-								# E-Mail-Adresse aus den User-Daten holen:
-								if ($parent["user_id"] > 0)
-									{
-									$emailUserIdQuery = "SELECT
-									user_name,
-									user_email
-									FROM ". $db_settings['userdata_table'] ."
-									WHERE user_id = '". intval($parent["user_id"]) ."'
-									LIMIT 1";
-									$email_result = mysql_query($emailUserIdQuery, $connid);
-									if (!$email_result) die($lang['db_error']);
-									$field = mysql_fetch_assoc($email_result);
-									mysql_free_result($email_result);
-
-									$parent["name"] = $field["user_name"];
-									$parent["email"] = $field["user_email"];
-									}
-								$emailbody = $lang['email_text'];
+								$parent = mysql_fetch_assoc($emailParentUserResult);
+								$emailbody = $lang['email_text'].$lang['email_original_post'];
 								$emailbody = str_replace("[recipient]", $parent["name"], $emailbody);
-								$emailbody = str_replace("[name]", $name, $emailbody);
-								$emailbody = str_replace("[subject]", $subject, $emailbody);
+								$emailbody = str_replace("[name]", $_POST['name'], $emailbody);
+								$emailbody = str_replace("[subject]", $_POST['subject'], $emailbody);
 								$emailbody = str_replace("[text]", $mail_text, $emailbody);
 								$emailbody = str_replace("[posting_address]", $PostAddress, $emailbody);
 								$emailbody = str_replace("[original_subject]", $parent["subject"], $emailbody);
@@ -1044,6 +919,7 @@ if (($settings['access_for_users_only'] == 1
 								unset($emailsubject);
 								unset($emailbody);
 								unset($an);
+								mysql_free_result($emailParentUserResult);
 								}
 							$threadNotifyQuery = "SELECT
 							t1.user_name AS name,
@@ -1051,46 +927,45 @@ if (($settings['access_for_users_only'] == 1
 							t2.user_id
 							FROM ". $db_settings['userdata_table'] ." AS t1,
 							". $db_settings['usersubscripts_table'] ." AS t2
-							WHERE t1.user_id = t2.user_id AND t2.tid = ". $neu['tid'];
-							$emails_result = mysql_query($threadNotifyQuery, $connid);
-							if (!$emails_result) die($lang['db_error']);
-							while ($field = mysql_fetch_assoc($emails_result))
+							WHERE t1.user_id = t2.user_id AND t2.tid = ". $redirect["counter"];
+							$threadNotifyResult = mysql_query($threadNotifyQuery, $connid);
+							if (!$threadNotifyResult) die($lang['db_error']);
+							while ($field = mysql_fetch_assoc($threadNotifyResult))
 								{
 								$emailbody = str_replace("[recipient]", $field["name"], $lang['email_text']);
-								$emailbody = str_replace("[name]", $name, $emailbody);
-								$emailbody = str_replace("[subject]", $subject, $emailbody);
+								$emailbody = str_replace("[name]", $_POST['name'], $emailbody);
+								$emailbody = str_replace("[subject]", $_POST['subject'], $emailbody);
 								$emailbody = str_replace("[text]", $mail_text, $emailbody);
 								$emailbody = str_replace("[posting_address]", $PostAddress, $emailbody);
-								$emailbody = str_replace("[original_subject]", $parent["subject"], $emailbody);
-								$emailbody = str_replace("[original_text]", unbbcode($parent["text"]), $emailbody);
 								$emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
 								$emailbody = stripslashes($emailbody);
 								$emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
 								$an = mb_encode_mimeheader($field["name"],"UTF-8")." <".$field["email"].">";
 								$emailsubject = strip_tags($lang['email_subject']);
-								$sent1 = processEmail($an, $emailsubject, $emailbody);
-								if ($sent1 === true)
-									{
-									$sent1 = "ok";
-									}
+								$sent1[] = processEmail($an, $emailsubject, $emailbody);
 								unset($emailsubject);
 								unset($emailbody);
 								unset($an);
 								}
-							mysql_free_result($emails_result);
+							mysql_free_result($threadNotifyResult);
 							}
-						# E-Mail-Benachrichtigung an Admins und Moderatoren:
-						$emailbody = ($id > 0) ? strip_tags($lang['admin_email_text_reply']) : strip_tags($lang['admin_email_text']);
-						$emailbody = str_replace("[name]", $name, $emailbody);
-						$emailbody = str_replace("[subject]", $subject, $emailbody);
+						# send message to admins and moderators:
+						$emailbody = (intval($id) > 0) ? strip_tags($lang['admin_email_text_reply']) : strip_tags($lang['admin_email_text']);
+						$emailbody = str_replace("[name]", $_POST['name'], $emailbody);
+						$emailbody = str_replace("[subject]", $_POST['subject'], $emailbody);
 						$emailbody = str_replace("[text]", $mail_text, $emailbody);
 						$emailbody = str_replace("[posting_address]", $PostAddress, $emailbody);
 						$emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
 						$emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
-#						$emailsubject = strip_tags($lang['admin_email_subject']);
 						$emailsubject = str_replace("[subject]", $subject, $lang['admin_email_subject']);
 						// Schauen, wer eine E-Mail-Benachrichtigung will:
-						$en_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_posting_notify = '1'", $connid);
+						$listAdminModEmailQuery = "SELECT
+						user_name,
+						user_email
+						FROM ".$db_settings['userdata_table']."
+						WHERE user_type IN('admin', 'mod')
+							AND new_posting_notify = '1'";
+						$en_result = mysql_query($listAdminModEmailQuery, $connid);
 						if (!$en_result) die($lang['db_error']);
 						while ($admin_array = mysql_fetch_assoc($en_result))
 							{
@@ -1102,10 +977,31 @@ if (($settings['access_for_users_only'] == 1
 							}
 						mysql_free_result($en_result);
 
-						# Cookies setzen, falls gewünscht und Funktion aktiv:
+						# for redirect:
+						$further_tid = $redirect["counter"];
+						$further_id = $redirect["id"];
+						$further_page = 0;
+						if ((!empty($_SESSION[$settings['session_prefix'] .'curr_view'])
+								and $_SESSION[$settings['session_prefix'] .'curr_view'] == 'board')
+							or (!empty($_SESSION[$settings['session_prefix'] .'user_view'])
+								and $_SESSION[$settings['session_prefix'] .'user_view'] == 'board')
+							or (!empty($_COOKIE['curr_view'])
+								and $_COOKIE['curr_view'] == 'board')
+							or (!empty($_COOKIE['user_view'])
+								and $_COOKIE['user_view'] == 'board'))
+							{
+							# there are more postings in the thread than
+							# the setting for postings per page allows
+							if ($redirect['count'] > $settings['answers_per_topic'])
+								{
+								$further_page = floor($redirect['count']/$settings['answers_per_topic']);
+								}
+							}
+						# set cookies, if wished and function is active:
 						if ($settings['remember_userdata'] == 1)
 							{
-							if (isset($setcookie) && $setcookie==1)
+							if (isset($_POST['setCookie'])
+								and $_POST['setCookie'] == 1)
 								{
 								setcookie("user_name",$name,time()+(3600*24*30));
 								setcookie("user_email",$email,time()+(3600*24*30));
@@ -1113,32 +1009,10 @@ if (($settings['access_for_users_only'] == 1
 								setcookie("user_place",$place,time()+(3600*24*30));
 								}
 							}
-
-						# for redirect:
-						$further_tid = $neu["tid"];
-						$further_id = $neu["id"];
-						$further_page = 0;
-						if ((!empty($_SESSION[$setting['session_prefix'] .'curr_view'])
-						and $_SESSION[$setting['session_prefix'] .'curr_view'] == 'board')
-						or (!empty($_SESSION[$setting['session_prefix'] .'user_view'])
-						and $_SESSION[$setting['session_prefix'] .'user_view'] == 'board')
-						or (!empty($_COOKIE['curr_view'])
-						and $_COOKIE['curr_view'] == 'board')
-						or (!empty($_COOKIE['user_view'])
-						and $_COOKIE['user_view'] == 'board'))
-							{
-							# there are more postings in thread than
-							# the setting for postings per page allows
-							if ($neu['count'] > $settings['answers_per_topic'])
-								{
-								$further_page = floor($neu['count']/$settings['answers_per_topic']);
-								}
-							}
 						$refer = 1;
 					break;
-
 					case "edit":
-						if ($edit_authorization == 1
+						if ($authorisation['edit'] == 1
 						&& ($field['locked'] == 0
 						|| (isset($_SESSION[$settings['session_prefix'].'user_type'])
 						&& ($_SESSION[$settings['session_prefix'].'user_type'] == 'admin'
@@ -1152,7 +1026,6 @@ if (($settings['access_for_users_only'] == 1
 							&& $_SESSION[$settings['session_prefix'].'user_type'] != 'mod'))))
 								{
 								$editPostingQuery = "SELECT
-								tid,
 								tid AS counter,
 								(SELECT COUNT(*) FROM ". $db_settings['forum_table'] ."
 									WHERE tid = counter) AS count,
@@ -1160,11 +1033,11 @@ if (($settings['access_for_users_only'] == 1
 								subject,
 								text
 								FROM ". $db_settings['forum_table'] ."
-								WHERE id = ". intval($id);
-								$tid_result = mysql_query($editPostingQuery, $connid);
-								if (!$tid_result) die($lang['db_error']);
-								$field = mysql_fetch_assoc($tid_result);
-								mysql_free_result($tid_result);
+								WHERE id = ". intval($_POST['id']);
+								$editPostingResult = mysql_query($editPostingQuery, $connid);
+								if (!$editPostingResult) die($lang['db_error']);
+								$field = mysql_fetch_assoc($editPostingResult);
+								mysql_free_result($editPostingResult);
 								# unnoticed editing for admins and mods:
 								if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 								&& $_SESSION[$settings['session_prefix'].'user_type'] == "admin"
@@ -1172,9 +1045,9 @@ if (($settings['access_for_users_only'] == 1
 								|| isset($_SESSION[$settings['session_prefix'].'user_type'])
 								&& $_SESSION[$settings['session_prefix'].'user_type'] == "mod"
 								&& $settings['dont_reg_edit_by_mod'] == 1
-								|| ($field['text'] == $text
-								&& $field['subject'] == $subject
-								&& $field['name'] == $name
+								|| ($field['text'] == $_POST['text']
+								&& $field['subject'] == $_POST['subject']
+								&& $field['name'] == $_POST['name']
 								&& isset($_SESSION[$settings['session_prefix'].'user_type'])
 								&& ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
 								|| $_SESSION[$settings['session_prefix'].'user_type'] == "mod")))
@@ -1183,17 +1056,17 @@ if (($settings['access_for_users_only'] == 1
 									time = time,
 									last_answer = last_answer,
 									edited = edited,
-									name = '". mysql_real_escape_string($name) ."',
-									subject = '". mysql_real_escape_string($subject) ."',
-									category = ". intval($p_category) .",
-									email = '". mysql_real_escape_string($email) ."',
-									hp = '". mysql_real_escape_string($hp) ."',
-									place = '". mysql_real_escape_string($place) ."',
-									text = '". mysql_real_escape_string($text) ."',
-									email_notify = '". intval($email_notify) ."',
-									show_signature = '". intval($show_signature) ."',
-									fixed = ". intval($fixed) ."
-									WHERE id = ". intval($id);
+									name = '". mysql_real_escape_string($_POST['name']) ."',
+									subject = '". mysql_real_escape_string($_POST['subject']) ."',
+									category = ". intval($_POST['p_category']) .",
+									email = '". mysql_real_escape_string($_POST['email']) ."',
+									hp = '". mysql_real_escape_string($_POST['hp']) ."',
+									place = '". mysql_real_escape_string($_POST['place']) ."',
+									text = '". mysql_real_escape_string($_POST['text']) ."',
+									email_notify = '". intval($_POST['email_notify']) ."',
+									show_signature = '". intval($_POST['show_signature']) ."',
+									fixed = ". intval($_POST['fixed']) ."
+									WHERE id = ". intval($_POST['id']);
 									}
 								else
 									{
@@ -1202,36 +1075,28 @@ if (($settings['access_for_users_only'] == 1
 									last_answer = last_answer,
 									edited = NOW(),
 									edited_by = '". mysql_real_escape_string($_SESSION[$settings['session_prefix']."user_name"]) ."',
-									name = '". mysql_real_escape_string($name) ."',
-									subject = '". mysql_real_escape_string($subject) ."',
-									category = ". intval($p_category) .",
-									email = '". mysql_real_escape_string($email) ."',
-									hp = '". mysql_real_escape_string($hp) ."',
-									place = '". mysql_real_escape_string($place) ."',
-									text = '". mysql_real_escape_string($text) ."',
-									email_notify = '". intval($email_notify) ."',
-									show_signature = '". intval($show_signature) ."',
-									fixed = ". intval($fixed) ."
-									WHERE id = ". intval($id);
+									name = '". mysql_real_escape_string($_POST['name']) ."',
+									subject = '". mysql_real_escape_string($_POST['subject']) ."',
+									category = ". intval($_POST['p_category']) .",
+									email = '". mysql_real_escape_string($_POST['email']) ."',
+									hp = '". mysql_real_escape_string($_POST['hp']) ."',
+									place = '". mysql_real_escape_string($_POST['place']) ."',
+									text = '". mysql_real_escape_string($_POST['text']) ."',
+									email_notify = '". intval($_POST['email_notify']) ."',
+									show_signature = '". intval($_POST['show_signature']) ."',
+									fixed = ". intval($_POST['fixed']) ."
+									WHERE id = ". intval($_POST['id']);
 									}
-								$posting_update_result = mysql_query($updatePostingQuery, $connid);
-								$category_update_result = mysql_query("UPDATE ". $db_settings['forum_table'] ." SET
-								time = time,
-								last_answer = last_answer,
-								edited = edited,
-								category = ". intval($p_category) ."
-								WHERE tid = '". $field["tid"] ."'", $connid);
-
-								if (isset($back))
-									{
-									$further_tid = $back;
-									}
-								$further_id = $id;
+								$postingUpdateResult = mysql_query($updatePostingQuery, $connid);
+								if (!$postingUpdateResult) die($lang['db_error']);
+								# generate code for redirection
+								$further_tid = $field['counter'];
+								$further_id = $_POST['id'];
 								$further_page = 0;
-								if ((!empty($_SESSION[$setting['session_prefix'] .'curr_view'])
-								and $_SESSION[$setting['session_prefix'] .'curr_view'] == 'board')
-								or (!empty($_SESSION[$setting['session_prefix'] .'user_view'])
-								and $_SESSION[$setting['session_prefix'] .'user_view'] == 'board')
+								if ((!empty($_SESSION[$settings['session_prefix'] .'curr_view'])
+								and $_SESSION[$settings['session_prefix'] .'curr_view'] == 'board')
+								or (!empty($_SESSION[$settings['session_prefix'] .'user_view'])
+								and $_SESSION[$settings['session_prefix'] .'user_view'] == 'board')
 								or (!empty($_COOKIE['curr_view'])
 								and $_COOKIE['curr_view'] == 'board')
 								or (!empty($_COOKIE['user_view'])
@@ -1259,14 +1124,18 @@ if (($settings['access_for_users_only'] == 1
 							}
 					break;
 					}
-				} # Ende "if (empty($errors) && empty($preview) && isset($_POST['save_entry']))"
+				} # End: if (empty($errors) and empty($_POST['preview']) and ...)
 			else
 				{
 				$show = "form";
 				}
-
-			if (isset($refer))
+			} # End: if (isset($_POST['form']))
+		else
+			{
+			# the page was requested to add a new or to edit or delete an existing posting
+			switch ($action)
 				{
+<<<<<<< HEAD
 				$qs = '';
 				$qsl = '';
 				if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
@@ -1279,44 +1148,263 @@ if (($settings['access_for_users_only'] == 1
 						$further = $further_tid;
 						}
 					else
+=======
+				case "new":
+				# in case of a not logged in user, read the cookies with userdata
+					if (!isset($_SESSION[$settings['session_prefix'].'user_id']))
 						{
-						$header_href = 'forum_entry.php';
-						$further = $further_id;
+						if (isset($_COOKIE['user_name']))
+							{
+							$name = $_COOKIE['user_name']; $setcookie = 1;
+							}
+						if (isset($_COOKIE['user_email']))
+							{
+							$email = $_COOKIE['user_email'];
+							}
+						if (isset($_COOKIE['user_hp']))
+							{
+							$hp = $_COOKIE['user_hp'];
+							}
+						if (isset($_COOKIE['user_place']))
+							{
+							$place = $_COOKIE['user_place'];
+							}
 						}
+					$show_signature = 1;
+					# if message is a reply:
+					if (!empty($_GET['id']) and intval($_GET['id']) > 0)
+						{
+						$oldMessageQuery = "SELECT
+						tid,
+						pid,
+						name,
+						subject,
+						category,
+						text,
+						locked
+						FROM ". $db_settings['forum_table'] ."
+						WHERE id = ". intval($_GET['id']);
+						$oldMessageResult = mysql_query($oldMessageQuery, $connid);
+						if (!$oldMessageResult) die($lang['db_error']);
+						if (mysql_num_rows($oldMessageResult) != 1)
+							{
+							$postingID = 0;
+							$show = "form";
+							}
+						else
+							{
+							$oldMessage = mysql_fetch_assoc($oldMessageResult);
+							# Zitatzeichen an den Anfang jeder Zeile stellen:
+							$oldMessage['text'] = preg_replace("/^/m", $settings['quote_symbol']." ", $oldMessage['text']);
+							if ($oldMessage['locked'] > 0
+							&& (empty($_SESSION[$settings['session_prefix'].'user_type'])
+							|| (isset($_SESSION[$settings['session_prefix'].'user_type'])
+							&& $_SESSION[$settings['session_prefix'].'user_type'] != 'admin'
+							&& $_SESSION[$settings['session_prefix'].'user_type'] != 'mod')))
+								{
+								$show = "no authorization";
+								$reason = $lang['thread_locked_error'];
+								}
+							else
+								{
+								$postingID = $oldMessage['pid'];
+								$show = "form";
+								}
+							}
+						mysql_free_result($oldMessageResult);
+						}
+					else
+						{
+						$postingID = 0;
+						$show = "form";
+						}
+				break;
+				case "edit":
+					if ($authorisation['edit'] == 1)
+>>>>>>> posting
+						{
+						# fetch data of message which should be edited:
+						$editMessageQuery = "SELECT
+						tid,
+						pid,
+						t1.user_id,
+						IF(t1.user_id > 0, t2.user_name, t1.name) AS name,
+						IF(t1.user_id > 0, t2.user_email, t1.email) AS email,
+						IF(t1.user_id > 0, t2.user_hp, t1.hp) AS hp,
+						IF(t1.user_id > 0, t2.user_place, t1.place) AS place,
+						IF(t1.user_id > 0, t2.signature, '') AS signature,
+						subject,
+						category,
+						text,
+						email_notify,
+						show_signature,
+						locked,
+						fixed,
+						UNIX_TIMESTAMP(time) AS time,
+						UNIX_TIMESTAMP(NOW() - INTERVAL ". $settings['edit_period'] ." MINUTE) AS edit_diff
+						FROM ". $db_settings['forum_table'] ." AS t1 LEFT JOIN ". $db_settings['userdata_table'] ." AS t2
+							ON t2.user_id = t1.user_id
+						WHERE t1.id = ". intval($_GET['id']);
+						$editMessageResult = mysql_query($editMessageQuery, $connid);
+						if (!$editMessageResult) die($lang['db_error']);
+						$oldMessage = mysql_fetch_assoc($editMessageResult);
+						mysql_free_result($editMessageResult);
+						if ($oldMessage['locked'] > 0 &&
+						(empty($_SESSION[$settings['session_prefix'].'user_type'])
+						|| (isset($_SESSION[$settings['session_prefix'].'user_type'])
+						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'admin'
+						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'mod')))
+							{
+							$show = "no authorization";
+							$reason = $lang['thread_locked_error'];
+							}
+						else if ($settings['edit_period'] > 0
+						&& $oldMessage["edit_diff"] > $oldMessage["time"]
+						&& (empty($_SESSION[$settings['session_prefix'].'user_type'])
+						|| (isset($_SESSION[$settings['session_prefix'].'user_type'])
+						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'admin'
+						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'mod')))
+							{
+							$show = "no authorization";
+							$reason = str_replace('[minutes]',$settings['edit_period'],$lang['edit_period_over']);
+							}
+						else
+							{
+							$show = "form";
+							}
+						}
+<<<<<<< HEAD
 					}
 				else
 					{
 					if ($settings['standard'] == 'thread')
+=======
+					else
 						{
-						$header_href = 'forum_entry.php';
-						$further = $further_id;
+						$show = "no authorization";
+						}
+				break;
+				case "delete":
+					if ($authorisation['delete'] == 1)
+>>>>>>> posting
+						{
+						$deleteQuery = "SELECT
+						tid,
+						pid,
+						UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS tp_time,
+						name,
+						subject,
+						category
+						FROM ". $db_settings['forum_table'] ."
+						WHERE id = ". intval($_GET['id']);
+						$deleteResult = mysql_query($deleteQuery, $connid);
+						if(!$deleteResult) die($lang['db_error']);
+						$deletePosting = mysql_fetch_assoc($deleteResult);
+						$show = "delete form";
 						}
 					else
 						{
+<<<<<<< HEAD
 						$header_href = $settings['standard'] .'_entry.php';
 						$further = $further_tid;
+=======
+						$show = "no authorization";
+>>>>>>> posting
 						}
-					}
-				if ($further_page > 0)
-					{
-					$qs .= '&be_page='.$further_page;
-					$qsl .= '&amp;be_page='.$further_page;
-					}
-				if ($header_href != 'forum_entry.php')
-					{
-					$qs .= '#p'.$further_id;
-					$qsl .= '#p'.$further_id;
-					}
-				header('location: '. $settings['forum_address'].$header_href .'?id='. $further.$qs);
-				die('<a href="'. $header_href .'?id='. $further.$qsl .'">further...</a>');
-				exit(); # Skript beenden
+				break;
+				case "delete ok":
+					if ($authorisation['delete'] == 1)
+						{
+						# select parent posting
+						$parentIdQuery = "SELECT
+						pid
+						FROM ". $db_settings['forum_table'] ."
+						WHERE id = ". intval($_GET['id']);
+						$parentIdResult = mysql_query($parentIdQuery,$connid);
+						if (!$parentIdResult) die($lang['db_error']);
+						$parentId = mysql_fetch_assoc($parentIdResult);
+						if ($parentId["pid"] == 0)
+							{
+							$deleteThreadQuery = "DELETE FROM ". $db_settings['forum_table'] ."
+							WHERE tid = ". intval($_GET['id']);
+							$deleteThreadResult = mysql_query($deleteThreadQuery, $connid);
+							}
+						else
+							{
+							$allLastAnswersQuery = "SELECT
+							tid,
+							time,
+							last_answer
+							FROM ". $db_settings['forum_table'] ."
+							WHERE id = ". intval($_GET['id']);
+							$allLastAnswersResult = mysql_query($allLastAnswersQuery, $connid);
+							$allLastAnswers = mysql_fetch_assoc($allLastAnswersResult);
+							mysql_free_result($allLastAnswersResult);
+
+							# if message is newest in topic:
+							if ($allLastAnswers['time'] == $allLastAnswers['last_answer'])
+								{
+								# search last answer and actualise "last_answer":
+								$lastAnswerQuery = "SELECT
+								time
+								FROM ". $db_settings['forum_table'] ."
+								WHERE tid = ". intval($allLastAnswers['tid']) ."
+								AND time < '". $allLastAnswers['time'] ."'
+								ORDER BY time DESC
+								LIMIT 1";
+								$lastAnswerResult = mysql_query($lastAnswerQuery, $connid);
+								$lastAnswer = mysql_fetch_assoc($lastAnswerResult);
+								mysql_free_result($lastAnswerResult);
+								$updateLastAnswerQuery = "UPDATE ". $db_settings['forum_table'] ." SET
+								time = time,
+								last_answer = '". $lastAnswer['time'] ."'
+								WHERE tid = ". intval($allLastAnswers['tid']);
+								$update_result = mysql_query($updateLastAnswerQuery, $connid);
+								}
+							# delete message:
+							$deleteMessageQuery = "DELETE FROM ". $db_settings['forum_table'] ."
+							WHERE id = ". intval($_GET['id']);
+							$delete_result = mysql_query($deleteMessageQuery,$connid);
+							} # if ($parentId["pid"] == 0) else
+						if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+							and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+							{
+							if ($_SESSION[$settings['session_prefix'].'user_view'] == 'board'
+								or $_SESSION[$settings['session_prefix'].'user_view'] == 'mix')
+								{
+								$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'.php';
+								}
+							else
+								{
+								$header_href = 'forum.php';
+								}
+							}
+						else
+							{
+							if ($settings['standard'] == 'thread')
+								{
+								$header_href = 'forum.php';
+								}
+							else
+								{
+								$header_href = $settings['standard'] .'.php';
+								}
+							}
+						header('location: '. $settings['forum_address'] . $header_href);
+						die('<a href="'. $header_href .'">further...</a>');
+						}
+					else
+						{
+						$show = "no authorization";
+						}
+				break;
 				}
-			} # Ende "if (isset(form))"
+			}
 
 		switch ($action)
 			{
 			case "new":
-				$wo = ($id == 0) ? $lang['new_entry_marking'] : $lang['answer_marking'];
+				$wo = ($postingID == 0) ? $lang['new_entry_marking'] : $lang['answer_marking'];
 			break;
 			case "edit";
 				$wo = $lang['edit_marking'];
@@ -1326,84 +1414,97 @@ if (($settings['access_for_users_only'] == 1
 			break;
 			}
 		$wo = strip_tags($wo);
-
-		if (isset($aname))
+		if (!empty($oldMessage['name']))
 			{
-			$lang['back_to_posting_linkname'] = str_replace("[name]", htmlspecialchars($aname), $lang['back_to_posting_linkname']);
-			$lang['answer_on_posting_marking'] = str_replace("[name]", htmlspecialchars($aname), $lang['answer_on_posting_marking']);
+			$lang['back_to_posting_linkname'] = str_replace("[name]", htmlspecialchars($oldMessage['name']), $lang['back_to_posting_linkname']);
+			$lang['answer_on_posting_marking'] = str_replace("[name]", htmlspecialchars($oldMessage['name']), $lang['answer_on_posting_marking']);
 			}
-
 		$subnav_1 = '';
-		if ($action == "new"
-		&& $id != 0
+		$subnav = array('href'=>'', 'linktext'=>'', 'query'=>'');
+		if (($action == "new"
+		&& ((isset($_GET['id']) and $_GET['id'] > 0)
+			or (isset($_POST['id']) and $_POST['id'] > 0)))
 		|| $action == "edit"
 		|| $action == "delete")
 			{
-			if (!empty($view))
+			if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+				and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
 				{
-				$subnav1_href1 = ($view=="board") ? 'board_entry.php' : 'mix_entry.php';
-				}
-			else
-				{
-				$subnav1_href1 = 'forum_entry.php';
-				}
-			if (isset($page)
-			&& isset($order)
-			&& isset($category))
-				{
-				$subnav1_query1  = '&amp;page='.$page.'&amp;order='.$order;
-				$subnav1_query1 .= ($category > 0) ? '&amp;category='.$category : '';
-				}
-			else
-				{
-				$subnav1_query1 = '';
-				}
-			if (!empty($view))
-				{
-				$subnav_1 .= '<a class="textlink" href="'.$subnav1_href1.'?id='.$thema;
-				$subnav_1 .= $subnav_query1.'&amp;descasc='.$descasc;
-				$subnav_1 .= '">'.$lang['back_to_topic_linkname'].'</a>';
-				}
-			else
-				{
-				$subnav_1 .= '<a class="textlink" href="'.$subnav1_href1.'?id='.$id;
-				$subnav_1 .= $subnav1_query1.'&amp;descasc='.$descasc.'">';
-				if (isset($aname))
+				if ($_SESSION[$settings['session_prefix'].'user_view'] == 'board'
+					or $_SESSION[$settings['session_prefix'].'user_view'] == 'mix')
 					{
-					$subnav_1 .= $lang['back_to_posting_linkname'].'</a>';
+					$subnav['href'] = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php';
+					$subnav['linktext'] = $lang['back_to_topic_linkname'];
 					}
 				else
 					{
-					$subnav_1 .= $lang['back_linkname'].'</a>';
+					$subnav['href'] = 'forum_entry.php';
+					$subnav['linktext'] = !empty($oldMessage['name']) ? $lang['back_to_posting_linkname'] : $lang['back_linkname'];
 					}
-				}
-			}
-		else if ($action == "new"
-		&& $id == 0)
-			{
-			if (!empty($view))
-				{
-				$subnav1_href2 = ($view=="board") ? 'board.php' : 'mix.php';
 				}
 			else
 				{
-				$subnav1_href2 = 'forum.php';
+				$subnav['href'] = ($settings['standard'] == 'thread') ? 'forum_entry.php' : $settings['standard'] .'_entry.php';
+				$subnav['linktext'] = !empty($oldMessage['name']) ? $lang['back_to_posting_linkname'] : $lang['back_linkname'];
 				}
-			$subnav_1 .= '<a class="textlink" href="'.$subnav1_href2;
-			$subnav_1 .= '">'.$lang['back_to_overview_linkname'].'</a>';
+			$subnav['query'] .= !empty($_POST['id']) ? '?id='. intval($_POST['id']) : '?id='. intval($_GET['id']);
 			}
+		else if ($action == "new"
+		&& ((isset($_GET['id']) and $_GET['id'] == 0)
+			or (isset($_POST['id']) and $_POST['id'] == 0)))
+			{
+			if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
+				and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
+				{
+				if ($_SESSION[$settings['session_prefix'].'user_view'] == 'board'
+					or $_SESSION[$settings['session_prefix'].'user_view'] == 'mix')
+					{
+					$subnav['href'] = $_SESSION[$settings['session_prefix'].'user_view'] .'.php';
+					}
+				else
+					{
+					$subnav['href'] = 'forum.php';
+					}
+				}
+			else
+				{
+				if ($settings['standard'] == 'thread')
+					{
+					$subnav['href'] = 'forum.php';
+					}
+				else
+					{
+					$subnav['href'] = $settings['standard'] .'.php';
+					}
+				}
+			$subnav['linktext'] = $lang['back_to_overview_linkname'];
+			}
+		else
+			{
+			if ($settings['standard'] == 'thread')
+				{
+				$subnav['href'] = 'forum.php';
+				}
+			else
+				{
+				$subnav['href'] = $settings['standard'] .'.php';
+				}
+			$subnav['linktext'] = $lang['back_to_overview_linkname'];
+			}
+		$subnav_1 = '<a class="textlink" href="'. $subnav['href'].$subnav['query'] .'">'. htmlspecialchars($subnav['linktext']) .'</a>';
 
 		parse_template();
 		echo $header;
 		echo outputDebugSession();
-
+		$output = '';
 		switch ($show)
 			{
 			case "form":
+				# generate a captcha in case of not signed on user and setting is on
 				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
-				&& $settings['captcha_posting'] == 1)
+					&& $settings['captcha_posting'] == 1)
 					{
-					if($settings['captcha_type']==1)
+					if ($settings['captcha_type'] == 1)
 						{
 						$_SESSION['captcha_session'] = $captcha->generate_code();
 						}
@@ -1412,108 +1513,72 @@ if (($settings['access_for_users_only'] == 1
 						$_SESSION['captcha_session'] = $captcha->generate_math_captcha();
 						}
 					}
-				# Überschrift:
-				if ($action == "new")
+				# load template for posting form
+				$postingTFile = 'data/templates/posting.new.xml';
+				$postingTemplate = simplexml_load_file($postingTFile, null, LIBXML_NOCDATA);
+				$tBody = $postingTemplate->body;
+				# page header
+				$addInfo = '';
+				if ($action == "edit")
 					{
-					if ($id == 0)
+					$pageHeader = $lang['edit_marking'];
+					}
+				else
+					{
+					if ((isset($_GET['id']) and $_GET['id'] > 0)
+						or (isset($_POST['id']) and $_POST['id'] > 0))
 						{
-						echo '<h2>'.$lang['new_entry_marking'].'</h2>'."\n";
+						$pageHeader = $lang['answer_marking'];
+						$addInfo = '<p class="postingforma">'.$lang['answer_on_posting_marking'].'</p>';
 						}
 					else
 						{
-						echo '<h2>'.$lang['answer_marking'].'</h2>'."\n";
-						echo '<p class="postingforma">'.$lang['answer_on_posting_marking'].'</p>'."\n";
+						$pageHeader = $lang['new_entry_marking'];
 						}
 					}
-				if ($action == "edit")
-					{
-					echo '<h2>'.$lang['edit_marking'].'</h2>'."\n";
-					}
+				$tBody = str_replace('{pageHeader}', $pageHeader, $tBody);
+				$tBody = str_replace('{additionalInfo}', $addInfo, $tBody);
 				# error messages, if present:
+				$errorMessages = '';
 				if (isset($errors))
 					{
-					echo errorMessages($errors);
+					$errorMessages = errorMessages($errors);
 					}
+				$tBody = str_replace('{errorMessages}', $errorMessages, $tBody);
 				# preview:
+				$previewOutput = '';
 				if (isset($preview)
 				&& empty($errors))
 					{
 					if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 						{
-						if ($action == "edit")
+						if ($action != "edit")
 							{
-							$pr_id = $p_user_id;
-							}
-						else
-							{
-							$pr_id = $_SESSION[$settings['session_prefix']."user_id"];
-							}
-						$previewQuery = "SELECT
-						user_name,
-						user_email,
-						hide_email,
-						user_hp,
-						user_place,
-						signature
-						FROM ". $db_settings['userdata_table'] ."
-						WHERE user_id = '". intval($pr_id) ."'
-						LIMIT 1";
-						$preview_result = mysql_query($previewQuery, $connid);
-						if (!$preview_result) die($lang['db_error']);
-						$field = mysql_fetch_assoc($preview_result);
-						mysql_free_result($preview_result);
-						$pr_name = $field["user_name"];
-						$pr_email = $field["user_email"];
-						$hide_email = $field["hide_email"];
-						$pr_hp = $field["user_hp"];
-						$pr_place = $field["user_place"];
-						$prSignature = $field["signature"];
+							$previewQuery = "SELECT
+							user_name,
+							user_email,
+							hide_email,
+							user_hp,
+							user_place,
+							signature
+							FROM ". $db_settings['userdata_table'] ."
+							WHERE user_id = '". intval($_SESSION[$settings['session_prefix']."user_id"]) ."'
+							LIMIT 1";
+							$previewResult = mysql_query($previewQuery, $connid);
+							if (!$preview_result) die($lang['db_error']);
+							$previewUserData = mysql_fetch_assoc($previewResult);
+							mysql_free_result($previewResult);
+							} # End: if ($action != "edit")
 						} # End: if (isset($_SESSION[$settings['session_prefix'].'user_id']))
-					if (empty($pr_name)) $pr_name = $name;
-					if (empty($pr_email)) $pr_email = $email;
-					if (empty($hide_email)) $hide_email = 0;
-					if (empty($pr_hp)) $pr_hp = $hp;
-					if (empty($pr_place)) $pr_place = $place;
-					# current time:
-					list($pr_time) = mysql_fetch_row(mysql_query("SELECT UNIX_TIMESTAMP(NOW() + INTERVAL ".$time_difference." HOUR)"));
-					$mark['admin'] = false;
-					$mark['mod'] = false;
-					$mark['user'] = false;
-					$entry = array();
-					$entry['hide_email'] = $hide_email;
-					$entry['id'] = 0;
-					$entry['answer'] = '';
-					$entry["email"] = $pr_email;
-					$entry["hp"] = $pr_hp;
-					$entry['name'] = $pr_name;
-					$entry["place"] = $pr_place;
-					$entry['user_id'] = !empty($pr_id) ? $pr_id : 0;
-					$entry['ip'] = '127.0.0.1';
-					$entry["edited_diff"] = 0;
-					$entry["p_time"] = $pr_time;
-					$entry["edited_by"] = '';
-					$entry["e_time"] = '';
-					# generate content of preview
-					if (isset($_SESSION[$settings['session_prefix'].'curr_view'])
-					and in_array($_SESSION[$settings['session_prefix'].'curr_view'], array('thread', 'mix', 'board')))
-						{
-						$prTemplate = file_get_contents('data/templates/posting.'. $_SESSION[$settings['session_prefix'].'curr_view'] .'.html');
-						$isView = $_SESSION[$settings['session_prefix'].'curr_view'];
-						}
-					else if (isset($_SESSION[$settings['session_prefix'].'user_view'])
-					and in_array($_SESSION[$settings['session_prefix'].'user_view'], array('thread', 'mix', 'board')))
+					# load one of the templates for the preview
+					if (isset($_SESSION[$settings['session_prefix'].'user_view'])
+					and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
 						{
 						$prTemplate = file_get_contents('data/templates/posting.'. $_SESSION[$settings['session_prefix'].'user_view'] .'.html');
 						$isView = $_SESSION[$settings['session_prefix'].'user_view'];
 						}
-					else if (isset($_COOKIE['curr_view'])
-					and in_array($_COOKIE['curr_view'], array('thread', 'mix', 'board')))
-						{
-						$prTemplate = file_get_contents('data/templates/posting.'. $_COOKIE['curr_view'] .'.html');
-						$isView = $_COOKIE['curr_view'];
-						}
 					else if (isset($_COOKIE['user_view'])
-					and in_array($_COOKIE['user_view'], array('thread', 'mix', 'board')))
+					and in_array($_COOKIE['user_view'], $possViews))
 						{
 						$prTemplate = file_get_contents('data/templates/posting.'. $_COOKIE['user_view'] .'.html');
 						$isView = $_COOKIE['user_view'];
@@ -1523,32 +1588,32 @@ if (($settings['access_for_users_only'] == 1
 						$prTemplate = file_get_contents('data/templates/posting.'. $settings['standard'] .'.html');
 						$isView = $settings['standard'];
 						}
-					$prAuthorinfo =  outputAuthorInfo($mark, $entry, $page, $order, $view, $category);
+					$mark['admin'] = false;
+					$mark['mod'] = false;
+					$mark['user'] = false;
+					$prAuthorinfo = outputAuthorInfo($mark, $_POST, 0, 0, $isView);
 					$prSubject = htmlspecialchars($subject);
-					if ($text == "")
+					if (empty($_POST['text']))
 						{
 						$prText = $lang['no_text'];
 						}
 					else
 						{
-						$prText = $text;
-#						$prText = htmlspecialchars($prText);
-#						$prText = nl2br($prText);
+						$prText = $_POST['text'];
 						$prText = ($settings['autolink'] == 1) ? make_link($prText) : $prText;
 						$prText = ($settings['bbcode'] == 1) ? bbcode($prText) : $prText;
 						$prText = ($settings['smilies'] == 1) ? smilies($prText) : $prText;
 						$prText = zitat($prText);
 						}
 					if ($show_signature == 1
-					&& $prSignature != "")
+					&& !empty($previewUserData['signature']))
 						{
+						$prSignature = $previewUserData['signature'];
 						$prSignature = $settings['signature_separator']."\n".$prSignature;
-#						$prSignature = htmlspecialchars($prSignature);
-#						$prSignature = nl2br($prSignature);
 						$prSignature = ($settings['autolink'] == 1) ? make_link($prSignature) : $prSignature;
 						$prSignature = ($settings['bbcode'] == 1) ? bbcode($prSignature) : $prSignature;
 						$prSignature = ($settings['smilies'] == 1) ? smilies($prSignature) : $prSignature;
-						$prSignature = '<div class="signature">'.$prSignature.'</div>'."\n";
+						$prSignature = '<div class="signature">'. $prSignature .'</div>'."\n";
 						}
 					else
 						{
@@ -1566,255 +1631,247 @@ if (($settings['access_for_users_only'] == 1
 					$prTemplate = str_replace('{thread}', $prThread, $prTemplate);
 					$prTemplate = str_replace('{postingID}', $entry['user_id'], $prTemplate);
 					$prTemplate = ($isView == 'board') ? '<table class="normaltab">'. $prTemplate .'</table>' : $prTemplate;
-#					echo '<pre>'. print_r(htmlspecialchars($prTemplate), true) .'</pre>';
-					echo '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
-					echo $prTemplate;
-					echo '<hr class="entryline" />'."\n";
-					} # if (isset($preview) && empty($errors))
-				# End preview
-				echo '<form action="posting.php" method="post" id="entryform" accept-charset="UTF-8">'."\n";
-				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
-				&& $settings['captcha_posting'] == 1)
+					$previewOutput .= '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
+					$previewOutput .= $prTemplate;
+					$previewOutput .= '<hr class="entryline" />'."\n";
+					} # End: if (isset($preview) && empty($errors))
+				$tBody = str_replace('{preview}', $previewOutput, $tBody);
+				$tBody = str_replace('{postingID}', isset($_GET['id']) ? intval($_GET['id']) : (isset($_POST['id']) ? intval($_POST['id']) : 0), $tBody);
+				$tBody = str_replace('{postingUniqueID}', uniqid(""), $tBody);
+				$tBody = str_replace('{postingAction}', htmlspecialchars($action), $tBody);
+				# set parents id if posting should be edited
+				$tParentID = '';
+				if ($action == 'edit')
 					{
-					echo '<input type="hidden" name="'. session_name() .'" value="'. session_id() .'" />'."\n";
+					$tParentID = $postingTemplate->parentid;
+					$tParentID = str_replace('{parentID}', isset($oldMessage['pid']) ? intval($oldMessage['pid']) : (isset($_POST['pid']) ? intval($_POST['pid']) : 0), $tParentID);
 					}
-				echo '<input type="hidden" name="form" value="true" />'."\n";
-				echo '<input type="hidden" name="id" value="'. intval($id) .'" />'."\n";
-				echo ($action == "edit") ? '<input type="hidden" name="pid" value="'. intval($pid) .'" />'."\n" : '';
-				echo '<input type="hidden" name="uniqid" value="'. uniqid("") .'" />'."\n";
-				echo '<input type="hidden" name="action" value="'. htmlspecialchars($action) .'" />'."\n";
-				echo (isset($p_user_id)) ? '<input type="hidden" name="p_user_id" value="'. $p_user_id .'" />'."\n" : '';
-				echo (isset($aname)) ? '<input type="hidden" name="aname" value="'. htmlspecialchars($aname) .'" />'."\n" : '';
-				echo (isset($back)) ? '<input type="hidden" name="back" value="'. $back .'" />'."\n" : '';
-				echo (isset($thema)) ? '<input type="hidden" name="thema" value="'. $thema .'" />'."\n" : '';
-				echo '<table class="normal">'."\n";
-				# Formularfelder für unbekannte User bzw. wenn
-				# Posting unbekannter User editiert wird:
-				if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
-				or $action == "edit"
-				&& $p_user_id == 0)
+				$tBody = str_replace('{fieldPID}', $tParentID, $tBody);
+				# set user id of the parent posting if current one should be edited
+				$tParentUID = '';
+				if (isset($oldMessage['user_id']))
 					{
-					echo '<tr>'."\n";
-					echo '<td><label for="name">'. $lang['name_marking'] .'</label"></td>'."\n";
-					echo '<td><input type="text" size="40" name="name" id="name" value="';
-					echo (isset($name)) ? htmlspecialchars($name) : '';
-					echo '" maxlength="'. $settings['name_maxlength'] .'" /></td>'."\n";
-					echo '</tr><tr>'."\n";
-					echo '<td><label for="email">'. $lang['email_marking'] .'</label></td>'."\n";
-					echo '<td><input type="text" size="40" name="email" id="email" value="';
-					echo (isset($email)) ? htmlspecialchars($email) : '';
-					echo '" maxlength="'. $settings['email_maxlength'] .'" />&nbsp;';
-					echo '<span class="xsmall">'. $lang['optional_marking'] .'</span></td>'."\n";
-					echo '</tr><tr>'."\n";
-					echo '<td><label for="hp">'. $lang['hp_marking'] .'</label></td>'."\n";
-					echo '<td><input type="text" size="40" name="hp" id="hp" value="';
-					echo (isset($hp)) ? htmlspecialchars($hp) : '';
-					echo '" maxlength="'. $settings['hp_maxlength'] .'&nbsp;';
-					echo '<span class="xsmall">'. $lang['optional_marking'] .'</span></td>'."\n";
-					echo '</tr><tr>'."\n";
-					echo '<td><label for="place">'. $lang['place_marking'] .'</label></td>'."\n";
-					echo '<td><input type="text" size="40" name="place" id="place" value="';
-					echo (isset($place)) ? htmlspecialchars($place) : '';
-					echo '" maxlength="'. $settings['place_maxlength'] .'" />&nbsp;';
-					echo '<span class="xsmall">'. $lang['optional_marking'] .'</span></td>'."\n";
-					echo '</tr>';
+					$tParentUID = $postingTemplate->parentuserid;
+					$tParentUID = str_replace('{parentUserID}', !empty($oldMessage['user_id']) ? intval($oldMessage['user_id']) : 0, $tParentUID);
+					}
+				$tBody = str_replace('{fieldUID}', $tParentUID, $tBody);
+				# set user name of the parent posting if current one should be edited
+				$tParentName = '';
+				if (isset($oldMessage['name']))
+					{
+					$tParentName = $postingTemplate->parentname;
+					$tParentName = str_replace('{parentName}', htmlspecialchars($oldMessage['name']), $tParentName);
+					}
+				$tBody = str_replace('{fieldParentName}', $tParentName, $tBody);
+				# set thread id if current postingis an answer or should be edited
+				$tThreadID = '';
+				if (isset($oldMessage['tid']))
+					{
+					$tThreadID = $postingTemplate->threadid;
+					$tThreadID = str_replace('{threadID}', intval($oldMessage['tid']), $tThreadID);
+					}
+				$tBody = str_replace('{fieldTID}', $tThreadID, $tBody);
+				# set the session id if necessary
+				$tSessionID = '';
+				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
+					and $settings['captcha_posting'] == 1)
+					{
+					$tSessionID = $postingTemplate->sessionid;
+					$tSessionID = str_replace('{sessionName}', session_name(), $tSessionID);
+					$tSessionID = str_replace('{sessionID}', session_id(), $tSessionID);
+					}
+				$tBody = str_replace('{fieldSID}', $tSessionID, $tBody);
+				# form fields for a new posting of an unregistered visitor
+				# respectively editing a posting of an unregistered visitor
+				$tUnreg = '';
+				if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
+					or ($action == "edit"
+					and $oldMessage['user_id'] == 0))
+					{
+					$tUnreg = $postingTemplate->unregistered;
+					$tUnreg = str_replace('{markOption}', $lang['optional_marking'], $tUnreg);
+					$tUnreg = str_replace('{labelName}', $lang['name_marking'], $tUnreg);
+					$tUnreg = str_replace('{labelEmail}', $lang['email_marking'], $tUnreg);
+					$tUnreg = str_replace('{labelHomepage}', $lang['hp_marking'], $tUnreg);
+					$tUnreg = str_replace('{labelPlace}', $lang['place_marking'], $tUnreg);
+					$tUnreg = str_replace('{maxLenName}', intval($settings['name_maxlength']), $tUnreg);
+					$tUnreg = str_replace('{maxLenEmail}', intval($settings['email_maxlength']), $tUnreg);
+					$tUnreg = str_replace('{maxLenHomepage}', intval($settings['hp_maxlength']), $tUnreg);
+					$tUnreg = str_replace('{maxLenPlace}', intval($settings['place_maxlength']), $tUnreg);
+					$tUnreg = str_replace('{postingName}', !empty($_POST['name']) ? htmlspecialchars($_POST['name']) : '', $tUnreg);
+					$tUnreg = str_replace('{postingEmail}', !empty($_POST['email']) ? htmlspecialchars($_POST['email']) : '', $tUnreg);
+					$tUnreg = str_replace('{postingHomepage}', !empty($_POST['hp']) ? htmlspecialchars($_POST['hp']) : '', $tUnreg);
+					$tUnreg = str_replace('{postingPlace}', !empty($_POST['place']) ? htmlspecialchars($_POST['place']) : '', $tUnreg);
+					# cookies controls
+					$tCookies = '';
 					if ($settings['remember_userdata'] == 1
 					&& !isset($_SESSION[$settings['session_prefix'].'user_id']))
 						{
-						echo '<tr>'."\n";
-						echo '<td>&nbsp;</td><td><span class="small"><input type="checkbox" name="setcookie" value="1"';
-						echo (isset($setcookie) && $setcookie == 1) ? ' checked="checked"' : '';
-						echo ' />&nbsp;'. $lang['remember_userdata_cbm'];
+						$tCookies = $postingTemplate->cookies;
+						$tCookies = str_replace('{formCheckSetCookie}', (isset($_POST['setcookie']) && $_POST['setcookie'] == 1) ? ' checked="checked"' : '', $tCookies);
+						$tCookies = str_replace('{rememberUserData}', $lang['remember_userdata_cbm'], $tCookies);
+						# cookies content, if cookies was set before
+						$tCookiesDel = '';
 						if (isset($_COOKIE['user_name'])
-						|| isset($_COOKIE['user_email'])
-						or isset($_COOKIE['user_hp'])
-						or isset($_COOKIE['user_hp']))
+							or isset($_COOKIE['user_email'])
+							or isset($_COOKIE['user_hp'])
+							or isset($_COOKIE['user_hp']))
 							{
-							echo '&nbsp;&nbsp;&nbsp;<a onclick="javascript:createPopup(this.href, 200, 150); return false;"';
-							echo ' href="delete_cookie.php" title="'. outputLangDebugInAttributes($lang['delete_cookies_linktitle']) .'"><img border="0"';
-							echo ' src="img/dc.png" name="dc" alt="" width="12" height="9">'. $lang['delete_cookies_linkname'] .'</a>';
-							}
-						echo '</span></td>'."\n";
-						echo '</tr>';
-						}
-					}
+							$tCookiesDel = $postingTemplate->deletecookies;
+							$tCookiesDel = str_replace('{deleteCookieTitle}', outputLangDebugInAttributes($lang['delete_cookies_linktitle']), $tCookiesDel);
+							$tCookiesDel = str_replace('{deleteCookieName}', $lang['delete_cookies_linkname'], $tCookiesDel);
+							} # End: if (isset($_COOKIE['user_name']) ...)
+						$tCookies = str_replace('{deleteExistingCookies}', $tCookiesDel, $tCookies);
+						} # End: if ($settings['remember_userdata'] == 1 ...)
+					$tUnreg = str_replace('{cookieBlock}', $tCookies, $tUnreg);
+					} # End: if (!isset($_SESSION[$settings['session_prefix'].'user_id']) ...)
+				$tBody = str_replace('{forUnregistered}', $tUnreg, $tBody);
+				# category select in presence of categories				
+				$tCats = '';
 				if ($categories !== false)
 					{
-					echo '<tr>'."\n";
-					echo '<td><label for="p_category">'. $lang['category_marking'] .'</label></td>'."\n";
-					echo '<td><select size="1" name="p_category" id="p_category">'."\n";
-					if (empty($id)
-					|| $id == 0
-					|| $action=="edit"
-					&& isset($pid)
-					&& $pid == 0)
+					# temporary array for categories for use in function outputMakeSelect
+					$tempCategories = array();
+					if ((empty($_GET['id']) or $_GET['id'] == 0)
+						or (empty($_POST['id']) or $_POST['id'] == 0)
+						or ($action == "edit" and isset($oldMessage['pid']) and $oldMessage['pid'] == 0))
 						{
-						while (list($key, $val) = each($categories))
+						foreach ($categories as $key => $val)
 							{
-							if ($key != 0)
+							if ($key > 0)
 								{
-								echo '<option value="'. $key .'"';
-								if ((isset($_SESSION[$settings['session_prefix'].'category'])
-								&& $_SESSION[$settings['session_prefix'].'category'] > 0
-								&& $key == $_SESSION[$settings['session_prefix'].'category']
-								&& empty($p_category))
-								|| (isset($p_category)
-								&& $key == $p_category))
-									{
-									echo ' selected="selected"';
-									}
-								echo '>'. htmlspecialchars($val) .'</option>'."\n";
+								$tempCategories[] = array('id' => $key, 'name' => $val);
 								}
 							}
 						}
 					else
 						{
-						echo '<option value="'. $p_category .'">';
-						if (isset($categories[$p_category]))
-							{
-							echo $categories[$p_category];
-							}
-						echo '</option>'."\n";
+						$tempCategories[] = array('id' => $oldMessage['category'], 'name' => $categories[$oldMessage['category']]);
 						}
-					echo '</select></td>'."\n";
-					echo '</tr>';
+					$selectedCategory =  isset($oldMessage['category']) ? intval($oldMessage['category']) : (!empty($_POST['p_category']) ? intval($_POST['p_category']) : '');
+					$categorySelect = outputMakeSelect($tempCategories, 'p_category', $selectedCategory);
+					$tCats = $postingTemplate->category;
+					$tCats = str_replace('{labelCategory}', $lang['category_marking'], $tCats);
+					$tCats = str_replace('{selectCategory}', $categorySelect, $tCats);
 					}
-				echo '<tr>'."\n";
-				echo '<td><label for="subject">'. $lang['subject_marking'] .'</label></td>'."\n";
-				echo '<td><input type="text" size="50" name="subject" id="subject" value="';
-				echo (isset($subject)) ? htmlspecialchars($subject) : '';
-				echo '" maxlength="'. $settings['subject_maxlength'] .'" /></td>'."\n";
-				echo '</tr><tr>'."\n";
-				echo '<td colspan="2"><label for="text">'. $lang['text_marking'] .'</label>';
-				if ($action == "new"
-				&& $id != 0)
+				$tBody = str_replace('{categorySelect}', $tCats, $tBody);
+				# set subject fields
+				$tBody = str_replace('{labelSubject}', htmlspecialchars($lang['subject_marking']), $tBody);
+				$tBody = str_replace('{maxLenSubject}', htmlspecialchars($settings['subject_maxlength']), $tBody);
+				$tBody = str_replace('{postingSubject}', isset($oldMessage['subject']) ? htmlspecialchars($oldMessage['subject']) : (!empty($_POST['subject']) ? htmlspecialchars($_POST['subject']) : ''), $tBody);
+				# set posting text
+				$tBody = str_replace('{labelText}', htmlspecialchars($lang['text_marking']), $tBody);
+				$tBody = str_replace('{deleteOldPostingText}', htmlspecialchars($lang['delete_quoted_text']), $tBody);
+				$tBody = str_replace('{bbCodeMarking}', $lang['bbcode_marking_user'], $tBody);
+				$tBody = str_replace('{postingText}', isset($oldMessage['text']) ? htmlspecialchars($oldMessage['text']) : (!empty($_POST['text']) ? htmlspecialchars($_POST['text']) : ''), $tBody);
+				# set the switch for signature
+				$tSignature = '';
+				if (($show_signature == 1
+					and (isset($_SESSION[$settings['session_prefix'].'user_id'])
+						and $action == "new"))
+					or (isset($_SESSION[$settings['session_prefix'].'user_id'])
+						and $action == "edit"
+						and $oldMessage['show_signature'] == 1))
 					{
-					echo '&nbsp;&nbsp;<span id="delete-text" class="small">'. $lang['delete_quoted_text'] .'</span>';
+					$tSignature = $postingTemplate->signature;
+					$signatureCheck = ($show_signature == 1 or (isset($oldMessage['show_signature']) && $oldMessage['show_signature'] == 1) or (!empty($_POST['show_signature']) and $_POST['show_signature'] == 1)) ? ' checked="checked"' : '';
+					$tSignature = str_replace('{formCheckShowSignature}', $signatureCheck, $tSignature);
+					$tSignature = str_replace('{showSignatureName}', htmlspecialchars($lang['show_signature_cbm']), $tSignature);
 					}
-				echo '</td>'."\n";
-				echo '</tr><tr>'."\n";
-				echo '<td colspan="2">'."\n";
-				echo '<table class="normal" border="0" cellpadding="0" cellspacing="0">'."\n";
-				echo '<tr>'."\n".'<td valign="top">'."\n";
-				echo '<textarea cols="78" rows="20" name="text" id="text">';
-				if (isset($text))
-					{
-					echo htmlspecialchars($text);
-					}
-				echo '</textarea>'."\n";
-				echo '</td>'."\n";
-				echo '<td id="buttonspace">'. $lang['bbcode_marking_user'] .'</td>'."\n";
-				echo '</tr>'."\n".'</table>'."\n";
-				echo '</td>'."\n";
-				echo '</tr>'."\n";
-				if ((isset($_SESSION[$settings['session_prefix'].'user_id'])
-				&& $action=="new")
-				|| (isset($_SESSION[$settings['session_prefix'].'user_id'])
-				&& $action=="edit"
-				&& $p_user_id > 0))
-					{
-					echo '<tr>'."\n";
-					echo '<td colspan="2"><label for="show_signature"><input type="checkbox"';
-					echo ' name="show_signature" id="show_signature" value="1"';
-					echo (isset($show_signature) && $show_signature==1) ? ' checked="checked"' : '';
-					echo ' />&nbsp;'. $lang['show_signature_cbm'] .'</label></td>'."\n";
-					echo '</tr>';
-					}
+				$tBody = str_replace('{showSignature}', $tSignature, $tBody);
+				# set the switch for email notification about answers
+				$tNotify = '';
 				if ($settings['email_notification'] == 1)
 					{
-					echo '<tr>'."\n";
-					echo '<td colspan="2"><label for="email_notify"><input type="checkbox"';
-					echo ' name="email_notify" id="email_notify" value="1"';
-					echo (isset($email_notify) && $email_notify == 1) ? ' checked="checked"' : '';
-					echo ' />&nbsp;'. $lang['email_notification_cbm'] .'</label></td>'."\n";
-					echo '</tr>';
+					$tNotify = $postingTemplate->notification;
+					$notificationCheck = ((isset($oldMessage['email_notify']) and $oldMessage['email_notify'] == 1) or (isset($_POST['email_notify']) and $_POST['email_notify'] == 1)) ? ' checked="checked"' : '';
+					$tNotify = str_replace('{formCheckEmailNotify}', $notificationCheck, $tNotify);
+					$tNotify = str_replace('{labelEmailNotify}', htmlspecialchars($lang['email_notification_cbm']), $tNotify);
 					}
-				else
-					{
-					echo '<input type="hidden" name="email_b" value="" />'."\n";
-					}
+				$tBody = str_replace('{emailNotification}', $tNotify, $tBody);
+				# set the switch to fix threads
+				$tFixed = '';
 				if (isset($_SESSION[$settings['session_prefix'].'user_type'])
-				&& ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
-				|| $_SESSION[$settings['session_prefix'].'user_type'] == "mod")
-				&& (empty($id)
-				|| $id == 0
-				|| $action=="edit"
-				&& isset($pid)
-				&& $pid == 0))
+					and ($_SESSION[$settings['session_prefix'].'user_type'] == "admin"
+						or $_SESSION[$settings['session_prefix'].'user_type'] == "mod")
+					and $postingID == 0)
 					{
-					echo '<tr>'."\n";
-					echo '<td colspan="2"><label for="fixed"><input type="checkbox"';
-					echo ' name="fixed" id="fixed" value="1"';
-					echo (isset($fixed) && $fixed == 1) ? ' checked="checked"' : '';
-					echo ' />&nbsp;'. $lang['fix_thread'] .'</label></td>'."\n";
-					echo '</tr>';
+					$tFixed = $postingTemplate->fixthread;
+					$fixedCheck = ((isset($oldMessage['fixed']) and $oldMessage['fixed'] == 1) or (isset($_POST['fixed']) and $_POST['fixed'] == 1)) ? ' checked="checked"' : '';
+					$tFixed = str_replace('{formCheckFixThread}', $fixedCheck, $tFixed);
+					$tFixed = str_replace('{labelFixThread}', htmlspecialchars($lang['fix_thread']), $tFixed);
 					}
+				$tBody = str_replace('{fixThread}', $tFixed, $tBody);
+				# set the captcha
+				$tCaptcha = '';
 				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
-				&& $settings['captcha_posting'] == 1)
+				&& $settings['captcha_posting'] == 1)			
 					{
-					echo '<tr>'."\n";
-					echo '<td colspan="2"><b>'. $lang['captcha_marking'] .'</b></td>'."\n";
-					echo '</tr>';
+					$tCaptcha = $postingTemplate->captcha;
+					$tCaptcha = str_replace('{captchaMarking}', htmlspecialchars($lang['captcha_marking']), $tCaptcha);
 					if ($settings['captcha_type'] == 1)
 						{
-						echo '<tr>'."\n";
-						echo '<td colspan="2"><img class="captcha" src="captcha/captcha_image.php?';
-						echo SID.'" alt="'. outputLangDebugInAttributes($lang['captcha_image_alt']) .'" width="180" height="40"/></td>'."\n";
-						echo '</tr><tr>'."\n";
-						echo '<td colspan="2">'. $lang['captcha_expl_image'] .'</td>'."\n";
-						echo '</tr><tr>'."\n";
-						echo '<td colspan="2"><input type="text" name="captcha_code" value="" size="10" /></td>'."\n";
-						echo '</tr>';
+						# image (text) captcha
+						$tCaptchaDetail = $postingTemplate->captchatext;
+						$tCaptchaDetail = str_replace('{SID}', SID, $tCaptchaDetail);
+						$tCaptchaDetail = str_replace('{captchaAltText}', outputLangDebugInAttributes($lang['captcha_image_alt']), $tCaptchaDetail);
+						$tCaptchaDetail = str_replace('{captchaExplanationText}', htmlspecialchars($lang['captcha_expl_image']), $tCaptchaDetail);
 						}
 					else
 						{
-						echo '<tr>'."\n";
-						echo '<td colspan="2">'. $lang['captcha_expl_math'] .'</td>'."\n";
-						echo '</tr><tr>'."\n";
-						echo '<td colspan="2">'. $_SESSION['captcha_session'][0] .' + '. $_SESSION['captcha_session'][1] .' = ';
-						echo '<input type="text" name="captcha_code" value="" size="5" /></td>'."\n";
-						echo '</tr>';
+						# mathematical captcha
+						$tCaptchaDetail = $postingTemplate->captchamath;
+						$tCaptchaDetail = str_replace('{captchaExplanationMath}', htmlspecialchars($lang['captcha_expl_math']), $tCaptchaDetail);
+						$tCaptchaDetail = str_replace('{captchaMathNull}', htmlspecialchars($_SESSION['captcha_session'][0]), $tCaptchaDetail);
+						$tCaptchaDetail = str_replace('{captchaMathOne}', htmlspecialchars($_SESSION['captcha_session'][1]), $tCaptchaDetail);
 						}
+					$tCaptcha = str_replace('{theCaptcha}', $tCaptchaDetail, $tCaptcha);
 					}
-				echo '<tr>'."\n";
-				echo '<td colspan="2"><input type="submit" name="save_entry" value="';
-				echo outputLangDebugInAttributes($lang['submit_button']) .'" title="'. outputLangDebugInAttributes($lang['submit_button_title']) .'" />&nbsp;';
-				echo '<input type="submit" name="preview" value="';
-				echo outputLangDebugInAttributes($lang['preview_button']) .'" title="'. outputLangDebugInAttributes($lang['preview_button_title']) .'" />&nbsp;';
-				echo '<input type="reset" value="'. outputLangDebugInAttributes($lang['reset_button']) .'" title="'. outputLangDebugInAttributes($lang['reset_button_title']) .'" /></td>'."\n";
-				echo "</tr>\n</table>\n</form>\n";
+				$tBody = str_replace('{showCaptcha}', $tCaptcha, $tBody);
+				# label the buttons
+				$tBody = str_replace('{formSubmitValue}', outputLangDebugInAttributes($lang['submit_button']), $tBody);
+				$tBody = str_replace('{formSubmitTitle}', outputLangDebugInAttributes($lang['submit_button_title']), $tBody);
+				$tBody = str_replace('{formPreviewValue}', outputLangDebugInAttributes($lang['preview_button']), $tBody);
+				$tBody = str_replace('{formPreviewTitle}', outputLangDebugInAttributes($lang['preview_button_title']), $tBody);
+				$tBody = str_replace('{formResetValue}', outputLangDebugInAttributes($lang['reset_button']), $tBody);
+				$tBody = str_replace('{formResetTitle}', outputLangDebugInAttributes($lang['reset_button_title']), $tBody);
+				# set the privacy explanation
+				$tPrivacy = '';
 				if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
-				|| isset($_SESSION[$settings['session_prefix'].'user_id'])
-				&& $action=="edit" )
+					or (isset($_SESSION[$settings['session_prefix'].'user_id'])
+						and $action == "edit"))
 					{
-					echo '<p class="xsmall" style="margin-top: 30px;">'. $lang['email_exp'] .'</p>'."\n";
+					$tPrivacy = $postingTemplate->privacyexp;
+					$tPrivacy = str_replace('{emailPrivacyExplanation}', htmlspecialchars($lang['email_exp']), $tPrivacy);
 					}
+				$tBody = str_replace('{privacyExplanation}', $tPrivacy, $tBody);
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
-				echo '<p class="caution">'. $lang['no_authorization'] .'</p>'."\n";
+				$output .= '<p class="caution">'. $lang['no_authorization'] .'</p>'."\n";
 				if (isset($reason))
 					{
-					echo '<p>'. $reason .'</p>'."\n";
+					$output .= '<p>'. $reason .'</p>'."\n";
 					}
 			break;
 			# End: switch ($show)->case "no authorization"
 			case "delete form":
-				$lang['thread_info'] = str_replace("[name]", htmlspecialchars($field["name"]), $lang['thread_info']);
-				$lang['thread_info'] = str_replace("[time]", strftime($lang['time_format'],$field["tp_time"]), $lang['thread_info']);
-				echo '<h2>'. $lang['delete_marking'] .'</h2>'."\n";
-				echo '<p>'. $lang['delete_posting_sure'];
-				echo ($field["pid"] == 0) ? '<br />'. $lang['delete_whole_thread'] : '';
-				echo '</p>'."\n";
-				echo '<p><b>'. htmlspecialchars($field["subject"]) .'</b>&nbsp;'. $lang['thread_info'] .'</p>'."\n";
-				echo '<form action="posting.php" method="get" accept-charset="UTF-8">'."\n";
-				echo '<input type="hidden" name="action" value="delete ok" />'."\n";
-				echo '<input type="hidden" name="id" value="'. intval($id) .'" />'."\n";
-				echo '<p><input type="submit" name="delete" value="'. $lang['delete_posting_ok'] .'" /></p>'."\n";
-				echo '</form>'."\n";
+				$lang['thread_info'] = str_replace("[name]", htmlspecialchars($deletePosting["name"]), $lang['thread_info']);
+				$lang['thread_info'] = str_replace("[time]", strftime($lang['time_format'], $deletePosting["tp_time"]), $lang['thread_info']);
+				$output .= '<h2>'. $lang['delete_marking'] .'</h2>'."\n";
+				$output .= '<p>'. $lang['delete_posting_sure'];
+				$output .= ($deletePosting["pid"] == 0) ? '<br />'. $lang['delete_whole_thread'] : '';
+				$output .= '</p>'."\n";
+				$output .= '<p><b>'. htmlspecialchars($deletePosting["subject"]) .'</b>&nbsp;'. $lang['thread_info'] .'</p>'."\n";
+				$output .= '<form action="posting.php" method="get" accept-charset="UTF-8">'."\n";
+				$output .= '<input type="hidden" name="action" value="delete ok" />'."\n";
+				$output .= '<input type="hidden" name="id" value="'. intval($_GET['id']) .'" />'."\n";
+				$output .= '<p><input type="submit" name="delete" value="'. outputLangDebugInAttributes($lang['delete_posting_ok']) .'" /></p>'."\n";
+				$output .= '</form>'."\n";
 			break;
 			# End: switch ($show)->case "delete form"
 			}
+		echo $output;
 		echo $footer;
 		} # End: if (($settings['entries_by_users_only'] == 1 ...)
 	else
@@ -1828,4 +1885,3 @@ else
 	header("Location: ". $settings['forum_address'] ."login.php?msg=noaccess");
 	die('<a href="login.php?msg=noaccess">further...</a>');
 	}
-?>

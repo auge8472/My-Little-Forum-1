@@ -1,0 +1,99 @@
+<?xml version='1.0' standalone='yes'?>
+<template>
+ <body><![CDATA[<h2>{pageHeader}</h2>
+{additionalInfo}
+{errorMessages}
+{preview}
+<form action="posting.php" method="post" id="entryform" accept-charset="UTF-8">
+<input type="hidden" name="form" value="true" />
+<input type="hidden" name="id" value="{postingID}" />
+<input type="hidden" name="uniqid" value="{postingUniqueID}" />
+<input type="hidden" name="action" value="{postingAction}" />
+{fieldPID}{fieldUID}{fieldParentName}{fieldTID}{fieldSID}
+<table class="normal">
+{forUnregistered}{categorySelect}
+<tr>
+<td><label for="subject">{labelSubject}</label></td>
+<td><input type="text" size="50" name="subject" id="subject" value="{postingSubject}" maxlength="{maxLenSubject}" /></td>
+</tr><tr>
+<td colspan="2"><label for="text">{labelText}</label>&nbsp;&nbsp;<span id="delete-text" class="small">{deleteOldPostingText}</span></td>
+</tr><tr>
+<td colspan="2"><div id="buttonspace">{bbCodeMarking}</div>
+<textarea cols="78" rows="20" name="text" id="text">{postingText}</textarea></td>
+</tr>{showSignature}{emailNotification}{fixThread}{showCaptcha}<tr>
+<td colspan="2"><input type="submit" name="save_entry" value="{formSubmitValue}" title="{formSubmitTitle}" />&nbsp;
+<input type="submit" name="preview" value="{formPreviewValue}" title="{formPreviewTitle}" />&nbsp;
+<input type="reset" value="{formResetValue}" title="{formResetTitle}" /></td>
+</tr>
+</table>
+</form>{privacyExplanation}]]>
+ </body>
+ <unregistered><![CDATA[<tr>
+<td><label for="name">{labelName}</label></td>
+<td><input type="text" size="40" name="name" id="name" value="{postingName}" maxlength="{maxLenName}" /></td>
+</tr><tr>
+<td><label for="email">{labelEmail}</label></td>
+<td><input type="text" size="40" name="email" id="email" value="{postingEmail}" maxlength="{maxLenEmail}" />&nbsp;<span class="xsmall">{markOption}</span></td>
+</tr><tr>
+<td><label for="hp">{labelHomepage}</label></td>
+<td><input type="text" size="40" name="hp" id="hp" value="{postingHomepage}" maxlength="{maxLenHomepage}" />&nbsp;<span class="xsmall">{markOption}</span></td>
+</tr><tr>
+<td><label for="place">{labelPlace}</label></td>
+<td><input type="text" size="40" name="place" id="place" value="{postingPlace}" maxlength="{maxLenPlace}" />&nbsp;<span class="xsmall">{markOption}</span></td>
+</tr>{cookieBlock}]]>
+ </unregistered>
+ <category><![CDATA[<tr>
+<td><label for="p_category">{labelCategory}</label></td>
+<td>{selectCategory}</td>
+</tr>]]>
+ </category>
+ <captcha><![CDATA[<tr>
+<td colspan="2"><b>{captchaMarking}</b></td>
+</tr>{theCaptcha}]]>
+ </captcha>
+ <captchatext><![CDATA[<tr>
+<td colspan="2"><img class="captcha" src="captcha/captcha_image.php?{SID}" alt="{captchaAltText}" width="180" height="40"/></td>
+</tr><tr>
+<td colspan="2">{captchaExplanationText}</td>
+</tr><tr>
+<td colspan="2"><input type="text" name="captcha_code" value="" size="10" /></td>
+</tr>]]>
+ </captchatext>
+ <captchamath><![CDATA[<tr>
+<td colspan="2">{captchaExplanationMath}</td>
+</tr><tr>
+<td colspan="2">{captchaMathNull} + {captchaMathOne} = <input type="text" name="captcha_code" value="" size="5" /></td>
+</tr>]]>
+ </captchamath>
+ <privacyexp><![CDATA[<p class="xsmall" style="margin-top: 30px;">{emailPrivacyExplanation}</p>]]>
+ </privacyexp>
+ <cookies><![CDATA[<tr>
+<td>&nbsp;</td>
+<td><span class="small"><input type="checkbox" name="setcookie" value="1" {formCheckSetCookie} />&nbsp;{rememberUserData}{deleteExistingCookies}</span></td>
+</tr>]]>
+ </cookies>
+ <deletecookies><![CDATA[&nbsp;&nbsp;<a onclick="javascript:createPopup(this.href, 200, 150); return false;" href="delete_cookie.php" title="{deleteCookieTitle}"><img border="0" src="img/delete.png" name="dc" alt="" width="12" height="9" />{deleteCookieName}</a>]]>
+ </deletecookies>
+ <signature><![CDATA[<tr>
+<td colspan="2"><label for="show_signature"><input type="checkbox" name="show_signature" id="show_signature" value="1"{formCheckShowSignature} />&nbsp;{showSignatureName}</label></td>
+</tr>]]>
+ </signature>
+ <notification><![CDATA[<tr>
+<td colspan="2"><label for="email_notify"><input type="checkbox" name="email_notify" id="email_notify" value="1"{formCheckEmailNotify} />&nbsp;{labelEmailNotify}</label></td>
+</tr>]]>
+ </notification>
+ <fixthread><![CDATA[<tr>
+<td colspan="2"><label for="fixed"><input type="checkbox" name="fixed" id="fixed" value="1"{formCheckFixThread} />&nbsp;{labelFixThread}</label></td>
+</tr>]]>
+ </fixthread>
+ <sessionid><![CDATA[<input type="hidden" name="{sessionName}" value="{sessionID}" />]]>
+ </sessionid>
+ <parentid><![CDATA[<input type="hidden" name="pid" value="{parentID}" />]]></parentid>
+ <parentname><![CDATA[<input type="hidden" name="aname" value="{parentName}" />]]></parentname>
+ <parentuserid><![CDATA[<input type="hidden" name="p_user_id" value="{parentUserID}" />]]></parentuserid>
+ <threadid><![CDATA[<input type="hidden" name="thema" value="{threadID}" />]]></threadid>
+</template>
+
+
+
+
