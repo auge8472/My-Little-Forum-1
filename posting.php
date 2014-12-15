@@ -1393,6 +1393,32 @@ if (($settings['access_for_users_only'] == 1
 					$tFixed = str_replace('{labelFixThread}', htmlspecialchars($lang['fix_thread']), $tFixed);
 					}
 				$tBody = str_replace('{fixThread}', $tFixed, $tBody);
+				# set the captcha
+				$tCaptcha = '';
+				if (empty($_SESSION[$settings['session_prefix'].'user_id'])
+				&& $settings['captcha_posting'] == 1)			
+					{
+					$tCaptcha = $postingTemplate->captcha;
+					$tCaptcha = str_replace('{captchaMarking}', htmlspecialchars($lang['captcha_marking']), $tCaptcha);
+					if ($settings['captcha_type'] == 1)
+						{
+						# image (text) captcha
+						$tCaptchaDetail = $postingTemplate->captchatext;
+						$tCaptchaDetail = str_replace('{SID}', SID, $tCaptchaDetail);
+						$tCaptchaDetail = str_replace('{captchaAltText}', outputLangDebugInAttributes($lang['captcha_image_alt']), $tCaptchaDetail);
+						$tCaptchaDetail = str_replace('{captchaExplanationText}', htmlspecialchars($lang['captcha_expl_image']), $tCaptchaDetail);
+						}
+					else
+						{
+						# mathematical captcha
+						$tCaptchaDetail = $postingTemplate->captchamath;
+						$tCaptchaDetail = str_replace('{captchaExplanationMath}', htmlspecialchars($lang['captcha_expl_math']), $tCaptchaDetail);
+						$tCaptchaDetail = str_replace('{captchaMathNull}', htmlspecialchars($_SESSION['captcha_session'][0]), $tCaptchaDetail);
+						$tCaptchaDetail = str_replace('{captchaMathOne}', htmlspecialchars($_SESSION['captcha_session'][1]), $tCaptchaDetail);
+						}
+					$tCaptcha = str_replace('{theCaptcha}', $tCaptchaDetail, $tCaptcha);
+					}
+				$tBody = str_replace('{showCaptcha}', $tCaptcha, $tBody);
 				# label the buttons
 				$tBody = str_replace('{formSubmitValue}', outputLangDebugInAttributes($lang['submit_button']), $tBody);
 				$tBody = str_replace('{formSubmitTitle}', outputLangDebugInAttributes($lang['submit_button_title']), $tBody);

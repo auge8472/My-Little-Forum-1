@@ -49,18 +49,22 @@
  </category>
  <captcha><![CDATA[<tr>
 <td colspan="2"><b>{captchaMarking}</b></td>
-</tr><tr>
+</tr>{theCaptcha}]]>
+ </captcha>
+ <captchatext><![CDATA[<tr>
 <td colspan="2"><img class="captcha" src="captcha/captcha_image.php?{SID}" alt="{captchaAltText}" width="180" height="40"/></td>
 </tr><tr>
 <td colspan="2">{captchaExplanationText}</td>
 </tr><tr>
 <td colspan="2"><input type="text" name="captcha_code" value="" size="10" /></td>
-</tr><tr>
+</tr>]]>
+ </captchatext>
+ <captchamath><![CDATA[<tr>
 <td colspan="2">{captchaExplanationMath}</td>
 </tr><tr>
 <td colspan="2">{captchaMathNull} + {captchaMathOne} = <input type="text" name="captcha_code" value="" size="5" /></td>
 </tr>]]>
- </captcha>
+ </captchamath>
  <privacyexp><![CDATA[<p class="xsmall" style="margin-top: 30px;">{emailPrivacyExplanation}</p>]]>
  </privacyexp>
  <cookies><![CDATA[<tr>
