@@ -190,7 +190,7 @@ if ($settings['access_for_users_only'] == 1
 		}
 	mysql_free_result($result);
 
-	$category = intval($category);
+	$category = !empty($_SESSION[$settings['session_prefix'].'category']) ? intval($_SESSION[$settings['session_prefix'].'category']) : 0;
 
 	$wo = $entrydata["subject"];
 	$subnav_1  = '<a class="textlink" href="forum.php" title="';
@@ -242,7 +242,7 @@ if ($settings['access_for_users_only'] == 1
 		}
 	# generate HTML source code of posting
 	$posting = str_replace('{postingheadline}', $pHeadline, $posting);
-	$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $entrydata, $page, $order, 'forum', $category), $posting);
+	$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $entrydata, $_SESSION[$settings['session_prefix'].'page'], $_SESSION[$settings['session_prefix'].'order'], 'forum', $category), $posting);
 	$posting = str_replace('{posting}', $ftext, $posting);
 	$posting = str_replace('{signature}', $signature, $posting);
 	$posting = str_replace('{answer-locked}', $answerlink, $posting);

@@ -191,7 +191,7 @@ if ($settings['access_for_users_only'] == 1
 				$mark = outputStatusMark($mark, $thread["user_type"], $connid);
 				if ($thread["show_signature"]==1)
 					{
-					$signature = $userdata["signature"];
+					$signature = $thread["signature"];
 					}
 				} # End: if ($thread["user_id"] > 0)
 			$allPostingsQuery = "SELECT
