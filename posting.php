@@ -211,355 +211,21 @@ if (($settings['access_for_users_only'] == 1
 				or $action == "delete"
 				or $action == "delete ok"))
 			{
-<<<<<<< HEAD
-			$queryAuthUser = "SELECT
-			t1.user_type,
-			t1.user_id
-			FROM ". $db_settings['userdata_table'] ." AS t1, ". $db_settings['forum_table'] ." AS t2
-			WHERE t2.id = ". intval(isset($_POST['id']) ? $_POST['id'] : $_GET['id']) ."
-				AND t2.user_id = t1.user_id
-			LIMIT 1";
-			$userAuthResult = mysql_query($queryAuthUser, $connid);
-			if (!$userAuthResult) die($lang['db_error']);
-			$resultAuth = mysql_fetch_assoc($userAuthResult);
-			mysql_free_result($userAuthResult);
-			# ist da jemand bekanntes?
-			if (isset($_SESSION[$settings['session_prefix'].'user_id']))
-				{
-				# Admin darf alles:
-				if ($_SESSION[$settings['session_prefix'].'user_type'] == "admin")
-					{
-					$edit_authorization = 1;
-					$delete_authorization = 1;
-					}
-				# Moderator darf alles außer Postings von Admins editieren/löschen:
-				else if ($_SESSION[$settings['session_prefix'].'user_type'] == "mod")
-					{
-					if ($resultAuth["user_type"] != "admin")
-						{
-						$edit_authorization = 1;
-						$delete_authorization = 1;
-						}
-					}
-				# User darf (falls aktiviert) nur seine eigenen Postings editieren/löschen:
-				else if ($_SESSION[$settings['session_prefix'].'user_type'] == "user")
-					{
-					# Schauen, ob es sich um einen eigenen Eintrag handelt:
-					if ($resultAuth["user_id"] == $_SESSION[$settings['session_prefix'].'user_id'])
-						{
-						if ($settings['user_edit'] == 1) $edit_authorization = 1;
-						if ($settings['user_delete'] == 1) $delete_authorization = 1;
-						}
-					}
-				}
-			} # Ende Überprüfung der Berechtigung
-
-		# wenn das Formular noch nicht abgeschickt wurde:
-		if (empty($_POST['form']))
-			{
-			switch ($action)
-				{
-				case "new":
-				# Cookies mit Userdaten einlesen, falls es sich um einen
-				# nicht angemeldeten User handelt und Cookies vorhanden sind:
-					if (!isset($_SESSION[$settings['session_prefix'].'user_id']))
-						{
-						if (isset($_COOKIE['user_name']))
-							{
-							$name = $_COOKIE['user_name']; $setcookie = 1;
-							}
-						if (isset($_COOKIE['user_email']))
-							{
-							$email = $_COOKIE['user_email'];
-							}
-						if (isset($_COOKIE['user_hp']))
-							{
-							$hp = $_COOKIE['user_hp'];
-							}
-						if (isset($_COOKIE['user_place']))
-							{
-							$place = $_COOKIE['user_place'];
-							}
-						}
-					$id = (!isset($id) or $id < 0) ? 0 : (int)$id;
-
-					if (empty($show_signature))
-						{
-						$show_signature = 1;
-						}
-
-					# if message is a reply:
-					if ($id != 0)
-						{
-						$messageQuery = "SELECT
-						tid,
-						pid,
-						name,
-						subject,
-						category,
-						text,
-						locked
-						FROM ". $db_settings['forum_table'] ."
-						WHERE id = ". intval($id);
-						$result = mysql_query($messageQuery, $connid);
-						if (!$result) die($lang['db_error']);
-						$field = mysql_fetch_assoc($result);
-						if (mysql_num_rows($result) != 1)
-							{
-							$id = 0;
-							}
-						else
-							{
-							$thema = $field["tid"];
-							$subject = $field["subject"];
-							$p_category = $field["category"];
-							$text = $field["text"];
-							$aname = $field["name"];
-							$text = $text;
-							# Zitatzeichen an den Anfang jeder Zeile stellen:
-							$text = preg_replace("/^/m", $settings['quote_symbol']." ", $text);
-							}
-						mysql_free_result($result);
-
-						if ($field['locked'] > 0
-						&& (empty($_SESSION[$settings['session_prefix'].'user_type'])
-						|| (isset($_SESSION[$settings['session_prefix'].'user_type'])
-						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'admin'
-						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'mod')))
-							{
-							$show = "no authorization";
-							$reason = $lang['thread_locked_error'];
-							}
-						else
-							{
-							$show = "form";
-							}
-						}
-					else
-						{
-						$show = "form";
-						}
-				break;
-
-				case "edit":
-					if ($edit_authorization == 1)
-						{
-						# fetch data of message which should be edited:
-						$editQuery = "SELECT
-						tid,
-						pid,
-						user_id,
-						name,
-						email,
-						hp,
-						place,
-						subject,
-						category,
-						text,
-						email_notify,
-						show_signature,
-						locked,
-						fixed,
-						UNIX_TIMESTAMP(time) AS time,
-						UNIX_TIMESTAMP(NOW() - INTERVAL ". $settings['edit_period'] ." MINUTE) AS edit_diff
-						FROM ". $db_settings['forum_table'] ."
-						WHERE id = ". intval($id);
-						$edit_result = mysql_query($editQuery, $connid);
-						if (!$edit_result) die($lang['db_error']);
-						$field = mysql_fetch_assoc($edit_result);
-						mysql_free_result($edit_result);
-
-						$thema = $field["tid"];
-						$tid = $field["tid"];
-						$pid = $field["pid"];
-						$p_user_id = $field["user_id"];
-						$name = $field["name"];
-						$aname = $field["name"];
-						$email = $field["email"];
-						$hp = $field["hp"];
-						$place = $field["place"];
-						$subject = $field["subject"];
-						$p_category = $field["category"];
-						$text = $field["text"];
-						$email_notify = $field["email_notify"];
-						$show_signature = $field["show_signature"];
-						$fixed = $field["fixed"];
-						if ($field['locked'] > 0
-						&& (empty($_SESSION[$settings['session_prefix'].'user_type'])
-						|| (isset($_SESSION[$settings['session_prefix'].'user_type'])
-						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'admin'
-						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'mod')))
-							{
-							$show = "no authorization";
-							$reason = $lang['thread_locked_error'];
-							}
-						else if ($settings['edit_period'] > 0
-						&& $field["edit_diff"] > $field["time"]
-						&& (empty($_SESSION[$settings['session_prefix'].'user_type'])
-						|| (isset($_SESSION[$settings['session_prefix'].'user_type'])
-						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'admin'
-						&& $_SESSION[$settings['session_prefix'].'user_type'] != 'mod')))
-							{
-							$show = "no authorization";
-							$reason = str_replace('[minutes]',$settings['edit_period'],$lang['edit_period_over']);
-							}
-						else
-							{
-							$show = "form";
-							}
-						}
-					else
-						{
-						$show = "no authorization";
-						}
-				break;
-
-				case "delete":
-					if ($delete_authorization == 1)
-						{
-						$deleteQuery = "SELECT
-						tid,
-						pid,
-						UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS tp_time,
-						name,
-						subject,
-						category
-						FROM ". $db_settings['forum_table'] ."
-						WHERE id = ". intval($id);
-						$delete_result = mysql_query($deleteQuery, $connid);
-						if(!$delete_result) die($lang['db_error']);
-						$field = mysql_fetch_assoc($delete_result);
-						$aname = $field["name"];
-						$thema = $field["tid"];
-						$show = "delete form";
-						}
-					else
-						{
-						$show = "no authorization";
-						}
-				break;
-
-				case "delete ok":
-					if ($delete_authorization == 1)
-						{
-						$postingIdQuery = "SELECT pid
-						FROM ". $db_settings['forum_table'] ."
-						WHERE id = ". intval($_GET['id']);
-						$pid_result = mysql_query($postingIdQuery,$connid);
-						if (!$pid_result) die($lang['db_error']);
-						$feld = mysql_fetch_assoc($pid_result);
-
-						if ($feld["pid"] == 0)
-							{
-							$deleteThreadQuery = "DELETE FROM ". $db_settings['forum_table'] ."
-							WHERE tid = ". intval($_GET['id']);
-							$delete_result = mysql_query($deleteThreadQuery, $connid);
-							}
-						else
-							{
-							$allLastAnswersQuery = "SELECT
-							tid,
-							time,
-							last_answer
-							FROM ". $db_settings['forum_table'] ."
-							WHERE id = ". intval($_GET['id']);
-							$last_answer_result = mysql_query($allLastAnswersQuery, $connid);
-							$field = mysql_fetch_assoc($last_answer_result);
-							mysql_free_result($last_answer_result);
-
-							# if message is newest in topic:
-							if ($field['time'] == $field['last_answer'])
-								{
-								# search last answer and actualise "last_answer":
-								$lastAnswerQuery = "SELECT
-								time
-								FROM ". $db_settings['forum_table'] ."
-								WHERE tid = ". intval($field['tid']) ."
-								AND time < '". $field['time'] ."'
-								ORDER BY time DESC
-								LIMIT 1";
-								$last_answer_result = mysql_query($lastAnswerQuery, $connid);
-								$field2 = mysql_fetch_assoc($last_answer_result);
-								mysql_free_result($last_answer_result);
-								$updateLastAnswerQuery = "UPDATE ". $db_settings['forum_table'] ." SET
-								time = time,
-								last_answer = '". $field2['time'] ."'
-								WHERE tid = ". intval($field['tid']);
-								$update_result = mysql_query($updateLastAnswerQuery, $connid);
-								}
-							# delete message:
-							$deleteMessageQuery = "DELETE FROM ". $db_settings['forum_table'] ."
-							WHERE id = ". intval($_GET['id']);
-							$delete_result = mysql_query($deleteMessageQuery,$connid);
-							} # if ($feld["pid"] == 0) else
-						if (!empty($_SESSION[$settings['session_prefix'].'curr_view'])
-						and in_array($_SESSION[$settings['session_prefix'].'curr_view'], $possViews))
-							{
-							if ($_SESSION[$settings['session_prefix'].'curr_view'] == 'thread')
-								{
-								$header_href = 'forum.php';
-								}
-							else
-								{
-								$header_href = $_SESSION[$settings['session_prefix'].'curr_view'] .'.php';
-								}
-							}
-						else if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
-						and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
-							{
-							if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
-								{
-								$header_href = 'forum.php';
-								}
-							else
-								{
-								$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'.php';
-								}
-							}
-						else
-							{
-							if ($setting['standard'] == 'thread')
-								{
-								$header_href = 'forum.php';
-								}
-							else
-								{
-								$header_href = $setting['standard'] .'.php';
-								}
-							}
-						header('location: '.$settings['forum_address'].$header_href);
-						die('<a href="'.$header_href.$qs.'">further...</a>');
-						}
-					else
-						{
-						$show = "no authorization";
-						}
-				break;
-				}
-			} #if (empty($_POST['form']))
-
-		# form submitted:
-		else if (isset($_POST['form']))
-=======
 			$authorisation =  processCheckAuthorisation(isset($_GET['id']) ? $_GET['id'] : $_POST['id'], $authorisation, $connid);
 			} # End: check for authorisation if called via GET or POST parameter
 		# if form was submitted (old file: line 618)
 		if (isset($_POST['form']))
->>>>>>> posting
 			{
 			$_POST['id'] = empty($_POST['id']) ? 0 : intval($_POST['id']);
 			switch ($action)
 				{
 				case "new":
-<<<<<<< HEAD
-=======
 					# is it a registered user?
 					if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 						{
 						$user_id = $_SESSION[$settings['session_prefix'].'user_id'];
 						$name = $_SESSION[$settings['session_prefix'].'user_name'];
 						}
->>>>>>> posting
 					# if the posting is an answer, search the thread-ID:
 					if ($_POST['id'] > 0)
 						{
@@ -611,57 +277,9 @@ if (($settings['access_for_users_only'] == 1
 						$name = $field["name"];
 						}
 				break;
-<<<<<<< HEAD
-				}
-
-			# trim and complete data:
-			$email = empty($_POST['email']) ? "" : trim($_POST['email']);
-			$hp = empty($_POST['hp']) ? "" : trim($_POST['hp']);
-			$place = empty($_POST['place']) ? "" : trim($_POST['place']);
-			$show_signature = empty($_POST['show_signature']) ? 0 : $_POST['show_signature'];
-			$email_notify = empty($_POST['email_notify']) ? 0 : $_POST['email_notify'];
-			$p_category = empty($_POST['p_category']) ? 0 : $_POST['p_category'];
-			$subject = empty($_POST['subject']) ? "" : trim($_POST['subject']);
-			$text = empty($_POST['text']) ? "" : trim($_POST['text']);
-			if (empty($_POST['name']))
-				{
-				if (isset($_SESSION[$settings['session_prefix'].'user_id']))
-					{
-					$name = $_SESSION[$settings['session_prefix'].'user_name'];
-					}
-				else
-					{
-					$name = "";
-					}
-				}
-			else
-				{
-				trim($_POST['name']);
-				}
-			if (empty($_POST['user_id']))
-				{
-				if (isset($_SESSION[$settings['session_prefix'].'user_id']))
-					{
-					$user_id = $_SESSION[$settings['session_prefix'].'user_id'];
-					}
-				else
-					{
-					$user_id = 0;
-					}
-				}
-			else
-				{
-				$user_id = intval($_POST['user_id']);
-				}
-				
-			# end trim and complete data
-
-			# check data:
-=======
 				} # End: switch ($action)
 			# check for new or edited posting is complete
 			# now check submitted data:
->>>>>>> posting
 			# double entry?
 			$uniqueIdQuery = "SELECT COUNT(*)
 			FROM ". $db_settings['forum_table'] ."
@@ -1135,20 +753,6 @@ if (($settings['access_for_users_only'] == 1
 			# the page was requested to add a new or to edit or delete an existing posting
 			switch ($action)
 				{
-<<<<<<< HEAD
-				$qs = '';
-				$qsl = '';
-				if (!empty($_SESSION[$settings['session_prefix'].'user_view'])
-				and in_array($_SESSION[$settings['session_prefix'].'user_view'], $possViews))
-					{
-					if ($_SESSION[$settings['session_prefix'].'user_view'] == 'board'
-						or $_SESSION[$settings['session_prefix'].'user_view'] == 'mix')
-						{
-						$header_href = $_SESSION[$settings['session_prefix'].'user_view'] .'_entry.php';
-						$further = $further_tid;
-						}
-					else
-=======
 				case "new":
 				# in case of a not logged in user, read the cookies with userdata
 					if (!isset($_SESSION[$settings['session_prefix'].'user_id']))
@@ -1221,7 +825,6 @@ if (($settings['access_for_users_only'] == 1
 				break;
 				case "edit":
 					if ($authorisation['edit'] == 1)
->>>>>>> posting
 						{
 						# fetch data of message which should be edited:
 						$editMessageQuery = "SELECT
@@ -1273,12 +876,6 @@ if (($settings['access_for_users_only'] == 1
 							$show = "form";
 							}
 						}
-<<<<<<< HEAD
-					}
-				else
-					{
-					if ($settings['standard'] == 'thread')
-=======
 					else
 						{
 						$show = "no authorization";
@@ -1286,7 +883,6 @@ if (($settings['access_for_users_only'] == 1
 				break;
 				case "delete":
 					if ($authorisation['delete'] == 1)
->>>>>>> posting
 						{
 						$deleteQuery = "SELECT
 						tid,
@@ -1304,12 +900,7 @@ if (($settings['access_for_users_only'] == 1
 						}
 					else
 						{
-<<<<<<< HEAD
-						$header_href = $settings['standard'] .'_entry.php';
-						$further = $further_tid;
-=======
 						$show = "no authorization";
->>>>>>> posting
 						}
 				break;
 				case "delete ok":
@@ -1419,7 +1010,6 @@ if (($settings['access_for_users_only'] == 1
 			$lang['back_to_posting_linkname'] = str_replace("[name]", htmlspecialchars($oldMessage['name']), $lang['back_to_posting_linkname']);
 			$lang['answer_on_posting_marking'] = str_replace("[name]", htmlspecialchars($oldMessage['name']), $lang['answer_on_posting_marking']);
 			}
-		$subnav_1 = '';
 		$subnav = array('href'=>'', 'linktext'=>'', 'query'=>'');
 		if (($action == "new"
 		&& ((isset($_GET['id']) and $_GET['id'] > 0)
@@ -1845,6 +1435,7 @@ if (($settings['access_for_users_only'] == 1
 					$tPrivacy = str_replace('{emailPrivacyExplanation}', htmlspecialchars($lang['email_exp']), $tPrivacy);
 					}
 				$tBody = str_replace('{privacyExplanation}', $tPrivacy, $tBody);
+				$output .= $tBody;
 			break;
 			# End: switch ($show)->case "form"
 			case "no authorization":
