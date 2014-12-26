@@ -223,6 +223,7 @@ $entryIP = '';
 $entryedit = '';
 $entryID = '';
 $answer = '';
+$uname = '';
 
 # whole author string template
 $authorstring = $lang['forum_author_marking'];
@@ -374,19 +375,19 @@ if (is_array($mark)
 	and $mark['admin'] === 1)
 	{
 	$class = 'admin-highlight';
-	$title .= ' title="'. outputLangDebugInAttributes($lang['ud_admin']) .'"';
+	$title = ' title="'. outputLangDebugInAttributes($lang['ud_admin']) .'"';
 	}
 else if (is_array($mark)
 	and $mark['mod'] === 1)
 	{
 	$class = 'mod-highlight';
-	$title .= ' title="'. outputLangDebugInAttributes($lang['ud_mod']) .'"';
+	$title = ' title="'. outputLangDebugInAttributes($lang['ud_mod']) .'"';
 	}
 else if (is_array($mark)
 	and $mark['user'] === 1)
 	{
 	$class = 'user-highlight';
-	$title .= ' title="'. outputLangDebugInAttributes($lang['ud_user']) .'"';
+	$title = ' title="'. outputLangDebugInAttributes($lang['ud_user']) .'"';
 	}
 else
 	{
