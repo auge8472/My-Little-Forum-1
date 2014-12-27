@@ -126,7 +126,7 @@ if ($result_count > 0
 			$item->appendChild($data);
 		$data = $rss1->createElement('description', $rssItem);
 			$item->appendChild($data);
-		$data = $rss1->createElement('pubDate', @ date("r", $zeile['rss_time']));
+		$data = $rss1->createElement('pubDate', @ gmdate(DATE_RSS, $zeile['rss_time']));
 			$item->appendChild($data);
 		$data = $rss1->createElement('link', htmlentities($settings['forum_address'].'forum_entry.php?id='.$zeile['id']));
 			$item->appendChild($data);
