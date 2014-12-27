@@ -76,6 +76,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 
 if (basename($_SERVER['SCRIPT_NAME'])!='login.php'
 && basename($_SERVER['SCRIPT_NAME'])!='info.php'
+&& basename($_SERVER['SCRIPT_NAME'])!='rss.php'
 && (!(isset($_SESSION[$settings['session_prefix'].'user_type'])
 && $_SESSION[$settings['session_prefix'].'user_type']=='admin'))
 && $settings['forum_disabled']==1)
