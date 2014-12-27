@@ -50,7 +50,7 @@ else
 	{
 	while ($satz = mysql_fetch_assoc($result))
 		{
-		$data[] = $satz; 
+		$data[] = $satz;
 		}
 	}
 
@@ -60,25 +60,20 @@ $root = $rss1->createElement('rss');
 	$root->setAttribute('version', '2.0');
 	$root->setAttribute('xmlns:dc', 'http://purl.org/dc/elements/1.1/');
 	$rss1->appendChild($root);
-$chan = $rss1->createElement('channel');
-	$root->appendChild($chan); 
+$channel = $rss1->createElement('channel');
+	$root->appendChild($channel);
 $head = $rss1->createElement('title', utf8_encode($settings['forum_name']));
-	$chan->appendChild($head);
+	$channel->appendChild($head);
 $head = $rss1->createElement('description', utf8_encode($settings['forum_name']));
-	$chan->appendChild($head);
+	$channel->appendChild($head);
 $head = $rss1->createElement('language', utf8_encode($lang['language']));
-	$chan->appendChild($head);
-$head = $rss1->createElement('link', htmlentities($settings['forum_address']));
-	$chan->appendChild($head);
-$head = $rss1->createElement('lastBuildDate', utf8_encode(date("D, j M Y H:i:s ").'GMT'));
-	$chan->appendChild($head);
+	$channel->appendChild($head);
+$head = $rss1->createElement('link', utf8_encode($settings['forum_address']));
+	$channel->appendChild($head);
+$head = $rss1->createElement('lastBuildDate', utf8_encode(gmdate(DATE_RSS)));
+	$channel->appendChild($head);
 
 $result_count = count($data);
-
-/*
-$rss  = '';
-$rss .= '  <atom:link href="'.$settings['forum_address'].'rss.php" rel="self" type="application/rss+xml" />'."\n";
-*/
 
 if ($result_count > 0
 && $settings['provide_rssfeed'] == 1
@@ -109,7 +104,7 @@ if ($result_count > 0
 		$rssItem .= str_replace("[time]", $zeile["xtime"], $rss_author_info);
 		$rssItem .= "\n\n". $ftext;
 		$item = $rss1->createElement('item');
-			$chan->appendChild($item);
+			$channel->appendChild($item);
 		$data = $rss1->createElement('title', $title);
 			$item->appendChild($data);
 		$data = $rss1->createElement('description', $rssItem);
@@ -125,8 +120,6 @@ if ($result_count > 0
 		}
 	}
 
-#header("Content-Type: text/html; charset: UTF-8");
-#echo '<pre>'. htmlspecialchars($rss) .'</pre>';
 header("Content-Type: application/xml; charset: UTF-8");
 echo $rss1->saveXML();
 ?>
