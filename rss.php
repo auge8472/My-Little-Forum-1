@@ -1,41 +1,10 @@
 <?php
 include("inc.php");
 
-if (isset($_GET['cat'])
-	and is_numeric($_GET['cat'])
-	and isset($category_ids)
-	and in_array($_GET['cat'], $category_ids))
-	{
-	$wherePart = "
-	WHERE category = ". intval($_GET['cat']);
-	}
-
-# database request
-$rssQuery = "SELECT
-id,
-pid,
-DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS xtime,
-UNIX_TIMESTAMP(time) AS rss_time,
-name,
-subject,
-text
-FROM ".$db_settings['forum_table'];
-
-if (isset($wherePart))
-	{
-	$rssQuery .= $wherePart;
-	}
-else if (is_array($categories))
-	{
-	$rssQuery .= "
-	WHERE category IN (".$category_ids_query.")";
-	}
-$rssQuery .= "
-ORDER BY time DESC
-LIMIT 15";
-$result = mysql_query($rssQuery, $connid);
-$data = array();
-if (!$result)
+if ($settings['forum_disabled'] == 1
+	and !(isset($_SESSION[$settings['session_prefix'].'user_type'])
+		and ($_SESSION[$settings['session_prefix'].'user_type'] == 'admin'
+			or $_SESSION[$settings['session_prefix'].'user_type'] == 'mod')))
 	{
 	$timestamp = time();
 	$data[0]['id'] = 0;
@@ -44,13 +13,61 @@ if (!$result)
 	$data[0]['rss_time'] = $timestamp;
 	$data[0]['name'] = $settings['forum_email'];
 	$data[0]['subject'] = $lang['error_headline'];
-	$data[0]['text'] = $lang['db_error'];
+	$data[0]['text'] = $lang['info_forum_disabled'];
 	}
 else
 	{
-	while ($satz = mysql_fetch_assoc($result))
+	if (isset($_GET['cat'])
+		and is_numeric($_GET['cat'])
+		and isset($category_ids)
+		and in_array($_GET['cat'], $category_ids))
 		{
-		$data[] = $satz;
+		$wherePart = "
+		WHERE category = ". intval($_GET['cat']);
+		}
+
+	# database request
+	$rssQuery = "SELECT
+	id,
+	pid,
+	DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS xtime,
+	UNIX_TIMESTAMP(time) AS rss_time,
+	name,
+	subject,
+	text
+	FROM ".$db_settings['forum_table'];
+
+	if (isset($wherePart))
+		{
+		$rssQuery .= $wherePart;
+		}
+	else if (is_array($categories))
+		{
+		$rssQuery .= "
+		WHERE category IN (".$category_ids_query.")";
+		}
+	$rssQuery .= "
+	ORDER BY time DESC
+	LIMIT 15";
+	$result = mysql_query($rssQuery, $connid);
+	$data = array();
+	if (!$result)
+		{
+		$timestamp = time();
+		$data[0]['id'] = 0;
+		$data[0]['pid'] = 0;
+		$data[0]['xtime'] = strftime($lang['time_format'], $timestamp);
+		$data[0]['rss_time'] = $timestamp;
+		$data[0]['name'] = $settings['forum_email'];
+		$data[0]['subject'] = $lang['error_headline'];
+		$data[0]['text'] = $lang['db_error'];
+		}
+	else
+		{
+		while ($satz = mysql_fetch_assoc($result))
+			{
+			$data[] = $satz;
+			}
 		}
 	}
 
