@@ -49,7 +49,7 @@ return $error;
 function processUrlEncode($url, $uri= true) {
 $url = trim($url);
 $temp = parse_url($url);
-$nurl .= (!empty($temp['scheme'])) ? $temp['scheme'].'://' : '';
+$nurl  = (!empty($temp['scheme'])) ? $temp['scheme'].'://' : '';
 $nurl .= (!empty($temp['user']) and !empty($temp['pass'])) ? $temp['user'].':'.$temp['pass'].'@' : '';
 $nurl .= (!empty($temp['host'])) ? $temp['host'] : '';
 $nurl .= (!empty($temp['port'])) ? ':'.$temp['port'] : '';
