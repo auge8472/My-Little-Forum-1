@@ -242,7 +242,7 @@ if ($settings['access_for_users_only'] == 1
 		}
 	# generate HTML source code of posting
 	$posting = str_replace('{postingheadline}', $pHeadline, $posting);
-	$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $entrydata, $_SESSION[$settings['session_prefix'].'page'], $_SESSION[$settings['session_prefix'].'order'], 'forum', $category), $posting);
+	$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $entrydata, 'forum'), $posting);
 	$posting = str_replace('{posting}', $ftext, $posting);
 	$posting = str_replace('{signature}', $signature, $posting);
 	$posting = str_replace('{answer-locked}', $answerlink, $posting);

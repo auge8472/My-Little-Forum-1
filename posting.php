@@ -1181,7 +1181,7 @@ if (($settings['access_for_users_only'] == 1
 					$mark['admin'] = false;
 					$mark['mod'] = false;
 					$mark['user'] = false;
-					$prAuthorinfo = outputAuthorInfo($mark, $_POST, 0, 0, $isView);
+					$prAuthorinfo = outputAuthorInfo($mark, $_POST, $isView);
 					$prSubject = htmlspecialchars($subject);
 					if (empty($_POST['text']))
 						{

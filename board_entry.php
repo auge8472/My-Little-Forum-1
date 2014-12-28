@@ -321,7 +321,7 @@ if ($settings['access_for_users_only'] == 1
 		# generate HTML source code of posting
 		$posting = str_replace('{postingID}', 'p'.$thread['id'], $posting);
 		$posting = str_replace('{postingheadline}', $pHeadline, $posting);
-		$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $thread, $page, $order, 'board', $category), $posting);
+		$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $thread, 'board'), $posting);
 		$posting = str_replace('{posting}', $ftext, $posting);
 		$posting = str_replace('{signature}', $signature, $posting);
 		$posting = str_replace('{answer-locked}', $answerlink, $posting);
@@ -375,7 +375,7 @@ if ($settings['access_for_users_only'] == 1
 		# generate HTML source code of posting
 		$posting = str_replace('{postingID}', 'p'.$entrydata['id'], $posting);
 		$posting = str_replace('{postingheadline}', $pHeadline, $posting);
-		$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $entrydata, $page, $order, 'board', $category), $posting);
+		$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $entrydata, 'board'), $posting);
 		$posting = str_replace('{posting}', $ftext, $posting);
 		$posting = str_replace('{signature}', $signature, $posting);
 		$posting = str_replace('{answer-locked}', $answerlink, $posting);

@@ -115,7 +115,7 @@ $signature = (isset($signature) && $signature != "") ? $signature = '<div class=
 $posting = $sPosting;
 $posting = str_replace('{postingID}', 'p'.$entrydata['id'], $posting);
 $posting = str_replace('{postingheadline}', $pHeadline, $posting);
-$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $entrydata, $_SESSION[$settings['session_prefix'].'page'], $_SESSION[$settings['session_prefix'].'order'], 'mix', $_SESSION[$settings['session_prefix'].'category']), $posting);
+$posting = str_replace('{authorinfo}', outputAuthorInfo($mark, $entrydata, 'mix'), $posting);
 $posting = str_replace('{posting}', $ftext, $posting);
 $posting = str_replace('{signature}', $signature, $posting);
 $posting = str_replace('{answer-locked}', $answerlink, $posting);

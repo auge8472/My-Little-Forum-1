@@ -204,13 +204,10 @@ return $r;
  *
  * @param array $mark
  * @param array $entry
- * @param integer $page
- * @param string $order
  * @param string $view
- * @param integer $category
  * @return string $r
  */
-function outputAuthorInfo($mark, $entry, $page, $order, $view, $category = 0) {
+function outputAuthorInfo($mark, $entry, $view) {
 global $lang, $settings;
 
 $r = '';
