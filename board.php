@@ -71,6 +71,7 @@ if($settings['access_for_users_only']  == 1
 	# list all threads
 	$threadsQuery = "SELECT
 		tid,
+		pid,
 		tid AS viewID,
 		t1.user_id AS posters_id,
 		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
@@ -81,6 +82,7 @@ if($settings['access_for_users_only']  == 1
 		category,
 		(SELECT SUM(views) FROM ".$db_settings['forum_table']." WHERE tid = viewID) AS views,
 		fixed,
+		marked,
 		(SELECT
 			user_type
 			FROM ".$db_settings['userdata_table']."

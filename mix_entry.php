@@ -31,6 +31,7 @@ id,
 tid,
 pid,
 user_id,
+user_id AS posters_id,
 DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS posting_time,
 UNIX_TIMESTAMP(time) AS time,
 UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_time,
@@ -45,6 +46,7 @@ text,
 category,
 show_signature,
 locked,
+fixed,
 INET_NTOA(ip_addr) AS ip_address
 FROM ".$db_settings['forum_table']."
 WHERE id = '".$parent_array[$id]["id"]."'
