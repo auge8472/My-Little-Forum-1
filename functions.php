@@ -640,7 +640,7 @@ $template = str_replace("{COUNTER}",$counter,$template);
 if ($settings['provide_rssfeed'] == 1 && $settings['access_for_users_only'] == 0) 
 	{ 
 	$rss_feed_link = '<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="rss.php" />';
-	$rss_feed_button = '<a href="rss.php"><span class="fa fa-rss-square">&nbsp;</span>RSS Feed</a><br />'; 
+	$rss_feed_button = '<a href="rss.php"><span class="fa fa-rss-square"></span>&nbsp;RSS Feed</a>';
 	}
 else 
 	{
