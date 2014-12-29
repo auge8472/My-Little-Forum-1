@@ -108,10 +108,6 @@ $lang_add['access_for_users_only_d'] =        "Who has access to the forum?";
 $lang_add['access_only_reg_users'] =          "Only registered users";
 $lang_add['access_all_users'] =               "Everyone";
 
-$lang_add['user_edit'] =                      "Edit posting by user";
-$lang_add['user_edit_d'] =                    "Should a user be able to edit his posting?";
-$lang_add['user_delete'] =                    "Delete posting by user";
-$lang_add['user_delete_d'] =                  "Should a user be able to delete his posting?";
 $lang_add['mail_parameter'] =                 "Mail parameter";
 $lang_add['mail_parameter_d'] =               "Parameter to contact the mail server (maybe needed). Contact your provider for information.";
 $lang_add['session_prefix'] =                 "Session prefix";
@@ -162,7 +158,7 @@ $lang_add['desc'] =                           "new posting on top";
 $lang_add['all_views_direct'] =               "Direct access to all views";
 $lang_add['all_views_direct_d'] =             "Should an user be able to open a thread in all accessible views?";
 $lang_add['thread_depth_indent'] =            "Depth of thread indent";
-$lang_add['thread_depth_indent_d'] =          "In wich depth should the indention of threads end?";
+$lang_add['thread_depth_indent_d'] =          "In wich depth the indention of threads should end?";
 $lang_add['empty_postings_possible'] =        "Empty postings possible";
 $lang_add['empty_postings_possible_d'] =      "Should an user be able to post an empty posting?";
 $lang_add['admin_mod_highlight'] =            "Highlight admins and moderators";
@@ -174,14 +170,31 @@ $lang_add['thread_view_sorter_d'] =           "Sets the sort order in thread vie
 
 $lang_add['topics_per_page'] =                "Threads/Topics per page";
 $lang_add['topics_per_page_d'] =              "How many threads/topics should be displayed per page?";
+$lang_add['users_per_page'] =                 "Users per page";
+$lang_add['users_per_page_d'] =               "How many users should be shwon in the users list?";
 $lang_add['email_notification'] =             "E-mail notification to the posting author";
 $lang_add['email_notification_d'] =           "Option for e-mail notification to the posting author once a reply to this post has been submitted";
+$lang_add['name_maxlength'] =                 "Maximal length of user name";
+$lang_add['name_maxlength_d'] =               "Sets the maximal length of the whole user name.";
+$lang_add['name_word_maxlength'] =            "Maximal length of user name word";
+$lang_add['name_word_maxlength_d'] =          "Sets the maximal length of a word in a user name.";
+$lang_add['search_results_per_page'] =        "Search results per page";
+$lang_add['search_results_per_page_d'] =      "Sets the number of search results presented on one page.";
+$lang_add['max_thread_indent_mix'] =          "Depth of thread indent in mix view";
+$lang_add['max_thread_indent_mix_d'] =        "In wich depth the indention of threads should end?";
+$lang_add['max_thread_indent_mix_topic'] =    "Depth of posting indent in mix view";
+$lang_add['max_thread_indent_mix_topic_d'] =  "In wich depth the indention of posting should end?";
 
 # posting settings
-$lang_add['edit_own_entries'] =               "Editing own posts";
-$lang_add['edit_own_entries_d'] =             "Should registered users be allowed to edit their own posts?";
+$lang_add['user_edit'] =                      "Edit posting by user";
+$lang_add['user_edit_d'] =                    "Should a user be allowed to edit his posting?";
+$lang_add['user_delete'] =                    "Delete posting by user";
+$lang_add['user_delete_d'] =                  "Should a user be able to delete his posting?";
 $lang_add['show_if_edited'] =                 "Show editing";
 $lang_add['show_if_edited_d'] =               "Show whether, when and by whom a post has been edited?";
+# old
+$lang_add['edit_own_entries'] =               "Editing own posts";
+$lang_add['edit_own_entries_d'] =             "Should registered users be allowed to edit their own posts?";
 
 # old
 $lang_add['admin_unnoticeable_edit'] =        "Unnoticed editing by admin";
@@ -196,16 +209,76 @@ $lang_add['mod_unnoticeable_edit_d'] =        "Should moderators be allowed to e
 $lang_add['dont_reg_edit_by_mod'] =           "Unnoticed editing by moderators";
 $lang_add['dont_reg_edit_by_mod_d'] =         "Should moderators be allowed to edit posts &quot;unnoticed&quot;?";
 
-$lang_add['edit_period'] =                    "Edit Period";
-$lang_add['edit_period_d'] =                  "How long can own entries be edited by users (in minutes, 0 for unlimited)?";
-$lang_add['edit_delay'] =                     "Edit delay";
-$lang_add['edit_delay_d'] =                   "If editing is to be shown, a time period (minutes) can be set within messages can be edited without showing it";
+$lang_add['email_maxlength'] =                "Maximal length of email address";
+$lang_add['email_maxlength_d'] =              "Sets the maximal length of an email address.";
+$lang_add['hp_maxlength'] =                   "Maximal length of homepage";
+$lang_add['hp_maxlength_d'] =                 "Sets the maximal length of a hompage URL.";
+$lang_add['place_maxlength'] =                "Maximal length of place";
+$lang_add['place_maxlength_d'] =              "Sets the maximal length of a place.";
+$lang_add['place_word_maxlength'] =           "Maximal length of place word";
+$lang_add['place_word_maxlength_d'] =         "Sets the maximal length of a word in a places name.";
+$lang_add['profile_maxlength'] =              "Maximal size of profile";
+$lang_add['profile_maxlength_d'] =            "Sets the maximal size of the whole profile.";
+$lang_add['quote_symbol'] =                   "Quotation mark";
+$lang_add['quote_symbol_d'] =                 "The symbol, that mark the begin of a quoted text line.";
+$lang_add['signature_maxlength'] =            "Maximal length of signature";
+$lang_add['signature_maxlength_d'] =          "Sets the maximal length of a signature.";
+$lang_add['signature_separator'] =            "Signature separator";
+$lang_add['signature_separator_d'] =          "The symbol or the group of symbols, that separates the signature from the posting.";
+$lang_add['subject_maxlength'] =              "Maximal length of subject";
+$lang_add['subject_maxlength_d'] =            "Sets the maximal length of the subject.";
+$lang_add['subject_word_maxlength'] =         "Maximal length of subject word";
+$lang_add['subject_word_maxlength_d'] =       "Sets the maximal length of a word in the subject.";
+$lang_add['text_maxlength'] =                 "Maximal length of posting";
+$lang_add['text_maxlength_d'] =               "Sets the maximal length of a whole posting.";
+$lang_add['text_word_maxlength'] =            "Maximal length of posting word";
+$lang_add['text_word_maxlength_d'] =          "Sets the maximal length of a word in the posting.";
+
+# enhanced settings
 $lang_add['smilies'] =                        "Smilies";
 $lang_add['smilies_d'] =                      "Should smilies be used?";
 $lang_add['bbcode_img'] =                     "BB code for images";
 $lang_add['bbcode_img_d'] =                   "Should it be allowed to add images to the posts ([img]http://www.domain.tld/image.jpg[/img]?";
 $lang_add['upload_images'] =                  "Upload Images";
 $lang_add['upload_images_d'] =                "Should it be possible to upload Images? Note: the folder img/uploaded/ needs rights to write (CHMOD 777)!";
+$lang_add['upload_max_img_height'] =          "Maximal height of image";
+$lang_add['upload_max_img_height_d'] =        "Sets the maximal height of an image in pixel.";
+$lang_add['upload_max_img_size'] =            "Maximal size of image";
+$lang_add['upload_max_img_size_d'] =          "Sets the maximal file size of an image in kilobyte.";
+$lang_add['upload_max_img_width'] =           "Maximal width of image";
+$lang_add['upload_max_img_width_d'] =         "Sets the maximal width of an image in pixel.";
+$lang_add['user_control_css'] =               "User defined CSS";
+$lang_add['user_control_css_d'] =             "Should the user be allowed to define his own CSS rules?";
+$lang_add['user_control_refresh'] =           "Refresh of main view";
+$lang_add['user_control_refresh_d'] =         "Should the user be allowed to activate the automatic refresh of the main view? The refresh will occur in a 20-minute-rhythm.";
+$lang_add['user_control_sort_thread_threads'] =   "User defined sorting of answers in thread view";
+$lang_add['user_control_sort_thread_threads_d'] = "Should the user be allowed to set the sort order in thread view differing from general setting? The newest answers to a topic can be set to top or bottom of the thread.";
+
+# security settings
+$lang_add['captcha_contact'] =                "Contact form";
+$lang_add['captcha_posting'] =                "Posting form";
+$lang_add['captcha_register'] =               "Register form";
+$lang_add['captcha_type'] =                   "CAPTCHA type:";
+$lang_add['captcha_type_d'] =                 "Which CAPTCHA type should be used? Note that the graphical CAPTCHA requires the GD Lib and at least one TTF font. Put the font files (*.ttf) into the folder captcha/fonts/. You can get fonts e.g. on free-fonts.com.";
+$lang_add['captcha_type_image'] =             "Graphical";
+$lang_add['captcha_type_math'] =              "Mathematical";
+$lang_add['edit_period'] =                    "Edit Period";
+$lang_add['edit_period_d'] =                  "How long can own entries be edited by users (in minutes, 0 for unlimited)?";
+$lang_add['edit_delay'] =                     "Edit delay";
+$lang_add['edit_delay_d'] =                   "If editing is to be shown, a time period (minutes) can be set within messages can be edited without showing it";
+$lang_add['entries_by_users_only'] =          "Who may post?";
+$lang_add['entries_by_users_only_d'] =        "Should all visitors be allowed to post in the forum or only registered users?";
+$lang_add['register_by_admin_only'] =         "Who may register users?";
+$lang_add['register_by_admin_only_d'] =       "Should visitors be allowed to register at the forum or should this be a task of an admin?";
+
+# session settings
+$lang_add['remember_last_visit'] =            "Remember last login";
+$lang_add['remember_last_visit_d'] =          "Should the date of the last login be saved with a cookie? So it is possible to mark new postings since the last login.";
+$lang_add['remember_userdata'] =              "Remember user data";
+$lang_add['remember_userdata_d'] =            "Should the user date be saved with a cookie? So it is possible to log in automatically.";
+$lang_add['remember_userstandard'] =          "Remember user settings";
+$lang_add['remember_userstandard_d'] =        "Should user settings be saved with a cookie? So the forum will be displayed with the user settings at first request of a session.";
+
 $lang_add['autolink'] =                       "Auto link";
 $lang_add['autolink_d'] =                     "Should links be automatically recognised and made clickable for the user?";
 $lang_add['count_views'] =                    "Views counter";
@@ -214,13 +287,6 @@ $lang_add['count_users_online'] =             "Users online counter";
 $lang_add['count_users_online_d'] =           "Count the users which are currently online?";
 $lang_add['captcha'] =                        "CAPTCHA:";
 $lang_add['captcha_d'] =                      "Which forms should be protected by a CAPTCHA (only for not registered users)?";
-$lang_add['captcha_posting'] =                "Posting form";
-$lang_add['captcha_contact'] =                "Contact form";
-$lang_add['captcha_register'] =               "Register form";
-$lang_add['captcha_type'] =                   "CAPTCHA type:";
-$lang_add['captcha_type_d'] =                 "Which CAPTCHA type should be used? Note that the graphical CAPTCHA requires the GD Lib and at least one TTF font. Put the font files (*.ttf) into the folder captcha/fonts/. You can get fonts e.g. on free-fonts.com.";
-$lang_add['captcha_type_image'] =             "Graphical";
-$lang_add['captcha_type_math'] =              "Mathematical";
 $lang_add['empty_forum'] =                    "Empty forum";
 $lang_add['uninstall'] =                      "Uninstall";
 $lang_add['empty_forum_note'] =               "Are you sure you want to delete all entries irretrievably?";

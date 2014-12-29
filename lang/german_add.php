@@ -57,42 +57,17 @@ $lang_add['1'] =                              "an";
 $lang_add['no'] =                             "nein";
 $lang_add['yes'] =                            "ja";
 
+# general settings
 $lang_add['forum_name'] =                     "Forumname";
 $lang_add['forum_name_d'] =                   "wird u.a. im Header angezeigt";
 $lang_add['forum_email'] =                    "Forum-E-Mail-Adresse";
 $lang_add['forum_email_d'] =                  "wird als Absende-Adresse für vom Forum versendete E-Mails und als Forums-Kontaktadresse verwendet";
 $lang_add['forum_disabled'] =                 "Forum abschalten";
 $lang_add['forum_disabled_d'] =               "Soll das Forum unverfügbar sein?";
-$lang_add['thread_view'] =                    "Thread-Ansicht";
-$lang_add['thread_view_d'] =                  "Soll die Thread-Ansicht verwendet werden?";
-$lang_add['board_view'] =                     "Board-Ansicht";
-$lang_add['board_view_d'] =                   "Soll die Board-Ansicht verwendet werden?";
-$lang_add['mix_view'] =                       "Mix-Ansicht";
-$lang_add['mix_view_d'] =                     "Soll die Mix-Ansicht verwendet werden?";
-$lang_add['standard'] =                       "Standard-Ansicht";
-$lang_add['standard_d'] =                     "Welche Ansicht soll als Standard-Ansicht festgelegt sein?";
-$lang_add['standard_thread'] =                "Thread-Ansicht";
-$lang_add['standard_board'] =                 "Board-Ansicht";
-$lang_add['standard_mix'] =                   "Mix-Ansicht";
-# old
-$lang_add['accession'] =                      "Zugangsberechtigung";
-$lang_add['accession_d'] =                    "Wer hat Zugang zum Forum?";
-# new
-$lang_add['access_for_users_only'] =          "Zugangsberechtigung";
-$lang_add['access_for_users_only_d'] =        "Wer hat Zugang zum Forum?";
-
-$lang_add['access_only_reg_users'] =          "nur registrierte Benutzer";
-$lang_add['access_all_users'] =               "alle";
-$lang_add['entry_perm'] =                     "Postings";
-$lang_add['entry_perm_d'] =                   "Wer kann Einträge machen?";
-$lang_add['register_perm'] =                  "Benutzerregistrierung";
-$lang_add['register_only_admin'] =            "nur durch Admin";
-$lang_add['register_self'] =                  "selbst";
-$lang_add['register_perm_d'] =                "Können sich Benutzer selbst anmelden?";
-$lang_add['mark_reg_users'] =                 "Registrierte Benutzer kennzeichnen?";
-$lang_add['mark_reg_users_d'] =               "Sollen registrierte Benutzer erkennbar sein?";
 $lang_add['forum_address'] =                  "Forum-Adresse";
 $lang_add['forum_address_d'] =                "URL des Forums in dieser Form: http://www.domain.tld/forum/";
+$lang_add['language_file'] =                  "Sprache";
+$lang_add['language_file_d'] =                "Sprache des Forums";
 # old
 $lang_add['home_link'] =                      "Home-Link";
 $lang_add['home_link_d'] =                    "Link zur Homepage, z.B. \"http://www.domain.tld/\" oder \"../index.html\" (optional)";
@@ -105,23 +80,34 @@ $lang_add['home_link_name_d'] =               "Name des Home-Links, z.B. &quot;z
 # new
 $lang_add['home_linkname'] =                  "Home-Linkname";
 $lang_add['home_linkname_d'] =                "Name des Home-Links, z.B. &quot;zurück zur Homepage&quot;";
-
-$lang_add['language_file'] =                  "Sprache";
-$lang_add['language_file_d'] =                "Sprache des Forums";
-$lang_add['topics_per_page'] =                "Threads/Topics pro Seite";
-$lang_add['topics_per_page_d'] =              "Wieviele Threads/Topics sollen pro Seite angezeigt werden?";
-$lang_add['forum_time_difference'] =          "Forums-Zeitunterschied";
-$lang_add['forum_time_difference_d'] =        "Unterschied zur Server-Zeit in Stunden";
 # old
 $lang_add['template_file'] =                  "Template-Datei";
 $lang_add['template_file_d'] =                "Template für das Seitenlayout";
 # new
 $lang_add['template'] =                       "Template-Datei";
 $lang_add['template_d'] =                     "Template für das Seitenlayout";
-$lang_add['user_edit'] =                      "Bearbeiten von Postings";
-$lang_add['user_edit_d'] =                    "Soll ein Benutzer sein eigenes Posting ändern können?";
-$lang_add['user_delete'] =                    "Löschen von Postings";
-$lang_add['user_delete_d'] =                  "Soll ein Benutzer sein eigenes Posting löschen können?";
+# old
+$lang_add['rss_feed'] =                       "RSS-Feed:";
+$lang_add['rss_feed_d'] =                     "Soll ein RSS-Feed mit den neuesten Postings angeboten werden (nur möglich, wenn Zugangsberechtigung [s.o.] auf \"alle\" gestellt ist)?";
+# new
+$lang_add['provide_rssfeed'] =                "RSS-Feed:";
+$lang_add['provide_rssfeed_d'] =              "Soll ein RSS-Feed mit den neuesten Postings angeboten werden (nur möglich, wenn Zugangsberechtigung [s.o.] auf \"alle\" gestellt ist)?";
+# old
+$lang_add['forum_time_difference'] =          "Forums-Zeitunterschied";
+$lang_add['forum_time_difference_d'] =        "Unterschied zur Server-Zeit in Stunden";
+# new
+$lang_add['time_difference'] =                "Forums-Zeitunterschied";
+$lang_add['time_difference_d'] =              "Unterschied zur Server-Zeit in Stunden";
+# old
+$lang_add['accession'] =                      "Zugangsberechtigung";
+$lang_add['accession_d'] =                    "Wer hat Zugang zum Forum?";
+# new
+$lang_add['access_for_users_only'] =          "Zugangsberechtigung";
+$lang_add['access_for_users_only_d'] =        "Wer hat Zugang zum Forum?";
+
+$lang_add['access_only_reg_users'] =          "nur registrierte Benutzer";
+$lang_add['access_all_users'] =               "alle";
+
 $lang_add['mail_parameter'] =                 "Mail Parameter";
 $lang_add['mail_parameter_d'] =               "Parameter, um über den Mailserver Emails versenden zu können (eventuell benötigt). Kontaktiere deinen Provider um Informationen zu erhalten.";
 $lang_add['session_prefix'] =                 "Sessionpräfix";
@@ -133,49 +119,174 @@ $lang_add['server_timezone_d'] =              "Zeitzone, die auf dem Webserver e
 $lang_add['autologin'] =                      "Automatisches Login";
 $lang_add['autologin_d'] =                    "Benutze Cookies, um den Benutzer beim Aufruf des Forums automatisch einzuloggen.";
 
-$lang_add['email_notification'] =             "E-Mail-Benachrichtigung an Posting-Autor";
-$lang_add['email_notification_d'] =           "Möglichkeit der E-Mail-Benachrichtigung an den Autor eines Postings, wenn darauf geantwortet wurde";
-$lang_add['edit_own_entries'] =               "Editieren eigener Postings";
-$lang_add['edit_own_entries_d'] =             "Können registrierte Benutzer ihre eigenen Postings editieren?";
-$lang_add['show_if_edited'] =                 "Editieren anzeigen";
-$lang_add['show_if_edited_d'] =               "Anzeigen ob, wann und von wem ein Posting editiert wurde";
-$lang_add['admin_unnoticeable_edit'] =        "Unbemerktes Editieren durch Admin";
-$lang_add['admin_unnoticeable_edit_d'] =      "Können Admins &quot;unbemerkt&quot; editieren?";
-$lang_add['mod_unnoticeable_edit'] =          "Unbemerktes Editieren durch Moderator";
-$lang_add['mod_unnoticeable_edit_d'] =        "Können Moderatoren &quot;unbemerkt&quot; editieren?";
-$lang_add['edit_period'] =                    "Editier-Zeitraum";
-$lang_add['edit_period_d'] =                  "Wie lange können eigene Postings von Benutzer editiert werden (in Minuten, 0 für belibig lange)?";
-$lang_add['edit_delay'] =                     "Editier-Anzeigeverzögerung";
-$lang_add['edit_delay_d'] =                   "Falls Editieren angezeigt werden soll, kann hier die Zeit in Minuten festgelegt werden, innerhalb der Postings editiert werden können, ohne das es angezeigt wird";
+# view settings
+$lang_add['thread_view'] =                    "Thread-Ansicht";
+$lang_add['thread_view_d'] =                  "Soll die Thread-Ansicht verwendet werden?";
+$lang_add['board_view'] =                     "Board-Ansicht";
+$lang_add['board_view_d'] =                   "Soll die Board-Ansicht verwendet werden?";
+$lang_add['mix_view'] =                       "Mix-Ansicht";
+$lang_add['mix_view_d'] =                     "Soll die Mix-Ansicht verwendet werden?";
+$lang_add['standard'] =                       "Standard-Ansicht";
+$lang_add['standard_d'] =                     "Welche Ansicht soll als Standard-Ansicht festgelegt sein?";
+$lang_add['standard_thread'] =                "Thread-Ansicht";
+$lang_add['standard_board'] =                 "Board-Ansicht";
+$lang_add['standard_mix'] =                   "Mix-Ansicht";
+$lang_add['entry_perm'] =                     "Postings";
+$lang_add['entry_perm_d'] =                   "Wer kann Einträge machen?";
+$lang_add['register_perm'] =                  "Benutzerregistrierung";
+$lang_add['register_only_admin'] =            "nur durch Admin";
+$lang_add['register_self'] =                  "selbst";
+$lang_add['register_perm_d'] =                "Können sich Benutzer selbst anmelden?";
 $lang_add['bbcode'] =                         "BB-Code";
 $lang_add['bbcode_d'] =                       "Sollen BB-Codes zum formatieren von Texten verwendet werden ([b]fett[/b], [i]kursiv[/i], [link]http://www.domain.de/[/link], [link=http://www.domain.tld/]Link[/link])?";
+# old
+$lang_add['mark_reg_users'] =                 "Registrierte Benutzer kennzeichnen?";
+$lang_add['mark_reg_users_d'] =               "Sollen registrierte Benutzer erkennbar sein?";
+# new
+$lang_add['show_registered'] =                "Registrierte Benutzer kennzeichnen?";
+$lang_add['show_registered_d'] =              "Sollen registrierte Benutzer erkennbar sein?";
 
+$lang_add['last_reply_link'] =                "Direkter Link zur letzten Antwort";
+$lang_add['last_reply_link_d'] =              "Direkter Link zur letzten Antwort in der Board-Ansicht.";
+$lang_add['last_reply_name'] =                "Name des Posters der letzten Antwort";
+$lang_add['last_reply_name_d'] =              "Zeige den Namen des Posters der letzten Antwort in der Board-Ansicht an.";
+$lang_add['show_posting_id'] =                "Posting-ID anzeigen";
+$lang_add['show_posting_id_d'] =              "Zeige die ID des Postings z.B. für die Benutzung in Links an.";
 $lang_add['asc'] =                            "neues Posting unten";
 $lang_add['desc'] =                           "neues Posting oben";
 
+$lang_add['all_views_direct'] =               "Direkte Links zu allen Ansichten";
+$lang_add['all_views_direct_d'] =             "Soll ein Benutzer einen Thread per direktem Link in allen Ansichten öffnen können?";
+$lang_add['thread_depth_indent'] =            "Tiefe der Thread-Einrückung";
+$lang_add['thread_depth_indent_d'] =          "In welcher Tiefe soll die Einrückung eines Threads enden?";
+$lang_add['empty_postings_possible'] =        "Leere Postings";
+$lang_add['empty_postings_possible_d'] =      "Soll ein Benutzer ein leeres Posting absenden können?";
+$lang_add['admin_mod_highlight'] =            "Admins und Mods hervorheben";
+$lang_add['admin_mod_highlight_d'] =          "Hebt Admins und Mods mit verschiedenen Farben hervor.";
+$lang_add['user_highlight'] =                 "Registrierte Benutzer hervorheben";
+$lang_add['user_highlight_d'] =               "Hebt Registrierte Benutzer mit einer eigenen Farbe hervor.";
+$lang_add['thread_view_sorter'] =             "Sortierung der Antworten in der Thread-Ansicht";
+$lang_add['thread_view_sorter_d'] =           "Legt die Sortierung in der Thread-Ansicht fest. Die neueste Antwort in einem Thread kann im Threadbaum oben oder unten angezeigt werden.";
+
+$lang_add['topics_per_page'] =                "Threads/Topics pro Seite";
+$lang_add['topics_per_page_d'] =              "Wieviele Threads/Topics sollen pro Seite angezeigt werden?";
+$lang_add['users_per_page'] =                 "Benutzer pro Seite";
+$lang_add['users_per_page_d'] =               "Wieviele Benutzer sollen in der Benutzerliste pro Seite angezeigt werden?";
+$lang_add['email_notification'] =             "E-Mail-Benachrichtigung an Posting-Autor";
+$lang_add['email_notification_d'] =           "Möglichkeit der E-Mail-Benachrichtigung an den Autor eines Postings, wenn darauf geantwortet wurde";
+$lang_add['name_maxlength'] =                 "Maximallänge des Benutzernamens";
+$lang_add['name_maxlength_d'] =               "Legt die maximale Gesamtlänge eines Benutzernamens fest.";
+$lang_add['name_word_maxlength'] =            "Maximallänge eines Namensbestandteils";
+$lang_add['name_word_maxlength_d'] =          "Legt die maximale Länge eines Worts in einem Benutzernamen fest.";
+$lang_add['search_results_per_page'] =        "Suchergebnisse pro Seite";
+$lang_add['search_results_per_page_d'] =      "Legt die Anzahl der Suchergebnisse auf einer Seite fest.";
+$lang_add['max_thread_indent_mix'] =          "Tiefe der Thread-Einrückung in der Mix-Ansicht";
+$lang_add['max_thread_indent_mix_d'] =        "In welcher Tiefe soll die Einrückung eines Threads enden?";
+$lang_add['max_thread_indent_mix_topic'] =    "Tiefe der Posting-Einrückung in der Mix-Ansicht";
+$lang_add['max_thread_indent_mix_topic_d'] =  "In welcher Tiefe soll die Einrückung der Postings enden?";
+
+# posting settings
+$lang_add['user_edit'] =                      "Bearbeiten von Postings";
+$lang_add['user_edit_d'] =                    "Soll ein Benutzer sein eigenes Posting ändern können?";
+$lang_add['user_delete'] =                    "Löschen von Postings";
+$lang_add['user_delete_d'] =                  "Soll ein Benutzer sein eigenes Posting löschen können?";
+$lang_add['show_if_edited'] =                 "Editieren anzeigen";
+$lang_add['show_if_edited_d'] =               "Anzeigen ob, wann und von wem ein Posting editiert wurde";
+# old
+$lang_add['edit_own_entries'] =               "Editieren eigener Postings";
+$lang_add['edit_own_entries_d'] =             "Können registrierte Benutzer ihre eigenen Postings editieren?";
+
+# old
+$lang_add['admin_unnoticeable_edit'] =        "Unbemerktes Editieren durch den Admin";
+$lang_add['admin_unnoticeable_edit_d'] =      "Können Admins &quot;unbemerkt&quot; editieren?";
+# new
+$lang_add['dont_reg_edit_by_admin'] =         "Unbemerktes Bearbeiten durch einen Admin";
+$lang_add['dont_reg_edit_by_admin_d'] =       "Können Admins &quot;unbemerkt&quot; editieren?";
+# old
+$lang_add['mod_unnoticeable_edit'] =          "Unbemerktes Bearbeiten durch einen Moderator";
+$lang_add['mod_unnoticeable_edit_d'] =        "Können Moderatoren &quot;unbemerkt&quot; editieren?";
+# new
+$lang_add['dont_reg_edit_by_mod'] =           "Unbemerktes Bearbeiten durch einen Moderator";
+$lang_add['dont_reg_edit_by_mod_d'] =         "Können Moderatoren &quot;unbemerkt&quot; editieren?";
+
+$lang_add['email_maxlength'] =                "Maximallänge der Emailadresse";
+$lang_add['email_maxlength_d'] =              "Legt die maximale Gesamtlänge einer Emailadresse fest.";
+$lang_add['hp_maxlength'] =                   "Maximallänge der Homepage";
+$lang_add['hp_maxlength_d'] =                 "Legt die maximale Gesamtlänge der URL einer Homepage fest.";
+$lang_add['place_maxlength'] =                "Maximallänge des Wohnorts";
+$lang_add['place_maxlength_d'] =              "Legt die maximale Gesamtlänge des Namens des Wohnorts fest.";
+$lang_add['place_word_maxlength'] =           "Maximallänge eines Worts im Namen des Wohnorts";
+$lang_add['place_word_maxlength_d'] =         "Legt die maximale Länge eines Worts im Namens des Wohnorts fest.";
+$lang_add['profile_maxlength'] =              "Maximalgröße des Profils";
+$lang_add['profile_maxlength_d'] =            "Legt die maximale Größe eines Benutzerprofils fest.";
+$lang_add['quote_symbol'] =                   "Zitatzeichen";
+$lang_add['quote_symbol_d'] =                 "Das Zeichen, das am Anfang einer jeden zitierten Zeile.";
+$lang_add['signature_maxlength'] =            "Maximallänge der Signatur";
+$lang_add['signature_maxlength_d'] =          "Legt die maximale Länge der Signatur fest.";
+$lang_add['signature_separator'] =            "Trennzeichen zur Signatur";
+$lang_add['signature_separator_d'] =          "Das Zeichen oder die Gruppe von Zeichen, die die Signatur vom Posting trennen.";
+$lang_add['subject_maxlength'] =              "Maximallänge des Betreffs";
+$lang_add['subject_maxlength_d'] =            "Legt die maximale Länge des Betreffs fest.";
+$lang_add['subject_word_maxlength'] =         "Maximallänge eines Worts des Betreffs";
+$lang_add['subject_word_maxlength_d'] =       "Legt die maximale Länge eines Worts im Betreff fest.";
+$lang_add['text_maxlength'] =                 "Maximallänge des Postings";
+$lang_add['text_maxlength_d'] =               "Legt die maximale Länge eines gesamten Postings fest.";
+$lang_add['text_word_maxlength'] =            "Maximallänge eines Worts des Postings";
+$lang_add['text_word_maxlength_d'] =          "Legt die maximale Länge eines Worts in einem Posting fest.";
+
+# enhanced settings
 $lang_add['smilies'] =                        "Smilies";
 $lang_add['smilies_d'] =                      "Sollen Smilies durch Bilder ersetzt werden?";
 $lang_add['bbcode_img'] =                     "BB-Code für Bilder";
 $lang_add['bbcode_img_d'] =                   "Soll es auch möglich sein, Bilder einzufügen ([img]http://www.domain.tld/bild.jpg[/img])?";
 $lang_add['upload_images'] =                  "Bilder hochladen";
 $lang_add['upload_images_d'] =                "Sollen Benutzer Bilder hochladen können? Wichtig: hierzu benötigt das Verzeichnis img/uploaded/ Schreibrechte (CHMOD 777)!";
+$lang_add['upload_max_img_height'] =          "Maximalhöhe eines Bildes";
+$lang_add['upload_max_img_height_d'] =        "Legt die maximale Höhe eines Bildes in Pixeln fest.";
+$lang_add['upload_max_img_size'] =            "Maximalgröße eines Bildes";
+$lang_add['upload_max_img_size_d'] =          "Legt die maximale Dateigröße eines Bildes in Kilobyte fest.";
+$lang_add['upload_max_img_width'] =           "Maximalbreite eines Bildes";
+$lang_add['upload_max_img_width_d'] =         "Legt die maximale Breite eines Bildes in Pixeln fest.";
+$lang_add['user_control_css'] =               "Benutzerdefiniertes CSS";
+$lang_add['user_control_css_d'] =             "Soll der Benutzer eigene CSS-Regeln festlegen dürfen?";
+$lang_add['user_control_refresh'] =           "Refresh der Hauptansicht";
+$lang_add['user_control_refresh_d'] =         "Soll der Benutzer für sich einen automatischen Refresh der Hauptansicht festlegen dürfen? Der Refresh wird im 20-Minuten-Rhythmus erfolgen.";
+$lang_add['user_control_sort_thread_threads'] =   "Benutzerdefinierte Sortierung der Postings";
+$lang_add['user_control_sort_thread_threads_d'] = "Soll der Benutzer eine von der Standardsortierung abweichende Sortierung der Postings innerhalb eines Threads festlegen dürfen? Die neueste Antwort in einem Thread kann im Threadbaum oben oder unten angezeigt werden.";
+
+# security settings
+$lang_add['captcha_contact'] =                "Kontakt-Formular";
+$lang_add['captcha_posting'] =                "Posting-Formular";
+$lang_add['captcha_register'] =               "Registerungs-Formular";
+$lang_add['captcha_type'] =                   "CAPTCHA Type:";
+$lang_add['captcha_type_d'] =                 "Welche Art von CAPTCHA soll verwendet werden? Das graphische CAPTCHA benötigt die GD Lib und mindesten eine TTF-Schrift. Die Schrift-Dateien (*.ttf) müsssen im Ordner captcha/fonts/ gespeichert werden. Schriften gibt es z.B. auf free-fonts.com.";
+$lang_add['captcha_type_image'] =             "graphisch";
+$lang_add['captcha_type_math'] =              "mathematisch";
+$lang_add['edit_period'] =                    "Editier-Zeitraum";
+$lang_add['edit_period_d'] =                  "Wie lange können eigene Postings von Benutzer editiert werden (in Minuten, 0 für belibig lange)?";
+$lang_add['edit_delay'] =                     "Editier-Anzeigeverzögerung";
+$lang_add['edit_delay_d'] =                   "Falls Editieren angezeigt werden soll, kann hier die Zeit in Minuten festgelegt werden, innerhalb der Postings editiert werden können, ohne das es angezeigt wird";
+$lang_add['entries_by_users_only'] =          "Wer darf posten?";
+$lang_add['entries_by_users_only_d'] =        "Sollen alle Besucher Postings schreiben dürfen oder nur registrierte Benutzer?";
+$lang_add['register_by_admin_only'] =         "Wer darf Benutzer registrieren?";
+$lang_add['register_by_admin_only_d'] =       "Sollen sich Besucher sebst registrieren können oder soll das nur ein Admin dürfen?";
+
+# session settings
+$lang_add['remember_last_visit'] =            "Letzten Login merken";
+$lang_add['remember_last_visit_d'] =          "Soll der letzte Login per Cookie beim Benutzer gespeichert bleiben? So können für den Benutzer neue Postings markiert werden.";
+$lang_add['remember_userdata'] =              "Benutzerdaten merken";
+$lang_add['remember_userdata_d'] =            "Sollen die Benutzerdaten per Cookie beim Benutzer gespeichert werden? So kann sich der Benutzer beim Aufruf des Forums automatisch einloggen.";
+$lang_add['remember_userstandard'] =          "Benutzereinstellungen merken";
+$lang_add['remember_userstandard_d'] =        "Sollen Benutzereinstellungen per Cookie beim Benutzer gespeichert werden? So kann das Forum schon beim Aufruf den konkreten Einstellungen entsprechend ausgegeben werden.";
+
 $lang_add['autolink'] =                       "Auto-Link";
 $lang_add['autolink_d'] =                     "Soll versucht werden, Links automatisch zu erkennen und anklickbar gemacht werden?";
 $lang_add['count_views'] =                    "Views-Counter";
 $lang_add['count_views_d'] =                  "Sollen die Posting-Aufrufe (Views) gezählt werden?";
 $lang_add['count_users_online'] =             "Benutzer-Online-Counter";
 $lang_add['count_users_online_d'] =           "Sollen die Benutzer gezählt werden, die gerade online sind?";
-$lang_add['rss_feed'] =                       "RSS-Feed:";
-$lang_add['rss_feed_d'] =                     "Soll ein RSS-Feed mit den neuesten Postings angeboten werden (nur möglich, wenn Zugangsberechtigung [s.o.] auf \"alle\" gestellt ist)?";
 $lang_add['captcha'] =                        "CAPTCHA:";
 $lang_add['captcha_d'] =                      "Welche Formulare sollen per CAPTCHA geschützt werden (nur für nicht registrierte User)?";
-$lang_add['captcha_posting'] =                "Posting-Formular";
-$lang_add['captcha_contact'] =                "Kontakt-Formular";
-$lang_add['captcha_register'] =               "Registerungs-Formular";
-$lang_add['captcha_type'] =                   "CAPTCHA Type:";
-$lang_add['captcha_type_d'] =                 "Welche Art von CAPTCHA soll verwendet werden? Das graphische CAPTCHA benötigt die GD Lib und mindesten eine TTF-Schrift. Die Schrift-Dateien (*.ttf) müsssen im Ordner captcha/fonts/ gespeichert werden. Schriften gibt es z.B. auf free-fonts.com.";
-$lang_add['captcha_type_image'] =             "graphisch";
-$lang_add['captcha_type_math'] =              "mathematisch";
 $lang_add['empty_forum'] =                    "Forum leeren";
 $lang_add['uninstall'] =                      "Forum deinstallieren";
 $lang_add['empty_forum_note'] =               "Es werden alle Postings des Forums unwiederbringlich gelöscht!";
