@@ -68,40 +68,16 @@ $lang_add['forum_address'] =                  "Forum address";
 $lang_add['forum_address_d'] =                "URL of the forum (use this format: http://www.domain.tld/forum/)";
 $lang_add['language_file'] =                  "Language";
 $lang_add['language_file_d'] =                "Language of the Forum";
-# old
-$lang_add['home_link'] =                      "Home link";
-$lang_add['home_link_d'] =                    "Link to your homepage, e.g. \"http://www.domain.tld/\" or \"../index.html\" (optional)";
-# new
 $lang_add['home_linkaddress'] =               "Home link";
 $lang_add['home_linkaddress_d'] =             "Link to your homepage, e.g. \"http://www.domain.tld/\" or \"../index.html\" (optional)";
-# old
-$lang_add['home_link_name'] =                 "Home link name";
-$lang_add['home_link_name_d'] =               "Name of the home link, e.g. &quot;Back to homepage&quot;";
-# new
 $lang_add['home_linkname'] =                  "Home link name";
 $lang_add['home_linkname_d'] =                "Name of the home link, e.g. &quot;Back to homepage&quot;";
-# old
-$lang_add['template_file'] =                  "Template file";
-$lang_add['template_file_d'] =                "Template for the page layout";
-# new
 $lang_add['template'] =                       "Template file";
 $lang_add['template_d'] =                     "Template for the page layout";
-# old
-$lang_add['rss_feed'] =                       "RSS feed:";
-$lang_add['rss_feed_d'] =                     "Should a RSS feed with the newest posts be offered (only possible if access permission (cp. above) has been set to \"Everyone\")?";
-#new
 $lang_add['provide_rssfeed'] =                "RSS feed:";
 $lang_add['provide_rssfeed_d'] =              "Should a RSS feed with the newest posts be offered (only possible if access permission (cp. above) has been set to \"Everyone\")?";
-# old
-$lang_add['forum_time_difference'] =          "Forum time difference";
-$lang_add['forum_time_difference_d'] =        "Time difference between server and forum time";
-# new
 $lang_add['time_difference'] =                "Forum time difference";
 $lang_add['time_difference_d'] =              "Time difference between server and forum time";
-# old
-$lang_add['accession'] =                      "Access permission";
-$lang_add['accession_d'] =                    "Who has access to the forum?";
-# new
 $lang_add['access_for_users_only'] =          "Access permission";
 $lang_add['access_for_users_only_d'] =        "Who has access to the forum?";
 
@@ -139,10 +115,6 @@ $lang_add['register_self'] =                  "Self";
 $lang_add['register_perm_d'] =                "Can users register themselves?";
 $lang_add['bbcode'] =                         "BB code";
 $lang_add['bbcode_d'] =                       "Should BB codes for formatting message texts be allowed ([b]bold[/b], [i]italic[/i], [link]http://www.domain.com/[/link], [link=http://www.domain.tld/]Link[/link])?";
-# old
-$lang_add['mark_reg_users'] =                 "Mark registered users";
-$lang_add['mark_reg_users_d'] =               "Should registered users be recognisable by a mark?";
-# new
 $lang_add['show_registered'] =                "Mark registered users";
 $lang_add['show_registered_d'] =              "Should registered users be recognisable by a mark?";
 
@@ -196,16 +168,8 @@ $lang_add['show_if_edited_d'] =               "Show whether, when and by whom a 
 $lang_add['edit_own_entries'] =               "Editing own posts";
 $lang_add['edit_own_entries_d'] =             "Should registered users be allowed to edit their own posts?";
 
-# old
-$lang_add['admin_unnoticeable_edit'] =        "Unnoticed editing by admin";
-$lang_add['admin_unnoticeable_edit_d'] =      "Should admins be allowed to edit posts &quot;unnoticed&quot;?";
-# new
 $lang_add['dont_reg_edit_by_admin'] =         "Unnoticed editing by admin";
 $lang_add['dont_reg_edit_by_admin_d'] =       "Should admins be allowed to edit posts &quot;unnoticed&quot;?";
-# old
-$lang_add['mod_unnoticeable_edit'] =          "Unnoticed editing by moderators";
-$lang_add['mod_unnoticeable_edit_d'] =        "Should moderators be allowed to edit posts &quot;unnoticed&quot;?";
-# new
 $lang_add['dont_reg_edit_by_mod'] =           "Unnoticed editing by moderators";
 $lang_add['dont_reg_edit_by_mod_d'] =         "Should moderators be allowed to edit posts &quot;unnoticed&quot;?";
 
