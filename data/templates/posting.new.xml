@@ -18,8 +18,9 @@
 </tr><tr>
 <td colspan="2"><label for="text">{labelText}</label>&nbsp;&nbsp;<span id="delete-text" class="small">{deleteOldPostingText}</span></td>
 </tr><tr>
-<td colspan="2"><div id="buttonspace">{bbCodeMarking}</div>
-<textarea cols="78" rows="20" name="text" id="text">{postingText}</textarea></td>
+<td colspan="2">
+<textarea cols="78" rows="20" name="text" id="text">{postingText}</textarea>
+<div id="buttonspace">{bbCodeMarking}</div></td>
 </tr>{showSignature}{emailNotification}{fixThread}{showCaptcha}<tr>
 <td colspan="2"><input type="submit" name="save_entry" value="{formSubmitValue}" title="{formSubmitTitle}" />&nbsp;
 <input type="submit" name="preview" value="{formPreviewValue}" title="{formPreviewTitle}" />&nbsp;
