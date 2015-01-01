@@ -231,6 +231,7 @@ if (($settings['access_for_users_only'] == 1
 						{
 						$threadIdQuery = "SELECT
 						tid,
+						pid,
 						locked
 						FROM ". $db_settings['forum_table'] ."
 						WHERE id = ". intval($_POST['id']);
@@ -245,6 +246,7 @@ if (($settings['access_for_users_only'] == 1
 							{
 							$field = mysql_fetch_assoc($threadIdResult);
 							$Thread = $field['tid'];
+							$postingID = $field['pid'];
 							if ($field['locked'] > 0)
 								{
 								unset($action);
@@ -257,6 +259,7 @@ if (($settings['access_for_users_only'] == 1
 					else if ($_POST['id'] == 0)
 						{
 						$Thread = 0;
+						$postingID = 0;
 						}
 				break;
 				case "edit";
