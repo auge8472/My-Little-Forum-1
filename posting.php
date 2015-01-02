@@ -779,8 +779,10 @@ if (($settings['access_for_users_only'] == 1
 						}
 					$show_signature = 1;
 					# if message is a reply:
-					if (!empty($_GET['id']) and intval($_GET['id']) > 0)
+					if ((isset($_GET['id']) and intval($_GET['id']) > 0)
+						or (isset($_POST['id']) and intval($_POST['id']) > 0))
 						{
+						$oldID = isset($_GET['id']) ? $_GET['id'] : (isset($_POST['id']) ? $_POST['id'] : 0);
 						$oldMessageQuery = "SELECT
 						tid,
 						pid,
@@ -790,7 +792,7 @@ if (($settings['access_for_users_only'] == 1
 						text,
 						locked
 						FROM ". $db_settings['forum_table'] ."
-						WHERE id = ". intval($_GET['id']);
+						WHERE id = ". intval($oldID);
 						$oldMessageResult = mysql_query($oldMessageQuery, $connid);
 						if (!$oldMessageResult) die($lang['db_error']);
 						if (mysql_num_rows($oldMessageResult) != 1)
