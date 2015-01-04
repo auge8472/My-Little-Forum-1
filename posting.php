@@ -387,10 +387,10 @@ if (($settings['access_for_users_only'] == 1
 				$errors[] = $lang['error_text_too_long'];
 				}
 			# trim and complete data:
-			$_POST['fixed'] = empty($_POST['fixed']) ? 0 : 1;
-			$_POST['show_signature'] = empty($_POST['show_signature']) ? 0 : 1;
-			$_POST['user_id'] = empty($_POST['user_id']) ? 0 : intval($_POST['user_id']);
-			$_POST['email_notify'] = empty($_POST['email_notify']) ? 0 : 1;
+			$_POST['fixed'] = (!empty($_POST['fixed'])) ? intval($_POST['fixed']) : 0;
+			$_POST['show_signature'] = (!empty($_POST['show_signature'])) ? intval($_POST['show_signature']) : 0;
+			$_POST['user_id'] = (!empty($_POST['user_id'])) ? intval($_POST['user_id']) : 0;
+			$_POST['email_notify'] = (!empty($_POST['email_notify'])) ? intval($_POST['email_notify']) : 0;
 			$_POST['hp'] = empty($_POST['hp']) ? "" : trim($_POST['hp']);
 			$_POST['place'] = empty($_POST['place']) ? "" : trim($_POST['place']);
 			if (empty($_POST['p_category'])
