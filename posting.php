@@ -615,16 +615,14 @@ if (($settings['access_for_users_only'] == 1
 								}
 							}
 						# set cookies, if wished and function is active:
-						if ($settings['remember_userdata'] == 1)
+						if ($settings['remember_userdata'] == 1
+							and (isset($_POST['setCookie'])
+								and $_POST['setCookie'] == 1))
 							{
-							if (isset($_POST['setCookie'])
-								and $_POST['setCookie'] == 1)
-								{
-								setcookie("user_name",$name,time()+(3600*24*30));
-								setcookie("user_email",$email,time()+(3600*24*30));
-								setcookie("user_hp",$hp,time()+(3600*24*30));
-								setcookie("user_place",$place,time()+(3600*24*30));
-								}
+							setcookie("user_name",$name,time()+(3600*24*30));
+							setcookie("user_email",$email,time()+(3600*24*30));
+							setcookie("user_hp",$hp,time()+(3600*24*30));
+							setcookie("user_place",$place,time()+(3600*24*30));
 							}
 						$refer = 1;
 					break;
