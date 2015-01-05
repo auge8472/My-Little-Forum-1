@@ -602,12 +602,8 @@ if (($settings['access_for_users_only'] == 1
 						$further_tid = $redirect["counter"];
 						$further_id = $redirect["id"];
 						$further_page = 0;
-						if ((!empty($_SESSION[$settings['session_prefix'] .'curr_view'])
-								and $_SESSION[$settings['session_prefix'] .'curr_view'] == 'board')
-							or (!empty($_SESSION[$settings['session_prefix'] .'user_view'])
+						if ((!empty($_SESSION[$settings['session_prefix'] .'user_view'])
 								and $_SESSION[$settings['session_prefix'] .'user_view'] == 'board')
-							or (!empty($_COOKIE['curr_view'])
-								and $_COOKIE['curr_view'] == 'board')
 							or (!empty($_COOKIE['user_view'])
 								and $_COOKIE['user_view'] == 'board'))
 							{
