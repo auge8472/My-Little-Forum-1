@@ -1770,6 +1770,7 @@ switch ($action)
 		$cc = ($_SESSION[$settings['session_prefix'].'debug'] == 'css') ? ' checked="checked"' : '';
 		$tBody = str_replace('{CheckCSS}', $cc, $tBody);
 		$tBody = str_replace('{Submit}', outputLangDebugInAttributes($lang_add['settings_sb']), $tBody);
+		echo '<pre>PHP-Version: '. phpversion() .'</pre>';
 		echo $tBody;
 	break;
 	case "categories":
