@@ -1911,7 +1911,7 @@ switch ($action)
 		$ul = $page * $settings['users_per_page'];
 		# as first, generate the menu
 		$menuItems = array('userdata', 'logindata', 'actions');
-		$menu .= '<ul class="menulist">'."\n";
+		$menu  = '<ul class="menulist">'."\n";
 		foreach ($menuItems as $item)
 			{
 			if ((empty($_GET['settingsCat'])
