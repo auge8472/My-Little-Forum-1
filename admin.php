@@ -1914,8 +1914,10 @@ switch ($action)
 		$menu .= '<ul class="menulist">'."\n";
 		foreach ($menuItems as $item)
 			{
-			if ((empty($_GET['settingsCat']) and $item == 'userdata')
-				or ($item == $_GET['settingsCat']))
+			if ((empty($_GET['settingsCat'])
+					and $item == 'userdata')
+				or (isset($_GET['settingsCat'])
+					and $item == $_GET['settingsCat']))
 				{
 				$menu .= '<li><span>';
 				$menu .= htmlspecialchars($lang_add['settings_cat'][$item]) .'</span></li>';
