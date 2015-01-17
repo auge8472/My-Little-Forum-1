@@ -66,6 +66,7 @@ if (isset($_POST['form_submitted']))
 		$db_settings['usersettings_table'] = $_POST['table_prefix'].'usersettings';
 		$db_settings['us_templates_table'] = $_POST['table_prefix'].'fu_settings';
 		$db_settings['usersubscripts_table'] = $_POST['table_prefix'].'subscripts';
+		$db_settings['posting_view'] = $_POST['table_prefix']."postingdata";
 		# content of db_settings.php
 		$fileSettingsContent  = "<?php\n";
 		$fileSettingsContent .= "\$db_settings['host'] = \"".$db_settings['host']."\";\n";
@@ -83,6 +84,7 @@ if (isset($_POST['form_submitted']))
 		$fileSettingsContent .= "\$db_settings['usersettings_table'] = \"".$db_settings['usersettings_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['us_templates_table'] = \"".$db_settings['us_templates_table']."\";\n";
 		$fileSettingsContent .= "\$db_settings['usersubscripts_table'] = \"".$db_settings['usersubscripts_table']."\";\n";
+		$fileSettingsContent .= "\$db_settings['posting_view'] = \"".$db_settings['posting_view']."\";\n";
 		$fileSettingsContent .= "?>";
 
 		$db_settings_file = @fopen("db_settings.php", "w") or $errors[] = str_replace("CHMOD",$chmod,$lang_add['no_writing_permission']);
@@ -245,6 +247,36 @@ if (isset($_POST['form_submitted']))
 			tid int(12) unsigned NOT NULL,
 			UNIQUE KEY user_thread (user_id,tid)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+			$table["posting_view"]["name"] = $db_settings['posting_view'];
+			$table["posting_view"]["query"] = "CREATE ALGORITHM=UNDEFINED DEFINER=`` SQL SECURITY DEFINER VIEW `".$db_settings['posting_view']."` AS
+			SELECT
+			`t1`.`id` AS `id`,
+			`t1`.`tid` AS `tid`,
+			`t1`.`pid` AS `pid`,
+			`t1`.`user_id` AS `user_id`,
+			`t2`.`user_type` AS `user_type`,
+			if((`t1`.`user_id` > 0),`t2`.`user_name`,`t1`.`name`) AS `name`,
+			if((`t1`.`user_id` > 0),`t2`.`user_email`,`t1`.`email`) AS `email`,
+			if((`t1`.`user_id` > 0),`t2`.`user_hp`,`t1`.`hp`) AS `hp`,
+			if((`t1`.`user_id` > 0),`t2`.`user_place`,`t1`.`place`) AS `place`,
+			if((`t1`.`user_id` > 0),`t2`.`signature`,'') AS `signature`,
+			`t2`.`hide_email` AS `hide_email`,
+			`t1`.`subject` AS `subject`,
+			`t1`.`category` AS `category`,
+			`t1`.`text` AS `text`,
+			`t1`.`email_notify` AS `email_notify`,
+			`t1`.`show_signature` AS `show_signature`,
+			`t1`.`ip_addr` AS `ip_addr`,
+			`t1`.`marked` AS `marked`,
+			`t1`.`locked` AS `locked`,
+			`t1`.`fixed` AS `fixed`,
+			`t1`.`time` AS `time`,
+			`t1`.`last_answer` AS `last_answer`,
+			`t1`.`edited` AS `edited`,
+			`t1`.`edited_by` AS `edited_by`
+			FROM (`".$db_settings['forum_table']."` `t1`
+			  LEFT JOIN `".$db_settings['userdata_table']."` `t2` 
+			    ON ((`t2`.`user_id` = `t1`.`user_id`)));";
 			foreach ($table as $tbl)
 				{
 				$ret = mysql_query($tbl["query"], $connid);

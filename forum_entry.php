@@ -83,8 +83,11 @@ if ($settings['access_for_users_only'] == 1
 		show_signature,
 		category,
 		locked,
-		fixed
-		FROM ". $db_settings['forum_table'] ."
+		fixed,
+		user_type,
+		hide_email,
+		signature
+		FROM ". $db_settings['posting_view'] ."
 		WHERE id = ". intval($id);
 		$result = mysql_query($postingQuery, $connid);
 		if (!$result) die($lang['db_error']);
@@ -110,40 +113,22 @@ if ($settings['access_for_users_only'] == 1
 
 			if ($entrydata["user_id"] > 0)
 				{
-				$userDataQuery = "SELECT
-				user_name,
-				user_type,
-				user_email,
-				hide_email,
-				user_hp,
-				user_place,
-				signature
-				FROM ".$db_settings['userdata_table']."
-				WHERE user_id = ". intval($entrydata["user_id"]);
-				$userdata_result = mysql_query($userDataQuery, $connid);
-				if (!$userdata_result) die($lang['db_error']);
-				$userdata = mysql_fetch_assoc($userdata_result);
-				mysql_free_result($userdata_result);
-				$entrydata["email"] = $userdata["user_email"];
-				$entrydata["hide_email"] = $userdata["hide_email"];
-				$entrydata["place"] = $userdata["user_place"];
-				$entrydata["hp"] = $userdata["user_hp"];
 				$opener = ($entrydata['pid'] == 0) ? 'opener' : '';
-				if ($userdata["user_type"] == "admin" && $settings['admin_mod_highlight'] == 1)
+				if ($entrydata["user_type"] == "admin" && $settings['admin_mod_highlight'] == 1)
 					{
 					$mark['admin'] = 1;
 					}
-				else if ($userdata["user_type"] == "mod" && $settings['admin_mod_highlight'] == 1)
+				else if ($entrydata["user_type"] == "mod" && $settings['admin_mod_highlight'] == 1)
 					{
 					$mark['mod'] = 1;
 					}
-				else if ($userdata["user_type"] == "user" && $settings['user_highlight'] == 1)
+				else if ($entrydata["user_type"] == "user" && $settings['user_highlight'] == 1)
 					{
 					$mark['user'] = 1;
 					}
 				if ($entrydata["show_signature"] == 1)
 					{
-					$signature = $userdata["signature"];
+					$signature = $entrydata["signature"];
 					}
 				}
 			}
@@ -175,11 +160,8 @@ if ($settings['access_for_users_only'] == 1
 	category,
 	marked,
 	fixed,
-	(SELECT
-		user_type
-		FROM ".$db_settings['userdata_table']."
-		WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
-	FROM ".$db_settings['forum_table']."
+	user_type
+	FROM ". $db_settings['posting_view'] ."
 	WHERE tid = ". intval($entrydata["tid"])."
 	ORDER BY time ". $settings['thread_view_sorter'];
 	$result = mysql_query($threadQuery, $connid);

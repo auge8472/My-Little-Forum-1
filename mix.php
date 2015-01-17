@@ -77,8 +77,8 @@ if ($settings['access_for_users_only'] == 1
 	$threadsQuery = "SELECT
 		tid,
 		tid AS viewID,
-		t1.user_id,
-		t1.user_id AS posters_id,
+		user_id,
+		user_id AS posters_id,
 		DATE_FORMAT(time + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS Uhrzeit,
 		DATE_FORMAT(last_answer + INTERVAL ".$time_difference." HOUR, '".$lang['time_format_sql']."') AS la_Uhrzeit,
 		UNIX_TIMESTAMP(last_answer) AS last_answer,
@@ -86,11 +86,8 @@ if ($settings['access_for_users_only'] == 1
 		category,
 		(SELECT SUM(views) FROM ".$db_settings['forum_table']." WHERE tid = viewID) AS views,
 		marked,
-		(SELECT
-			user_type
-			FROM ".$db_settings['userdata_table']."
-			WHERE ".$db_settings['userdata_table'].".user_id = posters_id) AS user_type
-		FROM ".$db_settings['forum_table']." AS t1
+		user_type
+		FROM ".$db_settings['posting_view']."
 		WHERE pid = 0".$threadsQueryWhere."
 		ORDER BY fixed DESC, ".$_SESSION[$settings['session_prefix'].'order']." ".$_SESSION[$settings['session_prefix'].'descasc']."
 		LIMIT ".$ul.", ".$settings['topics_per_page'];

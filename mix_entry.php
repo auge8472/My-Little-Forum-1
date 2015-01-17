@@ -47,8 +47,11 @@ category,
 show_signature,
 locked,
 fixed,
-INET_NTOA(ip_addr) AS ip_address
-FROM ".$db_settings['forum_table']."
+INET_NTOA(ip_addr) AS ip_address,
+user_type,
+hide_email,
+signature
+FROM ".$db_settings['posting_view']."
 WHERE id = '".$parent_array[$id]["id"]."'
 ORDER BY time ASC";
 $posting_result = mysql_query($singlePostingQuery, $connid);
@@ -58,18 +61,10 @@ mysql_free_result($posting_result);
 
 if ($entrydata["user_id"] > 0)
 	{
-	$userdata_result = mysql_query("SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ". $db_settings['userdata_table'] ." WHERE user_id = '". $entrydata["user_id"] ."'", $connid);
-	if (!$userdata_result) die($lang['db_error']);
-	$userdata = mysql_fetch_assoc($userdata_result);
-	mysql_free_result($userdata_result);
-	$entrydata["email"] = $userdata["user_email"];
-	$entrydata["hide_email"] = $userdata["hide_email"];
-	$entrydata["place"] = $userdata["user_place"];
-	$entrydata["hp"] = $userdata["user_hp"];
-	$mark = outputStatusMark($mark, $userdata["user_type"], $connid);
+	$mark = outputStatusMark($mark, $entrydata["user_type"], $connid);
 	if ($entrydata["show_signature"]==1)
 		{
-		$signature = $userdata["signature"];
+		$signature = $entrydata["signature"];
 		}
 	}
 

@@ -129,36 +129,32 @@ if ($settings['access_for_users_only'] == 1
 		if ($id > 0)
 			{
 			$firstPostingQuery = "SELECT
-			t1.id,
+			id,
 			tid,
 			pid,
-			t1.user_id,
-			t1.user_id AS posters_id,
+			user_id,
+			user_id AS posters_id,
 			DATE_FORMAT(time + INTERVAL ". $time_difference ." HOUR, '". $lang['time_format_sql'] ."') AS posting_time,
 			UNIX_TIMESTAMP(time) AS time,
 			UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_time,
 			UNIX_TIMESTAMP(edited - INTERVAL ". $settings['edit_delay'] ." MINUTE) AS edited_diff,
 			edited_by,
-			t1.name,
-			t1.email,
+			name,
+			email,
 			subject,
-			t1.hp,
-			t1.place,
+			hp,
+			place,
 			text,
 			show_signature,
 			category,
 			locked,
 			fixed,
-			INET_NTOA(t1.ip_addr) AS ip_address,
-			t2.user_type,
-			t2.user_name,
-			t2.user_email AS email,
+			INET_NTOA(ip_addr) AS ip_address,
+			user_type,
 			hide_email,
-			t2.user_hp AS hp,
-			t2.user_place AS place,
-			t2.signature
-			FROM ". $db_settings['forum_table'] ." AS t1, ". $db_settings['userdata_table'] ." AS t2
-			WHERE t1.id = ". intval($id) ." AND t1.user_id = t2.user_id
+			signature
+			FROM ". $db_settings['posting_view'] ."
+			WHERE id = ". intval($id) ."
 			LIMIT 1";
 			$result_t = mysql_query($firstPostingQuery, $connid);
 			if (!$result_t) die($lang['db_error']);
@@ -197,35 +193,31 @@ if ($settings['access_for_users_only'] == 1
 					}
 				} # End: if ($thread["user_id"] > 0)
 			$allPostingsQuery = "SELECT
-			t1.id,
+			id,
 			tid,
 			pid,
-			t1.user_id,
-			t1.user_id AS posters_id,
+			user_id,
+			user_id AS posters_id,
 			DATE_FORMAT(time + INTERVAL ". $time_difference ." HOUR, '". $lang['time_format_sql'] ."') AS posting_time,
 			UNIX_TIMESTAMP(time) AS time,
 			UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_time,
 			UNIX_TIMESTAMP(edited - INTERVAL ". $settings['edit_delay'] ." MINUTE) AS edited_diff,
 			edited_by,
-			t1.name,
-			t1.email,
+			name,
+			email,
 			subject,
-			t1.hp,
-			t1.place,
+			hp,
+			place,
 			text,
 			show_signature,
 			category,
 			locked,
-			INET_NTOA(t1.ip_addr) AS ip_address,
-			t2.user_type,
-			t2.user_name,
-			t2.user_email AS email,
+			INET_NTOA(ip_addr) AS ip_address,
+			user_type,
 			hide_email,
-			t2.user_hp AS hp,
-			t2.user_place AS place,
-			t2.signature
-			FROM ". $db_settings['forum_table'] ." AS t1, ". $db_settings['userdata_table'] ." AS t2
-			WHERE tid = ". intval($id) ." AND t1.id != ". intval($id) ." AND t1.user_id = t2.user_id
+			signature
+			FROM ". $db_settings['posting_view'] ."
+			WHERE tid = ". intval($id) ." AND id != ". intval($id) ."
 			ORDER BY time ". mysql_real_escape_string($da) ."
 			LIMIT ". $ul .", ". $settings['answers_per_topic'];
 			$result = mysql_query($allPostingsQuery, $connid);
