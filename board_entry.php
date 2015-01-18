@@ -383,7 +383,7 @@ if ($settings['access_for_users_only'] == 1
 	}
 else
 	{
-	header("location: ".$settings['forum_address']."login.php?msg=noaccess");
-	die("<a href=\"login.php?msg=noaccess\">further...</a>");
+	header('location: '. $settings['forum_address'] .'login.php?msg=noaccess');
+	die('<a href="login.php?msg=noaccess">further...</a>');
 	}
 ?>

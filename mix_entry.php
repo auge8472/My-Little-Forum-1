@@ -145,8 +145,8 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 		$lid = '&'.$id;
 		$did = '&amp;'.$id;
 		}
-	header("location: ".$settings['forum_address']."login.php?referer=mix_entry.php".$lid);
-	die("<a href=\"login.php?referer=mix_entry.php".$did."\">further...</a>");
+	header('location: '. $settings['forum_address'] .'login.php?referer=mix_entry.php'. $lid);
+	die('<a href="login.php?referer=mix_entry.php'. $did .'">further...</a>');
 	}
 
 if ($settings['access_for_users_only'] == 1
@@ -185,7 +185,7 @@ if ($settings['access_for_users_only'] == 1
 					{
 					if (is_array($category_ids) && !in_array($entrydata['category'], $category_ids))
 						{
-						header("location: ".$settings['forum_address']."mix.php");
+						header('location: '. $settings['forum_address'] .'mix.php');
 						die();
 						}
 					}
@@ -202,7 +202,7 @@ if ($settings['access_for_users_only'] == 1
 
 	if (!isset($entrydata))
 		{
-		header("Location: ".$settings['forum_address']."mix.php");
+		header('Location: '. $settings['forum_address'] .'mix.php');
 		exit();
 		}
 
@@ -249,7 +249,7 @@ if ($settings['access_for_users_only'] == 1
 	}
 else
 	{
-	header("location: ".$settings['forum_address']."login.php?msg=noaccess");
-	die("<a href=\"login.php?msg=noaccess\">further...</a>");
+	header('location: '. $settings['forum_address'] .'login.php?msg=noaccess');
+	die('<a href="login.php?msg=noaccess">further...</a>');
 	}
 ?>
