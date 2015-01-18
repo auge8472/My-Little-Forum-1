@@ -29,8 +29,8 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id'])
 && isset($settings['autologin'])
 && $settings['autologin'] == 1)
 	{
-	header("location: ".$settings['forum_address']."login.php?referer=forum.php");
-	die("<a href=\"login.php?referer=forum.php\">further...</a>");
+	header('location: '. $settings['forum_address'] .'login.php?referer=forum.php');
+	die('<a href="login.php?referer=forum.php">further...</a>');
 	}
 
 // go on if user has access:
@@ -192,7 +192,7 @@ if ($settings['access_for_users_only'] == 1
 	}
 else // no access
 	{
-	header("location: ".$settings['forum_address']."login.php?msg=noaccess");
-	die("<a href=\"login.php?msg=noaccess\">further...</a>");
+	header('location: '. $settings['forum_address'] .'login.php?msg=noaccess');
+	die('<a href="login.php?msg=noaccess">further...</a>');
 	}
 ?>
