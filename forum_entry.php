@@ -113,7 +113,6 @@ if ($settings['access_for_users_only'] == 1
 
 			if ($entrydata["user_id"] > 0)
 				{
-				$opener = ($entrydata['pid'] == 0) ? 'opener' : '';
 				if ($entrydata["user_type"] == "admin" && $settings['admin_mod_highlight'] == 1)
 					{
 					$mark['admin'] = 1;
@@ -131,6 +130,7 @@ if ($settings['access_for_users_only'] == 1
 					$signature = $entrydata["signature"];
 					}
 				}
+			$opener = ($entrydata['pid'] == 0) ? 'opener' : '';
 			}
 		else
 			{
