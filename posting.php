@@ -1,6 +1,6 @@
 <?php
 ###############################################################################
-# my little forum 1                                                            #
+# my little forum 1                                                           #
 # Copyright (C) 2013 Heiko August                                             #
 # http://www.auge8472.de/                                                     #
 #                                                                             #
