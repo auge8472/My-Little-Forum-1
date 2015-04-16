@@ -302,14 +302,14 @@ if ($settings['access_for_users_only'] == 1
 				$qs  = '';
 				$qs .= !empty($order) ? '&amp;order='. urlencode($order) : '';
 				$qs .= !empty($descasc) ? '&amp;descasc='. urlencode($descasc) : '';
-				$answerlink  = '<a class="textlink" href="posting.php?id='.$thread["id"].$qs;
+				$answerlink  = '<a class="buttonize" href="posting.php?id='.$thread["id"].$qs;
 				$answerlink .= '&amp;view=board" title="'. outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
-				$answerlink .= $lang['board_answer_linkname'].'</a>';
+				$answerlink .= '<span class="fa fa-comment-o"></span>&nbsp;'. $lang['board_answer_linkname'] .'</a>';
 				}
 			}
 		else
 			{
-			$answerlink = '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />'.$lang['thread_locked'].'</span>';
+			$answerlink = '<span class="buttonize"><span class="fa fa-lock"></span>&nbsp;'. $lang['thread_locked'] .'</span>';
 			}
 		$ftext = ($thread["text"]=="") ? $lang['no_text'] : outputPreparePosting($thread["text"]);
 		$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator']."\n".$signature, 'signature').'</div>'."\n" : '';
@@ -356,14 +356,14 @@ if ($settings['access_for_users_only'] == 1
 				$qs  = '';
 				$qs .= !empty($order) ? '&amp;order='. urlencode($order) : '';
 				$qs .= !empty($descasc) ? '&amp;descasc='. urlencode($descasc) : '';
-				$answerlink  = '<a class="textlink" href="posting.php?id='.$entrydata["id"].$qs;
+				$answerlink  = '<a class="buttonize" href="posting.php?id='.$entrydata["id"].$qs;
 				$answerlink .= '&amp;view=board" title="'. outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
-				$answerlink .= $lang['board_answer_linkname'].'</a>';
+				$answerlink .= '<span class="fa fa-comment-o"></span>&nbsp;'. $lang['board_answer_linkname'] .'</a>';
 				}
 			}
 		else
 			{
-			$answerlink = '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />'.$lang['thread_locked'].'</span>';
+			$answerlink = '<span class="buttonize"><span class="fa fa-lock"></span>&nbsp;'. $lang['thread_locked'] .'</span>';
 			}
 		$ftext = ($entrydata["text"]=="") ? $lang['no_text'] : outputPreparePosting($entrydata["text"]);
 		$signature = (isset($signature) && $signature != "") ? $signature = '<div class="signature">'.outputPreparePosting($settings['signature_separator']."\n".$signature, 'signature').'</div>'."\n" : '';

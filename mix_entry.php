@@ -89,17 +89,16 @@ if ($entrydata['locked'] == 0)
 		or ($settings['entries_by_users_only'] == 1
 		and isset($_SESSION[$settings['session_prefix'].'user_name'])))
 		{
-		$answerlink  = '<a class="textlink" href="posting.php?id='. $entrydata["id"] .'"';
+		$answerlink  = '<a class="buttonize" href="posting.php?id='. $entrydata["id"] .'"';
 		$answerlink .= ' title="'.outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
-		$answerlink .= $lang['board_answer_linkname'].'</a>';
+		$answerlink .= '<span class="fa fa-comment-o"></span>&nbsp;'. $lang['board_answer_linkname'] .'</a>';
 		}
 	}
 else
 	{
 	if ($entrydata['pid']==0)
 		{
-		$answerlink = '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />';
-		$answerlink = $lang['thread_locked'].'</span>';
+		$answerlink = '<span class="buttonize"><span class="fa fa-lock"></span>&nbsp;'. $lang['thread_locked'].'</span>';
 		}
 	else
 		{

@@ -214,14 +214,14 @@ if ($settings['access_for_users_only'] == 1
 			or ($settings['entries_by_users_only'] == 1
 			and isset($_SESSION[$settings['session_prefix'].'user_name'])))
 			{
-			$answerlink  = '<a class="textlink" href="posting.php?id='. intval($id);
+			$answerlink  = '<a class="buttonize" href="posting.php?id='. intval($id);
 			$answerlink .= '" title="'. outputLangDebugInAttributes($lang['forum_answer_linktitle']) .'">';
-			$answerlink .= $lang['forum_answer_linkname'].'</a>';
+			$answerlink .= '<span class="fa fa-comment-o"></span>&nbsp;'. $lang['forum_answer_linkname'] .'</a>';
 			}
 		}
 	else
 		{
-		$answerlink = '<span class="xsmall"><img src="img/lock.png" alt="" width="12" height="12" />'.$lang['thread_locked'].'</span>';
+		$answerlink = '<span class="buttonize"><span class="fa fa-lock"></span>&nbsp;'. $lang['thread_locked'] .'</span>';
 		}
 	# generate HTML source code of posting
 	$posting = str_replace('{postingheadline}', $pHeadline, $posting);
