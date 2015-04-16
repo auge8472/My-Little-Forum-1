@@ -1579,7 +1579,8 @@ if (isset($_GET['move_down_smiley']))
 
 if (empty($action)) $action="main";
 
-$topnav = '<a class="textlink" href="';
+$adminMainSiteLink = '<a class="" href="admin.php"><span class="fa fa-server"></span>&nbsp;'. $lang_add['admin_area'] .'</a>&nbsp;';
+$topnav = '<a class="" href="';
 if (!empty($_SESSION[$settings['session_prefix'].'user_view']))
 	{
 	if ($_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
@@ -1599,135 +1600,135 @@ else
 	{
 	$topnav .= 'forum.php';
 	}
-$topnav .= '">'.$lang['back_to_overview_linkname'].'</a>&nbsp;';
+$topnav .= '"><span class="fa fa-chevron-right"></span>&nbsp;'. $lang['back_to_overview_linkname'] .'</a>&nbsp;';
 if (!empty($action))
 	{
 	if ($action == "main")
 		{
-		$topnav .= '<span class="current-page">'.$lang_add['admin_area'].'</span>';
+		$topnav .= '<span class="current"><span class="fa fa-server"></span>&nbsp;'. $lang_add['admin_area'] .'</span>';
 		}
 	if ($action == "settings")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['forum_settings'] .'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<span class="current"><span class="fa fa-wrench"></span>&nbsp;'. $lang_add['forum_settings'] .'</span>';
 		}
 	if ($action == "debug")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['debug_administr'] .'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<span class="current"><span class="fa fa-terminal"></span>&nbsp;'. $lang_add['debug_administr'] .'</span>';
 		}
 	if ($action == "categories")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['category_administr'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<span class="current"><span class="fa fa-align-justify"></span>&nbsp;'.$lang_add['category_administr'].'</span>';
 		}
 	if ($action == "delete_category")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<a class="textlink" href="admin.php?action=categories">'.$lang_add['category_administr'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['delete_category'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<a class="textlink" href="admin.php?action=categories"><span class="fa fa-align-justify"></span>&nbsp;'.$lang_add['category_administr'].'</a>&nbsp;';
+		$topnav .= '<span class="current"><span class="fa fa-align-justify"></span>&nbsp;'.$lang_add['delete_category'].'</span>';
 		}
 	if ($action == "edit_category")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<a class="textlink" href="admin.php?action=categories">'.$lang_add['category_administr'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['cat_edit_hl'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<a class="" href="admin.php?action=categories"><span class="fa fa-align-justify"></span>&nbsp;'. $lang_add['category_administr'] .'</a>&nbsp;';
+		$topnav .= '<span class="current"><span class="fa fa-align-justify"></span>&nbsp;'. $lang_add['cat_edit_hl'] .'</span>';
 		}
 	if ($action == "user")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['user_administr'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<span class="current"><span class="fa fa-users"></span>&nbsp;'. $lang_add['user_administr'] .'</span>';
 		}
 	if ($action == "edit_user")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<a class="textlink" href="admin.php?action=user">'.$lang_add['user_administr'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['edit_user'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<a class="" href="admin.php?action=user"><span class="fa fa-users"></span>&nbsp;'. $lang_add['user_administr'] .'</a>&nbsp;';
+		$topnav .= '<span class="current"><span class="fa fa-user"></span>&nbsp;'.$lang_add['edit_user'].'</span>';
 		}
 	if ($action == "delete_users_sure")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<a class="textlink" href="admin.php?action=user">'.$lang_add['user_administr'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['delete_user'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<a class="" href="admin.php?action=user"><span class="fa fa-users"></span>&nbsp;'. $lang_add['user_administr'] .'</a>&nbsp;';
+		$topnav .= '<span class="current"><span class="fa fa-user-times"></span>&nbsp;'.$lang_add['delete_user'].'</span>';
 		}
 	if ($action == "register")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<a class="textlink" href="admin.php?action=user">'.$lang_add['user_administr'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['reg_user'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<a class="" href="admin.php?action=user"><span class="fa fa-users"></span>&nbsp;'. $lang_add['user_administr'] .'</a>&nbsp;';
+		$topnav .= '<span class="current"><span class="fa fa-user-plus"></span>&nbsp;'. $lang_add['reg_user'] .'</span>';
 		}
 	if ($action == "email_list")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<a class="textlink" href="admin.php?action=user">'.$lang_add['user_administr'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['email_list'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<a class="" href="admin.php?action=user"><span class="fa fa-users"></span>&nbsp;'. $lang_add['user_administr'] .'</a>&nbsp;';
+		$topnav .= '<span class="current"><span class="fa fa-at"></span>&nbsp;'. $lang_add['email_list'] .'</span>';
 		}
 	if ($action == "clear_userdata")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<a class="textlink" href="admin.php?action=user">'.$lang_add['user_administr'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['clear_userdata'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<a class="" href="admin.php?action=user"><span class="fa fa-users"></span>&nbsp;'. $lang_add['user_administr'] .'</a>&nbsp;';
+		$topnav .= '<span class="current"><span class="fa fa-user-times"></span>&nbsp;'. $lang_add['clear_userdata'] .'</span>';
 		}
 	if ($action == "banlists")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['banlists'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<span class="current"><span class="fa fa-times"></span>&nbsp;'. $lang_add['banlists'] .'</span>';
 		}
 	if ($action == "empty")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['empty_forum'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<span class="current"><span class="fa fa-file-o"></span>&nbsp;'. $lang_add['empty_forum'] .'</span>';
 		}
 	if ($action == "backup")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['backup_restore'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<span class="current"><span class="fa fa-files-o"></span>&nbsp;'. $lang_add['backup_restore'] .'</span>';
 		}
 	if ($action == "import_sql" or $action == "import_sql_ok")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<a class="textlink" href="admin.php?action=backup">'.$lang_add['backup_restore'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['import_sql'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<a class="" href="admin.php?action=backup"><span class="fa fa-files"></span>&nbsp;'. $lang_add['backup_restore'] .'</a>&nbsp;';
+		$topnav .= '<span class="current"><span class="fa fa-circle"></span>&nbsp;'. $lang_add['import_sql'] .'</span>';
 		}
 	if ($action == "uninstall")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['uninstall'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<span class="current"><span class="fa fa-trash-o"></span>&nbsp;'.$lang_add['uninstall'].'</span>';
 		}
 	if ($action == "smilies")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['smilies'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<span class="current"><span class="fa fa-smile-o"></span>&nbsp;'.$lang_add['smilies'].'</span>';
 		}
 	if ($action == "edit_smiley")
 		{
-		$topnav .= '<a class="textlink" href="admin.php">'.$lang_add['admin_area'].'</a>&nbsp;';
-		$topnav .= '<a class="textlink" href="admin.php?action=smilies">'.$lang_add['smilies'].'</a>&nbsp;';
-		$topnav .= '<span class="current-page">'.$lang_add['edit_smiley_hl'].'</span>';
+		$topnav .= $adminMainSiteLink;
+		$topnav .= '<a class="" href="admin.php?action=smilies"><span class="fa fa-smile-o"></span>&nbsp;'. $lang_add['smilies'] .'</a>&nbsp;';
+		$topnav .= '<span class="current"><span class="fa fa-smile-o"></span>&nbsp;'. $lang_add['edit_smiley_hl'] .'</span>';
 		}
 	if ($action == "delete_marked_threads")
 		{
-		$topnav .= '<span class="current-page">'.$lang_add['del_marked'].'</span>';
+		$topnav .= '<span class="current"><span class="fa fa-circle"></span>&nbsp;'. $lang_add['del_marked'] .'</span>';
 		}
 	if ($action == "unmark")
 		{
-		$topnav .= '<span class="current-page">'.$lang_add['unmark_threads'].'</span>';
+		$topnav .= '<span class="current"><span class="fa fa-circle"></span>&nbsp;'. $lang_add['unmark_threads'] .'</span>';
 		}
 	if ($action == "lock_marked_threads")
 		{
-		$topnav .= '<span class="current-page">'.$lang_add['lock_marked'].'</span>';
+		$topnav .= '<span class="current"><span class="fa fa-circle"></span>&nbsp;'. $lang_add['lock_marked'] .'</span>';
 		}
 	if ($action == "unlock_marked_threads")
 		{
-		$topnav .= '<span class="current-page">'.$lang_add['unlock_marked'].'</span>';
+		$topnav .= '<span class="current"><span class="fa fa-circle"></span>&nbsp;'. $lang_add['unlock_marked'] .'</span>';
 		}
 	if ($action == "invert_markings")
 		{
-		$topnav .= '<span class="current-page">'.$lang_add['invert_markings'].'</span>';
+		$topnav .= '<span class="current"><span class="fa fa-circle"></span>&nbsp;'. $lang_add['invert_markings'] .'</span>';
 		}
 	if ($action == "mark_threads")
 		{
-		$topnav .= '<span class="current-page">'.$lang_add['mark_threads'].'</span>';
+		$topnav .= '<span class="current"><span class="fa fa-circle"></span>&nbsp;'. $lang_add['mark_threads'] .'</span>';
 		}
 	}
 

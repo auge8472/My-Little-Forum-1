@@ -349,6 +349,24 @@ margin: 5px 0;
 padding: 0;
 }
 
+ul.admin-main-menu {
+display: -webkit-flex;
+display: flex;
+-webkit-flex-wrap: wrap;
+flex-wrap: wrap;
+}
+
+ul.admin-main-menu li {
+width: 22em;
+margin: 0 5px 5px 0;
+padding: 0;
+}
+
+ul.admin-main-menu a.buttonize {
+display: block;
+box-shadow: 3px 1px 5px #aaa;
+}
+
 ul.menu {
 list-style-type: none;
 font-size: 0.86em;
