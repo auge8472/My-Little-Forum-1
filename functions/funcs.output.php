@@ -453,10 +453,9 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
 		or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
 		{
-		$r .= '<li><a href="posting.php?action=edit&amp;id=';
-		$r .= $thread["id"] .'&amp;back='. $thread["tid"];
-		$r .= '" class="edit-posting" title="'. outputLangDebugInAttributes($lang['edit_linktitle']) .'">';
-		$r .= $lang['edit_linkname'] .'</a></li>'."\n";
+		$r .= '<li><a href="posting.php?action=edit&amp;id='. $thread["id"] .'&amp;back='. $thread["tid"];
+		$r .= '" title="'. outputLangDebugInAttributes($lang['edit_linktitle']) .'" class="buttonize">';
+		$r .= '<span class="fa fa-edit"></span>&nbsp;'. $lang['edit_linkname'] .'</a></li>'."\n";
 		}
 	# delete a posting
 	if (($settings['user_delete'] == 1
@@ -467,10 +466,9 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
 		or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
 		{
-		$r .= '<li><a href="posting.php?action=delete&amp;id=';
-		$r .= $thread["id"] .'&amp;back='. $thread["tid"];
-		$r .= '" class="delete-posting" title="'. outputLangDebugInAttributes($lang['delete_linktitle']) .'">';
-		$r .= $lang['delete_linkname'] .'</a></li>'."\n";
+		$r .= '<li><a href="posting.php?action=delete&amp;id='. $thread["id"] .'&amp;back='. $thread["tid"];
+		$r .= '" title="'. outputLangDebugInAttributes($lang['delete_linktitle']) .'" class="buttonize">';
+		$r .= '<span class="fa fa-times"></span>&nbsp;'. $lang['delete_linkname'] .'</a></li>'."\n";
 		}
 	# subscribe a thread
 	if ((!empty($first)
@@ -493,9 +491,9 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 			}
 		$r .= '<li><a href="posting.php?subscribe='. $subAction;
 		$r .= '&amp;id='. $thread["id"] .'&amp;back='. $thread["tid"];
-		$r .= '" class="'. $subClass .'" title="';
+		$r .= '" class="buttonize" title="';
 		$r .= outputLangDebugInAttributes($subTitle) .'">';
-		$r .= $subName .'</a></li>'."\n";
+		$r .= '&nbsp;'. $subName .'</a></li>'."\n";
 		}
 	# lock a thread
 	if ((!empty($first) and $first==='opener')
@@ -503,11 +501,10 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
 		or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
 		{
-		$r .= '<li><a href="posting.php?lock=true&amp;id='. intval($thread["id"]);
-		$r .= '" class="lock-posting" title="';
+		$r .= '<li><a href="posting.php?lock=true&amp;id='. intval($thread["id"]) .'" title="';
 		$r .= ($thread['locked'] == 0) ? outputLangDebugInAttributes($lang['lock_linktitle']) : outputLangDebugInAttributes($lang['unlock_linktitle']);
-		$r .= '">';
-		$r .= ($thread['locked'] == 0) ? $lang['lock_linkname'] : $lang['unlock_linkname'];
+		$r .= '" class="buttonize">';
+		$r .= ($thread['locked'] == 0) ? '<span class="fa fa-lock"></span>&nbsp;'. $lang['lock_linkname'] : '<span class="fa fa-unlock-alt"></span>&nbsp;'. $lang['unlock_linkname'];
 		$r .= '</a></li>'."\n";
 		}
 	# pin a thread
@@ -517,11 +514,10 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		or $_SESSION[$settings['session_prefix']."user_type"] == "mod")))
 		{
 		$fixClass = ($thread['fixed'] == 1) ? 'unfix' : 'fix';
-		$r .= '<li><a href="posting.php?fix=true&amp;id='. intval($thread["id"]);
-		$r .= '" class="'. $fixClass .'-posting" title="';
+		$r .= '<li><a href="posting.php?fix=true&amp;id='. intval($thread["id"]) .'" title="';
 		$r .= ($thread['fixed'] == 0) ? outputLangDebugInAttributes($lang['fix_thread_linktitle']) : outputLangDebugInAttributes($lang['unfix_thread_linktitle']);
-		$r .= '">';
-		$r .= ($thread['fixed'] == 0) ? $lang['fix_thread_link'] : $lang['unfix_thread_link'];
+		$r .= '" class="buttonize">';
+		$r .= ($thread['fixed'] == 0) ? '<span class="fa fa-thumb-tack"></span>&nbsp;'. $lang['fix_thread_link'] : '<span class="fa fa-thumb-tack fa-inverse"></span>&nbsp;'. $lang['unfix_thread_link'];
 		$r .= '</a></li>'."\n";
 		}
 	# move a posting
@@ -529,7 +525,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		and ($_SESSION[$settings['session_prefix']."user_type"] == "admin"
 		or $_SESSION[$settings['session_prefix']."user_type"] == "mod"))
 		{
-		$r .= '<li><span class="inactive-function">';
+		$r .= '<li><span class="inactive-function buttonize">';
 		$r .= $lang['move_posting_link'];
 		$r .= '</span></li>'."\n";
 #		$r .= '<li><a href="posting.php?pin=true&amp;id='. intval($thread["id"]);

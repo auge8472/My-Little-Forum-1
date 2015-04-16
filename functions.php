@@ -637,15 +637,13 @@ $template = str_replace("{SUB-NAVIGATION-2}",$subnav_2_dump,$template);
 
 // Footer:
 $template = str_replace("{COUNTER}",$counter,$template);
-if ($settings['provide_rssfeed'] == 1 && $settings['access_for_users_only'] == 0) 
+
+$rss_feed_link = '';
+$rss_feed_button = '';
+if ($settings['provide_rssfeed'] == 1 && $settings['access_for_users_only'] == 0)
 	{ 
 	$rss_feed_link = '<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="rss.php" />';
-	$rss_feed_button = '<a href="rss.php"><span class="fa fa-rss-square"></span>&nbsp;RSS Feed</a>';
-	}
-else 
-	{
-	$rss_feed_link = '';
-	$rss_feed_button = '';
+	$rss_feed_button = '<a href="rss.php" class="buttonize"><span class="fa fa-rss-square"></span>&nbsp;RSS Feed</a>';
 	}
 $template = str_replace("{RSS-FEED-LINK}",$rss_feed_link,$template);
 $template = str_replace("{RSS-FEED-BUTTON}",$rss_feed_button,$template);
