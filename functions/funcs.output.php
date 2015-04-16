@@ -481,6 +481,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 			$subClass = 'unsubscribe-posting';
 			$subTitle = $lang['unsubscribe_linktitle'];
 			$subName = $lang['unsubscribe_linkname'];
+			$subIcon = 'fa-envelope-o';
 			}
 		else
 			{
@@ -488,12 +489,13 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 			$subClass = 'subscribe-posting';
 			$subTitle = $lang['subscribe_linktitle'];
 			$subName = $lang['subscribe_linkname'];
+			$subIcon = 'fa-envelope';
 			}
 		$r .= '<li><a href="posting.php?subscribe='. $subAction;
 		$r .= '&amp;id='. $thread["id"] .'&amp;back='. $thread["tid"];
 		$r .= '" class="buttonize" title="';
 		$r .= outputLangDebugInAttributes($subTitle) .'">';
-		$r .= '&nbsp;'. $subName .'</a></li>'."\n";
+		$r .= '<span class="fa '. $subIcon .'"></span>&nbsp;'. $subName .'</a></li>'."\n";
 		}
 	# lock a thread
 	if ((!empty($first) and $first==='opener')
