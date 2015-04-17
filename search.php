@@ -349,41 +349,32 @@ if (!empty($search) || !empty($show_postings))
 		echo '<li><a class="';
 		echo ($entrydata['pid'] == 0) ? 'thread' : 'reply-search';
 		echo '" href="';
-		if (isset($_SESSION[$settings['session_prefix'].'user_view'])
-			&& $_SESSION[$settings['session_prefix'].'user_view']=='board')
+		if ((isset($_SESSION[$settings['session_prefix'].'user_view'])
+				&& $_SESSION[$settings['session_prefix'].'user_view'] == 'board')
+			or (isset($_COOKIE['user_view'])
+				&& $_COOKIE['user_view']=='board')
+			or (isset($standard)
+				&& $standard=='board'))
 			{
 			echo 'board_entry.php?id='. $entrydata['tid'] .'#p'. $entrydata['id'];
 			}
-		else if (isset($_SESSION[$settings['session_prefix'].'user_view'])
-			&& $_SESSION[$settings['session_prefix'].'user_view']=='thread')
+		else if ((isset($_SESSION[$settings['session_prefix'].'user_view'])
+				&& $_SESSION[$settings['session_prefix'].'user_view']=='mix')
+			or (isset($_COOKIE['user_view'])
+				&& $_COOKIE['user_view']=='mix')
+			or (isset($standard)
+				&& $standard=='mix'))
+			{
+			echo 'mix_entry.php?id='. $entrydata['tid'] .'#p'. $entrydata['id'];
+			}
+		else if ((isset($_SESSION[$settings['session_prefix'].'user_view'])
+				&& $_SESSION[$settings['session_prefix'].'user_view'] == 'thread')
+			or (isset($_COOKIE['user_view'])
+				&& $_COOKIE['user_view']=='thread')
+			or (isset($standard)
+				&& $standard=='thread'))
 			{
 			echo 'forum_entry.php?id='. $entrydata['id'];
-			}
-		else if (isset($_SESSION[$settings['session_prefix'].'user_view'])
-			&& $_SESSION[$settings['session_prefix'].'user_view']=='mix')
-			{
-			echo 'mix_entry.php?id='. $entrydata['tid'] .'#p'. $entrydata['id'];
-			}
-		else if (isset($_COOKIE['user_view'])
-			&& $_COOKIE['user_view']=='board')
-			{
-			echo 'board_entry.php?id='. $entrydata['tid'] .'#p'. $entrydata['id'];
-			}
-		else if (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=='thread')
-			{
-			echo 'forum_entry.php?id='. $entrydata['id'];
-			}
-		else if (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=='mix')
-			{
-			echo 'mix_entry.php?id='. $entrydata['tid'] .'#p'. $entrydata['id'];
-			}
-		else if (isset($standard) && $standard=='board')
-			{
-			echo 'board_entry.php?id='. $entrydata['tid'] .'#p'. $entrydata['id'];
-			}
-		else if (isset($standard) && $standard=='mix')
-			{
-			echo 'mix_entry.php?id='. $entrydata['tid'] .'#p'. $entrydata['id'];
 			}
 		else
 			{
