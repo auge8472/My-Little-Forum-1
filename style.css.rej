@@ -1,0 +1,9 @@
+diff a/style.css b/style.css	(rejected hunks)
+@@ -337,6 +337,7 @@
+ }
+ 
+ .postinganswer { float: left; }
++line-height: 1.4em;
+ .postingedit {
+ float: right;
+ text-align: right;
