@@ -298,7 +298,7 @@ if (isset($search) && empty($show_postings))
 			if ($key!=0)
 				{
 				echo '<option value="'.$key.'"';
-				echo ($key==$category) ? ' selected="selected"' : '';
+				echo (isset($category) && $key==$category) ? ' selected="selected"' : '';
 				echo '>'.$val.'</option>'."\n";
 				}
 			}
