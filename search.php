@@ -292,14 +292,14 @@ if (isset($search) && empty($show_postings))
 		echo '<select size="1" name="category">'."\n";
   		echo '<option value="0"';
 		echo (isset($category) && $category==0) ? ' selected="selected"' : '';
-		echo '>'.$lang['show_all_categories'].'</option>'."\n";
+		echo '>'. htmlspecialchars($lang['show_all_categories']) .'</option>'."\n";
 		while (list($key, $val) = each($categories))
 			{
 			if ($key!=0)
 				{
-				echo '<option value="'.$key.'"';
+				echo '<option value="'. htmlspecialchars($key) .'"';
 				echo (isset($category) && $key==$category) ? ' selected="selected"' : '';
-				echo '>'.$val.'</option>'."\n";
+				echo '>'. htmlspecialchars($val) .'</option>'."\n";
 				}
 			}
 		echo '</select>'."\n";
