@@ -285,35 +285,35 @@ else
 if (isset($search) && empty($show_postings))
 	{
 	echo '<form action="search.php" method="get" title="';
-	echo outputLangDebugInAttributes($lang['search_formtitle']).'"><div class="search">'."\n";
-	echo '<input type="text" name="search" value="'.htmlspecialchars($search_match).'" size="30" />'."\n";
-	if ($categories!=false)
+	echo outputLangDebugInAttributes($lang['search_formtitle']) .'"><div class="search">'."\n";
+	echo '<input type="text" name="search" value="'. htmlspecialchars($search_match) .'" size="30" />'."\n";
+	if ($categories != false)
 		{
 		echo '<select size="1" name="category">'."\n";
   		echo '<option value="0"';
-		echo (isset($category) && $category==0) ? ' selected="selected"' : '';
+		echo (isset($category) && $category == 0) ? ' selected="selected"' : '';
 		echo '>'. htmlspecialchars($lang['show_all_categories']) .'</option>'."\n";
 		while (list($key, $val) = each($categories))
 			{
 			if ($key!=0)
 				{
 				echo '<option value="'. htmlspecialchars($key) .'"';
-				echo (isset($category) && $key==$category) ? ' selected="selected"' : '';
+				echo (isset($category) && $key == $category) ? ' selected="selected"' : '';
 				echo '>'. htmlspecialchars($val) .'</option>'."\n";
 				}
 			}
 		echo '</select>'."\n";
 		}
-	echo '<input type="submit" name="" value="'.outputLangDebugInAttributes($lang['search_submit']).'" /><br />'."\n";
+	echo '<input type="submit" name="" value="'. outputLangDebugInAttributes($lang['search_submit']) .'" /><br />'."\n";
 	echo '<input type="radio" name="ao" value="and"';
 	echo ($ao == "and") ? ' checked="checked"' : '';
-	echo ' />'.$lang['search_and'].'&nbsp;<input type="radio" class="search-radio"';
+	echo ' />'. $lang['search_and'] .'&nbsp;<input type="radio" class="search-radio"';
 	echo ' name="ao" value="or"';
 	echo ($ao == "or") ? ' checked="checked"' : '';
-	echo ' />'.$lang['search_or'].'&nbsp;<input type="radio" class="search-radio"';
+	echo ' />'. $lang['search_or'] .'&nbsp;<input type="radio" class="search-radio"';
 	echo ' name="ao" value="phrase"';
 	echo ($ao == "phrase") ? ' checked="checked"' : '';
-	echo ' />'.$lang['search_phrase'].'</div></form>'."\n";
+	echo ' />'. $lang['search_phrase'] .'</div></form>'."\n";
 	}
 
 if ($count == 0 && $search != "")
@@ -352,48 +352,48 @@ if (!empty($search) || !empty($show_postings))
 		if (isset($_SESSION[$settings['session_prefix'].'user_view'])
 			&& $_SESSION[$settings['session_prefix'].'user_view']=='board')
 			{
-			echo 'board_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
+			echo 'board_entry.php?id='. $entrydata['tid'] .'#p'. $entrydata['id'];
 			}
 		else if (isset($_SESSION[$settings['session_prefix'].'user_view'])
 			&& $_SESSION[$settings['session_prefix'].'user_view']=='thread')
 			{
-			echo 'forum_entry.php?id='.$entrydata['id'];
+			echo 'forum_entry.php?id='. $entrydata['id'];
 			}
 		else if (isset($_SESSION[$settings['session_prefix'].'user_view'])
 			&& $_SESSION[$settings['session_prefix'].'user_view']=='mix')
 			{
-			echo 'mix_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
+			echo 'mix_entry.php?id='. $entrydata['tid'] .'#p'. $entrydata['id'];
 			}
 		else if (isset($_COOKIE['user_view'])
 			&& $_COOKIE['user_view']=='board')
 			{
-			echo 'board_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
+			echo 'board_entry.php?id='. $entrydata['tid'] .'#p'. $entrydata['id'];
 			}
 		else if (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=='thread')
 			{
-			echo 'forum_entry.php?id='.$entrydata['id'];
+			echo 'forum_entry.php?id='. $entrydata['id'];
 			}
 		else if (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=='mix')
 			{
-			echo 'mix_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
+			echo 'mix_entry.php?id='. $entrydata['tid'] .'#p'. $entrydata['id'];
 			}
 		else if (isset($standard) && $standard=='board')
 			{
-			echo 'board_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
+			echo 'board_entry.php?id='. $entrydata['tid'] .'#p'. $entrydata['id'];
 			}
 		else if (isset($standard) && $standard=='mix')
 			{
-			echo 'mix_entry.php?id='.$entrydata['tid'].'#p'.$entrydata['id'];
+			echo 'mix_entry.php?id='. $entrydata['tid'] .'#p'. $entrydata['id'];
 			}
 		else
 			{
-			echo 'forum_entry.php?id='.$entrydata['id'];
+			echo 'forum_entry.php?id='. $entrydata['id'];
 			}
-		echo '">'.htmlspecialchars($entrydata['subject']).'</a> ';
+		echo '">'. htmlspecialchars($entrydata['subject']) .'</a> ';
 		echo $search_author_info_x;
 		if (isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='')
 			{
-			echo ' <span class="category">('.$categories[$entrydata["category"]].')</span>';
+			echo ' <span class="category">('. $categories[$entrydata["category"]] .')</span>';
 			}
 		echo '</li>'."\n";
 		}
