@@ -285,10 +285,16 @@ padding: 7px 0 7px 20px;
 float: left;
 }
 
-#bottom div.right {
+#bottom .right {
 margin: 0;
 padding: 7px 20px 10px 0;
 text-align: right;
+list-style: none;
+font-size: 114%;
+}
+
+#bottom .right li {
+display: inline-block;
 }
 
 #bottom .right a .fa-rss-square {

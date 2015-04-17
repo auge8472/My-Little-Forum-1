@@ -643,7 +643,7 @@ $rss_feed_button = '';
 if ($settings['provide_rssfeed'] == 1 && $settings['access_for_users_only'] == 0)
 	{ 
 	$rss_feed_link = '<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="rss.php" />';
-	$rss_feed_button = '<a href="rss.php" class="buttonize"><span class="fa fa-rss-square"></span>&nbsp;RSS Feed</a>';
+	$rss_feed_button = '<li><a href="rss.php" class="buttonize"><span class="fa fa-rss-square"></span>&nbsp;RSS Feed</a></li>'. "\n";
 	}
 $template = str_replace("{RSS-FEED-LINK}",$rss_feed_link,$template);
 $template = str_replace("{RSS-FEED-BUTTON}",$rss_feed_button,$template);
