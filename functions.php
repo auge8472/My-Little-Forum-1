@@ -605,25 +605,25 @@ if (isset($_SESSION[$settings['session_prefix']."user_name"]))
 	{
 	if (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=="admin")
 		{
-		$user_menu_admin = ' | <a href="admin.php" title="'.strip_tags($lang['admin_area_linktitle']).'">'.$lang['admin_area_linkname'].'</a>';
+		$user_menu_admin = '<li><a href="admin.php" class="buttonize edge" title="'. strip_tags($lang['admin_area_linktitle']) .'"><span class="fa fa-server"></span>&nbsp;'. $lang['admin_area_linkname'] .'</a></li>'. "\n";
 		}
 	else
 		{
 		$user_menu_admin = "";
 		}
-	$user_menu = '<a href="user.php?id='.$_SESSION[$settings['session_prefix'].'user_id'].'" title="'.strip_tags($lang['own_userdata_linktitle']).'"><b>'.htmlspecialchars($_SESSION[$settings['session_prefix'].'user_name']).'</b></a> | <a href="login.php" title="'.strip_tags($lang['logout_linktitle']).'">'.$lang['logout_linkname'].'</a> | <a href="user.php" title="'.strip_tags($lang['user_area_linktitle']).'">'.$lang['user_area_linkname'].'</a>'.$user_menu_admin;
+	$user_menu = '<li><a href="user.php?id='. $_SESSION[$settings['session_prefix'].'user_id'] .'" class="buttonize edge" title="'. strip_tags($lang['own_userdata_linktitle']) .'"><span class="fa fa-user"></span>&nbsp;<b>'. htmlspecialchars($_SESSION[$settings['session_prefix'].'user_name']) .'</b></a></li>'. "\n" .'<li><a href="login.php" class="buttonize edge" title="'. strip_tags($lang['logout_linktitle']) .'"><span class="fa fa-sign-out"></span>&nbsp;'.$lang['logout_linkname'].'</a></li>'. "\n" .'<li><a href="user.php" class="buttonize edge" title="'. strip_tags($lang['user_area_linktitle']) .'"><span class="fa fa-users"></span>&nbsp;'. $lang['user_area_linkname'] .'</a></li>'. "\n" . $user_menu_admin;
 	}
 else
 	{
-	$user_menu = '<a href="login.php" rel="nofollow" title="'.strip_tags($lang['login_linktitle']).'">'.$lang['login_linkname'].'</a> | <a href="register.php" rel="nofollow" title="'.strip_tags($lang['register_linktitle']).'">'.$lang['register_linkname'].'</a>';
+	$user_menu = '<li><a href="login.php" class="buttonize edge" rel="nofollow" title="'. strip_tags($lang['login_linktitle']) .'"><span class="fa fa-sign-in"></span>&nbsp;'. $lang['login_linkname'] .'</a></li>'. "\n" .'<li><a href="register.php" class="buttonize edge" rel="nofollow" title="'. strip_tags($lang['register_linktitle']) .'"><span class="fa fa-user-plus"></span>&nbsp;'. $lang['register_linkname'] .'</a></li>'. "\n";
 	}
-$user_menu .= ' | <a href="search.php" rel="nofollow" title="'.strip_tags($lang['search_formtitle']).'">'.$lang['search_linkname'].'</a>';
-$template = str_replace("{USER-MENU}",$user_menu,$template);
+$user_menu .= '<li><a href="search.php" class="buttonize edge" rel="nofollow" title="'. strip_tags($lang['search_formtitle']) .'"><span class="fa fa-search-plus"></span>&nbsp;'. $lang['search_linkname'] .'</a></li>';
+$template = str_replace("{USER-MENU}", $user_menu, $template);
 
 // Search:
-$search_dump = "\n".'<form action="search.php" method="get" title="'.strip_tags($lang['search_formtitle']).'"><div class="search">'."\n";
-$search_dump .= '<input class="searchfield" type="text" id="search" name="search" value="" size="20" /><button type="submit" name=""><span class="fa fa-search">&nbsp;</span>'.$lang['search_marking'].'</button></div></form>'."\n";
-$template = str_replace("{SEARCH}",$search_dump,$template);
+$search_dump = "\n".'<form action="search.php" method="get" title="'. strip_tags($lang['search_formtitle']) .'"><div class="search">'."\n";
+$search_dump .= '<input class="searchfield" type="text" id="search" name="search" value="" size="20" /><button type="submit" name=""><span class="fa fa-search">&nbsp;</span>'. $lang['search_marking'] .'</button></div></form>'."\n";
+$template = str_replace("{SEARCH}", $search_dump, $template);
 
 // Sub navigation:
 $tnd = (isset($topnav)) ? $topnav : "";

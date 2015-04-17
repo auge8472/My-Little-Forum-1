@@ -24,10 +24,10 @@
 <body>
 <div id="top">
 <div class="left">
-{IF:HOME-LINK}<p class="home"><a href="{HOME-ADDRESS}"><img src="img/home.png" width="32" height="36" alt="{HOME-LINK}" title="{HOME-LINK}" /></a></p>{ENDIF:HOME-LINK}
+{IF:HOME-LINK}<p class="home"><a href="{HOME-ADDRESS}" title="{HOME-LINK}"><span class="fa fa-home"></span>&nbsp;{HOME-LINK}</a></p>{ENDIF:HOME-LINK}
 <h1>{FORUM-NAME}</h1>
 {LOAD-TIME}</div>
-<div class="right"><p class="usermenu">{USER-MENU}</p>{SEARCH}</div>
+<div class="right"><ul class="usermenu">{USER-MENU}</ul>{SEARCH}</div>
 </div>
 <div id="topnav">
 <div class="left">{LOCATION}{SUB-NAVIGATION-1}</div>

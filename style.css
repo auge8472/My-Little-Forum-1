@@ -176,29 +176,41 @@ background: -o-linear-gradient(top, #ccd8ea 0%, #ecf2f8 100%); /* Opera 11.10+ *
 background: linear-gradient(to bottom, #ccd8ea 0%, #ecf2f8 100%); /* W3C new */
 }
 
-/* set all paragraphs in #top together to 0.86em */
-#top p {
-font-size: 0.86em;
-}
-
 #top div.left {
 margin: 0;
-padding: 6px 0 5px 20px;
+padding: 0px 0 0 2em;
 float: left;
 }
 
 #top div.left .home {
-margin: 0;
+margin: 0 0 0.3em 0;
 padding: 0;
-float: left;
+}
+
+#top div.left .home a {
+display: inline-block;
+padding: 0.2em;
+border: 1px solid #125;
+text-decoration: none;
+box-shadow: 3px 1px 5px #aaa;
+border-radius: 0 0 4px 4px;
+}
+
+#top div.left .home a:link, #top div.left .home a:visited {
+color: #fff;
+background: #015;
+}
+
+#top div.left .home a:focus, #top div.left .home a:hover {
+color: #ffffe8;
+background: #118;
 }
 
 #top div.left h1 {
 font-size: 2em;
 font-weight: bold;
-margin: 0 0 4px 0.5em;
+margin: 0 0 0.2em 0;
 padding: 0;
-float: left;
 }
 
 #top div.left .index {
@@ -209,17 +221,28 @@ clear: left;
 
 #top div.right {
 margin:0;
-padding: 6px 20px 5px 0;
+padding: 0 2em 5px 0;
 text-align: right;
 }
 
-#top p.usermenu {
+#top ul.usermenu {
 margin:0 0 13px 0;
+list-style: none;
+}
+
+#top ul.usermenu li {
+display: inline-block;
+}
+
+#top ul.usermenu a.buttonize.edge {
+border-radius: 0 0 4px 4px;
+border-top: none;
 }
 
 #top h1 {
 margin:0 0 3px 0;
 padding:0;
+text-shadow: 4px 2px 2px #fff;
 }
 
 .search {
@@ -386,7 +409,7 @@ ul.admin-main-menu a.buttonize {
 display: block;
 }
 
-ul.admin-main-menu a.buttonize, div.postingbottom .buttonize {
+#top ul.usermenu a.buttonize, ul.admin-main-menu a.buttonize, div.postingbottom .buttonize {
 box-shadow: 3px 1px 5px #aaa;
 }
 
