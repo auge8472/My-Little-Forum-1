@@ -336,8 +336,10 @@ padding: 5px 10px;
 overflow: hidden;
 }
 
-.postinganswer { float: left; }
+.postinganswer {
+float: left;
 line-height: 1.4em;
+}
 .postingedit {
 float: right;
 text-align: right;
