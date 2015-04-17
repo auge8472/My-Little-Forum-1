@@ -106,7 +106,7 @@ background-image:url(img/update_mo.png);
 }
 
 .buttonize {
-border: 1px solid #aaa;
+border: 1px solid #c8c8c8;
 border-radius: 4px;
 display: inline-block;
 margin: 0;
@@ -330,9 +330,9 @@ font-style: italic;
 }
 
 .postingbottom {
-clear:both;
-margin:25px 0 0 0;
-padding: 0;
+clear: both;
+margin: 1em 0 0 0;
+padding: 5px 10px;
 overflow: hidden;
 }
 
@@ -381,12 +381,14 @@ padding: 0;
 
 ul.admin-main-menu a.buttonize {
 display: block;
+}
+
+ul.admin-main-menu a.buttonize, div.postingbottom .buttonize {
 box-shadow: 3px 1px 5px #aaa;
 }
 
 ul.menu {
 list-style-type: none;
-font-size: 0.86em;
 margin: 0;
 padding: 0;
 }
