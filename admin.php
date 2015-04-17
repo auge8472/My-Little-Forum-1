@@ -1610,7 +1610,7 @@ if (!empty($action))
 	if ($action == "settings")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<span class="current"><span class="fa fa-wrench"></span>&nbsp;'. $lang_add['forum_settings'] .'</span>';
+		$topnav .= '<span class="current"><span class="fa fa-sliders"></span>&nbsp;'. $lang_add['forum_settings'] .'</span>';
 		}
 	if ($action == "debug")
 		{
