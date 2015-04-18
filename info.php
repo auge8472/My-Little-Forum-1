@@ -4,7 +4,8 @@ include("inc.php");
 if(isset($_GET['info'])) $info = intval($_GET['info']);
 if(empty($info)) $info = 0;
 
-$topnav = '<img src="img/where.png" alt="" width="11" height="8" /><b>'.$lang['info'].'</b>';
+$topnav  = '<li><span class="current"><span class="fa fa-exclamation-triangle">';
+$topnav .= '</span>&nbsp;'. htmlspecialchars($lang['info']) .'</span></li>'."\n";
 
 parse_template();
 echo $header;

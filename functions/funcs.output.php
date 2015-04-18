@@ -191,8 +191,8 @@ if (!empty($view) or !empty($category))
 		}
 	}
 
-$r .= '<a class="textlink" rel="nofollow" href="posting.php'.$qs;
-$r .= '" title="'.outputLangDebugInAttributes($lang['new_entry_linktitle']).'">'.$lang['new_entry_linkname'].'</a>';
+$r .= '<li><a rel="nofollow" href="posting.php'. $qs .'" title="'. outputLangDebugInAttributes($lang['new_entry_linktitle']);
+$r .=  '"><span class="fa fa-bullhorn"></span>&nbsp;'. htmlspecialchars($lang['new_entry_linkname']) .'</a></li>'."\n";
 
 return $r;
 } # End: outputPostingLink

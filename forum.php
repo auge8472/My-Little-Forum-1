@@ -94,7 +94,7 @@ if ($settings['access_for_users_only'] == 1
 	$result = mysql_query($getAllThreadsQuery, $connid);
 	if (!$result) die($lang['db_error']);
 
-	$subnav_1 = outputPostingLink($_SESSION[$settings['session_prefix'].'category']);
+	$topnav = outputPostingLink($_SESSION[$settings['session_prefix'].'category']);
 	$subnav_2 = '';
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{

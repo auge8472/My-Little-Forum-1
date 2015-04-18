@@ -176,8 +176,8 @@ if ($settings['access_for_users_only'] == 1
 	$category = !empty($_SESSION[$settings['session_prefix'].'category']) ? intval($_SESSION[$settings['session_prefix'].'category']) : 0;
 
 	$wo = $entrydata["subject"];
-	$subnav_1  = '<a class="textlink" href="forum.php" title="';
-	$subnav_1 .= outputLangDebugInAttributes($lang['back_to_forum_linktitle']) .'">'. $lang['back_to_forum_linkname'] .'</a>';
+	$topnav  = '<li><a href="forum.php" title="'. outputLangDebugInAttributes($lang['back_to_forum_linktitle']) .'">';
+	$topnav .= '<span class="fa fa-chevron-right"></span>&nbsp;'. htmlspecialchars($lang['back_to_forum_linkname']) .'</a></li>'."\n";
 	$cat = ($category > 0) ? '&amp;category='. intval($category) : '';
 	$subnav_2 = "";
 	if ($settings['board_view']==1)

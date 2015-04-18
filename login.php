@@ -337,7 +337,8 @@ switch ($action)
 
 // HTML:
 $wo = strip_tags($lang['login_title']);
-$topnav = '<img src="img/where.png" alt="" width="11" height="8" /><b>'.$lang['login_title'].'</b>';
+$topnav  = '<li><span class="current"><span class="fa fa-sign-in"></span>&nbsp;';
+$topnav .= htmlspecialchars($lang['login_title']) .'</span></li>'."\n";
 parse_template();
 echo $header;
 

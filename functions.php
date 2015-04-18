@@ -626,11 +626,8 @@ $search_dump .= '<input class="searchfield" type="text" id="search" name="search
 $template = str_replace("{SEARCH}", $search_dump, $template);
 
 // Sub navigation:
-$tnd = (isset($topnav)) ? $topnav : "";
-$template = str_replace("{LOCATION}",$tnd,$template);
-
-$subnav_1_dump = (isset($subnav_1)) ? $subnav_1 : "&nbsp;";
-$template = str_replace("{SUB-NAVIGATION-1}",$subnav_1_dump,$template);
+$tnd = (isset($topnav) and !empty($topnav)) ? $topnav : "";
+$template = str_replace("{SUB-NAVIGATION-1}", '<ul class="left">'. $tnd .'</ul>', $template);
 
 $subnav_2_dump = (isset($subnav_2)) ? $subnav_2 : "&nbsp;";
 $template = str_replace("{SUB-NAVIGATION-2}",$subnav_2_dump,$template);

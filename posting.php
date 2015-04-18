@@ -1075,7 +1075,8 @@ if (($settings['access_for_users_only'] == 1
 				}
 			$subnav['linktext'] = $lang['back_to_overview_linkname'];
 			}
-		$subnav_1 = '<a class="textlink" href="'. $subnav['href'].$subnav['query'] .'">'. htmlspecialchars($subnav['linktext']) .'</a>';
+		$topnav  = '<li><a href="'. $subnav['href'].$subnav['query'] .'"><span class="fa fa-chevron-right">';
+		$topnav .= '</span>&nbsp;'. htmlspecialchars($subnav['linktext']) .'</a></li>'."\n";
 
 		parse_template();
 		echo $header;

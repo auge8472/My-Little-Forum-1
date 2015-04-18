@@ -218,8 +218,8 @@ if ($settings['access_for_users_only'] == 1
 	mysql_free_result($result); // Aufräumen
 
 	$wo = $entrydata["subject"];
-	$subnav_1  = '<a class="textlink" href="mix.php">';
-	$subnav_1 .= $lang['back_to_overview_linkname'].'</a>';
+	$topnav  = '<li><a href="mix.php"><span class="fa fa-chevron-right"></span>&nbsp;';
+	$topnav .= htmlspecialchars($lang['back_to_overview_linkname']) .'</a></li>'."\n";
 	$subnav_2 = "";
 	if ($settings['thread_view']==1)
 		{

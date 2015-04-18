@@ -209,46 +209,45 @@ list($count) = mysql_fetch_row($count_result);
 
 // HTML:
 $wo = strip_tags($lang['search_title']);
-$subnav_1 = "";
+$topnav = "";
 if (isset($search) && empty($show_postings))
 	{
 	if ($search != "" && $ao=="phrase")
 		{
-		$subnav_1 .= $lang['phrase']." <b>".htmlspecialchars($search)."</b>";
+		$topnav .= '<li><span class="current">'. htmlspecialchars($lang['phrase']) .' <b>'. htmlspecialchars($search) .'</b></span></li>'."\n";
 		}
 	else if ($search != "" && count($search_array) == 1)
 		{
-		$subnav_1 .= $lang['search_term']." <b>".htmlspecialchars($search_anz)."</b>";
+		$topnav .= '<li><span class="current">'. htmlspecialchars($lang['search_term']) .' <b>'. htmlspecialchars($search_anz) .'</b></span></li>'."\n";
 		}
 	else if ($search != "" && count($search_array) > 1)
 		{
-		$subnav_1 .= $lang['search_term']." <b>".htmlspecialchars($search_anz)."</b>";
+		$topnav .= '<li><span class="current">'. htmlspecialchars($lang['search_term']) .' <b>'. htmlspecialchars($search_anz).'</b></span></li>'."\n";
 		}
 	else
 		{
-		$subnav_1 .= "&nbsp;";
-		$topnav = '<img src="img/where.png" alt="" width="11" height="8" /><b>'.$lang['search_title'].'</b>';
+		$topnav = '<li><span class="current"><span class="fa fa-search"></span>&nbsp;';
+		$topnav .= htmlspecialchars($lang['search_title']) .'</span></li>'."\n";
 		}
 
 	if ($count > 0 && $search != "")
 		{
-		$subnav_1 .= " - ".$lang['search_result']." ";
+		$topnav .= '<li><span class="current">'. htmlspecialchars($lang['search_result']) .'</span></li>'."\n";
 		}
 	if ($count > 0 && $search != "" && $count > $settings['search_results_per_page'])
 		{
 		$lang['search_result_range'] = str_replace("[from]", ($page*$settings['search_results_per_page'])+1, $lang['search_result_range']);
 		$lang['search_result_range'] = str_replace("[to]", ((1+$page)*$settings['search_results_per_page']), $lang['search_result_range']);
 		$lang['search_result_range'] = str_replace("[total]", $count, $lang['search_result_range']);
-		$subnav_1 .= $lang['search_result_range'];
+		$topnav .= '<li><span class="current">'. htmlspecialchars($lang['search_result_range']) .'</span></li>'."\n";
 		}
 	else if ($count > 0 && $search != "" && $count <= $settings['search_results_per_page'])
 		{
-		$subnav_1 .=  $count;
+		$topnav .= '<li><span class="current">'. htmlspecialchars($count) .'</span></li>'."\n";
 		}
 	else
 		{
-		$subnav_1 .= "&nbsp;";
-		#$topnav = '<img src="img/where.png" alt="" width="11" height="8" /><b>'.$lang['search_title'].'</b>';
+		$topnav .= '';
 		}
 	}
 else if (isset($show_postings) && empty($search))
@@ -258,8 +257,8 @@ else if (isset($show_postings) && empty($search))
 	$field = mysql_fetch_assoc($user_name_result);
 	mysql_free_result($user_name_result);
 	$lang['show_userdata_linktitle'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['show_userdata_linktitle']);
-	$lang['postings_by_user'] = str_replace('[name]', '<a href="user.php?id='.$show_postings.'" title="'.outputLangDebugInAttributes($lang['show_userdata_linktitle']).'">'.htmlspecialchars($field["user_name"]).'</a>', $lang['postings_by_user']);
-	$subnav_1 .= '<img src="img/where.png" alt="" width="11" height="8" border="0"><b>'.$lang['postings_by_user'].'</b>';
+	$lang['postings_by_user'] = str_replace('[name]', '<a href="user.php?id='.$show_postings.'" title="'.outputLangDebugInAttributes($lang['show_userdata_linktitle']).'"><span class="fa fa-user"></span>&nbsp;'. htmlspecialchars($field["user_name"]) .'</a>', $lang['postings_by_user']);
+	$topnav .= '<li>'. $lang['postings_by_user'] .'</li>'."\n";
 	}
 
 if (isset($search) && $search != "")

@@ -94,7 +94,7 @@ if ($settings['access_for_users_only'] == 1
 	$threadsResult = mysql_query($threadsQuery, $connid);
 	if (!$threadsResult) die($lang['db_error']);
 
-	$subnav_1 = outputPostingLink($_SESSION[$settings['session_prefix'].'category'],"mix");
+	$topnav = outputPostingLink($_SESSION[$settings['session_prefix'].'category'],"mix");
 	$pagination = ($_SESSION[$settings['session_prefix'].'page'] > 0) ? '&amp;page='.$_SESSION[$settings['session_prefix'].'page'] : '';
 	$cat = ($_SESSION[$settings['session_prefix'].'category'] > 0) ? '&amp;category='.intval($_SESSION[$settings['session_prefix'].'category']) : '';
 	$subnav_2 = '';

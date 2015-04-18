@@ -213,29 +213,34 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 	}
 
 
-$subnav_1 = '';
+$topnav = '';
 if (isset($uid))
 	{
-	$subnav_1 .= '<a class="textlink" href="user.php?id='. intval($uid) .'">'. $lang['back_linkname'] .'</a>';
+	$topnav .= '<li><a href="user.php?id='. intval($uid) .'"><span class="fa fa-user">';
+	$topnav .= '</span>&nbsp;'. htmlspecialchars($lang['back_linkname']) .'</a></li>'."\n";
 	}
 else if (isset($forum_contact))
 	{
-	$subnav_1 .= '<a class="textlink" href="index.php">'. $lang['back_linkname'] .'</a>';
+	$topnav .= '<li><a href="index.php"><span class="fa fa-chevron-right">';
+	$topnav .= '</span>&nbsp;'. htmlspecialchars($lang['back_linkname']) .'</a></li>'."\n";
 	}
 else if ($id == 0 || isset($no_message))
 	{
-	$subnav_1 .= '<a class="textlink" href="javascript:history.back(1)">'. $lang['back_linkname'] .'</a>';
+	$topnav .= '<li><a href="javascript:history.back(1)"><span class="fa fa-chevron-right">';
+	$topnav .= '</span>&nbsp;'. htmlspecialchars($lang['back_linkname']) .'</a></li>'."\n";
 	}
 else
 	{
 	if (empty($view))
 		{
-		$subnav_1 .= '&nbsp;<a class="textlink" href="forum_entry.php?id='. intval($id) .'">'. str_replace("[name]", htmlspecialchars($field["name"]), $lang['back_to_posting_linkname']) .'</a>';
+		$topnav .= '<li><a href="forum_entry.php?id='. intval($id) .'">'
+		$topnav .= str_replace("[name]", htmlspecialchars($field["name"]), $lang['back_to_posting_linkname']) .'</a></li>'."\n";
 		}
 	else
 		{
 		$backURL = ($view == "board") ? 'board_entry.php' : 'mix_entry.php';
-		$subnav_1 .= '&nbsp;<a class="textlink" href="'. $backURL .'?id='. intval($field['tid']) .'">'. $lang['back_to_topic_linkname'] .'</a>';
+		$topnav .= '<li><a href="'. $backURL .'?id='. intval($field['tid']) .'">';
+		$topnav .= htmlspecialchars($lang['back_to_topic_linkname']) .'</a></li>'."\n";
 		}
 	}
 
