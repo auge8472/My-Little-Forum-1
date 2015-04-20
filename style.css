@@ -810,7 +810,7 @@ ul.menulist li a {
 padding: 3px 0.3em;
 border: 1px solid #bacbdf;
 border-bottom: none;
-border-radius: 8px 8px 0 0;
+border-radius: 4px 4px 0 0;
 color: #004;
 background: #ecf2f8;
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ecf2f8), color-stop(100%,#ccd8ea));
@@ -835,7 +835,7 @@ ul.menulist li span {
 padding: 3px 0.3em;
 border: 1px solid #bacbdf;
 border-bottom: none;
-border-radius: 8px 8px 0 0;
+border-radius: 4px 4px 0 0;
 color: #000;
 text-shadow: 1px 1px 0px #fff;
 background: #f8ffb8;
