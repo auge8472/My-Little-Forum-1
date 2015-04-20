@@ -202,12 +202,12 @@ background: #015;
 }
 
 #top div.left .home a:focus, #top div.left .home a:hover {
-color: #ffffe8;
+color: #ffffe4;
 background: #118;
 }
 
 #top div.left h1 {
-font-size: 2em;
+font-size: 1.5em;
 font-weight: bold;
 margin: 0 0 0.2em 0;
 padding: 0;
