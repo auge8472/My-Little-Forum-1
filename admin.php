@@ -2738,7 +2738,7 @@ switch ($action)
 			foreach ($menuitems as $key=>$val)
 				{
 				if ((empty($_GET['settingsCat']) and $key == 'ban_ips')
-				or ($key == $_GET['settingsCat']))
+				or (isset($_GET['settingsCat']) and $key == $_GET['settingsCat']))
 					{
 					$catTable = $key;
 					$menu .= '<li><span>';
