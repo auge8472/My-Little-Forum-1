@@ -754,7 +754,7 @@ if (!empty($action))
 			{
 			$lang['pers_msg_ln'] = str_replace("[name]", $userName["user_name"], $lang['pers_msg_ln']);
 			$topnav .= '<li><span class="current"><span class="fa fa-envelope-o"></span>&nbsp;';
-			$topnav .= htmlspecilachars($lang['pers_msg_ln']) .'</span></li>'."\n";
+			$topnav .= htmlspecialchars($lang['pers_msg_ln']) .'</span></li>'."\n";
 			}
 		if ($action == "subscriptions")
 			{
