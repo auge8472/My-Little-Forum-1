@@ -24,7 +24,7 @@ include_once("functions/include.prepare.php");
 
 
 // Seiten-Navigation für suche.php
-function snav($page, $suchergebnisse, $count, $search, $ao, $category) {
+function snav($page, $suchergebnisse, $count, $search, $ao) {
 global $lang;
 
 $output = '';
@@ -36,19 +36,19 @@ if ($count > $suchergebnisse)
 	if ($new_index_before >= 0)
 		{
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?search='.$search;
-		$output .= '&amp;category='.$category.'&amp;ao='.$ao.'&amp;page='.$new_index_before;
+		$output .= '&amp;ao='.$ao.'&amp;page='.$new_index_before;
 		$output .= '" title="'.outputLangDebugInAttributes($lang['previous_page_linktitle']).'"><b>&laquo;</b></a>&nbsp;';
 		}
 
 	if ($page == 3)
 		{
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?search='.$search;
-		$output .= '&amp;category='.$category.'&amp;ao='.$ao.'&amp;page=0"><b>1</b></a>&nbsp;';
+		$output .= '&amp;ao='.$ao.'&amp;page=0"><b>1</b></a>&nbsp;';
 		}
 	else if ($page > 3)
 		{
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?search='.$search;
-		$output .= '&amp;category='.$category.'&amp;ao='.$ao.'&amp;page=0">';
+		$output .= '&amp;ao='.$ao.'&amp;page=0">';
 		$output .= '<b>1</b></a>&nbsp;<b>...</b>&nbsp;';
 		}
 
@@ -60,7 +60,7 @@ if ($count > $suchergebnisse)
 			if ($page != $pagen_nr)
 				{
 				$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?search='.$search;
-				$output .= '&amp;category='.$category.'&amp;ao='.$ao.'&amp;page=';
+				$output .= '&amp;ao='.$ao.'&amp;page=';
 				$output .= $pagen_nr.'"><b>'.($pagen_nr+1).'</b></a>&nbsp;';
 				}
 			else
@@ -73,7 +73,7 @@ if ($count > $suchergebnisse)
 	if ($new_index_after < $site_count)
 		{
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?search='.$search;
-		$output .= '&amp;category='.$category.'&amp;ao='.$ao.'&amp;page='.$new_index_after;
+		$output .= '&amp;ao='.$ao.'&amp;page='.$new_index_after;
 		$output .= '" title="'.outputLangDebugInAttributes($lang['next_page_linktitle']).'"><b>&raquo;</b></a>';
  		}
  	}
@@ -262,7 +262,7 @@ else if (isset($show_postings) && empty($search))
 
 if (isset($search) && $search != "")
 	{
-	$subnav_2 = snav($page, $settings['search_results_per_page'], $count, $search, $ao, $category);
+	$subnav_2 = snav($page, $settings['search_results_per_page'], $count, $search, $ao);
 	}
 else if (isset($show_postings) && $show_postings !="")
 	{
