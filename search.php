@@ -149,7 +149,6 @@ unset($entrydata);
 if (substr($search, 1, 1) == "\"") $ao="phrase";
 
 $search = str_replace("\"", "", $search);
-#$search = stripslashes($search);
 $search = trim($search);
 $search = mysql_real_escape_string($search);
 $search_array = explode(" ", $search);
