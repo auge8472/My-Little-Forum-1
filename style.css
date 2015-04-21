@@ -288,7 +288,27 @@ display: block;
 height: calc(100% - 0.25em);
 width: calc(100% - 0.3em - 0.5em);
 line-height: 1.6em;
-padding: 0.15em 0.3em 0.1em 0.5em;
+padding: 0.2em 0.3em 0.05em 0.5em;
+text-decoration: none;
+border-right: 1px solid #c8c8c8;
+border-left: 1px solid #c8c8c8;
+}
+
+.main-navbar .left li a:link, .main-navbar .left li a:visited {
+color: #001;
+background: #ebebef;
+}
+.main-navbar .left li a:focus, .main-navbar .left li a:hover {
+color: #434;
+background: #fff;
+}
+.main-navbar .left li a:active {
+color: #652;
+background: #f7f7ea;
+}
+.main-navbar .left li .current {
+color: #000;
+background: #d8d8e2;
 }
 
 .main-navbar div.right {
