@@ -154,7 +154,7 @@ $search = mysql_real_escape_string($search);
 $search_array = explode(" ", $search);
 $search_anz = str_replace(" ", ", ", $search);
 
-$search_category = (isset($category) and $category != 0) ? " AND category='".mysql_real_escape_string($category)."'" : "";
+$search_category = (isset($_GET['category']) and $_GET['category'] > 0) ? " AND category = ". intval($_GET['category']) : "";
 
 if ($ao == "or")
 	{
@@ -289,14 +289,14 @@ if (isset($search) && empty($show_postings))
 		{
 		echo '<select size="1" name="category">'."\n";
   		echo '<option value="0"';
-		echo (isset($category) && $category == 0) ? ' selected="selected"' : '';
+		echo (!isset($_GET['category']) or (isset($_GET['category']) and $_GET['category'] == 0)) ? ' selected="selected"' : '';
 		echo '>'. htmlspecialchars($lang['show_all_categories']) .'</option>'."\n";
 		while (list($key, $val) = each($categories))
 			{
-			if ($key!=0)
+			if ($key != 0)
 				{
 				echo '<option value="'. htmlspecialchars($key) .'"';
-				echo (isset($category) && $key == $category) ? ' selected="selected"' : '';
+				echo (isset($_GET['category']) && $key == $_GET['category']) ? ' selected="selected"' : '';
 				echo '>'. htmlspecialchars($val) .'</option>'."\n";
 				}
 			}
