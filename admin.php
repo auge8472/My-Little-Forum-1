@@ -2179,6 +2179,9 @@ switch ($action)
 			while ($zeile = mysql_fetch_assoc($result))
 				{
 				# highlight user, mods and admins:
+				$mark['admin'] = 0;
+				$mark['mod'] = 0;
+				$mark['user'] = 0;
 				if (($settings['admin_mod_highlight'] == 1
 				or $settings['user-highlight'] == 1)
 				&& $zeile["user_id"] > 0)
