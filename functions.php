@@ -219,17 +219,17 @@ if ($entry_count > $entries_per_page)
 		$output .= '<a href="'.$_SERVER["SCRIPT_NAME"].'?page='.$new_index_before;
 		$output .= '&amp;order='.$order.'&amp;descasc='.$descasc.$ic.'">';
 		$output .= '<img src="img/prev.png" alt="&laquo;" title="';
-		$output .= strip_tags($lang['previous_page_linktitle']).'" width="12" height="9" /></a>&nbsp;';
+		$output .= strip_tags($lang['previous_page_linktitle']).'" width="12" height="9"></a>&nbsp;';
 		}
 	# if ($new_index_before >= 0 && $new_index_after < $site_count) $output .= " ";
 	$page_count = ceil($entry_count / $entries_per_page);
 	$output .= '<form action="'.$_SERVER["SCRIPT_NAME"].'" method="get" title="';
 	$output .= strip_tags($lang['choose_page_formtitle']).'"><div class="inline-form">'."\n";
-	$output .= isset($order) ? '<input type="hidden" name="order" value="'.$order.'" />' : '';
-	$output .= isset($descasc) ? '<input type="hidden" name="descasc" value="'.$descasc.'" />' : '';
-	$output .= (isset($category) and $category > 0) ? '<input type="hidden" name="category" value="'.$category.'" />' : '';
-	$output .= (isset($action) && $action!="") ? '<input type="hidden" name="action" value="'.$action.'" />' : '';
-	$output .= (isset($_GET['letter'])) ? '<input type="hidden" name="letter" value="'.$_GET['letter'].'" />' : '';
+	$output .= isset($order) ? '<input type="hidden" name="order" value="'.$order.'">' : '';
+	$output .= isset($descasc) ? '<input type="hidden" name="descasc" value="'.$descasc.'">' : '';
+	$output .= (isset($category) and $category > 0) ? '<input type="hidden" name="category" value="'.$category.'">' : '';
+	$output .= (isset($action) && $action!="") ? '<input type="hidden" name="action" value="'.$action.'">' : '';
+	$output .= (isset($_GET['letter'])) ? '<input type="hidden" name="letter" value="'.$_GET['letter'].'">' : '';
 	$output .= '<select class="kat" size="1" name="page" onchange="this.form.submit();">'."\n";
 	$output .= '<option value="0"';
 	$output .= ($page == 0) ? ' selected="selected"' : '';
@@ -243,13 +243,13 @@ if ($entry_count > $entries_per_page)
 			$output .= '>'.str_replace("[number]", $x+1, $lang['page_number']).'</option>'."\n";
 			}
 		}
-	$output .= '</select>'."\n".'<noscript>&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;" /></noscript></div></form>'."\n";
+	$output .= '</select>'."\n".'<noscript>&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;"></noscript></div></form>'."\n";
 	if ($new_index_after < $site_count)
 		{
 		$output .= '&nbsp;<a href="'.$_SERVER["SCRIPT_NAME"]."?page=".$new_index_after;
 		$output .= '&amp;order='.$order.'&amp;descasc='.$descasc.$ic.'">';
 		$output .= '<img src="img/next.png" alt="&raquo;" title="';
-		$output .= strip_tags($lang['next_page_linktitle']).'" width="12" height="9" /></a>';
+		$output .= strip_tags($lang['next_page_linktitle']).'" width="12" height="9"></a>';
 		}
 	}
 
@@ -367,9 +367,9 @@ $string = preg_replace("#\[msg\](.+?)\[/msg\]#is", "<a href=\"".$_SERVER['SCRIPT
 $string = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", "<a href=\"".$_SERVER['SCRIPT_NAME']."?id=\\1\">\\2</a>", $string);
 if ($settings['bbcode_img'] == 1)
 	{
-	$string = preg_replace("#\[img\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"margin: 5px 0px 5px 0px\" />", $string);
-	$string = preg_replace("#\[img\|left\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"float: left; margin: 0px 5px 5px 0px\" />", $string);
-	$string = preg_replace("#\[img\|right\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"float: right; margin: 0px 0px 5px 5px\" />", $string);
+	$string = preg_replace("#\[img\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"margin: 5px 0px 5px 0px\">", $string);
+	$string = preg_replace("#\[img\|left\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"float: left; margin: 0px 5px 5px 0px\">", $string);
+	$string = preg_replace("#\[img\|right\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"float: right; margin: 0px 0px 5px 5px\">", $string);
 	}
 $string = str_replace('javascript','javascr***',$string);
 
@@ -417,7 +417,7 @@ else
 	$p_class='posting';
 	}
 $string = $string[1];
-$string = str_replace('<br />','',$string);
+$string = str_replace('<br>','',$string);
 $string = '</p>'."\n".'<pre class="'.$p_class.'"><code>'.$string.'</code></pre>'."\n".'<p class="'.$p_class.'">';
 
 return $string;
@@ -470,11 +470,11 @@ $result = mysql_query("SELECT file, code_1, code_2, code_3, code_4, code_5, titl
 while($data = mysql_fetch_assoc($result))
 	{
 	$title = ($data['title']!='') ? ' title="'.htmlspecialchars($data['title']).'"' : '';
-	$string = ($data['code_1']!='') ? str_replace($data['code_1'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_1'].'"'.$title.' />', $string) : $string;
-	$string = ($data['code_2']!='') ? str_replace($data['code_2'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_2'].'"'.$title.' />', $string) : $string;
-	$string = ($data['code_3']!='') ? str_replace($data['code_3'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_3'].'"'.$title.' />', $string) : $string;
-	$string = ($data['code_4']!='') ? str_replace($data['code_4'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_4'].'"'.$title.' />', $string) : $string;
-	$string = ($data['code_5']!='') ? str_replace($data['code_5'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_5'].'"'.$title.' />', $string) : $string;
+	$string = ($data['code_1']!='') ? str_replace($data['code_1'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_1'].'"'.$title.'>', $string) : $string;
+	$string = ($data['code_2']!='') ? str_replace($data['code_2'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_2'].'"'.$title.'>', $string) : $string;
+	$string = ($data['code_3']!='') ? str_replace($data['code_3'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_3'].'"'.$title.'>', $string) : $string;
+	$string = ($data['code_4']!='') ? str_replace($data['code_4'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_4'].'"'.$title.'>', $string) : $string;
+	$string = ($data['code_5']!='') ? str_replace($data['code_5'], '<img src="img/smilies/'.$data['file'].'" alt="'.$data['code_5'].'"'.$title.'>', $string) : $string;
 	}
 mysql_free_result($result);
 
@@ -622,7 +622,7 @@ $template = str_replace("{USER-MENU}", $user_menu, $template);
 
 // Search:
 $search_dump = "\n".'<form action="search.php" method="get" title="'. strip_tags($lang['search_formtitle']) .'"><div class="search">'."\n";
-$search_dump .= '<input class="searchfield" type="text" id="search" name="search" value="" size="20" /><button type="submit" name=""><span class="fa fa-search">&nbsp;</span>'. $lang['search_marking'] .'</button></div></form>'."\n";
+$search_dump .= '<input class="searchfield" type="text" id="search" name="search" value="" size="20"><button type="submit" name=""><span class="fa fa-search">&nbsp;</span>'. $lang['search_marking'] .'</button></div></form>'."\n";
 $template = str_replace("{SEARCH}", $search_dump, $template);
 
 // Sub navigation:
@@ -639,7 +639,7 @@ $rss_feed_link = '';
 $rss_feed_button = '';
 if ($settings['provide_rssfeed'] == 1 && $settings['access_for_users_only'] == 0)
 	{ 
-	$rss_feed_link = '<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="rss.php" />';
+	$rss_feed_link = '<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="rss.php">';
 	$rss_feed_button = '<li><a href="rss.php" class="buttonize"><span class="fa fa-rss-square"></span>&nbsp;RSS Feed</a></li>'. "\n";
 	}
 $template = str_replace("{RSS-FEED-LINK}",$rss_feed_link,$template);
