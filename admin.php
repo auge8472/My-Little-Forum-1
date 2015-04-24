@@ -2634,37 +2634,37 @@ switch ($action)
 				echo '<input type="hidden" name="move_category" value="0" />'."\n";
 				}
 			echo '<p><input type="radio" name="delete_mode" id="del-complete" value="complete"';
-			echo ' checked="checked" /><label for="del-complete">'.$lang_add['del_cat_completely'].'</label></p>'."\n";
+			echo ' checked="checked" /><label for="del-complete">'. $lang_add['del_cat_completely'] .'</label></p>'."\n";
 			echo '<p><input type="radio" name="delete_mode" id="del-keep" value="keep_entries" />';
-			echo '<label for="del-keep">'.$lang_add['del_cat_keep_entries'].'</label>';
+			echo '<label for="del-keep">'. $lang_add['del_cat_keep_entries'] .'</label>';
 			if (count($categories) > 0)
 				{
-				echo ' <label for="del-keep-cat">'.str_replace("[category]",$cat_select,$lang_add['del_cat_move_entries']).'</label>';
+				echo ' <label for="del-keep-cat">'. str_replace("[category]", $cat_select, $lang_add['del_cat_move_entries']).'</label>';
 				}
 			echo '</p>'."\n".'<p><input type="submit" name="delete_category_submit" value="';
-			echo outputLangDebugInAttributes($lang_add['del_cat_sb']).'" /></p></form>'."\n";
+			echo outputLangDebugInAttributes($lang_add['del_cat_sb']) .'" /></p></form>'."\n";
 		break;
 		case "edit_category":
-			echo '<h2>'.$lang_add['cat_edit_hl'].'</h2>';
+			echo '<h2>'. $lang_add['cat_edit_hl'] .'</h2>';
 			if (isset($errors))
 				{
 				echo errorMessages($errors);
 				}
 			echo '<form action="admin.php" method="post"><div>'."\n";
 			echo '<input type="hidden" name="id" value="'. intval($field['id']) .'" />'."\n";
-			echo '<label for="cat-name">'.$lang_add['edit_category']."\n";
+			echo '<label for="cat-name">'. $lang_add['edit_category'] ."\n";
 			echo '<input type="text" name="category" id="cat-name" value="';
 			echo htmlspecialchars($field['category']) .'" size="25" /></label><br />'."\n";
-			echo '<b>'.$lang_add['accessible_for'].'</b><br />'."\n";
+			echo '<b>'.$lang_add['accessible_for'] .'</b><br />'."\n";
 			echo '<input type="radio" name="accession" id="access-all" value="0"';
 			echo ($field['accession'] == 0) ? ' checked="ckecked"' : '';
-			echo ' /><label for="access-all">'.$lang_add['cat_accession_all'].'</label><br />'."\n";
+			echo ' /><label for="access-all">'. $lang_add['cat_accession_all'] .'</label><br />'."\n";
 			echo '<input type="radio" name="accession" id="access-user" value="1"';
 			echo ($field['accession'] == 1) ? ' checked="ckecked"' : '';
-			echo ' /><label for="access-user">'.$lang_add['cat_accession_reg_users'].'</label><br />'."\n";
+			echo ' /><label for="access-user">'. $lang_add['cat_accession_reg_users'] .'</label><br />'."\n";
 			echo '<input type="radio" name="accession" id="access-mod-admin" value="2"';
 			echo ($field['accession'] == 2) ? ' checked="ckecked"' : '';
-			echo ' /><label for="access-mod-admin">'.$lang_add['cat_accession_mod_admin'].'</label><br /><br />'."\n";
+			echo ' /><label for="access-mod-admin">'. $lang_add['cat_accession_mod_admin'] .'</label><br /><br />'."\n";
 			echo '<input type="submit" name="edit_category_submit" value="';
 			echo outputLangDebugInAttributes($lang['submit_button_ok']).'" /></div></form>'."\n";
 		break;
@@ -2711,7 +2711,7 @@ switch ($action)
 			mysql_free_result($email_result);
 			echo '<textarea onfocus="if (this.value==this.defaultValue) this.select()"';
 			echo ' readonly="readonly" cols="60" rows="15" />';
-			echo implode(", ",$email_list).'</textarea>'."\n";
+			echo implode(", ",$email_list) .'</textarea>'."\n";
 		break;
 		case "clear_userdata":
 			$xmlFile = dirname($_SERVER["SCRIPT_FILENAME"]) .'/data/templates/admin.menu.clear.userdata.xml';
