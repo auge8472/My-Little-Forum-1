@@ -2617,7 +2617,7 @@ switch ($action)
 				$cat_select = '<select class="kat" size="1" name="move_category" id="del-keep-cat">'."\n";
 				while (list($key, $val) = each($categories))
 					{
-					if ($key != $category_id)
+					if ($key != $field['id'])
 						{
 						$cat_select .= '<option value="'.$key.'">'.$val.'</option>'."\n";
 						}
