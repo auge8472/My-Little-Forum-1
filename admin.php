@@ -480,7 +480,7 @@ if (isset($_POST['edit_category_submit']))
 		WHERE id = ". intval($id);
 		mysql_query($editCategoryQuery, $connid);
 		header("location: ". $settings['forum_address'] ."admin.php?action=categories");
-		die();
+		die('<a href="admin.php?action=categories">further...</a>');
 		}
 	$action = 'edit_category';
 	} # End: if (isset($_POST['edit_category_submit']))
@@ -519,7 +519,7 @@ if (isset($_POST['not_displayed_entries_submit']))
 		@mysql_query($moveEntriesToCatQuery, $connid);
 		}
 	header("location: ". $settings['forum_address'] ."admin.php?action=categories");
-	die();
+	die('<a href="admin.php?action=categories">further...</a>');
 	}
 
 if (isset($_GET['move_up_category']))
@@ -546,7 +546,7 @@ if (isset($_GET['move_up_category']))
 		WHERE category_order = 0", $connid);
 		}
 	header("location: ". $settings['forum_address'] ."admin.php?action=categories");
-	die();
+	die('<a href="admin.php?action=categories">further...</a>');
 	}
 
 if (isset($_GET['move_down_category']))
@@ -576,7 +576,7 @@ if (isset($_GET['move_down_category']))
 		WHERE category_order = 0", $connid);
 		}
 	header("location: ". $settings['forum_address'] ."admin.php?action=categories");
-	die();
+	die('<a href="admin.php?action=categories">further...</a>');
 	}
 
 if (isset($_POST['delete_category_submit']))
@@ -621,7 +621,7 @@ if (isset($_POST['delete_category_submit']))
 			mysql_query($movePostingsOfDeletedCatQuery, $connid);
 			}
 		header("location: ". $settings['forum_address'] ."admin.php?action=categories");
-		die();
+		die('<a href="admin.php?action=categories">further...</a>');
 		}
 	$action = 'categories';
 	}
@@ -1029,7 +1029,7 @@ if (isset($_POST['delete_marked_threads_confirmed']))
 		$headerRefer = 'forum.php';
 		}
 	header('Location: '. $settings['forum_address'].$headerRefer);
-	die();
+	die('<a href="'. $headerRefer .'">further...</a>');
 	}
 
 if (isset($_POST['unmark_confirmed']))
@@ -1050,7 +1050,7 @@ if (isset($_POST['unmark_confirmed']))
 		$headerRefer = 'forum.php';
 		}
 	header('Location: '. $settings['forum_address'].$headerRefer);
-	die();
+	die('<a href="'. $headerRefer .'">further...</a>');
 	}
 
 if (isset($_POST['invert_markings_confirmed']))
@@ -1067,7 +1067,7 @@ if (isset($_POST['invert_markings_confirmed']))
 		$headerRefer = 'forum.php';
 		}
 	header('Location: '. $settings['forum_address'].$headerRefer);
-	die();
+	die('<a href="'. $headerRefer .'">further...</a>');
 	}
 
 if (isset($_POST['mark_threads_submitted']))
@@ -1125,7 +1125,7 @@ if (isset($_POST['mark_threads_submitted']))
 		$headerRefer = 'forum.php';
 		}
 	header('Location: '. $settings['forum_address'].$headerRefer);
-	die();
+	die('<a href="'. $headerRefer .'">further...</a>');
 	}
 
 if (isset($_POST['lock_marked_threads_submitted']))
@@ -1146,7 +1146,7 @@ if (isset($_POST['lock_marked_threads_submitted']))
 		$headerRefer = 'forum.php';
 		}
 	header('Location: '. $settings['forum_address'].$headerRefer);
-	die();
+	die('<a href="'. $headerRefer .'">further...</a>');
 	}
 
 if (isset($_POST['unlock_marked_threads_submitted']))
@@ -1167,7 +1167,7 @@ if (isset($_POST['unlock_marked_threads_submitted']))
 		$headerRefer = 'forum.php';
 		}
 	header('Location: '. $settings['forum_address'].$headerRefer);
-	die();
+	die('<a href="'. $headerRefer .'">further...</a>');
 	}
 
 if (isset($_POST['settings_submitted']))
@@ -1434,7 +1434,7 @@ if (isset($_POST['smiley_file']))
 		code_1 = '". mysql_real_escape_string(trim($_POST['smiley_code'])) ."'";
 		mysql_query($insertSmileyQuery, $connid) or die(mysql_error($connid));
 		header('Location: '. $settings['forum_address'] .'admin.php?action=smilies');
-		die();
+		die('<a href="admin.php?action=smilies">further...</a>');
 		}
 	else
 		{
@@ -1463,7 +1463,7 @@ if(isset($_GET['delete_smiley']))
 		}
 	mysql_free_result($result);
 	header('Location: '. $settings['forum_address'] .'admin.php?action=smilies');
-	die();
+	die('<a href="admin.php?action=smilies">further...</a>');
 	}
 
 if(isset($_GET['edit_smiley']))
@@ -1519,7 +1519,7 @@ if(isset($_POST['edit_smiley_submit']))
 		WHERE id=". intval($id);
 		mysql_query($editSmileyUpdateQuery, $connid);
 		header('Location: '. $settings['forum_address'] .'admin.php?action=smilies');
-		die();
+		die('<a href="admin.php?action=smilies">further...</a>');
 		}
 	else
 		{
@@ -1531,14 +1531,14 @@ if (isset($_GET['enable_smilies']))
 	{
 	mysql_query("UPDATE ". $db_settings['settings_table'] ." SET value=1 WHERE name='smilies'", $connid);
 	header('Location: '. $settings['forum_address'] .'admin.php?action=smilies');
-	die();
+	die('<a href="admin.php?action=smilies">further...</a>');
 	}
 
 if (isset($_GET['disable_smilies']))
 	{
 	mysql_query("UPDATE ". $db_settings['settings_table'] ." SET value=0 WHERE name='smilies'", $connid);
 	header('Location: '. $settings['forum_address'] .'admin.php?action=smilies');
-	die();
+	die('<a href="admin.php?action=smilies">further...</a>');
 	}
 
 if (isset($_GET['move_up_smiley']))
@@ -1554,7 +1554,7 @@ if (isset($_GET['move_up_smiley']))
 		mysql_query("UPDATE ". $db_settings['smilies_table'] ." SET order_id=". $field['order_id']." WHERE order_id=0", $connid);
 		}
 	header('Location: '. $settings['forum_address'] .'admin.php?action=smilies');
-	die();
+	die('<a href="admin.php?action=smilies">further...</a>');
 	}
 
 if (isset($_GET['move_down_smiley']))
@@ -1574,7 +1574,7 @@ if (isset($_GET['move_down_smiley']))
 		mysql_query("UPDATE ". $db_settings['smilies_table'] ." SET order_id=". $field['order_id'] ." WHERE order_id=0", $connid);
 		}
 	header('Location: '. $settings['forum_address'] .'admin.php?action=smilies');
-	die();
+	die('<a href="admin.php?action=smilies">further...</a>');
 	}
 
 if (empty($action)) $action="main";
