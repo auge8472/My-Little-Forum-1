@@ -294,20 +294,20 @@ switch($action)
 			if (empty($_SESSION[$settings['session_prefix'].'user_id'])
 			&& $settings['captcha_register']==1)
 				{
-				echo '<input type="hidden" name="'.session_name().'" value="'.session_id().'" />';
+				echo '<input type="hidden" name="'.session_name().'" value="'.session_id().'">';
 				}
-			echo "\n".'<p><b>'.$lang['username_marking'].'</b><br />';
+			echo "\n".'<p><b>'.$lang['username_marking'].'</b><br>';
 			echo '<input type="text" size="25" name="new_user_name" value="';
 			echo (isset($new_user_name)) ? htmlspecialchars($new_user_name) : '';
-			echo '" maxlength="'.$settings['name_maxlength'].'" /></p>'."\n";
-			echo '<p><b>'.$lang['user_email_marking'].'</b><br />';
+			echo '" maxlength="'.$settings['name_maxlength'].'"></p>'."\n";
+			echo '<p><b>'.$lang['user_email_marking'].'</b><br>';
 			echo '<input type="text" size="25" name="new_user_email" value="';
 			echo (isset($new_user_email)) ? htmlspecialchars($new_user_email) : '';
-			echo '" maxlength="'.$settings['email_maxlength'].'" /></p>'."\n";
-			echo '<p><b>'.$lang['reg_pw'].'</b><br />';
-			echo '<input type="password" size="25" name="reg_pw" /></p>'."\n";
-			echo '<p><b>'.$lang['reg_pw_conf'].'</b><br />';
-			echo '<input type="password" size="25" name="reg_pw_conf" /></p>'."\n";
+			echo '" maxlength="'.$settings['email_maxlength'].'"></p>'."\n";
+			echo '<p><b>'.$lang['reg_pw'].'</b><br>';
+			echo '<input type="password" size="25" name="reg_pw"></p>'."\n";
+			echo '<p><b>'.$lang['reg_pw_conf'].'</b><br>';
+			echo '<input type="password" size="25" name="reg_pw_conf"></p>'."\n";
 
 			# CAPTCHA:
 			if (empty($_SESSION[$settings['session_prefix'].'user_id'])
@@ -318,18 +318,18 @@ switch($action)
 					{
 					echo '<p><img class="captcha" src="captcha/captcha_image.php?'.SID;
 					echo '" alt="'.outputLangDebugInAttributes($lang['captcha_image_alt']).'" width="180" height="40"/></p>'."\n";
-					echo '<p>'.$lang['captcha_expl_image'].'<br />';
-					echo '<input type="text" name="captcha_code" value="" size="10" /></p>'."\n";
+					echo '<p>'.$lang['captcha_expl_image'].'<br>';
+					echo '<input type="text" name="captcha_code" value="" size="10"></p>'."\n";
 					}
 				else
 					{
-					echo '<p>'.$lang['captcha_expl_math'].'<br />';
+					echo '<p>'.$lang['captcha_expl_math'].'<br>';
 					echo $_SESSION['captcha_session'][0].' + '.$_SESSION['captcha_session'][1];
-					echo ' = <input type="text" name="captcha_code" value="" size="5" /></p>'."\n";
+					echo ' = <input type="text" name="captcha_code" value="" size="5"></p>'."\n";
 					}
 				}
 			echo '<p><input type="submit" name="register_submit" value="';
-			echo outputLangDebugInAttributes($lang['reg_subm_button']).'" /></p>'."\n".'</div>'."\n".'</form>'."\n";
+			echo outputLangDebugInAttributes($lang['reg_subm_button']).'"></p>'."\n".'</div>'."\n".'</form>'."\n";
 			}
 		else
 			{

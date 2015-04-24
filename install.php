@@ -43,7 +43,7 @@ if (isset($_POST['form_submitted']))
 	if (empty($errors))
 		{
 		$connid = @mysql_connect($_POST['host'], $_POST['user'], $_POST['pw']);
-		if (!$connid) $errors[] = $lang_add['db_connection_error']." (MySQL: ".mysql_errno()."<br />".mysql_error().")";
+		if (!$connid) $errors[] = $lang_add['db_connection_error']." (MySQL: ".mysql_errno()."<br>".mysql_error().")";
 		}
 	// overwrite database settings file:
 	if (empty($errors) && empty($_POST['dont_overwrite_settings']))
@@ -99,13 +99,13 @@ if (isset($_POST['form_submitted']))
 		# create database if desired:
 		if (isset($_POST['create_database']))
 			{
-			@mysql_query("CREATE DATABASE ".$db_settings['db'], $connid) or $errors[] = $lang_add['db_create_db_error'] ." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+			@mysql_query("CREATE DATABASE ".$db_settings['db'], $connid) or $errors[] = $lang_add['db_create_db_error'] ." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 			}
 
 		# select database:
 		if (empty($errors))
 			{
-			@mysql_select_db($db_settings['db'], $connid) or $errors[] = $lang_add['db_inexistent_error']." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+			@mysql_select_db($db_settings['db'], $connid) or $errors[] = $lang_add['db_inexistent_error']." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 			}
 
 		# create tables:
@@ -282,7 +282,7 @@ if (isset($_POST['form_submitted']))
 				$ret = mysql_query($tbl["query"], $connid);
 				if ($ret === false)
 					{
-					$errors[] = str_replace("[table]",$tbl['name'],$lang_add['db_create_table_error']) ." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+					$errors[] = str_replace("[table]",$tbl['name'],$lang_add['db_create_table_error']) ." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 					}
 				}
 			}
@@ -303,7 +303,7 @@ if (isset($_POST['form_submitted']))
 			registered = NOW(),
 			user_view = '". mysql_real_escape_string($settings['standard']['standard']) ."',
 			personal_messages = '1'";
-			@mysql_query($fillUserdata, $connid) or $errors[] = $lang_add['db_insert_admin_error']." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+			@mysql_query($fillUserdata, $connid) or $errors[] = $lang_add['db_insert_admin_error']." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 			}
 
 		# insert settings in settings table:
@@ -344,7 +344,7 @@ if (isset($_POST['form_submitted']))
 				(name, value, type, poss_values, standard, cat)
 				VALUES
 				". $loopSettings;
-				@mysql_query($fillSettings, $connid) or $errors[] = str_replace("[setting]",$fillSettings,$lang_add['db_insert_settings_error']) ." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+				@mysql_query($fillSettings, $connid) or $errors[] = str_replace("[setting]",$fillSettings,$lang_add['db_insert_settings_error']) ." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 				}
 			}
 
@@ -364,7 +364,7 @@ if (isset($_POST['form_submitted']))
 				(order_id, file, code_1, code_2, code_3, code_4, code_5, title)
 				VALUES
 				". $loopSmiley;
-				@mysql_query($fillSmiley, $connid) or $errors[] = str_replace("[setting]", $db_settings['smilies_table'], $lang_add['db_insert_settings_error']) ." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+				@mysql_query($fillSmiley, $connid) or $errors[] = str_replace("[setting]", $db_settings['smilies_table'], $lang_add['db_insert_settings_error']) ." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 				}
 			}
 
@@ -383,7 +383,7 @@ if (isset($_POST['form_submitted']))
 				(name)
 				VALUES
 				". $loopBanlist;
-				@mysql_query($fillBanlist, $connid) or $errors[] = str_replace("[setting]",$db_settings['banlists_table'],$lang_add['db_insert_settings_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+				@mysql_query($fillBanlist, $connid) or $errors[] = str_replace("[setting]",$db_settings['banlists_table'],$lang_add['db_insert_settings_error'])." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 				}
 			}
 
@@ -396,7 +396,7 @@ if (isset($_POST['form_submitted']))
 				name = '". mysql_real_escape_string($us['name']) ."',
 				value = '". mysql_real_escape_string($us['value']) ."',
 				type = '". mysql_real_escape_string($us['type']) ."'";
-				@mysql_query($fillUserSetting, $connid) or $errors[] = str_replace("[setting]",$db_settings['us_templates_table'], $lang_add['db_insert_settings_error']) ." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+				@mysql_query($fillUserSetting, $connid) or $errors[] = str_replace("[setting]",$db_settings['us_templates_table'], $lang_add['db_insert_settings_error']) ." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 				# empty $fillBanlist for the next loop
 				$fillUserSetting = "";
 				}
@@ -413,7 +413,7 @@ else
 		and !empty($db_settings['db']))
 		{
 		$connid = @mysql_connect($db_settings['host'], $db_settings['user'], $db_settings['pw']);
-		if (!$connid) $errors[] = $lang_add['db_connection_error']." (MySQL: ". mysql_errno() ."<br />". mysql_error() .")";
+		if (!$connid) $errors[] = $lang_add['db_connection_error']." (MySQL: ". mysql_errno() ."<br>". mysql_error() .")";
 		else $db_selected = mysql_select_db($db_settings['db'], $connid);
 		if ($db_selected === true)
 			{
@@ -426,7 +426,7 @@ else
 			$versionResult = mysql_query($checkQuery, $connid);
 			if ($versionResult === false)
 				{
-				$errors[] = $lang_add['db_read_settings_error'] ." [Version] (MySQL: ". mysql_errno() ."<br />". mysql_error() .")";
+				$errors[] = $lang_add['db_read_settings_error'] ." [Version] (MySQL: ". mysql_errno() ."<br>". mysql_error() .")";
 				$version = false;
 				}
 			else
@@ -437,7 +437,7 @@ else
 		else
 			{
 			# $db_selected === false
-			$errors[] = $lang_add['db_connection_error'] ." (MySQL: ". mysql_errno() ."<br />". mysql_error() .")";
+			$errors[] = $lang_add['db_connection_error'] ." (MySQL: ". mysql_errno() ."<br>". mysql_error() .")";
 			}
 		}
 	}
@@ -482,7 +482,7 @@ if (empty($installed))
 			$output .= '>'. htmlspecialchars(ucfirst(str_replace(".php", "", $langFile))) .'</option>'."\n";
 			}
 		$output .= '</select>'."\n";
-		$output .= '<input type="submit" value="'. $lang['submit_button_ok'] .'" /></p>'."\n";
+		$output .= '<input type="submit" value="'. $lang['submit_button_ok'] .'"></p>'."\n";
 		$output .= '</form>'."\n";
 		}
 	else
@@ -498,7 +498,7 @@ if (empty($installed))
 		$output .= '<p>'.$lang_add['inst_main_settings_d'].'</p>'."\n";
 		$output .= '<table class="admintab">'."\n";
 		$output .= '<tr>'."\n";
-		$output .= '<td class="admintab-l"><label for="forum-name">'.$lang_add['forum_name'].'</label><br />';
+		$output .= '<td class="admintab-l"><label for="forum-name">'.$lang_add['forum_name'].'</label><br>';
 		$output .= '<span class="small">'.$lang_add['forum_name_d'].'</span></td>'."\n";
 		$output .= '<td class="admintab-r"><input type="text" name="forum_name" value="';
 		if (!empty($_POST['forum_name']))
@@ -509,9 +509,9 @@ if (empty($installed))
 			{
 			$output .= '';
 			}
-		$output .= '" size="40" id="forum-name" /></td>'."\n";
+		$output .= '" size="40" id="forum-name"></td>'."\n";
 		$output .= '</tr><tr>'."\n";
-		$output .= '<td class="admintab-l"><label for="forum-address">'.$lang_add['forum_address'].'</label><br />';
+		$output .= '<td class="admintab-l"><label for="forum-address">'.$lang_add['forum_address'].'</label><br>';
 		$output .= '<span class="small">'.$lang_add['forum_address_d'].'</span></td>'."\n";
 		$output .= '<td class="admintab-r"><input type="text" name="forum_address" value="';
 		if (!empty($_POST['forum_address']))
@@ -522,13 +522,13 @@ if (empty($installed))
 			{
 			$output .= "http://".$_SERVER['SERVER_NAME']. str_replace("install.php","",$_SERVER['SCRIPT_NAME']);
 			}
-		$output .= '" size="40" id="forum-address" /></td>'."\n";
+		$output .= '" size="40" id="forum-address"></td>'."\n";
 		$output .= '</tr><tr>'."\n";
-		$output .= '<td class="admintab-l"><label for="forum-email">'.$lang_add['forum_email'].'</label><br />';
+		$output .= '<td class="admintab-l"><label for="forum-email">'.$lang_add['forum_email'].'</label><br>';
 		$output .= '<span class="small">'.$lang_add['forum_email_d'].'</span></td>'."\n";
 		$output .= '<td class="admintab-r"><input type="text" name="forum_email" value="';
 		$output .= (isset($_POST['forum_email'])) ? htmlspecialchars($_POST['forum_email']) : "@";
-		$output .= '" size="40" id="forum-email" /></td>'."\n";
+		$output .= '" size="40" id="forum-email"></td>'."\n";
 		$output .= '</tr>'."\n";
 		$output .= '</table>'."\n";
 		$output .= '</fieldset>'."\n";
@@ -537,25 +537,25 @@ if (empty($installed))
 		$output .= '<p>'.$lang_add['inst_admin_settings_d'].'</p>'."\n";
 		$output .= '<table class="admintab">'."\n";
 		$output .= '<tr>'."\n";
-		$output .= '<td class="admintab-l"><label for="admin-name">'.$lang_add['inst_admin_name'].'</label><br />';
+		$output .= '<td class="admintab-l"><label for="admin-name">'.$lang_add['inst_admin_name'].'</label><br>';
 		$output .= '<span class="small">'.$lang_add['inst_admin_name_d'].'</span></td>'."\n";
 		$output .= '<td class="admintab-r"><input type="text" name="admin_name" value="';
 		$output .= (isset($_POST['admin_name'])) ? htmlspecialchars($_POST['admin_name']) : '';
-		$output .= '" size="40" id="admin-name" /></td>'."\n";
+		$output .= '" size="40" id="admin-name"></td>'."\n";
 		$output .= '</tr><tr>'."\n";
-		$output .= '<td class="admintab-l"><label for="admin-email">'.$lang_add['inst_admin_email'].'</label><br />';
+		$output .= '<td class="admintab-l"><label for="admin-email">'.$lang_add['inst_admin_email'].'</label><br>';
 		$output .= '<span class="small">'.$lang_add['inst_admin_email_d'].'</span></td>'."\n";
 		$output .= '<td class="admintab-r"><input type="text" name="admin_email" value="';
 		$output .= (isset($_POST['admin_email'])) ? htmlspecialchars($_POST['admin_email']) : "@";
-		$output .= '" size="40" id="admin-email" /></td>'."\n";
+		$output .= '" size="40" id="admin-email"></td>'."\n";
 		$output .= '</tr><tr>'."\n";
-		$output .= '<td class="admintab-l"><label for="admin-pw">'.$lang_add['inst_admin_pw'].'</label><br />';
+		$output .= '<td class="admintab-l"><label for="admin-pw">'.$lang_add['inst_admin_pw'].'</label><br>';
 		$output .= '<span class="small">'.$lang_add['inst_admin_pw_d'].'</span></td>'."\n";
-		$output .= '<td class="admintab-r"><input type="password" name="admin_pw" value="" size="40" id="admin-pw" /></td>'."\n";
+		$output .= '<td class="admintab-r"><input type="password" name="admin_pw" value="" size="40" id="admin-pw"></td>'."\n";
 		$output .= '</tr><tr>'."\n";
-		$output .= '<td class="admintab-l"><label for="admin-pw-confirm">'.$lang_add['inst_admin_pw_conf'].'</label><br />';
+		$output .= '<td class="admintab-l"><label for="admin-pw-confirm">'.$lang_add['inst_admin_pw_conf'].'</label><br>';
 		$output .= '<span class="small">'.$lang_add['inst_admin_pw_conf_d'].'</span></td>'."\n";
-		$output .= '<td class="admintab-r"><input type="password" name="admin_pw_conf" value="" size="40" id="admin-pw-confirm" /></td>'."\n";
+		$output .= '<td class="admintab-r"><input type="password" name="admin_pw_conf" value="" size="40" id="admin-pw-confirm"></td>'."\n";
 		$output .= '</tr>'."\n";
 		$output .= '</table>'."\n";
 		$output .= '</fieldset>'."\n";
@@ -565,48 +565,48 @@ if (empty($installed))
 		$output .= '<ul>'."\n";
 		$output .= '<li><input type="checkbox" name="create_database" id="create-db-1" value="true"';
 		$output .= (isset($_POST['create_database'])) ? ' checked="checked"' : '';
-		$output .= ' /><label for="create-db-1">'.$lang_add['create_database'].'</label></li>'."\n";
+		$output .= '><label for="create-db-1">'.$lang_add['create_database'].'</label></li>'."\n";
 		$output .= '<li><input type="checkbox" name="dont_overwrite_settings" id="create-db-0" value="true"';
 		$output .= (isset($_POST['dont_overwrite_settings'])) ? ' checked="checked"' : '';
 		$output .= '><label for="create-db-0">'.$lang_add['dont_overwrite_settings'].'</label></li>'."\n";
 		$output .= '</ul>'."\n";
 		$output .= '<table class="admintab">'."\n";
 		$output .= '<tr>'."\n";
-		$output .= '<td class="admintab-l"><label for="db-host">'.$lang_add['inst_db_host'].'</label><br />';
+		$output .= '<td class="admintab-l"><label for="db-host">'.$lang_add['inst_db_host'].'</label><br>';
 		$output .= '<span class="small">'.$lang_add['inst_db_host_d'].'</span></td>'."\n";
 		$output .= '<td class="admintab-r"><input type="text" name="host" value="';
 		$output .= (isset($_POST['host'])) ? htmlspecialchars($_POST['host']) : $db_settings['host'];
-		$output .= '" size="40" id="db-host" /></td>'."\n";
+		$output .= '" size="40" id="db-host"></td>'."\n";
 		$output .= '</tr><tr>'."\n";
-		$output .= '<td class="admintab-l"><label for="db-name">'.$lang_add['inst_db_name'].'</label><br />';
+		$output .= '<td class="admintab-l"><label for="db-name">'.$lang_add['inst_db_name'].'</label><br>';
 		$output .= '<span class="small">'.$lang_add['inst_db_name_d'].'</span></td>'."\n";
 		$output .= '<td class="admintab-r"><input type="text" name="db" value="';
 		$output .= (isset($_POST['db'])) ? htmlspecialchars($_POST['db']) : $db_settings['db'];
-		$output .= '" size="40" id="db-name" /></td>'."\n";
+		$output .= '" size="40" id="db-name"></td>'."\n";
 		$output .= '</tr><tr>'."\n";
-		$output .= '<td class="admintab-l"><label for="db-user">'.$lang_add['inst_db_user'].'</label><br />';
+		$output .= '<td class="admintab-l"><label for="db-user">'.$lang_add['inst_db_user'].'</label><br>';
 		$output .= '<span class="small">'.$lang_add['inst_db_user_d'].'</span></td>'."\n";
 		$output .= '<td class="admintab-r"><input type="text" name="user" value="';
 		$output .= (isset($_POST['user'])) ? htmlspecialchars($_POST['user']) : $db_settings['user'];
-		$output .= '" size="40" id="db-user" /></td>'."\n";
+		$output .= '" size="40" id="db-user"></td>'."\n";
 		$output .= '</tr><tr>'."\n";
-		$output .= '<td class="admintab-l"><label for="db-pass">'.$lang_add['inst_db_pw'].'</label><br />';
+		$output .= '<td class="admintab-l"><label for="db-pass">'.$lang_add['inst_db_pw'].'</label><br>';
 		$output .= '<span class="small">'.$lang_add['inst_db_pw_d'].'</span></td>'."\n";
 		$output .= '<td class="admintab-r"><input type="password" name="pw" value="';
 		$output .= (isset($_POST['pw'])) ? htmlspecialchars($_POST['pw']) : '';
-		$output .= '" size="40" id="db-pass" /></td>'."\n";
+		$output .= '" size="40" id="db-pass"></td>'."\n";
 		$output .= '</tr><tr>'."\n";
-		$output .= '<td class="admintab-l"><label for="db-prefix">'.$lang_add['inst_table_prefix'].'</b><br />';
+		$output .= '<td class="admintab-l"><label for="db-prefix">'.$lang_add['inst_table_prefix'].'</b><br>';
 		$output .= '<span class="small">'.$lang_add['inst_table_prefix_d'].'</span></td>'."\n";
 		$output .= '<td class="admintab-r"><input type="text" name="table_prefix" value="';
 		$output .= (isset($_POST['table_prefix'])) ? htmlspecialchars($_POST['table_prefix']) : $table_prefix;
-		$output .= '" size="40" id="db-prefix" /></td>'."\n";
+		$output .= '" size="40" id="db-prefix"></td>'."\n";
 		$output .= '</tr>'."\n";
 		$output .= '</table>'."\n";
 		$output .= '</fieldset>'."\n";
-		$output .= '<p><input type="submit" name="form_submitted" value="'.$lang_add['forum_install_ok'].'" /></p>'."\n";
-		$output .= '<input type="hidden" name="language" value="'.$language.'" />'."\n";
-		$output .= '<input type="hidden" name="installation_mode" value="installation" />'."\n";
+		$output .= '<p><input type="submit" name="form_submitted" value="'.$lang_add['forum_install_ok'].'"></p>'."\n";
+		$output .= '<input type="hidden" name="language" value="'.$language.'">'."\n";
+		$output .= '<input type="hidden" name="installation_mode" value="installation">'."\n";
 		$output .= '</form>'."\n";
 		}
 	}
@@ -618,10 +618,10 @@ else
 	}
 
 
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang['language']; ?>">
+?><!DOCTYPE html>
+<html lang="<?php echo $lang['language']; ?>">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta charset="UTF-8">
 <title><?php echo $lang_add['install_title']; ?></title>
 <style type="text/css">
 <!--

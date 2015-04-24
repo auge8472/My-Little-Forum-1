@@ -9,12 +9,12 @@ if (isset($_COOKIE['user_place'])) { setcookie("user_place","",0); $cookies_set 
 
 $wo = $lang['del_cookie_title'];
 
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang['language']; ?>">
+?><!DOCTYPE html>
+<html lang="<?php echo $lang['language']; ?>">
 <head>
 <title><?php echo $lang['del_cookie_title']; ?></title>
-<meta http-equiv="content-type" content="text/html; charset=<?php echo $lang['charset']; ?>" />
-<link rel="stylesheet" type="text/css" href="style.css" media="all" />
+<meta http-equiv="content-type" content="text/html; charset=<?php echo $lang['charset']; ?>">
+<link rel="stylesheet" type="text/css" href="style.css" media="all">
 </head>
 <body id="deletecookie">
 <h1><?php echo $lang['del_cookie_title']; ?></h1>

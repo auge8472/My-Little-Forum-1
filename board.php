@@ -243,12 +243,12 @@ if($settings['access_for_users_only']  == 1
 			$tips = '';
 			if ($zeile["fixed"] == 1)
 				{
-				$tips .= ' <img src="img/fixed.png" width="9" height="9" title="'. outputLangDebugInAttributes($lang['fixed']) .'" alt="*" />';
+				$tips .= ' <img src="img/fixed.png" width="9" height="9" title="'. outputLangDebugInAttributes($lang['fixed']) .'" alt="*">';
 				}
 			if ($settings['all_views_direct'] == 1)
 				{
 				$Targets = array('{Target}', '{Query}', '{Image}', '{Alt}', '{Title}');
-				$otherViews = '<a href="{Target}{Query}"><img src="{Image}" alt="{Alt}" title="{Title}" width="12" height="9" /></a>';
+				$otherViews = '<a href="{Target}{Query}"><img src="{Image}" alt="{Alt}" title="{Title}" width="12" height="9"></a>';
 				$tips .= ' <span class="small">';
 				if ($settings['thread_view']==1)
 					{

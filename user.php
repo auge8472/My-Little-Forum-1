@@ -577,7 +577,7 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 						# subscription to a posting
 						if ($vCont[0] === "posting")
 							{
-							# <input type="radio" name="id-235" value="posting-235-214" />
+							# <input type="radio" name="id-235" value="posting-235-214">
 							# delete thread subscription where a posting subscription is setted
 							$changeThreadSubscribeQuery = "DELETE ". $db_settings['usersubscripts_table'] ."
 							WHERE tid = ". intval($vCont[2]) ."
@@ -592,7 +592,7 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 						# subscription to a thread
 						else if ($vCont[0] === "thread")
 							{
-							# <input type="radio" name="id-214" value="thread-214-214" />
+							# <input type="radio" name="id-214" value="thread-214-214">
 							# delete posting subscriptions where the whole thread should be subscribed
 							$updateSubscribeQuery = "UPDATE ". $db_settings['forum_table'] ." SET
 							email_notify = 0
@@ -608,8 +608,8 @@ else if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 							}
 						else if ($vCont[0] === "none")
 							{
-							# <input type="radio" name="id-235" value="none-235-214" />
-							# <input type="radio" name="id-214" value="none-214-214" />
+							# <input type="radio" name="id-235" value="none-235-214">
+							# <input type="radio" name="id-214" value="none-214-214">
 							# delete every possible subscription where subscription is setted to "none"
 							$getSearchPostingSubscriptionQuery = "SELECT
 							email_notify
@@ -799,7 +799,7 @@ if ($action == "show users")
 		$subnav_2 .= '>'.$letter.'</option>'."\n";
 		}
 	$subnav_2 .= '</select>&nbsp;<input type="image" name="" value=""';
-	$subnav_2 .= ' src="img/submit.png" alt="&raquo;" /></form>'."\n";
+	$subnav_2 .= ' src="img/submit.png" alt="&raquo;"></form>'."\n";
 	$subnav_2 .= nav($page, $settings['users_per_page'], $thread_count, $order, $descasc, $category);
 	}
 
@@ -870,7 +870,7 @@ switch ($action)
 				$output .= '  <td><a href="contact.php?uid='. $field['user_id'] .'">';
 				$output .= '<img src="img/email.png" alt="'. outputLangDebugInAttributes($lang['email_alt']) .'" title="';
 				$output .= str_replace('[name]', htmlspecialchars($field['user_name']), outputLangDebugInAttributes($lang['email_to_user_linktitle']));
-				$output .= '" width="13" height="10" /></a></td>'."\n";
+				$output .= '" width="13" height="10"></a></td>'."\n";
 				$output .= ' </tr>';
 				}
 			if ($field["user_hp"]!="")
@@ -881,7 +881,7 @@ switch ($action)
 				$output .= '  <td><a href="'.$field['user_hp'].'">';
 				$output .= '<img src="img/homepage.png" alt="';
 				$output .= outputLangDebugInAttributes($lang['homepage_alt']) .'" title="'. htmlspecialchars($field['user_hp']);
-				$output .= '" width="13" height="13" /></a></td>'."\n";
+				$output .= '" width="13" height="13"></a></td>'."\n";
 				$output .= ' </tr>';
 				}
 			if ($field["user_place"]!=="")
@@ -1002,17 +1002,17 @@ switch ($action)
 						{
 						$output .= '<input type="text" name="usersetting['. $allSet['name'] .']" value="';
 						$output .= (!empty($set)) ? htmlspecialchars($set) : htmlspecialchars($allSet['value']);
-						$output .= '" id="'. $allSet['name'] .'" />'."\n";
+						$output .= '" id="'. $allSet['name'] .'">'."\n";
 						}
 					else
 						{
 						$output .= '<input type="radio" name="usersetting['. $allSet['name'] .']" value="false"';
 						$output .= (empty($set) or $set == 'false') ? ' checked="checked"' : '';
-						$output .= ' id="'. $allSet['name'] .'-no" /><label for="'. $allSet['name'] .'-no">';
+						$output .= ' id="'. $allSet['name'] .'-no"><label for="'. $allSet['name'] .'-no">';
 						$output .= $lang['no'] .'</label>'."\n";
 						$output .= '<input type="radio" name="usersetting['. $allSet['name'] .']" value="true"';
 						$output .= (!empty($set) and $set == 'true') ? ' checked="checked"' : '';
-						$output .= ' id="'. $allSet['name'] .'-yes" /><label for="'. $allSet['name'] .'-yes">';
+						$output .= ' id="'. $allSet['name'] .'-yes"><label for="'. $allSet['name'] .'-yes">';
 						$output .= $lang['yes'] .'</label>'."\n";
 						}
 					$output .= '</td>'."\n";
@@ -1020,9 +1020,9 @@ switch ($action)
 					}
 				}
 			$output .= "\n".'</table>'."\n";
-			$output .= '<p><input type="hidden" name="action" value="submit usersettings" />';
+			$output .= '<p><input type="hidden" name="action" value="submit usersettings">';
 			$output .= '<input type="submit" name="us-submit" value="';
-			$output .= outputLangDebugInAttributes($lang['userdata_subm_button']) .'" /></p>';
+			$output .= outputLangDebugInAttributes($lang['userdata_subm_button']) .'"></p>';
 			$output .= '</form>'."\n";
 			mysql_free_result($all_settings);
 			}
@@ -1123,7 +1123,7 @@ switch ($action)
 					$output .= '<a href="contact.php?uid='.$field['user_id'].'"><img src="img/email.png"';
 					$output .= ' alt="'.outputLangDebugInAttributes($lang['email_alt']).'" title="';
 					$output .= str_replace("[name]", htmlspecialchars($field["user_name"]), outputLangDebugInAttributes($lang['email_to_user_linktitle']));
-					$output .= '" width="13" height="10" /></a>';
+					$output .= '" width="13" height="10"></a>';
 					}
 				else $output .= "&nbsp;";
 				$output .= '</td>'."\n";
@@ -1133,7 +1133,7 @@ switch ($action)
 					$field["user_hp"] = amendProtocol($field["user_hp"]);
 					$output .= '<a href="'.$field["user_hp"].'"><img src="img/homepage.png" alt="';
 					$output .= outputLangDebugInAttributes($lang['homepage_alt']).'" title="';
-					$output .= htmlspecialchars($field["user_hp"]).'" width="13" height="13" /></a>'."\n";
+					$output .= htmlspecialchars($field["user_hp"]).'" width="13" height="13"></a>'."\n";
 					}
 				else $output .= "&nbsp;";
 				$output .= '</td>'."\n";
@@ -1236,41 +1236,41 @@ switch ($action)
 		$output .= '&nbsp;&nbsp;<span class="small">[ <a class="sln" href="user.php?';
 		$output .= 'action=email">'. $lang['edit_email_ln'] .'</a> ]</span></td>'."\n";
 		$output .= ' </tr><tr>'."\n";
-		$output .= '  <td><b>'.$lang['user_show_email'].'</b><br />';
+		$output .= '  <td><b>'.$lang['user_show_email'].'</b><br>';
 		$output .= '<span class="info">'.$lang['user_show_email_exp'].'</span></td>'."\n";
 		$output .= '  <td><input type="radio" name="hide_email" id="hidemail-0" value="0"';
 		$output .= ($hide_email=="0") ? ' checked="checked"' : '';
-		$output .= '><label for="hidemail-0">'.$lang['yes'].'</label><br />';
+		$output .= '><label for="hidemail-0">'.$lang['yes'].'</label><br>';
 		$output .= '<input type="radio" name="hide_email" id="hidemail-1" value="1"';
 		$output .= ($hide_email=="1") ? ' checked="checked"' : '';
 		$output .= '><label for="hidemail-1">'.$lang['no'].'</label></td>'."\n";
 		$output .= ' </tr><tr>'."\n";
-		$output .= '  <td><label for="real-name">'.$lang['user_real_name'].'</label><br />';
+		$output .= '  <td><label for="real-name">'.$lang['user_real_name'].'</label><br>';
 		$output .= '<span class="info">'.$lang['optional_marking'].'</span></td>'."\n";
 		$output .= '  <td><input type="text" size="40" name="user_real_name" value="';
 		$output .= htmlspecialchars($user_real_name).'" maxlength="';
-		$output .= $settings['name_maxlength'].'" id="real-name" /></td>'."\n";
+		$output .= $settings['name_maxlength'].'" id="real-name"></td>'."\n";
 		$output .= ' </tr><tr>'."\n";
-		$output .= '  <td><label for="homepage">'.$lang['user_hp'].'</label><br />';
+		$output .= '  <td><label for="homepage">'.$lang['user_hp'].'</label><br>';
 		$output .= '<span class="info">'.$lang['optional_marking'].'</span></td>'."\n";
 		$output .= '  <td><input type="text" size="40" name="user_hp" value="';
 		$output .= htmlspecialchars($user_hp).'" maxlength="';
-		$output .= $settings['hp_maxlength'].'" id="homepage" /></td>'."\n";
+		$output .= $settings['hp_maxlength'].'" id="homepage"></td>'."\n";
 		$output .= ' </tr><tr>'."\n";
-		$output .= '  <td><label for="userplace">'.$lang['user_place'].'</label><br />';
+		$output .= '  <td><label for="userplace">'.$lang['user_place'].'</label><br>';
 		$output .= '<span class="info">'.$lang['optional_marking'].'</span></td>'."\n";
 		$output .= '  <td><input type="text" size="40" name="user_place" value="';
 		$output .= htmlspecialchars($user_place).'" maxlength="';
-		$output .= $settings['place_maxlength'].'" id="userplace" /></td>'."\n";
+		$output .= $settings['place_maxlength'].'" id="userplace"></td>'."\n";
 		$output .= ' </tr><tr>'."\n";
-		$output .= '  <td><label for="userprofile">'.$lang['user_profile'].'</label><br />';
-		$output .= '<span class="info">'.$lang['user_profile_exp'].'<br />';
+		$output .= '  <td><label for="userprofile">'.$lang['user_profile'].'</label><br>';
+		$output .= '<span class="info">'.$lang['user_profile_exp'].'<br>';
 		$output .= $lang['optional_marking'].'</span></td>'."\n";
 		$output .= '  <td><textarea cols="65" rows="10" name="profile" id="userprofile">';
 		$output .= htmlspecialchars($profile).'</textarea></td>'."\n";
 		$output .= ' </tr><tr>'."\n";
-		$output .= '  <td><label for="usersignature">'.$lang['user_signature'].'</label><br />';
-		$output .= '<span class="info">'.$lang['user_sig_exp'].'<br />';
+		$output .= '  <td><label for="usersignature">'.$lang['user_signature'].'</label><br>';
+		$output .= '<span class="info">'.$lang['user_sig_exp'].'<br>';
 		$output .= $lang['optional_marking'].'</span></td>'."\n";
 		$output .= '  <td><textarea cols="65" rows="4" name="signature" id="usersignature">';
 		$output .= htmlspecialchars($signature).'</textarea></td>'."\n";
@@ -1289,34 +1289,34 @@ switch ($action)
 				{
 				$output .= '<input type="radio" name="user_view" value="thread" id="view-thread"';
 				$output .= ($user_view=="thread") ? ' checked="checked"' : '';
-				$output .= ' /><label for="view-thread">'.$lang['thread_view_linkname'].'</label><br />'."\n";
+				$output .= '><label for="view-thread">'.$lang['thread_view_linkname'].'</label><br>'."\n";
 				}
 			if ($settings['board_view'] == 1)
 				{
 				$output .= '<input type="radio" name="user_view" value="board" id="view-board"';
 				$output .= ($user_view=="board") ? ' checked="checked"' : '';
-				$output .= ' /><label for="view-board">'.$lang['board_view_linkname'].'</label><br />'."\n";
+				$output .= '><label for="view-board">'.$lang['board_view_linkname'].'</label><br>'."\n";
 				}
 			if ($settings['mix_view'] == 1)
 				{
 				$output .= '<input type="radio" name="user_view" value="mix" id="view-mix"';
 				$output .= ($user_view=="mix") ? ' checked="checked"' : '';
-				$output .= ' /><label for="view-mix">'.$lang['mix_view_linkname']."</label>\n";
+				$output .= '><label for="view-mix">'.$lang['mix_view_linkname']."</label>\n";
 				}
 			$output .= '</td>'."\n";
 			$output .= ' </tr>'."\n";
 			}
 		$output .= '<tr>'."\n";
-		$output .= '  <td>'.$lang['user_pers_msg'].'<br />';
+		$output .= '  <td>'.$lang['user_pers_msg'].'<br>';
 		$output .= '<span class="info">'.$lang['user_pers_msg_exp'].'</span></td>'."\n";
 		$output .= '  <td><input type="radio" name="personal_messages" value="1" id="persmess-1"';
 		$output .= ($personal_messages=="1") ? ' checked="checked"' : '';
-		$output .= ' /><label for="persmess-1">'.$lang['user_pers_msg_act'].'</label><br />'."\n";
+		$output .= '><label for="persmess-1">'.$lang['user_pers_msg_act'].'</label><br>'."\n";
 		$output .= '<input type="radio" name="personal_messages" value="0" id="persmess-0"';
 		$output .= ($personal_messages=="0") ? ' checked="checked"' : '';
 		$output .= '><label for="persmess-0">'.$lang['user_pers_msg_deact'].'</label></td>'."\n";
 		$output .= ' </tr><tr>'."\n";
-		$output .= '  <td><label for="timediff">'.$lang['user_time_diff'].'</label><br />';
+		$output .= '  <td><label for="timediff">'.$lang['user_time_diff'].'</label><br>';
 		$output .= '<span class="info">'.$lang['user_time_diff_exp'].'</span></td>'."\n";
 		$output .= '  <td><select name="user_time_difference" size="1" id="timediff">'."\n";
 		for ($h = -24; $h <= 24; $h++)
@@ -1331,24 +1331,24 @@ switch ($action)
 		if ($user_type=="admin" || $user_type=="mod")
 			{
 			$output .= '<tr>'."\n";
-			$output .= '  <td>'.$lang['admin_mod_notif'].'<br />';
+			$output .= '  <td>'.$lang['admin_mod_notif'].'<br>';
 			$output .= '<span class="info">'.$lang['admin_mod_notif_exp'].'</span></td>'."\n";
 			$output .= '  <td><input type="checkbox" name="new_posting_notify" value="1"';
 			$output .= ($new_posting_notify=="1") ? ' checked="checked"' : '';
-			$output .= ' id="notice-post" /><label for="notice-post">'.$lang['admin_mod_notif_np'].'</label><br />';
+			$output .= ' id="notice-post"><label for="notice-post">'.$lang['admin_mod_notif_np'].'</label><br>';
 			$output .= '<input type="checkbox" name="new_user_notify" value="1"';
 			$output .= ($new_user_notify=="1") ? ' checked="checked"' : '';
-			$output .= ' id="notice-user" /><label for="notice-user">'.$lang['admin_mod_notif_nu'].'</label></td>'."\n";
+			$output .= ' id="notice-user"><label for="notice-user">'.$lang['admin_mod_notif_nu'].'</label></td>'."\n";
 			}
 		$output .= ' </tr>'."\n".'</table>'."\n";
 		$output .= '<p><input type="submit" name="userdata_submit" value="';
-		$output .= outputLangDebugInAttributes($lang['userdata_subm_button']).'" /></p></form>'."\n";
+		$output .= outputLangDebugInAttributes($lang['userdata_subm_button']).'"></p></form>'."\n";
 		if ($settings['bbcode'] == 1)
 			{
 			$output .= '<p class="xsmall">'.$lang['bbcode_marking_user'];
 			if ($settings['bbcode_img']==1)
 				{
-				$output .= '<br />'.$lang['bbcode_img_marking_user'];
+				$output .= '<br>'.$lang['bbcode_img_marking_user'];
 				}
 			$output .= '</p>'."\n";
 			}
@@ -1386,11 +1386,11 @@ switch ($action)
 			$output .= errorMessages($errors);
 			}
 		$output .= '<form action="user.php" method="post">'."\n";
-		$output .= ' <p><label for="new-email">'.$lang['new_email'].'</label><br />'."\n";
+		$output .= ' <p><label for="new-email">'.$lang['new_email'].'</label><br>'."\n";
 		$output .= '<input type="text" size="25" name="new_email" id="new-email" value="';
 		$output .= (isset($new_email)) ? htmlspecialchars($new_email) : '';
 		$output .= '" maxlength="'.$settings['email_maxlength'].'"></p>'."\n";
-		$output .= ' <p><label for="pw-email">'.$lang['password_marking'].'</label><br />'."\n";
+		$output .= ' <p><label for="pw-email">'.$lang['password_marking'].'</label><br>'."\n";
 		$output .= '<input type="password" size="25" name="pw_new_email" id="pw-email" maxlength="50"></p>'."\n";
 		$output .= ' <p><input type="submit" name="change_email_submit" value="';
 		$output .= outputLangDebugInAttributes($lang['userdata_subm_button']).'"></p>'."\n";
@@ -1411,18 +1411,18 @@ switch ($action)
 		if ($field["personal_messages"] == 1)
 			{
 			$output .= '<form action="'.$_SERVER["SCRIPT_NAME"].'" method="post"><div>'."\n";
-			$output .= '<input type="hidden" name="action" value="pm_sent" />'."\n";
-			$output .= '<input type="hidden" name="recipient_id" value="'.intval($id).'" />'."\n";
-			$output .= ' <p><label for="mess-subject">'.$lang['pers_msg_sj'].'</label><br />'."\n";
+			$output .= '<input type="hidden" name="action" value="pm_sent">'."\n";
+			$output .= '<input type="hidden" name="recipient_id" value="'.intval($id).'">'."\n";
+			$output .= ' <p><label for="mess-subject">'.$lang['pers_msg_sj'].'</label><br>'."\n";
 			$output .= '<input class="fs" type="text" name="pm_subject" value="';
 			$output .= (isset($_POST['pm_subject'])) ? htmlspecialchars($_POST['pm_subject']) : '';
-			$output .= '" size="50" id="mess-subject" /></p>'."\n";
-			$output .= ' <p><label for="mess-text">'.$lang['pers_msg_txt'].'</label><br />'."\n";
+			$output .= '" size="50" id="mess-subject"></p>'."\n";
+			$output .= ' <p><label for="mess-text">'.$lang['pers_msg_txt'].'</label><br>'."\n";
 			$output .= '<textarea name="pm_text" id="mess-text" cols="60" rows="15">';
 			$output .= (isset($_POST['pm_text'])) ? htmlspecialchars($_POST['pm_text']) : '';
 			$output .= '</textarea></p>'."\n";
 			$output .= ' <p><input type="submit" name="pm_ok" value="';
-			$output .= outputLangDebugInAttributes($lang['pers_msg_subm_button']).'" /></p>';
+			$output .= outputLangDebugInAttributes($lang['pers_msg_subm_button']).'"></p>';
 			$output .= '</div></form>'."\n";
 			}
 		else
@@ -1522,13 +1522,13 @@ switch ($action)
 					$output .= '<input type="radio" name="id-'.$row['id'].'" value="posting-'.$row['id'].'-'.$row['tid'].'"';
 					$output .= ($row['email_notify'] == 1) ? ' checked="checked"' : '';
 					$output .= ($row['thread_notify'] == 1) ? ' disabled="disabled"' : '';
-					$output .= ' />';
+					$output .= '>';
 					$output .= '</td><td>';
 					$output .= '<input type="radio" name="id-'.$row['id'].'" value="thread-'.$row['id'].'-'.$row['tid'].'"';
 					$output .= ($row['thread_notify'] == 1) ? ' checked="checked"' : '';
-					$output .= ' />';
+					$output .= '>';
 					$output .= '</td><td>'."\n";
-					$output .= '<input type="radio" name="id-'.$row['id'].'" value="none-'.$row['id'].'-'.$row['tid'].'" />';
+					$output .= '<input type="radio" name="id-'.$row['id'].'" value="none-'.$row['id'].'-'.$row['tid'].'">';
 					$output .= '</td>'."\n";
 					$output .= ' </tr>';
 					$i++;
@@ -1536,7 +1536,7 @@ switch ($action)
 				}
 			$output .= "\n".'</table>'."\n";
 			$output .= '<p><input type="submit" name="subscriptions_submit" value="';
-			$output .= outputLangDebugInAttributes($lang['userdata_subm_button']).'" /></p></form>'."\n";
+			$output .= outputLangDebugInAttributes($lang['userdata_subm_button']).'"></p></form>'."\n";
 			}
 		else
 			{

@@ -173,10 +173,10 @@ if(isset($_GET['uploaded_image_selected']))
 	$action = 'uploaded';
 	}
 
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+?><!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta charset="UTF-8">
 <title><?php echo strip_tags($lang['upload_image_title']); ?></title>
 <style type="text/css">
 <!--
@@ -302,7 +302,7 @@ switch($action)
 			}
 		echo '<p>'.$lang['upload_exp'].'</p>'."\n";
 		echo '<form action="'.$_SERVER['SCRIPT_NAME'].'" method="post" '."\n";
-		echo 'enctype="multipart/form-data"><input type="file" name="probe" />'."\n";
+		echo 'enctype="multipart/form-data"><input type="file" name="probe">'."\n";
 		echo '<input type="submit" value="'.outputLangDebugInAttributes($lang['upload_subm_button']).'">'."\n";
 		echo '</form>'."\n";
 		echo '<p>[ <a href="'.$_SERVER['PHP_SELF'].'?action=show_uploaded_images">';
@@ -325,15 +325,15 @@ switch($action)
 		echo '<p><button style="width:25px; height:25px;" title="'.outputLangDebugInAttributes($lang['insert_image_normal']);
 		echo '" onclick="insertCode(\'[img]'.$uploaded_images_path.$filename.'[/img]\');';
 		echo '"><img src="img/img_normal.png" alt="'.outputLangDebugInAttributes($lang['insert_image_normal']);
-		echo '" width="11" height="11" /></button>&nbsp;<button style="width:25px; height:25px;"';
+		echo '" width="11" height="11"></button>&nbsp;<button style="width:25px; height:25px;"';
 		echo ' title="'.outputLangDebugInAttributes($lang['insert_image_left']).'" onclick="insertCode(\'[img|left]';
 		echo $uploaded_images_path.$filename.'[/img]\');"><img';
 		echo ' src="img/img_left.png" alt="'.outputLangDebugInAttributes($lang['insert_image_left']).'" width="11" height="11"';
-		echo ' /></button>&nbsp;<button style="width:25px; height:25px;" title="';
+		echo '></button>&nbsp;<button style="width:25px; height:25px;" title="';
 		echo outputLangDebugInAttributes($lang['insert_image_right']).'" onclick="insertCode(\'[img|right]';
 		echo $uploaded_images_path.$filename.'[/img]\');"><img';
 		echo ' src="img/img_right.png" alt="'.outputLangDebugInAttributes($lang['insert_image_right']).'" width="11"';
-		echo ' height="11" /></button></p>'."\n";
+		echo ' height="11"></button></p>'."\n";
 	break;
 	case 'show_uploaded_images':
 		$p = isset($_GET['p']) ? intval($_GET['p']) : 1;
@@ -373,7 +373,7 @@ switch($action)
 			echo '[ <a href="'.$_SERVER['SCRIPT_NAME'].'?action=show_uploaded_images';
 			echo '&amp;p='.$pageUp.'">&raquo;</a> ] ';
 			}
-		echo '<hr /><p>';
+		echo '<hr><p>';
 		if ($images_count > 0)
 			{
 			for ($i=$show_images_from; $i<$show_images_to; $i++)

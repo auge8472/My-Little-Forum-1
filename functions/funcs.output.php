@@ -44,7 +44,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 	{
 	$ref = (!empty($refer)) ? '&amp;refer='.$refer : '';
 	$r .= '<div class="marked-threads">'."\n";
-	$r .= ' <h2><img src="img/marked.png" alt="[x]" width="9" height="9" /> ';
+	$r .= ' <h2><img src="img/marked.png" alt="[x]" width="9" height="9">';
 	$r .= $lang['marked_threads_actions'].'</h2>'."\n";
 	$r .= ' <ul>'."\n";
 	$r .= '  <li><a href="admin.php?action=delete_marked_threads'.$ref.'"><span class="fa fa-trash-o"></span>';
@@ -98,7 +98,7 @@ if($categories !== false
 			$r .= '>'. $val .'</option>'."\n";
 			}
 		}
-	$r .= '</select>'."\n".'<noscript><p class="inline-form"> <input type="image" name="" value="" src="img/submit.png" alt="&raquo;" /></p></noscript></div>'."\n".'</form>'."\n";
+	$r .= '</select>'."\n".'<noscript><p class="inline-form"> <input type="image" name="" value="" src="img/submit.png" alt="&raquo;"></p></noscript></div>'."\n".'</form>'."\n";
 	}
 
 return $r;
@@ -243,7 +243,7 @@ if ($entry["hp"] != "")
 	{
 	$email_hp .= '<a href="'. amendProtocol($entry["hp"]) .'" title="';
 	$email_hp .= htmlspecialchars($entry["hp"]) .'"><img src="img/homepage.png" ';
-	$email_hp .= 'alt="'. outputLangDebugInAttributes($lang['homepage_alt']) .'" width="13" height="13" /></a>';
+	$email_hp .= 'alt="'. outputLangDebugInAttributes($lang['homepage_alt']) .'" width="13" height="13"></a>';
 	}
 if (($entry["email"] != ""
 	&& $entry["hide_email"] != 1)
@@ -263,7 +263,7 @@ if (($entry["email"] != ""
 	$email_hp .= '<a href="contact.php?id='. $entry["posters_id"];
 	$email_hp .= '" rel="nofollow" title="';
 	$email_hp .= str_replace("[name]", htmlspecialchars($entry['name']), outputLangDebugInAttributes($lang['email_to_user_linktitle'])) .'">';
-	$email_hp .= '<img src="img/email.png" alt="'. outputLangDebugInAttributes($lang['email_alt']) .'" width="13" height="10" /></a>';
+	$email_hp .= '<img src="img/email.png" alt="'. outputLangDebugInAttributes($lang['email_alt']) .'" width="13" height="10"></a>';
 	}
 if ($entry["place"] != "")
 	{
@@ -308,33 +308,33 @@ if ($view == 'forum')
 	$authorstring = str_replace("[place]", $place, $authorstring);
 	$authorstring = str_replace("[time]", $entry["posting_time"], $authorstring);
 	$entryID = !empty($entryID) ? ' - '. $entryID : '';
-	$entryedit = (!empty($entryedit)) ? '<br />'. $entryedit : '';
+	$entryedit = (!empty($entryedit)) ? '<br>'. $entryedit : '';
 	$r .= $authorstring .'&nbsp;'. $entryIP.$answer.$entryID.$entryedit;
 	}
 else if ($view == 'board'
 	or $view == 'mix')
 	{
-	$place = (!empty($place)) ? '<br />'. $place : '';
-	$entryedit = (!empty($entryedit)) ? '<br />'. $entryedit : '';
+	$place = (!empty($place)) ? '<br>'. $place : '';
+	$entryedit = (!empty($entryedit)) ? '<br>'. $entryedit : '';
 	if (!empty($entryIP)
 		or !empty($entryID)
 		or !empty($answer))
 		{
-		$separator = '<br /><br />';
+		$separator = '<br><br>';
 		if (!empty($entryIP))
 			{
-			$entryID = (!empty($entryID)) ? '<br /><br />'.$entryID : '';
-			$answer = (!empty($answer)) ? '<br />'.$answer : '';
+			$entryID = (!empty($entryID)) ? '<br><br>'.$entryID : '';
+			$answer = (!empty($answer)) ? '<br>'.$answer : '';
 			}
 		else
 			{
 			if (!empty($answer))
 				{
-				$entryID = (!empty($entryID)) ? '<br />'.$entryID : '';
+				$entryID = (!empty($entryID)) ? '<br>'.$entryID : '';
 				}
 			}
 		}
-	$r .= $uname .'<br />'."\n". $email_hp.$place ."\n<br />". $entry["posting_time"];
+	$r .= $uname .'<br>'."\n". $email_hp.$place ."\n<br>". $entry["posting_time"];
 	$r .= $entryedit.$separator.$entryIP.$answer.$entryID ."\n";
 	}
 else
@@ -400,7 +400,7 @@ if ($settings['show_registered'] == 1
 	and isset($_SESSION[$settings['session_prefix'].'user_id'])
 	and $user_id > 0)
 	{
-	$regimg .= '<img src="img/registered.png" alt="(R)" width="10" height="10" title="'. outputLangDebugInAttributes($lang['registered_user_title']) .'" />';
+	$regimg .= '<img src="img/registered.png" alt="(R)" width="10" height="10" title="'. outputLangDebugInAttributes($lang['registered_user_title']) .'">';
 	}
 
 $r .= $name.$regimg;
@@ -625,7 +625,7 @@ if ($t[$c]["pid"]==0
 	and (isset($t[$c]["fixed"])
 	and $t[$c]["fixed"] == 1))
 	{
-	$fixed = ' <img src="img/fixed.png" width="9" height="9" title="'. outputLangDebugInAttributes($lang['fixed']) .'" alt="*" />';
+	$fixed = ' <img src="img/fixed.png" width="9" height="9" title="'. outputLangDebugInAttributes($lang['fixed']) .'" alt="*">';
 	}
 else
 	{
@@ -641,7 +641,7 @@ if ($t[$c]["pid"] == 0
 		$otherViews .= '<a href="board_entry.php?id='. $t[$c]['tid'];
 		$otherViews .= ($category > 0) ? '&amp;category='. intval($category) : '';
 		$otherViews .= '&amp;view=board"><img src="img/board_d.png" alt="[Board]" title="';
-		$otherViews .= outputLangDebugInAttributes($lang['open_in_board_linktitle']) .'" width="12" height="9" /></a>';
+		$otherViews .= outputLangDebugInAttributes($lang['open_in_board_linktitle']) .'" width="12" height="9"></a>';
 		}
 	if ($settings['mix_view'] == 1
 		and $v != 'mix')
@@ -649,7 +649,7 @@ if ($t[$c]["pid"] == 0
 		$otherViews .= '<a href="mix_entry.php?id='. $t[$c]['tid'];
 		$otherViews .= ($category > 0) ? '&amp;category='. intval($category) : '';
 		$otherViews .= '&amp;view=mix"><img src="img/mix_d.png" alt="[Mix]" title="';
-		$otherViews .= outputLangDebugInAttributes($lang['open_in_mix_linktitle']) .'" width="12" height="9" /></a>';
+		$otherViews .= outputLangDebugInAttributes($lang['open_in_mix_linktitle']) .'" width="12" height="9"></a>';
 		}
 	if ($settings['thread_view'] == 1
 		and $v != 'forum')
@@ -657,7 +657,7 @@ if ($t[$c]["pid"] == 0
 		$otherViews .= '<a href="forum_entry.php?id='. $t[$c]['tid'];
 		$otherViews .= ($category > 0) ? '&amp;category='. intval($category) : '';
 		$otherViews .= '&amp;view=forum"><img src="img/thread_d.png" alt="[Forum]" title="';
-		$otherViews .= outputLangDebugInAttributes($lang['open_in_thread_linktitle']) .'" width="12" height="9" /></a>';
+		$otherViews .= outputLangDebugInAttributes($lang['open_in_thread_linktitle']) .'" width="12" height="9"></a>';
 		}
 	}
 else
@@ -681,7 +681,7 @@ if ($t[$c]["pid"]==0
 		{
 		$otherViews .= 'img/mark.png" alt="[-]" title="'. outputLangDebugInAttributes($lang['mark_linktitle']) .'"';
 		}
-	$otherViews .= ' width="9" height="9" /></a>';
+	$otherViews .= ' width="9" height="9"></a>';
 	}
 
 # view
@@ -863,7 +863,7 @@ return $string;
  * @return string
  */
 function outputImageDescAsc($curr) {
-$r = !empty($curr) ? '&nbsp;<img src="img/'. $curr .'.png" alt="['. $curr .']" width="5" height="9" border="0" />' : '';
+$r = !empty($curr) ? '&nbsp;<img src="img/'. $curr .'.png" alt="['. $curr .']" width="5" height="9" border="0"' : '>';
 return $r;
 } # End outputImageDescAsc
 

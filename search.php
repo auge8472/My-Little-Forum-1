@@ -284,7 +284,7 @@ if (isset($search) && empty($show_postings))
 	{
 	echo '<form action="search.php" method="get" title="';
 	echo outputLangDebugInAttributes($lang['search_formtitle']) .'"><div class="search">'."\n";
-	echo '<input type="text" name="search" value="'. htmlspecialchars($search_match) .'" size="30" />'."\n";
+	echo '<input type="text" name="search" value="'. htmlspecialchars($search_match) .'" size="30">'."\n";
 	if ($categories != false)
 		{
 		echo '<select size="1" name="category">'."\n";
@@ -302,16 +302,16 @@ if (isset($search) && empty($show_postings))
 			}
 		echo '</select>'."\n";
 		}
-	echo '<input type="submit" name="" value="'. outputLangDebugInAttributes($lang['search_submit']) .'" /><br />'."\n";
+	echo '<input type="submit" name="" value="'. outputLangDebugInAttributes($lang['search_submit']) .'"><br>'."\n";
 	echo '<input type="radio" name="ao" value="and"';
 	echo ($ao == "and") ? ' checked="checked"' : '';
-	echo ' />'. $lang['search_and'] .'&nbsp;<input type="radio" class="search-radio"';
+	echo '>'. $lang['search_and'] .'&nbsp;<input type="radio" class="search-radio"';
 	echo ' name="ao" value="or"';
 	echo ($ao == "or") ? ' checked="checked"' : '';
-	echo ' />'. $lang['search_or'] .'&nbsp;<input type="radio" class="search-radio"';
+	echo '>'. $lang['search_or'] .'&nbsp;<input type="radio" class="search-radio"';
 	echo ' name="ao" value="phrase"';
 	echo ($ao == "phrase") ? ' checked="checked"' : '';
-	echo ' />'. $lang['search_phrase'] .'</div></form>'."\n";
+	echo '>'. $lang['search_phrase'] .'</div></form>'."\n";
 	}
 
 if ($count == 0 && $search != "")

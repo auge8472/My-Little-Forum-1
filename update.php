@@ -47,7 +47,7 @@ if ($sql["status"] === false)
 	{
 	# no contact to the database server
 	# generate error message
-	$errors[] = "MySQL error: ".$sql["errnbr"]."<br />".$lang_add['db_'.$sql["errnbr"]];
+	$errors[] = "MySQL error: ".$sql["errnbr"]."<br>".$lang_add['db_'.$sql["errnbr"]];
 	# status: no connection to database
 	$scriptStatus = 1;
 	$output .= "<p>The script can not contact the database server. The username, password or database name seems to be wrong.</p>";
@@ -224,23 +224,23 @@ else
 			$output .= '<h2>'.$lang_add['update_current_dbsettings'].'</h2>'."\n";
 			$output .= '<table class="admintab">'."\n";
 			$output .= ' <tr>'."\n";
-			$output .= '  <td class="definition">'.$lang_add['inst_db_host'].'<br />'."\n";
+			$output .= '  <td class="definition">'.$lang_add['inst_db_host'].'<br>'."\n";
 			$output .= '  <span class="small">'.$lang_add['inst_db_host_d'].'</span></td>'."\n";
 			$output .= '  <td class="description">'.$db_settings['host'].'</td>'."\n";
 			$output .= ' </tr><tr>'."\n";
-			$output .= '  <td class="definition">'.$lang_add['inst_db_name'].'<br />'."\n";
+			$output .= '  <td class="definition">'.$lang_add['inst_db_name'].'<br>'."\n";
 			$output .= '  <span class="small">'.$lang_add['inst_db_name_d'].'</span></td>'."\n";
 			$output .= '  <td class="description">'.$db_settings['db'].'</td>'."\n";
 			$output .= ' </tr><tr>'."\n";
-			$output .= '  <td class="definition">'.$lang_add['inst_db_user'].'<br />'."\n";
+			$output .= '  <td class="definition">'.$lang_add['inst_db_user'].'<br>'."\n";
 			$output .= '<span class="small">'.$lang_add['inst_db_user_d'].'</span></td>'."\n";
 			$output .= '  <td class="description">'.$db_settings['user'].'</td>'."\n";
 			$output .= ' </tr><tr>'."\n";
-			$output .= '  <td class="definition">'.$lang_add['inst_db_pw'].'<br />'."\n";
+			$output .= '  <td class="definition">'.$lang_add['inst_db_pw'].'<br>'."\n";
 			$output .= '  <span class="small">'.$lang_add['inst_db_pw_d'].'</span></td>'."\n";
 			$output .= '  <td class="description">'.$passWord.'</td>'."\n";
 			$output .= ' </tr><tr>'."\n";
-			$output .= '  <td class="definition">'.$lang_add['inst_table_prefix'].'<br />'."\n";
+			$output .= '  <td class="definition">'.$lang_add['inst_table_prefix'].'<br>'."\n";
 			$output .= '  <span class="small">'.$lang_add['inst_table_prefix_d'].'</span></td>'."\n";
 			$output .= '  <td class="description">'.$prefix.'</td>'."\n";
 			$output .= ' </tr>'."\n";
@@ -265,11 +265,11 @@ else
 			$output .= '<form action="update.php" method="post">'."\n";
 			$output .= '<table class="admintab">'."\n";
 			$output .= ' <tr>'."\n";
-			$output .= '  <td class="definition">'.$lang_add["delete_2char_smilies"].'<br />'."\n";
+			$output .= '  <td class="definition">'.$lang_add["delete_2char_smilies"].'<br>'."\n";
 			$output .= '  <span class="small">'.$lang_add['delete_2char_smilies_d'].'</td>'."\n";
 			$output .= '  <td class="description">'."\n";
-			$output .= '   <input type="radio" id="DeleteSmilies" name="DeleteSmilies" value="delete" checked="checked" /><label for="DeleteSmilies">'.$lang['yes'].'</label>'."\n";
-			$output .= '   <input type="radio" id="StoreSmilies" name="DeleteSmilies" value="store" /><label for="StoreSmilies">'.$lang['no'].'</label></td>'."\n";
+			$output .= '   <input type="radio" id="DeleteSmilies" name="DeleteSmilies" value="delete" checked="checked"><label for="DeleteSmilies">'.$lang['yes'].'</label>'."\n";
+			$output .= '   <input type="radio" id="StoreSmilies" name="DeleteSmilies" value="store"><label for="StoreSmilies">'.$lang['no'].'</label></td>'."\n";
 			$output .= ' </tr>'."\n";
 			$output .= '</table>'."\n";
 #			$output .= '<ul>';
@@ -277,10 +277,10 @@ else
 #			$output .= isset($_POST['dont_overwrite_settings']) ? ' checked="checked"' : '';
 #			$output .= '>'.$lang_add['dont_overwrite_settings'].'</li>';
 #			$output .= '</ul>';
-			$output .= '<p><input type="submit" name="form_submitted" value="'.$lang_add['forum_update_ok'].'" /></p>'."\n";
-			$output .= '<input type="hidden" name="language" value="'.$lang['language'].'" />'."\n";
-			$output .= '<input type="hidden" name="installation_mode" value="update" />'."\n";
-			$output .= '<input type="hidden" name="table_prefix" value="'.$prefix.'" />'."\n";
+			$output .= '<p><input type="submit" name="form_submitted" value="'.$lang_add['forum_update_ok'].'"></p>'."\n";
+			$output .= '<input type="hidden" name="language" value="'.$lang['language'].'">'."\n";
+			$output .= '<input type="hidden" name="installation_mode" value="update">'."\n";
+			$output .= '<input type="hidden" name="table_prefix" value="'.$prefix.'">'."\n";
 			$output .= '</form>'."\n";
 			} # End: if (isset($_POST['form_submitted'])) (else)
 		} # End: if (!is_array($oldSettings)) (else)
@@ -289,7 +289,7 @@ else
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang['language']; ?>">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title><?php echo $settings['forum_name']." - ".$lang_add['install_title']; ?></title>
 <style type="text/css">
 

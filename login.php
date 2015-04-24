@@ -382,18 +382,18 @@ switch ($action)
 				}
 			}
 		echo '<form action="'.$_SERVER['SCRIPT_NAME'].'" method="post"><div>'."\n";
-		echo '<label for="user-name">'.$lang['username_marking'].'</label><br />'."\n";
-		echo '<input type="text" name="username" id="user-name" /><br /><br />'."\n";
-		echo '<label for="user-pwd">'.$lang['password_marking'].'</label><br />'."\n";
-		echo '<input type="password" name="userpw" id="user-pwd" /><br /><br />'."\n";
+		echo '<label for="user-name">'.$lang['username_marking'].'</label><br>'."\n";
+		echo '<input type="text" name="username" id="user-name"><br><br>'."\n";
+		echo '<label for="user-pwd">'.$lang['password_marking'].'</label><br>'."\n";
+		echo '<input type="password" name="userpw" id="user-pwd"><br><br>'."\n";
 		if (isset($settings['autologin'])
 			&& $settings['autologin'] == 1)
 			{
-			echo '<input type="checkbox" name="autologin_checked" id="autologin" value="true" />'."\n";
+			echo '<input type="checkbox" name="autologin_checked" id="autologin" value="true">'."\n";
 			echo '<label for="autologin" class="small"> '.$lang['auto_login_marking'];
-			echo '</label><br /><br />'."\n";
+			echo '</label><br><br>'."\n";
 			}
-		echo '<input type="submit" value="'.outputLangDebugInAttributes($lang['login_submit_button']).'" />'."\n";
+		echo '<input type="submit" value="'.outputLangDebugInAttributes($lang['login_submit_button']).'">'."\n";
 		echo '</div></form>'."\n";
 		echo '<p>'.$lang['login_advice'].'</p>'."\n";
 		echo '<p><span class="small"><a href="'.$_SERVER['SCRIPT_NAME'].'?action=pw_forgotten">'."\n";
@@ -405,12 +405,12 @@ switch ($action)
 		echo '<p class="normal">'.$lang['pw_forgotten_exp'].'</p>'."\n";
 		echo '<form action="login.php" method="post">'."\n";
 		echo '<div>'."\n";
-		echo '<input type="hidden" name="action" value="pw_forgotten_ok" />'."\n";
-		echo '<label for="user-name">'.$lang['username_marking'].'</label><br />'."\n";
-		echo '<input type="text" name="pwf_username" id="user-name" /><br /><br />'."\n";
-		echo '<label for="user-email">'.$lang['user_email_marking'].'</label><br />'."\n";
-		echo '<input type="text" name="pwf_email" id="user-email" /><br /><br />'."\n";
-		echo '<input type="submit" value="'.outputLangDebugInAttributes($lang['submit_button_ok']).'" /></div>'."\n";
+		echo '<input type="hidden" name="action" value="pw_forgotten_ok">'."\n";
+		echo '<label for="user-name">'.$lang['username_marking'].'</label><br>'."\n";
+		echo '<input type="text" name="pwf_username" id="user-name"><br><br>'."\n";
+		echo '<label for="user-email">'.$lang['user_email_marking'].'</label><br>'."\n";
+		echo '<input type="text" name="pwf_email" id="user-email"><br><br>'."\n";
+		echo '<input type="submit" value="'.outputLangDebugInAttributes($lang['submit_button_ok']).'"></div>'."\n";
 		echo '</form>'."\n";
 	break;
 	}

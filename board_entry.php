@@ -52,7 +52,7 @@ if ($entry_count > $entries_per_page)
 		$output .= '&amp;descasc='.$descasc.'" title="';
 		$output .= outputLangDebugInAttributes($lang['previous_page_linktitle']).'"><img src="img/prev.png" alt="&laquo;"';
 		$output .= 'width="12" height="9" onmouseover="this.src=\'img/prev_mo.png\';"';
-		$output .= ' onmouseout="this.src=\'img/prev.png\';" /></a>';
+		$output .= ' onmouseout="this.src=\'img/prev.png\';"></a>';
 		}
 	if ($new_index_before >= 0 && $new_index_after < $countPages)
 		{
@@ -65,7 +65,7 @@ if ($entry_count > $entries_per_page)
 		$output .= '&amp;descasc='.$descasc.'" title="';
 		$output .= outputLangDebugInAttributes($lang['next_page_linktitle']).'"><img src="img/next.png" alt="&laquo;"';
 		$output .= 'width="12" height="9" onmouseover="this.src=\'img/next_mo.png\';"';
-		$output .= ' onmouseout="this.src=\'img/next.png\';" /></a>';
+		$output .= ' onmouseout="this.src=\'img/next.png\';"></a>';
 		}
 	$output .= '&nbsp;<form method="get" action="'.$_SERVER["SCRIPT_NAME"].'"';
 	$output .= ' title="'.outputLangDebugInAttributes($lang['choose_page_formtitle']).'">';
@@ -87,7 +87,7 @@ if ($entry_count > $entries_per_page)
 		$output .= ($be_page == $a) ? ' selected="selected"' : '';
 		$output .= '>'.($a + 1).'</option>'."\n";
 		}
-	$output .= '</select>'."\n".'<noscript><p class="inline-form">&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;" /></p></noscript>'."\n".'</div>'."\n".'</form>'."\n";
+	$output .= '</select>'."\n".'<noscript><p class="inline-form">&nbsp;<input type="image" name="" value="" src="img/submit.png" alt="&raquo;"></p></noscript>'."\n".'</div>'."\n".'</form>'."\n";
 	}
 return $output;
 } # End: nav_b

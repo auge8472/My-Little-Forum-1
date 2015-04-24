@@ -271,47 +271,47 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 		if(empty($_SESSION[$settings['session_prefix'].'user_id'])
 			&& $settings['captcha_contact']==1)
 			{
-			echo '<input type="hidden" name="'. session_name() .'" value="'. session_id() .'" />'."\n";
+			echo '<input type="hidden" name="'. session_name() .'" value="'. session_id() .'">'."\n";
 			}
 		if (isset($id))
 			{
-			echo '<input type="hidden" name="id" value="'. intval($id) .'" />'."\n";
+			echo '<input type="hidden" name="id" value="'. intval($id) .'">'."\n";
 			}
 		else if (isset($uid))
 			{
-			echo '<input type="hidden" name="uid" value="'. intval($uid) .'" />'."\n";
+			echo '<input type="hidden" name="uid" value="'. intval($uid) .'">'."\n";
 			}
 		if (isset($view))
 			{
-			echo '<input type="hidden" name="view" value="'. htmlspecialchars($view) .'" />'."\n";
+			echo '<input type="hidden" name="view" value="'. htmlspecialchars($view) .'">'."\n";
 			}
 		if (isset($forum_contact))
 			{
-			echo '<input type="hidden" name="forum_contact" value="'. $forum_contact .'" />'."\n";
+			echo '<input type="hidden" name="forum_contact" value="'. $forum_contact .'">'."\n";
 			}
 		if (isset($page) && isset($order) && isset($category) && isset($descasc))
 			{
-			echo '<input type="hidden" name="page" value="'. intval($page) .'" />'."\n";
-			echo '<input type="hidden" name="order" value="'. htmlspecialchars($order) .'" />'."\n";
-			echo '<input type="hidden" name="category" value="'. intval($category) .'" />'."\n";
-			echo '<input type="hidden" name="descasc" value="'. htmlspecialchars($descasc) .'" />'."\n";
+			echo '<input type="hidden" name="page" value="'. intval($page) .'">'."\n";
+			echo '<input type="hidden" name="order" value="'. htmlspecialchars($order) .'">'."\n";
+			echo '<input type="hidden" name="category" value="'. intval($category) .'">'."\n";
+			echo '<input type="hidden" name="descasc" value="'. htmlspecialchars($descasc) .'">'."\n";
 			}
 		echo '<table>'."\n";
 		echo '<tr>'."\n";
 		echo '<td><label for="sender_name">'. $lang['name_marking_msg'] .'</label></td>'."\n";
 		echo '<td><input type="text" name="sender_name" value="';
 		echo isset($sender_name) ? htmlspecialchars($sender_name) : "";
-		echo '" size="40" id="sender_name" /></td>'."\n";
+		echo '" size="40" id="sender_name"></td>'."\n";
 		echo '</tr><tr>'."\n";
 		echo '<td><label for="sender_email">'. $lang['email_marking_msg'] .'</label></td>'."\n";
 		echo '<td><input type="text" name="sender_email" value="';
 		echo isset($sender_email) ? htmlspecialchars($sender_email) : "";
-		echo '" size="40" id="sender_email" /></td>'."\n";
+		echo '" size="40" id="sender_email"></td>'."\n";
 		echo '</tr><tr>'."\n";
 		echo '<td><label for="subject">'. $lang['subject_marking'] .'</label></td>'."\n";
 		echo '<td><input type="text" name="subject" value="';
 		echo isset($subject) ? htmlspecialchars($subject) : "";
-		echo '" size="40" id="subject" /></td>'."\n";
+		echo '" size="40" id="subject"></td>'."\n";
 		echo '</tr><tr>'."\n";
 		echo '<td colspan="2"><textarea name="text" cols="60" rows="15">';
 		echo isset($text) ? htmlspecialchars($text) : "";
@@ -332,7 +332,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 				echo '</tr><tr>'."\n";
 				echo '<td colspan="2">'. $lang['captcha_expl_image'] .'</td>'."\n";
 				echo '</tr><tr>'."\n";
-				echo '<td colspan="2"><input type="text" name="captcha_code" value="" size="10" /></td>'."\n";
+				echo '<td colspan="2"><input type="text" name="captcha_code" value="" size="10"></td>'."\n";
 				echo '</tr>';
 				}
 			else
@@ -342,13 +342,13 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 				echo '</tr><tr>'."\n";
 				echo '<td colspan="2">'. $_SESSION['captcha_session'][0];
 				echo ' + '. $_SESSION['captcha_session'][1];
-				echo ' = <input type="text" name="captcha_code" value="" size="5" /></td>'."\n";
+				echo ' = <input type="text" name="captcha_code" value="" size="5"></td>'."\n";
 				echo '</tr>';
 				}
 			}
 		echo '</table>'."\n";
 		echo '<p><input type="submit" name="form_submitted" value="';
-		echo outputLangDebugInAttributes($lang['pers_msg_subm_button']) .'" /></p>'."\n";
+		echo outputLangDebugInAttributes($lang['pers_msg_subm_button']) .'"></p>'."\n";
 		echo '</form>'."\n";
 		}
 	else if (empty($sent) && isset($no_message))

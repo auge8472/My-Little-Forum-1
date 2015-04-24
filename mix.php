@@ -334,12 +334,12 @@ if ($settings['access_for_users_only'] == 1
 				if ($zeile['marked']==1)
 					{
 					echo '<img src="img/marked.png" alt="[x]" width="9" height="9"';
-					echo ' title="'.outputLangDebugInAttributes($lang['unmark_linktitle']).'" />';
+					echo ' title="'.outputLangDebugInAttributes($lang['unmark_linktitle']).'">';
 					}
 				else
 					{
 					echo '<img src="img/mark.png" alt="[-]" title="';
-					echo outputLangDebugInAttributes($lang['mark_linktitle']).'" width="9" height="9" />';
+					echo outputLangDebugInAttributes($lang['mark_linktitle']).'" width="9" height="9">';
 					}
 				echo '</a></td>'."\n";
 				}
