@@ -2922,15 +2922,15 @@ switch ($action)
 					echo '<form action="admin.php" method="post">'."\n";
 					echo '<table>'."\n";
 					echo '<tr>'."\n";
-					echo '<td>'.$lang_add['add_smiley_file'].'</td>'."\n";
-					echo '<td>'.$lang_add['add_smiley_code'].'</td>'."\n";
+					echo '<td>'. $lang_add['add_smiley_file'] .'</td>'."\n";
+					echo '<td>'. $lang_add['add_smiley_code'] .'</td>'."\n";
 					echo '<td>&nbsp;</td>'."\n";
 					echo '</tr><tr>'."\n";
 					echo '<td><select name="smiley_file" size="1">'."\n";
 					foreach ($smiley_files as $smiley_file)
 						{
-						echo '<option value="'.htmlspecialchars($smiley_file);
-						echo '">'.htmlspecialchars($smiley_file).'</option>'."\n";
+						echo '<option value="'. htmlspecialchars($smiley_file);
+						echo '">'. htmlspecialchars($smiley_file) .'</option>'."\n";
 						}
 					echo '</select></td>'."\n";
 					echo '<td><input type="text" name="smiley_code" size="10"></td>'."\n";
