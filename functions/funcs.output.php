@@ -1005,6 +1005,10 @@ if ((isset($_SESSION[$settings['session_prefix'].'user_type'])
 	$r .= '<pre>'. print_r($_SESSION, true) .'</pre>';
 	$r .= '<h2>COOKIE</h2>';
 	$r .= '<pre>'. print_r($_COOKIE, true) .'</pre>';
+	$r .= '<h2>GET</h2>';
+	$r .= '<pre>'. print_r($_GET, true) .'</pre>';
+	$r .= '<h2>POST</h2>';
+	$r .= '<pre>'. print_r($_POST, true) .'</pre>';
 	}
 return $r;
 } # End: outputDebugSession
