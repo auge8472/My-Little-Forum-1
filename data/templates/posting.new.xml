@@ -9,7 +9,7 @@
 <input type="hidden" name="id" value="{postingID}" />
 <input type="hidden" name="uniqid" value="{postingUniqueID}" />
 <input type="hidden" name="action" value="{postingAction}" />
-{fieldPID}{fieldUID}{fieldTID}{fieldSID}
+{fieldPID}{fieldUID}{fieldParentName}{fieldTID}{fieldSID}
 <table class="normal">
 {forUnregistered}{categorySelect}
 <tr>
@@ -90,6 +90,7 @@
  <sessionid><![CDATA[<input type="hidden" name="{sessionName}" value="{sessionID}" />]]>
  </sessionid>
  <parentid><![CDATA[<input type="hidden" name="pid" value="{parentID}" />]]></parentid>
+ <parentname><![CDATA[<input type="hidden" name="aname" value="{parentName}" />]]></parentname>
  <parentuserid><![CDATA[<input type="hidden" name="p_user_id" value="{parentUserID}" />]]></parentuserid>
  <threadid><![CDATA[<input type="hidden" name="thema" value="{threadID}" />]]></threadid>
 </template>
