@@ -891,19 +891,8 @@ if (isset($_POST['delete_db_confirmed']))
 	if (empty($errors))
 		{
 		echo '<pre>'."\n";
-		echo 'Deleting table <b>'.$db_settings['forum_table'].'</b>... ';
-		if (mysql_query("DROP TABLE ". $db_settings['forum_table'], $connid))
-			{
-			echo '<b style="color:green;">OK</b><br>';
-			}
-		else
-			{
-			$errors[] = mysql_error($connid);
-			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysql_errno($connid);
-			echo '<br>'. mysql_error($connid).')<br><br>'."\n";
-			}
-		echo 'Deleting table <b>'.$db_settings['userdata_table'].'</b>... ';
-		if (mysql_query("DROP TABLE ". $db_settings['userdata_table'], $connid))
+		echo 'Deleting table <b>'.$db_settings['smilies_table'].'</b>... ';
+		if (mysql_query("DROP TABLE ". $db_settings['smilies_table'], $connid))
 			{
 			echo '<b style="color:green;">OK</b><br>';
 			}
@@ -924,8 +913,63 @@ if (isset($_POST['delete_db_confirmed']))
 			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysql_errno($connid);
 			echo '<br>'. mysql_error($connid).')<br><br>'."\n";
 			}
-		echo 'Deleting table <b>'.$db_settings['settings_table'].'</b>... ';
-		if (mysql_query("DROP TABLE ". $db_settings['settings_table'], $connid))
+		echo 'Deleting table <b>'.$db_settings['banned_ips_table'].'</b>... ';
+		if (mysql_query("DROP TABLE ". $db_settings['banned_ips_table'], $connid))
+			{
+			echo '<b style="color:green;">OK</b><br>';
+			}
+		else
+			{
+			$errors[] = mysql_error($connid);
+			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysql_errno($connid);
+			echo '<br>'. mysql_error($connid).')<br><br>'."\n";
+			}
+		echo 'Deleting table <b>'.$db_settings['banlists_table'].'</b>... ';
+		if (mysql_query("DROP TABLE ". $db_settings['banlists_table'], $connid))
+			{
+			echo '<b style="color:green;">OK</b><br>';
+			}
+		else
+			{
+			$errors[] = mysql_error($connid);
+			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysql_errno($connid);
+			echo '<br>'. mysql_error($connid).')<br><br>'."\n";
+			}
+		echo 'Deleting table <b>'.$db_settings['usersubscripts_table'].'</b>... ';
+		if (mysql_query("DROP TABLE ". $db_settings['usersubscripts_table'], $connid))
+			{
+			echo '<b style="color:green;">OK</b><br>';
+			}
+		else
+			{
+			$errors[] = mysql_error($connid);
+			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysql_errno($connid);
+			echo '<br>'. mysql_error($connid).')<br><br>'."\n";
+			}
+		echo 'Deleting table <b>'.$db_settings['usersettings_table'].'</b>... ';
+		if (mysql_query("DROP TABLE ". $db_settings['usersettings_table'], $connid))
+			{
+			echo '<b style="color:green;">OK</b><br>';
+			}
+		else
+			{
+			$errors[] = mysql_error($connid);
+			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysql_errno($connid);
+			echo '<br>'. mysql_error($connid).')<br><br>'."\n";
+			}
+		echo 'Deleting table <b>'.$db_settings['us_templates_table'].'</b>... ';
+		if (mysql_query("DROP TABLE ". $db_settings['us_templates_table'], $connid))
+			{
+			echo '<b style="color:green;">OK</b><br>';
+			}
+		else
+			{
+			$errors[] = mysql_error($connid);
+			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysql_errno($connid);
+			echo '<br>'. mysql_error($connid).')<br><br>'."\n";
+			}
+		echo 'Deleting table <b>'.$db_settings['userdata_table'].'</b>... ';
+		if (mysql_query("DROP TABLE ". $db_settings['userdata_table'], $connid))
 			{
 			echo '<b style="color:green;">OK</b><br>';
 			}
@@ -946,8 +990,8 @@ if (isset($_POST['delete_db_confirmed']))
 			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysql_errno($connid);
 			echo '<br>'. mysql_error($connid).')<br><br>'."\n";
 			}
-		echo 'Deleting table <b>'.$db_settings['smilies_table'].'</b>... ';
-		if (mysql_query("DROP TABLE ". $db_settings['smilies_table'], $connid))
+		echo 'Deleting view <b>'.$db_settings['posting_view'].'</b>... ';
+		if (mysql_query("DROP VIEW IF EXISTS ". $db_settings['posting_view'], $connid))
 			{
 			echo '<b style="color:green;">OK</b><br>';
 			}
@@ -957,8 +1001,19 @@ if (isset($_POST['delete_db_confirmed']))
 			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysql_errno($connid);
 			echo '<br>'. mysql_error($connid).')<br><br>'."\n";
 			}
-		echo 'Deleting table <b>'.$db_settings['banlists_table'].'</b>... ';
-		if (mysql_query("DROP TABLE ". $db_settings['banlists_table'], $connid))
+		echo 'Deleting table <b>'.$db_settings['forum_table'].'</b>... ';
+		if (mysql_query("DROP TABLE ". $db_settings['forum_table'], $connid))
+			{
+			echo '<b style="color:green;">OK</b><br>';
+			}
+		else
+			{
+			$errors[] = mysql_error($connid);
+			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysql_errno($connid);
+			echo '<br>'. mysql_error($connid).')<br><br>'."\n";
+			}
+		echo 'Deleting table <b>'.$db_settings['settings_table'].'</b>... ';
+		if (mysql_query("DROP TABLE ". $db_settings['settings_table'], $connid))
 			{
 			echo '<b style="color:green;">OK</b><br>';
 			}
