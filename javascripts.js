@@ -141,7 +141,7 @@ if (Buttons && o>0)
 	for (var i=0;i<o;i++)
 		{
 		j = i + 1;
-		output[j] = "<input type=\"button\" value=\""+ Buttons[i].get('text') +"\" title=\"" + Buttons[i].get('titel') + "\" class=\"bb-button\" onclick=\"bbcode('"+ Buttons[i].get('value') +"')\"><br />";
+		output[j] = "<input type=\"button\" value=\""+ Buttons[i].get('text') +"\" title=\"" + Buttons[i].get('titel') + "\" class=\"bb-button\" onclick=\"bbcode('"+ Buttons[i].get('value') +"')\"><br>";
 		}
 	j = j + 1;
 	}
@@ -165,7 +165,7 @@ if (Smilies && o>0)
 		output[i] = "<button name=\"smiley\" type=\"button\" value=\""+ Smilies[i].get('value') +"\" title=\""+ Smilies[i].get('title') + Smilies[i].get('value') +"\" onclick=\"insertIt(this.value,'text');\"><img src=\"img/smilies/"+ Smilies[i].get('url') +"\" alt=\""+ Smilies[i].get('value') +"\"></button>";
 		if (i % 2 == 1)
 			{
-			output[i] = output[i] +"<br />";
+			output[i] = output[i] +"<br>";
 			}
 		}
 	if (o > i)
@@ -174,7 +174,7 @@ if (Smilies && o>0)
 		output[j] = "<span class=\"js-handler\" title=\""+ Smilies[j].get('title') +"\" onclick=\"moreSmilies(auge_smilies)\">"+ Smilies[j].get('value') +"</span>";
 		if (i % 2 == 1)
 			{
-			output[j] = "<br />"+ output[j];
+			output[j] = "<br>"+ output[j];
 			}
 		}
 	}
@@ -213,7 +213,7 @@ else
 		buttons[j] = "<button name=\"smiley\" type=\"button\" value=\""+ Smilies[i].get('value') +"\" title=\""+ Smilies[i].get('title') + Smilies[i].get('value') +"\" onclick=\"insertIt(this.value,'text'); destroyElement('add-smilies');\"><img src=\"img/smilies/"+ Smilies[i].get('url') +"\" alt=\""+ Smilies[i].get('value') +"\"></button>";
 		if (i % 2 == 1)
 			{
-			buttons[j] = buttons[j] +"<br />";
+			buttons[j] = buttons[j] +"<br>";
 			}
 //		buttons[j] = SmileyButton(Smilies[i]);
 		}

@@ -162,7 +162,7 @@ views
 FROM ".$db_settings['forum_table'], $connid);
 if (!$sql_result) die($lang['db_error']);
 
-?><pre># Forum entries (<?php echo $db_settings['forum_table']; ?>):<br /><br /><?php
+?><pre># Forum entries (<?php echo $db_settings['forum_table']; ?>):<br><br><?php
 while ($field = mysql_fetch_assoc($sql_result))
 	{
 	echo "INSERT INTO ".$db_settings['forum_table']." SET
@@ -188,10 +188,10 @@ while ($field = mysql_fetch_assoc($sql_result))
 	marked = ".$field['marked'].",
 	locked = ".$field['locked'].",
 	fixed = ".$field['fixed'].",
-	views = ".$field['views'].";<br />";
+	views = ".$field['views'].";<br>";
 	}
 mysql_free_result($sql_result);
-?><br /></pre><?php
+?><br></pre><?php
 } # End: sql_forum
 
 
@@ -227,7 +227,7 @@ FROM ".$db_settings['forum_table']."
 WHERE marked='1'", $connid);
 if (!$sql_result) die($lang['db_error']);
 
-?><pre># Marked forum entries (<?php echo $db_settings['forum_table']; ?>):<br /><br /><?php
+?><pre># Marked forum entries (<?php echo $db_settings['forum_table']; ?>):<br><br><?php
 while ($field = mysql_fetch_assoc($sql_result))
 	{
 	echo "INSERT INTO ".$db_settings['forum_table']." SET
@@ -253,10 +253,10 @@ while ($field = mysql_fetch_assoc($sql_result))
 	marked = ".$field['marked'].",
 	locked = ".$field['locked'].",
 	fixed = ".$field['fixed'].",
-	views = ".$field['views'].";<br />";
+	views = ".$field['views'].";<br>";
 	}
 mysql_free_result($sql_result);
-?><br /></pre><?php
+?><br></pre><?php
 } # End: sql_forum_marked
 
 
@@ -292,7 +292,7 @@ activate_code
 FROM ".$db_settings['userdata_table'], $connid);
 if (!$sql_result) die($lang['db_error']);
 
-?><pre># Userdata (<?php echo $db_settings['userdata_table']; ?>):<br /><br /><?php
+?><pre># Userdata (<?php echo $db_settings['userdata_table']; ?>):<br><br><?php
 while ($field = mysql_fetch_assoc($sql_result))
 	{
 	echo "INSERT INTO ".$db_settings['userdata_table']." SET
@@ -319,10 +319,10 @@ while ($field = mysql_fetch_assoc($sql_result))
 	time_difference = ".$field['time_difference'].",
 	user_lock = ".$field['user_lock'].",
 	pwf_code = '".$field['pwf_code']."',
-	activate_code = '".$field['activate_code']."';<br />";
+	activate_code = '".$field['activate_code']."';<br>";
 	}
 mysql_free_result($sql_result);
-?><br /></pre><?php
+?><br></pre><?php
 } # End: sql_userdata
 
 
@@ -339,7 +339,7 @@ accession
 FROM ".$db_settings['category_table'], $connid);
 if (!$sql_result) die($lang['db_error']);
 
-?><pre># Categories (<?php echo $db_settings['category_table']; ?>):<br /><br /><?php
+?><pre># Categories (<?php echo $db_settings['category_table']; ?>):<br><br><?php
 while ($field = mysql_fetch_assoc($sql_result))
 	{
 	echo "INSERT INTO ".$db_settings['category_table']." SET
@@ -347,10 +347,10 @@ while ($field = mysql_fetch_assoc($sql_result))
 	category_order = ".$field['category_order'].",
 	category = '".htmlspecialchars($field['category'])."',
 	description = '".htmlspecialchars($field['description'])."',
-	accession = ".$field['accession'].";<br />";
+	accession = ".$field['accession'].";<br>";
 	}
 mysql_free_result($sql_result);
-?><br /></pre><?php
+?><br></pre><?php
 } # End: sql_categories
 
 
@@ -364,15 +364,15 @@ value
 FROM ".$db_settings['settings_table'], $connid);
 if (!$sql_result) die($lang['db_error']);
 
-?><pre># Settings (<?php echo $db_settings['settings_table']; ?>)<br /><br /><?php
+?><pre># Settings (<?php echo $db_settings['settings_table']; ?>)<br><br><?php
 while ($field = mysql_fetch_assoc($sql_result))
 	{
 	echo "INSERT INTO ".$db_settings['settings_table']." SET
 	name = '".$field['name']."',
-	value = '".htmlspecialchars($field['value'])."';<br />";
+	value = '".htmlspecialchars($field['value'])."';<br>";
 	}
 mysql_free_result($sql_result);
-?><br /></pre><?php
+?><br></pre><?php
 } # End: sql_settings
 
 
@@ -393,7 +393,7 @@ title
 FROM ".$db_settings['smilies_table'], $connid);
 if (!$sql_result) die($lang['db_error']);
 
-?><pre># Smilies (<?php echo $db_settings['smilies_table']; ?>)<br /><br /><?php
+?><pre># Smilies (<?php echo $db_settings['smilies_table']; ?>)<br><br><?php
 while ($field = mysql_fetch_array($sql_result))
 	{
 	echo "INSERT INTO ".$db_settings['smilies_table']." SET
@@ -405,10 +405,10 @@ while ($field = mysql_fetch_array($sql_result))
 	code_3 = '".htmlspecialchars($field['code_3'])."',
 	code_4 = '".htmlspecialchars($field['code_4'])."',
 	code_5 = '".htmlspecialchars($field['code_5'])."',
-	title = '".htmlspecialchars($field['title'])."';<br />";
+	title = '".htmlspecialchars($field['title'])."';<br>";
 	}
 mysql_free_result($sql_result);
-?><br /></pre><?php
+?><br></pre><?php
 }
 
 
@@ -422,15 +422,15 @@ list
 FROM ".$db_settings['banlists_table'], $connid);
 if (!$sql_result) die($lang['db_error']);
 
-?><pre># Banlists (<?php echo $db_settings['banlists_table']; ?>)<br /><br /><?php
+?><pre># Banlists (<?php echo $db_settings['banlists_table']; ?>)<br><br><?php
 while ($field = mysql_fetch_array($sql_result))
 	{
 	echo "INSERT INTO ".$db_settings['banlists_table']." SET
 	name = '".$field['name']."',
-	list = '".htmlspecialchars($field['list'])."';<br />";
+	list = '".htmlspecialchars($field['list'])."';<br>";
 	}
 mysql_free_result($sql_result);
-?><br /></pre><?php
+?><br></pre><?php
 }
 
 ?>

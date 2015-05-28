@@ -8,7 +8,7 @@ $lang['time_format_sql'] =             "%d.%m.%Y, %H:%i";
 $lang['yes'] =                         "ja";
 $lang['no'] =                          "nein";
 $lang['error_headline'] =              "Fehler:";
-$lang['db_error'] =                    "<strong>Fehler!</strong><br />Es ist ein Datenbankfehler aufgetreten.";
+$lang['db_error'] =                    "<strong>Fehler!</strong><br>Es ist ein Datenbankfehler aufgetreten.";
 $lang['mail_error'] =                  "Es ist ein Fehler beim Versenden der E-Mail aufgetreten. Bitte nochmal versuchen.";
 $lang['no_authorization'] =            "Keine Berechtigung!";
 $lang['caution'] =                     "Achtung!";
@@ -175,7 +175,7 @@ $lang['bbcode_image_title'] =          "Bild einfügen: [img]http://domain.tld/i
 $lang['upload_image'] =                "upload";
 $lang['upload_image_title'] =          "Bild hochladen";
 $lang['smiley_title'] =                "Smiley einfügen: ";
-$lang['bbcode_marking_user'] =         "Text kann mit diesen Befehlen formatiert werden: [b]Text[/b] für fetten Text, [i]Text[/i] für kursiven Text<br />Links einfügen: [link]http://www.domain.tld/[/link] oder [link=http://www.domain.tld/]Linkname[/link]";
+$lang['bbcode_marking_user'] =         "Text kann mit diesen Befehlen formatiert werden: [b]Text[/b] für fetten Text, [i]Text[/i] für kursiven Text<br>Links einfügen: [link]http://www.domain.tld/[/link] oder [link=http://www.domain.tld/]Linkname[/link]";
 $lang['bbcode_img_marking_user'] =     "Bilder einfügen: [img]http://www.domain.tld/bild.jpg[/img] - links/rechts neben text: [img|left]...[/img] / [img|right]...[/img]";
 $lang['submit_button'] =               " OK - Eintragen ";
 $lang['submit_button_title'] =         "Eintragen speichern";
@@ -346,7 +346,7 @@ $lang['user_settings_hl'] =            "Foreneinstellungen: [name]";
 
 // register.php:
 $lang['register_hl'] =                 "Registrieren";
-$lang['reg_only_via_admin'] =          "Das Registrieren geht nur über den Administrator des Forums.<br /><br />[forum-email]";
+$lang['reg_only_via_admin'] =          "Das Registrieren geht nur über den Administrator des Forums.<br><br>[forum-email]";
 $lang['register_exp'] =                "Bitte gewünschten Benutzernamen, Passwort und eine gültige E-Mail-Adresse angeben. Nach der Registrierung wird eine E-Mail mit Aktivierungsschlüssel zum Freischalten des Accounts an diese E-Mail-Adresse gesendet.";
 $lang['reg_subm_button'] =             "  OK  ";
 $lang['registered_ok'] =               "Der Benutzername <strong>[name]</strong> wurde aufgenommen, der Aktivierungsschlüssel wurde an <strong>[email]</strong> gesendet. Das Account muss nun innerhalb eines Tages freigeschaltet werden.";

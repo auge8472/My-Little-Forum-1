@@ -28,5 +28,5 @@
  </body>
  <optbodycats><![CDATA[   <td class="info">{ThreadCategory}</td>]]></optbodycats>
  <optbodyviews><![CDATA[   <td class="number-cell">{ThreadViews}</td>]]></optbodyviews>
- <optbodymarker><![CDATA[   <td><a href="admin.php?mark={MarkID}&amp;refer={MarkRefer}&amp;page={MarkPage}&amp;order={MarkOrder}{MarkCategory}"><img src="{MarkSrc}" alt="{markAlt}" width="9" height="9" title="{MarkTitle}" /></a></td>]]></optbodymarker>
+ <optbodymarker><![CDATA[   <td><a href="admin.php?mark={MarkID}&amp;refer={MarkRefer}&amp;page={MarkPage}&amp;order={MarkOrder}{MarkCategory}"><img src="{MarkSrc}" alt="{markAlt}" width="9" height="9" title="{MarkTitle}"></a></td>]]></optbodymarker>
 </template>

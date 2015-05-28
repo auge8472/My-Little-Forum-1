@@ -1218,7 +1218,7 @@ if (($settings['access_for_users_only'] == 1
 					$prTemplate = ($isView == 'board') ? '<table class="normaltab">'. $prTemplate .'</table>' : $prTemplate;
 					$previewOutput .= '<h3 class="caution">'.$lang['preview_headline'].'</h3>'."\n";
 					$previewOutput .= $prTemplate;
-					$previewOutput .= '<hr class="entryline" />'."\n";
+					$previewOutput .= '<hr class="entryline">'."\n";
 					} # End: if (isset($preview) && empty($errors))
 				$tBody = str_replace('{preview}', $previewOutput, $tBody);
 				$tBody = str_replace('{postingID}', isset($_GET['id']) ? intval($_GET['id']) : (isset($_POST['id']) ? intval($_POST['id']) : 0), $tBody);
@@ -1446,13 +1446,13 @@ if (($settings['access_for_users_only'] == 1
 				$lang['thread_info'] = str_replace("[time]", strftime($lang['time_format'], $deletePosting["tp_time"]), $lang['thread_info']);
 				$output .= '<h2>'. $lang['delete_marking'] .'</h2>'."\n";
 				$output .= '<p>'. $lang['delete_posting_sure'];
-				$output .= ($deletePosting["pid"] == 0) ? '<br />'. $lang['delete_whole_thread'] : '';
+				$output .= ($deletePosting["pid"] == 0) ? '<br>'. $lang['delete_whole_thread'] : '';
 				$output .= '</p>'."\n";
 				$output .= '<p><b>'. htmlspecialchars($deletePosting["subject"]) .'</b>&nbsp;'. $lang['thread_info'] .'</p>'."\n";
 				$output .= '<form action="posting.php" method="get" accept-charset="UTF-8">'."\n";
-				$output .= '<input type="hidden" name="action" value="delete ok" />'."\n";
-				$output .= '<input type="hidden" name="id" value="'. intval($_GET['id']) .'" />'."\n";
-				$output .= '<p><input type="submit" name="delete" value="'. outputLangDebugInAttributes($lang['delete_posting_ok']) .'" /></p>'."\n";
+				$output .= '<input type="hidden" name="action" value="delete ok">'."\n";
+				$output .= '<input type="hidden" name="id" value="'. intval($_GET['id']) .'">'."\n";
+				$output .= '<p><input type="submit" name="delete" value="'. outputLangDebugInAttributes($lang['delete_posting_ok']) .'"></p>'."\n";
 				$output .= '</form>'."\n";
 			break;
 			# End: switch ($show)->case "delete form"

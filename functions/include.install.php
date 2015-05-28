@@ -146,77 +146,77 @@ type = 'bool'";
 
 
 # alter settings table
-@mysql_query($alterTable["settings"], $connid) or $errors[] = str_replace("[table]", $db_settings['settings_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+@mysql_query($alterTable["settings"], $connid) or $errors[] = str_replace("[table]", $db_settings['settings_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 # alter banlist table
 if (empty($errors))
 	{
-	@mysql_query($alterTable["banlist"], $connid) or $errors[] = str_replace("[table]", $db_settings['banlists_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+	@mysql_query($alterTable["banlist"], $connid) or $errors[] = str_replace("[table]", $db_settings['banlists_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 	}
 # alter smilies table (part 1)
 if (empty($errors))
 	{
-	@mysql_query($alterTable["smilies"], $connid) or $errors[] = str_replace("[table]", $db_settings['smilies_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+	@mysql_query($alterTable["smilies"], $connid) or $errors[] = str_replace("[table]", $db_settings['smilies_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 	}
 # alter smilies table (part 2)
 if (empty($errors)
 	and (!empty($_POST["DeleteSmilies"])
 	and $_POST["DeleteSmilies"] == "delete"))
 	{
-	@mysql_query($alterTable["smilies1"], $connid) or $errors[] = str_replace("[table]", $db_settings['smilies_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+	@mysql_query($alterTable["smilies1"], $connid) or $errors[] = str_replace("[table]", $db_settings['smilies_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 	}
 # alter user online table
 if (empty($errors))
 	{
-	@mysql_query($alterTable["uonline"], $connid) or $errors[] = str_replace("[table]", $db_settings['useronline_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+	@mysql_query($alterTable["uonline"], $connid) or $errors[] = str_replace("[table]", $db_settings['useronline_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 	}
 # alter user data table
 if (empty($errors))
 	{
-	@mysql_query($alterTable["userdat"], $connid) or $errors[] = str_replace("[table]", $db_settings['userdata_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+	@mysql_query($alterTable["userdat"], $connid) or $errors[] = str_replace("[table]", $db_settings['userdata_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 	}
 # alter posting data table
 if (empty($errors))
 	{
-	@mysql_query($alterTable["posting"], $connid) or $errors[] = str_replace("[table]", $db_settings['forum_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+	@mysql_query($alterTable["posting"], $connid) or $errors[] = str_replace("[table]", $db_settings['forum_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 	}
 # alter category data table
 if (empty($errors))
 	{
-	@mysql_query($alterTable["category1"], $connid) or $errors[] = str_replace("[table]", $db_settings['category_table'],$lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+	@mysql_query($alterTable["category1"], $connid) or $errors[] = str_replace("[table]", $db_settings['category_table'],$lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 	}
 # create new table for users own forum settings
 if (empty($errors))
 	{
-	@mysql_query($newTable["user_settings"], $connid) or $errors[] = str_replace("[table]", $db_settings['usersettings_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+	@mysql_query($newTable["user_settings"], $connid) or $errors[] = str_replace("[table]", $db_settings['usersettings_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 	}
 # create new table for administrating users own forum settings
 if (empty($errors))
 	{
-	@mysql_query($newTable['us_template'], $connid) or $errors[] = str_replace("[table]", $db_settings['us_templates_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+	@mysql_query($newTable['us_template'], $connid) or $errors[] = str_replace("[table]", $db_settings['us_templates_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 	}
 # create new table for users own subscriptions
 if (empty($errors))
 	{
-	@mysql_query($newTable['user_subscriptions'], $connid) or $errors[] = str_replace("[table]", $db_settings['usersubscripts_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+	@mysql_query($newTable['user_subscriptions'], $connid) or $errors[] = str_replace("[table]", $db_settings['usersubscripts_table'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 	}
 # create new table for banned IPs
 if (empty($errors))
 	{
-	@mysql_query($newTable['banned_ips'], $connid) or $errors[] = str_replace("[table]", $newTable['banned_ips'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+	@mysql_query($newTable['banned_ips'], $connid) or $errors[] = str_replace("[table]", $newTable['banned_ips'], $lang_add['db_alter_table_error'])." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 	}
 # insert new settings
 if (empty($errors))
 	{
 	foreach ($newSetting as $Set)
 		{
-		@mysql_query($Set, $connid) or $errors[] = $lang_add['db_insert_settings_error']." (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+		@mysql_query($Set, $connid) or $errors[] = $lang_add['db_insert_settings_error']." (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 		}
 	}
 
 # set value 1.8 for version string
 if (empty($errors))
 	{
-	@mysql_query("UPDATE ".$db_settings['settings_table']." SET value='1.8' WHERE name = 'version'", $connid) or $errors[] = $lang_add['db_update_error']. " (MySQL: ". mysql_errno($connid) ."<br />". mysql_error($connid) .")";
+	@mysql_query("UPDATE ".$db_settings['settings_table']." SET value='1.8' WHERE name = 'version'", $connid) or $errors[] = $lang_add['db_update_error']. " (MySQL: ". mysql_errno($connid) ."<br>". mysql_error($connid) .")";
 	}
 
 $return = (!empty($errors)) ? $errors : false;

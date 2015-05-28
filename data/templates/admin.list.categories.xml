@@ -23,7 +23,7 @@
    <td>{Postings}</td>
    <td><a href="admin.php?edit_category={CategoryID}">{Action1}</a></td>
    <td><a href="admin.php?delete_category={CategoryID}">{Action2}</a></td>
-   <td><a href="admin.php?move_up_category={CategoryID}"><img src="img/up.png" alt="up" width="11" height="11" /></a>&nbsp;<a href="admin.php?move_down_category={CategoryID}"><img src="img/down.png" alt="down" width="11" height="11" /></a></td>
+   <td><a href="admin.php?move_up_category={CategoryID}"><img src="img/up.png" alt="up" width="11" height="11"></a>&nbsp;<a href="admin.php?move_down_category={CategoryID}"><img src="img/down.png" alt="down" width="11" height="11"></a></td>
   </tr>]]>
  </body>
 </template>

@@ -12,7 +12,7 @@ $lang['time_format_sql'] =             "%d.%m.%Y, %H:%i";
 $lang['yes'] =                         "yes";
 $lang['no'] =                          "no";
 $lang['error_headline'] =              "Error:";
-$lang['db_error'] =                    "<b>Error!</b><br />A database error has occurred.";
+$lang['db_error'] =                    "<b>Error!</b><br>A database error has occurred.";
 $lang['mail_error'] =                  "An error occurred while sending the e-mail. Please try again!";
 $lang['no_authorization'] =            "No authorization!";
 $lang['caution'] =                     "Caution!";
@@ -179,7 +179,7 @@ $lang['bbcode_image_title'] =          "Insert image: [img]http://domain.tld/ima
 $lang['upload_image'] =                "upload";
 $lang['upload_image_title'] =          "Upload image";
 $lang['smiley_title'] =                "Insert smiley";
-$lang['bbcode_marking_user'] =         "Text parts can be formatted with the following commands: [b]Text[/b] for bold format, [i]Text[/i] for italic format<br />Add hyperlinks: [link]http://www.domain.tld/[/link] or [link=http://www.domain.tld/]Link name[/link]";
+$lang['bbcode_marking_user'] =         "Text parts can be formatted with the following commands: [b]Text[/b] for bold format, [i]Text[/i] for italic format<br>Add hyperlinks: [link]http://www.domain.tld/[/link] or [link=http://www.domain.tld/]Link name[/link]";
 $lang['bbcode_img_marking_user'] =     "Add images: [img]http://www.domain.tld/image.jpg[/img] - left/right of the text: [img|left]...[/img] / [img|right]...[/img]";
 $lang['submit_button'] =               " OK - Submit ";
 $lang['submit_button_title'] =         "Save entry";
@@ -350,7 +350,7 @@ $lang['user_settings_hl'] =            "Forum settings: [name]";
 
 // register.php:
 $lang['register_hl'] =                 "Register your account";
-$lang['reg_only_via_admin'] =          "You can only register via the admin of this forum.<br /><br />[forum-email]";
+$lang['reg_only_via_admin'] =          "You can only register via the admin of this forum.<br><br>[forum-email]";
 $lang['register_exp'] =                "Please specify the user name desired, a password and a valid e-mail address. An activation key will be sent to this e-mail address. The account has to be activated within one day.";
 $lang['reg_subm_button'] =             "  OK  ";
 $lang['registered_ok'] =               "The user name <b>[name]</b> has been accepted and the activation key has been sent to <b>[email]</b>. The account has to be activated within one day.";

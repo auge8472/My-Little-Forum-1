@@ -2,30 +2,30 @@
 <template>
  <wholetable><![CDATA[<form action="admin.php" method="post">
  <div>
-	<input type="hidden" name="edit_user_id" value="{UserID}" />
+	<input type="hidden" name="edit_user_id" value="{UserID}">
 	<table class="admin info">
 	 <tbody>
     <tr>
      <td><label for="set-uname">{UserName}</label></td>
-     <td><input type="text" size="40" name="edit_user_name" value="{Name}" id="set-uname" /></td>
+     <td><input type="text" size="40" name="edit_user_name" value="{Name}" id="set-uname"></td>
     </tr><tr>
      <td><label for="set-utype">{UserType}</label></td>
      <td>{UserTypeMenu}</td>
     </tr><tr>
      <td><label for="set-email">{UserEmail}</label></td>
-     <td><input type="text" size="40" name="user_email" value="{Email}" id="set-email" /></td>
+     <td><input type="text" size="40" name="user_email" value="{Email}" id="set-email"></td>
     </tr><tr>
      <td>{ShowEmail}</td>
-     <td><label for="show-mail-1"><input type="radio" name="hide_email" value="0"{CheckShowEmailYes} id="show-mail-1" />{ShowEmailYes}</label><label for="show-mail-0"><input type="radio" name="hide_email" value="1"{CheckShowEmailNo} id="show-mail-0" />{ShowEmailNo}</label></td>
+     <td><label for="show-mail-1"><input type="radio" name="hide_email" value="0"{CheckShowEmailYes} id="show-mail-1">{ShowEmailYes}</label><label for="show-mail-0"><input type="radio" name="hide_email" value="1"{CheckShowEmailNo} id="show-mail-0">{ShowEmailNo}</label></td>
     </tr><tr>
      <td><label for="set-r-name">{UserRealName}</label></td>
-     <td><input type="text" size="40" name="user_real_name" value="{RealName}" maxlength="{RN-Max}" id="set-r-name" /></td>
+     <td><input type="text" size="40" name="user_real_name" value="{RealName}" maxlength="{RN-Max}" id="set-r-name"></td>
     </tr><tr>
      <td><label for="set-hp">{UserHomepage}</label></td>
-     <td><input type="text" size="40" name="user_hp" value="{Homepage}" maxlength="{HP-Max}" id="set-hp" /></td>
+     <td><input type="text" size="40" name="user_hp" value="{Homepage}" maxlength="{HP-Max}" id="set-hp"></td>
     </tr><tr>
      <td><label for="set-place">{UserPlace}</label></td>
-     <td><input type="text" size="40" name="user_place" value="{Place}" maxlength="{P-Max}" id="set-place" /></td>
+     <td><input type="text" size="40" name="user_place" value="{Place}" maxlength="{P-Max}" id="set-place"></td>
     </tr><tr>
      <td><label for="set-profile">{UserProfile}</label></td>
      <td><textarea cols="65" rows="4" name="profile" id="set-profile">{Profile}</textarea></td>
@@ -34,14 +34,14 @@
      <td><textarea cols="65" rows="4" name="signature" id="set-signature">{Signature}</textarea></td>
     </tr><tr>
      <td>{UserPersonalMessages}</td>
-     <td><label for="pers-mess-1"><input type="radio" name="personal_messages" value="1"{CheckPersMessYes} id="pers-mess-1" />{PersMessYes}</label><label for="pers-mess-0"><input type="radio" name="personal_messages" value="0"{CheckPersMessNo} id="pers-mess-0" />{PersMessNo}</label></td>
+     <td><label for="pers-mess-1"><input type="radio" name="personal_messages" value="1"{CheckPersMessYes} id="pers-mess-1">{PersMessYes}</label><label for="pers-mess-0"><input type="radio" name="personal_messages" value="0"{CheckPersMessNo} id="pers-mess-0">{PersMessNo}</label></td>
     </tr><tr>
      <td><label for="user-time-diff">{UserTimeDifference}</label></td>
      <td>{UserTimeDiffMenu}</td>
     </tr>{OptionViews}{OptionAdminNotify}
    </tbody>
   </table>
-  <p><input type="submit" name="edit_user_submit" value="{Submit}" /></p>
+  <p><input type="submit" name="edit_user_submit" value="{Submit}"></p>
  </div>
 </form>]]>
  </wholetable>
@@ -52,7 +52,7 @@
  </optviews>
  <optadmin><![CDATA[ <tr>
      <td>{AdminModNotify}</td>
-     <td><label for="new-post"><input type="checkbox" name="new_posting_notify" value="1"{CheckNotifyPost} id="new-post" />{NotifyPost}</label><br /><label for="new-user"><input type="checkbox" name="new_user_notify" value="1"{CheckNotifyUser} id="new-user" />{NotifyUser}</label></td>
+     <td><label for="new-post"><input type="checkbox" name="new_posting_notify" value="1"{CheckNotifyPost} id="new-post">{NotifyPost}</label><br><label for="new-user"><input type="checkbox" name="new_user_notify" value="1"{CheckNotifyUser} id="new-user">{NotifyUser}</label></td>
     </tr>]]>
  </optadmin>
 </template>
