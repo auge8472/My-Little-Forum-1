@@ -254,13 +254,13 @@ if ($settings['board_view'] == 1) $possViews[] = 'board';
 if ($settings['thread_view'] == 1) $possViews[] = 'thread';
 if ($settings['mix_view'] == 1) $possViews[] = 'mix';
 
-$cssLink = '<link rel="stylesheet" type="text/css" href="style.css" media="all" />';
+$cssLink = '<link rel="stylesheet" type="text/css" href="style.css" media="all">';
 if ((!empty($_SESSION[$settings['session_prefix'].'debug'])
 		and $_SESSION[$settings['session_prefix'].'debug'] == 'css')
 	and ($_SESSION[$settings['session_prefix'].'user_type'] == 'admin'
 		or $_SESSION[$settings['session_prefix'].'user_type'] == 'mod'))
 	{
-	$cssLink = '<link rel="stylesheet" type="text/css" href="data/test.css" media="all" />';
+	$cssLink = '<link rel="stylesheet" type="text/css" href="data/test.css" media="all">';
 	}
 $postingPages = array('posting.php','user.php');
 $additionalJS = '';
@@ -313,7 +313,7 @@ if ($settings['user_control_refresh']==1
 	$reloadTime = $loadTime + 1200;
 	$loadTime = strftime(strip_tags($lang['time_format']), $loadTime);
 	$reloadTime = strftime(strip_tags($lang['time_format']), $reloadTime);
-	$additionalJS .= '<meta http-equiv="refresh" content="1200" />'."\n";
+	$additionalJS .= '<meta http-equiv="refresh" content="1200">'."\n";
 	$lang['forum_load_message'] = str_replace('[load]', $loadTime, $lang['forum_load_message']);
 	$lang['forum_load_message'] = str_replace('[reload]', $reloadTime, $lang['forum_load_message']);
 	$lang['forum_load_message'] = '<p class="index">'.$lang['forum_load_message'].'</p>';
