@@ -2809,12 +2809,14 @@ switch ($action)
 			if (isset($IPsBanned) or isset($IPsBannedLong))
 				{
 				$output .= '   <ul>'."\n";
-				if (isset($IPsBanned)) $output .= '    <li>Anzahl der vorhandenen Einträge: <b>'. htmlspecialchars($IPsBanned) .'</b></li>'."\n";
+				if (isset($IPsBanned)) $output .= '    <li>'. htmlspecialchars($lang_add['count_banned_items']) .': <b>'. htmlspecialchars($IPsBanned) .'</b></li>'."\n";
 				if (isset($IPsBannedLong))
 					{
 					foreach ($IPsBannedLong as $IPsBannedCount)
 						{
-						$output .= '    <li>'. htmlspecialchars($IPsBannedCount["requests"]) .' Zugriffe: <b>'. htmlspecialchars($IPsBannedCount["counted_ips"]) .'</b></li>'."\n";
+						$output .= '    <li>'. htmlspecialchars($IPsBannedCount["requests"]) .' ';
+						$output .= ($IPsBannedCount["requests"] == 1) ? htmlspecialchars($lang_add['number_of_accesses1']) : htmlspecialchars($lang_add['number_of_accesses2']);
+						$output .= ': <b>'. htmlspecialchars($IPsBannedCount["counted_ips"]) .'</b></li>'."\n";
 						}
 					}
 				$output .= '   </ul>'."\n";
