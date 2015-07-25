@@ -710,6 +710,9 @@ if (isset($_GET['delete_user_ip']))
 			$deleteUserQuery = "DELETE FROM ". $db_settings['userdata_table'] ."
 			WHERE user_id = ". intval($_GET['delete_user_ip']);
 			$ban_result = mysql_query($deleteUserQuery, $connid);
+			$deleteUserFromSubscriptions = "DELETE FROM ". $db_settings['usersubscripts_table'] ."
+			WHERE user_id = ". intval($_GET['delete_user_ip']);
+			$ban_result = mysql_query($deleteUserFromSubscriptions, $connid);
 			}
 		}
 	$action="user";
@@ -819,6 +822,9 @@ if (isset($_POST['delete_confirmed']))
 				email_notify = 0
 				WHERE user_id = '". intval($selected_confirmed[$x]) ."'";
 				$update_result = mysql_query($deleteUserIDQuery, $connid);
+				$deleteUserFromSubscriptions = "DELETE FROM ". $db_settings['usersubscripts_table'] ."
+				WHERE user_id = ". intval($selected_confirmed[$x]);
+				$update_result = mysql_query($deleteUserFromSubscriptions, $connid);
 				}
 			}
 		}
