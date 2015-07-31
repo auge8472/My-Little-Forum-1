@@ -863,7 +863,7 @@ return $string;
  * @return string
  */
 function outputImageDescAsc($curr) {
-$r = !empty($curr) ? '&nbsp;<img src="img/'. $curr .'.png" alt="['. $curr .']" width="5" height="9" border="0"' : '>';
+$r = !empty($curr) ? '&nbsp;<img src="img/'. $curr .'.png" alt="['. $curr .']" width="5" height="9" border="0">' : '';
 return $r;
 } # End outputImageDescAsc
 

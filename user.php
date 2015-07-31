@@ -941,7 +941,7 @@ switch ($action)
 				if ($settings['smilies'] == 1) $ftext = smilies($ftext);
 				$output .= '<tr>'."\n";
 				$output .= '  <td>'. $lang['user_signature'] .'</td>'."\n";
-				$output .= '  <td><p class="signature">'. $ftext .'</p></td>'."\n";
+				$output .= '  <td>'. $ftext .'</td>'."\n";
 				$output .= ' </tr>';
 				}
 			$output .= '</table>'."\n";
