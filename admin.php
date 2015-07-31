@@ -869,6 +869,9 @@ if (isset($_POST['delete_all_postings_confirmed']))
 		{
 		$empty_forum_result = mysql_query("DELETE FROM ". $db_settings['forum_table'], $connid);
 		if (!$empty_forum_result) die($lang['db_error']);
+		$deleteAllSubscriptions = "TRUNCATE TABLE ". $db_settings['usersubscripts_table'];
+		$update_result = mysql_query($deleteAllSubscriptions, $connid);
+		if (!$update_result) die($lang['db_error']);
 		$action="main";
 		}
 	else
