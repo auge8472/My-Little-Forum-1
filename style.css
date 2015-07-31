@@ -31,6 +31,9 @@ line-height: 1.6em;
 max-width: 750px;
 }
 
+/* announce html5 block elements to ancient browsers */
+article, footer, header, main, nav, section { display: block; }
+
 /* standard links: */
 a:link, a:visited {
 color: #00c;
