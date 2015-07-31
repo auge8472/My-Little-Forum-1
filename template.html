@@ -23,25 +23,25 @@
 <!-- mlf1 version {SCRIPT-VERSION-STRING} -->
 </head>
 <body>
-<div id="top">
+<header id="top">
 <div class="left">
 {IF:HOME-LINK}<p class="home"><a href="{HOME-ADDRESS}" title="{HOME-LINK}"><span class="fa fa-home"></span>&nbsp;{HOME-LINK}</a></p>{ENDIF:HOME-LINK}
 <h1>{FORUM-NAME}</h1>
 {LOAD-TIME}</div>
 <div class="right"><ul class="usermenu">{USER-MENU}</ul>{SEARCH}</div>
-</div>
-<div class="main-navbar">
+</header>
+<nav class="main-navbar">
 {SUB-NAVIGATION-1}
 <div class="right">{SUB-NAVIGATION-2}</div>
-</div>
-<div id="content">{CONTENT}</div>
-<div class="main-navbar">
+</nav>
+<main role="main" id="content">{CONTENT}</main>
+<nav class="main-navbar">
 {SUB-NAVIGATION-1}
 <div class="right">{SUB-NAVIGATION-2}</div>
-</div>
-<div id="bottom">
+</nav>
+<footer id="bottom">
 <div class="left">{COUNTER}<br><a href="{FORUM-ADDRESS}">{FORUM-NAME}</a> | <a href="contact.php">{CONTACT}</a></div>
 <ul class="right">{RSS-FEED-BUTTON}<li><a href="https://github.com/auge8472/My-Little-Forum-1" class="buttonize"><span class="fa fa-github"></span>&nbsp;my little forum</a></li></ul>
-</div>
+</footer>
 </body>
 </html>
