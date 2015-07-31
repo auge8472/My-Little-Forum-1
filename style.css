@@ -169,7 +169,7 @@ form { display: inline; }
 .inline-form { display: inline; }
 
 /* template: */
-#top {
+header {
 margin:0;
 overflow: hidden;
 background: #ecf2f8;
@@ -179,18 +179,18 @@ background: -o-linear-gradient(top, #ccd8ea 0%, #ecf2f8 100%); /* Opera 11.10+ *
 background: linear-gradient(to bottom, #ccd8ea 0%, #ecf2f8 100%); /* W3C new */
 }
 
-#top div.left {
+header div.left {
 margin: 0;
 padding: 0px 0 0 2em;
 float: left;
 }
 
-#top div.left .home {
+header div.left .home {
 margin: 0 0 0.3em 0;
 padding: 0;
 }
 
-#top div.left .home a {
+header div.left .home a {
 display: inline-block;
 padding: 0.2em;
 border: 1px solid #335;
@@ -199,53 +199,48 @@ box-shadow: 3px 1px 5px #aaa;
 border-radius: 0 0 4px 4px;
 }
 
-#top div.left .home a:link, #top div.left .home a:visited {
+header div.left .home a:link, header div.left .home a:visited {
 color: #fff;
 background: #015;
 }
 
-#top div.left .home a:focus, #top div.left .home a:hover {
+header div.left .home a:focus, header div.left .home a:hover {
 color: #ffffe4;
 background: #118;
 }
 
-#top div.left h1 {
+header div.left h1 {
 font-size: 1.5em;
 font-weight: bold;
 margin: 0 0 0.2em 0;
 padding: 0;
+text-shadow: 4px 2px 2px #fff;
 }
 
-#top div.left .index {
+header div.left .index {
 margin: 4px 0 0 0;
 padding: 0;
 clear: left;
 }
 
-#top div.right {
+header div.right {
 margin:0;
 padding: 0 2em 5px 0;
 text-align: right;
 }
 
-#top ul.usermenu {
+header ul.usermenu {
 margin:0 0 13px 0;
 list-style: none;
 }
 
-#top ul.usermenu li {
+header ul.usermenu li {
 display: inline-block;
 }
 
-#top ul.usermenu a.buttonize.edge {
+header ul.usermenu a.buttonize.edge {
 border-radius: 0 0 4px 4px;
 border-top: none;
-}
-
-#top h1 {
-margin:0 0 3px 0;
-padding:0;
-text-shadow: 4px 2px 2px #fff;
 }
 
 .search {
@@ -256,7 +251,7 @@ input.searchfield {
 width: 130px;
 }
 
-.main-navbar {
+nav {
 clear:both;
 position:relative;
 margin: 0;
@@ -268,7 +263,7 @@ border-top: 1px solid #bacbdf;
 border-bottom: 1px solid #bacbdf;
 }
 
-.main-navbar ul.left {
+nav ul.left {
 position: absolute;
 left: 0;
 top: 0;
@@ -278,7 +273,7 @@ padding: 0 0 0 2em;
 line-height:160%;
 list-style: none;
 }
-.main-navbar .left li {
+nav .left li {
 display: inline-block;
 height: 100%;
 margin: 0;
@@ -286,7 +281,7 @@ padding: 0;
 line-height: 1.6em;
 }
 
-.main-navbar .left li a, .main-navbar .left li .current {
+nav .left li a, nav .left li .current {
 display: block;
 height: calc(100% - 0.25em);
 width: calc(100% - 0.3em - 0.5em);
@@ -297,37 +292,37 @@ border-right: 1px solid #c8c8c8;
 border-left: 1px solid #c8c8c8;
 }
 
-.main-navbar .left li a:link, .main-navbar .left li a:visited {
+nav .left li a:link, nav .left li a:visited {
 color: #001;
 background: #ebebef;
 }
-.main-navbar .left li a:focus, .main-navbar .left li a:hover {
+nav .left li a:focus, nav .left li a:hover {
 color: #434;
 background: #fff;
 }
-.main-navbar .left li a:active {
+nav .left li a:active {
 color: #652;
 background: #f7f7ea;
 }
-.main-navbar .left li .current {
+nav .left li .current {
 color: #000;
 background: #d8d8e2;
 }
 
-.main-navbar div.right {
+nav div.right {
 margin: 5px 0;
 padding: 0 20px 0 0;
 text-align: right;
 line-height:160%;
 }
 
-#content {
+main {
 padding: 2em;
 font-size: 1em;
 background:#fff;
 }
 
-#bottom {
+footer {
 min-height:4em;
 font-size: 0.86em;
 line-height:1.5em;
@@ -342,13 +337,13 @@ background: linear-gradient(to bottom, #ecf2f8 0%, #ccd8ea 100%);
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ecf2f8', endColorstr='#ccd8ea',GradientType=0 );
 }
 
-#bottom div.left {
+footer div.left {
 margin: 0;
 padding: 7px 0 7px 20px;
 float: left;
 }
 
-#bottom .right {
+footer .right {
 margin: 0;
 padding: 7px 20px 10px 0;
 text-align: right;
@@ -356,15 +351,15 @@ list-style: none;
 font-size: 114%;
 }
 
-#bottom .right li {
+footer .right li {
 display: inline-block;
 }
 
-#bottom .right a .fa-rss-square {
+footer .right a .fa-rss-square {
 color: #d70;
 }
 
-#bottom .right a .fa-github {
+footer .right a .fa-github {
 color: #000;
 }
 
@@ -449,7 +444,7 @@ ul.admin-main-menu a.buttonize {
 display: block;
 }
 
-#top ul.usermenu a.buttonize, ul.admin-main-menu a.buttonize, div.postingbottom .buttonize {
+header ul.usermenu a.buttonize, ul.admin-main-menu a.buttonize, div.postingbottom .buttonize {
 box-shadow: 3px 1px 5px #aaa;
 }
 
