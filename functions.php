@@ -622,7 +622,7 @@ $template = str_replace("{USER-MENU}", $user_menu, $template);
 
 // Search:
 $search_dump = "\n".'<form action="search.php" method="get" title="'. strip_tags($lang['search_formtitle']) .'"><div class="search">'."\n";
-$search_dump .= '<input class="searchfield" type="text" id="search" name="search" value="" size="20"><button type="submit" name=""><span class="fa fa-search">&nbsp;</span>'. $lang['search_marking'] .'</button></div></form>'."\n";
+$search_dump .= '<input class="searchfield" type="search" id="search" name="search" value="" size="20"><button type="submit" name=""><span class="fa fa-search">&nbsp;</span>'. $lang['search_marking'] .'</button></div></form>'."\n";
 $template = str_replace("{SEARCH}", $search_dump, $template);
 
 // Sub navigation:

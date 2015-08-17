@@ -284,7 +284,7 @@ if (isset($search) && empty($show_postings))
 	{
 	echo '<form action="search.php" method="get" title="';
 	echo outputLangDebugInAttributes($lang['search_formtitle']) .'"><div class="search">'."\n";
-	echo '<input type="text" name="search" value="'. htmlspecialchars($search_match) .'" size="30">'."\n";
+	echo '<input type="search" name="search" value="'. htmlspecialchars($search_match) .'" size="30">'."\n";
 	if ($categories != false)
 		{
 		echo '<select size="1" name="category">'."\n";

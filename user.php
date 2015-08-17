@@ -1253,7 +1253,7 @@ switch ($action)
 		$output .= ' </tr><tr>'."\n";
 		$output .= '  <td><label for="homepage">'.$lang['user_hp'].'</label><br>';
 		$output .= '<span class="info">'.$lang['optional_marking'].'</span></td>'."\n";
-		$output .= '  <td><input type="text" size="40" name="user_hp" value="';
+		$output .= '  <td><input type="url" size="40" name="user_hp" value="';
 		$output .= htmlspecialchars($user_hp).'" maxlength="';
 		$output .= $settings['hp_maxlength'].'" id="homepage"></td>'."\n";
 		$output .= ' </tr><tr>'."\n";
