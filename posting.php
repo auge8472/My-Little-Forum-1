@@ -1134,7 +1134,7 @@ if (($settings['access_for_users_only'] == 1
 				$tBody = str_replace('{errorMessages}', $errorMessages, $tBody);
 				# preview:
 				$previewOutput = '';
-				if (isset($preview)
+				if (isset($_POST['preview'])
 				&& empty($errors))
 					{
 					if (isset($_SESSION[$settings['session_prefix'].'user_id']))
