@@ -774,14 +774,16 @@ if (($settings['access_for_users_only'] == 1
 						{
 						$oldID = isset($_GET['id']) ? $_GET['id'] : (isset($_POST['id']) ? $_POST['id'] : 0);
 						$oldMessageQuery = "SELECT
-						tid,
-						pid,
-						name,
-						subject,
-						category,
-						text,
-						locked
-						FROM ". $db_settings['forum_table'] ."
+						t1.tid,
+						t1.pid,
+						if ((t1.user_id > 0), t2.user_name, t1.name) AS name,
+						t1.subject,
+						t1.category,
+						t1.text,
+						t1.locked
+						FROM ". $db_settings['forum_table'] ." AS t1
+							LEFT JOIN ". $db_settings['userdata_table'] ." AS t2 
+								ON (t2.user_id = t1.user_id)
 						WHERE id = ". intval($oldID);
 						$oldMessageResult = mysql_query($oldMessageQuery, $connid);
 						if (!$oldMessageResult) die($lang['db_error']);
