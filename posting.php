@@ -1152,7 +1152,7 @@ if (($settings['access_for_users_only'] == 1
 							WHERE user_id = '". intval($_SESSION[$settings['session_prefix']."user_id"]) ."'
 							LIMIT 1";
 							$previewResult = mysql_query($previewQuery, $connid);
-							if (!$preview_result) die($lang['db_error']);
+							if (!$previewResult) die($lang['db_error']);
 							$previewUserData = mysql_fetch_assoc($previewResult);
 							mysql_free_result($previewResult);
 							} # End: if ($action != "edit")
