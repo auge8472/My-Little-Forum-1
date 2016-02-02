@@ -18,6 +18,10 @@ header .left, header .right, nav .right, main {
 	border-bottom: 1px solid #aac;
 }
 
+header .right .usermenu, nav ul.left, nav .right ul, main ul, footer .right {
+	list-style-type: none;
+}
+
 header .left, header .right, nav .right {
 	margin: 0 0 0.35em 0;
 	margin: 0 0 0.35rem 0;
@@ -39,7 +43,6 @@ header .right .usermenu {
 	margin: 0 0 0.25em 0;
 	margin: 0 0 0.25rem 0;
 	padding: 0;
-	list-style-type: none;
 }
 
 .usermenu li {
@@ -59,7 +62,6 @@ nav ul.left, nav .right ul {
 	margin: 0 0 0.25em 0;
 	margin: 0 0 0.25rem 0;
 	padding: 0;
-	list-style-type: none;
 }
 
 nav ul.left li, nav .right li {
@@ -77,7 +79,6 @@ main ul {
 	margin: 0 0 0.25em 0;
 	margin: 0 0 0.25rem 0;
 	padding: 0;
-	list-style-type: none;	
 }
 
 main ul li > ul {
@@ -113,7 +114,6 @@ footer .right {
 	margin: 0 0 0.25em 0;
 	margin: 0 0 0.25rem 0;
 	padding: 0;
-	list-style-type: none;
 }
 
 footer .right li {
