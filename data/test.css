@@ -1,0 +1,15 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	color: #000;
+	font-size: 100.01%;
+	background: #fff;
+}
+
+header, nav, main, footer {
+	display: block;
+	margin: 0 0 0.35em 0;
+	margin: 0 0 0.35rem 0;
+	padding: 0 0.25em;
+	padding: 0 0.25rem;
+}
