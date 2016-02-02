@@ -242,7 +242,10 @@ if ($settings['access_for_users_only'] == 1
 	$topnav  = '<li><a href="board.php" title="'. outputLangDebugInAttributes($lang['back_to_board_linktitle']).'">'
 	$topnav .= '<span class="fa fa-circle"></span>&nbsp;'. htmlspecialchars($lang['back_to_board_linkname']).'</a></li>'."\n";
 	$cat = ($_SESSION[$settings['session_prefix'].'category'] > 0) ? '&amp;category='.intval($_SESSION[$settings['session_prefix'].'category']) : '';
+	$subnav_2tm = "\n <ul>\n{NavPoints} </ul>\n";
+	$subnav_2ts = '  <li>{NavPoint}</li>'."\n";
 	$subnav_2 = '';
+	$subnav2p = array();
 	if ($da=="DESC")
 		{
 		$order_order = 'ASC';
@@ -258,14 +261,14 @@ if ($settings['access_for_users_only'] == 1
 	$url  = 'board_entry.php?id='.$thread["tid"].'&amp;da='.$order_order.'&amp;order='.$order.'&amp;descasc='.$descasc;
 	$class = 'order-postings';
 	$title = outputLangDebugInAttributes($order_title);
-	$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
+	$subnav2p[] = str_replace('{NavPoint}', outputSingleLink($url, $linktext, $title, $class), $subnav_2ts);
 	if ($settings['thread_view']==1)
 		{
 		$url = 'forum_entry.php?view=thread&amp;id='.$thread["tid"];
 		$class = 'thread-view';
 		$title = outputLangDebugInAttributes($lang['thread_view_linktitle']);
 		$linktext = $lang['thread_view_linkname'];
-		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
+		$subnav2p[] = str_replace('{NavPoint}', outputSingleLink($url, $linktext, $title, $class), $subnav_2ts);
 		}
 	if ($settings['mix_view']==1)
 		{
@@ -273,8 +276,9 @@ if ($settings['access_for_users_only'] == 1
 		$class = 'mix-view';
 		$title = outputLangDebugInAttributes($lang['mix_view_linktitle']);
 		$linktext = $lang['mix_view_linkname'];
-		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
+		$subnav2p[] = str_replace('{NavPoint}', outputSingleLink($url, $linktext, $title, $class), $subnav_2ts);
 		}
+	$subnav_2 = str_replace('{NavPoints}', join("", $subnav2p), $subnav_2tm);
 	$subnav_2 .= nav_b($be_page, $settings['answers_per_topic'], $thread_count, $thread["tid"], $da, $page, $category, $order, $descasc);
 
 	parse_template();
