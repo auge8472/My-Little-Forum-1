@@ -95,3 +95,23 @@ main ul li > ul {
 	margin: 0 0 0.25em 0;
 	padding: 0;
 }
+
+footer .left {
+	margin: 0 0 0.25em 0;
+	margin: 0 0 0.25rem 0;
+	padding: 0;
+}
+
+footer .right {
+	margin: 0 0 0.25em 0;
+	margin: 0 0 0.25rem 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+footer .right li {
+	display: inline;
+	margin: 0;
+	padding: 0 0.25em 0 0;
+	padding: 0 0.25rem 0 0;
+}
