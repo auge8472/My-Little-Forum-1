@@ -15,10 +15,13 @@ header, nav, main, footer {
 }
 
 header .left, header .right, nav .right {
+	border-bottom: 1px solid #aac;
+}
+
+header .left, header .right, nav .right {
 	margin: 0 0 0.35em 0;
 	margin: 0 0 0.35rem 0;
 	padding: 0;
-	border-bottom: 1px solid #aac;
 }
 
 header .left p, header .left h1 {
