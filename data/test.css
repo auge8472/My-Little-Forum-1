@@ -39,17 +39,17 @@ header .left p, header .left h1, header .right .usermenu, nav ul.left, nav .righ
 	padding: 0;
 }
 
-header h1 {
-	font-size: 1.4em;
-	font-size: 1.4rem;
-}
-
 /* list items of linklists */
 .usermenu li, nav ul.left li, nav .right li, .marked-threads li, footer .right li {
 	display: inline;
 	margin: 0;
 	padding: 0 0.25em 0 0;
 	padding: 0 0.25rem 0 0;
+}
+
+header h1 {
+	font-size: 1.4em;
+	font-size: 1.4rem;
 }
 
 header form[action='search.php'] {
