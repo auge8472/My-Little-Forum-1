@@ -56,7 +56,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 	$r .= '  <li><a href="admin.php?action=unmark'.$ref.'"><span class="fa fa-check"></span>';
 	$r .= '&nbsp;'. $lang['unmark_threads'].'</a></li>'."\n";
 	$r .= '  <li><a href="admin.php?action=invert_markings'.$ref.'">';
-	$r .= $lang['invert_markings'].'</a></li>'."\n";
+	$r .= '&nbsp;'. $lang['invert_markings'].'</a></li>'."\n";
 	$r .= '  <li><a href="admin.php?action=mark_threads'.$ref.'"><span class="fa fa-check-square-o"></span>';
 	$r .= '&nbsp;'. $lang['mark_threads'].'</a></li>'."\n";
 	$r .= ' </ul>'."\n";
