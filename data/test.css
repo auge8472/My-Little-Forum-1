@@ -28,7 +28,7 @@ header .left, header .right, nav .right {
 	padding: 0;
 }
 
-header .left p, header .left h1 {
+header .left p, header .left h1, header .right .usermenu, nav ul.left, nav .right ul, main .marked-threads ul, footer .left, footer .right {
 	margin: 0 0 0.25em 0;
 	margin: 0 0 0.25rem 0;
 	padding: 0;
@@ -37,12 +37,6 @@ header .left p, header .left h1 {
 header h1 {
 	font-size: 1.4em;
 	font-size: 1.4rem;
-}
-
-header .right .usermenu {
-	margin: 0 0 0.25em 0;
-	margin: 0 0 0.25rem 0;
-	padding: 0;
 }
 
 .usermenu li {
@@ -55,12 +49,6 @@ header .right .usermenu {
 header form[action='search.php'] {
 	margin: 0.35em 0;
 	margin: 0.35rem 0;
-	padding: 0;
-}
-
-nav ul.left, nav .right ul {
-	margin: 0 0 0.25em 0;
-	margin: 0 0 0.25rem 0;
 	padding: 0;
 }
 
@@ -102,18 +90,6 @@ main ul li > ul {
 	margin: 0;
 	padding: 0 0.25em 0 0;
 	padding: 0 0.25rem 0 0;
-}
-
-footer .left {
-	margin: 0 0 0.25em 0;
-	margin: 0 0 0.25rem 0;
-	padding: 0;
-}
-
-footer .right {
-	margin: 0 0 0.25em 0;
-	margin: 0 0 0.25rem 0;
-	padding: 0;
 }
 
 footer .right li {
