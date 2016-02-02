@@ -14,7 +14,7 @@ header, nav, main, footer {
 	padding: 0 0.25rem;
 }
 
-header .left, header .right, nav .right {
+header .left, header .right, nav .right, main {
 	border-bottom: 1px solid #aac;
 }
 
@@ -69,6 +69,29 @@ nav ul.left li, nav .right li {
 }
 
 nav form {
+	margin: 0 0 0.25em 0;
+	padding: 0;
+}
+
+main ul {
+	margin: 0 0 0.25em 0;
+	margin: 0 0 0.25rem 0;
+	padding: 0;
+	list-style-type: none;	
+}
+
+main ul li > ul {
+	padding-left: 1em;
+	padding-left: 1rem;
+}
+
+.marked-threads {
+	margin: 1em 0 0.35em 0;
+	margin: 1rem 0 0.35rem 0;
+}
+
+.marked-threads h2 {
+	font-size: 1em;
 	margin: 0 0 0.25em 0;
 	padding: 0;
 }
