@@ -14,7 +14,7 @@ header, nav, main, footer {
 	padding: 0 0.25rem;
 }
 
-header .left, header .right {
+header .left, header .right, nav .right {
 	margin: 0 0 0.35em 0;
 	margin: 0 0 0.35rem 0;
 	padding: 0;
@@ -49,5 +49,23 @@ header .right .usermenu {
 header form[action='search.php'] {
 	margin: 0.35em 0;
 	margin: 0.35rem 0;
+	padding: 0;
+}
+
+nav ul.left, nav .right ul {
+	margin: 0 0 0.25em 0;
+	margin: 0 0 0.25rem 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+nav ul.left li, nav .right li {
+	display: inline;
+	margin: 0;
+	padding: 0 0.25em 0 0;
+}
+
+nav form {
+	margin: 0 0 0.25em 0;
 	padding: 0;
 }
