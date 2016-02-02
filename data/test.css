@@ -6,6 +6,7 @@ html, body {
 	background: #fff;
 }
 
+/* main elements */
 header, nav, main, footer {
 	display: block;
 	margin: 0 0 0.35em 0;
@@ -14,39 +15,41 @@ header, nav, main, footer {
 	padding: 0 0.25rem;
 }
 
+/* elements with border-bottom to differentiate it from the following block */
 header .left, header .right, nav .right, main {
 	border-bottom: 1px solid #aac;
 }
 
-header .left, header .right, nav .right {
+/* lists, that should not have list bullets */
+header .right .usermenu, nav ul.left, nav .right ul, main ul, footer .right {
+	list-style-type: none;
+}
+
+/* elements with the great gap */
+header .left, header .right, nav .right, main ul {
 	margin: 0 0 0.35em 0;
 	margin: 0 0 0.35rem 0;
 	padding: 0;
 }
 
-header .left p, header .left h1 {
+/* elements with the small gap */
+header .left p, header .left h1, header .right .usermenu, nav ul.left, nav .right ul, main .marked-threads ul, footer .left, footer .right {
 	margin: 0 0 0.25em 0;
 	margin: 0 0 0.25rem 0;
 	padding: 0;
+}
+
+/* list items of linklists */
+.usermenu li, nav ul.left li, nav .right li, .marked-threads li, footer .right li {
+	display: inline;
+	margin: 0;
+	padding: 0 0.25em 0 0;
+	padding: 0 0.25rem 0 0;
 }
 
 header h1 {
 	font-size: 1.4em;
 	font-size: 1.4rem;
-}
-
-header .right .usermenu {
-	margin: 0 0 0.25em 0;
-	margin: 0 0 0.25rem 0;
-	padding: 0;
-	list-style-type: none;
-}
-
-.usermenu li {
-	display: inline;
-	margin: 0;
-	padding: 0 0.25em 0 0;
-	padding: 0 0.25rem 0 0;
 }
 
 header form[action='search.php'] {
@@ -55,29 +58,9 @@ header form[action='search.php'] {
 	padding: 0;
 }
 
-nav ul.left, nav .right ul {
-	margin: 0 0 0.25em 0;
-	margin: 0 0 0.25rem 0;
-	padding: 0;
-	list-style-type: none;
-}
-
-nav ul.left li, nav .right li {
-	display: inline;
-	margin: 0;
-	padding: 0 0.25em 0 0;
-}
-
 nav form {
 	margin: 0 0 0.25em 0;
 	padding: 0;
-}
-
-main ul {
-	margin: 0 0 0.25em 0;
-	margin: 0 0 0.25rem 0;
-	padding: 0;
-	list-style-type: none;	
 }
 
 main ul li > ul {
@@ -94,24 +77,4 @@ main ul li > ul {
 	font-size: 1em;
 	margin: 0 0 0.25em 0;
 	padding: 0;
-}
-
-footer .left {
-	margin: 0 0 0.25em 0;
-	margin: 0 0 0.25rem 0;
-	padding: 0;
-}
-
-footer .right {
-	margin: 0 0 0.25em 0;
-	margin: 0 0 0.25rem 0;
-	padding: 0;
-	list-style-type: none;
-}
-
-footer .right li {
-	display: inline;
-	margin: 0;
-	padding: 0 0.25em 0 0;
-	padding: 0 0.25rem 0 0;
 }
