@@ -206,7 +206,6 @@ global $lang, $select_submit_button;
 $output = "";
 if ($entry_count > $entries_per_page)
 	{
-	$output .= "&nbsp;";
 	$new_index_before = $page - 1;
 	$new_index_after = $page + 1;
 	$site_count = ceil($entry_count / $entries_per_page);

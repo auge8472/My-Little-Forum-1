@@ -1,0 +1,117 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	color: #000;
+	font-size: 100.01%;
+	background: #fff;
+}
+
+header, nav, main, footer {
+	display: block;
+	margin: 0 0 0.35em 0;
+	margin: 0 0 0.35rem 0;
+	padding: 0 0.25em;
+	padding: 0 0.25rem;
+}
+
+header .left, header .right, nav .right, main {
+	border-bottom: 1px solid #aac;
+}
+
+header .left, header .right, nav .right {
+	margin: 0 0 0.35em 0;
+	margin: 0 0 0.35rem 0;
+	padding: 0;
+}
+
+header .left p, header .left h1 {
+	margin: 0 0 0.25em 0;
+	margin: 0 0 0.25rem 0;
+	padding: 0;
+}
+
+header h1 {
+	font-size: 1.4em;
+	font-size: 1.4rem;
+}
+
+header .right .usermenu {
+	margin: 0 0 0.25em 0;
+	margin: 0 0 0.25rem 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+.usermenu li {
+	display: inline;
+	margin: 0;
+	padding: 0 0.25em 0 0;
+	padding: 0 0.25rem 0 0;
+}
+
+header form[action='search.php'] {
+	margin: 0.35em 0;
+	margin: 0.35rem 0;
+	padding: 0;
+}
+
+nav ul.left, nav .right ul {
+	margin: 0 0 0.25em 0;
+	margin: 0 0 0.25rem 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+nav ul.left li, nav .right li {
+	display: inline;
+	margin: 0;
+	padding: 0 0.25em 0 0;
+}
+
+nav form {
+	margin: 0 0 0.25em 0;
+	padding: 0;
+}
+
+main ul {
+	margin: 0 0 0.25em 0;
+	margin: 0 0 0.25rem 0;
+	padding: 0;
+	list-style-type: none;	
+}
+
+main ul li > ul {
+	padding-left: 1em;
+	padding-left: 1rem;
+}
+
+.marked-threads {
+	margin: 1em 0 0.35em 0;
+	margin: 1rem 0 0.35rem 0;
+}
+
+.marked-threads h2 {
+	font-size: 1em;
+	margin: 0 0 0.25em 0;
+	padding: 0;
+}
+
+footer .left {
+	margin: 0 0 0.25em 0;
+	margin: 0 0 0.25rem 0;
+	padding: 0;
+}
+
+footer .right {
+	margin: 0 0 0.25em 0;
+	margin: 0 0 0.25rem 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+footer .right li {
+	display: inline;
+	margin: 0;
+	padding: 0 0.25em 0 0;
+	padding: 0 0.25rem 0 0;
+}

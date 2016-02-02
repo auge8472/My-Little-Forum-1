@@ -179,14 +179,17 @@ if ($settings['access_for_users_only'] == 1
 	$topnav  = '<li><a href="forum.php" title="'. outputLangDebugInAttributes($lang['back_to_forum_linktitle']) .'">';
 	$topnav .= '<span class="fa fa-chevron-right"></span>&nbsp;'. htmlspecialchars($lang['back_to_forum_linkname']) .'</a></li>'."\n";
 	$cat = ($category > 0) ? '&amp;category='. intval($category) : '';
-	$subnav_2 = "";
+	$subnav_2tm = "\n <ul>\n{NavPoints} </ul>\n";
+	$subnav_2ts = '  <li>{NavPoint}</li>'."\n";
+	$subnav_2 = '';
+	$subnav2p = array();
 	if ($settings['board_view']==1)
 		{
 		$url = 'board_entry.php?view=board&amp;id='.$entrydata["tid"];
 		$class = 'board-view';
 		$title = outputLangDebugInAttributes($lang['board_view_linktitle']);
 		$linktext = $lang['board_view_linkname'];
-		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
+		$subnav2p[] = str_replace('{NavPoint}', outputSingleLink($url, $linktext, $title, $class), $subnav_2ts);
 		}
 	if ($settings['mix_view']==1)
 		{
@@ -194,8 +197,9 @@ if ($settings['access_for_users_only'] == 1
 		$class = 'mix-view';
 		$title = outputLangDebugInAttributes($lang['mix_view_linktitle']);
 		$linktext = $lang['mix_view_linkname'];
-		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
+		$subnav2p[] = str_replace('{NavPoint}', outputSingleLink($url, $linktext, $title, $class), $subnav_2ts);
 		}
+	$subnav_2 = str_replace('{NavPoints}', join("", $subnav2p), $subnav_2tm);
 
 	parse_template();
 	# import posting template

@@ -95,14 +95,17 @@ if ($settings['access_for_users_only'] == 1
 	if (!$result) die($lang['db_error']);
 
 	$topnav = outputPostingLink($_SESSION[$settings['session_prefix'].'category']);
+	$subnav_2tm = "\n <ul>\n{NavPoints} </ul>\n";
+	$subnav_2ts = '  <li>{NavPoint}</li>'."\n";
 	$subnav_2 = '';
+	$subnav2p = array();
 	if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 		{
 		$url  = 'index.php?update=1';
 		$class = 'update-postings';
 		$title = outputLangDebugInAttributes($lang['update_time_linktitle']);
 		$linktext = $lang['update_time_linkname'];
-		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
+		$subnav2p[] = str_replace('{NavPoint}', outputSingleLink($url, $linktext, $title, $class), $subnav_2ts);
 		}
 	if ($threadOrder == "time")
 		{
@@ -116,14 +119,14 @@ if ($settings['access_for_users_only'] == 1
 		}
 	$class = 'order-postings';
 	$linktext = $lang['order_linkname'];
-	$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
+	$subnav2p[] = str_replace('{NavPoint}', outputSingleLink($url, $linktext, $title, $class), $subnav_2ts);
 	if ($settings['board_view'] == 1)
 		{
 		$url = 'board.php?view=board';
 		$class = 'board-view';
 		$title = outputLangDebugInAttributes($lang['board_view_linktitle']);
 		$linktext = $lang['board_view_linkname'];
-		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
+		$subnav2p[] = str_replace('{NavPoint}', outputSingleLink($url, $linktext, $title, $class), $subnav_2ts);
 		}
 	if ($settings['mix_view']==1)
 		{
@@ -131,14 +134,16 @@ if ($settings['access_for_users_only'] == 1
 		$class = 'mix-view';
 		$title = outputLangDebugInAttributes($lang['mix_view_linktitle']);
 		$linktext = $lang['mix_view_linkname'];
-		$subnav_2 .= outputSingleLink($url, $linktext, $title, $class);
+		$subnav2p[] = str_replace('{NavPoint}', outputSingleLink($url, $linktext, $title, $class), $subnav_2ts);
 		}
+	$subnav_2 = str_replace('{NavPoints}', join("", $subnav2p), $subnav_2tm);
 	$subnav_2 .= nav($_SESSION[$settings['session_prefix'].'page'], (int)$settings['topics_per_page'], $thread_count, $_SESSION[$settings['session_prefix'].'order'], $_SESSION[$settings['session_prefix'].'descasc'], $_SESSION[$settings['session_prefix'].'category']);
 	$subnav_2 .= outputCategoriesList($categories, $_SESSION[$settings['session_prefix'].'category']);
 
 	parse_template();
 	echo $header;
 	echo outputDebugSession();
+	#echo '<pre>'. print_r($subnav2p, true) .'</pre>';
 
 	if ($thread_count > 0 && isset($result))
 		{
