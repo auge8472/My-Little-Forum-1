@@ -27,6 +27,45 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* original FontAwesome */
+.icon-align-justify:before {
+    content: "\f039";
+}
+.icon-chevron-right:before {
+    content: "\f054";
+}
+.icon-comment-o:before {
+    content: "\f0e5";
+}
+.icon-envelope-o:before {
+    content: "\f003";
+}
+.icon-file-code-o:before {
+    content: "\f1c9";
+}
+.icon-lock2:before {
+    content: "\f023";
+}
+.icon-server:before {
+    content: "\f233";
+}
+.icon-trash-o:before {
+    content: "\f014";
+}
+.icon-user:before {
+    content: "\f007";
+}
+.icon-user-plus:before {
+    content: "\f234";
+}
+.icon-user-times:before {
+    content: "\f235";
+}
+.icon-users:before {
+    content: "\f0c0";
+}
+
+/* original Icomoon */
 
 /**
  * start of the page rules
