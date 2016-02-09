@@ -43,11 +43,29 @@
 .icon-file-code-o:before {
     content: "\f1c9";
 }
+.icon-file-o:before {
+    content: "\f016";
+}
+.icon-files-o:before {
+    content: "\f0c5";
+}
 .icon-lock2:before {
     content: "\f023";
 }
 .icon-server:before {
     content: "\f233";
+}
+.icon-sliders:before {
+    content: "\f1de";
+}
+.icon-smile-o:before {
+    content: "\f118";
+}
+.icon-terminal:before {
+    content: "\f120";
+}
+.icon-times:before {
+    content: "\f00d";
 }
 .icon-trash-o:before {
     content: "\f014";
