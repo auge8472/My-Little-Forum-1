@@ -169,3 +169,26 @@ main ul li > ul {
 	margin: 0 0 0.25em 0;
 	padding: 0;
 }
+
+@media screen and (max-width: 38em) {
+	.normaltab {
+		width: 100%;
+		margin: 0;
+	}
+	.normaltab tr, .normaltab td {
+ 		display: block;
+	}
+	.normaltab thead {
+		display: none;
+	}
+	.normaltab tr {
+		border: 1px solid #bacbdf;
+		margin-bottom: 0.25em;
+		margin-bottom: 0.25rem;
+	}
+	.normaltab td {
+		margin: 0;
+		padding: 0 0.25em;
+		padding: 0 0.25rem;
+	}
+}
