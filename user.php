@@ -1066,7 +1066,7 @@ switch ($action)
 		if ($thread_count > 0)
 			{
 			$currDescAsc = strtolower($descasc);
-			$output .= '<table class="normaltab">'."\n";
+			$output .= '<table class="normaltab list-users">'."\n";
 			$output .= ' <thead>'."\n";
 			$output .= '  <tr>'."\n";
 			$output .= '   <th><a href="user.php?action=show+users&amp;order=user_name&amp;descasc=';
@@ -1502,7 +1502,7 @@ switch ($action)
 			$output .= outputUsersettingsMenu($uid, 'subscriptions');
 			$output .= '<form action="user.php" method="post">'."\n";
 			$output .= '<input type="hidden" name="action" value="edit subscriptions">'."\n";
-			$output .= '<table class="normaltab">'."\n";
+			$output .= '<table class="normaltab list-subscriptions">'."\n";
 			$output .= ' <tr class="titlerow">'."\n";
 			$output .= '  <th>'. $lang['edit_subscriptions_th_title'] .'</th>'."\n";
 			$output .= '  <th>'. $lang['edit_subscriptions_th_posting'] .'</th>'."\n";

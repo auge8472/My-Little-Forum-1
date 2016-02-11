@@ -137,7 +137,7 @@ if ($settings['access_for_users_only'] == 1
 	if ($thread_count > 0 && isset($threadsResult))
 		{
 		$currDescAsc = strtolower($_SESSION[$settings['session_prefix'].'descasc']);
-		echo '<table class="normaltab">'."\n";
+		echo '<table class="normaltab list-mix-threads">'."\n";
 		echo ' <thead>'."\n";
 		echo '  <tr>'."\n";
 		echo '   <th><a href="mix.php?order=subject&amp;descasc=';
