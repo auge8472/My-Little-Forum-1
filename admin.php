@@ -2144,7 +2144,7 @@ switch ($action)
 				}
 			echo $menu;
 			echo '<form action="admin.php" method="post">'."\n";
-			echo '<table class="normaltab">'."\n";
+			echo '<table class="normaltab users-list">'."\n";
 			echo ' <thead>'."\n";
 			echo '  <tr>'."\n";
 			echo '   <th class="checkrow">&nbsp;</th>'."\n";

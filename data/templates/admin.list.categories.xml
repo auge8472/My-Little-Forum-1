@@ -1,6 +1,6 @@
 <?xml version='1.0' standalone='yes'?>
 <template>
- <wholetable><![CDATA[<table class="normaltab">
+ <wholetable><![CDATA[<table class="normaltab categories-list">
  <thead>
 {tp-Headline}</thead>
  <tbody>
