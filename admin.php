@@ -1672,163 +1672,163 @@ if (!empty($action))
 	{
 	if ($action == "main")
 		{
-		$topnav .= '<li><span class="current"><span class="icon-server"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-server icon-server"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['admin_area']) .'</span></li>'."\n";
 		}
 	if ($action == "settings")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><span class="current"><span class="fa fa-sliders"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-sliders icon-sliders"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['forum_settings']) .'</span></li>'."\n";
 		}
 	if ($action == "debug")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><span class="current"><span class="fa fa-terminal"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-terminal icon-terminal"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['debug_administr']) .'</span></li>'."\n";
 		}
 	if ($action == "categories")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><span class="current"><span class="icon-align-justify"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-align-justify icon-align-justify"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['category_administr']) .'</span></li>'."\n";
 		}
 	if ($action == "delete_category")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><a href="admin.php?action=categories"><span class="icon-align-justify"></span>&nbsp;';
+		$topnav .= '<li><a href="admin.php?action=categories"><span class="fa fa-align-justify icon-align-justify"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['category_administr']) .'</a></li>'."\n";
-		$topnav .= '<li><span class="current"><span class="icon-align-justify"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-align-justify icon-align-justify"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['delete_category']) .'</span></li>'."\n";
 		}
 	if ($action == "edit_category")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><a href="admin.php?action=categories"><span class="icon-align-justify"></span>&nbsp;';
+		$topnav .= '<li><a href="admin.php?action=categories"><span class="fa fa-align-justify icon-align-justify"></span>&nbsp;';
 		$topnav .= htmlspecialchars( $lang_add['category_administr']) .'</a></li>'."\n";
-		$topnav .= '<li><span class="current"><span class="icon-align-justify"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-align-justify icon-align-justify"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['cat_edit_hl']) .'</span></li>'."\n";
 		}
 	if ($action == "user")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><span class="current"><span class="icon-users"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-users icon-users"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['user_administr']) .'</span></li>'."\n";
 		}
 	if ($action == "edit_user")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><a href="admin.php?action=user"><span class="icon-users"></span>&nbsp;';
+		$topnav .= '<li><a href="admin.php?action=user"><span class="fa fa-users icon-users"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['user_administr']) .'</a></li>'."\n";
-		$topnav .= '<li><span class="current"><span class="icon-user"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-user icon-user"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['edit_user']) .'</span></li>'."\n";
 		}
 	if ($action == "delete_users_sure")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><a href="admin.php?action=user"><span class="icon-users"></span>&nbsp;';
+		$topnav .= '<li><a href="admin.php?action=user"><span class="fa fa-users icon-users"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['user_administr']) .'</a></li>'."\n";
-		$topnav .= '<li><span class="current"><span class="icon-user-times"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-user-times icon-user-times"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['delete_user']) .'</span></li>'."\n";
 		}
 	if ($action == "register")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><a href="admin.php?action=user"><span class="icon-users"></span>&nbsp;';
+		$topnav .= '<li><a href="admin.php?action=user"><span class="fa fa-users icon-users"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['user_administr']) .'</a></li>'."\n";
-		$topnav .= '<li><span class="current"><span class="icon-user-plus"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-user-plus icon-user-plus"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['reg_user']) .'</span></li>'."\n";
 		}
 	if ($action == "email_list")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><a href="admin.php?action=user"><span class="icon-users"></span>&nbsp;';
+		$topnav .= '<li><a href="admin.php?action=user"><span class="fa fa-users icon-users"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['user_administr']) .'</a></li>'."\n";
-		$topnav .= '<li><span class="current"><span class="icon-envelope-o"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-envelope-o icon-envelope-o"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['email_list']) .'</span></li>'."\n";
 		}
 	if ($action == "clear_userdata")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><a href="admin.php?action=user"><span class="icon-users"></span>&nbsp;';
+		$topnav .= '<li><a href="admin.php?action=user"><span class="fa fa-users icon-users"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['user_administr']) .'</a></li>'."\n";
-		$topnav .= '<li><span class="current"><span class="icon-user-times"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-user-times icon-user-times"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['clear_userdata']) .'</span></li>'."\n";
 		}
 	if ($action == "banlists")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><span class="current"><span class="fa fa-fw fa-times"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-fw fa-times icon-times"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['banlists']) .'</span></li>'."\n";
 		}
 	if ($action == "empty")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><span class="current"><span class="fa fa-file"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-file icon-file"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['empty_forum']) .'</span></li>'."\n";
 		}
 	if ($action == "backup")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><span class="current"><span class="fa fa-files-o"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-files-o icon-files-o"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['backup_restore']) .'</span></li>'."\n";
 		}
 	if ($action == "import_sql" or $action == "import_sql_ok")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><a href="admin.php?action=backup"><span class="fa fa-files"></span>&nbsp;';
+		$topnav .= '<li><a href="admin.php?action=backup"><span class="fa fa-files icon-files-o"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['backup_restore']) .'</a></li>'."\n";
-		$topnav .= '<li><span class="current"><span class="fa fa-circle"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-circle icon-circle"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['import_sql']) .'</span></li>'."\n";
 		}
 	if ($action == "uninstall")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><span class="current"><span class="icon-trash-o"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-trash-o icon-trash-o"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['uninstall']) .'</span></li>'."\n";
 		}
 	if ($action == "smilies")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><span class="current"><span class="fa fa-smile-o"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-smile-o icon-smile-o"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['smilies']) .'</span></li>'."\n";
 		}
 	if ($action == "edit_smiley")
 		{
 		$topnav .= $adminMainSiteLink;
-		$topnav .= '<li><a href="admin.php?action=smilies"><span class="fa fa-smile-o"></span>&nbsp;';
+		$topnav .= '<li><a href="admin.php?action=smilies"><span class="fa fa-smile-o icon-smile-o"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['smilies']) .'</a></li>'."\n";
-		$topnav .= '<li><span class="current"><span class="fa fa-smile-o"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-smile-o icon-smile-o"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['edit_smiley_hl']) .'</span></li>'."\n";
 		}
 	if ($action == "delete_marked_threads")
 		{
-		$topnav .= '<li><span class="current"><span class="fa fa-circle"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-circle icon-circle"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['del_marked']) .'</span></li>'."\n";
 		}
 	if ($action == "unmark")
 		{
-		$topnav .= '<li><span class="current"><span class="fa fa-circle"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-circle icon-circle"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['unmark_threads']) .'</span></li>'."\n";
 		}
 	if ($action == "lock_marked_threads")
 		{
-		$topnav .= '<li><span class="current"><span class="fa fa-circle"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-circle icon-circle"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['lock_marked']) .'</span></li>'."\n";
 		}
 	if ($action == "unlock_marked_threads")
 		{
-		$topnav .= '<li><span class="current"><span class="fa fa-circle"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-circle icon-circle"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['unlock_marked']) .'</span></li>'."\n";
 		}
 	if ($action == "invert_markings")
 		{
-		$topnav .= '<li><span class="current"><span class="fa fa-circle"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-circle icon-circle"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['invert_markings']) .'</span></li>'."\n";
 		}
 	if ($action == "mark_threads")
 		{
-		$topnav .= '<li><span class="current"><span class="fa fa-circle"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-circle icon-circle"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang_add['mark_threads']) .'</span></li>'."\n";
 		}
 	}
@@ -2144,7 +2144,7 @@ switch ($action)
 				}
 			echo $menu;
 			echo '<form action="admin.php" method="post">'."\n";
-			echo '<table class="normaltab">'."\n";
+			echo '<table class="normaltab list-users">'."\n";
 			echo ' <thead>'."\n";
 			echo '  <tr>'."\n";
 			echo '   <th class="checkrow">&nbsp;</th>'."\n";

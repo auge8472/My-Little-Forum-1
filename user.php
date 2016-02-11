@@ -694,13 +694,13 @@ else
 	{
 	$topnav .= 'forum.php';
 	}
-$topnav .= '"><span class="fa fa-chevron-right"></span>&nbsp;';
+$topnav .= '"><span class="fa fa-chevron-right icon-chevron-right"></span>&nbsp;';
 $topnav .= htmlspecialchars($lang['back_to_overview_linkname']) .'</a></li>'."\n";
 if (!empty($action))
 	{
 	if ($action == "show users")
 		{
-		$topnav .= '<li><span class="current"><span class="fa fa-users"></span>&nbsp;';
+		$topnav .= '<li><span class="current"><span class="fa fa-users icon-users"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang['reg_users_hl']);
 		if (!empty($_GET['letter']))
 			{
@@ -710,58 +710,58 @@ if (!empty($action))
 		}
 	else
 		{
-		$topnav .= '<li><a href="user.php"><span class="fa fa-users"></span>&nbsp;';
+		$topnav .= '<li><a href="user.php"><span class="fa fa-users icon-users"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang['reg_users_hl']) .'</a></li>'."\n";
 		if ($action == "get userdata")
 			{
 			$lang['user_info_hl'] = str_replace("[name]", $userName["user_name"], $lang['user_info_hl']);
-			$topnav .= '<li><span class="current"><span class="fa fa-user"></span>&nbsp;';
+			$topnav .= '<li><span class="current"><span class="fa fa-user icon-user"></span>&nbsp;';
 			$topnav .= htmlspecialchars($lang['user_info_hl']) .'</span></li>'."\n";
 			}
 		if ($action == "usersettings")
 			{
 			$lang['user_info_hl'] = str_replace("[name]", $userName["user_name"], $lang['user_info_hl']);
-			$topnav .= '<li><a href="user.php?id='. intval($uid).'"><span class="fa fa-user">';
+			$topnav .= '<li><a href="user.php?id='. intval($uid).'"><span class="fa fa-user icon-user">';
 			$topnav .= '</span>&nbsp;'. htmlspecialchars($lang['user_info_hl']) .'</a></li>'."\n";
-			$topnav .= '<li><span class="current"><span class="fa fa-eye"></span>&nbsp;';
+			$topnav .= '<li><span class="current"><span class="fa fa-eye icon-eye"></span>&nbsp;';
 			$topnav .= htmlspecialchars($lang['edit_users_settings']) .'</span></li>'."\n";
 			}
 		if ($action == "edit")
 			{
 			$lang['user_info_hl'] = str_replace("[name]", $userName["user_name"], $lang['user_info_hl']);
-			$topnav .= '<li><a href="user.php?id='. intval($uid). '"><span class="fa fa-user">';
+			$topnav .= '<li><a href="user.php?id='. intval($uid). '"><span class="fa fa-user icon-user">';
 			$topnav .= '</span>&nbsp;'. htmlspecialchars($lang['user_info_hl']) .'</a></li>'."\n";
-			$topnav .= '<li><span class="current"><span class="fa fa-pencil-square-o"></span>&nbsp;';
+			$topnav .= '<li><span class="current"><span class="fa fa-pencil-square-o icon-pencil-square-o"></span>&nbsp;';
 			$topnav .= htmlspecialchars($lang['edit_userdata_ln']) .'</span></li>'."\n";
 			}
 		if ($action == "pw")
 			{
 			$lang['user_info_hl'] = str_replace("[name]", $userName["user_name"], $lang['user_info_hl']);
-			$topnav .= '<li><a href="user.php?id='. intval($uid) .'"><span class="fa fa-user">';
+			$topnav .= '<li><a href="user.php?id='. intval($uid) .'"><span class="fa fa-user icon-user">';
 			$topnav .= '</span>&nbsp;'. htmlspecialchars($lang['user_info_hl']) .'</a></li>'."\n";
-			$topnav .= '<li><span class="current"><span class="fa fa-key"></span>&nbsp;';
+			$topnav .= '<li><span class="current"><span class="fa fa-key icon-key"></span>&nbsp;';
 			$topnav .= htmlspecialchars($lang['edit_pw_ln']) .'</span></li>'."\n";
 			}
 		if ($action == "email")
 			{
 			$lang['user_info_hl'] = str_replace("[name]", $userName["user_name"], $lang['user_info_hl']);
-			$topnav .= '<li><a href="user.php?id='. intval($uid) .'"><span class="fa fa-user">';
+			$topnav .= '<li><a href="user.php?id='. intval($uid) .'"><span class="fa fa-user icon-user">';
 			$topnav .= '</span>&nbsp;'. htmlspecialchars($lang['user_info_hl']) .'</a></li>'."\n";
-			$topnav .= '<li><span class="current"><span class="fa fa-at"></span>&nbsp;';
+			$topnav .= '<li><span class="current"><span class="fa fa-at icon-at"></span>&nbsp;';
 			$topnav .= htmlspecialchars($lang['change_email_hl']) .'</span></li>'."\n";
 			}
 		if ($action == "personal_message")
 			{
 			$lang['pers_msg_ln'] = str_replace("[name]", $userName["user_name"], $lang['pers_msg_ln']);
-			$topnav .= '<li><span class="current"><span class="fa fa-envelope-o"></span>&nbsp;';
+			$topnav .= '<li><span class="current"><span class="fa fa-envelope-o icon-envelope-o"></span>&nbsp;';
 			$topnav .= htmlspecialchars($lang['pers_msg_ln']) .'</span></li>'."\n";
 			}
 		if ($action == "subscriptions")
 			{
 			$lang['user_info_hl'] = str_replace("[name]", $userName["user_name"], $lang['user_info_hl']);
-			$topnav .= '<li><a href="user.php?id='. intval($uid) .'"><span class="fa fa-user">';
+			$topnav .= '<li><a href="user.php?id='. intval($uid) .'"><span class="fa fa-user icon-user">';
 			$topnav .= '</span>&nbsp;'. htmlspecialchars($lang['user_info_hl']) .'</a></li>'."\n";
-			$topnav .= '<li><span class="current"><span class="fa fa-info-circle"></span>&nbsp;';
+			$topnav .= '<li><span class="current"><span class="fa fa-info-circle icon-info-circle"></span>&nbsp;';
 			$topnav .= htmlspecialchars($lang['edit_subscription_ln']) .'</span></li>'."\n";
 			}
 		}
@@ -1066,7 +1066,7 @@ switch ($action)
 		if ($thread_count > 0)
 			{
 			$currDescAsc = strtolower($descasc);
-			$output .= '<table class="normaltab">'."\n";
+			$output .= '<table class="normaltab list-users">'."\n";
 			$output .= ' <thead>'."\n";
 			$output .= '  <tr>'."\n";
 			$output .= '   <th><a href="user.php?action=show+users&amp;order=user_name&amp;descasc=';
@@ -1502,7 +1502,7 @@ switch ($action)
 			$output .= outputUsersettingsMenu($uid, 'subscriptions');
 			$output .= '<form action="user.php" method="post">'."\n";
 			$output .= '<input type="hidden" name="action" value="edit subscriptions">'."\n";
-			$output .= '<table class="normaltab">'."\n";
+			$output .= '<table class="normaltab list-subscriptions">'."\n";
 			$output .= ' <tr class="titlerow">'."\n";
 			$output .= '  <th>'. $lang['edit_subscriptions_th_title'] .'</th>'."\n";
 			$output .= '  <th>'. $lang['edit_subscriptions_th_posting'] .'</th>'."\n";

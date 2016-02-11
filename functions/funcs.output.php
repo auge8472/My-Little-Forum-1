@@ -47,13 +47,13 @@ if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 	$r .= ' <h2><img src="img/marked.png" alt="[x]" width="9" height="9">';
 	$r .= $lang['marked_threads_actions'].'</h2>'."\n";
 	$r .= ' <ul>'."\n";
-	$r .= '  <li><a href="admin.php?action=delete_marked_threads'.$ref.'"><span class="fa fa-trash-o"></span>';
+	$r .= '  <li><a href="admin.php?action=delete_marked_threads'.$ref.'"><span class="fa fa-trash-o icon-trash-o"></span>';
 	$r .= '&nbsp;'. $lang['delete_marked_threads'].'</a></li>'."\n";
-	$r .= '  <li><a href="admin.php?action=lock_marked_threads'.$ref.'"><span class="fa fa-lock"></span>';
+	$r .= '  <li><a href="admin.php?action=lock_marked_threads'.$ref.'"><span class="fa fa-lock icon-lock2"></span>';
 	$r .= '&nbsp;'. $lang['lock_marked_threads'].'</a></li>'."\n";
-	$r .= '  <li><a href="admin.php?action=unlock_marked_threads'.$ref.'"><span class="fa fa-unlock-alt"></span>';
+	$r .= '  <li><a href="admin.php?action=unlock_marked_threads'.$ref.'"><span class="fa fa-unlock-alt icon-unlock-alt"></span>';
 	$r .= '&nbsp;'. $lang['unlock_marked_threads'].'</a></li>'."\n";
-	$r .= '  <li><a href="admin.php?action=unmark'.$ref.'"><span class="fa fa-check"></span>';
+	$r .= '  <li><a href="admin.php?action=unmark'.$ref.'"><span class="fa fa-check icon-check-square-o"></span>';
 	$r .= '&nbsp;'. $lang['unmark_threads'].'</a></li>'."\n";
 	$r .= '  <li><a href="admin.php?action=invert_markings'.$ref.'">';
 	$r .= '&nbsp;'. $lang['invert_markings'].'</a></li>'."\n";
@@ -192,7 +192,7 @@ if (!empty($view) or !empty($category))
 	}
 
 $r .= '<li><a rel="nofollow" href="posting.php'. $qs .'" title="'. outputLangDebugInAttributes($lang['new_entry_linktitle']);
-$r .=  '"><span class="fa fa-bullhorn"></span>&nbsp;'. htmlspecialchars($lang['new_entry_linkname']) .'</a></li>'."\n";
+$r .=  '"><span class="fa fa-bullhorn icon-bullhorn"></span>&nbsp;'. htmlspecialchars($lang['new_entry_linkname']) .'</a></li>'."\n";
 
 return $r;
 } # End: outputPostingLink
@@ -455,7 +455,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		{
 		$r .= '<li><a href="posting.php?action=edit&amp;id='. $thread["id"] .'&amp;back='. $thread["tid"];
 		$r .= '" title="'. outputLangDebugInAttributes($lang['edit_linktitle']) .'" class="buttonize">';
-		$r .= '<span class="fa fa-edit"></span>&nbsp;'. $lang['edit_linkname'] .'</a></li>'."\n";
+		$r .= '<span class="fa fa-edit icon-edit"></span>&nbsp;'. $lang['edit_linkname'] .'</a></li>'."\n";
 		}
 	# delete a posting
 	if (($settings['user_delete'] == 1
@@ -468,7 +468,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		{
 		$r .= '<li><a href="posting.php?action=delete&amp;id='. $thread["id"] .'&amp;back='. $thread["tid"];
 		$r .= '" title="'. outputLangDebugInAttributes($lang['delete_linktitle']) .'" class="buttonize">';
-		$r .= '<span class="fa fa-trash-o"></span>&nbsp;'. $lang['delete_linkname'] .'</a></li>'."\n";
+		$r .= '<span class="fa fa-trash-o icon-trash-o"></span>&nbsp;'. $lang['delete_linkname'] .'</a></li>'."\n";
 		}
 	# subscribe a thread
 	if ((!empty($first)
@@ -506,7 +506,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		$r .= '<li><a href="posting.php?lock=true&amp;id='. intval($thread["id"]) .'" title="';
 		$r .= ($thread['locked'] == 0) ? outputLangDebugInAttributes($lang['lock_linktitle']) : outputLangDebugInAttributes($lang['unlock_linktitle']);
 		$r .= '" class="buttonize">';
-		$r .= ($thread['locked'] == 0) ? '<span class="fa fa-lock"></span>&nbsp;'. $lang['lock_linkname'] : '<span class="fa fa-unlock-alt"></span>&nbsp;'. $lang['unlock_linkname'];
+		$r .= ($thread['locked'] == 0) ? '<span class="fa fa-lock icon-lock2"></span>&nbsp;'. $lang['lock_linkname'] : '<span class="fa fa-unlock-alt icon-unlock-alt"></span>&nbsp;'. $lang['unlock_linkname'];
 		$r .= '</a></li>'."\n";
 		}
 	# pin a thread
@@ -519,7 +519,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		$r .= '<li><a href="posting.php?fix=true&amp;id='. intval($thread["id"]) .'" title="';
 		$r .= ($thread['fixed'] == 0) ? outputLangDebugInAttributes($lang['fix_thread_linktitle']) : outputLangDebugInAttributes($lang['unfix_thread_linktitle']);
 		$r .= '" class="buttonize">';
-		$r .= ($thread['fixed'] == 0) ? '<span class="fa fa-thumb-tack"></span>&nbsp;'. $lang['fix_thread_link'] : '<span class="fa fa-thumb-tack fa-inverse"></span>&nbsp;'. $lang['unfix_thread_link'];
+		$r .= ($thread['fixed'] == 0) ? '<span class="fa fa-thumb-tack icon-thumb-tack"></span>&nbsp;'. $lang['fix_thread_link'] : '<span class="fa fa-thumb-tack fa-inverse icon-thumb-tack"></span>&nbsp;'. $lang['unfix_thread_link'];
 		$r .= '</a></li>'."\n";
 		}
 	# move a posting

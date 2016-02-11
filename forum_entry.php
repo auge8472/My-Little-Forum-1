@@ -177,7 +177,7 @@ if ($settings['access_for_users_only'] == 1
 
 	$wo = $entrydata["subject"];
 	$topnav  = '<li><a href="forum.php" title="'. outputLangDebugInAttributes($lang['back_to_forum_linktitle']) .'">';
-	$topnav .= '<span class="fa fa-chevron-right"></span>&nbsp;'. htmlspecialchars($lang['back_to_forum_linkname']) .'</a></li>'."\n";
+	$topnav .= '<span class="fa fa-chevron-right icon-chevron-right"></span>&nbsp;'. htmlspecialchars($lang['back_to_forum_linkname']) .'</a></li>'."\n";
 	$cat = ($category > 0) ? '&amp;category='. intval($category) : '';
 	$subnav_2tm = "\n <ul>\n{NavPoints} </ul>\n";
 	$subnav_2ts = '  <li>{NavPoint}</li>'."\n";
@@ -220,12 +220,12 @@ if ($settings['access_for_users_only'] == 1
 			{
 			$answerlink  = '<a class="buttonize" href="posting.php?id='. intval($id);
 			$answerlink .= '" title="'. outputLangDebugInAttributes($lang['forum_answer_linktitle']) .'">';
-			$answerlink .= '<span class="fa fa-comment-o"></span>&nbsp;'. $lang['forum_answer_linkname'] .'</a>';
+			$answerlink .= '<span class="fa fa-comment-o icon-comment-o"></span>&nbsp;'. $lang['forum_answer_linkname'] .'</a>';
 			}
 		}
 	else
 		{
-		$answerlink = '<span class="buttonize"><span class="fa fa-lock"></span>&nbsp;'. $lang['thread_locked'] .'</span>';
+		$answerlink = '<span class="buttonize"><span class="fa fa-lock icon-lock2"></span>&nbsp;'. $lang['thread_locked'] .'</span>';
 		}
 	# generate HTML source code of posting
 	$posting = str_replace('{postingheadline}', $pHeadline, $posting);

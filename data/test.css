@@ -31,6 +31,12 @@
 .icon-align-justify:before {
     content: "\f039";
 }
+.icon-bullhorn:before {
+    content: "\f0a1";
+}
+.icon-check-square-o:before {
+    content: "\f046";
+}
 .icon-chevron-right:before {
     content: "\f054";
 }
@@ -40,17 +46,65 @@
 .icon-envelope-o:before {
     content: "\f003";
 }
+.icon-eye:before {
+    content: "\f06e";
+}
 .icon-file-code-o:before {
     content: "\f1c9";
+}
+.icon-file-o:before {
+    content: "\f016";
+}
+.icon-files-o:before {
+    content: "\f0c5";
+}
+.icon-github:before {
+    content: "\f09b";
+}
+.icon-home:before {
+    content: "\f015";
 }
 .icon-lock2:before {
     content: "\f023";
 }
+.icon-rss-square:before {
+    content: "\f143";
+}
+.icon-search:before {
+    content: "\f002";
+}
+.icon-search-plus:before {
+    content: "\f00e";
+}
 .icon-server:before {
     content: "\f233";
 }
+.icon-sign-in:before {
+    content: "\f090";
+}
+.icon-sign-out:before {
+    content: "\f08b";
+}
+.icon-sliders:before {
+    content: "\f1de";
+}
+.icon-smile-o:before {
+    content: "\f118";
+}
+.icon-terminal:before {
+    content: "\f120";
+}
+.icon-thumb-tack:before {
+    content: "\f08d";
+}
+.icon-times:before {
+    content: "\f00d";
+}
 .icon-trash-o:before {
     content: "\f014";
+}
+.icon-unlock-alt:before {
+    content: "\f13e";
 }
 .icon-user:before {
     content: "\f007";
@@ -66,6 +120,9 @@
 }
 
 /* original Icomoon */
+.icon-warning:before {
+    content: "\e901";
+}
 
 /**
  * start of the page rules
@@ -99,7 +156,7 @@ header .right .usermenu, nav ul.left, nav .right ul, main ul, footer .right {
 }
 
 /* elements with the great gap */
-header .left, header .right, nav .right, main ul {
+header .left, header .right, nav .right {
 	margin: 0 0 0.35em 0;
 	margin: 0 0 0.35rem 0;
 	padding: 0;
@@ -109,6 +166,12 @@ header .left, header .right, nav .right, main ul {
 header .left p, header .left h1, header .right .usermenu, nav ul.left, nav .right ul, main .marked-threads ul, footer .left, footer .right {
 	margin: 0 0 0.25em 0;
 	margin: 0 0 0.25rem 0;
+	padding: 0;
+}
+
+main ul {
+	margin: 0 0 0.5em 0;
+	margin: 0 0 0.5rem 0;
 	padding: 0;
 }
 
@@ -150,4 +213,27 @@ main ul li > ul {
 	font-size: 1em;
 	margin: 0 0 0.25em 0;
 	padding: 0;
+}
+
+@media screen and (max-width: 38em) {
+	.normaltab {
+		width: 100%;
+		margin: 0;
+	}
+	.normaltab tr, .normaltab td {
+ 		display: block;
+	}
+	.normaltab thead {
+		display: none;
+	}
+	.normaltab tr {
+		border: 1px solid #bacbdf;
+		margin-bottom: 0.25em;
+		margin-bottom: 0.25rem;
+	}
+	.normaltab td {
+		margin: 0;
+		padding: 0 0.25em;
+		padding: 0 0.25rem;
+	}
 }

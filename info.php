@@ -4,7 +4,7 @@ include("inc.php");
 if(isset($_GET['info'])) $info = intval($_GET['info']);
 if(empty($info)) $info = 0;
 
-$topnav  = '<li><span class="current"><span class="fa fa-exclamation-triangle">';
+$topnav  = '<li><span class="current"><span class="fa fa-exclamation-triangle icon-warning">';
 $topnav .= '</span>&nbsp;'. htmlspecialchars($lang['info']) .'</span></li>'."\n";
 
 parse_template();

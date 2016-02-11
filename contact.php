@@ -216,24 +216,24 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 $topnav = '';
 if (isset($uid))
 	{
-	$topnav .= '<li><a href="user.php?id='. intval($uid) .'"><span class="fa fa-user">';
+	$topnav .= '<li><a href="user.php?id='. intval($uid) .'"><span class="fa fa-user icon-user">';
 	$topnav .= '</span>&nbsp;'. htmlspecialchars($lang['back_linkname']) .'</a></li>'."\n";
 	}
 else if (isset($forum_contact))
 	{
-	$topnav .= '<li><a href="index.php"><span class="fa fa-chevron-right">';
+	$topnav .= '<li><a href="index.php"><span class="fa fa-chevron-right icon-chevron-right">';
 	$topnav .= '</span>&nbsp;'. htmlspecialchars($lang['back_linkname']) .'</a></li>'."\n";
 	}
 else if ($id == 0 || isset($no_message))
 	{
-	$topnav .= '<li><a href="javascript:history.back(1)"><span class="fa fa-chevron-right">';
+	$topnav .= '<li><a href="javascript:history.back(1)"><span class="fa fa-chevron-right icon-chevron-right">';
 	$topnav .= '</span>&nbsp;'. htmlspecialchars($lang['back_linkname']) .'</a></li>'."\n";
 	}
 else
 	{
 	if (empty($view))
 		{
-		$topnav .= '<li><a href="forum_entry.php?id='. intval($id) .'">'
+		$topnav .= '<li><a href="forum_entry.php?id='. intval($id) .'">';
 		$topnav .= str_replace("[name]", htmlspecialchars($field["name"]), $lang['back_to_posting_linkname']) .'</a></li>'."\n";
 		}
 	else

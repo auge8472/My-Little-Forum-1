@@ -225,7 +225,7 @@ if (isset($search) && empty($show_postings))
 		}
 	else
 		{
-		$topnav = '<li><span class="current"><span class="fa fa-search"></span>&nbsp;';
+		$topnav = '<li><span class="current"><span class="fa fa-search icon-search"></span>&nbsp;';
 		$topnav .= htmlspecialchars($lang['search_title']) .'</span></li>'."\n";
 		}
 
@@ -256,7 +256,7 @@ else if (isset($show_postings) && empty($search))
 	$field = mysql_fetch_assoc($user_name_result);
 	mysql_free_result($user_name_result);
 	$lang['show_userdata_linktitle'] = str_replace("[name]", htmlspecialchars($field["user_name"]), $lang['show_userdata_linktitle']);
-	$lang['postings_by_user'] = str_replace('[name]', '<a href="user.php?id='.$show_postings.'" title="'.outputLangDebugInAttributes($lang['show_userdata_linktitle']).'"><span class="fa fa-user"></span>&nbsp;'. htmlspecialchars($field["user_name"]) .'</a>', $lang['postings_by_user']);
+	$lang['postings_by_user'] = str_replace('[name]', '<a href="user.php?id='.$show_postings.'" title="'.outputLangDebugInAttributes($lang['show_userdata_linktitle']).'"><span class="fa fa-user icon-user"></span>&nbsp;'. htmlspecialchars($field["user_name"]) .'</a>', $lang['postings_by_user']);
 	$topnav .= '<li>'. $lang['postings_by_user'] .'</li>'."\n";
 	}
 
