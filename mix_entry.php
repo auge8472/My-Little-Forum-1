@@ -91,14 +91,14 @@ if ($entrydata['locked'] == 0)
 		{
 		$answerlink  = '<a class="buttonize" href="posting.php?id='. $entrydata["id"] .'"';
 		$answerlink .= ' title="'.outputLangDebugInAttributes($lang['board_answer_linktitle']).'">';
-		$answerlink .= '<span class="fa fa-comment-o"></span>&nbsp;'. $lang['board_answer_linkname'] .'</a>';
+		$answerlink .= '<span class="fa fa-comment-o icon-comment-o"></span>&nbsp;'. $lang['board_answer_linkname'] .'</a>';
 		}
 	}
 else
 	{
 	if ($entrydata['pid']==0)
 		{
-		$answerlink = '<span class="buttonize"><span class="fa fa-lock"></span>&nbsp;'. $lang['thread_locked'].'</span>';
+		$answerlink = '<span class="buttonize"><span class="fa fa-lock icon-lock"></span>&nbsp;'. $lang['thread_locked'].'</span>';
 		}
 	else
 		{
@@ -218,7 +218,7 @@ if ($settings['access_for_users_only'] == 1
 	mysql_free_result($result); // Aufräumen
 
 	$wo = $entrydata["subject"];
-	$topnav  = '<li><a href="mix.php"><span class="fa fa-chevron-right"></span>&nbsp;';
+	$topnav  = '<li><a href="mix.php"><span class="fa fa-chevron-right icon-chevron-right"></span>&nbsp;';
 	$topnav .= htmlspecialchars($lang['back_to_overview_linkname']) .'</a></li>'."\n";
 	$subnav_2tm = "\n <ul>\n{NavPoints} </ul>\n";
 	$subnav_2ts = '  <li>{NavPoint}</li>'."\n";

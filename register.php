@@ -263,7 +263,7 @@ if (isset($_POST['register_submit']))
 	}
 
 $wo = strip_tags($lang['register_hl']);
-$topnav = '<li><span class="current"><span class="fa fa-user-plus"></span>&nbsp;'.$lang['register_hl'].'</span></li>'."\n";
+$topnav = '<li><span class="current"><span class="fa fa-user-plus icon-user-plus"></span>&nbsp;'.$lang['register_hl'].'</span></li>'."\n";
 parse_template();
 echo $header;
 
