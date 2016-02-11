@@ -49,7 +49,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 	$r .= ' <ul>'."\n";
 	$r .= '  <li><a href="admin.php?action=delete_marked_threads'.$ref.'"><span class="fa fa-trash-o icon-trash-o"></span>';
 	$r .= '&nbsp;'. $lang['delete_marked_threads'].'</a></li>'."\n";
-	$r .= '  <li><a href="admin.php?action=lock_marked_threads'.$ref.'"><span class="fa fa-lock icon-lock"></span>';
+	$r .= '  <li><a href="admin.php?action=lock_marked_threads'.$ref.'"><span class="fa fa-lock icon-lock2"></span>';
 	$r .= '&nbsp;'. $lang['lock_marked_threads'].'</a></li>'."\n";
 	$r .= '  <li><a href="admin.php?action=unlock_marked_threads'.$ref.'"><span class="fa fa-unlock-alt icon-unlock-alt"></span>';
 	$r .= '&nbsp;'. $lang['unlock_marked_threads'].'</a></li>'."\n";
@@ -506,7 +506,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		$r .= '<li><a href="posting.php?lock=true&amp;id='. intval($thread["id"]) .'" title="';
 		$r .= ($thread['locked'] == 0) ? outputLangDebugInAttributes($lang['lock_linktitle']) : outputLangDebugInAttributes($lang['unlock_linktitle']);
 		$r .= '" class="buttonize">';
-		$r .= ($thread['locked'] == 0) ? '<span class="fa fa-lock icon-lock"></span>&nbsp;'. $lang['lock_linkname'] : '<span class="fa fa-unlock-alt icon-unlock-alt"></span>&nbsp;'. $lang['unlock_linkname'];
+		$r .= ($thread['locked'] == 0) ? '<span class="fa fa-lock icon-lock2"></span>&nbsp;'. $lang['lock_linkname'] : '<span class="fa fa-unlock-alt icon-unlock-alt"></span>&nbsp;'. $lang['unlock_linkname'];
 		$r .= '</a></li>'."\n";
 		}
 	# pin a thread

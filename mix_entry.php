@@ -98,7 +98,7 @@ else
 	{
 	if ($entrydata['pid']==0)
 		{
-		$answerlink = '<span class="buttonize"><span class="fa fa-lock icon-lock"></span>&nbsp;'. $lang['thread_locked'].'</span>';
+		$answerlink = '<span class="buttonize"><span class="fa fa-lock icon-lock2"></span>&nbsp;'. $lang['thread_locked'].'</span>';
 		}
 	else
 		{

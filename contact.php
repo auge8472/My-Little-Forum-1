@@ -233,7 +233,7 @@ else
 	{
 	if (empty($view))
 		{
-		$topnav .= '<li><a href="forum_entry.php?id='. intval($id) .'">'
+		$topnav .= '<li><a href="forum_entry.php?id='. intval($id) .'">';
 		$topnav .= str_replace("[name]", htmlspecialchars($field["name"]), $lang['back_to_posting_linkname']) .'</a></li>'."\n";
 		}
 	else

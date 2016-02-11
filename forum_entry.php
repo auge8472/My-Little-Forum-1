@@ -225,7 +225,7 @@ if ($settings['access_for_users_only'] == 1
 		}
 	else
 		{
-		$answerlink = '<span class="buttonize"><span class="fa fa-lock icon-lock"></span>&nbsp;'. $lang['thread_locked'] .'</span>';
+		$answerlink = '<span class="buttonize"><span class="fa fa-lock icon-lock2"></span>&nbsp;'. $lang['thread_locked'] .'</span>';
 		}
 	# generate HTML source code of posting
 	$posting = str_replace('{postingheadline}', $pHeadline, $posting);
