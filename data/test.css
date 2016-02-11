@@ -117,7 +117,7 @@ header .right .usermenu, nav ul.left, nav .right ul, main ul, footer .right {
 }
 
 /* elements with the great gap */
-header .left, header .right, nav .right, main ul {
+header .left, header .right, nav .right {
 	margin: 0 0 0.35em 0;
 	margin: 0 0 0.35rem 0;
 	padding: 0;
@@ -127,6 +127,12 @@ header .left, header .right, nav .right, main ul {
 header .left p, header .left h1, header .right .usermenu, nav ul.left, nav .right ul, main .marked-threads ul, footer .left, footer .right {
 	margin: 0 0 0.25em 0;
 	margin: 0 0 0.25rem 0;
+	padding: 0;
+}
+
+main ul {
+	margin: 0 0 0.5em 0;
+	margin: 0 0 0.5rem 0;
 	padding: 0;
 }
 
