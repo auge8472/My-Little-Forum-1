@@ -200,6 +200,7 @@ nav form {
 }
 
 main ul li > ul {
+	margin: 0;
 	padding-left: 1em;
 	padding-left: 1rem;
 }
