@@ -455,7 +455,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		{
 		$r .= '<li><a href="posting.php?action=edit&amp;id='. $thread["id"] .'&amp;back='. $thread["tid"];
 		$r .= '" title="'. outputLangDebugInAttributes($lang['edit_linktitle']) .'" class="buttonize">';
-		$r .= '<span class="fa fa-edit icon-edit"></span>&nbsp;'. $lang['edit_linkname'] .'</a></li>'."\n";
+		$r .= '<span class="fa fa-edit icon-pencil-square-o"></span>&nbsp;'. $lang['edit_linkname'] .'</a></li>'."\n";
 		}
 	# delete a posting
 	if (($settings['user_delete'] == 1
