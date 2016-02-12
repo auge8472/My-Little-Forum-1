@@ -67,6 +67,9 @@
 .icon-lock2:before {
     content: "\f023";
 }
+.icon-pencil-square-o:before {
+    content: "\f044";
+}
 .icon-rss-square:before {
     content: "\f143";
 }
