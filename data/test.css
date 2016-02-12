@@ -14,17 +14,44 @@
 
 [class^="icon-"], [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'icomoon' !important;
+    font: normal normal normal 0.88em/1 'icomoon' !important;
+    display: inline-block;
     speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
     text-transform: none;
-    line-height: 1;
-
+    color: #303840;
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/* classes for special use cases */
+.icon-fw {
+  width: 1.3em;
+  text-align: center;
+}
+.icon-spin {
+  -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 2s infinite linear;
+}
+@-webkit-keyframes icon-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes icon-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
 }
 
 /* original FontAwesome */
@@ -60,6 +87,7 @@
 }
 .icon-github:before {
     content: "\f09b";
+    color: #333;
 }
 .icon-home:before {
     content: "\f015";
@@ -67,8 +95,12 @@
 .icon-lock2:before {
     content: "\f023";
 }
+.icon-pencil-square-o:before {
+    content: "\f044";
+}
 .icon-rss-square:before {
     content: "\f143";
+    color: #d70;
 }
 .icon-search:before {
     content: "\f002";
@@ -145,6 +177,10 @@ header, nav, main, footer {
 	padding: 0 0.25rem;
 }
 
+footer {
+	margin: 0;
+}
+
 /* elements with border-bottom to differentiate it from the following block */
 header .left, header .right, nav .right, main {
 	border-bottom: 1px solid #aac;
@@ -200,6 +236,7 @@ nav form {
 }
 
 main ul li > ul {
+	margin: 0;
 	padding-left: 1em;
 	padding-left: 1rem;
 }
@@ -235,5 +272,103 @@ main ul li > ul {
 		margin: 0;
 		padding: 0 0.25em;
 		padding: 0 0.25rem;
+	}
+}
+
+@media screen and (min-width: 46em) {
+	header {
+		display: flex;
+		flex-direction: row;
+		margin: 0;
+		padding: 0;
+		border-bottom: 1px solid #aae;
+	}
+	header .left, header .right {
+		margin: 0;
+		padding: 0 0.25em;
+		padding: 0 0.25rem;
+		border: none;
+	}
+	header .left {
+		flex: 1 2 40%;
+	}
+	header .right {
+		flex: 1 1 60%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		
+	}
+	header .right > * {
+		flex: 0 1 auto;
+		text-align: right;
+	}
+	p.index {
+		font-size: 0.86em;
+	}
+	nav {
+		display: flex;
+		flex-direction: row;
+		margin: 0;
+		padding: 0.15em 0;
+		padding: 0.15rem 0;
+		border-bottom: 1px solid #aae;
+	}
+	nav ul.left, nav .right {
+		margin: 0;
+		padding: 0 0.25em;
+		padding: 0 0.25rem;
+		border: none;
+	}
+	nav .left {
+		flex: 1 2 35%;
+	}
+	nav .right {
+		flex: 1 1 65%;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+	}
+	body nav .right > * {
+		margin: 0;
+	}
+	main {
+		background: #fff;
+		margin: 0;
+		padding: 0.5em;
+		padding: 0.5rem;
+	}
+	.marked-threads {
+		display: flex;
+		flex-direction: row;
+		margin: 1em 0 0;
+	}
+	.marked-threads h2 {
+		margin: 0;
+		padding: 0 15px;
+		background: url(../img/marked.png) left 54% no-repeat;
+	}
+	main .marked-threads ul {
+		margin: 0;
+	}
+	main .marked-threads li {
+		margin: 0 0.2em 0 0;
+		margin: 0 0.2rem 0 0;
+		padding: 0;
+	}
+	footer {
+		display: flex;
+		flex-direction: row;
+		padding-bottom: 0.35em;
+		padding-bottom: 0.35rem;
+	}
+	nav .left {
+		flex: 1 1 65%;
+	}
+	footer .right {
+		flex: 1 2 45%;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
 	}
 }

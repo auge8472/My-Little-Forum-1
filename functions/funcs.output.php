@@ -44,8 +44,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 	{
 	$ref = (!empty($refer)) ? '&amp;refer='.$refer : '';
 	$r .= '<div class="marked-threads">'."\n";
-	$r .= ' <h2><img src="img/marked.png" alt="[x]" width="9" height="9">';
-	$r .= $lang['marked_threads_actions'].'</h2>'."\n";
+	$r .= ' <h2>'.$lang['marked_threads_actions'].'</h2>'."\n";
 	$r .= ' <ul>'."\n";
 	$r .= '  <li><a href="admin.php?action=delete_marked_threads'.$ref.'"><span class="fa fa-trash-o icon-trash-o"></span>';
 	$r .= '&nbsp;'. $lang['delete_marked_threads'].'</a></li>'."\n";
@@ -455,7 +454,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])
 		{
 		$r .= '<li><a href="posting.php?action=edit&amp;id='. $thread["id"] .'&amp;back='. $thread["tid"];
 		$r .= '" title="'. outputLangDebugInAttributes($lang['edit_linktitle']) .'" class="buttonize">';
-		$r .= '<span class="fa fa-edit icon-edit"></span>&nbsp;'. $lang['edit_linkname'] .'</a></li>'."\n";
+		$r .= '<span class="fa fa-edit icon-pencil-square-o"></span>&nbsp;'. $lang['edit_linkname'] .'</a></li>'."\n";
 		}
 	# delete a posting
 	if (($settings['user_delete'] == 1
