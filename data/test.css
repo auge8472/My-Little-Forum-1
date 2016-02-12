@@ -245,3 +245,101 @@ main ul li > ul {
 		padding: 0 0.25rem;
 	}
 }
+
+@media screen and (min-width: 46em) {
+	header {
+		display: flex;
+		flex-direction: row;
+		margin: 0;
+		padding: 0;
+		border-bottom: 1px solid #aae;
+	}
+	header .left, header .right {
+		margin: 0;
+		padding: 0 0.25em;
+		padding: 0 0.25rem;
+		border: none;
+	}
+	header .left {
+		flex: 1 2 40%;
+	}
+	header .right {
+		flex: 1 1 60%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		
+	}
+	header .right > * {
+		flex: 0 1 auto;
+		text-align: right;
+	}
+	p.index {
+		font-size: 0.86em;
+	}
+	nav {
+		display: flex;
+		flex-direction: row;
+		margin: 0;
+		padding: 0.15em 0;
+		padding: 0.15rem 0;
+		border-bottom: 1px solid #aae;
+	}
+	nav ul.left, nav .right {
+		margin: 0;
+		padding: 0 0.25em;
+		padding: 0 0.25rem;
+		border: none;
+	}
+	nav .left {
+		flex: 1 2 35%;
+	}
+	nav .right {
+		flex: 1 1 65%;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+	}
+	body nav .right > * {
+		margin: 0;
+	}
+	main {
+		background: #fff;
+		margin: 0;
+		padding: 0.5em;
+		padding: 0.5rem;
+	}
+	.marked-threads {
+		display: flex;
+		flex-direction: row;
+		margin: 1em 0 0;
+	}
+	.marked-threads h2 {
+		margin: 0;
+		padding: 0 15px;
+		background: url(../img/marked.png) left 54% no-repeat;
+	}
+	main .marked-threads ul {
+		margin: 0;
+	}
+	main .marked-threads li {
+		margin: 0 0.2em 0 0;
+		margin: 0 0.2rem 0 0;
+		padding: 0;
+	}
+	footer {
+		display: flex;
+		flex-direction: row;
+		padding-bottom: 0.35em;
+		padding-bottom: 0.35rem;
+	}
+	nav .left {
+		flex: 1 1 65%;
+	}
+	footer .right {
+		flex: 1 2 45%;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+	}
+}
