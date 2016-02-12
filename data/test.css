@@ -57,6 +57,7 @@
 }
 .icon-github:before {
     content: "\f09b";
+    color: #333;
 }
 .icon-home:before {
     content: "\f015";
@@ -69,6 +70,7 @@
 }
 .icon-rss-square:before {
     content: "\f143";
+    color: #d70;
 }
 .icon-search:before {
     content: "\f002";
