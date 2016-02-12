@@ -148,6 +148,10 @@ header, nav, main, footer {
 	padding: 0 0.25rem;
 }
 
+footer {
+	margin: 0;
+}
+
 /* elements with border-bottom to differentiate it from the following block */
 header .left, header .right, nav .right, main {
 	border-bottom: 1px solid #aac;
