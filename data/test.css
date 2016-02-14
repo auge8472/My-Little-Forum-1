@@ -14,7 +14,7 @@
 
 [class^="icon-"], [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
-    font: normal normal normal 0.8em/1 'icomoon' !important;
+    font: normal normal normal 0.84em/1 'icomoon' !important;
     display: inline-block;
     speak: none;
     text-transform: none;
