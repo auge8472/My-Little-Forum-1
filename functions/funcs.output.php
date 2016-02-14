@@ -52,11 +52,11 @@ if (isset($_SESSION[$settings['session_prefix'].'user_type'])
 	$r .= '&nbsp;'. $lang['lock_marked_threads'].'</a></li>'."\n";
 	$r .= '  <li><a href="admin.php?action=unlock_marked_threads'.$ref.'"><span class="fa fa-unlock-alt icon-unlock-alt"></span>';
 	$r .= '&nbsp;'. $lang['unlock_marked_threads'].'</a></li>'."\n";
-	$r .= '  <li><a href="admin.php?action=unmark'.$ref.'"><span class="fa fa-check icon-check-square-o"></span>';
+	$r .= '  <li><a href="admin.php?action=unmark'.$ref.'"><span class="fa fa-check icon-check-square"></span>';
 	$r .= '&nbsp;'. $lang['unmark_threads'].'</a></li>'."\n";
-	$r .= '  <li><a href="admin.php?action=invert_markings'.$ref.'">';
+	$r .= '  <li><a href="admin.php?action=invert_markings'.$ref.'"><span class="fa fa-exchange icon-exchange"></span>';
 	$r .= '&nbsp;'. $lang['invert_markings'].'</a></li>'."\n";
-	$r .= '  <li><a href="admin.php?action=mark_threads'.$ref.'"><span class="fa fa-check-square-o"></span>';
+	$r .= '  <li><a href="admin.php?action=mark_threads'.$ref.'"><span class="fa fa-check-square-o icon-check-square-o"></span>';
 	$r .= '&nbsp;'. $lang['mark_threads'].'</a></li>'."\n";
 	$r .= ' </ul>'."\n";
 	$r .= '</div>'."\n";
