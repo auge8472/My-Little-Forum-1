@@ -221,12 +221,12 @@ if (isset($uid))
 	}
 else if (isset($forum_contact))
 	{
-	$topnav .= '<li><a href="index.php"><span class="fa fa-chevron-right icon-chevron-right">';
+	$topnav .= '<li><a href="index.php"><span class="fa fa-chevron-right icon-chevron-left">';
 	$topnav .= '</span>&nbsp;'. htmlspecialchars($lang['back_linkname']) .'</a></li>'."\n";
 	}
 else if ($id == 0 || isset($no_message))
 	{
-	$topnav .= '<li><a href="javascript:history.back(1)"><span class="fa fa-chevron-right icon-chevron-right">';
+	$topnav .= '<li><a href="javascript:history.back(1)"><span class="fa fa-chevron-right icon-chevron-left">';
 	$topnav .= '</span>&nbsp;'. htmlspecialchars($lang['back_linkname']) .'</a></li>'."\n";
 	}
 else

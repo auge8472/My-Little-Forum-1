@@ -1666,7 +1666,7 @@ else
 	{
 	$topnav .= 'forum.php';
 	}
-$topnav .= '"><span class="fa fa-chevron-right icon-chevron-right"></span>&nbsp;';
+$topnav .= '"><span class="fa fa-chevron-right icon-chevron-left"></span>&nbsp;';
 $topnav .= htmlspecialchars($lang['back_to_overview_linkname']) .'</a></li>'."\n";
 if (!empty($action))
 	{

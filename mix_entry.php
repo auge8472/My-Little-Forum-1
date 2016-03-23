@@ -218,7 +218,7 @@ if ($settings['access_for_users_only'] == 1
 	mysql_free_result($result); // Aufräumen
 
 	$wo = $entrydata["subject"];
-	$topnav  = '<li><a href="mix.php"><span class="fa fa-chevron-right icon-chevron-right"></span>&nbsp;';
+	$topnav  = '<li><a href="mix.php"><span class="fa fa-chevron-right icon-chevron-left"></span>&nbsp;';
 	$topnav .= htmlspecialchars($lang['back_to_overview_linkname']) .'</a></li>'."\n";
 	$subnav_2tm = "\n <ul>\n{NavPoints} </ul>\n";
 	$subnav_2ts = '  <li>{NavPoint}</li>'."\n";

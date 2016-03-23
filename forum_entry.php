@@ -177,7 +177,7 @@ if ($settings['access_for_users_only'] == 1
 
 	$wo = $entrydata["subject"];
 	$topnav  = '<li><a href="forum.php" title="'. outputLangDebugInAttributes($lang['back_to_forum_linktitle']) .'">';
-	$topnav .= '<span class="fa fa-chevron-right icon-chevron-right"></span>&nbsp;'. htmlspecialchars($lang['back_to_forum_linkname']) .'</a></li>'."\n";
+	$topnav .= '<span class="fa fa-chevron-right icon-chevron-left"></span>&nbsp;'. htmlspecialchars($lang['back_to_forum_linkname']) .'</a></li>'."\n";
 	$cat = ($category > 0) ? '&amp;category='. intval($category) : '';
 	$subnav_2tm = "\n <ul>\n{NavPoints} </ul>\n";
 	$subnav_2ts = '  <li>{NavPoint}</li>'."\n";
