@@ -123,7 +123,7 @@ if(isset($_POST['register_submit']))
     if (strlen($new_user_email) > $settings['email_maxlength']) $errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
     // word in username too long?
     $text_arr = explode(" ",$new_user_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-    $error_nwtl = str_replace("[word]", htmlspecialchars(stripslashes(substr($text_arr[$i],0,$settings['name_word_maxlength'])))."...", $lang['error_name_word_too_long']);
+    $error_nwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['name_word_maxlength'])))."...", $lang['error_name_word_too_long']);
     $errors[] = $error_nwtl; } }
     // look if name already exists:
     $name_result = mysql_query("SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_name = '".mysql_escape_string($new_user_name)."' LIMIT 1", $connid);
@@ -132,7 +132,7 @@ if(isset($_POST['register_submit']))
     mysql_free_result($name_result);
     if (strtolower($field["user_name"]) == strtolower($new_user_name) && $new_user_name != "")
      {
-      $lang['error_name_reserved'] = str_replace("[name]", htmlspecialchars(stripslashes($new_user_name)), $lang['error_name_reserved']);
+      $lang['error_name_reserved'] = str_replace("[name]", htmlsc(stripslashes($new_user_name)), $lang['error_name_reserved']);
       $errors[] = $lang['error_name_reserved'];
      }
     // look, if e-mail already exists:
@@ -142,7 +142,7 @@ if(isset($_POST['register_submit']))
     mysql_free_result($email_result);
     if (strtolower($field["user_email"]) == strtolower($new_user_email) && $new_user_email != "")
      {
-      $errors[] = str_replace("[e-mail]", htmlspecialchars(stripslashes($new_user_email)), $lang['error_email_reserved']);
+      $errors[] = str_replace("[e-mail]", htmlsc(stripslashes($new_user_email)), $lang['error_email_reserved']);
      }
     // e-mail correct?
     if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $new_user_email)) $errors[] = $lang['error_email_wrong'];
@@ -254,9 +254,9 @@ switch($action)
       <form action="register.php" method="post"><div>
       <?php if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_register']==1) { ?><input type="hidden" name="<?php echo session_name(); ?>" value="<?php echo session_id(); ?>" /><?php } ?>
       <p><b><?php echo $lang['username_marking']; ?></b><br />
-      <input type="text" size="25" name="new_user_name" value="<?php if (isset($new_user_name)) echo htmlspecialchars(stripslashes($new_user_name)); ?>" maxlength="<?php echo $settings['name_maxlength']; ?>" /></p>
+      <input type="text" size="25" name="new_user_name" value="<?php if (isset($new_user_name)) echo htmlsc(stripslashes($new_user_name)); ?>" maxlength="<?php echo $settings['name_maxlength']; ?>" /></p>
       <p><b><?php echo $lang['user_email_marking']; ?></b><br />
-      <input type="text" size="25" name="new_user_email" value="<?php if (isset($new_user_email)) echo htmlspecialchars(stripslashes($new_user_email)); ?>" maxlength="<?php echo $settings['email_maxlength']; ?>" /></p>
+      <input type="text" size="25" name="new_user_email" value="<?php if (isset($new_user_email)) echo htmlsc(stripslashes($new_user_email)); ?>" maxlength="<?php echo $settings['email_maxlength']; ?>" /></p>
       <p><b><?php echo $lang['reg_pw']; ?></b><br />
       <input type="password" size="25" name="reg_pw" /></p>
       <p><b><?php echo $lang['reg_pw_conf']; ?></b><br />
@@ -292,8 +292,8 @@ switch($action)
   case 'registered':
    if (isset($sent))
      {
-      $lang['registered_ok'] = str_replace("[name]", htmlspecialchars(stripslashes($new_user_name)), $lang['registered_ok']);
-      $lang['registered_ok'] = str_replace("[email]", htmlspecialchars(stripslashes($new_user_email)), $lang['registered_ok']);
+      $lang['registered_ok'] = str_replace("[name]", htmlsc(stripslashes($new_user_name)), $lang['registered_ok']);
+      $lang['registered_ok'] = str_replace("[email]", htmlsc(stripslashes($new_user_email)), $lang['registered_ok']);
       ?>
       <p class="normal"><?php echo $lang['registered_ok']; ?></p><p>&nbsp;</p>
       <?php

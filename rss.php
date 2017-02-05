@@ -28,7 +28,7 @@ if ($result_count > 0 && $settings['provide_rssfeed'] == 1 && $settings['access_
 while ($zeile = mysql_fetch_array($result))
 {
 $ftext = $zeile["text"];
-$ftext = htmlspecialchars(stripslashes($ftext));
+$ftext = htmlsc(stripslashes($ftext));
 $ftext = make_link($ftext);
 $ftext = preg_replace("#\[msg\](.+?)\[/msg\]#is", "\\1", $ftext);
 $ftext = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", "\\2 --> \\1", $ftext);
@@ -41,12 +41,12 @@ $ftext = rss_quote($ftext);
 #$ftext = str_replace("<", "&lt;", $ftext);
 #$ftext = str_replace(">", "&gt;", $ftext);
 $title = $zeile['subject'];
-$title = htmlspecialchars(stripslashes($title));
+$title = htmlsc(stripslashes($title));
 #$title = str_replace("&raquo;", "&gt;", $title);
 #$title = str_replace("&laquo;", "&lt;", $title);
 #$title = str_replace("&", "&amp;", $title);
 $name = $zeile['name'];
-$name = htmlspecialchars(stripslashes($name));
+$name = htmlsc(stripslashes($name));
 #$name = str_replace("&raquo;", "&gt;", $name);
 #$name = str_replace("&laquo;", "&lt;", $name);
 #$name = str_replace("&", "&amp;", $name);

@@ -28,7 +28,7 @@ if (isset($_GET['page'])) $page = $_GET['page'];
 if (isset($_GET['order'])) $order = $_GET['order'];
 if (isset($_GET['category'])) $category = stripslashes(urldecode($_GET['category']));
 if (isset($_GET['descasc'])) $descasc = $_GET['descasc'];
-if (isset($_GET['forum_contact'])) $forum_contact = htmlspecialchars($_GET['forum_contact']);
+if (isset($_GET['forum_contact'])) $forum_contact = htmlsc($_GET['forum_contact']);
 if (isset($_POST['forum_contact'])) $forum_contact = $_POST['forum_contact'];
 if (isset($_POST['view'])) $view = $_POST['view'];
 if (isset($_POST['page'])) $page = $_POST['page'];
@@ -205,7 +205,7 @@ else
  {
   if (empty($view))
    {
-    $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.str_replace("[name]", htmlspecialchars(stripslashes($field["name"])), $lang['back_to_posting_linkname']).'</a>';
+    $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.str_replace("[name]", htmlsc(stripslashes($field["name"])), $lang['back_to_posting_linkname']).'</a>';
    }
   else
    {
@@ -226,7 +226,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
  {
   if (empty($no_message))
    {
-    ?><h2><?php if (isset($forum_contact)) echo $lang['forum_contact_hl']; else echo str_replace("[name]", htmlspecialchars(stripslashes($name)), $lang['message_to']); ?></h2><?php
+    ?><h2><?php if (isset($forum_contact)) echo $lang['forum_contact_hl']; else echo str_replace("[name]", htmlsc(stripslashes($name)), $lang['message_to']); ?></h2><?php
    }
   if (empty($sent) && empty($no_message))
    {
@@ -250,18 +250,18 @@ if (isset($id) || isset($uid) || isset($forum_contact))
     <table border="0" cellpadding="3" cellspacing="0">
     <tr>
     <td><b><?php echo $lang['name_marking_msg']; ?></b></td>
-    <td><input type="text" name="sender_name" value="<?php if (isset($sender_name)) echo htmlspecialchars(stripslashes($sender_name)); else echo ""; ?>" size="40" /></td>
+    <td><input type="text" name="sender_name" value="<?php if (isset($sender_name)) echo htmlsc(stripslashes($sender_name)); else echo ""; ?>" size="40" /></td>
     </tr>
     <tr>
     <td><b><?php echo $lang['email_marking_msg']; ?></b></td>
-    <td><input type="text" name="sender_email" value="<?php if (isset($sender_email)) echo htmlspecialchars(stripslashes($sender_email)); else echo ""; ?>" size="40" /></td>
+    <td><input type="text" name="sender_email" value="<?php if (isset($sender_email)) echo htmlsc(stripslashes($sender_email)); else echo ""; ?>" size="40" /></td>
     </tr>
     <tr>
     <td><b><?php echo $lang['subject_marking']; ?></b></td>
-    <td><input type="text" name="subject" value="<?php if (isset($subject)) echo htmlspecialchars(stripslashes($subject)); else echo ""; ?>" size="40" /></td>
+    <td><input type="text" name="subject" value="<?php if (isset($subject)) echo htmlsc(stripslashes($subject)); else echo ""; ?>" size="40" /></td>
     </tr>
     <tr>
-    <td colspan="2"><br /><textarea name="text" cols="60" rows="15"><?php if (isset($text)) echo htmlspecialchars(stripslashes($text)); else echo ""; ?></textarea></td>
+    <td colspan="2"><br /><textarea name="text" cols="60" rows="15"><?php if (isset($text)) echo htmlsc(stripslashes($text)); else echo ""; ?></textarea></td>
     </tr><?php
     if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_contact']==1)
     {
@@ -302,7 +302,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
    }
   else
    {
-    ?><p><?php if (isset($forum_contact)) echo $lang['forum_contact_sent']; else echo str_replace("[name]", htmlspecialchars(stripslashes($name)), $lang['msg_sent']); ?><p>&nbsp;</p></p><?php
+    ?><p><?php if (isset($forum_contact)) echo $lang['forum_contact_sent']; else echo str_replace("[name]", htmlsc(stripslashes($name)), $lang['msg_sent']); ?><p>&nbsp;</p></p><?php
    }
  }
 

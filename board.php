@@ -148,7 +148,7 @@ if($thread_count > 0 && isset($result))
   ?>
   <tr>
   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php
-  ?><a class="<?php if ((isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $zeile["last_answer"]) || (($zeile["pid"]==0) && empty($_SESSION[$settings['session_prefix'].'newtime']) && $zeile["last_answer"] > $last_visit)) echo "threadnew"; else echo "thread"; ?>" href="board_entry.php?id=<?php echo $zeile["tid"]; if ($page != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC") echo '&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc; ?>"><?php echo htmlspecialchars(stripslashes($zeile["subject"])); ?></a><?php
+  ?><a class="<?php if ((isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $zeile["last_answer"]) || (($zeile["pid"]==0) && empty($_SESSION[$settings['session_prefix'].'newtime']) && $zeile["last_answer"] > $last_visit)) echo "threadnew"; else echo "thread"; ?>" href="board_entry.php?id=<?php echo $zeile["tid"]; if ($page != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC") echo '&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc; ?>"><?php echo htmlsc(stripslashes($zeile["subject"])); ?></a><?php
   if ($zeile["fixed"] == 1) { ?> <img src="img/fixed.gif" width="9" height="9" title="<?php echo $lang['fixed']; ?>" alt="*" /><?php }
   if ($settings['all_views_direct'] == 1) { echo " <span class=\"small\">"; if ($settings['thread_view']==1) {?><a href="forum_entry.php?id=<?php echo $zeile["tid"]; ?>"><img src="img/thread_d.gif" alt="[Thread]" title="<?php echo $lang['open_in_thread_linktitle']; ?>" width="12" height="9" onmouseover="this.src='img/thread_mo.gif';" onmouseout="this.src='img/thread_d.gif';" /></a><?php } if ($settings['mix_view'] == 1) { ?><a href="mix_entry.php?id=<?php echo $zeile["tid"]; ?>"><img src="img/mix_d.gif" alt="[Mix]" title="<?php echo $lang['open_in_mix_linktitle']; ?>" width="12" height="9" onmouseover="this.src='img/mix_mo.gif';" onmouseout="this.src='img/mix_d.gif';" /></a>&nbsp;<?php }echo "</span>"; } ?></td>
   <?php if ($categories!=false && $category == 0) { ?>
@@ -157,9 +157,9 @@ if($thread_count > 0 && isset($result))
   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php
   if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
    {
-    $sult = str_replace("[name]", htmlspecialchars(stripslashes($zeile["name"])), $lang['show_userdata_linktitle']); ?><a href="user.php?id=<?php echo $zeile["user_id"]; ?>" title="<?php echo $sult; ?>"><?php
+    $sult = str_replace("[name]", htmlsc(stripslashes($zeile["name"])), $lang['show_userdata_linktitle']); ?><a href="user.php?id=<?php echo $zeile["user_id"]; ?>" title="<?php echo $sult; ?>"><?php
    }
-  ?><span class="small"><?php if ($mark_admin==true) { ?><span class="admin-highlight"><?php } elseif ($mark_mod==true) { ?><span class="mod-highlight"><?php } echo htmlspecialchars(stripslashes($zeile["name"])); if ($mark_admin==true || $mark_mod=="true") { ?></span><?php } ?></span><?php
+  ?><span class="small"><?php if ($mark_admin==true) { ?><span class="admin-highlight"><?php } elseif ($mark_mod==true) { ?><span class="mod-highlight"><?php } echo htmlsc(stripslashes($zeile["name"])); if ($mark_admin==true || $mark_mod=="true") { ?></span><?php } ?></span><?php
 
   if ($zeile["user_id"] > 0 && $settings['show_registered'] ==1)
    {

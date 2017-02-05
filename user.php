@@ -176,22 +176,22 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
      }
 
      $text_arr = explode(" ",$user_real_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-     $error_nwtl = str_replace("[word]", htmlspecialchars(stripslashes(substr($text_arr[$i],0,$settings['name_word_maxlength'])))."...", $lang['error_name_word_too_long']);
+     $error_nwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['name_word_maxlength'])))."...", $lang['error_name_word_too_long']);
      $errors[] = $error_nwtl; } }
      $text_arr = explode(" ",$user_place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
-     $error_pwtl = str_replace("[word]", htmlspecialchars(stripslashes(substr($text_arr[$i],0,$settings['place_word_maxlength'])))."...", $lang['error_place_word_too_long']);
+     $error_pwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['place_word_maxlength'])))."...", $lang['error_place_word_too_long']);
      $errors[] = $error_pwtl; } }
      $text_arr = str_replace("\n", " ", $profile);
      if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
      if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
      $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-     $error_twtl = str_replace("[word]", htmlspecialchars(stripslashes(substr($text_arr[$i],0,$settings['text_word_maxlength'])))."...", $lang['err_prof_word_too_long']);
+     $error_twtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['text_word_maxlength'])))."...", $lang['err_prof_word_too_long']);
      $errors[] = $error_twtl; } }
      $text_arr = str_replace("\n", " ", $signature);
      if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
      if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
      $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-     $error_twtl = str_replace("[word]", htmlspecialchars(stripslashes(substr($text_arr[$i],0,$settings['text_word_maxlength'])))."...", $lang['err_sig_word_too_long']);
+     $error_twtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['text_word_maxlength'])))."...", $lang['err_sig_word_too_long']);
      $errors[] = $error_twtl; } }
     // End of checking
 
@@ -420,29 +420,29 @@ switch ($action)
 
    if ($field["user_name"] != "")
    {
-   $lang['user_info_hl'] = str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['user_info_hl']);
+   $lang['user_info_hl'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['user_info_hl']);
    ?>
    <h2><?php echo $lang['user_info_hl']; ?></h2>
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['username_marking']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php echo htmlspecialchars(stripslashes($field["user_name"])); if ($field["user_type"]=="admin") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_admin'].")</span>"; elseif ($field["user_type"]=="mod") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_mod'].")</span>";?></p></td>
+     <td class="d"><p class="userdata"><?php echo htmlsc(stripslashes($field["user_name"])); if ($field["user_type"]=="admin") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_admin'].")</span>"; elseif ($field["user_type"]=="mod") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_mod'].")</span>";?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_real_name']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php if ($field["user_real_name"]!="") echo htmlspecialchars(stripslashes($field["user_real_name"])); else echo "-" ?></p></td>
+     <td class="d"><p class="userdata"><?php if ($field["user_real_name"]!="") echo htmlsc(stripslashes($field["user_real_name"])); else echo "-" ?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_email_marking']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo $field['user_id']; ?>"><img src="img/email.gif" alt="'<?php echo $lang['email_alt']; ?>" title="<?php echo str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "-"; ?></p></td>
+     <td class="d"><p class="userdata"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo $field['user_id']; ?>"><img src="img/email.gif" alt="'<?php echo $lang['email_alt']; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "-"; ?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_hp']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php if ($field["user_hp"]!="") { if (substr($field["user_hp"],0,7) != "http://" && substr($field["user_hp"],0,8) != "https://" && substr($field["user_hp"],0,6) != "ftp://" && substr($field["user_hp"],0,9) != "gopher://" && substr($field["user_hp"],0,7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo $field["user_hp"]; ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlspecialchars(stripslashes($field["user_hp"])); ?>" width="13" height="13" /></a><?php } else echo "-" ?></p></td>
+     <td class="d"><p class="userdata"><?php if ($field["user_hp"]!="") { if (substr($field["user_hp"],0,7) != "http://" && substr($field["user_hp"],0,8) != "https://" && substr($field["user_hp"],0,6) != "ftp://" && substr($field["user_hp"],0,9) != "gopher://" && substr($field["user_hp"],0,7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo $field["user_hp"]; ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlsc(stripslashes($field["user_hp"])); ?>" width="13" height="13" /></a><?php } else echo "-" ?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_place']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php if ($field["user_place"]!="") echo htmlspecialchars(stripslashes($field["user_place"])); else echo "-" ?></p></td>
+     <td class="d"><p class="userdata"><?php if ($field["user_place"]!="") echo htmlsc(stripslashes($field["user_place"])); else echo "-" ?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_since']; ?></b></p></td>
@@ -462,7 +462,7 @@ switch ($action)
           else
            {
             $ftext=$field["profile"];
-            $ftext = htmlspecialchars(stripslashes($ftext));
+            $ftext = htmlsc(stripslashes($ftext));
             $ftext = nl2br($ftext);
             $ftext = zitat($ftext);
             if ($settings['autolink'] == 1) $ftext = make_link($ftext);
@@ -482,7 +482,7 @@ switch ($action)
           else
            {
             $ftext=$field["signature"];
-            $ftext = htmlspecialchars(stripslashes($ftext));
+            $ftext = htmlsc(stripslashes($ftext));
             $ftext = nl2br($ftext);
             $ftext = zitat($ftext);
             if ($settings['autolink'] == 1) $ftext = make_link($ftext);
@@ -504,7 +504,7 @@ switch ($action)
     }
    else
     {
-     $lang['pers_msg_ln'] = str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['pers_msg_ln']);
+     $lang['pers_msg_ln'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['pers_msg_ln']);
      ?><p><br />
      <a class="textlink" href="user.php?action=personal_message&amp;id=<?php echo $id; ?>"><?php echo $lang['pers_msg_ln']; ?></a></p>
      <?php
@@ -550,12 +550,12 @@ switch ($action)
       while ($field = mysql_fetch_array($result))
        {
         ?><tr>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo $field['user_id']; ?>" title="<?php echo str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['show_userdata_linktitle']); ?>"><b><?php echo htmlspecialchars(stripslashes($field['user_name'])); ?></b></a></td>
+        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo $field['user_id']; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['show_userdata_linktitle']); ?>"><b><?php echo htmlsc(stripslashes($field['user_name'])); ?></b></a></td>
         <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_type"] == "admin") echo $lang['ud_admin']; elseif ($field["user_type"] == "mod") echo $lang['ud_mod']; else echo $lang['ud_user']; ?></span></td>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo $field['user_id']; ?>"><img src="img/email.gif" alt="'<?php echo $lang['email_alt']; ?>" title="<?php echo str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "&nbsp;"; ?></span></td>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_hp"]!="") { if (substr($field["user_hp"],0,7) != "http://" && substr($field["user_hp"],0,8) != "https://" && substr($field["user_hp"],0,6) != "ftp://" && substr($field["user_hp"],0,9) != "gopher://" && substr($field["user_hp"],0,7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo htmlspecialchars(stripslashes($field["user_hp"])); ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlspecialchars(stripslashes($field["user_hp"])); ?>" width="13" height="13" /></a><?php } else echo "&nbsp;" ?></span></td>
+        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo $field['user_id']; ?>"><img src="img/email.gif" alt="'<?php echo $lang['email_alt']; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "&nbsp;"; ?></span></td>
+        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_hp"]!="") { if (substr($field["user_hp"],0,7) != "http://" && substr($field["user_hp"],0,8) != "https://" && substr($field["user_hp"],0,6) != "ftp://" && substr($field["user_hp"],0,9) != "gopher://" && substr($field["user_hp"],0,7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo htmlsc(stripslashes($field["user_hp"])); ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlsc(stripslashes($field["user_hp"])); ?>" width="13" height="13" /></a><?php } else echo "&nbsp;" ?></span></td>
         <?php if ($settings['count_users_online'] == 1) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="online"><?php if ($settings['count_users_online'] == 1 && in_array($field['user_id'], $useronline_array)) { echo $lang['online']; } else echo "&nbsp;"; ?></span></td><?php }
-        if (isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod")) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($field["user_type"]=="user") { if ($field["user_lock"] == 0) { ?><span class="small"><a href="user.php?user_lock=<?php echo $field["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;page=<?php echo $page; ?>" title="<?php echo str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['lock_user_lt']); ?>"><?php echo $lang['unlocked']; ?></a></span><?php } else { ?><span class="small"><a style="color: red;" href="user.php?user_lock=<?php echo $field["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;page=<?php echo $page; ?>" title="<?php echo str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['unlock_user_lt']); ?>"><?php echo $lang['locked']; ?></a></span><?php } } else echo "&nbsp;"; ?></td><?php } ?>
+        if (isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod")) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($field["user_type"]=="user") { if ($field["user_lock"] == 0) { ?><span class="small"><a href="user.php?user_lock=<?php echo $field["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;page=<?php echo $page; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['lock_user_lt']); ?>"><?php echo $lang['unlocked']; ?></a></span><?php } else { ?><span class="small"><a style="color: red;" href="user.php?user_lock=<?php echo $field["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;page=<?php echo $page; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['unlock_user_lt']); ?>"><?php echo $lang['locked']; ?></a></span><?php } } else echo "&nbsp;"; ?></td><?php } ?>
         </tr>
         <?php $i++;
        }
@@ -588,7 +588,7 @@ switch ($action)
      $personal_messages = $field["personal_messages"];
     }
 
-   $lang['edit_userdata_hl'] = str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['edit_userdata_hl']);
+   $lang['edit_userdata_hl'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['edit_userdata_hl']);
    ?>
    <h2><?php echo $lang['edit_userdata_hl']; ?></h2>
    <?php
@@ -599,11 +599,11 @@ switch ($action)
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="c"><b><?php echo $lang['username_marking']; ?></b></td>
-     <td class="d"><?php echo htmlspecialchars(stripslashes($field["user_name"])); ?></td>
+     <td class="d"><?php echo htmlsc(stripslashes($field["user_name"])); ?></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_email_marking']; ?></b></td>
-     <td class="d"><?php echo htmlspecialchars(stripslashes($field["user_email"])); ?>&nbsp;&nbsp;<span class="small">[ <a class="sln" href="user.php?action=email"><?php echo $lang['edit_email_ln']; ?></a> ]</span></td>
+     <td class="d"><?php echo htmlsc(stripslashes($field["user_email"])); ?>&nbsp;&nbsp;<span class="small">[ <a class="sln" href="user.php?action=email"><?php echo $lang['edit_email_ln']; ?></a> ]</span></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_show_email']; ?></b><br /><span class="small"><?php echo $lang['user_show_email_exp']; ?></span></td>
@@ -611,23 +611,23 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_real_name']; ?></b><br /><span class="small"><?php echo $lang['optional_marking']; ?></span></td>
-     <td class="d"><input type="text" size="40" name="user_real_name" value="<?php echo htmlspecialchars(stripslashes($user_real_name)); ?>" maxlength="<?php echo $settings['name_maxlength'] ?>"></td>
+     <td class="d"><input type="text" size="40" name="user_real_name" value="<?php echo htmlsc(stripslashes($user_real_name)); ?>" maxlength="<?php echo $settings['name_maxlength'] ?>"></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_hp']; ?></b><br /><span class="small"><?php echo $lang['optional_marking']; ?></span></td>
-     <td class="d"><input type="text" size="40" name="user_hp" value="<?php echo htmlspecialchars(stripslashes($user_hp)); ?>" maxlength="<?php echo $settings['hp_maxlength'] ?>"></td>
+     <td class="d"><input type="text" size="40" name="user_hp" value="<?php echo htmlsc(stripslashes($user_hp)); ?>" maxlength="<?php echo $settings['hp_maxlength'] ?>"></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_place']; ?></b><br /><span class="small"><?php echo $lang['optional_marking']; ?></span></td>
-     <td class="d"><input type="text" size="40" name="user_place" value="<?php echo htmlspecialchars(stripslashes($user_place)); ?>" maxlength="<?php echo $settings['place_maxlength'] ?>"></td>
+     <td class="d"><input type="text" size="40" name="user_place" value="<?php echo htmlsc(stripslashes($user_place)); ?>" maxlength="<?php echo $settings['place_maxlength'] ?>"></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_profile']; ?></b><br /><span class="small"><?php echo $lang['user_profile_exp'] . "<br />" . $lang['optional_marking']; ?></span></td>
-     <td class="d"><textarea cols="65" rows="10" name="profile"><?php echo htmlspecialchars(stripslashes($profile)); ?></textarea></td>
+     <td class="d"><textarea cols="65" rows="10" name="profile"><?php echo htmlsc(stripslashes($profile)); ?></textarea></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_signature']; ?></b><br /><span class="small"><?php echo $lang['user_sig_exp'] . "<br />" . $lang['optional_marking']; ?></span></td>
-     <td class="d"><textarea cols="65" rows="4" name="signature"><?php echo htmlspecialchars(stripslashes($signature)); ?></textarea></td>
+     <td class="d"><textarea cols="65" rows="4" name="signature"><?php echo htmlsc(stripslashes($signature)); ?></textarea></td>
     </tr>
     <?php if ($settings['thread_view'] != 0 && $settings['board_view'] != 0 || $settings['board_view'] != 0 && $settings['mix_view'] != 0 || $settings['thread_view'] != 0 && $settings['mix_view'] != 0)
     { ?>
@@ -695,7 +695,7 @@ switch ($action)
    <?php if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php } ?>
    <form action="user.php" method="post"><div>
    <p><b><?php echo $lang['new_email']; ?></b><br />
-   <input type="text" size="25" name="new_email" value="<?php if (isset($new_email)) echo htmlspecialchars(stripslashes($new_email)); ?>" maxlength="<?php echo $settings['email_maxlength']; ?>"></p>
+   <input type="text" size="25" name="new_email" value="<?php if (isset($new_email)) echo htmlsc(stripslashes($new_email)); ?>" maxlength="<?php echo $settings['email_maxlength']; ?>"></p>
    <p><b><?php echo $lang['password_marking']; ?></b><br />
    <input type="password" size="25" name="pw_new_email" maxlength="50"></p>
    <p><input type="submit" name="change_email_submit" value="<?php echo $lang['submit_button_ok']; ?>"></p>
@@ -728,7 +728,7 @@ switch ($action)
    $field = mysql_fetch_array($pma_result);
    mysql_free_result($pma_result);
 
-   $lang['pers_msg_hl'] = str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['pers_msg_hl']);
+   $lang['pers_msg_hl'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['pers_msg_hl']);
    ?><h2><?php echo $lang['pers_msg_hl']; ?></h2><?php
 
    if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php }
@@ -739,22 +739,22 @@ switch ($action)
      <input type="hidden" name="action" value="pm_sent" />
      <input type="hidden" name="recipient_id" value="<?php echo $id; ?>" />
      <b><?php echo $lang['pers_msg_sj']; ?></b><br />
-     <input class="fs" type="text" name="pm_subject" value="<?php if (isset($_POST['pm_subject'])) echo htmlspecialchars(stripslashes($_POST['pm_subject'])); else echo ""; ?>" size="50" /><br /><br />
+     <input class="fs" type="text" name="pm_subject" value="<?php if (isset($_POST['pm_subject'])) echo htmlsc(stripslashes($_POST['pm_subject'])); else echo ""; ?>" size="50" /><br /><br />
      <b><?php echo $lang['pers_msg_txt']; ?></b><br />
-     <textarea name="pm_text" cols="60" rows="15"><?php if (isset($_POST['pm_text'])) echo htmlspecialchars(stripslashes($_POST['pm_text'])); else echo ""; ?></textarea><br /><br />
+     <textarea name="pm_text" cols="60" rows="15"><?php if (isset($_POST['pm_text'])) echo htmlsc(stripslashes($_POST['pm_text'])); else echo ""; ?></textarea><br /><br />
      <input type="submit" name="pm_ok" value="<?php echo $lang['pers_msg_subm_button']; ?>" /><br /><br />
      </div></form><?php
     }
    else
     {
-     $lang['pers_msg_deactivated'] = str_replace("[name]", htmlspecialchars(stripslashes($field["user_name"])), $lang['pers_msg_deactivated']);
+     $lang['pers_msg_deactivated'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['pers_msg_deactivated']);
      echo $lang['pers_msg_deactivated'] . "<p>&nbsp;</p>";
     }
    break;
 
    case "locked":
     ?><h2 class="caution"><?php echo $lang['user_locked_hl']; ?></h2>
-    <p><?php echo str_replace("[name]", htmlspecialchars(stripslashes($user_name)), $lang['usr_locked_txt']); ?></p>
+    <p><?php echo str_replace("[name]", htmlsc(stripslashes($user_name)), $lang['usr_locked_txt']); ?></p>
     <p>&nbsp;</p><?php
    break;
  }
