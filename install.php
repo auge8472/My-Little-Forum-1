@@ -76,12 +76,12 @@ $settings['captcha_register'] = 0;
 $settings['captcha_type'] = 0;
 
 $smilies = array(
-array('smile.gif', ':-)', ':)', '', '', '', ''),
-array('wink.gif', ';-)', ';)', '', '', '', ''),
-array('tongue.gif', ':-P', ':P', '', '', '', ''),
-array('biggrin.gif', ':-D', ':D', '', '', '', ''),
-array('neutral.gif', ':-|', ':|', '', '', '', ''),
-array('frown.gif', ':-(', ':(', '', '', '', ''),
+array('smile.gif', ':-)', '', '', '', '', ''),
+array('wink.gif', ';-)', '', '', '', '', ''),
+array('tongue.gif', ':-P', '', '', '', '', ''),
+array('biggrin.gif', ':-D', '', '', '', '', ''),
+array('neutral.gif', ':-|', '', '', '', '', ''),
+array('frown.gif', ':-(', '', '', '', '', ''),
 array('yes.gif', ':yes:', '', '', '', '', ''),
 array('no.gif', ':no:', '', '', '', '', ''),
 array('ok.gif', ':ok:', '', '', '', '', ''),
