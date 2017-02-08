@@ -48,7 +48,7 @@ if(isset($_GET['id']) && isset($_GET['key']) && trim($_GET['key'])!='')
     $result = mysql_query("SELECT user_name, user_email, activate_code FROM ".$db_settings['userdata_table']." WHERE user_id = ".$user_id." LIMIT 1", $connid);
     if(!$result) die($lang['db_error']);
     if(mysql_num_rows($result) != 1) $errors[] = true;
-    $data = mysql_fetch_array($result);
+    $data = mysql_fetch_assoc($result);
     mysql_free_result($result);
    }
   if(empty($errors))
@@ -75,7 +75,7 @@ if(isset($_GET['id']) && isset($_GET['key']) && trim($_GET['key'])!='')
       // Schauen, wer eine E-Mail-Benachrichtigung will:
       $admin_result=mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_user_notify='1'", $connid);
       if(!$admin_result) die($lang['db_error']);
-      while ($admin_array = mysql_fetch_array($admin_result))
+      while ($admin_array = mysql_fetch_assoc($admin_result))
        {
         $ind_reg_emailbody = str_replace("[admin]", $admin_array['user_name'], $lang['new_user_notif_txt']);
         $admin_mailto = $admin_array['user_name']." <".$admin_array['user_email'].">";
@@ -128,7 +128,7 @@ if(isset($_POST['register_submit']))
     // look if name already exists:
     $name_result = mysql_query("SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_name = '".mysql_escape_string($new_user_name)."' LIMIT 1", $connid);
     if(!$name_result) die($lang['db_error']);
-    $field = mysql_fetch_array($name_result);
+    $field = mysql_fetch_assoc($name_result);
     mysql_free_result($name_result);
     if (strtolower($field["user_name"]) == strtolower($new_user_name) && $new_user_name != "")
      {
@@ -138,7 +138,7 @@ if(isset($_POST['register_submit']))
     // look, if e-mail already exists:
     $email_result = mysql_query("SELECT user_email FROM ".$db_settings['userdata_table']." WHERE user_email = '".mysql_escape_string($new_user_email)."'", $connid);
     if(!$email_result) die($lang['db_error']);
-    $field = mysql_fetch_array($email_result);
+    $field = mysql_fetch_assoc($email_result);
     mysql_free_result($email_result);
     if (strtolower($field["user_email"]) == strtolower($new_user_email) && $new_user_email != "")
      {
@@ -168,7 +168,7 @@ if(isset($_POST['register_submit']))
    // check for not accepted words in name and e-mail:
    $result=mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1", $connid);
    if(!$result) die($lang['db_error']);
-   $data = mysql_fetch_array($result);
+   $data = mysql_fetch_assoc($result);
    mysql_free_result($result);
    if(trim($data['list']) != '')
     {
@@ -194,7 +194,7 @@ if(isset($_POST['register_submit']))
      // get new user ID:
      $new_user_id_result = mysql_query("SELECT user_id FROM ".$db_settings['userdata_table']." WHERE user_name = '".mysql_escape_string($new_user_name)."' LIMIT 1", $connid);
      if (!$new_user_id_result) die($lang['db_error']);
-     $field = mysql_fetch_array($new_user_id_result);
+     $field = mysql_fetch_assoc($new_user_id_result);
      $new_user_id = $field['user_id'];
      mysql_free_result($new_user_id_result);
 

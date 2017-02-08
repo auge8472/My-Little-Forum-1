@@ -44,14 +44,14 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
                         subject, hp, place, text, category, show_signature, locked FROM ".$db_settings['forum_table']."
                         WHERE id = '".$parent_array[$id]["id"]."' ORDER BY time ASC", $connid);
   if(!$posting_result) die($lang['db_error']);
-  $entrydata = mysql_fetch_array($posting_result);
+  $entrydata = mysql_fetch_assoc($posting_result);
   mysql_free_result($posting_result);
 
   if ($entrydata["user_id"] > 0)
    {
     $userdata_result=mysql_query("SELECT user_name, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$entrydata["user_id"]."'", $connid);
     if (!$userdata_result) die($lang['db_error']);
-    $userdata = mysql_fetch_array($userdata_result);
+    $userdata = mysql_fetch_assoc($userdata_result);
     mysql_free_result($userdata_result);
     $entrydata["email"] = $userdata["user_email"];
     $entrydata["hide_email"] = $userdata["hide_email"];
@@ -62,7 +62,7 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
 
    // Posting heraussuchen, auf das geantwortet wurde:
    $result_a = mysql_query("SELECT name FROM ".$db_settings['forum_table']." WHERE id = ".$parent_array[$id]["pid"], $connid);
-   $posting_a = mysql_fetch_array($result_a);
+   $posting_a = mysql_fetch_assoc($result_a);
    mysql_free_result($result_a);
 
    ?><div class="mixdivl" style="margin-left: <?php if ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix_topic']/$settings['thread_indent_mix_topic'])) echo "0"; else echo $settings['thread_indent_mix_topic']; ?>px;">
@@ -156,7 +156,7 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
     $result=mysql_query("SELECT tid, pid, subject, category FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
     if(!$result) die($lang['db_error']);
     if(mysql_num_rows($result) > 0) {  // überprüfen ob ein Eintrag mit dieser id in der Datenbank ist
-    $entrydata = mysql_fetch_array($result); // Und ggbf. aus der Datenbank holen
+    $entrydata = mysql_fetch_assoc($result); // Und ggbf. aus der Datenbank holen
 
     // Look if id correct:
     if ($entrydata['pid'] != 0) header("location: ".basename($_SERVER['PHP_SELF'])."?id=".$entrydata['tid']."&page=".$page."&category=".$category."&order=".$order."&descasc=".$descasc."#p".$id);
@@ -189,7 +189,7 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
  if(!$result) die($lang['db_error']);
 
   // Ergebnisse einlesen
- while($tmp = mysql_fetch_array($result)) {  // Ergebnis holen
+ while($tmp = mysql_fetch_assoc($result)) {  // Ergebnis holen
   $parent_array[$tmp["id"]] = $tmp;          // Ergebnis im Array ablegen
   $child_array[$tmp["pid"]][] =  $tmp["id"]; // Vorwärtsbezüge konstruieren
  }

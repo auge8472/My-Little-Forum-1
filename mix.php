@@ -144,7 +144,7 @@ if($thread_count > 0 && isset($result))
   </tr>
   <?php
   $i=0;
-  while ($zeile = mysql_fetch_array($result)) {
+  while ($zeile = mysql_fetch_assoc($result)) {
 
   // count replies:
   $pid_resultc = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"], $connid);
@@ -156,7 +156,7 @@ if($thread_count > 0 && isset($result))
   if ($settings['last_reply_link'] == 1)
   {
    $last_answer_result = mysql_query("SELECT name, id FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"]." ORDER BY time DESC LIMIT 1", $connid);
-   $last_answer = mysql_fetch_array($last_answer_result);
+   $last_answer = mysql_fetch_assoc($last_answer_result);
    mysql_free_result($last_answer_result);
   }
   ?><tr>
@@ -168,7 +168,7 @@ if($thread_count > 0 && isset($result))
                      name, subject, category FROM ".$db_settings['forum_table']."
                      WHERE tid = ".$zeile["tid"]." ORDER BY time ASC", $connid);
          // Ergebnisse einlesen:
-         while($tmp = mysql_fetch_array($thread_result))
+         while($tmp = mysql_fetch_assoc($thread_result))
           {                                           // Ergebnis holen
            $parent_array[ $tmp["id"] ] = $tmp;          // Ergebnis im Array ablegen
            $child_array[ $tmp["pid"] ][] =  $tmp["id"]; // Vorwärtsbezüge konstruieren

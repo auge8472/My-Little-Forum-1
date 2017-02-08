@@ -59,7 +59,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
    {
     $ue_result = mysql_query("SELECT user_email FROM ".$db_settings['userdata_table']." WHERE user_id = '".$_SESSION[$settings['session_prefix'].'user_id']."' LIMIT 1", $connid);
     if (!$ue_result) die($lang['db_error']);
-    $ue_field = mysql_fetch_array($ue_result);
+    $ue_field = mysql_fetch_assoc($ue_result);
     mysql_free_result($ue_result);
     $sender_name = $_SESSION[$settings['session_prefix'].'user_name'];
     $sender_email = $ue_field['user_email'];
@@ -69,7 +69,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
   {
    $result = mysql_query("SELECT tid, user_id, name, email, subject FROM ".$db_settings['forum_table']." WHERE id = '".$id."' LIMIT 1", $connid);
    if (!$result) die($lang['db_error']);
-   $field = mysql_fetch_array($result);
+   $field = mysql_fetch_assoc($result);
    mysql_free_result($result);
    $name = $field['name'];
    $email = $field['email'];
@@ -78,7 +78,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
   {
    $result = mysql_query("SELECT user_id, user_name, user_email, hide_email FROM ".$db_settings['userdata_table']." WHERE user_id = '".$uid."' LIMIT 1", $connid);
    if (!$result) die($lang['db_error']);
-   $field = mysql_fetch_array($result);
+   $field = mysql_fetch_assoc($result);
    mysql_free_result($result);
    $name = $field['user_name'];
    $email = $field['user_email'];
@@ -89,7 +89,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
   {
   $user_result = mysql_query("SELECT user_email, hide_email FROM ".$db_settings['userdata_table']." WHERE user_id = '".$field['user_id']."' LIMIT 1", $connid);
   if (!$user_result) die($lang['db_error']);
-  $user_field = mysql_fetch_array($user_result);
+  $user_field = mysql_fetch_assoc($user_result);
   mysql_free_result($user_result);
   $email = $user_field['user_email'];
   $hide_email = $user_field['hide_email'];
@@ -116,7 +116,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
      // check for not accepted words:
      $result=mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1", $connid);
      if(!$result) die($lang['db_error']);
-     $data = mysql_fetch_array($result);
+     $data = mysql_fetch_assoc($result);
      mysql_free_result($result);
      if(trim($data['list']) != '')
       {

@@ -71,7 +71,7 @@ switch ($action)
      if (!$result) die($lang['db_error']);
      if (mysql_num_rows($result) == 1)
       {
-       $feld = mysql_fetch_array($result);
+       $feld = mysql_fetch_assoc($result);
 
      if ($feld["user_pw"] == md5($userpw))
       {
@@ -126,7 +126,7 @@ switch ($action)
      if(!$result) die($lang['db_error']);
      if(mysql_num_rows($result) == 1)
       {
-       $feld = mysql_fetch_array($result);
+       $feld = mysql_fetch_assoc($result);
 
        if (md5($feld["user_pw"]) == $auto_login_array[1] && trim($feld["activate_code"]==''))
         {
@@ -176,7 +176,7 @@ switch ($action)
    {
     $pwf_result = mysql_query("SELECT user_id, user_name, user_email, user_pw FROM ".$db_settings['userdata_table']." WHERE user_name = '".$pwf_username."'", $connid);
     if (!$pwf_result) die($lang['db_error']);
-    $field = mysql_fetch_array($pwf_result);
+    $field = mysql_fetch_assoc($pwf_result);
     mysql_free_result($pwf_result);
     if($field["user_email"] == $pwf_email)
      {
@@ -222,7 +222,7 @@ switch ($action)
    {
     $pwf_result = mysql_query("SELECT user_id, user_name, user_email, pwf_code FROM ".$db_settings['userdata_table']." WHERE user_id = '".intval($_GET["activate"])."'", $connid);
     if (!$pwf_result) die($lang['db_error']);
-    $field = mysql_fetch_array($pwf_result);
+    $field = mysql_fetch_assoc($pwf_result);
     mysql_free_result($pwf_result);
     if ($field['user_id'] == $_GET["activate"] && $field['pwf_code'] == $_GET['code'])
      {

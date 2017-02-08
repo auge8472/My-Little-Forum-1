@@ -191,7 +191,7 @@ elseif (isset($show_postings) && empty($search))
  {
   $user_name_result = mysql_query("SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_id = '".$show_postings."' LIMIT 1", $connid);
   if (!$user_name_result) die($lang['db_error']);
-  $field = mysql_fetch_array($user_name_result);
+  $field = mysql_fetch_assoc($user_name_result);
   mysql_free_result($user_name_result);
   $lang['show_userdata_linktitle'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['show_userdata_linktitle']);
   $lang['postings_by_user'] = str_replace("[name]", "<a href=\"user.php?id=".$show_postings."\" title=\"".$lang['show_userdata_linktitle']."\">".htmlsc(stripslashes($field["user_name"]))."</a>", $lang['postings_by_user']);
@@ -233,7 +233,7 @@ elseif ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "phra
 elseif ($count == 0 && $search != "") { echo "<p class=\"caution\">".$lang['search_no_match']."</p>"; }
 if (isset($search) && $search != "" || isset($show_postings) && $show_postings !="") {
 $i=0;
-while ($entrydata = mysql_fetch_array($result)) {
+while ($entrydata = mysql_fetch_assoc($result)) {
 $search_author_info_x = str_replace("[name]", htmlsc(stripslashes($entrydata["name"])), $lang['search_author_info']);
 $search_author_info_x = str_replace("[time]", strftime($lang['time_format'],$entrydata["Uhrzeit"]), $search_author_info_x);
 ?><p class="searchresults"><a class="<?php if ($entrydata["pid"] == 0) echo "thread"; else echo "reply-search"; ?>" href="<?php

@@ -99,12 +99,12 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
 
   if ($thread_count > 0 && isset($result))
    {
-    while ($zeile = mysql_fetch_array($result))
+    while ($zeile = mysql_fetch_assoc($result))
      {
       $thread_result=mysql_query("SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS tp_time, UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"]." ORDER BY time ASC", $connid);
 
       // put result into arrays:
-      while($tmp = mysql_fetch_array($thread_result))
+      while($tmp = mysql_fetch_assoc($thread_result))
        {
         $parent_array[$tmp["id"]] = $tmp;
         $child_array[$tmp["pid"]][] =  $tmp["id"];

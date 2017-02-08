@@ -59,7 +59,7 @@ function split_sql($sql)
       $sql_result=mysql_query("SELECT id, pid, tid, uniqid, time, last_answer, edited, edited_by, user_id, name, subject, category, email, hp, place, ip, text, show_signature, email_notify, marked, locked, fixed, views FROM ".$db_settings['forum_table'], $connid);
       if(!$sql_result) die($lang['db_error']);
       ?><pre># Forum entries (<?php echo $db_settings['forum_table']; ?>):<br /><br /><?php
-      while ($field = mysql_fetch_array($sql_result))
+      while ($field = mysql_fetch_assoc($sql_result))
        {
         echo "INSERT INTO ".$db_settings['forum_table']." VALUES (".$field['id'].", ".$field['pid'].", ".$field['tid'].", '".$field['uniqid']."', '".$field['time']."', '".$field['last_answer']."', '".$field['edited']."', '".htmlsc(addslashes($field['edited_by']))."', ".$field['user_id'].", '".htmlsc(addslashes($field['name']))."', '".htmlsc(addslashes($field['subject']))."', ".$field['category'].", '".htmlsc(addslashes($field['email']))."', '".htmlsc(addslashes($field['hp']))."', '".htmlsc(addslashes($field['place']))."', '".$field['ip']."', '".str_replace("\r", "\\r", str_replace("\n",  "\\n", htmlsc(addslashes($field['text']))))."', ".$field['show_signature'].", ".$field['email_notify'].", ".$field['marked'].", ".$field['locked'].", ".$field['fixed'].", ".$field['views'].");<br />";
        }
@@ -72,7 +72,7 @@ function split_sql($sql)
       $sql_result=mysql_query("SELECT id, pid, tid, uniqid, time, last_answer, edited, edited_by, user_id, name, subject, category, email, hp, place, ip, text, show_signature, email_notify, marked, locked, fixed, views FROM ".$db_settings['forum_table']." WHERE marked='1'", $connid);
       if(!$sql_result) die($lang['db_error']);
       ?><pre># Marked forum entries (<?php echo $db_settings['forum_table']; ?>):<br /><br /><?php
-      while ($field = mysql_fetch_array($sql_result))
+      while ($field = mysql_fetch_assoc($sql_result))
        {
         echo "INSERT INTO ".$db_settings['forum_table']." VALUES (".$field['id'].", ".$field['pid'].", ".$field['tid'].", '".$field['uniqid']."', '".$field['time']."', '".$field['last_answer']."', '".$field['edited']."', '".htmlsc(addslashes($field['edited_by']))."', ".$field['user_id'].", '".htmlsc(addslashes($field['name']))."', '".htmlsc(addslashes($field['subject']))."', ".$field['category'].", '".htmlsc(addslashes($field['email']))."', '".htmlsc(addslashes($field['hp']))."', '".htmlsc(addslashes($field['place']))."', '".$field['ip']."', '".str_replace("\r", "\\r", str_replace("\n",  "\\n", htmlsc(addslashes($field['text']))))."', ".$field['show_signature'].", ".$field['email_notify'].", ".$field['marked'].", ".$field['locked'].", ".$field['fixed'].", ".$field['views'].");<br />";
        }
@@ -85,7 +85,7 @@ function split_sql($sql)
       $sql_result=mysql_query("SELECT user_id, user_type, user_name, user_real_name, user_pw, user_email, hide_email, user_hp, user_place, signature, profile, logins, last_login, last_logout, user_ip, registered, user_view, new_posting_notify, new_user_notify, personal_messages, time_difference, user_lock, pwf_code, activate_code FROM ".$db_settings['userdata_table'], $connid);
       if(!$sql_result) die($lang['db_error']);
       ?><pre># Userdata (<?php echo $db_settings['userdata_table']; ?>):<br /><br /><?php
-        while ($field = mysql_fetch_array($sql_result))
+        while ($field = mysql_fetch_assoc($sql_result))
        {
         echo "INSERT INTO ".$db_settings['userdata_table']." VALUES (".$field['user_id'].", '".$field['user_type']."', '".htmlsc(addslashes($field['user_name']))."', '".htmlsc(addslashes($field['user_real_name']))."', '".htmlsc(addslashes($field['user_pw']))."', '".htmlsc(addslashes($field['user_email']))."', '".$field['hide_email']."', '".htmlsc(addslashes($field['user_hp']))."', '".htmlsc(addslashes($field['user_place']))."', '".str_replace("\r", "\\r", str_replace("\n",  "\\n", htmlsc(addslashes($field['signature']))))."', '".str_replace("\r", "\\r", str_replace("\n",  "\\n", htmlsc(addslashes($field['profile']))))."', ".$field['logins'].", '".$field['last_login']."', '".$field['last_logout']."', '".$field['user_ip']."', '".$field['registered']."', '".$field['user_view']."', ".$field['new_posting_notify'].", ".$field['new_user_notify'].", ".$field['personal_messages'].", ".$field['time_difference'].", ".$field['user_lock'].", '".$field['pwf_code']."', '".$field['activate_code']."');<br />";
        }
@@ -98,7 +98,7 @@ function split_sql($sql)
       $sql_result=mysql_query("SELECT id, category_order, category, description, accession FROM ".$db_settings['category_table'], $connid);
       if(!$sql_result) die($lang['db_error']);
       ?><pre># Categories (<?php echo $db_settings['category_table']; ?>):<br /><br /><?php
-      while ($field = mysql_fetch_array($sql_result))
+      while ($field = mysql_fetch_assoc($sql_result))
        {
         echo "INSERT INTO ".$db_settings['category_table']." VALUES (".$field['id'].", ".$field['category_order'].", '".htmlsc(addslashes($field['category']))."', '".htmlsc(addslashes($field['description']))."', ".$field['accession'].");<br />";
        }
@@ -111,7 +111,7 @@ function split_sql($sql)
       $sql_result=mysql_query("SELECT name, value FROM ".$db_settings['settings_table'], $connid);
       if(!$sql_result) die($lang['db_error']);
       ?><pre># Settings (<?php echo $db_settings['settings_table']; ?>)<br /><br /><?php
-      while ($field = mysql_fetch_array($sql_result))
+      while ($field = mysql_fetch_assoc($sql_result))
        {
         echo "INSERT INTO ".$db_settings['settings_table']." VALUES ('".$field['name']."', '".htmlsc(addslashes($field['value']))."');<br />";
        }
@@ -124,7 +124,7 @@ function split_sql($sql)
       $sql_result=mysql_query("SELECT id, order_id, file, code_1, code_2, code_3, code_4, code_5, title FROM ".$db_settings['smilies_table'], $connid);
       if(!$sql_result) die($lang['db_error']);
       ?><pre># Smilies (<?php echo $db_settings['smilies_table']; ?>)<br /><br /><?php
-      while ($field = mysql_fetch_array($sql_result))
+      while ($field = mysql_fetch_assoc($sql_result))
        {
         echo "INSERT INTO ".$db_settings['smilies_table']." VALUES (".$field['id'].", ".$field['order_id'].", '".htmlsc(addslashes($field['file']))."', '".htmlsc(addslashes($field['code_1']))."', '".htmlsc(addslashes($field['code_2']))."', '".htmlsc(addslashes($field['code_3']))."', '".htmlsc(addslashes($field['code_4']))."', '".htmlsc(addslashes($field['code_5']))."', '".htmlsc(addslashes($field['title']))."');<br />";
        }
@@ -137,7 +137,7 @@ function split_sql($sql)
       $sql_result=mysql_query("SELECT name, list FROM ".$db_settings['banlists_table'], $connid);
       if(!$sql_result) die($lang['db_error']);
       ?><pre># Banlists (<?php echo $db_settings['banlists_table']; ?>)<br /><br /><?php
-      while ($field = mysql_fetch_array($sql_result))
+      while ($field = mysql_fetch_assoc($sql_result))
        {
         echo "INSERT INTO ".$db_settings['banlists_table']." VALUES ('".$field['name']."', '".htmlsc(addslashes($field['list']))."');<br />";
        }
@@ -196,7 +196,7 @@ if(isset($_POST['sql_submit']))
 
   $pw_result = mysql_query("SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = '".$_SESSION[$settings['session_prefix'].'user_id']."' LIMIT 1", $connid);
   if (!$pw_result) die($lang['db_error']);
-  $field = mysql_fetch_array($pw_result);
+  $field = mysql_fetch_assoc($pw_result);
   mysql_free_result($pw_result);
   if ($_POST['sql_pw']=='') $errors[] = $lang['error_form_uncompl'];
   else
@@ -224,7 +224,7 @@ if (isset($_GET['mark']))
  {
   $mark_result = mysql_query("SELECT marked FROM ".$db_settings['forum_table']." WHERE id='".$_GET['mark']."' LIMIT 1", $connid);
   if (!$mark_result) die($lang['db_error']);
-  $field = mysql_fetch_array($mark_result);
+  $field = mysql_fetch_assoc($mark_result);
   mysql_free_result($mark_result);
   if ($field['marked']==0) $marked = 1; else $marked = 0;
 
@@ -247,7 +247,7 @@ if (isset($_POST['new_category']))
     // does this category already exist?
     $category_result = mysql_query("SELECT category FROM ".$db_settings['category_table']." WHERE category = '".mysql_escape_string($new_category)."' LIMIT 1", $connid);
     if(!$category_result) die($lang['db_error']);
-    $field = mysql_fetch_array($category_result);
+    $field = mysql_fetch_assoc($category_result);
     mysql_free_result($category_result);
 
     if(strtolower($field["category"]) == strtolower($new_category)) $errors[] = $lang_add['category_already_exists'];
@@ -270,7 +270,7 @@ if(isset($_GET['edit_user']))
  {
   $edit_user_id = intval($_GET['edit_user']);
   $result = mysql_query("SELECT user_type, user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, user_view, new_posting_notify, new_user_notify, personal_messages, time_difference FROM ".$db_settings['userdata_table']." WHERE user_id = '".$edit_user_id."'", $connid) or die($lang['db_error']);
-  $field = mysql_fetch_array($result);
+  $field = mysql_fetch_assoc($result);
   mysql_free_result($result);
   $edit_user_type = $field["user_type"];
   $user_email = $field["user_email"];
@@ -312,7 +312,7 @@ if(isset($_POST['edit_user_submit']))
   if(empty($user_view) or $user_view == '') $user_view = $standard;
   // does the name already exist?
   $name_result = mysql_query("SELECT user_id, user_name FROM ".$db_settings['userdata_table']." WHERE user_name = '".mysql_escape_string($edit_user_name)."'", $connid) or die($lang['db_error']);
-  $field = mysql_fetch_array($name_result);
+  $field = mysql_fetch_assoc($name_result);
   mysql_free_result($name_result);
   if($edit_user_id != $field['user_id'] && strtolower($field["user_name"]) == strtolower($edit_user_name)) $errors[] = str_replace("[name]", htmlsc(stripslashes($edit_user_name)), $lang['error_name_reserved']);
   if(strlen($user_real_name) > $settings['name_maxlength']) $errors[] = $lang['user_real_name'] . " " .$lang['error_input_too_long'];
@@ -366,7 +366,7 @@ if(isset($_GET['edit_category']))
  {
   $category_result = mysql_query("SELECT id, category_order, category, accession FROM ".$db_settings['category_table']." WHERE id = '".$_GET['edit_category']."' LIMIT 1", $connid);
   if(!$category_result) die($lang['db_error']);
-  $field = mysql_fetch_array($category_result);
+  $field = mysql_fetch_assoc($category_result);
   mysql_free_result($category_result);
   $id = $field['id'];
   $category = $field['category'];
@@ -378,7 +378,7 @@ if (isset($_GET['delete_category']))
  {
   $category_result = mysql_query("SELECT id, category FROM ".$db_settings['category_table']." WHERE id = '".intval($_GET['delete_category'])."' LIMIT 1", $connid);
   if(!$category_result) die($lang['db_error']);
-  $field = mysql_fetch_array($category_result);
+  $field = mysql_fetch_assoc($category_result);
   mysql_free_result($category_result);
   $category_id = $field['id'];
   $category_name = $field['category'];
@@ -441,7 +441,7 @@ if (isset($_GET['move_up_category']))
  {
   $category_result = mysql_query("SELECT category_order FROM ".$db_settings['category_table']." WHERE id = ".$_GET['move_up_category']." LIMIT 1", $connid);
   if(!$category_result) die($lang['db_error']);
-  $field = mysql_fetch_array($category_result);
+  $field = mysql_fetch_assoc($category_result);
   mysql_free_result($category_result);
   if ($field['category_order'] > 1)
    {
@@ -461,7 +461,7 @@ if (isset($_GET['move_down_category']))
 
   $category_result = mysql_query("SELECT category_order FROM ".$db_settings['category_table']." WHERE id = ".$_GET['move_down_category']." LIMIT 1", $connid);
   if(!$category_result) die($lang['db_error']);
-  $field = mysql_fetch_array($category_result);
+  $field = mysql_fetch_assoc($category_result);
   mysql_free_result($category_result);
   if ($field['category_order'] < $category_count)
    {
@@ -488,7 +488,7 @@ if (isset($_POST['delete_category_submit']))
     // reset order:
     $result = mysql_query("SELECT id FROM ".$db_settings['category_table']." ORDER BY category_order ASC", $connid);
     $i=1;
-    while ($data = mysql_fetch_array($result))
+    while ($data = mysql_fetch_assoc($result))
      {
       mysql_query("UPDATE ".$db_settings['category_table']." SET category_order=".$i." WHERE id = ".intval($data['id']), $connid);
       $i++;
@@ -515,7 +515,7 @@ if (isset($_GET['delete_user']))
   $user_id = intval($_GET['delete_user']);
   $user_result = mysql_query("SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_id='".$user_id."' LIMIT 1", $connid);
   if (!$user_result) die($lang['db_error']);
-  $user = mysql_fetch_array($user_result);
+  $user = mysql_fetch_assoc($user_result);
   mysql_free_result($user_result);
   $selected[] = $user_id;
   $selected_usernames[] = $user["user_name"];
@@ -532,7 +532,7 @@ if (isset($_POST['delete_user']))
     {
      $user_result = mysql_query("SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_id='".$selected[$x]."' LIMIT 1", $connid);
      if (!$user_result) die($lang['db_error']);
-     $user = mysql_fetch_array($user_result);
+     $user = mysql_fetch_assoc($user_result);
      mysql_free_result($user_result);
      $selected_usernames[] = $user["user_name"];
     }
@@ -563,7 +563,7 @@ if (isset($_POST['clear_userdata']))
 
    }
   if (!$clear_result) die($lang['db_error']);
-  while ($line = mysql_fetch_array($clear_result))
+  while ($line = mysql_fetch_assoc($clear_result))
    {
     $selected_usernames[] = $line['user_name'];
     $selected[] = $line['user_id'];
@@ -592,7 +592,7 @@ if (isset($_GET['user_lock']))
  {
   $lock_result = mysql_query("SELECT user_lock FROM ".$db_settings['userdata_table']." WHERE user_id = '".$_GET['user_lock']."' LIMIT 1", $connid);
   if (!$lock_result) die($lang['db_error']);
-  $field = mysql_fetch_array($lock_result);
+  $field = mysql_fetch_assoc($lock_result);
   mysql_free_result($lock_result);
   if ($field['user_lock'] == 0) $new_lock = 1; else $new_lock = 0;
   $update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_lock='".$new_lock."', last_login=last_login, registered=registered WHERE user_id='".$_GET['user_lock']."' LIMIT 1", $connid);
@@ -603,7 +603,7 @@ if (isset($_POST['delete_all_postings_confirmed']))
  {
   $pw_result = mysql_query("SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = '".$_SESSION[$settings['session_prefix'].'user_id']."' LIMIT 1", $connid);
   if (!$pw_result) die($lang['db_error']);
-  $field = mysql_fetch_array($pw_result);
+  $field = mysql_fetch_assoc($pw_result);
   mysql_free_result($pw_result);
   if ($_POST['delete_all_postings_confirm_pw']=="") $errors[] = $lang['error_form_uncompl'];
   else
@@ -623,7 +623,7 @@ if (isset($_POST['delete_db_confirmed']))
  {
   $pw_result = mysql_query("SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = '".$_SESSION[$settings['session_prefix'].'user_id']."' LIMIT 1", $connid);
   if (!$pw_result) die($lang['db_error']);
-  $field = mysql_fetch_array($pw_result);
+  $field = mysql_fetch_assoc($pw_result);
   mysql_free_result($pw_result);
   if ($_POST['delete_db_confirm_pw']=="" || empty($_POST['delete_modus'])) $errors[] = $lang['error_form_uncompl'];
   else
@@ -713,7 +713,7 @@ if (isset($_POST['mark_threads_submitted']))
     // letzten Thread ermitteln, der nicht markiert werden soll:
     $mot_result =  mysql_query("SELECT tid FROM ".$db_settings['forum_table']." WHERE pid = '0' ORDER BY id DESC LIMIT ".$limit.", 1", $connid);
     if (!$mot_result) die($lang['db_error']);
-    $field = mysql_fetch_array($mot_result);
+    $field = mysql_fetch_assoc($mot_result);
     $last_thread = $field['tid'];
     mysql_free_result($mot_result);
     // ...und alle älteren markieren:
@@ -790,7 +790,7 @@ if (isset($_POST['ar_username']))
     // schauen, ob der Name schon vergeben ist:
     $name_result = mysql_query("SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_name = '".mysql_escape_string($ar_username)."'");
     if(!$name_result) die($lang['db_error']);
-    $field = mysql_fetch_array($name_result);
+    $field = mysql_fetch_assoc($name_result);
     mysql_free_result($name_result);
 
     if (strtolower($field["user_name"]) == strtolower($ar_username) && $ar_username != "")
@@ -945,7 +945,7 @@ if(isset($_GET['delete_smiley']))
 
   $result = mysql_query("SELECT id FROM ".$db_settings['smilies_table']." ORDER BY order_id ASC", $connid);
   $i=1;
-  while ($data = mysql_fetch_array($result))
+  while ($data = mysql_fetch_assoc($result))
    {
     mysql_query("UPDATE ".$db_settings['smilies_table']." SET order_id=".$i." WHERE id = ".intval($data['id']), $connid);
     $i++;
@@ -960,7 +960,7 @@ if(isset($_GET['edit_smiley']))
  {
   $result = mysql_query("SELECT id, file, code_1, code_2, code_3, code_4, code_5, title FROM ".$db_settings['smilies_table']." WHERE id = ".intval($_GET['edit_smiley'])." LIMIT 1", $connid);
   if(!$result) die($lang['db_error']);
-  $data = mysql_fetch_array($result);
+  $data = mysql_fetch_assoc($result);
   mysql_free_result($result);
 
   $id = $data['id'];
@@ -1015,7 +1015,7 @@ if (isset($_GET['move_up_smiley']))
  {
   $result = mysql_query("SELECT order_id FROM ".$db_settings['smilies_table']." WHERE id = ".$_GET['move_up_smiley']." LIMIT 1", $connid);
   if(!$result) die($lang['db_error']);
-  $field = mysql_fetch_array($result);
+  $field = mysql_fetch_assoc($result);
   mysql_free_result($result);
   if ($field['order_id'] > 1)
    {
@@ -1035,7 +1035,7 @@ if (isset($_GET['move_down_smiley']))
 
   $result = mysql_query("SELECT order_id FROM ".$db_settings['smilies_table']." WHERE id = ".$_GET['move_down_smiley']." LIMIT 1", $connid);
   if(!$result) die($lang['db_error']);
-  $field = mysql_fetch_array($result);
+  $field = mysql_fetch_assoc($result);
   mysql_free_result($result);
   if ($field['order_id'] < $smilies_count)
    {
@@ -1202,7 +1202,7 @@ switch ($action)
      </tr><?php
 
     $i=0;
-    while ($line = mysql_fetch_array($result))
+    while ($line = mysql_fetch_assoc($result))
      {
       $count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE category = '".intval($line['id'])."' AND pid = 0", $connid);
       list($threads_in_category) = mysql_fetch_row($count_result);
@@ -1345,7 +1345,7 @@ switch ($action)
    </tr>
    <?php
    $i=0;
-   while ($zeile = mysql_fetch_array($result)) {
+   while ($zeile = mysql_fetch_assoc($result)) {
    ?>
    <tr>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>" width="10px"><input type="checkbox" name="selected[]" value="<?php echo $zeile["user_id"]; ?>" /></td>
@@ -1738,7 +1738,7 @@ switch ($action)
   case "email_list":
    $email_result = mysql_query("SELECT user_email FROM ".$db_settings['userdata_table'], $connid);
    if (!$email_result) die($lang['db_error']);
-   while ($line = mysql_fetch_array($email_result))
+   while ($line = mysql_fetch_assoc($email_result))
     {
      $email_list[] = $line['user_email'];
     }
@@ -1779,19 +1779,19 @@ switch ($action)
    // get banned users:
    $result=mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'users' LIMIT 1", $connid);
    if(!$result) die($lang['db_error']);
-   $data = mysql_fetch_array($result);
+   $data = mysql_fetch_assoc($result);
    $banned_users = str_replace(',',', ',$data['list']);
    mysql_free_result($result);
    // get banned ips:
    $result=mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'ips' LIMIT 1", $connid);
    if(!$result) die($lang['db_error']);
-   $data = mysql_fetch_array($result);
+   $data = mysql_fetch_assoc($result);
    $banned_ips = str_replace(',',', ',$data['list']);
    mysql_free_result($result);
    // get not accepted words:
    $result=mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1", $connid);
    if(!$result) die($lang['db_error']);
-   $data = mysql_fetch_array($result);
+   $data = mysql_fetch_assoc($result);
    $not_accepted_words = str_replace(',',', ',$data['list']);
    mysql_free_result($result);
    ?><form action="admin.php" method="post"><div>
@@ -1845,7 +1845,7 @@ switch ($action)
       <th><?php echo $lang_add['edit_smilies_order']; ?></th>
      </tr><?php
     $i=0;
-    while($line = mysql_fetch_array($result))
+    while($line = mysql_fetch_assoc($result))
      {
       // remove used smilies from smiley array:
       if(isset($smiley_files))

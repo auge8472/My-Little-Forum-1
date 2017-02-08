@@ -43,7 +43,7 @@ if(basename($_SERVER['PHP_SELF'])!='login.php' && basename($_SERVER['PHP_SELF'])
 // look if IP is banned:
 $ip_result=mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'ips' LIMIT 1", $connid);
 if(!$ip_result) die($lang['db_error']);
-$data = mysql_fetch_array($ip_result);
+$data = mysql_fetch_assoc($ip_result);
 mysql_free_result($ip_result);
 if(trim($data['list']) != '')
  {
@@ -59,7 +59,7 @@ if(isset($_SESSION[$settings['session_prefix'].'user_name']))
  {
   $ban_result=mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'users' LIMIT 1", $connid);
   if(!$ban_result) die($lang['db_error']);
-  $data = mysql_fetch_array($ban_result);
+  $data = mysql_fetch_assoc($ban_result);
   mysql_free_result($ban_result);
   if(trim($data['list']) != '')
    {

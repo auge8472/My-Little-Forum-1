@@ -42,7 +42,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
  {
   $lock_result = mysql_query("SELECT user_lock FROM ".$db_settings['userdata_table']." WHERE user_id = '".$_SESSION[$settings['session_prefix'].'user_id']."' LIMIT 1", $connid);
   if (!$lock_result) die($lang['db_error']);
-  $lock_result_array = mysql_fetch_array($lock_result);
+  $lock_result_array = mysql_fetch_assoc($lock_result);
   mysql_free_result($lock_result);
   if ($lock_result_array['user_lock'] > 0)
    {
@@ -55,7 +55,7 @@ if (isset($_GET['lock']) && isset($_SESSION[$settings['session_prefix'].'user_id
 {
  $lock_result = mysql_query("SELECT tid, locked FROM ".$db_settings['forum_table']." WHERE id='".$id."' LIMIT 1", $connid);
  if (!$lock_result) die($lang['db_error']);
- $field = mysql_fetch_array($lock_result);
+ $field = mysql_fetch_assoc($lock_result);
  mysql_free_result($lock_result);
  if ($field['locked']==0) mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, locked='1' WHERE tid = ".$field['tid'], $connid);
  else mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, locked='0' WHERE tid = ".$field['tid'], $connid);
@@ -94,12 +94,12 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
      {
       $user_id_result = mysql_query("SELECT user_id FROM ".$db_settings['forum_table']." WHERE id = '".$id."' LIMIT 1", $connid);
       if (!$user_id_result) die($lang['db_error']);
-      $result_array = mysql_fetch_array($user_id_result);
+      $result_array = mysql_fetch_assoc($user_id_result);
       mysql_free_result($user_id_result);
 
       $user_type_result = mysql_query("SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = '".$result_array["user_id"]."' LIMIT 1", $connid);
       if (!$user_type_result) die($lang['db_error']);
-      $user_result_array = mysql_fetch_array($user_type_result);
+      $user_result_array = mysql_fetch_assoc($user_type_result);
       mysql_free_result($user_type_result);
 
       // ist da jemand bekanntes?
@@ -163,7 +163,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
        {
         $result = mysql_query("SELECT tid, pid, name, subject, category, text, locked FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
         if (!$result) die($lang['db_error']);
-        $field = mysql_fetch_array($result);
+        $field = mysql_fetch_assoc($result);
         if (mysql_num_rows($result) != 1) $id = 0;
         else
          {
@@ -192,7 +192,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
         // fetch data of message which should be edited:
         $edit_result = mysql_query("SELECT tid, pid, user_id, name, email, hp, place, subject, category, text, email_notify, show_signature, locked, fixed, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(NOW() - INTERVAL ".$settings['edit_period']." MINUTE) AS edit_diff FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
         if (!$edit_result) die($lang['db_error']);
-        $field = mysql_fetch_array($edit_result);
+        $field = mysql_fetch_assoc($edit_result);
         mysql_free_result($edit_result);
         $thema = $field["tid"];
         $tid = $field["tid"];
@@ -221,7 +221,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
        {
         $delete_result = mysql_query("SELECT tid, pid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS tp_time, name, subject, category FROM ".$db_settings['forum_table']." WHERE id = '".$id."'", $connid);
         if(!$delete_result) die($lang['db_error']);
-        $field = mysql_fetch_array($delete_result);
+        $field = mysql_fetch_assoc($delete_result);
         $aname = $field["name"];
         $thema = $field["tid"];
         $show = "delete form";
@@ -234,7 +234,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
         {
          $pid_result=mysql_query("SELECT pid FROM ".$db_settings['forum_table']." WHERE id = ".$id);
          if (!$pid_result) die($lang['db_error']);
-         $feld = mysql_fetch_array($pid_result);
+         $feld = mysql_fetch_assoc($pid_result);
          if ($feld["pid"] == 0)
           {
            $delete_result = mysql_query("DELETE FROM ".$db_settings['forum_table']." WHERE tid = ".$id, $connid);
@@ -242,14 +242,14 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
          else
           {
            $last_answer_result=mysql_query("SELECT tid, time, last_answer FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
-           $field = mysql_fetch_array($last_answer_result);
+           $field = mysql_fetch_assoc($last_answer_result);
            mysql_free_result($last_answer_result);
            // if message is newest in topic:
            if ($field['time'] == $field['last_answer'])
             {
              // vorige Antwort heraussuchen und "last_answer" aktualisieren:
              $last_answer_result=mysql_query("SELECT time FROM ".$db_settings['forum_table']." WHERE tid = ".$field['tid']." AND time < '".$field['time']."' ORDER BY time DESC LIMIT 1", $connid);
-             $field2 = mysql_fetch_array($last_answer_result);
+             $field2 = mysql_fetch_assoc($last_answer_result);
              mysql_free_result($last_answer_result);
              $update_result=mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer='".$field2['time']."' WHERE tid=".$field['tid'], $connid);
             }
@@ -295,7 +295,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
         if (mysql_num_rows($tid_result) != 1) die($lang['db_error']);
         else
          {
-          $field = mysql_fetch_array($tid_result);
+          $field = mysql_fetch_assoc($tid_result);
           $Thread = $field['tid'];
           if ($field['locked'] > 0) { unset($action); $show = "no authorization"; $reason = $lang['thread_locked_error']; }
          }
@@ -309,7 +309,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
       // fetch missing data from database:
       $edit_result = mysql_query("SELECT name, locked, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(NOW() - INTERVAL ".$settings['edit_period']." MINUTE) AS edit_diff FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
       if (!$edit_result) die($lang['db_error']);
-      $field = mysql_fetch_array($edit_result);
+      $field = mysql_fetch_assoc($edit_result);
       mysql_free_result($edit_result);
       if (empty($name)) $name = $field["name"];
      break;
@@ -344,7 +344,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
         // check for not accepted words:
         $result=mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1", $connid);
         if(!$result) die($lang['db_error']);
-        $data = mysql_fetch_array($result);
+        $data = mysql_fetch_assoc($result);
         mysql_free_result($result);
         if(trim($data['list']) != '')
          {
@@ -365,7 +365,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
          {
           $result = mysql_query("SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_name = '".mysql_escape_string($name)."'");
           if(!$result) die($lang['db_error']);
-          $field = mysql_fetch_array($result);
+          $field = mysql_fetch_assoc($result);
           mysql_free_result($result);
           if (strtolower($field["user_name"]) == strtolower($name) && $name != "")
            {
@@ -449,13 +449,13 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
             die($lang['db_error']); }
             // letzten Eintrag ermitteln (um darauf umzuleiten):
             $result_neu = mysql_query("SELECT tid, pid, id FROM ".$db_settings['forum_table']." WHERE id = LAST_INSERT_ID()");
-            $neu = mysql_fetch_array($result_neu);
+            $neu = mysql_fetch_assoc($result_neu);
 
             // Schauen, ob eine E-Mail benachrichtigung versendet werden soll:
              if ($settings['email_notification'] == 1)
               {
                $parent_result = mysql_query("SELECT user_id, name, email, subject, text, email_notify FROM ".$db_settings['forum_table']." WHERE id = '".$id."' LIMIT 1", $connid);
-               $parent = mysql_fetch_array($parent_result);
+               $parent = mysql_fetch_assoc($parent_result);
                if ($parent["email_notify"] == 1)
                 {
                  // wenn das Posting von einem registrierten User stammt, E-Mail-Adresse aus den User-Daten holen:
@@ -463,7 +463,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                   {
                    $email_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = '".$parent["user_id"]."' LIMIT 1", $connid);
                    if (!$email_result) die($lang['db_error']);
-                   $field = mysql_fetch_array($email_result);
+                   $field = mysql_fetch_assoc($email_result);
                    mysql_free_result($email_result);
                    $parent["name"] = $field["user_name"];
                    $parent["email"] = $field["user_email"];
@@ -521,7 +521,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                // Schauen, wer eine E-Mail-Benachrichtigung will:
                $en_result=mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_posting_notify='1'", $connid);
                if(!$en_result) die($lang['db_error']);
-               while ($admin_array = mysql_fetch_array($en_result))
+               while ($admin_array = mysql_fetch_assoc($en_result))
                {
                 $ind_emailbody = str_replace("[admin]", $admin_array['user_name'], $emailbody);
                 $an = $admin_array['user_name']." <".$admin_array['user_email'].">";
@@ -562,7 +562,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
           {
           $tid_result=mysql_query("SELECT tid, name, subject, text FROM ".$db_settings['forum_table']." WHERE id = ".$id);
           if (!$tid_result) die($lang['db_error']);
-          $field = mysql_fetch_array($tid_result);
+          $field = mysql_fetch_assoc($tid_result);
           mysql_free_result($tid_result);
           // unnoticed editing for admins and mods:
           if (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=="admin" && $settings['dont_reg_edit_by_admin']==1 || isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=="mod" && $settings['dont_reg_edit_by_mod']==1 || ($field['text'] == $text && $field['subject'] == $subject && $field['name'] == $name && isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type']=="admin" || $_SESSION[$settings['session_prefix'].'user_type']=="mod")))
@@ -712,7 +712,7 @@ switch ($show)
        if ($action=="edit") $pr_id = $p_user_id; else $pr_id = $_SESSION[$settings['session_prefix']."user_id"];
        $preview_result = mysql_query("SELECT user_name, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$pr_id."' LIMIT 1", $connid);
        if (!$preview_result) die($lang['db_error']);
-       $field = mysql_fetch_array($preview_result);
+       $field = mysql_fetch_assoc($preview_result);
        mysql_free_result($preview_result);
        $pr_name = $field["user_name"];
        $pr_email = $field["user_email"];
@@ -940,7 +940,7 @@ switch ($show)
 
        $result = mysql_query("SELECT file, code_1, title FROM ".$db_settings['smilies_table']." ORDER BY order_id ASC LIMIT ".$smiley_buttons, $connid);
        $i=1;
-       while ($data = mysql_fetch_array($result))
+       while ($data = mysql_fetch_assoc($result))
         {
          ?><button class="smiley-button" name="smiley" type="button" value="<?php echo stripslashes($data['code_1']); ?>" title="<?php echo $lang['smiley_title']; ?>" onclick="insert('<?php echo stripslashes($data['code_1']); ?> ');"><img src="img/smilies/<?php echo stripslashes($data['file']); ?>" alt="<?php echo stripslashes($data['code_1']); ?>" /></button><?php if($i % 2 == 0) { ?><br /><?php }
          $i++;

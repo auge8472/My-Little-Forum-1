@@ -134,7 +134,7 @@ function update13to14()
   $categories_result = mysql_query("SELECT DISTINCT category FROM ".$db_settings['forum_table']." ORDER BY category ASC", $connid);
   if(!$categories_result) die($comment_lang['db_error']);
   $i=1;
-  while ($data = mysql_fetch_array($categories_result))
+  while ($data = mysql_fetch_assoc($categories_result))
    {
     @mysql_query("INSERT INTO ".$db_settings['category_table']." (category_order, category, accession) VALUES (".$i.", '".mysql_escape_string($data['category'])."',0)", $connid) or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysql_error($connid).")";
     $i++;
@@ -201,7 +201,7 @@ function update15to16()
      {
       $category_result = mysql_query("SELECT id, category FROM ".$db_settings['category_table'], $connid);
       if(!$category_result) die($lang['db_error']);
-      while($data = mysql_fetch_array($category_result))
+      while($data = mysql_fetch_assoc($category_result))
        {
         @mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, category_int=".intval($data['id'])." WHERE category = '".mysql_escape_string($data["category"])."'", $connid) or $errors[] = $lang_add['update_error']. " (MySQL: ".mysql_error($connid).")";
         if(isset($errors)) break;
@@ -434,7 +434,7 @@ if (isset($_POST['form_submitted']))
       $version_result = @mysql_query("SELECT value FROM ".$db_settings['settings_table']." WHERE name = 'version' LIMIT 1", $connid);
       if($version_result)
        {
-        $field = mysql_fetch_array($version_result);
+        $field = mysql_fetch_assoc($version_result);
         $version_count = mysql_num_rows($version_result);
         mysql_free_result($version_result);
        }

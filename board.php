@@ -118,7 +118,7 @@ if($thread_count > 0 && isset($result))
   </tr>
   <?php
   $i=0;
-  while ($zeile = mysql_fetch_array($result)) {
+  while ($zeile = mysql_fetch_assoc($result)) {
   // count replies:
   $pid_resultc = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"], $connid);
   list($answers_count) = mysql_fetch_row($pid_resultc);
@@ -129,7 +129,7 @@ if($thread_count > 0 && isset($result))
   if ($settings['last_reply_link'] == 1)
   {
    $last_answer_result = mysql_query("SELECT name, id FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"]." ORDER BY time DESC LIMIT 1", $connid);
-   $last_answer = mysql_fetch_array($last_answer_result);
+   $last_answer = mysql_fetch_assoc($last_answer_result);
    mysql_free_result($last_answer_result);
   }
 
@@ -140,7 +140,7 @@ if($thread_count > 0 && isset($result))
    {
     $userdata_result=mysql_query("SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = '".$zeile["user_id"]."'", $connid);
     if (!$userdata_result) die($lang['db_error']);
-    $userdata = mysql_fetch_array($userdata_result);
+    $userdata = mysql_fetch_assoc($userdata_result);
     mysql_free_result($userdata_result);
     if ($userdata['user_type'] == "admin") $mark_admin = true;
     elseif ($userdata['user_type'] == "mod") $mark_mod = true;

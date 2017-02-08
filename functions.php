@@ -55,7 +55,7 @@ function get_categories()
      }
     if(!$result) die($lang['db_error']);
     $categories[0]='';
-    while ($line = mysql_fetch_array($result))
+    while ($line = mysql_fetch_assoc($result))
      {
       $categories[$line['id']] = stripslashes($line['category']);
      }
@@ -82,7 +82,7 @@ function category_accession()
  {
   global $settings, $lang, $connid, $db_settings;
   $result = mysql_query("SELECT id, accession FROM ".$db_settings['category_table'], $connid);
-  while ($line = mysql_fetch_array($result))
+  while ($line = mysql_fetch_assoc($result))
    {
     $category_accession[$line['id']] = $line['accession'];
    }
@@ -225,7 +225,7 @@ function smilies($string)
  {
   global $connid, $db_settings;
   $result = mysql_query("SELECT file, code_1, code_2, code_3, code_4, code_5, title FROM ".$db_settings['smilies_table'], $connid);
-  while($data = mysql_fetch_array($result))
+  while($data = mysql_fetch_assoc($result))
    {
     if($data['title']!='') $title = ' title="'.stripslashes($data['title']).'"'; else $title='';
     if($data['code_1']!='') $string = str_replace($data['code_1'], "<img src=\"img/smilies/".$data['file']."\" alt=\"".$data['code_1']."\"".$title." />", $string);
@@ -294,7 +294,7 @@ function zitat($string)
   {
    $userdata_result=mysql_query("SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = '".$parent_array[$id]["user_id"]."'", $connid);
    if (!$userdata_result) die($lang['db_error']);
-   $userdata = mysql_fetch_array($userdata_result);
+   $userdata = mysql_fetch_assoc($userdata_result);
    mysql_free_result($userdata_result);
    if ($userdata['user_type'] == "admin") $mark_admin = true;
    elseif ($userdata['user_type'] == "mod") $mark_mod = true;

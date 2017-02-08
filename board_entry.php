@@ -91,7 +91,7 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
                         UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_Uhrzeit,
                         UNIX_TIMESTAMP(edited - INTERVAL ".$settings['edit_delay']." MINUTE) AS edited_diff, edited_by, user_id, name, email,
                         subject, hp, place, text, show_signature, category, locked, ip FROM ".$db_settings['forum_table']." WHERE id = ".$id." LIMIT 1", $connid);
-     $thread = mysql_fetch_array($result_t);
+     $thread = mysql_fetch_assoc($result_t);
      mysql_free_result($result_t);
 
      // Look if id correct:
@@ -116,7 +116,7 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
       {
        $userdata_result_t=mysql_query("SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$thread["user_id"]."'", $connid);
        if (!$userdata_result_t) die($lang['db_error']);
-       $userdata = mysql_fetch_array($userdata_result_t);
+       $userdata = mysql_fetch_assoc($userdata_result_t);
        mysql_free_result($userdata_result_t);
        $thread["email"] = $userdata["user_email"];
        $thread["hide_email"] = $userdata["hide_email"];
@@ -219,7 +219,7 @@ echo $header;
     </tr><?php } ?>
     <?php
     $i=0;
-    while ($entrydata = mysql_fetch_array($result)) {
+    while ($entrydata = mysql_fetch_assoc($result)) {
      unset($signature);
      $mark_admin = false;
      $mark_mod = false;
@@ -227,7 +227,7 @@ echo $header;
       {
        $userdata_result=mysql_query("SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$entrydata["user_id"]."'", $connid);
        if (!$userdata_result) die($lang['db_error']);
-       $userdata = mysql_fetch_array($userdata_result);
+       $userdata = mysql_fetch_assoc($userdata_result);
        mysql_free_result($userdata_result);
        $entrydata["email"] = $userdata["user_email"];
        $entrydata["hide_email"] = $userdata["hide_email"];
@@ -241,7 +241,7 @@ echo $header;
     //if ($i >= $be_page * $settings['answers_per_topic'] && $i < $be_page * $settings['answers_per_topic'] + $settings['answers_per_topic']) { ?>
        <?php // Posting heraussuchen, auf das geantwortet wurde:
         $result_a = mysql_query("SELECT name FROM ".$db_settings['forum_table']." WHERE id = ".$entrydata["pid"], $connid);
-        $posting_a = mysql_fetch_array($result_a);
+        $posting_a = mysql_fetch_assoc($result_a);
         mysql_free_result($result_a); ?>
     <tr>
      <td class="autorcell" rowspan="2" valign="top"><?php

@@ -52,7 +52,7 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
    if (!$result) die($lang['db_error']);
    if (mysql_num_rows($result) == 1)
     {
-     $entrydata = mysql_fetch_array($result);
+     $entrydata = mysql_fetch_assoc($result);
      mysql_free_result($result);
 
      // category of this posting accessible by user?
@@ -73,7 +73,7 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
      {
       $userdata_result=mysql_query("SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$entrydata["user_id"]."'", $connid);
       if (!$userdata_result) die($lang['db_error']);
-      $userdata = mysql_fetch_array($userdata_result);
+      $userdata = mysql_fetch_assoc($userdata_result);
       mysql_free_result($userdata_result);
       $entrydata["email"] = $userdata["user_email"];
       $entrydata["hide_email"] = $userdata["hide_email"];
@@ -97,7 +97,7 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
  if(!$result) die($lang['db_error']);
 
 
- while($tmp = mysql_fetch_array($result))
+ while($tmp = mysql_fetch_assoc($result))
   {
    $parent_array[$tmp["id"]] = $tmp;
    $child_array[$tmp["pid"]][] =  $tmp["id"];

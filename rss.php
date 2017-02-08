@@ -25,7 +25,7 @@ echo '<?xml version="1.0" encoding="'.$lang['charset'].'"?>';
 <?php
 if ($result_count > 0 && $settings['provide_rssfeed'] == 1 && $settings['access_for_users_only'] == 0)
 {
-while ($zeile = mysql_fetch_array($result))
+while ($zeile = mysql_fetch_assoc($result))
 {
 $ftext = $zeile["text"];
 $ftext = htmlsc(stripslashes($ftext));
