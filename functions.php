@@ -19,6 +19,23 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. #
 ###############################################################################
 
+/**
+ * disables magic_quotes from given variables of different types
+ *
+ * remove the slashes if magic_quotes_gpc is activated
+ * see also: http://php.net/manual/en/security.magicquotes.disabling.html
+ *
+ * @param array [$value]
+ * @return array [$value]
+ * @since 1.7.8
+ * @link http://php.net/manual/en/security.magicquotes.disabling.html
+ */
+function stripslashes_deep($value) {
+	$value = is_array($value) ? array_map('stripslashes_deep', $value) : stripslashes($value);
+	return $value;
+} # End: stripslashes_deep
+
+
 function get_settings() {
 	global $lang, $connid, $db_settings;
 	$r = array();
