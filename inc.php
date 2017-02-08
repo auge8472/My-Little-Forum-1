@@ -25,7 +25,7 @@ session_start();
 include("db_settings.php");
 include("functions.php");
 $connid = connect_db($db_settings['host'], $db_settings['user'], $db_settings['pw'], $db_settings['db']);
-get_settings();
+$settings = get_settings();
 include("lang/".$settings['language_file']);
 setlocale(LC_ALL, $lang['locale']);
 

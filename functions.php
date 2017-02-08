@@ -19,17 +19,17 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. #
 ###############################################################################
 
-function get_settings()
- {
-  global $lang, $connid, $db_settings, $settings;
-  $result = mysql_query("SELECT name, value FROM ".$db_settings['settings_table'], $connid);
-  if(!$result) die($lang['db_error']);
-  while ($line = mysql_fetch_array($result))
-   {
-    $settings[$line['name']] = $line['value'];
-   }
-  mysql_free_result($result);
- }
+function get_settings() {
+	global $lang, $connid, $db_settings;
+	$r = array();
+	$result = mysql_query("SELECT name, value FROM ".$db_settings['settings_table'], $connid);
+	if (!$result) die($lang['db_error']);
+	while ($line = mysql_fetch_assoc($result)) {
+		$r[$line['name']] = $line['value'];
+	}
+	mysql_free_result($result);
+	return $r;
+}
 
 function get_categories()
  {
