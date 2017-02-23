@@ -69,7 +69,7 @@ $settings['upload_max_img_height'] = 600;
 $settings['mail_parameter'] = "";
 $settings['forum_disabled'] = 0;
 $settings['session_prefix'] = "mlf_";
-$settings['version'] = '1.7.7';
+$settings['version'] = '1.7.7.2';
 $settings['captcha_posting'] = 0;
 $settings['captcha_contact'] = 0;
 $settings['captcha_register'] = 0;
@@ -280,7 +280,7 @@ function update16to17()
 function update17()
  {
   global $db_settings, $settings, $connid, $lang_add;
-  @mysql_query("UPDATE ".$db_settings['settings_table']." SET value='1.7.7' WHERE name = 'version'", $connid) or $errors[] = $lang_add['update_error']. " (MySQL: ".mysql_error($connid).")";
+  @mysql_query("UPDATE ".$db_settings['settings_table']." SET value='1.7.7.2' WHERE name = 'version'", $connid) or $errors[] = $lang_add['update_error']. " (MySQL: ".mysql_error($connid).")";
   if(isset($errors)) return $errors; else return false;
  }
 
