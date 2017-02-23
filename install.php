@@ -272,7 +272,7 @@ function update16to17()
   @mysql_query("INSERT INTO ".$db_settings['settings_table']." (name, value) VALUES ('captcha_contact','".$settings['captcha_contact']."')", $connid) or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysql_error($connid).")";
   @mysql_query("INSERT INTO ".$db_settings['settings_table']." (name, value) VALUES ('captcha_register','".$settings['captcha_register']."')", $connid) or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysql_error($connid).")";
   @mysql_query("INSERT INTO ".$db_settings['settings_table']." (name, value) VALUES ('captcha_type','".$settings['captcha_type']."')", $connid) or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysql_error($connid).")";
-  @mysql_query("UPDATE ".$db_settings['settings_table']." SET value='1.7.7' WHERE name = 'version'", $connid) or $errors[] = $lang_add['update_error']. " (MySQL: ".mysql_error($connid).")";
+  @mysql_query("UPDATE ".$db_settings['settings_table']." SET value='1.7.7.2' WHERE name = 'version'", $connid) or $errors[] = $lang_add['update_error']. " (MySQL: ".mysql_error($connid).")";
   if(isset($errors)) return $errors; else return false;
  }
 function update17()
