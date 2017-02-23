@@ -642,7 +642,9 @@ if(empty($installed))
          <select name="old_version" size="1">
          <option value="1.3">1.3</option>
          <option value="1.4">1.4</option>
-         <option value="1.5" selected="selected">1.5</option>
+         <option value="1.5">1.5</option>
+         <option value="1.6">1.6</option>
+         <option value="1.7" selected="selected">1.7</option>
          </select></p><?php
         }
        ?><table class="admintab" border="0" cellpadding="5" cellspacing="1">
