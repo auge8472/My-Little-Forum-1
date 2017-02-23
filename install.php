@@ -161,7 +161,6 @@ function update14to15()
   @mysql_query("INSERT INTO ".$db_settings['settings_table']." (name, value) VALUES ('edit_period','180')", $connid) or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysql_error($connid).")";
   @mysql_query("DELETE FROM ".$db_settings['settings_table']." WHERE name = 'thread_indent'", $connid) or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysql_error($connid).")";
   @mysql_query("DELETE FROM ".$db_settings['settings_table']." WHERE name = 'max_thread_indent'", $connid) or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysql_error($connid).")";
-  #@mysql_query("UPDATE ".$db_settings['settings_table']." SET value='".$settings['language_file']."' WHERE name = 'language_file'", $connid) or $errors[] = $lang_add['update_error']. " (MySQL: ".mysql_error($connid).")";
   if(isset($errors)) return $errors; else return false;
  }
 
@@ -210,7 +209,6 @@ function update15to16()
      }
     if(empty($errors)) @mysql_query("ALTER TABLE ".$db_settings['forum_table']." DROP category", $connid) or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysql_error($connid).")";
     if(empty($errors)) @mysql_query("ALTER TABLE ".$db_settings['forum_table']." CHANGE category_int category INT(11) DEFAULT '0' NOT NULL", $connid) or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysql_error($connid).")";
-    #if(empty($errors)) @mysql_query("ALTER TABLE ".$db_settings['forum_table']." DROP INDEX category", $connid) or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysql_error($connid).")";
     if(empty($errors)) @mysql_query("ALTER TABLE ".$db_settings['forum_table']." ADD INDEX category (category), ADD INDEX pid (pid), ADD INDEX fixed (fixed)", $connid) or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysql_error($connid).")";
    }
   if(empty($errors))
