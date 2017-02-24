@@ -106,7 +106,6 @@ include("inc.php");
 
  if (substr($search, 1, 1) == "\"") $ao="phrase";
  $search = str_replace("\"", "", $search);
- $search = stripslashes($search);
  $search = trim($search);
  $search = mysqli_real_escape_string($connid, $search);
  $search_array = explode(" ", $search);
@@ -151,15 +150,15 @@ if (isset($search) && empty($show_postings))
  {
   if ($search != "" && $ao=="phrase")
    {
-    $subnav_1 .= $lang['phrase']." <b>".htmlsc(stripslashes($search))."</b>";
+    $subnav_1 .= $lang['phrase']." <b>".htmlsc($search)."</b>";
    }
   elseif ($search != "" && count($search_array) == 1)
    {
-    $subnav_1 .= $lang['search_term']." <b>".htmlsc(stripslashes($search_anz))."</b>";
+    $subnav_1 .= $lang['search_term']." <b>".htmlsc($search_anz)."</b>";
    }
   elseif ($search != "" && count($search_array) > 1)
    {
-    $subnav_1 .= $lang['search_term']." <b>".htmlsc(stripslashes($search_anz))."</b>";
+    $subnav_1 .= $lang['search_term']." <b>".htmlsc($search_anz)."</b>";
    }
   else
    {
@@ -193,15 +192,15 @@ elseif (isset($show_postings) && empty($search))
   if (!$user_name_result) die($lang['db_error']);
   $field = mysqli_fetch_assoc($user_name_result);
   mysqli_free_result($user_name_result);
-  $lang['show_userdata_linktitle'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['show_userdata_linktitle']);
-  $lang['postings_by_user'] = str_replace("[name]", "<a href=\"user.php?id=".$show_postings."\" title=\"".$lang['show_userdata_linktitle']."\">".htmlsc(stripslashes($field["user_name"]))."</a>", $lang['postings_by_user']);
+  $lang['show_userdata_linktitle'] = str_replace("[name]", htmlsc($field["user_name"]), $lang['show_userdata_linktitle']);
+  $lang['postings_by_user'] = str_replace("[name]", "<a href=\"user.php?id=".$show_postings."\" title=\"".$lang['show_userdata_linktitle']."\">".htmlsc($field["user_name"])."</a>", $lang['postings_by_user']);
   $subnav_1 .= "<img src=\"img/where.gif\" alt=\"\" width=\"11\" height=\"8\" border=\"0\"><b>".$lang['postings_by_user']."</b>";
  }
 if (isset($search) && $search != "") { $subnav_2 = snav($page, $settings['search_results_per_page'], $count, $search, $ao, $category); } elseif (isset($show_postings) && $show_postings !="") { $subnav_2 = pnav($page, $settings['search_results_per_page'], $count, $show_postings); }
 parse_template();
 echo $header;
 
-if (isset($search)) $search_match = htmlsc(stripslashes($search)); else $search_match = "";
+if (isset($search)) $search_match = htmlsc($search); else $search_match = "";
 if (isset($search) && empty($show_postings))
 { ?><form action="search.php" method="get" title="<?php echo $lang['search_formtitle']; ?>"><div class="search">
 <input type="text" name="search" value="<?php echo $search_match; ?>" size="30" />
@@ -234,7 +233,7 @@ elseif ($count == 0 && $search != "") { echo "<p class=\"caution\">".$lang['sear
 if (isset($search) && $search != "" || isset($show_postings) && $show_postings !="") {
 $i=0;
 while ($entrydata = mysqli_fetch_assoc($result)) {
-$search_author_info_x = str_replace("[name]", htmlsc(stripslashes($entrydata["name"])), $lang['search_author_info']);
+$search_author_info_x = str_replace("[name]", htmlsc($entrydata["name"]), $lang['search_author_info']);
 $search_author_info_x = str_replace("[time]", strftime($lang['time_format'],$entrydata["Uhrzeit"]), $search_author_info_x);
 ?><p class="searchresults"><a class="<?php if ($entrydata["pid"] == 0) echo "thread"; else echo "reply-search"; ?>" href="<?php
 if (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="board") echo "board_entry.php?id=".$entrydata["tid"]."#p".$entrydata["id"];
@@ -245,7 +244,7 @@ elseif (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="thread") echo "f
 elseif (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="mix") echo "mix_entry.php?id=".$entrydata["tid"]."#p".$entrydata["id"];
 elseif (isset($standard) && $standard=="board") echo "board_entry.php?id=".$entrydata["tid"]."#p".$entrydata["id"];
 elseif (isset($standard) && $standard=="mix") echo "mix_entry.php?id=".$entrydata["tid"]."#p".$entrydata["id"];
-else echo "forum_entry.php?id=".$entrydata["id"]; ?>"><?php echo htmlsc(stripslashes($entrydata["subject"])); ?></a> <?php echo $search_author_info_x; if(isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='') echo " <span class=\"category\">(".$categories[$entrydata["category"]].")</span>"; ?></p><?php }
+else echo "forum_entry.php?id=".$entrydata["id"]; ?>"><?php echo htmlsc($entrydata["subject"]); ?></a> <?php echo $search_author_info_x; if(isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='') echo " <span class=\"category\">(".$categories[$entrydata["category"]].")</span>"; ?></p><?php }
 }
 ?>
 <br />
