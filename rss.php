@@ -4,15 +4,15 @@ include("inc.php");
 // database request
  if ($categories == false)
   {
-   $result=mysql_query("SELECT id, pid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS xtime, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS rss_time, name, subject, text FROM ".$db_settings['forum_table']." ORDER BY time DESC LIMIT 15", $connid);
+   $result=mysqli_query($connid, "SELECT id, pid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS xtime, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS rss_time, name, subject, text FROM ".$db_settings['forum_table']." ORDER BY time DESC LIMIT 15");
    if(!$result) die($lang['db_error']);
    }
  elseif (is_array($categories))
   {
-   $result=mysql_query("SELECT id, pid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS xtime, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS rss_time, name, subject, text FROM ".$db_settings['forum_table']." WHERE category IN (".$category_ids_query.") ORDER BY time DESC LIMIT 15", $connid);
+   $result=mysqli_query($connid, "SELECT id, pid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS xtime, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS rss_time, name, subject, text FROM ".$db_settings['forum_table']." WHERE category IN (". $category_ids_query .") ORDER BY time DESC LIMIT 15");
    if(!$result) die($lang['db_error']);
   }
-$result_count = mysql_num_rows($result);
+$result_count = mysqli_num_rows($result);
 header("Content-Type: text/xml; charset: ".$lang['charset']);
 echo '<?xml version="1.0" encoding="'.$lang['charset'].'"?>';
 ?>
@@ -25,7 +25,7 @@ echo '<?xml version="1.0" encoding="'.$lang['charset'].'"?>';
 <?php
 if ($result_count > 0 && $settings['provide_rssfeed'] == 1 && $settings['access_for_users_only'] == 0)
 {
-while ($zeile = mysql_fetch_assoc($result))
+while ($zeile = mysqli_fetch_assoc($result))
 {
 $ftext = $zeile["text"];
 $ftext = htmlsc(stripslashes($ftext));
