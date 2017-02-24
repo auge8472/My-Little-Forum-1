@@ -38,21 +38,21 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
 function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
  {
   global $settings, $connid, $lang, $db_settings, $parent_array, $child_array, $user_delete, $page, $category, $order, $descasc, $time_difference, $categories;
-  $posting_result = mysql_query("SELECT id, pid, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
+  $posting_result = mysqli_query($connid, "SELECT id, pid, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
                         UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_Uhrzeit,
                         UNIX_TIMESTAMP(edited - INTERVAL ".$settings['edit_delay']." MINUTE) AS edited_diff, edited_by, name, email,
                         subject, hp, place, text, category, show_signature, locked FROM ".$db_settings['forum_table']."
-                        WHERE id = '".$parent_array[$id]["id"]."' ORDER BY time ASC", $connid);
+                        WHERE id = ". intval($parent_array[$id]["id"]) ." ORDER BY time ASC");
   if(!$posting_result) die($lang['db_error']);
-  $entrydata = mysql_fetch_assoc($posting_result);
-  mysql_free_result($posting_result);
+  $entrydata = mysqli_fetch_assoc($posting_result);
+  mysqli_free_result($posting_result);
 
   if ($entrydata["user_id"] > 0)
    {
-    $userdata_result=mysql_query("SELECT user_name, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$entrydata["user_id"]."'", $connid);
+    $userdata_result=mysqli_query($connid, "SELECT user_name, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($entrydata["user_id"]));
     if (!$userdata_result) die($lang['db_error']);
-    $userdata = mysql_fetch_assoc($userdata_result);
-    mysql_free_result($userdata_result);
+    $userdata = mysqli_fetch_assoc($userdata_result);
+    mysqli_free_result($userdata_result);
     $entrydata["email"] = $userdata["user_email"];
     $entrydata["hide_email"] = $userdata["hide_email"];
     $entrydata["place"] = $userdata["user_place"];
@@ -61,9 +61,9 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
    }
 
    // Posting heraussuchen, auf das geantwortet wurde:
-   $result_a = mysql_query("SELECT name FROM ".$db_settings['forum_table']." WHERE id = ".$parent_array[$id]["pid"], $connid);
-   $posting_a = mysql_fetch_assoc($result_a);
-   mysql_free_result($result_a);
+   $result_a = mysqli_query($connid, "SELECT name FROM ".$db_settings['forum_table']." WHERE id = ". intval($parent_array[$id]["pid"]));
+   $posting_a = mysqli_fetch_assoc($result_a);
+   mysqli_free_result($result_a);
 
    ?><div class="mixdivl" style="margin-left: <?php if ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix_topic']/$settings['thread_indent_mix_topic'])) echo "0"; else echo $settings['thread_indent_mix_topic']; ?>px;">
     <table class="mix-entry" border="0" cellpadding="5" cellspacing="1">
@@ -153,10 +153,10 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
   $id = (int) $id;   // ... $id erst mal zu einem Integer machen ..
   if( $id > 0 )      // ... und schauen ob es größer als 0 ist ..
    {
-    $result=mysql_query("SELECT tid, pid, subject, category FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
+    $result=mysqli_query($connid, "SELECT tid, pid, subject, category FROM ".$db_settings['forum_table']." WHERE id = ". intval($id));
     if(!$result) die($lang['db_error']);
-    if(mysql_num_rows($result) > 0) {  // überprüfen ob ein Eintrag mit dieser id in der Datenbank ist
-    $entrydata = mysql_fetch_assoc($result); // Und ggbf. aus der Datenbank holen
+    if(mysqli_num_rows($result) > 0) {  // überprüfen ob ein Eintrag mit dieser id in der Datenbank ist
+    $entrydata = mysqli_fetch_assoc($result); // Und ggbf. aus der Datenbank holen
 
     // Look if id correct:
     if ($entrydata['pid'] != 0) header("location: ".basename($_SERVER['PHP_SELF'])."?id=".$entrydata['tid']."&page=".$page."&category=".$category."&order=".$order."&descasc=".$descasc."#p".$id);
@@ -172,7 +172,7 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
       }
 
     // count views:
-    if (isset($settings['count_views']) && $settings['count_views'] == 1) mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=".$id, $connid);
+    if (isset($settings['count_views']) && $settings['count_views'] == 1) mysqli_query($connid, "UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=". intval($id));
 
    }
   }
@@ -185,16 +185,16 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
 
 
  $thread = $entrydata["tid"];
- $result = mysql_query("SELECT id, pid FROM ".$db_settings['forum_table']." WHERE tid = ".$thread." ORDER BY time ASC", $connid);
+ $result = mysqli_query($connid, "SELECT id, pid FROM ".$db_settings['forum_table']." WHERE tid = ". intval($thread) ." ORDER BY time ASC");
  if(!$result) die($lang['db_error']);
 
   // Ergebnisse einlesen
- while($tmp = mysql_fetch_assoc($result)) {  // Ergebnis holen
+ while($tmp = mysqli_fetch_assoc($result)) {  // Ergebnis holen
   $parent_array[$tmp["id"]] = $tmp;          // Ergebnis im Array ablegen
   $child_array[$tmp["pid"]][] =  $tmp["id"]; // Vorwärtsbezüge konstruieren
  }
 
- mysql_free_result($result); // Aufräumen
+ mysqli_free_result($result); // Aufräumen
 
 $wo = $entrydata["subject"];
 $subnav_1 = '<a class="textlink" href="mix.php?page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_overview_linkname'].'</a>';
