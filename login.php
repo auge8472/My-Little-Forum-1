@@ -67,11 +67,11 @@ switch ($action)
   case "login ok":
    if (isset($username) && trim($username) != "" && isset($userpw) && $userpw != "")
     {
-     $result = mysql_query("SELECT user_id, user_name, user_pw, user_type, UNIX_TIMESTAMP(last_login) AS last_login, UNIX_TIMESTAMP(last_logout) AS last_logout, user_view, time_difference, activate_code FROM ".$db_settings['userdata_table']." WHERE user_name = '".mysql_escape_string($username)."'", $connid);
+     $result = mysqli_query($connid, "SELECT user_id, user_name, user_pw, user_type, UNIX_TIMESTAMP(last_login) AS last_login, UNIX_TIMESTAMP(last_logout) AS last_logout, user_view, time_difference, activate_code FROM ".$db_settings['userdata_table']." WHERE user_name = '". mysqli_real_escape_string($connid, $username) ."'");
      if (!$result) die($lang['db_error']);
-     if (mysql_num_rows($result) == 1)
+     if (mysqli_num_rows($result) == 1)
       {
-       $feld = mysql_fetch_assoc($result);
+       $feld = mysqli_fetch_assoc($result);
 
      if ($feld["user_pw"] == md5($userpw))
       {
@@ -102,10 +102,10 @@ switch ($action)
        $_SESSION[$settings['session_prefix'].'user_view'] = $user_view;
        $_SESSION[$settings['session_prefix'].'newtime'] = $newtime;
        $_SESSION[$settings['session_prefix'].'user_time_difference'] = $user_time_difference;
-       $update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET logins=logins+1, last_login=NOW(), last_logout=NOW(), registered=registered WHERE user_id='".$user_id."'", $connid);
+       $update_result = mysqli_query($connid, "UPDATE ".$db_settings['userdata_table']." SET logins=logins+1, last_login=NOW(), last_logout=NOW(), registered=registered WHERE user_id= ". intval($user_id));
        if ($db_settings['useronline_table'] != "")
         {
-         @mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE ip = '".$_SERVER['REMOTE_ADDR']."'", $connid);
+         @mysqli_query($connid, "DELETE FROM ".$db_settings['useronline_table']." WHERE ip = '". mysqli_real_escape_string($connid, $_SERVER['REMOTE_ADDR']) ."'");
         }
        header("location: index.php"); die("<a href=\"index.php\">further...</a>");
       }
@@ -122,11 +122,11 @@ switch ($action)
      $auto_login_array = explode(".",$_COOKIE['auto_login']);
      $c_uid = $auto_login_array[0];
      $c_uid = (int)$c_uid;
-     $result = mysql_query("SELECT user_id, user_name, user_pw, user_type, UNIX_TIMESTAMP(last_login) AS last_login, UNIX_TIMESTAMP(last_logout) AS last_logout, user_view, time_difference, activate_code FROM ".$db_settings['userdata_table']." WHERE user_id = '".$c_uid."'", $connid);
+     $result = mysqli_query($connid, "SELECT user_id, user_name, user_pw, user_type, UNIX_TIMESTAMP(last_login) AS last_login, UNIX_TIMESTAMP(last_logout) AS last_logout, user_view, time_difference, activate_code FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($c_uid));
      if(!$result) die($lang['db_error']);
-     if(mysql_num_rows($result) == 1)
+     if(mysqli_num_rows($result) == 1)
       {
-       $feld = mysql_fetch_assoc($result);
+       $feld = mysqli_fetch_assoc($result);
 
        if (md5($feld["user_pw"]) == $auto_login_array[1] && trim($feld["activate_code"]==''))
         {
@@ -142,11 +142,11 @@ switch ($action)
          $_SESSION[$settings['session_prefix'].'user_view'] = $user_view;
          $_SESSION[$settings['session_prefix'].'newtime'] = $newtime;
          $_SESSION[$settings['session_prefix'].'user_time_difference'] = $user_time_difference;
-         $update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET logins=logins+1, last_login=NOW(), last_logout=NOW(), registered=registered WHERE user_id='".$user_id."'", $connid);
+         $update_result = mysqli_query($connid, "UPDATE ".$db_settings['userdata_table']." SET logins=logins+1, last_login=NOW(), last_logout=NOW(), registered=registered WHERE user_id= ". intval($user_id));
          setcookie("auto_login",$_COOKIE['auto_login'],time()+(3600*24*30));
          if ($db_settings['useronline_table'] != "")
           {
-           @mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE ip = '".$_SERVER['REMOTE_ADDR']."'", $connid);
+           @mysqli_query("DELETE FROM ".$db_settings['useronline_table']." WHERE ip = '". mysqli_real_escape_string($connid, $_SERVER['REMOTE_ADDR']) ."'");
           }
         }
        else setcookie("auto_login","",0);
@@ -161,12 +161,12 @@ switch ($action)
   break;
 
   case "logout":
-   $update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET last_login=last_login, last_logout=NOW(), registered=registered WHERE user_id='".$user_id."'", $connid);
+   $update_result = mysqli_query($connid, "UPDATE ".$db_settings['userdata_table']." SET last_login=last_login, last_logout=NOW(), registered=registered WHERE user_id= ". intval($user_id));
    session_destroy();
    setcookie("auto_login","",0);
    if ($db_settings['useronline_table'] != "")
     {
-     @mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE ip = 'uid_".$user_id."'", $connid);
+     @mysqli_query($connid, "DELETE FROM ".$db_settings['useronline_table']." WHERE ip = 'uid_". mysqli_real_escape_string($user_id) ."'");
     }
    header("location: index.php"); die("<a href=\"index.php\">further...</a>");
   break;
@@ -174,14 +174,14 @@ switch ($action)
   case "pw_forgotten_ok":
    if (isset($pwf_username) && trim($pwf_username) != "" && isset($pwf_email) && trim($pwf_email) != "")
    {
-    $pwf_result = mysql_query("SELECT user_id, user_name, user_email, user_pw FROM ".$db_settings['userdata_table']." WHERE user_name = '".$pwf_username."'", $connid);
+    $pwf_result = mysqli_query($connid, "SELECT user_id, user_name, user_email, user_pw FROM ".$db_settings['userdata_table']." WHERE user_name = '". mysqli_real_escape_string($connid, $pwf_username) ."'");
     if (!$pwf_result) die($lang['db_error']);
-    $field = mysql_fetch_assoc($pwf_result);
-    mysql_free_result($pwf_result);
+    $field = mysqli_fetch_assoc($pwf_result);
+    mysqli_free_result($pwf_result);
     if($field["user_email"] == $pwf_email)
      {
       $pwf_code = md5(uniqid(rand()));
-      $update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET last_login=last_login, registered=registered, pwf_code='".$pwf_code."' WHERE user_id='".$field["user_id"]."' LIMIT 1", $connid);
+      $update_result = mysqli_query($connid, "UPDATE ".$db_settings['userdata_table']." SET last_login=last_login, registered=registered, pwf_code='". mysqli_real_escape_string($connid, $pwf_code) ."' WHERE user_id= ". intval($field["user_id"])." LIMIT 1");
 
       // send mail with activating link:
       $ip = $_SERVER["REMOTE_ADDR"];
@@ -220,10 +220,10 @@ switch ($action)
   case "activate":
   if (isset($_GET['activate']) && trim($_GET['activate']) != "" && isset($_GET['code']) && trim($_GET['code']) != "")
    {
-    $pwf_result = mysql_query("SELECT user_id, user_name, user_email, pwf_code FROM ".$db_settings['userdata_table']." WHERE user_id = '".intval($_GET["activate"])."'", $connid);
+    $pwf_result = mysqli_query($connid, "SELECT user_id, user_name, user_email, pwf_code FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($_GET["activate"]));
     if (!$pwf_result) die($lang['db_error']);
-    $field = mysql_fetch_assoc($pwf_result);
-    mysql_free_result($pwf_result);
+    $field = mysqli_fetch_assoc($pwf_result);
+    mysqli_free_result($pwf_result);
     if ($field['user_id'] == $_GET["activate"] && $field['pwf_code'] == $_GET['code'])
      {
       // generate new password:
@@ -232,7 +232,7 @@ switch ($action)
       $new_user_pw="";
       for($i=0;$i<8;$i++) { $new_user_pw.=substr($letters,mt_rand(0,strlen($letters)-1),1); }
       $encoded_new_user_pw = md5($new_user_pw);
-      $update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET last_login=last_login, registered=registered, user_pw='".$encoded_new_user_pw."', pwf_code='' WHERE user_id='".$field["user_id"]."' LIMIT 1", $connid);
+      $update_result = mysqli_query($connid, "UPDATE ".$db_settings['userdata_table']." SET last_login=last_login, registered=registered, user_pw='". mysqli_real_escape_string($connid, $encoded_new_user_pw) ."', pwf_code='' WHERE user_id= ". intval($field["user_id"]) ."' LIMIT 1");
 
       // send new password:
       $ip = $_SERVER["REMOTE_ADDR"];
