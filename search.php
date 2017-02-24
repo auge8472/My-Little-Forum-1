@@ -98,7 +98,7 @@ include("inc.php");
  if (empty($page)) $page = 0;
  //if (empty($da)) $order="time";
  if (empty($search)) $search = "";
- $category = mysql_escape_string($category);
+ $category = mysqli_real_escape_string($connid, $category);
  if (empty($ao)) $ao = "and";
  $ul = $page * $settings['search_results_per_page'];
 
@@ -108,7 +108,7 @@ include("inc.php");
  $search = str_replace("\"", "", $search);
  $search = stripslashes($search);
  $search = trim($search);
- $search = mysql_escape_string($search);
+ $search = mysqli_real_escape_string($connid, $search);
  $search_array = explode(" ", $search);
  $search_anz = str_replace(" ", ", ", $search);
 
@@ -131,15 +131,15 @@ include("inc.php");
 
  if (is_array($categories))
   {
-   $result = mysql_query("SELECT id, pid, tid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit, subject, name, email, hp, place, text, category FROM ".$db_settings['forum_table']." WHERE ".$search_string." AND category IN (".$category_ids_query.") ORDER BY tid DESC, time ASC LIMIT ".$ul.", ".$settings['search_results_per_page'], $connid);
-   $count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE ".$search_string." AND category IN (".$category_ids_query.")", $connid);
-   list($count) = mysql_fetch_row($count_result);
+   $result = mysqli_query($connid, "SELECT id, pid, tid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit, subject, name, email, hp, place, text, category FROM ".$db_settings['forum_table']." WHERE ". $search_string ." AND category IN (". $category_ids_query .") ORDER BY tid DESC, time ASC LIMIT ". intval($ul) .", ". intval($settings['search_results_per_page']));
+   $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE ". $search_string ." AND category IN (". $category_ids_query .")");
+   list($count) = mysqli_fetch_row($count_result);
   }
  else
   {
-   $result = mysql_query("SELECT id, pid, tid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit, subject, name, email, hp, place, text, category FROM ".$db_settings['forum_table']." WHERE ".$search_string." ORDER BY tid DESC, time ASC LIMIT ".$ul.", ".$settings['search_results_per_page'], $connid);
-   $count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE ".$search_string, $connid);
-   list($count) = mysql_fetch_row($count_result);
+   $result = mysqli_query($connid, "SELECT id, pid, tid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit, subject, name, email, hp, place, text, category FROM ".$db_settings['forum_table']." WHERE ".$search_string." ORDER BY tid DESC, time ASC LIMIT ". intval($ul) .", ". intval($settings['search_results_per_page']));
+   $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE ". $search_string);
+   list($count) = mysqli_fetch_row($count_result);
   }
 
  if(!$result) die($lang['db_error']);
@@ -189,10 +189,10 @@ if (isset($search) && empty($show_postings))
  }
 elseif (isset($show_postings) && empty($search))
  {
-  $user_name_result = mysql_query("SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_id = '".$show_postings."' LIMIT 1", $connid);
+  $user_name_result = mysqli_query($connid, "SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($show_postings) ." LIMIT 1");
   if (!$user_name_result) die($lang['db_error']);
-  $field = mysql_fetch_assoc($user_name_result);
-  mysql_free_result($user_name_result);
+  $field = mysqli_fetch_assoc($user_name_result);
+  mysqli_free_result($user_name_result);
   $lang['show_userdata_linktitle'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['show_userdata_linktitle']);
   $lang['postings_by_user'] = str_replace("[name]", "<a href=\"user.php?id=".$show_postings."\" title=\"".$lang['show_userdata_linktitle']."\">".htmlsc(stripslashes($field["user_name"]))."</a>", $lang['postings_by_user']);
   $subnav_1 .= "<img src=\"img/where.gif\" alt=\"\" width=\"11\" height=\"8\" border=\"0\"><b>".$lang['postings_by_user']."</b>";
@@ -233,7 +233,7 @@ elseif ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "phra
 elseif ($count == 0 && $search != "") { echo "<p class=\"caution\">".$lang['search_no_match']."</p>"; }
 if (isset($search) && $search != "" || isset($show_postings) && $show_postings !="") {
 $i=0;
-while ($entrydata = mysql_fetch_assoc($result)) {
+while ($entrydata = mysqli_fetch_assoc($result)) {
 $search_author_info_x = str_replace("[name]", htmlsc(stripslashes($entrydata["name"])), $lang['search_author_info']);
 $search_author_info_x = str_replace("[time]", strftime($lang['time_format'],$entrydata["Uhrzeit"]), $search_author_info_x);
 ?><p class="searchresults"><a class="<?php if ($entrydata["pid"] == 0) echo "thread"; else echo "reply-search"; ?>" href="<?php
