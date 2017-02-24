@@ -335,7 +335,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
 
    // check data:
         // double entry?
-        $uniqid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE uniqid = '". mysqli_real_escape_string($uniqid) ."' AND time > NOW()-10000");
+        $uniqid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE uniqid = '". mysqli_real_escape_string($connid, $uniqid) ."' AND time > NOW()-10000");
         list($uniqid_count) = mysqli_fetch_row($uniqid_result);
         mysqli_free_result($uniqid_result);
         if ($uniqid_count > 0)
