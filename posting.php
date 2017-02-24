@@ -40,10 +40,10 @@ if(isset($_POST['p_category'])) $p_category = intval($_POST['p_category']);
 // Schauen, ob User gesperrt ist:
 if (isset($_SESSION[$settings['session_prefix'].'user_id']))
  {
-  $lock_result = mysql_query("SELECT user_lock FROM ".$db_settings['userdata_table']." WHERE user_id = '".$_SESSION[$settings['session_prefix'].'user_id']."' LIMIT 1", $connid);
+  $lock_result = mysqli_query($connid, "SELECT user_lock FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
   if (!$lock_result) die($lang['db_error']);
-  $lock_result_array = mysql_fetch_assoc($lock_result);
-  mysql_free_result($lock_result);
+  $lock_result_array = mysql9_fetch_assoc($lock_result);
+  mysqli_free_result($lock_result);
   if ($lock_result_array['user_lock'] > 0)
    {
     header("location: user.php");
@@ -53,12 +53,12 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 
 if (isset($_GET['lock']) && isset($_SESSION[$settings['session_prefix'].'user_id']) && $_SESSION[$settings['session_prefix']."user_type"] == "admin" || isset($_GET['lock']) && isset($_SESSION[$settings['session_prefix'].'user_id']) && $_SESSION[$settings['session_prefix']."user_type"] == "mod")
 {
- $lock_result = mysql_query("SELECT tid, locked FROM ".$db_settings['forum_table']." WHERE id='".$id."' LIMIT 1", $connid);
+ $lock_result = mysqli_query($connid, "SELECT tid, locked FROM ".$db_settings['forum_table']." WHERE id= ". intval($id) ." LIMIT 1");
  if (!$lock_result) die($lang['db_error']);
- $field = mysql_fetch_assoc($lock_result);
- mysql_free_result($lock_result);
- if ($field['locked']==0) mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, locked='1' WHERE tid = ".$field['tid'], $connid);
- else mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, locked='0' WHERE tid = ".$field['tid'], $connid);
+ $field = mysqli_fetch_assoc($lock_result);
+ mysqli_free_result($lock_result);
+ if ($field['locked']==0) mysqli_query($connid, "UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, locked='1' WHERE tid = ". intval($field['tid']));
+ else mysqli_query($connid, "UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, locked='0' WHERE tid = ". intval($field['tid']));
 
  if (empty($page)) $page = 0;
  if (empty($order)) $order = "time";
@@ -92,15 +92,15 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
     // Falls editiert oder gelöscht werden soll, schauen, ob der User dazu berechtigt ist:
     if ($action=="edit" || $action == "delete" || $action == "delete ok")
      {
-      $user_id_result = mysql_query("SELECT user_id FROM ".$db_settings['forum_table']." WHERE id = '".$id."' LIMIT 1", $connid);
+      $user_id_result = mysqli_query($connid, "SELECT user_id FROM ".$db_settings['forum_table']." WHERE id = ". intval($id) ." LIMIT 1");
       if (!$user_id_result) die($lang['db_error']);
-      $result_array = mysql_fetch_assoc($user_id_result);
-      mysql_free_result($user_id_result);
+      $result_array = mysqli_fetch_assoc($user_id_result);
+      mysqli_free_result($user_id_result);
 
-      $user_type_result = mysql_query("SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = '".$result_array["user_id"]."' LIMIT 1", $connid);
+      $user_type_result = mysqli_query($connid, "SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($result_array["user_id"]) ." LIMIT 1");
       if (!$user_type_result) die($lang['db_error']);
-      $user_result_array = mysql_fetch_assoc($user_type_result);
-      mysql_free_result($user_type_result);
+      $user_result_array = mysqli_fetch_assoc($user_type_result);
+      mysqli_free_result($user_type_result);
 
       // ist da jemand bekanntes?
       if (isset($_SESSION[$settings['session_prefix'].'user_id']))
@@ -161,10 +161,10 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
       // if message is a reply:
       if ($id != 0)
        {
-        $result = mysql_query("SELECT tid, pid, name, subject, category, text, locked FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
+        $result = mysqli_query($connid, "SELECT tid, pid, name, subject, category, text, locked FROM ".$db_settings['forum_table']." WHERE id = ". intval($id));
         if (!$result) die($lang['db_error']);
-        $field = mysql_fetch_assoc($result);
-        if (mysql_num_rows($result) != 1) $id = 0;
+        $field = mysqli_fetch_assoc($result);
+        if (mysqli_num_rows($result) != 1) $id = 0;
         else
          {
           $thema = $field["tid"];
@@ -179,7 +179,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
           $text = preg_replace("/^/m", $settings['quote_symbol']." ", $text);
           $text = addslashes($text);
          }
-        mysql_free_result($result);
+        mysqli_free_result($result);
         if ($field['locked'] > 0 && (empty($_SESSION[$settings['session_prefix'].'user_type']) || (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] != 'admin' && $_SESSION[$settings['session_prefix'].'user_type'] != 'mod'))) { $show = "no authorization"; $reason = $lang['thread_locked_error']; }
         else $show = "form";
        }
@@ -190,10 +190,10 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
       if ($edit_authorization == 1)
        {
         // fetch data of message which should be edited:
-        $edit_result = mysql_query("SELECT tid, pid, user_id, name, email, hp, place, subject, category, text, email_notify, show_signature, locked, fixed, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(NOW() - INTERVAL ".$settings['edit_period']." MINUTE) AS edit_diff FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
+        $edit_result = mysqli_query($connid, "SELECT tid, pid, user_id, name, email, hp, place, subject, category, text, email_notify, show_signature, locked, fixed, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(NOW() - INTERVAL ".$settings['edit_period']." MINUTE) AS edit_diff FROM ".$db_settings['forum_table']." WHERE id = ". intval($id));
         if (!$edit_result) die($lang['db_error']);
-        $field = mysql_fetch_assoc($edit_result);
-        mysql_free_result($edit_result);
+        $field = mysqli_fetch_assoc($edit_result);
+        mysqli_free_result($edit_result);
         $thema = $field["tid"];
         $tid = $field["tid"];
         $pid = $field["pid"];
@@ -219,9 +219,9 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
      case "delete":
       if ($delete_authorization == 1)
        {
-        $delete_result = mysql_query("SELECT tid, pid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS tp_time, name, subject, category FROM ".$db_settings['forum_table']." WHERE id = '".$id."'", $connid);
+        $delete_result = mysqli_query($connid, "SELECT tid, pid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS tp_time, name, subject, category FROM ".$db_settings['forum_table']." WHERE id = ". intval($id));
         if(!$delete_result) die($lang['db_error']);
-        $field = mysql_fetch_assoc($delete_result);
+        $field = mysqli_fetch_assoc($delete_result);
         $aname = $field["name"];
         $thema = $field["tid"];
         $show = "delete form";
@@ -232,29 +232,29 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
      case "delete ok":
        if ($delete_authorization == 1)
         {
-         $pid_result=mysql_query("SELECT pid FROM ".$db_settings['forum_table']." WHERE id = ".$id);
+         $pid_result=mysqli_query($connid, "SELECT pid FROM ".$db_settings['forum_table']." WHERE id = ". intval($id));
          if (!$pid_result) die($lang['db_error']);
-         $feld = mysql_fetch_assoc($pid_result);
+         $feld = mysqli_fetch_assoc($pid_result);
          if ($feld["pid"] == 0)
           {
-           $delete_result = mysql_query("DELETE FROM ".$db_settings['forum_table']." WHERE tid = ".$id, $connid);
+           $delete_result = mysqli_query($connid, "DELETE FROM ".$db_settings['forum_table']." WHERE tid = ". intval($id));
           }
          else
           {
-           $last_answer_result=mysql_query("SELECT tid, time, last_answer FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
-           $field = mysql_fetch_assoc($last_answer_result);
-           mysql_free_result($last_answer_result);
+           $last_answer_result=mysqli_query($connid, "SELECT tid, time, last_answer FROM ".$db_settings['forum_table']." WHERE id = ". intval($id));
+           $field = mysqli_fetch_assoc($last_answer_result);
+           mysqli_free_result($last_answer_result);
            // if message is newest in topic:
            if ($field['time'] == $field['last_answer'])
             {
              // vorige Antwort heraussuchen und "last_answer" aktualisieren:
-             $last_answer_result=mysql_query("SELECT time FROM ".$db_settings['forum_table']." WHERE tid = ".$field['tid']." AND time < '".$field['time']."' ORDER BY time DESC LIMIT 1", $connid);
-             $field2 = mysql_fetch_assoc($last_answer_result);
-             mysql_free_result($last_answer_result);
-             $update_result=mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer='".$field2['time']."' WHERE tid=".$field['tid'], $connid);
+             $last_answer_result=mysqli_query($connid, "SELECT time FROM ".$db_settings['forum_table']." WHERE tid = ". intval($field['tid']) ." AND time < '". mysqli_real_escape_string($connid, $field['time']) ."' ORDER BY time DESC LIMIT 1");
+             $field2 = mysqli_fetch_assoc($last_answer_result);
+             mysqli_free_result($last_answer_result);
+             $update_result=mysqli_query($connid, "UPDATE ".$db_settings['forum_table']." SET time=time, last_answer='". mysqli_real_escape_string($connid, $field2['time']) ."' WHERE tid=". intval($field['tid']));
             }
            // delete message:
-           $delete_result = mysql_query("DELETE FROM ".$db_settings['forum_table']." WHERE id = ".$id);
+           $delete_result = mysqli_query($connid, "DELETE FROM ".$db_settings['forum_table']." WHERE id = ". intval($id));
           }
 
          if (isset($page) && isset($order) && isset($category) && isset($descasc)) { $qs="?page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category; }
@@ -290,16 +290,16 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
       // falls eine Antwort verfasst werden soll, die Thread-ID ermitteln:
       if ($id != 0)
        {
-        $tid_result = mysql_query("SELECT tid, locked FROM ".$db_settings['forum_table']." WHERE id=".$id, $connid);
+        $tid_result = mysqli_query($connid, "SELECT tid, locked FROM ".$db_settings['forum_table']." WHERE id=". intval($id));
         if (!$tid_result) die($lang['db_error']);
-        if (mysql_num_rows($tid_result) != 1) die($lang['db_error']);
+        if (mysqli_num_rows($tid_result) != 1) die($lang['db_error']);
         else
          {
-          $field = mysql_fetch_assoc($tid_result);
+          $field = mysqli_fetch_assoc($tid_result);
           $Thread = $field['tid'];
           if ($field['locked'] > 0) { unset($action); $show = "no authorization"; $reason = $lang['thread_locked_error']; }
          }
-        mysql_free_result($tid_result);
+        mysqli_free_result($tid_result);
        }
       elseif ($id == 0) $Thread = 0;
 
@@ -307,10 +307,10 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
 
      case "edit";
       // fetch missing data from database:
-      $edit_result = mysql_query("SELECT name, locked, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(NOW() - INTERVAL ".$settings['edit_period']." MINUTE) AS edit_diff FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
+      $edit_result = mysqli_query($connid, "SELECT name, locked, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(NOW() - INTERVAL ".$settings['edit_period']." MINUTE) AS edit_diff FROM ".$db_settings['forum_table']." WHERE id = ". intval($id));
       if (!$edit_result) die($lang['db_error']);
-      $field = mysql_fetch_assoc($edit_result);
-      mysql_free_result($edit_result);
+      $field = mysqli_fetch_assoc($edit_result);
+      mysqli_free_result($edit_result);
       if (empty($name)) $name = $field["name"];
      break;
     }
@@ -335,17 +335,17 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
 
    // check data:
         // double entry?
-        $uniqid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE uniqid = '".$uniqid."' AND time > NOW()-10000", $connid);
-        list($uniqid_count) = mysql_fetch_row($uniqid_result);
-        mysql_free_result($uniqid_result);
+        $uniqid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE uniqid = '". mysqli_real_escape_string($uniqid) ."' AND time > NOW()-10000");
+        list($uniqid_count) = mysqli_fetch_row($uniqid_result);
+        mysqli_free_result($uniqid_result);
         if ($uniqid_count > 0)
           { header("location: index.php"); die("<a href=\"index.php\">further...</a>"); }
 
         // check for not accepted words:
-        $result=mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1", $connid);
+        $result=mysqli_query($connid, "SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1");
         if(!$result) die($lang['db_error']);
-        $data = mysql_fetch_assoc($result);
-        mysql_free_result($result);
+        $data = mysqli_fetch_assoc($result);
+        mysqli_free_result($result);
         if(trim($data['list']) != '')
          {
           $not_accepted_words = explode(',',trim($data['list']));
@@ -363,10 +363,10 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
         // name reserved?
         if (!isset($_SESSION[$settings['session_prefix'].'user_id']))
          {
-          $result = mysql_query("SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_name = '".mysql_escape_string($name)."'");
+          $result = mysqli_query($connid, "SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_name = '". mysqli_real_escape_string($connid, $name) ."'");
           if(!$result) die($lang['db_error']);
-          $field = mysql_fetch_assoc($result);
-          mysql_free_result($result);
+          $field = mysqli_fetch_assoc($result);
+          mysqli_free_result($result);
           if (strtolower($field["user_name"]) == strtolower($name) && $name != "")
            {
             $lang['error_name_reserved'] = str_replace("[name]", htmlsc(stripslashes($name)), $lang['error_name_reserved']);
@@ -439,32 +439,32 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
      switch ($action)
       {
        case "new":
-            $result = mysql_query("INSERT INTO ".$db_settings['forum_table']." (pid, tid, uniqid, time, last_answer, user_id, name, subject, email, hp, place, ip, text, show_signature, email_notify, category, fixed) VALUES (".intval($id).",".intval($Thread).",'".$uniqid."',NOW(),NOW(),".intval($user_id).",'".mysql_escape_string($name)."','".mysql_escape_string($subject)."','".mysql_escape_string($email)."','".mysql_escape_string($hp)."','".mysql_escape_string($place)."','".$_SERVER["REMOTE_ADDR"]."','".mysql_escape_string($text)."',".intval($show_signature).",".intval($email_notify).",".intval($p_category).",".intval($fixed).")", $connid);
+            $result = mysqli_query($connid, "INSERT INTO ".$db_settings['forum_table']." (pid, tid, uniqid, time, last_answer, user_id, name, subject, email, hp, place, ip, text, show_signature, email_notify, category, fixed) VALUES (". intval($id) .", ". intval($Thread) .", '". mysqli_real_escape_string($connid, $uniqid) ."', NOW() ,NOW(), ". intval($user_id) .", '". mysqli_real_escape_string($connid, $name) ."', '". mysqli_real_escape_string($connid, $subject) ."', '". mysqli_real_escape_string($connid, $email) ."', '". mysqli_real_escape_string($connid, $hp) ."', '". mysqli_real_escape_string($connid, $place) ."', '". mysqli_real_escape_string($connid, $_SERVER["REMOTE_ADDR"]) ."', '". mysqli_real_escape_string($connid, $text) ."', ". intval($show_signature) .", ". intval($email_notify) .", ". intval($p_category) .", ". intval($fixed) .")");
             if(!$result) die($lang['db_error']);
             if($id == 0) // Jetzt die Thread-id des neuen Threads korrekt setzen
-            if(!mysql_query("UPDATE ".$db_settings['forum_table']." SET tid=id, time=time WHERE id = LAST_INSERT_id()", $connid))
+            if(!mysqli_query($connid, "UPDATE ".$db_settings['forum_table']." SET tid=id, time=time WHERE id = LAST_INSERT_id()"))
             die($lang['db_error']);
             // wann auf Thread als letztes geantwortet wurde aktualisieren (für Board-Ansicht):
-            if($id != 0) { if(!mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=NOW() WHERE tid=".$Thread, $connid))
+            if($id != 0) { if(!mysqli_query($connid, "UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=NOW() WHERE tid=". intval($Thread)))
             die($lang['db_error']); }
             // letzten Eintrag ermitteln (um darauf umzuleiten):
-            $result_neu = mysql_query("SELECT tid, pid, id FROM ".$db_settings['forum_table']." WHERE id = LAST_INSERT_ID()");
-            $neu = mysql_fetch_assoc($result_neu);
+            $result_neu = mysqli_query($connid, "SELECT tid, pid, id FROM ".$db_settings['forum_table']." WHERE id = LAST_INSERT_ID()");
+            $neu = mysqli_fetch_assoc($result_neu);
 
             // Schauen, ob eine E-Mail benachrichtigung versendet werden soll:
              if ($settings['email_notification'] == 1)
               {
-               $parent_result = mysql_query("SELECT user_id, name, email, subject, text, email_notify FROM ".$db_settings['forum_table']." WHERE id = '".$id."' LIMIT 1", $connid);
-               $parent = mysql_fetch_assoc($parent_result);
+               $parent_result = mysqli_query($connid, "SELECT user_id, name, email, subject, text, email_notify FROM ".$db_settings['forum_table']." WHERE id = ". intval($id) ." LIMIT 1");
+               $parent = mysqli_fetch_assoc($parent_result);
                if ($parent["email_notify"] == 1)
                 {
                  // wenn das Posting von einem registrierten User stammt, E-Mail-Adresse aus den User-Daten holen:
                  if ($parent["user_id"] > 0)
                   {
-                   $email_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = '".$parent["user_id"]."' LIMIT 1", $connid);
+                   $email_result = mysqli_query($connid, "SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($parent["user_id"]) ." LIMIT 1");
                    if (!$email_result) die($lang['db_error']);
-                   $field = mysql_fetch_assoc($email_result);
-                   mysql_free_result($email_result);
+                   $field = mysqli_fetch_assoc($email_result);
+                   mysqli_free_result($email_result);
                    $parent["name"] = $field["user_name"];
                    $parent["email"] = $field["user_email"];
                   }
@@ -519,9 +519,9 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                $header .= "X-Sender-ip: $ip\n";
                $header .= "Content-Type: text/plain";
                // Schauen, wer eine E-Mail-Benachrichtigung will:
-               $en_result=mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_posting_notify='1'", $connid);
+               $en_result=mysqli_query($connid, "SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_posting_notify='1'");
                if(!$en_result) die($lang['db_error']);
-               while ($admin_array = mysql_fetch_assoc($en_result))
+               while ($admin_array = mysqli_fetch_assoc($en_result))
                {
                 $ind_emailbody = str_replace("[admin]", $admin_array['user_name'], $emailbody);
                 $an = $admin_array['user_name']." <".$admin_array['user_email'].">";
@@ -534,7 +534,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                   if(@mail($an, str_replace("[subject]", stripslashes($subject), $lang['admin_email_subject']), $ind_emailbody, $header)) { $sent2 = "ok"; }
                  }
                }
-               mysql_free_result($en_result);
+               mysqli_free_result($en_result);
 
               // Cookies setzen, falls gewünscht und Funktion aktiv:
               if ($settings['remember_userdata'] == 1)
@@ -560,20 +560,20 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
          {
           if (!($settings['edit_period'] > 0 && $field["edit_diff"] > $field["time"] && (empty($_SESSION[$settings['session_prefix'].'user_type']) || (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] != 'admin' && $_SESSION[$settings['session_prefix'].'user_type'] != 'mod'))))
           {
-          $tid_result=mysql_query("SELECT tid, name, subject, text FROM ".$db_settings['forum_table']." WHERE id = ".$id);
+          $tid_result=mysqli_query($connid, "SELECT tid, name, subject, text FROM ".$db_settings['forum_table']." WHERE id = ". intval($id));
           if (!$tid_result) die($lang['db_error']);
-          $field = mysql_fetch_assoc($tid_result);
-          mysql_free_result($tid_result);
+          $field = mysqli_fetch_assoc($tid_result);
+          mysqli_free_result($tid_result);
           // unnoticed editing for admins and mods:
           if (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=="admin" && $settings['dont_reg_edit_by_admin']==1 || isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=="mod" && $settings['dont_reg_edit_by_mod']==1 || ($field['text'] == $text && $field['subject'] == $subject && $field['name'] == $name && isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type']=="admin" || $_SESSION[$settings['session_prefix'].'user_type']=="mod")))
            {
-            $posting_update_result = mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, name='".mysql_escape_string($name)."', subject='".mysql_escape_string($subject)."', category=".intval($p_category).", email='".mysql_escape_string($email)."', hp='".mysql_escape_string($hp)."', place='".mysql_escape_string($place)."', text='".mysql_escape_string($text)."', email_notify='".intval($email_notify)."', show_signature='".intval($show_signature)."', fixed=".intval($fixed)." WHERE id=".intval($id), $connid);
+            $posting_update_result = mysqli_query($connid, "UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, name='". mysqli_real_escape_string($connid, $name) ."', subject='". mysqli_real_escape_string($connid, $subject) ."', category=". intval($p_category) .", email='". mysqli_real_escape_string($connid, $email)."', hp='". mysqli_real_escape_string($connid, $hp) ."', place='". mysqli_real_escape_string($connid, $place)."', text='". mysqli_real_escape_string($connid, $text) ."', email_notify=". intval($email_notify) .", show_signature=". intval($show_signature) .", fixed=". intval($fixed) ." WHERE id=". intval($id));
            }
           else
            {
-            $posting_update_result = mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=NOW(), edited_by='".mysql_escape_string($_SESSION[$settings['session_prefix']."user_name"])."', name='".mysql_escape_string($name)."', subject='".mysql_escape_string($subject)."', category=".intval($p_category).", email='".mysql_escape_string($email)."', hp='".mysql_escape_string($hp)."', place='".mysql_escape_string($place)."', text='".mysql_escape_string($text)."', email_notify='".intval($email_notify)."', show_signature='".intval($show_signature)."', fixed=".intval($fixed)." WHERE id=".intval($id), $connid);
+            $posting_update_result = mysqli_query($connid, "UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=NOW(), edited_by='". mysqli_real_escape_string($connid, $_SESSION[$settings['session_prefix']."user_name"]) ."', name='". mysqli_real_escape_string($connid, $name) ."', subject='". mysqli_real_escape_string($connid, $subject) ."', category=". intval($p_category) .", email='". mysqli_real_escape_string($connid, $email) ."', hp='". mysqli_real_escape_string($connid, $hp) ."', place='". mysqli_real_escape_string($connid, $place) ."', text='". mysqli_real_escape_string($connid, $text) ."', email_notify= ". intval($email_notify) .", show_signature= ". intval($show_signature) .", fixed=". intval($fixed) ." WHERE id=". intval($id));
            }
-          $category_update_result = mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, category=".intval($p_category)." WHERE tid = '".$field["tid"]."'", $connid);
+          $category_update_result = mysqli_query($connid, "UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, category=". intval($p_category) ." WHERE tid = ". intval($field["tid"]));
 
           if (isset($back)) $further_tid = $back;
           $further_id = $id;
@@ -710,10 +710,10 @@ switch ($show)
      if(isset($_SESSION[$settings['session_prefix'].'user_id']))
       {
        if ($action=="edit") $pr_id = $p_user_id; else $pr_id = $_SESSION[$settings['session_prefix']."user_id"];
-       $preview_result = mysql_query("SELECT user_name, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$pr_id."' LIMIT 1", $connid);
+       $preview_result = mysqli_query($connid, "SELECT user_name, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($pr_id) ." LIMIT 1");
        if (!$preview_result) die($lang['db_error']);
-       $field = mysql_fetch_assoc($preview_result);
-       mysql_free_result($preview_result);
+       $field = mysqli_fetch_assoc($preview_result);
+       mysqli_free_result($preview_result);
        $pr_name = $field["user_name"];
        $pr_email = $field["user_email"];
        $hide_email = $field["hide_email"];
@@ -729,7 +729,7 @@ switch ($show)
      if (empty($pr_place)) $pr_place = $place;
 
      // aktuelle Zeit:
-     list($pr_time) = mysql_fetch_row(mysql_query("SELECT UNIX_TIMESTAMP(NOW() + INTERVAL ".$time_difference." HOUR)"));
+     list($pr_time) = mysqli_fetch_row(mysqli_query($connid, "SELECT UNIX_TIMESTAMP(NOW() + INTERVAL ".$time_difference." HOUR)"));
 
      ?><p class="caution" style="margin: 10px 0px 3px 0px;"><?php echo $lang['preview_headline']; ?></p><?php
      if (isset($view))
@@ -934,18 +934,18 @@ switch ($show)
       {
        $smiley_buttons = 6;
 
-       $count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['smilies_table'], $connid);
-       list($smilies_count) = mysql_fetch_row($count_result);
-       mysql_free_result($count_result);
+       $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['smilies_table']);
+       list($smilies_count) = mysqli_fetch_row($count_result);
+       mysqli_free_result($count_result);
 
-       $result = mysql_query("SELECT file, code_1, title FROM ".$db_settings['smilies_table']." ORDER BY order_id ASC LIMIT ".$smiley_buttons, $connid);
+       $result = mysqli_query($connid, "SELECT file, code_1, title FROM ".$db_settings['smilies_table']." ORDER BY order_id ASC LIMIT ". intval($smiley_buttons));
        $i=1;
-       while ($data = mysql_fetch_assoc($result))
+       while ($data = mysqli_fetch_assoc($result))
         {
          ?><button class="smiley-button" name="smiley" type="button" value="<?php echo stripslashes($data['code_1']); ?>" title="<?php echo $lang['smiley_title']; ?>" onclick="insert('<?php echo stripslashes($data['code_1']); ?> ');"><img src="img/smilies/<?php echo stripslashes($data['file']); ?>" alt="<?php echo stripslashes($data['code_1']); ?>" /></button><?php if($i % 2 == 0) { ?><br /><?php }
          $i++;
         }
-       mysql_free_result($result);
+       mysqli_free_result($result);
 
        if($smilies_count > $smiley_buttons) { if($i % 2 == 0) { ?><br /><?php } ?><span class="small"><a href="javascript:more_smilies()" title="<?php echo $lang['more_smilies_linktitle']; ?>"><?php echo $lang['more_smilies_linkname']; ?></a></span><?php }
       }
