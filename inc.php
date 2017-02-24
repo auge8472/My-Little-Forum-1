@@ -153,8 +153,8 @@ if ($settings['count_users_online'] == 1)
  }
 else
  {
-  $counter = str_replace("[forum_name]", "<a href=\"".$settings['forum_address']."\">".stripslashes($settings['forum_name'])."</a>", $lang['counter']);
-  $counter = str_replace("[contact]", "<a href=\"contact.php?forum_contact=true\">".$lang['contact_linkname']."</a>", $counter);
+  $counter = str_replace("[forum_name]", "<a href=\"".$settings['forum_address']."\">". htmlsc($settings['forum_name']) ."</a>", $lang['counter']);
+  $counter = str_replace("[contact]", "<a href=\"contact.php?forum_contact=true\">". htmlsc($lang['contact_linkname']) ."</a>", $counter);
   $counter = str_replace("[postings]", $posting_count, $counter);
   $counter = str_replace("[threads]", $thread_count, $counter);
   $counter = str_replace("[users]", $user_count, $counter);
