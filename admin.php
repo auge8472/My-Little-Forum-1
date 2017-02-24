@@ -46,7 +46,6 @@ function split_sql($sql)
   $lines2 = $cleared_lines;
   foreach($lines2 as $line)
    {
-    $line = stripslashes($line);
     if(substr($line, -1)==';') $lines[] = substr($line,0,-1);
    }
   return $lines;
@@ -314,7 +313,7 @@ if(isset($_POST['edit_user_submit']))
   $name_result = mysqli_query($connid, "SELECT user_id, user_name FROM ".$db_settings['userdata_table']." WHERE user_name = '". mysqli_real_escape_string($connid, $edit_user_name) ."'") or die($lang['db_error']);
   $field = mysqli_fetch_assoc($name_result);
   mysqli_free_result($name_result);
-  if($edit_user_id != $field['user_id'] && strtolower($field["user_name"]) == strtolower($edit_user_name)) $errors[] = str_replace("[name]", htmlsc(stripslashes($edit_user_name)), $lang['error_name_reserved']);
+  if($edit_user_id != $field['user_id'] && strtolower($field["user_name"]) == strtolower($edit_user_name)) $errors[] = str_replace("[name]", htmlsc($edit_user_name), $lang['error_name_reserved']);
   if(strlen($user_real_name) > $settings['name_maxlength']) $errors[] = $lang['user_real_name'] . " " .$lang['error_input_too_long'];
   if(strlen($user_hp) > $settings['hp_maxlength']) $errors[] = $lang['user_hp'] . " " .$lang['error_input_too_long'];
   if(strlen($user_place) > $settings['place_maxlength']) $errors[] = $lang['user_place'] . " " .$lang['error_input_too_long'];
@@ -332,22 +331,22 @@ if(isset($_POST['edit_user_submit']))
    }
 
   $text_arr = explode(" ",$user_real_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-  $error_nwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['name_word_maxlength'])))."...", $lang['error_name_word_too_long']);
+  $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
   $errors[] = $error_nwtl; } }
   $text_arr = explode(" ",$user_place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
-  $error_pwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['place_word_maxlength'])))."...", $lang['error_place_word_too_long']);
+  $error_pwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
   $errors[] = $error_pwtl; } }
   $text_arr = str_replace("\n", " ", $profile);
   if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
   if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
   $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-  $error_twtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['text_word_maxlength'])))."...", $lang['err_prof_word_too_long']);
+  $error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['err_prof_word_too_long']);
   $errors[] = $error_twtl; } }
   $text_arr = str_replace("\n", " ", $signature);
   if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
   if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
   $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-  $error_twtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['text_word_maxlength'])))."...", $lang['err_sig_word_too_long']);
+  $error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['err_sig_word_too_long']);
   $errors[] = $error_twtl; } }
   // end of checking
 
@@ -780,7 +779,7 @@ if (isset($_POST['ar_username']))
     $errors[] = $lang['name_marking'] . " " .$lang['error_input_too_long'];
     // überprüfen, ob ein Wort im Username zu lang ist:
     $text_arr = explode(" ",$ar_username); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-    $error_nwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['name_word_maxlength'])))."...", $lang['error_name_word_too_long']);
+    $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
     $errors[] = $error_nwtl; } }
     // schauen, ob der Name schon vergeben ist:
     $name_result = mysqli_query($connid, "SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_name = '". mysqli_real_escape_string($connid, $ar_username) ."'");
@@ -790,7 +789,7 @@ if (isset($_POST['ar_username']))
 
     if (strtolower($field["user_name"]) == strtolower($ar_username) && $ar_username != "")
      {
-      $lang['error_name_reserved'] = str_replace("[name]", htmlsc(stripslashes($ar_username)), $lang['error_name_reserved']);
+      $lang['error_name_reserved'] = str_replace("[name]", htmlsc($ar_username), $lang['error_name_reserved']);
       $errors[] = $lang['error_name_reserved'];
      }
     // Überprüfung ob die Email-Adresse das Format name@domain.tld hat:
@@ -824,7 +823,6 @@ if (isset($_POST['ar_username']))
       $lang['new_user_email_txt_a'] = str_replace("[name]", $ar_username, $lang['new_user_email_txt_a']);
       $lang['new_user_email_txt_a'] = str_replace("[password]", $ar_pw, $lang['new_user_email_txt_a']);
       $lang['new_user_email_txt_a'] = str_replace("[login_link]", $settings['forum_address']."login.php?username=".urlencode($ar_username)."&userpw=".$ar_pw, $lang['new_user_email_txt_a']);
-      $lang['new_user_email_txt_a'] = stripslashes($lang['new_user_email_txt_a']);
       $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
       $header .= "X-Mailer: Php/" . phpversion(). "\n";
       $header .= "X-Sender-ip: ".$_SERVER["REMOTE_ADDR"]."\n";
@@ -1206,7 +1204,7 @@ switch ($action)
       list($postings_in_category) = mysqli_fetch_row($count_result);
       mysqli_free_result($count_result);
       ?><tr>
-      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><b><?php echo stripslashes($line['category']); ?></b></td>
+      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><b><?php echo htmlsc($line['category']); ?></b></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($line['accession']==2) echo $lang_add['cat_accession_mod_admin']; elseif ($line['accession']==1) echo $lang_add['cat_accession_reg_users']; else echo $lang_add['cat_accession_all']; ?></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo $threads_in_category; ?></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo $postings_in_category; ?></td>
@@ -1227,7 +1225,7 @@ switch ($action)
    ?><br />
    <form action="admin.php" method="post"><div style="display: inline;">
    <b><?php echo $lang_add['new_category']; ?></b><br />
-   <input type="text" name="new_category" size="25" value="<?php if(isset($new_category)) echo htmlsc(stripslashes($new_category)); ?>" /><br /><br />
+   <input type="text" name="new_category" size="25" value="<?php if(isset($new_category)) echo htmlsc($new_category); ?>" /><br /><br />
    <b><?php echo $lang_add['accessible_for']; ?></b><br />
    <input type="radio" name="accession" value="0"<?php if(empty($accession) || isset($accession) && $accession == 0) { ?> checked="ckecked"<?php } ?> /><?php echo $lang_add['cat_accession_all']; ?><br />
    <input type="radio" name="accession" value="1"<?php if(isset($accession) && $accession == 1) { ?> checked="ckecked"<?php } ?> /><?php echo $lang_add['cat_accession_reg_users']; ?><br />
@@ -1279,7 +1277,7 @@ switch ($action)
    <td><?php echo str_replace("[number]", $user_count, $lang['num_reg_users']); ?></td>
    <td style="text-align:right;"><?php echo $lang_add['search_user']; ?><form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="get"><div style="display:inline">
    <input type="hidden" name="action" value="user" />
-   <input type="text" name="search_user" value="<?php if(isset($search_user)) echo htmlsc(stripslashes($search_user)); ?>" size="25">&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" />
+   <input type="text" name="search_user" value="<?php if(isset($search_user)) echo htmlsc($search_user); ?>" size="25">&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" />
    </div></form><?php
    if(empty($serach_user) || trim($search_user==''))
    {
@@ -1322,7 +1320,7 @@ switch ($action)
 
    if($result_count > 0)
    {
-   if (isset($_GET['new_user'])) { ?><p class="caution"><?php echo str_replace("[name]", htmlsc(stripslashes(urldecode($_GET['new_user']))), $lang_add['new_user_registered']); if(isset($_GET['send_error'])) { ?><br /><?php echo $lang_add['userdata_send_error']; } ?></p><p><a class="textlink" href="admin.php?action=register"><?php echo $lang_add['reg_another_user']; ?></a></p><?php }
+   if (isset($_GET['new_user'])) { ?><p class="caution"><?php echo str_replace("[name]", htmlsc(urldecode($_GET['new_user'])), $lang_add['new_user_registered']); if(isset($_GET['send_error'])) { ?><br /><?php echo $lang_add['userdata_send_error']; } ?></p><p><a class="textlink" href="admin.php?action=register"><?php echo $lang_add['reg_another_user']; ?></a></p><?php }
    if (isset($no_users_in_selection)) { ?><p class="caution"><?php echo $lang_add['no_users_in_sel']; ?></p><?php } ?>
    <form action="admin.php" method="post">
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
@@ -1345,13 +1343,13 @@ switch ($action)
    <tr>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>" width="10px"><input type="checkbox" name="selected[]" value="<?php echo $zeile["user_id"]; ?>" /></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>" width="10px"><?php echo $zeile["user_id"]; ?></td>
-   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo $zeile["user_id"]; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($zeile["user_name"])), $lang['show_userdata_linktitle']); ?>"><b><?php echo htmlsc(stripslashes($zeile["user_name"])); ?></b></a></td>
-   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="mailto:<?php echo $zeile["user_email"]; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($zeile["user_name"])), $lang_add['mailto_user_lt']); ?>"><?php echo htmlsc(stripslashes($zeile["user_email"])); ?></a></td>
+   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo $zeile["user_id"]; ?>" title="<?php echo str_replace("[name]", htmlsc($zeile["user_name"]), $lang['show_userdata_linktitle']); ?>"><b><?php echo htmlsc($zeile["user_name"]); ?></b></a></td>
+   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="mailto:<?php echo $zeile["user_email"]; ?>" title="<?php echo str_replace("[name]", htmlsc($zeile["user_name"]), $lang_add['mailto_user_lt']); ?>"><?php echo htmlsc($zeile["user_email"]); ?></a></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($zeile["user_type"] == "admin") echo $lang['ud_admin']; elseif ($zeile["user_type"] == "mod") echo $lang['ud_mod']; else echo $lang['ud_user']; ?></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo strftime($lang['time_format'],$zeile["registered_time"]); ?></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo $zeile["logins"]; ?></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($zeile["logins"] > 0) echo strftime($lang['time_format'],$zeile["last_login_time"]); else echo "&nbsp;"; ?></td>
-   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($zeile["user_lock"] == 0) { ?><a href="admin.php?user_lock=<?php echo $zeile["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;ul=<?php echo $ul; ?>&amp;sam=<?php echo $sam; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($zeile["user_name"])), $lang['lock_user_lt']); ?>"><?php echo $lang['unlocked']; ?></a><?php } else { ?><a style="color: red;" href="admin.php?user_lock=<?php echo $zeile["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;ul=<?php echo $ul; ?>&amp;sam=<?php echo $sam; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($zeile["user_name"])), $lang['unlock_user_lt']); ?>"><?php echo $lang['locked']; ?></a><?php } ?></td>
+   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($zeile["user_lock"] == 0) { ?><a href="admin.php?user_lock=<?php echo $zeile["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;ul=<?php echo $ul; ?>&amp;sam=<?php echo $sam; ?>" title="<?php echo str_replace("[name]", htmlsc($zeile["user_name"]), $lang['lock_user_lt']); ?>"><?php echo $lang['unlocked']; ?></a><?php } else { ?><a style="color: red;" href="admin.php?user_lock=<?php echo $zeile["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;ul=<?php echo $ul; ?>&amp;sam=<?php echo $sam; ?>" title="<?php echo str_replace("[name]", htmlsc($zeile["user_name"]), $lang['unlock_user_lt']); ?>"><?php echo $lang['locked']; ?></a><?php } ?></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?edit_user=<?php echo $zeile["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;ul=<?php echo $ul; ?>&amp;sam=<?php echo $sam; ?>"><?php echo $lang_add['edit_link']; ?></a></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?delete_user=<?php echo $zeile["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;ul=<?php echo $ul; ?>&amp;sam=<?php echo $sam; ?>"><?php echo $lang_add['delete_link']; ?></a></td>
    </tr>
@@ -1376,9 +1374,9 @@ switch ($action)
    <form action="admin.php" method="post">
    <input type="hidden" name="action" value="register">
    <b><?php echo $lang['username_marking']; ?></b><br />
-   <input type="text" size="25" name="ar_username" value="<?php if (isset($ar_username)) echo htmlsc(stripslashes($ar_username)); ?>" maxlength="<?php echo $name_maxlength; ?>" /><br /><br />
+   <input type="text" size="25" name="ar_username" value="<?php if (isset($ar_username)) echo htmlsc($ar_username); ?>" maxlength="<?php echo $name_maxlength; ?>" /><br /><br />
    <b><?php echo $lang['user_email_marking']; ?></b><br />
-   <input type="text" size="25" name="ar_email" value="<?php if (isset($ar_email)) echo htmlsc(stripslashes($ar_email)); ?>" maxlength="<?php echo $email_maxlength; ?>" /><br /><br />
+   <input type="text" size="25" name="ar_email" value="<?php if (isset($ar_email)) echo htmlsc($ar_email); ?>" maxlength="<?php echo $email_maxlength; ?>" /><br /><br />
    <b><?php echo $lang_add['pw_marking']; ?></b><br />
    <input type="password" size="25" name="ar_pw" maxlength="50"><br /><br />
    <b><?php echo $lang_add['pw_conf_marking']; ?></b><br />
@@ -1395,7 +1393,7 @@ switch ($action)
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="c"><b><?php echo $lang_add['forum_name']; ?></b><br /><span class="small"><?php echo $lang_add['forum_name_d']; ?></span></td>
-     <td class="d"><input type="text" name="forum_name" value="<?php echo htmlsc(stripslashes($settings['forum_name'])); ?>" size="40" /></td>
+     <td class="d"><input type="text" name="forum_name" value="<?php echo htmlsc($settings['forum_name']); ?>" size="40" /></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['forum_address']; ?></b><br /><span class="small"><?php echo $lang_add['forum_address_d']; ?></span></td>
@@ -1411,7 +1409,7 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['home_link_name']; ?></b><br /><span class="small"><?php echo $lang_add['home_link_name_d']; ?></span></td>
-     <td class="d"><input type="text" name="home_linkname" value="<?php echo htmlsc(stripslashes($settings['home_linkname'])); ?>" size="40" /></td>
+     <td class="d"><input type="text" name="home_linkname" value="<?php echo htmlsc($settings['home_linkname']); ?>" size="40" /></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['template_file']; ?></b><br /><span class="small"><?php echo $lang_add['template_file_d']; ?></span></td>
@@ -1553,7 +1551,7 @@ switch ($action)
     {
      ?><tr>
      <td class="c"><b><?php echo $key; ?></b></td>
-     <td class="d"><input type="text" name="<?php echo htmlsc(stripslashes($key)); ?>" value="<?php echo htmlsc(stripslashes($val)); ?>" size="30" /></td>
+     <td class="d"><input type="text" name="<?php echo htmlsc($key); ?>" value="<?php echo htmlsc($val); ?>" size="30" /></td>
     </tr><?php
    }
    ?></table>
@@ -1569,7 +1567,7 @@ switch ($action)
    <?php
    for($x=0; $x<count($selected_usernames); $x++)
    {
-    ?><li><a href="user.php?id=<?php echo $selected[$x]; ?>"><b><?php echo htmlsc(stripslashes($selected_usernames[$x])); ?></b></a><?php
+    ?><li><a href="user.php?id=<?php echo $selected[$x]; ?>"><b><?php echo htmlsc($selected_usernames[$x]); ?></b></a><?php
    }
    ?>
    </ul>
@@ -1615,7 +1613,7 @@ switch ($action)
   ?><p class="caution"><?php echo $lang['caution']; ?></p>
   <p><?php echo $lang_add['del_marked_note']; ?></p>
   <form action="admin.php" method="post"><div>
-  <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc(stripslashes($_GET['refer'])); ?>" /><?php } ?>
+  <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
   <input type="submit" name="delete_marked_threads_confirmed" value="<?php echo $lang_add['del_marked_sb']; ?>" />
   </div></form>
   <p>&nbsp;</p>
@@ -1624,7 +1622,7 @@ switch ($action)
   case "unmark":
   ?><p><?php echo $lang_add['unmark_threads_note']; ?></p>
   <form action="admin.php" method="post"><div>
-  <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc(stripslashes($_GET['refer'])); ?>" /><?php } ?>
+  <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
   <input type="submit" name="unmark_confirmed" value="<?php echo $lang['submit_button_ok']; ?>" />
   </div></form>
   <p>&nbsp;</p>
@@ -1633,14 +1631,14 @@ switch ($action)
   case "invert_markings":
   ?><p><?php echo $lang_add['invert_markings_note']; ?></p>
   <form action="admin.php" method="post"><div>
-  <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc(stripslashes($_GET['refer'])); ?>" /><?php } ?>
+  <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
   <input type="submit" name="invert_markings_confirmed" value="<?php echo $lang['submit_button_ok']; ?>" />
   </div></form>
   <p>&nbsp;</p>
   <?php
   break;
   case "mark_threads":
-   ?><form action="admin.php" method="post"><div style="display: inline;"><?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc(stripslashes($_GET['refer'])); ?>" /><?php }
+   ?><form action="admin.php" method="post"><div style="display: inline;"><?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php }
    $lang_add['mark_old_threads'] = str_replace("[number]", "<input type=\"text\" name=\"n1\" value=\"\" size=\"4\" />", $lang_add['mark_old_threads']);
    $lang_add['mark_old_threads_no_replies'] = str_replace("[number]", "<input type=\"text\" name=\"n2\" value=\"\" size=\"4\" />", $lang_add['mark_old_threads_no_replies']);
    ?><p><input type="radio" name="mark_threads" value="1" checked="checked" /> <?php echo $lang_add['mark_old_threads']; ?></p>
@@ -1652,7 +1650,7 @@ switch ($action)
    $lang_add['lock_marked_conf'] = str_replace("[marked_symbol]", "<img src=\"img/marked.gif\" alt=\"[x]\" width=\"9\" height=\"9\" />", $lang_add['lock_marked_conf']);
    ?><p><?php echo $lang_add['lock_marked_conf']; ?></p>
    <form action="admin.php" method="post"><div>
-   <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc(stripslashes($_GET['refer'])); ?>" /><?php } ?>
+   <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
    <input type="submit" name="lock_marked_threads_submitted" value="<?php echo $lang['submit_button_ok']; ?>" />
    </div></form><p>&nbsp;</p><?php
   break;
@@ -1660,7 +1658,7 @@ switch ($action)
    $lang_add['unlock_marked_conf'] = str_replace("[marked_symbol]", "<img src=\"img/marked.gif\" alt=\"[x]\" width=\"9\" height=\"9\" />", $lang_add['unlock_marked_conf']);
    ?><p><?php echo $lang_add['unlock_marked_conf']; ?></p>
    <form action="admin.php" method="post"><div>
-   <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc(stripslashes($_GET['refer'])); ?>" /><?php } ?>
+   <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
    <input type="submit" name="unlock_marked_threads_submitted" value="<?php echo $lang['submit_button_ok']; ?>" />
    </div></form><p>&nbsp;</p><?php
   break;
@@ -1671,11 +1669,11 @@ switch ($action)
     $cat_select = '<select class="kat" size="1" name="move_category">';
     while(list($key, $val) = each($categories))
      {
-      if ($key!=stripslashes($category_id)) $cat_select .= '<option value="'.$key.'">'.$val.'</option>';
+      if ($key!= $category_id) $cat_select .= '<option value="'. htmlsc($key) .'">'. htmlsc($val) .'</option>';
      }
     $cat_select .= '</select>';
    }
-  ?><h2><?php echo str_replace("[category]",stripslashes($category_name),$lang_add['del_cat_hl']); ?></h2>
+  ?><h2><?php echo str_replace("[category]", htmlsc($category_name), $lang_add['del_cat_hl']); ?></h2>
   <p class="caution"><?php echo $lang['caution']; ?></p>
   <form action="admin.php" method="post"><div style="display: inline;">
   <input type="hidden" name="category_id" value="<?php echo $category_id; ?>" />
@@ -1690,7 +1688,7 @@ switch ($action)
    ?><form action="admin.php" method="post"><div style="display: inline;">
    <input type="hidden" name="id" value="<?php echo $id; ?>" />
    <b><?php echo $lang_add['edit_category']; ?></b><br />
-   <input type="text" name="category" value="<?php echo htmlsc(stripslashes($category)); ?>" size="25" /><br /><br />
+   <input type="text" name="category" value="<?php echo htmlsc($category); ?>" size="25" /><br /><br />
    <b><?php echo $lang_add['accessible_for']; ?></b><br />
    <input type="radio" name="accession" value="0"<?php if ($accession==0) echo " checked=\"ckecked\""; ?> /><?php echo $lang_add['cat_accession_all']; ?><br />
    <input type="radio" name="accession" value="1"<?php if ($accession==1) echo " checked=\"ckecked\""; ?> /><?php echo $lang_add['cat_accession_reg_users']; ?><br />
@@ -1720,7 +1718,7 @@ switch ($action)
    if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><?php }
    ?><form action="admin.php" method="post"><div>
    <b><?php echo $lang_add['sql_dump']; ?></b><br />
-   <textarea name="sql" cols="70" rows="15"><?php if(isset($sql)) echo stripslashes($sql); ?></textarea><br /><br />
+   <textarea name="sql" cols="70" rows="15"><?php if(isset($sql)) echo htmlsc($sql); ?></textarea><br /><br />
    <p><b><?php echo $lang['password_marking']; ?></b><br />
    <input type="password" size="25" name="sql_pw" /></p>
    <p><input type="submit" name="sql_submit" value="<?php echo $lang['submit_button_ok']; ?>" /></p>
@@ -1793,15 +1791,15 @@ switch ($action)
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="c"><b><?php echo $lang_add['banned_users']; ?></b><br /><span class="small"><?php echo $lang_add['banned_users_d']; ?></span></td>
-     <td class="d"><textarea name="banned_users" cols="50" rows="5"><?php if(isset($banned_users)) echo stripslashes($banned_users);  ?></textarea></td>
+     <td class="d"><textarea name="banned_users" cols="50" rows="5"><?php if(isset($banned_users)) echo htmlsc($banned_users);  ?></textarea></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['banned_ips']; ?></b><br /><span class="small"><?php echo $lang_add['banned_ips_d']; ?></span></td>
-     <td class="d"><textarea name="banned_ips" cols="50" rows="5"><?php if(isset($banned_ips)) echo stripslashes($banned_ips);  ?></textarea></td>
+     <td class="d"><textarea name="banned_ips" cols="50" rows="5"><?php if(isset($banned_ips)) echo htmlsc($banned_ips);  ?></textarea></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['not_accepted_words']; ?></b><br /><span class="small"><?php echo $lang_add['not_accepted_words_d']; ?></span></td>
-     <td class="d"><textarea name="not_accepted_words" cols="50" rows="5"><?php if(isset($not_accepted_words)) echo stripslashes($not_accepted_words);  ?></textarea></td>
+     <td class="d"><textarea name="not_accepted_words" cols="50" rows="5"><?php if(isset($not_accepted_words)) echo htmlsc($not_accepted_words);  ?></textarea></td>
     </tr>
     <tr>
      <td class="c">&nbsp;</td>
@@ -1855,16 +1853,16 @@ switch ($action)
        }
 
       unset($codes);
-      if(trim($line['code_1'])!='') $codes[] = stripslashes($line['code_1']);
-      if(trim($line['code_2'])!='') $codes[] = stripslashes($line['code_2']);
-      if(trim($line['code_3'])!='') $codes[] = stripslashes($line['code_3']);
-      if(trim($line['code_4'])!='') $codes[] = stripslashes($line['code_4']);
-      if(trim($line['code_5'])!='') $codes[] = stripslashes($line['code_5']);
+      if(trim($line['code_1'])!='') $codes[] = $line['code_1'];
+      if(trim($line['code_2'])!='') $codes[] = $line['code_2'];
+      if(trim($line['code_3'])!='') $codes[] = $line['code_3'];
+      if(trim($line['code_4'])!='') $codes[] = $line['code_4'];
+      if(trim($line['code_5'])!='') $codes[] = $line['code_5'];
       $codes_disp = implode(' &nbsp;',$codes);
       ?><tr>
-      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><img src="img/smilies/<?php echo stripslashes($line['file']); ?>" alt="<?php echo stripslashes($line['code_1']); ?>"<?php if($line['title']!='') { ?> title="<?php echo stripslashes($line['title']); ?>"<?php } ?> /></td>
+      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><img src="img/smilies/<?php echo rawurlencode($line['file']); ?>" alt="<?php echo htmlsc($line['code_1']); ?>"<?php if($line['title']!='') { ?> title="<?php echo htmlsc($line['title']); ?>"<?php } ?> /></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo $codes_disp; ?></td>
-      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo stripslashes($line['title']); ?></td>
+      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo htmlsc($line['title']); ?></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?edit_smiley=<?php echo $line['id']; ?>"><?php echo $lang_add['edit_link']; ?></a></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?delete_smiley=<?php echo $line['id']; ?>"><?php echo $lang_add['delete_link']; ?></a></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?move_up_smiley=<?php echo $line['id']; ?>"><img src="img/up.gif" alt="up" width="11" height="11" onmouseover="this.src='img/up_mo.gif';" onmouseout="this.src='img/up.gif';" /></a>&nbsp;<a href="admin.php?move_down_smiley=<?php echo $line['id']; ?>"><img src="img/down.gif" alt="down" width="11" height="11" onmouseover="this.src='img/down_mo.gif';" onmouseout="this.src='img/down.gif';" /></a></td>
@@ -1929,7 +1927,7 @@ switch ($action)
       {
        if(preg_match('/\.gif$/i', $dirfile) || preg_match('/\.png$/i', $dirfile) || preg_match('/\.jpg$/i', $dirfile))
         {
-         ?><option value="<?php echo $dirfile; ?>"<?php if($dirfile==stripslashes($file)) { ?> selected="selected"<?php } ?>> <?php echo $dirfile; ?></option><?php
+         ?><option value="<?php echo $dirfile; ?>"<?php if($dirfile==$file) { ?> selected="selected"<?php } ?>> <?php echo $dirfile; ?></option><?php
         }
       }
      closedir($fp);
@@ -1937,11 +1935,11 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['edit_smilies_codes']; ?></b></td>
-     <td class="d"><input type="text" name="code_1" size="7" value="<?php if(isset($code_1)) echo stripslashes($code_1); ?>" /> <input type="text" name="code_2" size="7" value="<?php if(isset($code_2)) echo stripslashes($code_2); ?>" /> <input type="text" name="code_3" size="7" value="<?php if(isset($code_3)) echo stripslashes($code_3); ?>" /> <input type="text" name="code_4" size="7" value="<?php if(isset($code_4)) echo stripslashes($code_4); ?>" /> <input type="text" name="code_5" size="7" value="<?php if(isset($code_5)) echo stripslashes($code_5); ?>" /></td>
+     <td class="d"><input type="text" name="code_1" size="7" value="<?php if(isset($code_1)) echo htmlsc($code_1); ?>" /> <input type="text" name="code_2" size="7" value="<?php if(isset($code_2)) echo htmlsc($code_2); ?>" /> <input type="text" name="code_3" size="7" value="<?php if(isset($code_3)) echo htmlsc($code_3); ?>" /> <input type="text" name="code_4" size="7" value="<?php if(isset($code_4)) echo htmlsc($code_4); ?>" /> <input type="text" name="code_5" size="7" value="<?php if(isset($code_5)) echo htmlsc($code_5); ?>" /></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['edit_smilies_title']; ?></b></td>
-     <td class="d"><input type="text" name="title" size="25" value="<?php if(isset($title)) echo stripslashes($title); ?>" /></td>
+     <td class="d"><input type="text" name="title" size="25" value="<?php if(isset($title)) echo htmlsc($title); ?>" /></td>
     </tr>
     <tr>
      <td class="c">&nbsp;</td>
@@ -1957,7 +1955,7 @@ switch ($action)
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="c"><b><?php echo $lang['username_marking']; ?></b></td>
-     <td class="d"><input type="text" size="40" name="edit_user_name" value="<?php echo htmlsc(stripslashes($edit_user_name)); ?>" /></td>
+     <td class="d"><input type="text" size="40" name="edit_user_name" value="<?php echo htmlsc($edit_user_name); ?>" /></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['usertype_marking']; ?></b></td>
@@ -1965,7 +1963,7 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_email_marking']; ?></b></td>
-     <td class="d"><input type="text" size="40" name="user_email" value="<?php echo htmlsc(stripslashes($user_email)); ?>" /></td>
+     <td class="d"><input type="text" size="40" name="user_email" value="<?php echo htmlsc($user_email); ?>" /></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_show_email']; ?></b></td>
@@ -1973,23 +1971,23 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_real_name']; ?></b></td>
-     <td class="d"><input type="text" size="40" name="user_real_name" value="<?php echo htmlsc(stripslashes($user_real_name)); ?>" maxlength="<?php echo $settings['name_maxlength'] ?>"></td>
+     <td class="d"><input type="text" size="40" name="user_real_name" value="<?php echo htmlsc($user_real_name); ?>" maxlength="<?php echo $settings['name_maxlength'] ?>"></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_hp']; ?></b></td>
-     <td class="d"><input type="text" size="40" name="user_hp" value="<?php echo htmlsc(stripslashes($user_hp)); ?>" maxlength="<?php echo $settings['hp_maxlength'] ?>"></td>
+     <td class="d"><input type="text" size="40" name="user_hp" value="<?php echo htmlsc($user_hp); ?>" maxlength="<?php echo $settings['hp_maxlength'] ?>"></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_place']; ?></b></td>
-     <td class="d"><input type="text" size="40" name="user_place" value="<?php echo htmlsc(stripslashes($user_place)); ?>" maxlength="<?php echo $settings['place_maxlength'] ?>"></td>
+     <td class="d"><input type="text" size="40" name="user_place" value="<?php echo htmlsc($user_place); ?>" maxlength="<?php echo $settings['place_maxlength'] ?>"></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_profile']; ?></b></td>
-     <td class="d"><textarea cols="65" rows="4" name="profile"><?php echo htmlsc(stripslashes($profile)); ?></textarea></td>
+     <td class="d"><textarea cols="65" rows="4" name="profile"><?php echo htmlsc($profile); ?></textarea></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_signature']; ?></b></td>
-     <td class="d"><textarea cols="65" rows="4" name="signature"><?php echo htmlsc(stripslashes($signature)); ?></textarea></td>
+     <td class="d"><textarea cols="65" rows="4" name="signature"><?php echo htmlsc($signature); ?></textarea></td>
     </tr>
     <?php if ($settings['thread_view'] != 0 && $settings['board_view'] != 0 || $settings['board_view'] != 0 && $settings['mix_view'] != 0 || $settings['thread_view'] != 0 && $settings['mix_view'] != 0)
     { ?>
