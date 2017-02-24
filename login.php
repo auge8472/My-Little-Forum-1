@@ -188,7 +188,6 @@ switch ($action)
       $lang['pwf_activating_email_txt'] = str_replace("[name]", $field["user_name"], $lang['pwf_activating_email_txt']);
       $lang['pwf_activating_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['pwf_activating_email_txt']);
       $lang['pwf_activating_email_txt'] = str_replace("[activating_link]", $settings['forum_address'].basename($_SERVER['PHP_SELF'])."?activate=".$field["user_id"]."&code=".$pwf_code, $lang['pwf_activating_email_txt']);
-      $lang['pwf_activating_email_txt'] = stripslashes($lang['pwf_activating_email_txt']);
       $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
       $header .= "X-Mailer: Php/" . phpversion(). "\n";
       $header .= "X-Sender-ip: $ip\n";
@@ -239,7 +238,6 @@ switch ($action)
       $lang['new_pw_email_txt'] = str_replace("[name]", $field['user_name'], $lang['new_pw_email_txt']);
       $lang['new_pw_email_txt'] = str_replace("[password]", $new_user_pw, $lang['new_pw_email_txt']);
       $lang['new_pw_email_txt'] = str_replace("[login_link]", $settings['forum_address'].basename($_SERVER['PHP_SELF'])."?username=".urlencode($field['user_name'])."&userpw=".$new_user_pw, $lang['new_pw_email_txt']);
-      $lang['new_pw_email_txt'] = stripslashes($lang['new_pw_email_txt']);
       $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
       $header .= "X-Mailer: Php/" . phpversion(). "\n";
       $header .= "X-Sender-ip: $ip\n";
