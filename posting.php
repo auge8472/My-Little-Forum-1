@@ -172,8 +172,6 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
           $p_category = $field["category"];
           $text = $field["text"];
           $aname = $field["name"];
-          #if(get_magic_quotes_runtime())
-          $text = stripslashes($text);
           $text = wordwrap($text);
           // Zitatzeichen an den Anfang jeder Zeile stellen:
           $text = preg_replace("/^/m", $settings['quote_symbol']." ", $text);
@@ -369,7 +367,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
           mysqli_free_result($result);
           if (strtolower($field["user_name"]) == strtolower($name) && $name != "")
            {
-            $lang['error_name_reserved'] = str_replace("[name]", htmlsc(stripslashes($name)), $lang['error_name_reserved']);
+            $lang['error_name_reserved'] = str_replace("[name]", htmlsc($name), $lang['error_name_reserved']);
             $errors[] = $lang['error_name_reserved'];
            }
          }
@@ -403,20 +401,20 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
           $errors[] = $lang['error_text_too_long'];
          }
         $text_arr = explode(" ",$name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-        $error_nwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['name_word_maxlength'])))."...", $lang['error_name_word_too_long']);
+        $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
         $errors[] = $error_nwtl; } }
         $text_arr = explode(" ",$place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
-        $error_pwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['place_word_maxlength'])))."...", $lang['error_place_word_too_long']);
+        $error_pwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
         $errors[] = $error_pwtl; } }
         $text_arr = explode(" ",$subject); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['subject_word_maxlength']) {
-        $error_swtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['subject_word_maxlength'])))."...", $lang['error_subject_word_too_long']);
+        $error_swtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['subject_word_maxlength']))."...", $lang['error_subject_word_too_long']);
         $errors[] = $error_swtl; } }
         $text_arr = str_replace("\n", " ", $text);
         if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); $text_arr = preg_replace("#\[url\](.+?)\[/url\]#is", "", $text_arr); $text_arr = preg_replace("#\[url=(.+?)\](.+?)\[/url\]#is", "\\2", $text_arr); }
         if ($settings['bbcode_img'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
         if ($settings['autolink'] == 1) $text_arr = text_check_link($text_arr);
         $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-        $error_twtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['text_word_maxlength'])))."...", $lang['error_text_word_too_long']);
+        $error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['error_text_word_too_long']);
         $errors[] = $error_twtl; } }
 
         // CAPTCHA check:
@@ -480,7 +478,6 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                  $emailbody = str_replace("[original_subject]", $parent["subject"], $emailbody);
                  $emailbody = str_replace("[original_text]", $parent["text"], $emailbody);
                  $emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
-                 $emailbody = stripslashes($emailbody);
                  $emailbody = str_replace(htmlsc($settings['quote_symbol']), ">", $emailbody);
                  $emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
                  $header  = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
@@ -511,7 +508,6 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                elseif ($settings['standard'] == "mix") $emailbody = str_replace("[posting_address]", $settings['forum_address']."mix_entry.php?id=".$neu["tid"]."#p".$neu["id"], $emailbody);
                else $emailbody = str_replace("[posting_address]", $settings['forum_address']."forum_entry.php?id=".$neu["id"], $emailbody);
                $emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
-               $emailbody = stripslashes($emailbody);
                $emailbody = str_replace(htmlsc($settings['quote_symbol']), ">", $emailbody);
                $emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
                $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
@@ -527,11 +523,11 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                 $an = $admin_array['user_name']." <".$admin_array['user_email'].">";
                 if($settings['mail_parameter']!='')
                  {
-                  if(@mail($an, str_replace("[subject]", stripslashes($subject), $lang['admin_email_subject']), $ind_emailbody, $header, $settings['mail_parameter'])) { $sent2 = "ok"; }
+                  if(@mail($an, str_replace("[subject]", $subject, $lang['admin_email_subject']), $ind_emailbody, $header, $settings['mail_parameter'])) { $sent2 = "ok"; }
                  }
                 else
                  {
-                  if(@mail($an, str_replace("[subject]", stripslashes($subject), $lang['admin_email_subject']), $ind_emailbody, $header)) { $sent2 = "ok"; }
+                  if(@mail($an, str_replace("[subject]", $subject, $lang['admin_email_subject']), $ind_emailbody, $header)) { $sent2 = "ok"; }
                  }
                }
                mysqli_free_result($en_result);
@@ -618,8 +614,8 @@ switch ($action)
 
 if (isset($aname))
  {
-  $lang['back_to_posting_linkname'] = str_replace("[name]", htmlsc(stripslashes($aname)), $lang['back_to_posting_linkname']);
-  $lang['answer_on_posting_marking'] = str_replace("[name]", htmlsc(stripslashes($aname)), $lang['answer_on_posting_marking']);
+  $lang['back_to_posting_linkname'] = str_replace("[name]", htmlsc($aname), $lang['back_to_posting_linkname']);
+  $lang['answer_on_posting_marking'] = str_replace("[name]", htmlsc($aname), $lang['answer_on_posting_marking']);
  }
 
 $subnav_1 = '';
@@ -738,7 +734,7 @@ switch ($show)
       <table class="normaltab" border="0" cellpadding="5" cellspacing="1" width="100%">
        <tr>
         <td class="autorcell" rowspan="2" valign="top">
-         <b><?php echo htmlsc(stripslashes($pr_name)); ?></b><br />
+         <b><?php echo htmlsc($pr_name); ?></b><br />
          <?php if (($pr_email != "" && $hide_email != 1) or $pr_hp != "") { echo "<br />"; }
          if ($pr_hp != "")
           {
@@ -746,13 +742,13 @@ switch ($show)
            echo "<a href=\"" . $pr_hp . "\"><img src=\"img/homepage.gif\" alt=\"".$lang['homepage_alt']."\" width=\"13\" height=\"13\" /></a>";
           }
          if (($pr_email != ""  && $hide_email != 1) && $pr_hp != "") { echo "&nbsp;"; }
-         if ($pr_email != "" && $hide_email != 1) { echo '<a href="contact.php"><img src="img/email.gif" alt="'.$lang['email_alt'].'" title="'.str_replace("[name]", htmlsc(stripslashes($pr_name)), $lang['email_to_user_linktitle']).'" width="13" height="10" /></a>'; }
+         if ($pr_email != "" && $hide_email != 1) { echo '<a href="contact.php"><img src="img/email.gif" alt="'.$lang['email_alt'].'" title="'.str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']).'" width="13" height="10" /></a>'; }
          if (($pr_email != "" && $hide_email != 1) or $pr_hp !="") { echo "<br />"; }
          echo "<br />";
-         if ($pr_place != "") { echo htmlsc(stripslashes($pr_place)); echo ", <br />"; }
+         if ($pr_place != "") { echo htmlsc($pr_place); echo ", <br />"; }
          echo strftime($lang['time_format'],$pr_time); ?>
          <div class="autorcellwidth">&nbsp;</div></td>
-        <td class="titlecell"><div class="left"><h2><?php echo htmlsc(stripslashes($subject)); ?></h2></div></td>
+        <td class="titlecell"><div class="left"><h2><?php echo htmlsc($subject); ?></h2></div></td>
        </tr>
        <tr>
         <td class="postingcell" valign="top">
@@ -762,7 +758,7 @@ switch ($show)
           else
            {
              $pr_text=$text;
-             $pr_text = htmlsc(stripslashes($pr_text));
+             $pr_text = htmlsc($pr_text);
              $pr_text = nl2br($pr_text);
              $pr_text = zitat($pr_text);
              if ($settings['autolink'] == 1) $pr_text = make_link($pr_text);
@@ -772,7 +768,7 @@ switch ($show)
             }
            if ($show_signature == 1 && $pr_signature != "")
             {
-             $pr_signature = htmlsc(stripslashes($pr_signature));
+             $pr_signature = htmlsc($pr_signature);
              $pr_signature = nl2br($pr_signature);
              if ($settings['autolink'] == 1) $pr_signature = make_link($pr_signature);
              if ($settings['bbcode'] == 1) $pr_signature = bbcode($pr_signature);
@@ -788,15 +784,15 @@ switch ($show)
     else
      {
       ?><div class="preview">
-      <h2 class="postingheadline"><?php echo htmlsc(stripslashes($subject)); ?></h2>
+      <h2 class="postingheadline"><?php echo htmlsc($subject); ?></h2>
           <?php
           $email_hp = ""; $place_wc = ""; $place_c = "";
           if (($pr_email != "" && $hide_email != 1) or $pr_hp != "") $email_hp = " ";
-          if ($pr_hp != "") { if (substr($pr_hp,0,7) != "http://" && substr($pr_hp,0,8) != "https://" && substr($pr_hp,0,6) != "ftp://" && substr($pr_hp,0,9) != "gopher://" && substr($pr_hp,0,7) != "news://") $pr_hp = "http://".$pr_hp; $email_hp .= "<a href=\"" . $pr_hp . "\" title=\"".htmlsc(stripslashes($pr_hp))."\"><img src=\"img/homepage.gif\" alt=\"".$lang['homepage_alt']."\" width=\"13\" height=\"13\" /></a>"; }
+          if ($pr_hp != "") { if (substr($pr_hp,0,7) != "http://" && substr($pr_hp,0,8) != "https://" && substr($pr_hp,0,6) != "ftp://" && substr($pr_hp,0,9) != "gopher://" && substr($pr_hp,0,7) != "news://") $pr_hp = "http://".$pr_hp; $email_hp .= "<a href=\"" . $pr_hp . "\" title=\"".htmlsc($pr_hp)."\"><img src=\"img/homepage.gif\" alt=\"".$lang['homepage_alt']."\" width=\"13\" height=\"13\" /></a>"; }
           if ($pr_email != ""  && $hide_email != 1 && $pr_hp != "") { $email_hp .= " "; }
-          if ($pr_email != "" && $hide_email != 1) { $email_hp .= '<a href="contact.php"><img src="img/email.gif" alt="'.$lang['email_alt'].'" title="'.str_replace("[name]", htmlsc(stripslashes($pr_name)), $lang['email_to_user_linktitle']).'" width="13" height="10" /></a>'; }
-          if ($pr_place != "") { $place_c = htmlsc(stripslashes($pr_place)) . ", "; $place_wc = htmlsc(stripslashes($pr_place)); }
-          $lang['forum_author_marking'] = str_replace("[name]", htmlsc(stripslashes($pr_name)), $lang['forum_author_marking']);
+          if ($pr_email != "" && $hide_email != 1) { $email_hp .= '<a href="contact.php"><img src="img/email.gif" alt="'.$lang['email_alt'].'" title="'.str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']).'" width="13" height="10" /></a>'; }
+          if ($pr_place != "") { $place_c = htmlsc($pr_place) . ", "; $place_wc = htmlsc($pr_place); }
+          $lang['forum_author_marking'] = str_replace("[name]", htmlsc(($pr_name), $lang['forum_author_marking']);
           $lang['forum_author_marking'] = str_replace("[email_hp]", $email_hp, $lang['forum_author_marking']);
           $lang['forum_author_marking'] = str_replace("[place, ]", $place_c, $lang['forum_author_marking']);
           $lang['forum_author_marking'] = str_replace("[place]", $place_wc, $lang['forum_author_marking']);
@@ -811,7 +807,7 @@ switch ($show)
            else
             {
              $pr_text=$text;
-             $pr_text = htmlsc(stripslashes($pr_text));
+             $pr_text = htmlsc($pr_text);
              $pr_text = nl2br($pr_text);
              $pr_text = zitat($pr_text);
              if ($settings['autolink'] == 1) $pr_text = make_link($pr_text);
@@ -821,7 +817,7 @@ switch ($show)
             }
            if ($show_signature == 1 && $pr_signature != "")
             {
-             $pr_signature = htmlsc(stripslashes($pr_signature));
+             $pr_signature = htmlsc($pr_signature);
              $pr_signature = nl2br($pr_signature);
              if ($settings['autolink'] == 1) $pr_signature = make_link($pr_signature);
              if ($settings['bbcode'] == 1) $pr_signature = bbcode($pr_signature);
@@ -842,7 +838,7 @@ switch ($show)
   <input type="hidden" name="uniqid" value="<?php echo uniqid(""); ?>" />
   <input type="hidden" name="action" value="<?php echo $action; ?>" />
   <?php if (isset($p_user_id)) { ?><input type="hidden" name="p_user_id" value="<?php echo $p_user_id; ?>" /><?php } ?>
-  <?php if (isset($aname)) { ?><input type="hidden" name="aname" value="<?php echo htmlsc(stripslashes($aname)); ?>" /><?php } ?>
+  <?php if (isset($aname)) { ?><input type="hidden" name="aname" value="<?php echo htmlsc($aname); ?>" /><?php } ?>
   <?php if (isset($view)) echo"<input type=\"hidden\" name=\"view\" value=\"".$view."\" />"; ?>
   <?php if (isset($back)) echo"<input type=\"hidden\" name=\"back\" value=\"".$back."\" />"; ?>
   <?php if (isset($thema)) echo"<input type=\"hidden\" name=\"thema\" value=\"".$thema."\" />"; ?>
@@ -861,16 +857,16 @@ switch ($show)
    {
    ?>
    <tr>
-    <td><b><?php echo $lang['name_marking']; ?></b></td><td><input type="text" size="40" name="name" value="<?php if (isset($name)) { echo htmlsc(stripslashes($name)); } ?>" maxlength="<?php echo $settings['name_maxlength']; ?>" /></td>
+    <td><b><?php echo $lang['name_marking']; ?></b></td><td><input type="text" size="40" name="name" value="<?php if (isset($name)) { echo htmlsc($name); } ?>" maxlength="<?php echo $settings['name_maxlength']; ?>" /></td>
    </tr>
    <tr>
-    <td><b><?php echo $lang['email_marking']; ?></b></td><td><input type="text" size="40" name="email" value="<?php if (isset($email)) { echo htmlsc(stripslashes($email)); } ?>" maxlength="<?php echo $settings['email_maxlength']; ?>" />&nbsp;<span class="xsmall"><?php echo $lang['optional_marking']; ?></span></td>
+    <td><b><?php echo $lang['email_marking']; ?></b></td><td><input type="text" size="40" name="email" value="<?php if (isset($email)) { echo htmlsc($email); } ?>" maxlength="<?php echo $settings['email_maxlength']; ?>" />&nbsp;<span class="xsmall"><?php echo $lang['optional_marking']; ?></span></td>
    </tr>
    <tr>
-    <td><b><?php echo $lang['hp_marking']; ?></b></td><td><input type="text" size="40" name="hp" value="<?php if (isset($hp)) { echo htmlsc(stripslashes($hp)); } ?>" maxlength="<?php echo $settings['hp_maxlength']; ?>" />&nbsp;<span class="xsmall"><?php echo $lang['optional_marking']; ?></span></td>
+    <td><b><?php echo $lang['hp_marking']; ?></b></td><td><input type="text" size="40" name="hp" value="<?php if (isset($hp)) { echo htmlsc($hp); } ?>" maxlength="<?php echo $settings['hp_maxlength']; ?>" />&nbsp;<span class="xsmall"><?php echo $lang['optional_marking']; ?></span></td>
    </tr>
    <tr>
-    <td><b><?php echo $lang['place_marking']; ?></b></td><td><input type="text" size="40" name="place" value="<?php if (isset($place)) { echo htmlsc(stripslashes($place)); } ?>" maxlength="<?php echo $settings['place_maxlength']; ?>" />&nbsp;<span class="xsmall"><?php echo $lang['optional_marking']; ?></span></td>
+    <td><b><?php echo $lang['place_marking']; ?></b></td><td><input type="text" size="40" name="place" value="<?php if (isset($place)) { echo htmlsc($place); } ?>" maxlength="<?php echo $settings['place_maxlength']; ?>" />&nbsp;<span class="xsmall"><?php echo $lang['optional_marking']; ?></span></td>
    </tr>
    <?php if ($settings['remember_userdata'] == 1 && !isset($_SESSION[$settings['session_prefix'].'user_id'])) { ?>
    <tr>
@@ -902,7 +898,7 @@ switch ($show)
    </tr>
    <?php } ?>
    <tr>
-    <td><b><?php echo $lang['subject_marking']; ?></b></td><td><input type="text" size="50" name="subject" value="<?php if (isset($subject)) echo htmlsc(stripslashes($subject)) ; ?>" maxlength="<?php echo $settings['subject_maxlength']; ?>" /></td>
+    <td><b><?php echo $lang['subject_marking']; ?></b></td><td><input type="text" size="50" name="subject" value="<?php if (isset($subject)) echo htmlsc($subject) ; ?>" maxlength="<?php echo $settings['subject_maxlength']; ?>" /></td>
    </tr>
    <tr>
     <td>&nbsp;</td><td>&nbsp;</td>
@@ -914,7 +910,7 @@ switch ($show)
     <td colspan="2">
      <table class="normal" border="0" cellpadding="0" cellspacing="0">
      <tr><td valign="top">
-     <textarea cols="78" rows="20" name="text"><?php if (isset($text)) echo htmlsc(stripslashes($text)); ?></textarea></td><td valign="top" style="padding: 0px 0px 0px 5px;"><?php
+     <textarea cols="78" rows="20" name="text"><?php if (isset($text)) echo htmlsc($text); ?></textarea></td><td valign="top" style="padding: 0px 0px 0px 5px;"><?php
      if ($settings['bbcode'] == 1)
       {
        ?><input class="bbcode-button" style="font-weight: bold;" type="button" name="bold" value="<?php echo $lang['bbcode_bold']; ?>" title="<?php echo $lang['bbcode_bold_title']; ?>" onclick="bbcode('b');" /><br />
@@ -942,7 +938,7 @@ switch ($show)
        $i=1;
        while ($data = mysqli_fetch_assoc($result))
         {
-         ?><button class="smiley-button" name="smiley" type="button" value="<?php echo stripslashes($data['code_1']); ?>" title="<?php echo $lang['smiley_title']; ?>" onclick="insert('<?php echo stripslashes($data['code_1']); ?> ');"><img src="img/smilies/<?php echo stripslashes($data['file']); ?>" alt="<?php echo stripslashes($data['code_1']); ?>" /></button><?php if($i % 2 == 0) { ?><br /><?php }
+         ?><button class="smiley-button" name="smiley" type="button" value="<?php echo $data['code_1']; ?>" title="<?php echo $lang['smiley_title']; ?>" onclick="insert('<?php echo $data['code_1']; ?> ');"><img src="img/smilies/<?php echo $data['file']; ?>" alt="<?php echo $data['code_1']; ?>" /></button><?php if($i % 2 == 0) { ?><br /><?php }
          $i++;
         }
        mysqli_free_result($result);
@@ -1010,12 +1006,12 @@ switch ($show)
   break;
 
    case "delete form":
-    $lang['thread_info'] = str_replace("[name]", htmlsc(stripslashes($field["name"])), $lang['thread_info']);
+    $lang['thread_info'] = str_replace("[name]", htmlsc($field["name"]), $lang['thread_info']);
     $lang['thread_info'] = str_replace("[time]", strftime($lang['time_format'],$field["tp_time"]), $lang['thread_info']);
     ?>
     <h2><?php echo $lang['delete_marking']; ?></h2>
     <p><?php echo $lang['delete_posting_sure']; if ($field["pid"]==0) echo "<br />".$lang['delete_whole_thread']; ?></p>
-    <p><b><?php echo htmlsc(stripslashes($field["subject"])); ?></b>&nbsp;<?php echo $lang['thread_info']; ?></p>
+    <p><b><?php echo htmlsc($field["subject"]); ?></b>&nbsp;<?php echo $lang['thread_info']; ?></p>
     <form action="posting.php" method="post"><div>
     <input type="hidden" name="action" value="delete ok" />
     <input type="hidden" name="id" value="<?php echo $id; ?>" />
