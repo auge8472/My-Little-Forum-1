@@ -175,7 +175,6 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
           $text = wordwrap($text);
           // Zitatzeichen an den Anfang jeder Zeile stellen:
           $text = preg_replace("/^/m", $settings['quote_symbol']." ", $text);
-          $text = addslashes($text);
          }
         mysqli_free_result($result);
         if ($field['locked'] > 0 && (empty($_SESSION[$settings['session_prefix'].'user_type']) || (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] != 'admin' && $_SESSION[$settings['session_prefix'].'user_type'] != 'mod'))) { $show = "no authorization"; $reason = $lang['thread_locked_error']; }
