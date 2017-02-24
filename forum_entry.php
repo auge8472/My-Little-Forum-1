@@ -45,15 +45,15 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
  if (isset($id)) $id = (int)$id;
  if(isset($id) && $id > 0)
   {
-   $result=mysql_query("SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS p_time,
+   $result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS p_time,
                         UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_time,
                         UNIX_TIMESTAMP(edited - INTERVAL ".$settings['edit_delay']." MINUTE) AS edited_diff, edited_by, user_id, name, email,
-                        subject, hp, place, ip, text, show_signature, category, locked, ip FROM ".$db_settings['forum_table']." WHERE id = ".$id, $connid);
+                        subject, hp, place, ip, text, show_signature, category, locked, ip FROM ".$db_settings['forum_table']." WHERE id = ". intval($id));
    if (!$result) die($lang['db_error']);
-   if (mysql_num_rows($result) == 1)
+   if (mysqli_num_rows($result) == 1)
     {
-     $entrydata = mysql_fetch_assoc($result);
-     mysql_free_result($result);
+     $entrydata = mysqli_fetch_assoc($result);
+     mysqli_free_result($result);
 
      // category of this posting accessible by user?
      if (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin"))
@@ -65,16 +65,16 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
         }
       }
 
-     if (isset($settings['count_views']) && $settings['count_views'] == 1) mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE id=".$id, $connid);
+     if (isset($settings['count_views']) && $settings['count_views'] == 1) mysqli_query($connid, "UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE id=". intval($id));
 
      $mark_admin = false;
      $mark_mod = false;
      if ($entrydata["user_id"] > 0)
      {
-      $userdata_result=mysql_query("SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$entrydata["user_id"]."'", $connid);
+      $userdata_result=mysqli_query($connid, "SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($entrydata["user_id"]));
       if (!$userdata_result) die($lang['db_error']);
-      $userdata = mysql_fetch_assoc($userdata_result);
-      mysql_free_result($userdata_result);
+      $userdata = mysqli_fetch_assoc($userdata_result);
+      mysqli_free_result($userdata_result);
       $entrydata["email"] = $userdata["user_email"];
       $entrydata["hide_email"] = $userdata["hide_email"];
       $entrydata["place"] = $userdata["user_place"];
@@ -91,19 +91,19 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
  // thread-data:
  $Thread = $entrydata["tid"];
 
- $result = mysql_query("SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS tp_time,
+ $result = mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS tp_time,
                         UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked FROM ".$db_settings['forum_table']."
-                        WHERE tid = ".$Thread." ORDER BY time ASC", $connid);
+                        WHERE tid = ". intval($Thread) ." ORDER BY time ASC");
  if(!$result) die($lang['db_error']);
 
 
- while($tmp = mysql_fetch_assoc($result))
+ while($tmp = mysqli_fetch_assoc($result))
   {
    $parent_array[$tmp["id"]] = $tmp;
    $child_array[$tmp["pid"]][] =  $tmp["id"];
   }
 
- mysql_free_result($result);
+ mysqli_free_result($result);
 
 $category = stripslashes($category);
 
