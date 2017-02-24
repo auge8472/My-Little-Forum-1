@@ -570,7 +570,7 @@ if(empty($installed))
        </tr>
        <tr>
        <td class="admintab-l"><b><?php echo $lang_add['forum_name']; ?></b><br /><span class="small"><?php echo $lang_add['forum_name_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="forum_name" value="<?php if (isset($_POST['forum_name'])) echo stripslashes($_POST['forum_name']); else echo $settings['forum_name']; ?>" size="40" /></td>
+       <td class="admintab-r"><input type="text" name="forum_name" value="<?php if (isset($_POST['forum_name'])) echo htmlsc($_POST['forum_name']); else echo $settings['forum_name']; ?>" size="40" /></td>
        </tr>
        <tr>
        <td class="admintab-l"><b><?php echo $lang_add['forum_address']; ?></b><br /><span class="small"><?php echo $lang_add['forum_address_d']; ?></span></td>
