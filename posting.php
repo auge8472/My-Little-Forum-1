@@ -42,7 +42,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
  {
   $lock_result = mysqli_query($connid, "SELECT user_lock FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
   if (!$lock_result) die($lang['db_error']);
-  $lock_result_array = mysql9_fetch_assoc($lock_result);
+  $lock_result_array = mysqli_fetch_assoc($lock_result);
   mysqli_free_result($lock_result);
   if ($lock_result_array['user_lock'] > 0)
    {
