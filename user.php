@@ -94,7 +94,7 @@ if(isset($_POST['change_email_submit']))
     $new_email = trim($_POST['new_email']);
     $pw_new_email = $_POST['pw_new_email'];
     // Check data:
-    $email_result = mysql_query($connid, "SELECT user_id, user_name, user_pw, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1");
+    $email_result = mysqli_query($connid, "SELECT user_id, user_name, user_pw, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1");
     if (!$email_result) die($lang['db_error']);
     $field = mysqli_fetch_assoc($email_result);
     mysqli_free_result($email_result);
@@ -130,7 +130,7 @@ if(isset($_POST['change_email_submit']))
        }
       if(empty($errors))
        {
-        @mysql_query($connid, "UPDATE ".$db_settings['userdata_table']." SET user_email='".mysqli_real_escape_string($connid, $new_email)."', last_login=last_login, registered=registered, activate_code = '".mysqli_real_escape_string($connid, $activate_code)."' WHERE user_id='".$user_id."'") or die($lang['db_error']);
+        @mysqli_query($connid, "UPDATE ".$db_settings['userdata_table']." SET user_email='".mysqli_real_escape_string($connid, $new_email)."', last_login=last_login, registered=registered, activate_code = '".mysqli_real_escape_string($connid, $activate_code)."' WHERE user_id='".$user_id."'") or die($lang['db_error']);
         header("location: login.php"); die("<a href=\"login.php\">further...</a>");
        }
       else $action="email";
@@ -199,7 +199,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     if (empty($hide_email)) $hide_email = 0;
     if (empty($errors))
      {
-      $update_result = mysql_query($connid, "UPDATE ".$db_settings['userdata_table']." SET user_real_name='".mysqli_real_escape_string($connid, $user_real_name)."', hide_email='".$hide_email."', user_hp='".mysqli_real_escape_string($connid, $user_hp)."', user_place='".mysqli_real_escape_string($connid, $user_place)."', profile='".mysqli_real_escape_string($connid, $profile)."', signature='".mysqli_real_escape_string($connid, $signature)."', last_login=last_login, registered=registered, user_view='".$user_view."', new_posting_notify='".$new_posting_notify."', new_user_notify='".$new_user_notify."', personal_messages='".$personal_messages."', time_difference='".$user_time_difference."' WHERE user_id='".$user_id."' LIMIT 1");
+      $update_result = mysqli_query($connid, "UPDATE ".$db_settings['userdata_table']." SET user_real_name='".mysqli_real_escape_string($connid, $user_real_name)."', hide_email='".$hide_email."', user_hp='".mysqli_real_escape_string($connid, $user_hp)."', user_place='".mysqli_real_escape_string($connid, $user_place)."', profile='".mysqli_real_escape_string($connid, $profile)."', signature='".mysqli_real_escape_string($connid, $signature)."', last_login=last_login, registered=registered, user_view='".$user_view."', new_posting_notify='".$new_posting_notify."', new_user_notify='".$new_user_notify."', personal_messages='".$personal_messages."', time_difference='".$user_time_difference."' WHERE user_id='".$user_id."' LIMIT 1");
       $_SESSION[$settings['session_prefix'].'user_view'] = $user_view;
       $_SESSION[$settings['session_prefix'].'user_time_difference'] = $user_time_difference;
 
