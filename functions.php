@@ -281,8 +281,8 @@ function connect_db($host,$user,$pw,$db) {
 	return $connid;
 }
 
- // counts the users which are online:
- function user_online()
+// counts the users which are online:
+function user_online()
  {
   $user_online_period = 10;
   global $connid, $db_settings, $settings;
@@ -290,12 +290,10 @@ function connect_db($host,$user,$pw,$db) {
   $diff = time()-($user_online_period*60);
   if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $ip = "uid_".$_SESSION[$settings['session_prefix'].'user_id'];
   else $ip = $_SERVER['REMOTE_ADDR'];
-  @mysql_query("DELETE FROM ".$db_settings['useronline_table']." WHERE time < ".$diff, $connid);
-  list($is_online) = @mysql_fetch_row(@mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE ip= '".$ip."'", $connid));
-  if ($is_online > 0) @mysql_query("UPDATE ".$db_settings['useronline_table']." SET time='".time()."', user_id='".$user_id."' WHERE ip='".$ip."'", $connid);
-  else @mysql_query("INSERT INTO ".$db_settings['useronline_table']." SET time='".time()."', ip='".$ip."', user_id='".$user_id."'", $connid);
-  #list($user_online) = @mysql_fetch_row(@mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table'], $connid));
-  #return $user_online;
+  @mysqli_query($connid, "DELETE FROM ".$db_settings['useronline_table']." WHERE time < ".$diff);
+  list($is_online) = @mysqli_fetch_row(@mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE ip= '".$ip."'"));
+  if ($is_online > 0) @mysqli_query($connid, "UPDATE ".$db_settings['useronline_table']." SET time='".time()."', user_id='".$user_id."' WHERE ip='".$ip."'");
+  else @mysqli_query($connid, "INSERT INTO ".$db_settings['useronline_table']." SET time='".time()."', ip='".$ip."', user_id='".$user_id."'");
  }
 
  // displays the thread tree:
@@ -307,10 +305,10 @@ function connect_db($host,$user,$pw,$db) {
   $mark_admin = false; $mark_mod = false;
   if ($settings['admin_mod_highlight'] == 1 && $parent_array[$id]["user_id"] > 0)
   {
-   $userdata_result=mysql_query("SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = '".$parent_array[$id]["user_id"]."'", $connid);
+   $userdata_result=mysqli_query($connid, "SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = '".$parent_array[$id]["user_id"]."'");
    if (!$userdata_result) die($lang['db_error']);
-   $userdata = mysql_fetch_assoc($userdata_result);
-   mysql_free_result($userdata_result);
+   $userdata = mysqli_fetch_assoc($userdata_result);
+   mysqli_free_result($userdata_result);
    if ($userdata['user_type'] == "admin") $mark_admin = true;
    elseif ($userdata['user_type'] == "mod") $mark_mod = true;
   }
