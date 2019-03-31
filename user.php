@@ -69,22 +69,22 @@ if (empty($category)) $category = "all";
 unset($errors);
 
 // Check if user locked:
-$lock_result = mysql_query("SELECT user_lock FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_SESSION[$settings['session_prefix'].'user_id'])." LIMIT 1", $connid);
+$lock_result = mysqli_query($connid, "SELECT user_lock FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_SESSION[$settings['session_prefix'].'user_id'])." LIMIT 1");
 if (!$lock_result) die($lang['db_error']);
-$lock_result_array = mysql_fetch_assoc($lock_result);
-mysql_free_result($lock_result);
+$lock_result_array = mysqli_fetch_assoc($lock_result);
+mysqli_free_result($lock_result);
 if ($lock_result_array['user_lock'] > 0) $action = "locked";
 
 if (isset($_GET['user_lock']) && isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
  {
-  $lock_result = mysql_query("SELECT user_lock, user_type FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_GET['user_lock'])." LIMIT 1", $connid);
+  $lock_result = mysqli_query($connid, "SELECT user_lock, user_type FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_GET['user_lock'])." LIMIT 1");
   if (!$lock_result) die($lang['db_error']);
-  $field = mysql_fetch_assoc($lock_result);
-  mysql_free_result($lock_result);
+  $field = mysqli_fetch_assoc($lock_result);
+  mysqli_free_result($lock_result);
   if ($field['user_type'] == "user")
    {
     if ($field['user_lock'] == 0) $new_lock = 1; else $new_lock = 0;
-    $update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_lock='".$new_lock."', last_login=last_login, registered=registered WHERE user_id='".$_GET['user_lock']."' LIMIT 1", $connid);
+    $update_result = mysqli_query($connid, "UPDATE ".$db_settings['userdata_table']." SET user_lock='".$new_lock."', last_login=last_login, registered=registered WHERE user_id='".$_GET['user_lock']."' LIMIT 1");
    }
   $action="show users";
  }
@@ -94,10 +94,10 @@ if(isset($_POST['change_email_submit']))
     $new_email = trim($_POST['new_email']);
     $pw_new_email = $_POST['pw_new_email'];
     // Check data:
-    $email_result = mysql_query("SELECT user_id, user_name, user_pw, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+    $email_result = mysql_query($connid, "SELECT user_id, user_name, user_pw, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1");
     if (!$email_result) die($lang['db_error']);
-    $field = mysql_fetch_assoc($email_result);
-    mysql_free_result($email_result);
+    $field = mysqli_fetch_assoc($email_result);
+    mysqli_free_result($email_result);
     if ($pw_new_email=='' || $new_email=='') $errors[] = $lang['error_form_uncompl'];
     if (empty($errors))
      {
@@ -130,7 +130,7 @@ if(isset($_POST['change_email_submit']))
        }
       if(empty($errors))
        {
-        @mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_email='".mysql_escape_string($new_email)."', last_login=last_login, registered=registered, activate_code = '".mysql_escape_string($activate_code)."' WHERE user_id='".$user_id."'", $connid) or die($lang['db_error']);
+        @mysql_query($connid, "UPDATE ".$db_settings['userdata_table']." SET user_email='".mysqli_real_escape_string($connid, $new_email)."', last_login=last_login, registered=registered, activate_code = '".mysqli_real_escape_string($connid, $activate_code)."' WHERE user_id='".$user_id."'") or die($lang['db_error']);
         header("location: login.php"); die("<a href=\"login.php\">further...</a>");
        }
       else $action="email";
@@ -199,7 +199,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     if (empty($hide_email)) $hide_email = 0;
     if (empty($errors))
      {
-      $update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_real_name='".mysql_escape_string($user_real_name)."', hide_email='".$hide_email."', user_hp='".mysql_escape_string($user_hp)."', user_place='".mysql_escape_string($user_place)."', profile='".mysql_escape_string($profile)."', signature='".mysql_escape_string($signature)."', last_login=last_login, registered=registered, user_view='".$user_view."', new_posting_notify='".$new_posting_notify."', new_user_notify='".$new_user_notify."', personal_messages='".$personal_messages."', time_difference='".$user_time_difference."' WHERE user_id='".$user_id."' LIMIT 1", $connid);
+      $update_result = mysql_query($connid, "UPDATE ".$db_settings['userdata_table']." SET user_real_name='".mysqli_real_escape_string($connid, $user_real_name)."', hide_email='".$hide_email."', user_hp='".mysqli_real_escape_string($connid, $user_hp)."', user_place='".mysqli_real_escape_string($connid, $user_place)."', profile='".mysqli_real_escape_string($connid, $profile)."', signature='".mysqli_real_escape_string($connid, $signature)."', last_login=last_login, registered=registered, user_view='".$user_view."', new_posting_notify='".$new_posting_notify."', new_user_notify='".$new_user_notify."', personal_messages='".$personal_messages."', time_difference='".$user_time_difference."' WHERE user_id='".$user_id."' LIMIT 1");
       $_SESSION[$settings['session_prefix'].'user_view'] = $user_view;
       $_SESSION[$settings['session_prefix'].'user_time_difference'] = $user_time_difference;
 
@@ -209,10 +209,10 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
    break;
 
    case "pw submited":
-    $pw_result = mysql_query("SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+    $pw_result = mysqli_query($connid, "SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1");
     if (!$pw_result) die($lang['db_error']);
-    $field = mysql_fetch_assoc($pw_result);
-    mysql_free_result($pw_result);
+    $field = mysqli_fetch_assoc($pw_result);
+    mysqli_free_result($pw_result);
 
     trim($old_pw);
     trim($new_pw);
@@ -227,7 +227,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     // Update, if no errors:
     if (empty($errors))
      {
-      $pw_update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_pw='".md5($new_pw)."', last_login=last_login, registered=registered WHERE user_id='".$user_id."'", $connid);
+      $pw_update_result = mysqli_query($connid, "UPDATE ".$db_settings['userdata_table']." SET user_pw='".md5($new_pw)."', last_login=last_login, registered=registered WHERE user_id='".$user_id."'");
       header("location: user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
      }
     else $action="pw";
@@ -235,10 +235,10 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
    /* self-delete of user:
    case "delete submited":
     // Überprüfungen:
-    $pw_result = mysql_query("SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = '".$user_id."' LIMIT 1", $connid);
+    $pw_result = mysqli_query($connid, "SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = '".$user_id."' LIMIT 1");
     if (!$pw_result) die($lang['db_error']);
-    $field = mysql_fetch_assoc($pw_result);
-    mysql_free_result($pw_result);
+    $field = mysqli_fetch_assoc($pw_result);
+    mysqli_free_result($pw_result);
     if ($pw_delete=="") $errors[] = $lang['error_form_uncompl'];
     else
      {
@@ -247,8 +247,8 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     // DB-Update, falls keine Fehler:
     if (empty($errors))
      {
-      $delete_result = mysql_query("DELETE FROM ".$db_settings['userdata_table']." WHERE user_id='".$user_id."' LIMIT 1", $connid);
-      $update_result = mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, user_id='0', email_notify='0' WHERE user_id = '".$user_id."'", $connid);
+      $delete_result = mysqli_query($connid, "DELETE FROM ".$db_settings['userdata_table']." WHERE user_id='".$user_id."' LIMIT 1");
+      $update_result = mysqli_query($connid, "UPDATE ".$db_settings['forum_table']." SET time=time, user_id='0', email_notify='0' WHERE user_id = '".$user_id."'");
       session_destroy();
       header("location: index.php"); die("<a href=\"index.php\">further...</a>");
      }
@@ -257,15 +257,15 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
    */
 
    case "pm_sent":
-    $pms_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+    $pms_result = mysqli_query($connid, "SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1");
     if (!$pms_result) die($lang['db_error']);
-    $sender = mysql_fetch_assoc($pms_result);
-    mysql_free_result($pms_result);
+    $sender = mysqli_fetch_assoc($pms_result);
+    mysqli_free_result($pms_result);
 
-    $pmr_result = mysql_query("SELECT user_name, user_email, personal_messages FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_POST['recipient_id'])." LIMIT 1", $connid);
+    $pmr_result = mysqli_query($connid, "SELECT user_name, user_email, personal_messages FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_POST['recipient_id'])." LIMIT 1");
     if (!$pmr_result) die($lang['db_error']);
-    $recipient = mysql_fetch_assoc($pmr_result);
-    mysql_free_result($pmr_result);
+    $recipient = mysqli_fetch_assoc($pmr_result);
+    mysqli_free_result($pmr_result);
 
     if ($_POST['pm_text'] == "") $errors[] = $lang['error_pers_msg_no_text'];
     if ($recipient['personal_messages'] == "") $errors[] = $lang['error_pers_msg_deactivated'];
@@ -337,13 +337,13 @@ if ($action == "show users")
   if (empty($descasc)) $descasc="ASC";
   if (empty($order)) $order="user_name";
   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['reg_users_hl'].'</b>';
-  if (isset($_GET['letter']) && $_GET['letter']!="") $pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table']." WHERE user_name LIKE '".$_GET['letter']."%'", $connid);
-  else $pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
-  list($thread_count) = mysql_fetch_row($pid_result);
-  mysql_free_result($pid_result);
-  $abs_pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
-  list($abs_thread_count) = mysql_fetch_row($abs_pid_result);
-  mysql_free_result($abs_pid_result);
+  if (isset($_GET['letter']) && $_GET['letter']!="") $pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['userdata_table']." WHERE user_name LIKE '".$_GET['letter']."%'");
+  else $pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['userdata_table']);
+  list($thread_count) = mysqli_fetch_row($pid_result);
+  mysqli_free_result($pid_result);
+  $abs_pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['userdata_table']);
+  list($abs_thread_count) = mysqli_fetch_row($abs_pid_result);
+  mysqli_free_result($abs_pid_result);
   $lang['num_reg_users'] = str_replace("[number]", $abs_thread_count, $lang['num_reg_users']);
   if (isset($_GET['letter']) && $_GET['letter'] == "A") $la = ' selected="selected"'; else $la = '';
   if (isset($_GET['letter']) && $_GET['letter'] == "B") $lb = ' selected="selected"'; else $lb = '';
@@ -409,14 +409,14 @@ switch ($action)
  {
   case "get userdata":
    if (empty($id)) $id = $user_id;
-   else $result = mysql_query("SELECT user_id, user_type, user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS since_date FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($id), $connid);
+   else $result = mysqli_query($connid, "SELECT user_id, user_type, user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS since_date FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($id));
    if (!$result) die($lang['db_error']);
-   $field = mysql_fetch_assoc($result);
-   mysql_free_result($result);
+   $field = mysqli_fetch_assoc($result);
+   mysqli_free_result($result);
    // count postings:
-   $count_postings_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE user_id = ".intval($id), $connid);
-   list($postings_count) = mysql_fetch_row($count_postings_result);
-   mysql_free_result($count_postings_result);
+   $count_postings_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE user_id = ".intval($id));
+   list($postings_count) = mysqli_fetch_row($count_postings_result);
+   mysqli_free_result($count_postings_result);
 
    if ($field["user_name"] != "")
    {
@@ -518,20 +518,20 @@ switch ($action)
    if (empty($order)) $order="user_name";
    if (empty($descasc)) $descasc="ASC";
    $ul = $page * $settings['users_per_page'];
-   if (isset($_GET['letter'])) $result = mysql_query("SELECT user_id, user_name, user_type, user_email, hide_email, user_hp, user_lock FROM ".$db_settings['userdata_table']." WHERE user_name LIKE '".$_GET['letter']."%' ORDER BY ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['users_per_page'], $connid);
-   else $result = mysql_query("SELECT user_id, user_name, user_type, user_email, hide_email, user_hp, user_lock FROM ".$db_settings['userdata_table']." ORDER BY ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['users_per_page'], $connid);
+   if (isset($_GET['letter'])) $result = mysqli_query($connid, "SELECT user_id, user_name, user_type, user_email, hide_email, user_hp, user_lock FROM ".$db_settings['userdata_table']." WHERE user_name LIKE '".$_GET['letter']."%' ORDER BY ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['users_per_page']);
+   else $result = mysqli_query($connid, "SELECT user_id, user_name, user_type, user_email, hide_email, user_hp, user_lock FROM ".$db_settings['userdata_table']." ORDER BY ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['users_per_page']);
    if (!$result) die($lang['db_error']);
 
    // Schauen, wer online ist:
    if ($settings['count_users_online'] == 1)
     {
-     $useronline_result = mysql_query("SELECT user_id FROM ".$db_settings['useronline_table'], $connid);
+     $useronline_result = mysqli_query($connid, "SELECT user_id FROM ".$db_settings['useronline_table']);
      if (!$useronline_result) die($lang['db_error']);
-     while ($uid_field = mysql_fetch_assoc($useronline_result))
+     while ($uid_field = mysqli_fetch_assoc($useronline_result))
       {
        $useronline_array[] = $uid_field['user_id'];
       }
-     mysql_free_result($useronline_result);
+     mysqli_free_result($useronline_result);
     }
 
     if ($thread_count > 0)
@@ -547,7 +547,7 @@ switch ($action)
       </tr>
       <?php
       $i=0;
-      while ($field = mysql_fetch_assoc($result))
+      while ($field = mysqli_fetch_assoc($result))
        {
         ?><tr>
         <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo $field['user_id']; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['show_userdata_linktitle']); ?>"><b><?php echo htmlsc(stripslashes($field['user_name'])); ?></b></a></td>
@@ -568,10 +568,10 @@ switch ($action)
   break;
 
   case "edit":
-   $result = mysql_query("SELECT user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, user_view, new_posting_notify, new_user_notify, personal_messages, time_difference FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id), $connid);
+   $result = mysqli_query($connid, "SELECT user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, user_view, new_posting_notify, new_user_notify, personal_messages, time_difference FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id));
    if (!$result) die($lang['db_error']);
-   $field = mysql_fetch_assoc($result);
-   mysql_free_result($result);
+   $field = mysqli_fetch_assoc($result);
+   mysqli_free_result($result);
 
    if (empty($userdata_submit))
     {
@@ -723,10 +723,10 @@ switch ($action)
   */
 
   case "personal_message":
-   $pma_result = mysql_query("SELECT user_name, personal_messages FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($id)." LIMIT 1", $connid);
+   $pma_result = mysqli_query($connid, "SELECT user_name, personal_messages FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($id)." LIMIT 1");
    if (!$pma_result) die($lang['db_error']);
-   $field = mysql_fetch_assoc($pma_result);
-   mysql_free_result($pma_result);
+   $field = mysqli_fetch_assoc($pma_result);
+   mysqli_free_result($pma_result);
 
    $lang['pers_msg_hl'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['pers_msg_hl']);
    ?><h2><?php echo $lang['pers_msg_hl']; ?></h2><?php
