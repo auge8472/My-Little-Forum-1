@@ -273,15 +273,13 @@ function zitat($string)
   return $string;
  }
 
- // connects to the database:
- function connect_db($host,$user,$pw,$db)
- {
-  global $lang;
-  $connid = @mysql_connect($host, $user, $pw);  // Datenbankverbindung herstellen
-  if(!$connid) die($lang['db_error']);
-  mysql_select_db($db, $connid) or die($lang['db_error']);
-  return $connid;
- }
+// connects to the database:
+function connect_db($host,$user,$pw,$db) {
+	global $lang;
+	$connid = @mysqli_connect($host, $user, $pw, $db);  // open database connection
+	if (!$connid) die($lang['db_error']);
+	return $connid;
+}
 
  // counts the users which are online:
  function user_online()
