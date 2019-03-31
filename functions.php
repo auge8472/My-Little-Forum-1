@@ -39,12 +39,12 @@ function stripslashes_deep($value) {
 function get_settings() {
 	global $lang, $connid, $db_settings;
 	$r = array();
-	$result = mysql_query("SELECT name, value FROM ".$db_settings['settings_table'], $connid);
+	$result = mysqli_query($connid, "SELECT name, value FROM ".$db_settings['settings_table']);
 	if (!$result) die($lang['db_error']);
-	while ($line = mysql_fetch_assoc($result)) {
+	while ($line = mysqli_fetch_assoc($result)) {
 		$r[$line['name']] = $line['value'];
 	}
-	mysql_free_result($result);
+	mysqli_free_result($result);
 	return $r;
 }
 
@@ -52,31 +52,31 @@ function get_categories()
  {
   global $lang, $settings, $connid, $db_settings;
 
-  $count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['category_table'], $connid);
-  list($category_count) = mysql_fetch_row($count_result);
-  mysql_free_result($count_result);
+  $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['category_table']);
+  list($category_count) = mysqli_fetch_row($count_result);
+  mysqli_free_result($count_result);
 
   if ($category_count > 0)
    {
     if (empty($_SESSION[$settings['session_prefix'].'user_id']))
      {
-      $result = mysql_query("SELECT id, category FROM ".$db_settings['category_table']." WHERE accession = 0 ORDER BY category_order ASC", $connid);
+      $result = mysqli_query($connid, "SELECT id, category FROM ".$db_settings['category_table']." WHERE accession = 0 ORDER BY category_order ASC");
      }
     elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "user")
      {
-      $result = mysql_query("SELECT id, category FROM ".$db_settings['category_table']." WHERE accession = 0 OR accession = 1 ORDER BY category_order ASC", $connid);
+      $result = mysqli_query($connid, "SELECT id, category FROM ".$db_settings['category_table']." WHERE accession = 0 OR accession = 1 ORDER BY category_order ASC");
      }
     elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "mod" || $_SESSION[$settings['session_prefix'].'user_type'] == "admin"))
      {
-      $result = mysql_query("SELECT id, category FROM ".$db_settings['category_table']." WHERE accession = 0 OR accession = 1 OR accession = 2 ORDER BY category_order ASC", $connid);
+      $result = mysqli_query($connid, "SELECT id, category FROM ".$db_settings['category_table']." WHERE accession = 0 OR accession = 1 OR accession = 2 ORDER BY category_order ASC");
      }
     if(!$result) die($lang['db_error']);
     $categories[0]='';
-    while ($line = mysql_fetch_assoc($result))
+    while ($line = mysqli_fetch_assoc($result))
      {
       $categories[$line['id']] = stripslashes($line['category']);
      }
-    mysql_free_result($result);
+    mysqli_free_result($result);
     return $categories;
    }
   else return false;
@@ -98,12 +98,12 @@ function get_category_ids($categories)
 function category_accession()
  {
   global $settings, $lang, $connid, $db_settings;
-  $result = mysql_query("SELECT id, accession FROM ".$db_settings['category_table'], $connid);
-  while ($line = mysql_fetch_assoc($result))
+  $result = mysqli_query($connid, "SELECT id, accession FROM ".$db_settings['category_table']);
+  while ($line = mysqli_fetch_assoc($result))
    {
     $category_accession[$line['id']] = $line['accession'];
    }
-  mysql_free_result($result);
+  mysqli_free_result($result);
   if (isset($category_accession)) return $category_accession; else return false;
  }
 
@@ -241,8 +241,8 @@ function unbbcode($string)
 function smilies($string)
  {
   global $connid, $db_settings;
-  $result = mysql_query("SELECT file, code_1, code_2, code_3, code_4, code_5, title FROM ".$db_settings['smilies_table'], $connid);
-  while($data = mysql_fetch_assoc($result))
+  $result = mysqli_query($connid, "SELECT file, code_1, code_2, code_3, code_4, code_5, title FROM ".$db_settings['smilies_table']);
+  while($data = mysqli_fetch_assoc($result))
    {
     if($data['title']!='') $title = ' title="'.stripslashes($data['title']).'"'; else $title='';
     if($data['code_1']!='') $string = str_replace($data['code_1'], "<img src=\"img/smilies/".$data['file']."\" alt=\"".$data['code_1']."\"".$title." />", $string);
@@ -251,7 +251,7 @@ function smilies($string)
     if($data['code_4']!='') $string = str_replace($data['code_4'], "<img src=\"img/smilies/".$data['file']."\" alt=\"".$data['code_4']."\"".$title." />", $string);
     if($data['code_5']!='') $string = str_replace($data['code_5'], "<img src=\"img/smilies/".$data['file']."\" alt=\"".$data['code_5']."\"".$title." />", $string);
    }
-  mysql_free_result($result);
+  mysqli_free_result($result);
   return($string);
  }
 
