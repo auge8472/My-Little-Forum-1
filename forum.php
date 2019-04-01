@@ -49,22 +49,22 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
   // database request
   if ($categories == false) // no categories defined
    {
-    $result=mysql_query("SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE pid = 0 ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page'], $connid);
+    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE pid = 0 ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page']);
     if(!$result) die($lang['db_error']);
    }
   elseif (is_array($categories) && $category == 0) // there are categories and all categories should be shown
    {
-    $result=mysql_query("SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category IN (".$category_ids_query.") ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page'], $connid);
+    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category IN (".$category_ids_query.") ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page']);
     if (!$result) die($lang['db_error']);
    }
   elseif (is_array($categories) && $category != 0 && in_array($category, $category_ids)) // there are categories and only one category should be shown
    {
-    $result=mysql_query("SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE category = '".mysql_escape_string($category)."' AND pid = 0 ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page'], $connid);
+    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE category = '".mysqli_real_escape_string($connid, $category)."' AND pid = 0 ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page']);
     if(!$result) die($lang['db_error']);
     // how many entries?
-    $pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '".mysql_escape_string($category)."'", $connid);
-    list($thread_count) = mysql_fetch_row($pid_result);
-    mysql_free_result($pid_result);
+    $pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '".mysqli_real_escape_string($connid, $category)."'");
+    list($thread_count) = mysqli_fetch_row($pid_result);
+    mysqli_free_result($pid_result);
    }
 
   $subnav_1='<a class="textlink" href="posting.php?category='.$category.'" title="'.$lang['new_entry_linktitle'].'">'.$lang['new_entry_linkname'].'</a>';
@@ -99,12 +99,12 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
 
   if ($thread_count > 0 && isset($result))
    {
-    while ($zeile = mysql_fetch_assoc($result))
+    while ($zeile = mysqli_fetch_assoc($result))
      {
-      $thread_result=mysql_query("SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS tp_time, UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"]." ORDER BY time ASC", $connid);
+      $thread_result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS tp_time, UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"]." ORDER BY time ASC");
 
       // put result into arrays:
-      while($tmp = mysql_fetch_assoc($thread_result))
+      while($tmp = mysqli_fetch_assoc($thread_result))
        {
         $parent_array[$tmp["id"]] = $tmp;
         $child_array[$tmp["pid"]][] =  $tmp["id"];
@@ -116,7 +116,7 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
       thread_tree($zeile["id"]);
 
       ?></ul><?php
-      mysql_free_result($thread_result);
+      mysqli_free_result($thread_result);
     }
 
     if(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=='admin')
@@ -135,7 +135,7 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
       ?><p><?php echo $lang['no_messages']; ?></p><p>&nbsp;</p><?php
      }
    }
-  if (isset($result)) mysql_free_result($result);
+  if (isset($result)) mysqli_free_result($result);
 
   echo $footer;
  }
