@@ -87,10 +87,10 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
    $id = (int) $id;
    if( $id > 0 )
     {
-     $result_t=mysqli_query($connid, "SELECT id, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
-                        UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_Uhrzeit,
-                        UNIX_TIMESTAMP(edited - INTERVAL ".$settings['edit_delay']." MINUTE) AS edited_diff, edited_by, user_id, name, email,
-                        subject, hp, place, text, show_signature, category, locked, ip FROM ".$db_settings['forum_table']." WHERE id = ".$id." LIMIT 1");
+     $result_t=mysqli_query($connid, "SELECT id, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
+                        UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_Uhrzeit,
+                        UNIX_TIMESTAMP(edited - INTERVAL ". $settings['edit_delay'] ." MINUTE) AS edited_diff, edited_by, user_id, name, email,
+                        subject, hp, place, text, show_signature, category, locked, ip FROM ". $db_settings['forum_table'] ." WHERE id = ". $id ." LIMIT 1");
      $thread = mysqli_fetch_assoc($result_t);
      mysqli_free_result($result_t);
 
@@ -108,13 +108,13 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
       }
 
      // count views:
-     if (isset($settings['count_views']) && $settings['count_views'] == 1) mysqli_query($connid, "UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=".$id);
+     if (isset($settings['count_views']) && $settings['count_views'] == 1) mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=". $id);
 
      $mark_admin = false;
      $mark_mod = false;
      if ($thread["user_id"] > 0)
       {
-       $userdata_result_t=mysqli_query($connid, "SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$thread["user_id"]."'");
+       $userdata_result_t=mysqli_query($connid, "SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($thread["user_id"]));
        if (!$userdata_result_t) die($lang['db_error']);
        $userdata = mysqli_fetch_assoc($userdata_result_t);
        mysqli_free_result($userdata_result_t);
@@ -126,12 +126,12 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
        elseif ($userdata["user_type"] == "mod" && $settings['admin_mod_highlight'] == 1) $mark_mod = true;
        if ($thread["show_signature"]==1) $signature = $userdata["signature"];
       }
-     $result=mysqli_query($connid, "SELECT id, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
-                        UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_Uhrzeit,
+     $result=mysqli_query($connid, "SELECT id, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
+                        UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_Uhrzeit,
                         UNIX_TIMESTAMP(edited - INTERVAL ".$settings['edit_delay']." MINUTE) AS edited_diff, edited_by, user_id, name, email,
-                        subject, hp, place, text, show_signature, category, locked, ip FROM ".$db_settings['forum_table']." WHERE tid = ".$id." AND id != ".$id." ORDER BY time ".$da." LIMIT ".$ul.", ".$settings['answers_per_topic']);
+                        subject, hp, place, text, show_signature, category, locked, ip FROM ". $db_settings['forum_table'] ." WHERE tid = ". $id ." AND id != ". $id ." ORDER BY time ". $da ." LIMIT ". $ul .", ". intval($settings['answers_per_topic']));
 
-     $result_c = mysqli_query($connid, "SELECT tid FROM ".$db_settings['forum_table']." WHERE tid = ".$id." AND id != ".$id);
+     $result_c = mysqli_query($connid, "SELECT tid FROM ". $db_settings['forum_table'] ." WHERE tid = ". $id ." AND id != ". $id);
      $thread_count = mysqli_num_rows($result_c);
      mysqli_free_result($result_c);
 
@@ -225,7 +225,7 @@ echo $header;
      $mark_mod = false;
      if ($entrydata["user_id"] > 0)
       {
-       $userdata_result=mysqli_query($connid, "SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$entrydata["user_id"]."'");
+       $userdata_result=mysqli_query($connid, "SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($entrydata["user_id"]));
        if (!$userdata_result) die($lang['db_error']);
        $userdata = mysqli_fetch_assoc($userdata_result);
        mysqli_free_result($userdata_result);
@@ -240,7 +240,7 @@ echo $header;
 
     //if ($i >= $be_page * $settings['answers_per_topic'] && $i < $be_page * $settings['answers_per_topic'] + $settings['answers_per_topic']) { ?>
        <?php // Posting heraussuchen, auf das geantwortet wurde:
-        $result_a = mysqli_query($connid, "SELECT name FROM ".$db_settings['forum_table']." WHERE id = ".$entrydata["pid"]);
+        $result_a = mysqli_query($connid, "SELECT name FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($entrydata["pid"]));
         $posting_a = mysqli_fetch_assoc($result_a);
         mysqli_free_result($result_a); ?>
     <tr>
