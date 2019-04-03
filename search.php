@@ -131,14 +131,14 @@ include("inc.php");
 
  if (is_array($categories))
   {
-   $result = mysqli_query($connid, "SELECT id, pid, tid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit, subject, name, email, hp, place, text, category FROM ".$db_settings['forum_table']." WHERE ".$search_string." AND category IN (".$category_ids_query.") ORDER BY tid DESC, time ASC LIMIT ".$ul.", ".$settings['search_results_per_page']);
-   $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE ".$search_string." AND category IN (".$category_ids_query.")");
+   $result = mysqli_query($connid, "SELECT id, pid, tid, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit, subject, name, email, hp, place, text, category FROM ". $db_settings['forum_table'] ." WHERE ". $search_string ." AND category IN (". $category_ids_query .") ORDER BY tid DESC, time ASC LIMIT ". $ul .", ". intval($settings['search_results_per_page']));
+   $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE ". $search_string ." AND category IN (". $category_ids_query .")");
    list($count) = mysqli_fetch_row($count_result);
   }
  else
   {
-   $result = mysqli_query($connid, "SELECT id, pid, tid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit, subject, name, email, hp, place, text, category FROM ".$db_settings['forum_table']." WHERE ".$search_string." ORDER BY tid DESC, time ASC LIMIT ".$ul.", ".$settings['search_results_per_page']);
-   $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE ".$search_string);
+   $result = mysqli_query($connid, "SELECT id, pid, tid, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit, subject, name, email, hp, place, text, category FROM ". $db_settings['forum_table'] ." WHERE ". $search_string ." ORDER BY tid DESC, time ASC LIMIT ". $ul .", ". intval($settings['search_results_per_page']));
+   $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE ". $search_string);
    list($count) = mysqli_fetch_row($count_result);
   }
 
@@ -189,7 +189,7 @@ if (isset($search) && empty($show_postings))
  }
 elseif (isset($show_postings) && empty($search))
  {
-  $user_name_result = mysqli_query($connid, "SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_id = '".$show_postings."' LIMIT 1");
+  $user_name_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($show_postings) ." LIMIT 1");
   if (!$user_name_result) die($lang['db_error']);
   $field = mysqli_fetch_assoc($user_name_result);
   mysqli_free_result($user_name_result);
