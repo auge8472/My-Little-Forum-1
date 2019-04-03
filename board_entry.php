@@ -90,7 +90,7 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
      $result_t=mysqli_query($connid, "SELECT id, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
                         UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_Uhrzeit,
                         UNIX_TIMESTAMP(edited - INTERVAL ". $settings['edit_delay'] ." MINUTE) AS edited_diff, edited_by, user_id, name, email,
-                        subject, hp, place, text, show_signature, category, locked, ip FROM ". $db_settings['forum_table'] ." WHERE id = ". $id ." LIMIT 1");
+                        subject, hp, place, text, show_signature, category, locked, ip FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($id) ." LIMIT 1");
      $thread = mysqli_fetch_assoc($result_t);
      mysqli_free_result($result_t);
 
@@ -108,7 +108,7 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
       }
 
      // count views:
-     if (isset($settings['count_views']) && $settings['count_views'] == 1) mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=". $id);
+     if (isset($settings['count_views']) && $settings['count_views'] == 1) mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=". intval($id));
 
      $mark_admin = false;
      $mark_mod = false;
@@ -128,10 +128,10 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
       }
      $result=mysqli_query($connid, "SELECT id, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
                         UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_Uhrzeit,
-                        UNIX_TIMESTAMP(edited - INTERVAL ".$settings['edit_delay']." MINUTE) AS edited_diff, edited_by, user_id, name, email,
+                        UNIX_TIMESTAMP(edited - INTERVAL ". $settings['edit_delay'] ." MINUTE) AS edited_diff, edited_by, user_id, name, email,
                         subject, hp, place, text, show_signature, category, locked, ip FROM ". $db_settings['forum_table'] ." WHERE tid = ". $id ." AND id != ". $id ." ORDER BY time ". $da ." LIMIT ". $ul .", ". intval($settings['answers_per_topic']));
 
-     $result_c = mysqli_query($connid, "SELECT tid FROM ". $db_settings['forum_table'] ." WHERE tid = ". $id ." AND id != ". $id);
+     $result_c = mysqli_query($connid, "SELECT tid FROM ". $db_settings['forum_table'] ." WHERE tid = ". $id ." AND id != ". intval($id));
      $thread_count = mysqli_num_rows($result_c);
      mysqli_free_result($result_c);
 
