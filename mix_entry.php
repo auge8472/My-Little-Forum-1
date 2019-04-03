@@ -38,18 +38,18 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
 function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
  {
   global $settings, $connid, $lang, $db_settings, $parent_array, $child_array, $user_delete, $page, $category, $order, $descasc, $time_difference, $categories;
-  $posting_result = mysqli_query($connid, "SELECT id, pid, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS Uhrzeit,
-                        UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ".$time_difference." HOUR) AS e_Uhrzeit,
+  $posting_result = mysqli_query($connid, "SELECT id, pid, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
+                        UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_Uhrzeit,
                         UNIX_TIMESTAMP(edited - INTERVAL ".$settings['edit_delay']." MINUTE) AS edited_diff, edited_by, name, email,
-                        subject, hp, place, text, category, show_signature, locked FROM ".$db_settings['forum_table']."
-                        WHERE id = '".$parent_array[$id]["id"]."' ORDER BY time ASC");
+                        subject, hp, place, text, category, show_signature, locked FROM ". $db_settings['forum_table'] ."
+                        WHERE id = ". intval($parent_array[$id]["id"]) ." ORDER BY time ASC");
   if(!$posting_result) die($lang['db_error']);
   $entrydata = mysqli_fetch_assoc($posting_result);
   mysqli_free_result($posting_result);
 
   if ($entrydata["user_id"] > 0)
    {
-    $userdata_result=mysqli_query($connid, "SELECT user_name, user_email, hide_email, user_hp, user_place, signature FROM ".$db_settings['userdata_table']." WHERE user_id = '".$entrydata["user_id"]."'");
+    $userdata_result=mysqli_query($connid, "SELECT user_name, user_email, hide_email, user_hp, user_place, signature FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($entrydata["user_id"]));
     if (!$userdata_result) die($lang['db_error']);
     $userdata = mysqli_fetch_assoc($userdata_result);
     mysqli_free_result($userdata_result);
@@ -61,7 +61,7 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
    }
 
    // Posting heraussuchen, auf das geantwortet wurde:
-   $result_a = mysqli_query($connid, "SELECT name FROM ".$db_settings['forum_table']." WHERE id = ".$parent_array[$id]["pid"]);
+   $result_a = mysqli_query($connid, "SELECT name FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($parent_array[$id]["pid"]));
    $posting_a = mysqli_fetch_assoc($result_a);
    mysqli_free_result($result_a);
 
@@ -153,7 +153,7 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
   $id = (int) $id;   // ... $id erst mal zu einem Integer machen ..
   if( $id > 0 )      // ... und schauen ob es größer als 0 ist ..
    {
-    $result=mysqli_query($connid, "SELECT tid, pid, subject, category FROM ".$db_settings['forum_table']." WHERE id = ".$id);
+    $result=mysqli_query($connid, "SELECT tid, pid, subject, category FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($id));
     if(!$result) die($lang['db_error']);
     if(mysqli_num_rows($result) > 0) {  // überprüfen ob ein Eintrag mit dieser id in der Datenbank ist
     $entrydata = mysqli_fetch_assoc($result); // Und ggbf. aus der Datenbank holen
@@ -172,7 +172,7 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
       }
 
     // count views:
-    if (isset($settings['count_views']) && $settings['count_views'] == 1) mysqli_query($connid, "UPDATE ".$db_settings['forum_table']." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=".$id);
+    if (isset($settings['count_views']) && $settings['count_views'] == 1) mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=". intval($id));
 
    }
   }
@@ -185,7 +185,7 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
 
 
  $thread = $entrydata["tid"];
- $result = mysqli_query($connid, "SELECT id, pid FROM ".$db_settings['forum_table']." WHERE tid = ".$thread." ORDER BY time ASC");
+ $result = mysqli_query($connid, "SELECT id, pid FROM ". $db_settings['forum_table'] ." WHERE tid = ". intval($thread) ." ORDER BY time ASC");
  if(!$result) die($lang['db_error']);
 
   // Ergebnisse einlesen
