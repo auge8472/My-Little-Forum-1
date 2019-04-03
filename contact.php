@@ -57,7 +57,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
   if (isset($_COOKIE['user_email']) && empty($_POST["form_submitted"])) $sender_email = $_COOKIE['user_email'];
   if (isset($_SESSION[$settings['session_prefix'].'user_id']) && empty($_POST["form_submitted"]))
    {
-    $ue_result = mysqli_query($connid, "SELECT user_email FROM ".$db_settings['userdata_table']." WHERE user_id = '".$_SESSION[$settings['session_prefix'].'user_id']."' LIMIT 1");
+    $ue_result = mysqli_query($connid, "SELECT user_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
     if (!$ue_result) die($lang['db_error']);
     $ue_field = mysqli_fetch_assoc($ue_result);
     mysqli_free_result($ue_result);
@@ -67,7 +67,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 
   if (isset($id))
   {
-   $result = mysqli_query($connid, "SELECT tid, user_id, name, email, subject FROM ".$db_settings['forum_table']." WHERE id = '".$id."' LIMIT 1");
+   $result = mysqli_query($connid, "SELECT tid, user_id, name, email, subject FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($id) ." LIMIT 1");
    if (!$result) die($lang['db_error']);
    $field = mysqli_fetch_assoc($result);
    mysqli_free_result($result);
@@ -76,7 +76,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
   }
   elseif (isset($uid))
   {
-   $result = mysqli_query($connid, "SELECT user_id, user_name, user_email, hide_email FROM ".$db_settings['userdata_table']." WHERE user_id = '".$uid."' LIMIT 1");
+   $result = mysqli_query($connid, "SELECT user_id, user_name, user_email, hide_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($uid) ." LIMIT 1");
    if (!$result) die($lang['db_error']);
    $field = mysqli_fetch_assoc($result);
    mysqli_free_result($result);
@@ -87,7 +87,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 
   if (isset($field['user_id']) && $field['user_id'] > 0 && empty($uid))
   {
-  $user_result = mysqli_query($connid, "SELECT user_email, hide_email FROM ".$db_settings['userdata_table']." WHERE user_id = '".$field['user_id']."' LIMIT 1");
+  $user_result = mysqli_query($connid, "SELECT user_email, hide_email FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($field['user_id']) ." LIMIT 1");
   if (!$user_result) die($lang['db_error']);
   $user_field = mysqli_fetch_assoc($user_result);
   mysqli_free_result($user_result);
@@ -114,7 +114,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
     if ($text == "") $errors[] = $lang['error_no_text'];
 
      // check for not accepted words:
-     $result=mysqli_query($connid, "SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1");
+     $result=mysqli_query($connid, "SELECT list FROM ". $db_settings['banlists_table'] ." WHERE name = 'words' LIMIT 1");
      if(!$result) die($lang['db_error']);
      $data = mysqli_fetch_assoc($result);
      mysqli_free_result($result);
