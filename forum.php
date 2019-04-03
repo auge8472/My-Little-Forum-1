@@ -49,20 +49,20 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
   // database request
   if ($categories == false) // no categories defined
    {
-    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE pid = 0 ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page']);
+    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ". $db_settings['forum_table'] ." WHERE pid = 0 ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". $ul .", ". intval($settings['topics_per_page']));
     if(!$result) die($lang['db_error']);
    }
   elseif (is_array($categories) && $category == 0) // there are categories and all categories should be shown
    {
-    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category IN (".$category_ids_query.") ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page']);
+    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ". $db_settings['forum_table'] ." WHERE pid = 0 AND category IN (". $category_ids_query .") ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". $ul .", ". intval($settings['topics_per_page']));
     if (!$result) die($lang['db_error']);
    }
   elseif (is_array($categories) && $category != 0 && in_array($category, $category_ids)) // there are categories and only one category should be shown
    {
-    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ".$db_settings['forum_table']." WHERE category = '".mysqli_real_escape_string($connid, $category)."' AND pid = 0 ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page']);
+    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ". $db_settings['forum_table'] ." WHERE category = ". intval($category) ." AND pid = 0 ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". $ul .", ". intval($settings['topics_per_page']));
     if(!$result) die($lang['db_error']);
     // how many entries?
-    $pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '".mysqli_real_escape_string($connid, $category)."'");
+    $pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE pid = 0 AND category = ". intval($category));
     list($thread_count) = mysqli_fetch_row($pid_result);
     mysqli_free_result($pid_result);
    }
@@ -101,7 +101,7 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
    {
     while ($zeile = mysqli_fetch_assoc($result))
      {
-      $thread_result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS tp_time, UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"]." ORDER BY time ASC");
+      $thread_result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS tp_time, UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed FROM ". $db_settings['forum_table'] ." WHERE tid = ". intval($zeile["tid"]) ." ORDER BY time ASC");
 
       // put result into arrays:
       while($tmp = mysqli_fetch_assoc($thread_result))
