@@ -8,7 +8,7 @@ include("inc.php");
 </head>
 <body>
 <?php
-$result = mysqli_query($connid, "SELECT file, code_1, title FROM ".$db_settings['smilies_table']." ORDER BY order_id ASC");
+$result = mysqli_query($connid, "SELECT file, code_1, title FROM ". $db_settings['smilies_table'] ." ORDER BY order_id ASC");
 while ($data = mysqli_fetch_assoc($result))
  {
   ?><a href="#" title="<?php echo $lang['smiley_title']; ?>" onclick="opener.insert('<?php echo stripslashes($data['code_1']); ?> '); window.close();"><img style="margin: 0px 10px 10px 0px; border: 0px;" src="img/smilies/<?php echo stripslashes($data['file']); ?>" alt="<?php echo stripslashes($data['code_1']); ?>" /></a><?php
