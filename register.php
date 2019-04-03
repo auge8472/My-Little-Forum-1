@@ -28,7 +28,7 @@ if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha
  }
 
 // remove not activated user accounts:
-@mysqli_query($connid, "DELETE FROM ".$db_settings['userdata_table']." WHERE registered < (NOW() - INTERVAL 24 HOUR) AND activate_code != '' AND logins=0");
+@mysqli_query($connid, "DELETE FROM ". $db_settings['userdata_table'] ." WHERE registered < (NOW() - INTERVAL 24 HOUR) AND activate_code != '' AND logins=0");
 
 if(isset($_POST['action'])) $action = $_POST['action'];
 if(isset($_GET['action'])) $action = $_GET['action'];
@@ -45,7 +45,7 @@ if(isset($_GET['id']) && isset($_GET['key']) && trim($_GET['key'])!='')
 
   if(empty($errors))
    {
-    $result = mysqli_query($connid, "SELECT user_name, user_email, activate_code FROM ".$db_settings['userdata_table']." WHERE user_id = ".$user_id." LIMIT 1");
+    $result = mysqli_query($connid, "SELECT user_name, user_email, activate_code FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($user_id) ." LIMIT 1");
     if(!$result) die($lang['db_error']);
     if(mysqli_num_rows($result) != 1) $errors[] = true;
     $data = mysqli_fetch_assoc($result);
@@ -59,7 +59,7 @@ if(isset($_GET['id']) && isset($_GET['key']) && trim($_GET['key'])!='')
    {
     if($data['activate_code'] == $key)
      {
-      @mysqli_query($connid, "UPDATE ".$db_settings['userdata_table']." SET activate_code = '' WHERE user_id=".$user_id) or die('x');
+      @mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET activate_code = '' WHERE user_id=". intval($user_id)) or die('x');
 
       // E-Mail-Benachrichtigung an Admins und Moderatoren:
       // E-Mail erstellen:
@@ -73,7 +73,7 @@ if(isset($_GET['id']) && isset($_GET['key']) && trim($_GET['key'])!='')
       $header .= "X-Sender-ip: $ip\n";
       $header .= "Content-Type: text/plain";
       // Schauen, wer eine E-Mail-Benachrichtigung will:
-      $admin_result=mysqli_query($connid, "SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE new_user_notify='1'");
+      $admin_result=mysqli_query($connid, "SELECT user_name, user_email FROM ". $db_settings['userdata_table'] ." WHERE new_user_notify=1");
       if(!$admin_result) die($lang['db_error']);
       while ($admin_array = mysqli_fetch_assoc($admin_result))
        {
@@ -126,7 +126,7 @@ if(isset($_POST['register_submit']))
     $error_nwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['name_word_maxlength'])))."...", $lang['error_name_word_too_long']);
     $errors[] = $error_nwtl; } }
     // look if name already exists:
-    $name_result = mysqli_query($connid, "SELECT user_name FROM ".$db_settings['userdata_table']." WHERE user_name = '".mysqli_real_escape_string($connid, $new_user_name)."' LIMIT 1");
+    $name_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_name = '". mysqli_real_escape_string($connid, $new_user_name) ."' LIMIT 1");
     if(!$name_result) die($lang['db_error']);
     $field = mysqli_fetch_assoc($name_result);
     mysqli_free_result($name_result);
@@ -136,7 +136,7 @@ if(isset($_POST['register_submit']))
       $errors[] = $lang['error_name_reserved'];
      }
     // look, if e-mail already exists:
-    $email_result = mysqli_query($connid, "SELECT user_email FROM ".$db_settings['userdata_table']." WHERE user_email = '".mysqli_real_escape_string($connid, $new_user_email)."'");
+    $email_result = mysqli_query($connid, "SELECT user_email FROM ". $db_settings['userdata_table'] ." WHERE user_email = '". mysqli_real_escape_string($connid, $new_user_email) ."'");
     if(!$email_result) die($lang['db_error']);
     $field = mysqli_fetch_assoc($email_result);
     mysqli_free_result($email_result);
@@ -166,7 +166,7 @@ if(isset($_POST['register_submit']))
    }
 
    // check for not accepted words in name and e-mail:
-   $result=mysqli_query($connid, "SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1");
+   $result=mysqli_query($connid, "SELECT list FROM ". $db_settings['banlists_table'] ." WHERE name = 'words' LIMIT 1");
    if(!$result) die($lang['db_error']);
    $data = mysqli_fetch_assoc($result);
    mysqli_free_result($result);
@@ -186,13 +186,12 @@ if(isset($_POST['register_submit']))
    // save user if no errors:
    if (empty($errors))
     {
-     $new_user_type = "user";
      $encoded_new_user_pw = md5($reg_pw);
      $activate_code = md5(uniqid(rand()));
-     @mysqli_query($connid, "INSERT INTO ".$db_settings['userdata_table']." (user_type, user_name, user_pw, user_email, hide_email, profile, last_login, last_logout, user_ip, registered, user_view, personal_messages, activate_code) VALUES ('".mysqli_real_escape_string($connid, $new_user_type)."','".mysqli_real_escape_string($connid, $new_user_name)."','".mysqli_real_escape_string($connid, $encoded_new_user_pw)."','".mysqli_real_escape_string($connid, $new_user_email)."','1','',NOW(),NOW(),'".mysqli_real_escape_string($connid, $_SERVER["REMOTE_ADDR"])."',NOW(),'".mysqli_real_escape_string($connid, $settings['standard'])."','1', '".mysqli_real_escape_string($connid, $activate_code)."')") or die($lang['db_error']);
+     @mysqli_query($connid, "INSERT INTO ". $db_settings['userdata_table'] ." (user_type, user_name, user_pw, user_email, hide_email, profile, last_login, last_logout, user_ip, registered, user_view, personal_messages, activate_code) VALUES ('user','". mysqli_real_escape_string($connid, $new_user_name) ."','". mysqli_real_escape_string($connid, $encoded_new_user_pw) ."','". mysqli_real_escape_string($connid, $new_user_email) ."','1','',NOW(),NOW(),'". mysqli_real_escape_string($connid, $_SERVER["REMOTE_ADDR"]) ."',NOW(),'". mysqli_real_escape_string($connid, $settings['standard']) ."','1', '". mysqli_real_escape_string($connid, $activate_code) ."')") or die($lang['db_error']);
 
      // get new user ID:
-     $new_user_id_result = mysqli_query($connid, "SELECT user_id FROM ".$db_settings['userdata_table']." WHERE user_name = '".mysqli_real_escape_string($connid, $new_user_name)."' LIMIT 1");
+     $new_user_id_result = mysqli_query($connid, "SELECT user_id FROM ". $db_settings['userdata_table'] ." WHERE user_name = '". mysqli_real_escape_string($connid, $new_user_name) ."' LIMIT 1");
      if (!$new_user_id_result) die($lang['db_error']);
      $field = mysqli_fetch_assoc($new_user_id_result);
      $new_user_id = $field['user_id'];
