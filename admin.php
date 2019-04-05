@@ -46,7 +46,6 @@ function split_sql($sql)
   $lines2 = $cleared_lines;
   foreach($lines2 as $line)
    {
-    $line = stripslashes($line);
     if(substr($line, -1)==';') $lines[] = substr($line,0,-1);
    }
   return $lines;
@@ -61,7 +60,7 @@ function split_sql($sql)
       ?><pre># Forum entries (<?php echo $db_settings['forum_table']; ?>):<br /><br /><?php
       while ($field = mysqli_fetch_assoc($sql_result))
        {
-        echo "INSERT INTO ".$db_settings['forum_table']." VALUES (".$field['id'].", ".$field['pid'].", ".$field['tid'].", '".$field['uniqid']."', '".$field['time']."', '".$field['last_answer']."', '".$field['edited']."', '".htmlsc(addslashes($field['edited_by']))."', ".$field['user_id'].", '".htmlsc(addslashes($field['name']))."', '".htmlsc(addslashes($field['subject']))."', ".$field['category'].", '".htmlsc(addslashes($field['email']))."', '".htmlsc(addslashes($field['hp']))."', '".htmlsc(addslashes($field['place']))."', '".$field['ip']."', '".str_replace("\r", "\\r", str_replace("\n",  "\\n", htmlsc(addslashes($field['text']))))."', ".$field['show_signature'].", ".$field['email_notify'].", ".$field['marked'].", ".$field['locked'].", ".$field['fixed'].", ".$field['views'].");<br />";
+        echo "INSERT INTO ".$db_settings['forum_table']." VALUES (". intval($field['id']) .", ". intval($field['pid']) .", ". intval($field['tid']) .", '". mysql_real_escape_string($connid, $field['uniqid']) ."', ". intval($field['time']) .", '". mysql_real_escape_string($connid, $field['last_answer']) ."', '". mysql_real_escape_string($connid, $field['edited']) ."', '". mysql_real_escape_string($connid, $field['edited_by']) ."', ". intval($field['user_id']) .", '". mysql_real_escape_string($connid, $field['name']) ."', '". mysql_real_escape_string($connid, ($field['subject']) ."', ". intval($field['category']) .", '". mysql_real_escape_string($connid, $field['email']) ."', '". mysql_real_escape_string($connid, $field['hp']) ."', '". mysql_real_escape_string($connid, $field['place']) ."', '". mysql_real_escape_string($connid, $field['ip']) ."', '". mysql_real_escape_string($connid, $field['text']) ."', ". intval($field['show_signature']) .", ". intval($field['email_notify']) .", ". intval($field['marked']) .", ". intval($field['locked']) .", ". intval($field['fixed']) .", ". intval($field['views']) .");<br />";
        }
       mysqli_free_result($sql_result);
       ?><br /></pre><?php
@@ -74,7 +73,7 @@ function split_sql($sql)
       ?><pre># Marked forum entries (<?php echo $db_settings['forum_table']; ?>):<br /><br /><?php
       while ($field = mysqli_fetch_assoc($sql_result))
        {
-        echo "INSERT INTO ".$db_settings['forum_table']." VALUES (".$field['id'].", ".$field['pid'].", ".$field['tid'].", '".$field['uniqid']."', '".$field['time']."', '".$field['last_answer']."', '".$field['edited']."', '".htmlsc(addslashes($field['edited_by']))."', ".$field['user_id'].", '".htmlsc(addslashes($field['name']))."', '".htmlsc(addslashes($field['subject']))."', ".$field['category'].", '".htmlsc(addslashes($field['email']))."', '".htmlsc(addslashes($field['hp']))."', '".htmlsc(addslashes($field['place']))."', '".$field['ip']."', '".str_replace("\r", "\\r", str_replace("\n",  "\\n", htmlsc(addslashes($field['text']))))."', ".$field['show_signature'].", ".$field['email_notify'].", ".$field['marked'].", ".$field['locked'].", ".$field['fixed'].", ".$field['views'].");<br />";
+        echo "INSERT INTO ".$db_settings['forum_table']." VALUES (". intval($field['id']) .", ". intval($field['pid']) .", ". intval($field['tid']) .", '". mysql_real_escape_string($connid, $field['uniqid']) ."', '". mysql_real_escape_string($connid, $field['time']) ."', '". mysql_real_escape_string($connid, $field['last_answer']) ."', '". mysql_real_escape_string($connid, $field['edited']) ."', '". mysql_real_escape_string($connid, $field['edited_by']) ."', ". intval($field['user_id']) .", '". mysql_real_escape_string($connid, $field['name']) ."', '". mysql_real_escape_string($connid, $field['subject']) ."', ". intval($field['category']) .", '". mysql_real_escape_string($connid, $field['email']) ."', '". mysql_real_escape_string($connid, $field['hp']) ."', '". mysql_real_escape_string($connid, $field['place']) ."', '". mysql_real_escape_string($connid, $field['ip']) ."', '". mysql_real_escape_string($connid, $field['text']) ."', ". intval($field['show_signature']) .", ". intval($field['email_notify']) .", ". intval($field['marked']) .", ". intval($field['locked']) .", ". intval($field['fixed']) .", ". intval($field['views']) .");<br />";
        }
       mysqli_free_result($sql_result);
       ?><br /></pre><?php
@@ -87,7 +86,7 @@ function split_sql($sql)
       ?><pre># Userdata (<?php echo $db_settings['userdata_table']; ?>):<br /><br /><?php
         while ($field = mysqli_fetch_assoc($sql_result))
        {
-        echo "INSERT INTO ".$db_settings['userdata_table']." VALUES (".$field['user_id'].", '".$field['user_type']."', '".htmlsc(addslashes($field['user_name']))."', '".htmlsc(addslashes($field['user_real_name']))."', '".htmlsc(addslashes($field['user_pw']))."', '".htmlsc(addslashes($field['user_email']))."', '".$field['hide_email']."', '".htmlsc(addslashes($field['user_hp']))."', '".htmlsc(addslashes($field['user_place']))."', '".str_replace("\r", "\\r", str_replace("\n",  "\\n", htmlsc(addslashes($field['signature']))))."', '".str_replace("\r", "\\r", str_replace("\n",  "\\n", htmlsc(addslashes($field['profile']))))."', ".$field['logins'].", '".$field['last_login']."', '".$field['last_logout']."', '".$field['user_ip']."', '".$field['registered']."', '".$field['user_view']."', ".$field['new_posting_notify'].", ".$field['new_user_notify'].", ".$field['personal_messages'].", ".$field['time_difference'].", ".$field['user_lock'].", '".$field['pwf_code']."', '".$field['activate_code']."');<br />";
+        echo "INSERT INTO ".$db_settings['userdata_table']." VALUES (". intval($field['user_id']) .", '". mysqli_real_escape_string($connid, $field['user_type']) ."', '". mysqli_real_escape_string($connid, $field['user_name']) ."', '". mysqli_real_escape_string($connid, $field['user_real_name']) ."', '". mysqli_real_escape_string($connid, $field['user_pw']) ."', '". mysqli_real_escape_string($connid, $field['user_email']) ."', ". intval($field['hide_email']) .", '". mysqli_real_escape_string($connid, $field['user_hp']) ."', '". mysqli_real_escape_string($connid, $field['user_place']) ."', '". mysqli_real_escape_string($connid, $field['signature']) ."', '". mysqli_real_escape_string($connid, $field['profile'])."', ". intval($field['logins']) .", '". mysqli_real_escape_string($connid, $field['last_login']) ."', '". mysqli_real_escape_string($connid, $field['last_logout']) ."', '". mysqli_real_escape_string($connid, $field['user_ip'])."', '". mysqli_real_escape_string($connid, $field['registered']) ."', '". mysqli_real_escape_string($connid, $field['user_view']) ."', ". intval($field['new_posting_notify']).", ". intval($field['new_user_notify']).", ". intval($field['personal_messages']) .", ". intval($field['time_difference']) .", ". intval($field['user_lock']).", '". mysqli_real_escape_string($connid, $field['pwf_code']) ."', '". mysqli_real_escape_string($connid, $field['activate_code']) ."');<br />";
        }
        mysqli_free_result($sql_result);
       ?><br /></pre><?php
@@ -100,7 +99,7 @@ function split_sql($sql)
       ?><pre># Categories (<?php echo $db_settings['category_table']; ?>):<br /><br /><?php
       while ($field = mysqli_fetch_assoc($sql_result))
        {
-        echo "INSERT INTO ".$db_settings['category_table']." VALUES (".$field['id'].", ".$field['category_order'].", '".htmlsc(addslashes($field['category']))."', '".htmlsc(addslashes($field['description']))."', ".$field['accession'].");<br />";
+        echo "INSERT INTO ".$db_settings['category_table']." VALUES (". intval($field['id']) .", ". intval($field['category_order']).", '". mysqli_real_escape_string($connid, $field['category']) ."', '". mysqli_real_escape_string($connid, $field['description'])."', ". intval($field['accession']) .");<br />";
        }
       mysqli_free_result($sql_result);
       ?><br /></pre><?php
@@ -113,7 +112,7 @@ function split_sql($sql)
       ?><pre># Settings (<?php echo $db_settings['settings_table']; ?>)<br /><br /><?php
       while ($field = mysqli_fetch_assoc($sql_result))
        {
-        echo "INSERT INTO ".$db_settings['settings_table']." VALUES ('".$field['name']."', '".htmlsc(addslashes($field['value']))."');<br />";
+        echo "INSERT INTO ".$db_settings['settings_table']." VALUES ('". mysqli_real_escape_string($connid, $field['name']) ."', '". mysqli_real_escape_string($connid, $field['value']) ."');<br />";
        }
       mysqli_free_result($sql_result);
       ?><br /></pre><?php
@@ -126,7 +125,7 @@ function split_sql($sql)
       ?><pre># Smilies (<?php echo $db_settings['smilies_table']; ?>)<br /><br /><?php
       while ($field = mysqli_fetch_assoc($sql_result))
        {
-        echo "INSERT INTO ".$db_settings['smilies_table']." VALUES (".$field['id'].", ".$field['order_id'].", '".htmlsc(addslashes($field['file']))."', '".htmlsc(addslashes($field['code_1']))."', '".htmlsc(addslashes($field['code_2']))."', '".htmlsc(addslashes($field['code_3']))."', '".htmlsc(addslashes($field['code_4']))."', '".htmlsc(addslashes($field['code_5']))."', '".htmlsc(addslashes($field['title']))."');<br />";
+        echo "INSERT INTO ".$db_settings['smilies_table']." VALUES (". intval($field['id']) .", ". intval($field['order_id']) .", '". mysqli_real_escape_string($connid, $field['file']) ."', '". mysqli_real_escape_string($connid, $field['code_1']) ."', '". mysqli_real_escape_string($connid, $field['code_2']) ."', '". mysqli_real_escape_string($connid, $field['code_3']) ."', '". mysqli_real_escape_string($connid, $field['code_4']) ."', '". mysqli_real_escape_string($connid, $field['code_5']) ."', '". mysqli_real_escape_string($connid, $field['title']) ."');<br />";
        }
       mysqli_free_result($sql_result);
       ?><br /></pre><?php
@@ -139,7 +138,7 @@ function split_sql($sql)
       ?><pre># Banlists (<?php echo $db_settings['banlists_table']; ?>)<br /><br /><?php
       while ($field = mysqli_fetch_assoc($sql_result))
        {
-        echo "INSERT INTO ".$db_settings['banlists_table']." VALUES ('".$field['name']."', '".htmlsc(addslashes($field['list']))."');<br />";
+        echo "INSERT INTO ".$db_settings['banlists_table']." VALUES ('". mysqli_real_escape_string($connid, $field['name']) ."', '". mysqli_real_escape_string($connid, $field['list']) ."');<br />";
        }
       mysqli_free_result($sql_result);
       ?><br /></pre><?php
@@ -194,7 +193,7 @@ if(isset($_POST['sql_submit']))
  {
   $sql = $_POST['sql'];
 
-  $pw_result = mysqli_query($connid, "SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = '".$_SESSION[$settings['session_prefix'].'user_id']."' LIMIT 1");
+  $pw_result = mysqli_query($connid, "SELECT user_pw FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
   if (!$pw_result) die($lang['db_error']);
   $field = mysqli_fetch_assoc($pw_result);
   mysqli_free_result($pw_result);
@@ -228,7 +227,7 @@ if (isset($_GET['mark']))
   mysqli_free_result($mark_result);
   if ($field['marked']==0) $marked = 1; else $marked = 0;
 
-  mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked=". $marked ." WHERE tid=". intval($_GET['mark']));
+  mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked= ". intval($marked) ."' WHERE tid= ". intval($_GET['mark']));
 
   header("location: ".$_GET['refer']."?id=".$_GET['mark']."&category=".$_GET['category']."&page=".$_GET['page']."&order=".$_GET['order']);
   die("<a href=\"".$_GET['refer']."?id=".$_GET['mark']."&amp;category=".$_GET['category']."&amp;page=".$_GET['page']."&amp;order=".$_GET['order']."\">further...</a>");
@@ -258,7 +257,7 @@ if (isset($_POST['new_category']))
       list($category_count) = mysqli_fetch_row($count_result);
       mysqli_free_result($count_result);
       mysqli_query($connid, "INSERT INTO ". $db_settings['category_table'] ." (category_order, category, accession)
-      VALUES (". intval($category_count) ."+1,'". mysqli_real_escape_string($connid, $new_category) ."',". $accession.")");
+      VALUES (". intval($category_count) ."+1,'". mysqli_real_escape_string($connid, $new_category) ."',". intval($accession).")");
       header("location: admin.php?action=categories");
       exit();
      }
@@ -269,7 +268,7 @@ if (isset($_POST['new_category']))
 if(isset($_GET['edit_user']))
  {
   $edit_user_id = intval($_GET['edit_user']);
-  $result = mysqli_query($connid, "SELECT user_type, user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, user_view, new_posting_notify, new_user_notify, personal_messages, time_difference FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". $edit_user_id) or die($lang['db_error']);
+  $result = mysqli_query($connid, "SELECT user_type, user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, user_view, new_posting_notify, new_user_notify, personal_messages, time_difference FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($edit_user_id)) or die($lang['db_error']);
   $field = mysqli_fetch_assoc($result);
   mysqli_free_result($result);
   $edit_user_type = $field["user_type"];
@@ -332,30 +331,30 @@ if(isset($_POST['edit_user_submit']))
    }
 
   $text_arr = explode(" ",$user_real_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-  $error_nwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['name_word_maxlength'])))."...", $lang['error_name_word_too_long']);
+  $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
   $errors[] = $error_nwtl; } }
   $text_arr = explode(" ",$user_place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
-  $error_pwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['place_word_maxlength'])))."...", $lang['error_place_word_too_long']);
+  $error_pwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
   $errors[] = $error_pwtl; } }
   $text_arr = str_replace("\n", " ", $profile);
   if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
   if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
   $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-  $error_twtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['text_word_maxlength'])))."...", $lang['err_prof_word_too_long']);
+  $error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['err_prof_word_too_long']);
   $errors[] = $error_twtl; } }
   $text_arr = str_replace("\n", " ", $signature);
   if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
   if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
   $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-  $error_twtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['text_word_maxlength'])))."...", $lang['err_sig_word_too_long']);
+  $error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['err_sig_word_too_long']);
   $errors[] = $error_twtl; } }
   // end of checking
 
   // save if no errors:
   if(empty($errors))
    {
-    @mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_name='". mysqli_real_escape_string($connid, $edit_user_name) ."', user_type='". mysqli_real_escape_string($connid, $edit_user_type) ."', user_email='". mysqli_real_escape_string($connid, $user_email) ."', user_real_name='". mysqli_real_escape_string($connid, $user_real_name) ."', hide_email=". intval($hide_email) .", user_hp='". mysqli_real_escape_string($connid, $user_hp) ."', user_place='". mysqli_real_escape_string($connid, $user_place) ."', profile='". mysqli_real_escape_string($connid, $profile) ."', signature='". mysqli_real_escape_string($connid, $signature) ."', last_login=last_login, registered=registered, user_view='". mysqli_real_escape_string($connid, $user_view) ."', new_posting_notify=". intval($new_posting_notify) .", new_user_notify=". intval($new_user_notify) .", personal_messages=". intval($personal_messages) .", time_difference=". intval($user_time_difference) ."' WHERE user_id=". $edit_user_id) or die($lang['db_error']);
-    @mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, name='". mysqli_real_escape_string($connid, $edit_user_name) ."' WHERE user_id=". $edit_user_id);
+    @mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_name='". mysqli_real_escape_string($connid, $edit_user_name) ."', user_type='". mysqli_real_escape_string($connid, $edit_user_type) ."', user_email='". mysqli_real_escape_string($connid, $user_email) ."', user_real_name='". mysqli_real_escape_string($connid, $user_real_name) ."', hide_email=". intval($hide_email) .", user_hp='". mysqli_real_escape_string($connid, $user_hp) ."', user_place='". mysqli_real_escape_string($connid, $user_place) ."', profile='". mysqli_real_escape_string($connid, $profile) ."', signature='". mysqli_real_escape_string($connid, $signature) ."', last_login=last_login, registered=registered, user_view='". mysqli_real_escape_string($connid, $user_view) ."', new_posting_notify=". intval($new_posting_notify) .", new_user_notify=". intval($new_user_notify) .", personal_messages=". intval($personal_messages) .", time_difference=". intval($user_time_difference) ."' WHERE user_id=". intval($edit_user_id)) or die($lang['db_error']);
+    @mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, name='". mysqli_real_escape_string($connid, $edit_user_name) ."' WHERE user_id=". intval($edit_user_id));
     header("location: admin.php?action=user");
     die("<a href=\"admin.php?action=user\">further...</a>");
    }
@@ -392,7 +391,7 @@ if (isset($_POST['edit_category_submit']))
   $category = str_replace('"','\'',$category);
   $accession = intval($_POST['accession']);
   // does this category already exist?
-  $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['category_table'] ." WHERE category LIKE '". mysqli_real_escape_string($connid, $category) ."' AND id != ". $id);
+  $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['category_table'] ." WHERE category LIKE '". mysqli_real_escape_string($connid, $category) ."' AND id != ". intval($id));
   if(!$count_result) die($lang['db_error']);
   list($category_count) = mysqli_fetch_row($count_result);
   mysqli_free_result($count_result);
@@ -401,7 +400,7 @@ if (isset($_POST['edit_category_submit']))
 
   if(empty($errors))
    {
-    mysqli_query($connid, "UPDATE ". $db_settings['category_table'] ." SET category='". mysqli_real_escape_string($connid, $category) ."', accession=". $accession ." WHERE id=". $id);
+    mysqli_query($connid, "UPDATE ". $db_settings['category_table'] ." SET category='". mysqli_real_escape_string($connid, $category) ."', accession=". intval($accession) ." WHERE id=". intval($id));
     header("location: admin.php?action=categories");
     die();
    }
@@ -478,14 +477,14 @@ if (isset($_POST['delete_category_submit']))
   if($category_id > 0)
    {
     // delete category from category table:
-    mysqli_query($connid, "DELETE FROM ". $db_settings['category_table'] ." WHERE id=". $category_id);
+    mysqli_query($connid, "DELETE FROM ". $db_settings['category_table'] ." WHERE id=". intval($category_id));
 
     // reset order:
     $result = mysqli_query($connid, "SELECT id FROM ". $db_settings['category_table'] ." ORDER BY category_order ASC");
     $i=1;
     while ($data = mysqli_fetch_assoc($result))
      {
-      mysqli_query($connid, "UPDATE ". $db_settings['category_table'] ." SET category_order=". $i ." WHERE id = ". intval($data['id']));
+      mysqli_query($connid, "UPDATE ". $db_settings['category_table'] ." SET category_order=". intval($i) ." WHERE id = ". intval($data['id']));
       $i++;
      }
     mysqli_free_result($result);
@@ -493,11 +492,11 @@ if (isset($_POST['delete_category_submit']))
     // what to to with the entries of deleted category:
     if ($_POST['delete_mode'] == "complete")
      {
-      mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE category = ". $category_id);
+      mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE category = ". intval($category_id));
      }
     else
      {
-      mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, category=". intval($_POST['move_category']) ." WHERE category = ". $category_id);
+      mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, category=". intval($_POST['move_category']) ." WHERE category = ". intval($category_id));
      }
     header("location: admin.php?action=categories");
     die();
@@ -508,7 +507,7 @@ if (isset($_POST['delete_category_submit']))
 if (isset($_GET['delete_user']))
  {
   $user_id = intval($_GET['delete_user']);
-  $user_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_id=". $user_id ." LIMIT 1");
+  $user_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_id= ". intval($user_id) ." LIMIT 1");
   if (!$user_result) die($lang['db_error']);
   $user = mysqli_fetch_assoc($user_result);
   mysqli_free_result($user_result);
@@ -525,7 +524,7 @@ if (isset($_POST['delete_user']))
     $selected = $_POST['selected'];
     for($x=0; $x<count($selected); $x++)
     {
-     $user_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_id=". $selected[$x] ." LIMIT 1");
+     $user_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_id=". intval($selected[$x]) ." LIMIT 1");
      if (!$user_result) die($lang['db_error']);
      $user = mysqli_fetch_assoc($user_result);
      mysqli_free_result($user_result);
@@ -648,7 +647,7 @@ if (isset($_POST['delete_db_confirmed']))
      {
       unset($errors);
       echo '<br /><br />Deleting database <b>'.$db_settings['db'].'</b>... ';
-      $result = mysqli_query($connid, "SHOW TABLES");
+      $result = mysqli_query($connid, "SHOW TABLES FROM ". $db_settings['db']);
       if(mysqli_num_rows($result) == 0)
        {
         if(mysqli_query($connid, "DROP DATABASE ". $db_settings['db'])) echo '<b style="color:green;">OK</b><br />'; else { $errors[] = mysqli_error($connid); echo '<b style="color:red;">FAILED</b> (MySQL: '.mysqli_error($connid).')<br />'; }
@@ -705,12 +704,12 @@ if (isset($_POST['mark_threads_submitted']))
   if($limit >= 0)
    {
     // letzten Thread ermitteln, der nicht markiert werden soll:
-    $mot_result =  mysqli_query($connid, "SELECT tid FROM ". $db_settings['forum_table'] ." WHERE pid = 0 ORDER BY id DESC LIMIT ". $limit .", 1");
+    $mot_result =  mysqli_query($connid, "SELECT tid FROM ". $db_settings['forum_table'] ." WHERE pid = 0 ORDER BY id DESC LIMIT ". intval($limit) .", 1");
     if (!$mot_result) die($lang['db_error']);
     $field = mysqli_fetch_assoc($mot_result);
     $last_thread = $field['tid'];
     mysqli_free_result($mot_result);
-    // ...und alle älteren markieren:
+    // ...und alle Ã¤lteren markieren:
     if($_POST['mark_threads'] == 1) mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked=1 WHERE tid < ". intval($last_thread));
     if($_POST['mark_threads'] == 2) mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked=1 WHERE tid < ". intval($last_thread) ." AND time=last_answer");
    }
@@ -755,7 +754,7 @@ if (isset($_POST['unlock_marked_threads_submitted']))
 
 if (isset($_POST['ar_username']))
  {
-  // überflüssige Leerzeichen abschneiden:
+  // Ã¼berflÃ¼ssige Leerzeichen abschneiden:
   $ar_username = $_POST['ar_username'];
   $ar_email = $_POST['ar_email'];
   $ar_pw = $_POST['ar_pw'];
@@ -765,21 +764,21 @@ if (isset($_POST['ar_username']))
   $ar_email = trim($ar_email);
   $ar_pw = trim($ar_pw);
   $ar_pw_conf = trim($ar_pw_conf);
-  // Schauen, ob alle Felder ausgefüllt wurden:
+  // Schauen, ob alle Felder ausgefÃ¼llt wurden:
   if ($ar_username=="" or $ar_email=="") $errors[] = $lang['error_form_uncompl'];
   if(empty($errors))
    {
     if (($ar_pw=="" or $ar_pw_conf=="") && !isset($ar_send_userdata)) $errors[] = $lang_add['error_send_userdata'];
    }
-  // wenn alle Felder ausgefüllt wurden, weitere Überprüfungen durchführen:
+  // wenn alle Felder ausgefÃ¼llt wurden, weitere ÃœberprÃ¼fungen durchfÃ¼hren:
   if(empty($errors))
    {
-    // Überprüfen, ob der Name zu lang ist:
+    // ÃœberprÃ¼fen, ob der Name zu lang ist:
     if (strlen($ar_username) > $settings['name_maxlength'])
     $errors[] = $lang['name_marking'] . " " .$lang['error_input_too_long'];
-    // überprüfen, ob ein Wort im Username zu lang ist:
+    // Ã¼berprÃ¼fen, ob ein Wort im Username zu lang ist:
     $text_arr = explode(" ",$ar_username); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-    $error_nwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['name_word_maxlength'])))."...", $lang['error_name_word_too_long']);
+    $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
     $errors[] = $error_nwtl; } }
     // schauen, ob der Name schon vergeben ist:
     $name_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_name = '". mysqli_real_escape_string($connid, $ar_username) ."'");
@@ -789,10 +788,10 @@ if (isset($_POST['ar_username']))
 
     if (strtolower($field["user_name"]) == strtolower($ar_username) && $ar_username != "")
      {
-      $lang['error_name_reserved'] = str_replace("[name]", htmlsc(stripslashes($ar_username)), $lang['error_name_reserved']);
+      $lang['error_name_reserved'] = str_replace("[name]", htmlsc($ar_username), $lang['error_name_reserved']);
       $errors[] = $lang['error_name_reserved'];
      }
-    // Überprüfung ob die Email-Adresse das Format name@domain.tld hat:
+    // ÃœberprÃ¼fung ob die Email-Adresse das Format name@domain.tld hat:
     if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $ar_email))
     $errors[] = $lang['error_email_wrong'];
 
@@ -812,7 +811,7 @@ if (isset($_POST['ar_username']))
       for($i=0;$i<8;$i++) { $ar_pw.=substr($letters,mt_rand(0,strlen($letters)-1),1); }
      }
     $encoded_ar_pw = md5($ar_pw);
-    $new_user_result = mysqli_query($connid, "INSERT INTO ". $db_settings['userdata_table'] ." (user_type, user_name, user_pw, user_email, hide_email, profile, last_login, last_logout, user_ip, registered, user_view, personal_messages) VALUES ('user','". mysqli_real_escape_string($connid, $ar_username) ."','". mysqli_real_escape_string($connid, $encoded_ar_pw) ."','". mysqli_real_escape_string($connid, $ar_email) ."','1','',NOW(),NOW(),'". mysqli_real_escape_string($connid, $_SERVER["REMOTE_ADDR"]) ."',NOW(),'". $settings['standard'] ."',1)");
+    $new_user_result = mysqli_query($connid, "INSERT INTO ". $db_settings['userdata_table'] ." (user_type, user_name, user_pw, user_email, hide_email, profile, last_login, last_logout, user_ip, registered, user_view, personal_messages) VALUES ('user','". mysqli_real_escape_string($connid, $ar_username) ."','". mysqli_real_escape_string($connid, $encoded_ar_pw) ."','". mysqli_real_escape_string($connid, $ar_email) ."','1','',NOW(),NOW(),'". mysqli_real_escape_string($connid, $_SERVER["REMOTE_ADDR"]) ."',NOW(),'". mysqli_real_escape_string($connid, $settings['standard']) ."',1)");
     if(!$new_user_result) die($lang['db_error']);
 
     // E-Mail an neuen User versenden:
@@ -823,7 +822,6 @@ if (isset($_POST['ar_username']))
       $lang['new_user_email_txt_a'] = str_replace("[name]", $ar_username, $lang['new_user_email_txt_a']);
       $lang['new_user_email_txt_a'] = str_replace("[password]", $ar_pw, $lang['new_user_email_txt_a']);
       $lang['new_user_email_txt_a'] = str_replace("[login_link]", $settings['forum_address']."login.php?username=".urlencode($ar_username)."&userpw=".$ar_pw, $lang['new_user_email_txt_a']);
-      $lang['new_user_email_txt_a'] = stripslashes($lang['new_user_email_txt_a']);
       $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
       $header .= "X-Mailer: Php/" . phpversion(). "\n";
       $header .= "X-Sender-ip: ".$_SERVER["REMOTE_ADDR"]."\n";
@@ -984,7 +982,7 @@ if(isset($_POST['edit_smiley_submit']))
   if($code_1=='' && $code_2=='' && $code_3=='' && $code_4=='' && $code_5=='') $errors[] = $lang_add['smiley_code_error'];
   if(empty($errors))
    {
-    mysqli_query($connid, "UPDATE ". $db_settings['smilies_table'] ." SET file='". mysqli_real_escape_string($connid, $file) ."', code_1='". mysqli_real_escape_string($connid, $code_1) ."', code_2='". mysqli_real_escape_string($connid, $code_2) ."', code_3='". mysqli_real_escape_string($connid, $code_3) ."', code_4='". mysqli_real_escape_string($connid, $code_4) ."', code_5='". mysqli_real_escape_string($connid, $code_5) ."', title='". mysqli_real_escape_string($connid, $title) ."' WHERE id=". $id);
+    mysqli_query($connid, "UPDATE ". $db_settings['smilies_table'] ." SET file='". mysqli_real_escape_string($connid, $file) ."', code_1='". mysqli_real_escape_string($connid, $code_1) ."', code_2='". mysqli_real_escape_string($connid, $code_2) ."', code_3='". mysqli_real_escape_string($connid, $code_3) ."', code_4='". mysqli_real_escape_string($connid, $code_4) ."', code_5='". mysqli_real_escape_string($connid, $code_5) ."', title='". mysqli_real_escape_string($connid, $title) ."' WHERE id=". intval($id));
     header("location: admin.php?action=smilies");
     die();
    }
@@ -1205,7 +1203,7 @@ switch ($action)
       list($postings_in_category) = mysqli_fetch_row($count_result);
       mysqli_free_result($count_result);
       ?><tr>
-      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><b><?php echo stripslashes($line['category']); ?></b></td>
+      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><b><?php echo htmlsc($line['category']); ?></b></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($line['accession']==2) echo $lang_add['cat_accession_mod_admin']; elseif ($line['accession']==1) echo $lang_add['cat_accession_reg_users']; else echo $lang_add['cat_accession_all']; ?></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo $threads_in_category; ?></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo $postings_in_category; ?></td>
@@ -1226,7 +1224,7 @@ switch ($action)
    ?><br />
    <form action="admin.php" method="post"><div style="display: inline;">
    <b><?php echo $lang_add['new_category']; ?></b><br />
-   <input type="text" name="new_category" size="25" value="<?php if(isset($new_category)) echo htmlsc(stripslashes($new_category)); ?>" /><br /><br />
+   <input type="text" name="new_category" size="25" value="<?php if(isset($new_category)) echo htmlsc($new_category); ?>" /><br /><br />
    <b><?php echo $lang_add['accessible_for']; ?></b><br />
    <input type="radio" name="accession" value="0"<?php if(empty($accession) || isset($accession) && $accession == 0) { ?> checked="ckecked"<?php } ?> /><?php echo $lang_add['cat_accession_all']; ?><br />
    <input type="radio" name="accession" value="1"<?php if(isset($accession) && $accession == 1) { ?> checked="ckecked"<?php } ?> /><?php echo $lang_add['cat_accession_reg_users']; ?><br />
@@ -1247,15 +1245,15 @@ switch ($action)
 
    if(isset($letter))
     {
-     $result = mysqli_query($connid, "SELECT user_id, user_name, user_type, user_email, logins, UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS last_login_time, UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS registered_time, user_lock FROM ". $db_settings['userdata_table'] ." WHERE user_name LIKE '". mysqli_real_escape_string($connid, $letter) ."%' ORDER BY ". $order ." ". $descasc ." LIMIT ". $ul .", ". intval($settings['users_per_page']));
+     $result = mysqli_query($connid, "SELECT user_id, user_name, user_type, user_email, logins, UNIX_TIMESTAMP(last_login + INTERVAL ". $time_difference ." HOUR) AS last_login_time, UNIX_TIMESTAMP(registered + INTERVAL ". $time_difference ." HOUR) AS registered_time, user_lock FROM ". $db_settings['userdata_table'] ." WHERE user_name LIKE '". mysqli_real_escape_string($connid, $letter) ."%' ORDER BY ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['users_per_page']));
     }
    elseif(isset($search_user))
     {
-     $result = mysqli_query($connid, "SELECT user_id, user_name, user_type, user_email, logins, UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS last_login_time, UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS registered_time, user_lock FROM ". $db_settings['userdata_table'] ." WHERE user_name LIKE '". mysqli_real_escape_string($connid, $search_user) ."%' OR user_email LIKE '". mysqli_real_escape_string($connid, $search_user) ."%' ORDER BY ". $order ." ". $descasc ." LIMIT ". $ul .", ". intval($settings['users_per_page']));
+     $result = mysqli_query($connid, "SELECT user_id, user_name, user_type, user_email, logins, UNIX_TIMESTAMP(last_login + INTERVAL ". $time_difference ." HOUR) AS last_login_time, UNIX_TIMESTAMP(registered + INTERVAL ". $time_difference ." HOUR) AS registered_time, user_lock FROM ". $db_settings['userdata_table'] ." WHERE user_name LIKE '". mysqli_real_escape_string($connid, $search_user) ."%' OR user_email LIKE '". mysqli_real_escape_string($connid, $search_user) ."%' ORDER BY ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['users_per_page']));
     }
    else
     {
-     $result = mysqli_query($connid, "SELECT user_id, user_name, user_type, user_email, logins, UNIX_TIMESTAMP(last_login + INTERVAL ".$time_difference." HOUR) AS last_login_time, UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS registered_time, user_lock FROM ". $db_settings['userdata_table'] ." ORDER BY ". $order ." ". $descasc ." LIMIT ". $ul .", ". intval($settings['users_per_page']));
+     $result = mysqli_query($connid, "SELECT user_id, user_name, user_type, user_email, logins, UNIX_TIMESTAMP(last_login + INTERVAL ". $time_difference ." HOUR) AS last_login_time, UNIX_TIMESTAMP(registered + INTERVAL ". $time_difference ." HOUR) AS registered_time, user_lock FROM ". $db_settings['userdata_table'] ." ORDER BY ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['users_per_page']));
     }
    if(!$result) die($lang['db_error']);
    $result_count = mysqli_num_rows($result);
@@ -1278,7 +1276,7 @@ switch ($action)
    <td><?php echo str_replace("[number]", $user_count, $lang['num_reg_users']); ?></td>
    <td style="text-align:right;"><?php echo $lang_add['search_user']; ?><form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="get"><div style="display:inline">
    <input type="hidden" name="action" value="user" />
-   <input type="text" name="search_user" value="<?php if(isset($search_user)) echo htmlsc(stripslashes($search_user)); ?>" size="25">&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" />
+   <input type="text" name="search_user" value="<?php if(isset($search_user)) echo htmlsc($search_user); ?>" size="25">&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" />
    </div></form><?php
    if(empty($serach_user) || trim($search_user==''))
    {
@@ -1321,7 +1319,7 @@ switch ($action)
 
    if($result_count > 0)
    {
-   if (isset($_GET['new_user'])) { ?><p class="caution"><?php echo str_replace("[name]", htmlsc(stripslashes(urldecode($_GET['new_user']))), $lang_add['new_user_registered']); if(isset($_GET['send_error'])) { ?><br /><?php echo $lang_add['userdata_send_error']; } ?></p><p><a class="textlink" href="admin.php?action=register"><?php echo $lang_add['reg_another_user']; ?></a></p><?php }
+   if (isset($_GET['new_user'])) { ?><p class="caution"><?php echo str_replace("[name]", htmlsc(urldecode($_GET['new_user'])), $lang_add['new_user_registered']); if(isset($_GET['send_error'])) { ?><br /><?php echo $lang_add['userdata_send_error']; } ?></p><p><a class="textlink" href="admin.php?action=register"><?php echo $lang_add['reg_another_user']; ?></a></p><?php }
    if (isset($no_users_in_selection)) { ?><p class="caution"><?php echo $lang_add['no_users_in_sel']; ?></p><?php } ?>
    <form action="admin.php" method="post">
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
@@ -1344,13 +1342,13 @@ switch ($action)
    <tr>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>" width="10px"><input type="checkbox" name="selected[]" value="<?php echo $zeile["user_id"]; ?>" /></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>" width="10px"><?php echo $zeile["user_id"]; ?></td>
-   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo $zeile["user_id"]; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($zeile["user_name"])), $lang['show_userdata_linktitle']); ?>"><b><?php echo htmlsc(stripslashes($zeile["user_name"])); ?></b></a></td>
-   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="mailto:<?php echo $zeile["user_email"]; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($zeile["user_name"])), $lang_add['mailto_user_lt']); ?>"><?php echo htmlsc(stripslashes($zeile["user_email"])); ?></a></td>
+   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo $zeile["user_id"]; ?>" title="<?php echo str_replace("[name]", htmlsc($zeile["user_name"]), $lang['show_userdata_linktitle']); ?>"><b><?php echo htmlsc($zeile["user_name"]); ?></b></a></td>
+   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="mailto:<?php echo $zeile["user_email"]; ?>" title="<?php echo str_replace("[name]", htmlsc($zeile["user_name"]), $lang_add['mailto_user_lt']); ?>"><?php echo htmlsc($zeile["user_email"]); ?></a></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($zeile["user_type"] == "admin") echo $lang['ud_admin']; elseif ($zeile["user_type"] == "mod") echo $lang['ud_mod']; else echo $lang['ud_user']; ?></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo strftime($lang['time_format'],$zeile["registered_time"]); ?></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo $zeile["logins"]; ?></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($zeile["logins"] > 0) echo strftime($lang['time_format'],$zeile["last_login_time"]); else echo "&nbsp;"; ?></td>
-   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($zeile["user_lock"] == 0) { ?><a href="admin.php?user_lock=<?php echo $zeile["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;ul=<?php echo $ul; ?>&amp;sam=<?php echo $sam; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($zeile["user_name"])), $lang['lock_user_lt']); ?>"><?php echo $lang['unlocked']; ?></a><?php } else { ?><a style="color: red;" href="admin.php?user_lock=<?php echo $zeile["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;ul=<?php echo $ul; ?>&amp;sam=<?php echo $sam; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($zeile["user_name"])), $lang['unlock_user_lt']); ?>"><?php echo $lang['locked']; ?></a><?php } ?></td>
+   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($zeile["user_lock"] == 0) { ?><a href="admin.php?user_lock=<?php echo $zeile["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;ul=<?php echo $ul; ?>&amp;sam=<?php echo $sam; ?>" title="<?php echo str_replace("[name]", htmlsc($zeile["user_name"]), $lang['lock_user_lt']); ?>"><?php echo $lang['unlocked']; ?></a><?php } else { ?><a style="color: red;" href="admin.php?user_lock=<?php echo $zeile["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;ul=<?php echo $ul; ?>&amp;sam=<?php echo $sam; ?>" title="<?php echo str_replace("[name]", htmlsc($zeile["user_name"]), $lang['unlock_user_lt']); ?>"><?php echo $lang['locked']; ?></a><?php } ?></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?edit_user=<?php echo $zeile["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;ul=<?php echo $ul; ?>&amp;sam=<?php echo $sam; ?>"><?php echo $lang_add['edit_link']; ?></a></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?delete_user=<?php echo $zeile["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;ul=<?php echo $ul; ?>&amp;sam=<?php echo $sam; ?>"><?php echo $lang_add['delete_link']; ?></a></td>
    </tr>
@@ -1375,9 +1373,9 @@ switch ($action)
    <form action="admin.php" method="post">
    <input type="hidden" name="action" value="register">
    <b><?php echo $lang['username_marking']; ?></b><br />
-   <input type="text" size="25" name="ar_username" value="<?php if (isset($ar_username)) echo htmlsc(stripslashes($ar_username)); ?>" maxlength="<?php echo $name_maxlength; ?>" /><br /><br />
+   <input type="text" size="25" name="ar_username" value="<?php if (isset($ar_username)) echo htmlsc($ar_username); ?>" maxlength="<?php echo $name_maxlength; ?>" /><br /><br />
    <b><?php echo $lang['user_email_marking']; ?></b><br />
-   <input type="text" size="25" name="ar_email" value="<?php if (isset($ar_email)) echo htmlsc(stripslashes($ar_email)); ?>" maxlength="<?php echo $email_maxlength; ?>" /><br /><br />
+   <input type="text" size="25" name="ar_email" value="<?php if (isset($ar_email)) echo htmlsc($ar_email); ?>" maxlength="<?php echo $email_maxlength; ?>" /><br /><br />
    <b><?php echo $lang_add['pw_marking']; ?></b><br />
    <input type="password" size="25" name="ar_pw" maxlength="50"><br /><br />
    <b><?php echo $lang_add['pw_conf_marking']; ?></b><br />
@@ -1394,7 +1392,7 @@ switch ($action)
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="c"><b><?php echo $lang_add['forum_name']; ?></b><br /><span class="small"><?php echo $lang_add['forum_name_d']; ?></span></td>
-     <td class="d"><input type="text" name="forum_name" value="<?php echo htmlsc(stripslashes($settings['forum_name'])); ?>" size="40" /></td>
+     <td class="d"><input type="text" name="forum_name" value="<?php echo htmlsc($settings['forum_name']); ?>" size="40" /></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['forum_address']; ?></b><br /><span class="small"><?php echo $lang_add['forum_address_d']; ?></span></td>
@@ -1410,7 +1408,7 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['home_link_name']; ?></b><br /><span class="small"><?php echo $lang_add['home_link_name_d']; ?></span></td>
-     <td class="d"><input type="text" name="home_linkname" value="<?php echo htmlsc(stripslashes($settings['home_linkname'])); ?>" size="40" /></td>
+     <td class="d"><input type="text" name="home_linkname" value="<?php echo htmlsc($settings['home_linkname']); ?>" size="40" /></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['template_file']; ?></b><br /><span class="small"><?php echo $lang_add['template_file_d']; ?></span></td>
@@ -1552,7 +1550,7 @@ switch ($action)
     {
      ?><tr>
      <td class="c"><b><?php echo $key; ?></b></td>
-     <td class="d"><input type="text" name="<?php echo htmlsc(stripslashes($key)); ?>" value="<?php echo htmlsc(stripslashes($val)); ?>" size="30" /></td>
+     <td class="d"><input type="text" name="<?php echo htmlsc($key); ?>" value="<?php echo htmlsc($val); ?>" size="30" /></td>
     </tr><?php
    }
    ?></table>
@@ -1568,7 +1566,7 @@ switch ($action)
    <?php
    for($x=0; $x<count($selected_usernames); $x++)
    {
-    ?><li><a href="user.php?id=<?php echo $selected[$x]; ?>"><b><?php echo htmlsc(stripslashes($selected_usernames[$x])); ?></b></a><?php
+    ?><li><a href="user.php?id=<?php echo $selected[$x]; ?>"><b><?php echo htmlsc($selected_usernames[$x]); ?></b></a><?php
    }
    ?>
    </ul>
@@ -1614,7 +1612,7 @@ switch ($action)
   ?><p class="caution"><?php echo $lang['caution']; ?></p>
   <p><?php echo $lang_add['del_marked_note']; ?></p>
   <form action="admin.php" method="post"><div>
-  <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc(stripslashes($_GET['refer'])); ?>" /><?php } ?>
+  <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
   <input type="submit" name="delete_marked_threads_confirmed" value="<?php echo $lang_add['del_marked_sb']; ?>" />
   </div></form>
   <p>&nbsp;</p>
@@ -1623,7 +1621,7 @@ switch ($action)
   case "unmark":
   ?><p><?php echo $lang_add['unmark_threads_note']; ?></p>
   <form action="admin.php" method="post"><div>
-  <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc(stripslashes($_GET['refer'])); ?>" /><?php } ?>
+  <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
   <input type="submit" name="unmark_confirmed" value="<?php echo $lang['submit_button_ok']; ?>" />
   </div></form>
   <p>&nbsp;</p>
@@ -1632,14 +1630,14 @@ switch ($action)
   case "invert_markings":
   ?><p><?php echo $lang_add['invert_markings_note']; ?></p>
   <form action="admin.php" method="post"><div>
-  <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc(stripslashes($_GET['refer'])); ?>" /><?php } ?>
+  <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
   <input type="submit" name="invert_markings_confirmed" value="<?php echo $lang['submit_button_ok']; ?>" />
   </div></form>
   <p>&nbsp;</p>
   <?php
   break;
   case "mark_threads":
-   ?><form action="admin.php" method="post"><div style="display: inline;"><?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc(stripslashes($_GET['refer'])); ?>" /><?php }
+   ?><form action="admin.php" method="post"><div style="display: inline;"><?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php }
    $lang_add['mark_old_threads'] = str_replace("[number]", "<input type=\"text\" name=\"n1\" value=\"\" size=\"4\" />", $lang_add['mark_old_threads']);
    $lang_add['mark_old_threads_no_replies'] = str_replace("[number]", "<input type=\"text\" name=\"n2\" value=\"\" size=\"4\" />", $lang_add['mark_old_threads_no_replies']);
    ?><p><input type="radio" name="mark_threads" value="1" checked="checked" /> <?php echo $lang_add['mark_old_threads']; ?></p>
@@ -1651,7 +1649,7 @@ switch ($action)
    $lang_add['lock_marked_conf'] = str_replace("[marked_symbol]", "<img src=\"img/marked.gif\" alt=\"[x]\" width=\"9\" height=\"9\" />", $lang_add['lock_marked_conf']);
    ?><p><?php echo $lang_add['lock_marked_conf']; ?></p>
    <form action="admin.php" method="post"><div>
-   <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc(stripslashes($_GET['refer'])); ?>" /><?php } ?>
+   <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
    <input type="submit" name="lock_marked_threads_submitted" value="<?php echo $lang['submit_button_ok']; ?>" />
    </div></form><p>&nbsp;</p><?php
   break;
@@ -1659,7 +1657,7 @@ switch ($action)
    $lang_add['unlock_marked_conf'] = str_replace("[marked_symbol]", "<img src=\"img/marked.gif\" alt=\"[x]\" width=\"9\" height=\"9\" />", $lang_add['unlock_marked_conf']);
    ?><p><?php echo $lang_add['unlock_marked_conf']; ?></p>
    <form action="admin.php" method="post"><div>
-   <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc(stripslashes($_GET['refer'])); ?>" /><?php } ?>
+   <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
    <input type="submit" name="unlock_marked_threads_submitted" value="<?php echo $lang['submit_button_ok']; ?>" />
    </div></form><p>&nbsp;</p><?php
   break;
@@ -1670,11 +1668,11 @@ switch ($action)
     $cat_select = '<select class="kat" size="1" name="move_category">';
     while(list($key, $val) = each($categories))
      {
-      if ($key!=stripslashes($category_id)) $cat_select .= '<option value="'.$key.'">'.$val.'</option>';
+      if ($key!= $category_id) $cat_select .= '<option value="'. htmlsc($key) .'">'. htmlsc($val) .'</option>';
      }
     $cat_select .= '</select>';
    }
-  ?><h2><?php echo str_replace("[category]",stripslashes($category_name),$lang_add['del_cat_hl']); ?></h2>
+  ?><h2><?php echo str_replace("[category]", htmlsc($category_name), $lang_add['del_cat_hl']); ?></h2>
   <p class="caution"><?php echo $lang['caution']; ?></p>
   <form action="admin.php" method="post"><div style="display: inline;">
   <input type="hidden" name="category_id" value="<?php echo $category_id; ?>" />
@@ -1689,7 +1687,7 @@ switch ($action)
    ?><form action="admin.php" method="post"><div style="display: inline;">
    <input type="hidden" name="id" value="<?php echo $id; ?>" />
    <b><?php echo $lang_add['edit_category']; ?></b><br />
-   <input type="text" name="category" value="<?php echo htmlsc(stripslashes($category)); ?>" size="25" /><br /><br />
+   <input type="text" name="category" value="<?php echo htmlsc($category); ?>" size="25" /><br /><br />
    <b><?php echo $lang_add['accessible_for']; ?></b><br />
    <input type="radio" name="accession" value="0"<?php if ($accession==0) echo " checked=\"ckecked\""; ?> /><?php echo $lang_add['cat_accession_all']; ?><br />
    <input type="radio" name="accession" value="1"<?php if ($accession==1) echo " checked=\"ckecked\""; ?> /><?php echo $lang_add['cat_accession_reg_users']; ?><br />
@@ -1719,7 +1717,7 @@ switch ($action)
    if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><?php }
    ?><form action="admin.php" method="post"><div>
    <b><?php echo $lang_add['sql_dump']; ?></b><br />
-   <textarea name="sql" cols="70" rows="15"><?php if(isset($sql)) echo stripslashes($sql); ?></textarea><br /><br />
+   <textarea name="sql" cols="70" rows="15"><?php if(isset($sql)) echo htmlsc($sql); ?></textarea><br /><br />
    <p><b><?php echo $lang['password_marking']; ?></b><br />
    <input type="password" size="25" name="sql_pw" /></p>
    <p><input type="submit" name="sql_submit" value="<?php echo $lang['submit_button_ok']; ?>" /></p>
@@ -1792,15 +1790,15 @@ switch ($action)
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="c"><b><?php echo $lang_add['banned_users']; ?></b><br /><span class="small"><?php echo $lang_add['banned_users_d']; ?></span></td>
-     <td class="d"><textarea name="banned_users" cols="50" rows="5"><?php if(isset($banned_users)) echo stripslashes($banned_users);  ?></textarea></td>
+     <td class="d"><textarea name="banned_users" cols="50" rows="5"><?php if(isset($banned_users)) echo htmlsc($banned_users);  ?></textarea></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['banned_ips']; ?></b><br /><span class="small"><?php echo $lang_add['banned_ips_d']; ?></span></td>
-     <td class="d"><textarea name="banned_ips" cols="50" rows="5"><?php if(isset($banned_ips)) echo stripslashes($banned_ips);  ?></textarea></td>
+     <td class="d"><textarea name="banned_ips" cols="50" rows="5"><?php if(isset($banned_ips)) echo htmlsc($banned_ips);  ?></textarea></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['not_accepted_words']; ?></b><br /><span class="small"><?php echo $lang_add['not_accepted_words_d']; ?></span></td>
-     <td class="d"><textarea name="not_accepted_words" cols="50" rows="5"><?php if(isset($not_accepted_words)) echo stripslashes($not_accepted_words);  ?></textarea></td>
+     <td class="d"><textarea name="not_accepted_words" cols="50" rows="5"><?php if(isset($not_accepted_words)) echo htmlsc($not_accepted_words);  ?></textarea></td>
     </tr>
     <tr>
      <td class="c">&nbsp;</td>
@@ -1854,16 +1852,16 @@ switch ($action)
        }
 
       unset($codes);
-      if(trim($line['code_1'])!='') $codes[] = stripslashes($line['code_1']);
-      if(trim($line['code_2'])!='') $codes[] = stripslashes($line['code_2']);
-      if(trim($line['code_3'])!='') $codes[] = stripslashes($line['code_3']);
-      if(trim($line['code_4'])!='') $codes[] = stripslashes($line['code_4']);
-      if(trim($line['code_5'])!='') $codes[] = stripslashes($line['code_5']);
+      if(trim($line['code_1'])!='') $codes[] = $line['code_1'];
+      if(trim($line['code_2'])!='') $codes[] = $line['code_2'];
+      if(trim($line['code_3'])!='') $codes[] = $line['code_3'];
+      if(trim($line['code_4'])!='') $codes[] = $line['code_4'];
+      if(trim($line['code_5'])!='') $codes[] = $line['code_5'];
       $codes_disp = implode(' &nbsp;',$codes);
       ?><tr>
-      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><img src="img/smilies/<?php echo stripslashes($line['file']); ?>" alt="<?php echo stripslashes($line['code_1']); ?>"<?php if($line['title']!='') { ?> title="<?php echo stripslashes($line['title']); ?>"<?php } ?> /></td>
+      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><img src="img/smilies/<?php echo rawurlencode($line['file']); ?>" alt="<?php echo htmlsc($line['code_1']); ?>"<?php if($line['title']!='') { ?> title="<?php echo htmlsc($line['title']); ?>"<?php } ?> /></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo $codes_disp; ?></td>
-      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo stripslashes($line['title']); ?></td>
+      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo htmlsc($line['title']); ?></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?edit_smiley=<?php echo $line['id']; ?>"><?php echo $lang_add['edit_link']; ?></a></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?delete_smiley=<?php echo $line['id']; ?>"><?php echo $lang_add['delete_link']; ?></a></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?move_up_smiley=<?php echo $line['id']; ?>"><img src="img/up.gif" alt="up" width="11" height="11" onmouseover="this.src='img/up_mo.gif';" onmouseout="this.src='img/up.gif';" /></a>&nbsp;<a href="admin.php?move_down_smiley=<?php echo $line['id']; ?>"><img src="img/down.gif" alt="down" width="11" height="11" onmouseover="this.src='img/down_mo.gif';" onmouseout="this.src='img/down.gif';" /></a></td>
@@ -1928,7 +1926,7 @@ switch ($action)
       {
        if(preg_match('/\.gif$/i', $dirfile) || preg_match('/\.png$/i', $dirfile) || preg_match('/\.jpg$/i', $dirfile))
         {
-         ?><option value="<?php echo $dirfile; ?>"<?php if($dirfile==stripslashes($file)) { ?> selected="selected"<?php } ?>> <?php echo $dirfile; ?></option><?php
+         ?><option value="<?php echo $dirfile; ?>"<?php if($dirfile==$file) { ?> selected="selected"<?php } ?>> <?php echo $dirfile; ?></option><?php
         }
       }
      closedir($fp);
@@ -1936,11 +1934,11 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['edit_smilies_codes']; ?></b></td>
-     <td class="d"><input type="text" name="code_1" size="7" value="<?php if(isset($code_1)) echo stripslashes($code_1); ?>" /> <input type="text" name="code_2" size="7" value="<?php if(isset($code_2)) echo stripslashes($code_2); ?>" /> <input type="text" name="code_3" size="7" value="<?php if(isset($code_3)) echo stripslashes($code_3); ?>" /> <input type="text" name="code_4" size="7" value="<?php if(isset($code_4)) echo stripslashes($code_4); ?>" /> <input type="text" name="code_5" size="7" value="<?php if(isset($code_5)) echo stripslashes($code_5); ?>" /></td>
+     <td class="d"><input type="text" name="code_1" size="7" value="<?php if(isset($code_1)) echo htmlsc($code_1); ?>" /> <input type="text" name="code_2" size="7" value="<?php if(isset($code_2)) echo htmlsc($code_2); ?>" /> <input type="text" name="code_3" size="7" value="<?php if(isset($code_3)) echo htmlsc($code_3); ?>" /> <input type="text" name="code_4" size="7" value="<?php if(isset($code_4)) echo htmlsc($code_4); ?>" /> <input type="text" name="code_5" size="7" value="<?php if(isset($code_5)) echo htmlsc($code_5); ?>" /></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['edit_smilies_title']; ?></b></td>
-     <td class="d"><input type="text" name="title" size="25" value="<?php if(isset($title)) echo stripslashes($title); ?>" /></td>
+     <td class="d"><input type="text" name="title" size="25" value="<?php if(isset($title)) echo htmlsc($title); ?>" /></td>
     </tr>
     <tr>
      <td class="c">&nbsp;</td>
@@ -1956,7 +1954,7 @@ switch ($action)
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="c"><b><?php echo $lang['username_marking']; ?></b></td>
-     <td class="d"><input type="text" size="40" name="edit_user_name" value="<?php echo htmlsc(stripslashes($edit_user_name)); ?>" /></td>
+     <td class="d"><input type="text" size="40" name="edit_user_name" value="<?php echo htmlsc($edit_user_name); ?>" /></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['usertype_marking']; ?></b></td>
@@ -1964,7 +1962,7 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_email_marking']; ?></b></td>
-     <td class="d"><input type="text" size="40" name="user_email" value="<?php echo htmlsc(stripslashes($user_email)); ?>" /></td>
+     <td class="d"><input type="text" size="40" name="user_email" value="<?php echo htmlsc($user_email); ?>" /></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_show_email']; ?></b></td>
@@ -1972,23 +1970,23 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_real_name']; ?></b></td>
-     <td class="d"><input type="text" size="40" name="user_real_name" value="<?php echo htmlsc(stripslashes($user_real_name)); ?>" maxlength="<?php echo $settings['name_maxlength'] ?>"></td>
+     <td class="d"><input type="text" size="40" name="user_real_name" value="<?php echo htmlsc($user_real_name); ?>" maxlength="<?php echo $settings['name_maxlength'] ?>"></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_hp']; ?></b></td>
-     <td class="d"><input type="text" size="40" name="user_hp" value="<?php echo htmlsc(stripslashes($user_hp)); ?>" maxlength="<?php echo $settings['hp_maxlength'] ?>"></td>
+     <td class="d"><input type="text" size="40" name="user_hp" value="<?php echo htmlsc($user_hp); ?>" maxlength="<?php echo $settings['hp_maxlength'] ?>"></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_place']; ?></b></td>
-     <td class="d"><input type="text" size="40" name="user_place" value="<?php echo htmlsc(stripslashes($user_place)); ?>" maxlength="<?php echo $settings['place_maxlength'] ?>"></td>
+     <td class="d"><input type="text" size="40" name="user_place" value="<?php echo htmlsc($user_place); ?>" maxlength="<?php echo $settings['place_maxlength'] ?>"></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_profile']; ?></b></td>
-     <td class="d"><textarea cols="65" rows="4" name="profile"><?php echo htmlsc(stripslashes($profile)); ?></textarea></td>
+     <td class="d"><textarea cols="65" rows="4" name="profile"><?php echo htmlsc($profile); ?></textarea></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_signature']; ?></b></td>
-     <td class="d"><textarea cols="65" rows="4" name="signature"><?php echo htmlsc(stripslashes($signature)); ?></textarea></td>
+     <td class="d"><textarea cols="65" rows="4" name="signature"><?php echo htmlsc($signature); ?></textarea></td>
     </tr>
     <?php if ($settings['thread_view'] != 0 && $settings['board_view'] != 0 || $settings['board_view'] != 0 && $settings['mix_view'] != 0 || $settings['thread_view'] != 0 && $settings['mix_view'] != 0)
     { ?>

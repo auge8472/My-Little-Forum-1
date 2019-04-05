@@ -28,7 +28,7 @@ $$key = $value;
 
 include("inc.php");
 
- function snav($page, $suchergebnisse, $count, $search, $ao, $category)  // Seiten-Navigation für suche.php
+ function snav($page, $suchergebnisse, $count, $search, $ao, $category)  // Seiten-Navigation fÃ¼r suche.php
   {
    global $lang;
    $output = "&nbsp;";
@@ -106,7 +106,6 @@ include("inc.php");
 
  if (substr($search, 1, 1) == "\"") $ao="phrase";
  $search = str_replace("\"", "", $search);
- $search = stripslashes($search);
  $search = trim($search);
  $search = mysqli_real_escape_string($connid, $search);
  $search_array = explode(" ", $search);
@@ -131,13 +130,13 @@ include("inc.php");
 
  if (is_array($categories))
   {
-   $result = mysqli_query($connid, "SELECT id, pid, tid, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit, subject, name, email, hp, place, text, category FROM ". $db_settings['forum_table'] ." WHERE ". $search_string ." AND category IN (". $category_ids_query .") ORDER BY tid DESC, time ASC LIMIT ". $ul .", ". intval($settings['search_results_per_page']));
+   $result = mysqli_query($connid, "SELECT id, pid, tid, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit, subject, name, email, hp, place, text, category FROM ". $db_settings['forum_table'] ." WHERE ". $search_string ." AND category IN (". $category_ids_query .") ORDER BY tid DESC, time ASC LIMIT ". intval($ul) .", ". intval($settings['search_results_per_page']));
    $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE ". $search_string ." AND category IN (". $category_ids_query .")");
    list($count) = mysqli_fetch_row($count_result);
   }
  else
   {
-   $result = mysqli_query($connid, "SELECT id, pid, tid, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit, subject, name, email, hp, place, text, category FROM ". $db_settings['forum_table'] ." WHERE ". $search_string ." ORDER BY tid DESC, time ASC LIMIT ". $ul .", ". intval($settings['search_results_per_page']));
+   $result = mysqli_query($connid, "SELECT id, pid, tid, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit, subject, name, email, hp, place, text, category FROM ". $db_settings['forum_table'] ." WHERE ". $search_string ." ORDER BY tid DESC, time ASC LIMIT ". intval($ul) .", ". intval($settings['search_results_per_page']));
    $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE ". $search_string);
    list($count) = mysqli_fetch_row($count_result);
   }
@@ -151,15 +150,15 @@ if (isset($search) && empty($show_postings))
  {
   if ($search != "" && $ao=="phrase")
    {
-    $subnav_1 .= $lang['phrase']." <b>".htmlsc(stripslashes($search))."</b>";
+    $subnav_1 .= $lang['phrase']." <b>".htmlsc($search)."</b>";
    }
   elseif ($search != "" && count($search_array) == 1)
    {
-    $subnav_1 .= $lang['search_term']." <b>".htmlsc(stripslashes($search_anz))."</b>";
+    $subnav_1 .= $lang['search_term']." <b>".htmlsc($search_anz)."</b>";
    }
   elseif ($search != "" && count($search_array) > 1)
    {
-    $subnav_1 .= $lang['search_term']." <b>".htmlsc(stripslashes($search_anz))."</b>";
+    $subnav_1 .= $lang['search_term']." <b>".htmlsc($search_anz)."</b>";
    }
   else
    {
@@ -201,7 +200,7 @@ if (isset($search) && $search != "") { $subnav_2 = snav($page, $settings['search
 parse_template();
 echo $header;
 
-if (isset($search)) $search_match = htmlsc(stripslashes($search)); else $search_match = "";
+if (isset($search)) $search_match = htmlsc($search); else $search_match = "";
 if (isset($search) && empty($show_postings))
 { ?><form action="search.php" method="get" title="<?php echo $lang['search_formtitle']; ?>"><div class="search">
 <input type="text" name="search" value="<?php echo $search_match; ?>" size="30" />
@@ -245,7 +244,7 @@ elseif (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="thread") echo "f
 elseif (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="mix") echo "mix_entry.php?id=".$entrydata["tid"]."#p".$entrydata["id"];
 elseif (isset($standard) && $standard=="board") echo "board_entry.php?id=".$entrydata["tid"]."#p".$entrydata["id"];
 elseif (isset($standard) && $standard=="mix") echo "mix_entry.php?id=".$entrydata["tid"]."#p".$entrydata["id"];
-else echo "forum_entry.php?id=".$entrydata["id"]; ?>"><?php echo htmlsc(stripslashes($entrydata["subject"])); ?></a> <?php echo $search_author_info_x; if(isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='') echo " <span class=\"category\">(".$categories[$entrydata["category"]].")</span>"; ?></p><?php }
+else echo "forum_entry.php?id=".$entrydata["id"]; ?>"><?php echo htmlsc($entrydata["subject"]); ?></a> <?php echo $search_author_info_x; if(isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='') echo " <span class=\"category\">(".$categories[$entrydata["category"]].")</span>"; ?></p><?php }
 }
 ?>
 <br />

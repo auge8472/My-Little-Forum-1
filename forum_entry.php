@@ -114,31 +114,31 @@ if ($settings['board_view']==1) $subnav_2 .= '<span class="small"><a href="board
 if ($settings['mix_view']==1) $subnav_2 .= '&nbsp;&nbsp;<span class="small"><a href="mix_entry.php?id='.$entrydata["tid"].'&amp;page='.$page.'&amp;order='.$order.'&amp;category='.urlencode($category).'" title="'.$lang['mix_view_linktitle'].'"><img src="img/mix.gif" alt="" />'.$lang['mix_view_linkname'].'</a></span>';
 parse_template();
 echo $header;
-?><h2 class="postingheadline"><?php echo htmlsc(stripslashes($entrydata["subject"])); ?><?php if (isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='') { ?> <span class="category">(<?php echo $categories[$entrydata["category"]]; ?>)</span><?php } ?></h2>
+?><h2 class="postingheadline"><?php echo htmlsc($entrydata["subject"]); ?><?php if (isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='') { ?> <span class="category">(<?php echo $categories[$entrydata["category"]]; ?>)</span><?php } ?></h2>
 <?php
 $email_hp = ""; $place = ""; $place_c = "";
 if (empty($entrydata["hide_email"])) $entrydata["hide_email"]=0;
 if ($entrydata["email"]!="" && $entrydata["hide_email"] != 1 or $entrydata["hp"]!="") { $email_hp = " "; }
-if ($entrydata["hp"]!="") { if (substr($entrydata["hp"],0,7) != "http://" && substr($entrydata["hp"],0,8) != "https://" && substr($entrydata["hp"],0,6) != "ftp://" && substr($entrydata["hp"],0,9) != "gopher://" && substr($entrydata["hp"],0,7) != "news://") $entrydata["hp"] = "http://".$entrydata["hp"]; $email_hp .= "<a href=\"" . $entrydata["hp"] ."\" title=\"".htmlsc(stripslashes($entrydata["hp"]))."\"><img src=\"img/homepage.gif\" alt=\"".$lang['homepage_alt']."\" width=\"13\" height=\"13\" /></a>"; }
+if ($entrydata["hp"]!="") { if (substr($entrydata["hp"],0,7) != "http://" && substr($entrydata["hp"],0,8) != "https://" && substr($entrydata["hp"],0,6) != "ftp://" && substr($entrydata["hp"],0,9) != "gopher://" && substr($entrydata["hp"],0,7) != "news://") $entrydata["hp"] = "http://".$entrydata["hp"]; $email_hp .= "<a href=\"" . $entrydata["hp"] ."\" title=\"".htmlsc($entrydata["hp"])."\"><img src=\"img/homepage.gif\" alt=\"".$lang['homepage_alt']."\" width=\"13\" height=\"13\" /></a>"; }
 if (($entrydata["email"]!="" && $entrydata["hide_email"] != 1) && $entrydata["hp"]!="") { $email_hp .= "&nbsp;"; }
 
-if ($entrydata["email"]!="" && $entrydata["hide_email"] != 1 && isset($page) && isset($order) && isset($category)) { $email_hp .= '<a href="contact.php?id='.$entrydata["id"].'&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'"><img src="img/email.gif" alt="'.$lang['email_alt'].'" title="'.str_replace("[name]", htmlsc(stripslashes($entrydata["name"])), $lang['email_to_user_linktitle']).'" width="13" height="10" /></a>'; }
-elseif ($entrydata["email"]!="" && $entrydata["hide_email"] != 1) { $email_hp .= '<a href="contact.php?id='.$entrydata["id"].'" title="'.str_replace("[name]", htmlsc(stripslashes($entrydata["name"])), $lang['email_to_user_linktitle']).'"><img src="img/email.gif" alt="'.$lang['email_alt'].'" width="16" height="16" /></a>'; }
+if ($entrydata["email"]!="" && $entrydata["hide_email"] != 1 && isset($page) && isset($order) && isset($category)) { $email_hp .= '<a href="contact.php?id='.$entrydata["id"].'&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'"><img src="img/email.gif" alt="'.$lang['email_alt'].'" title="'.str_replace("[name]", htmlsc($entrydata["name"]), $lang['email_to_user_linktitle']).'" width="13" height="10" /></a>'; }
+elseif ($entrydata["email"]!="" && $entrydata["hide_email"] != 1) { $email_hp .= '<a href="contact.php?id='.$entrydata["id"].'" title="'.str_replace("[name]", htmlsc($entrydata["name"]), $lang['email_to_user_linktitle']).'"><img src="img/email.gif" alt="'.$lang['email_alt'].'" width="16" height="16" /></a>'; }
 
-if ($entrydata["place"] != "") { $place_c = htmlsc(stripslashes($entrydata["place"])) . ", "; $place = htmlsc(stripslashes($entrydata["place"])); }
+if ($entrydata["place"] != "") { $place_c = htmlsc($entrydata["place"]) . ", "; $place = htmlsc($entrydata["place"]); }
 
-if ($mark_admin==true) $name = "<span class=\"admin-highlight\">".htmlsc(stripslashes($entrydata["name"]))."</span>";
-elseif ($mark_mod==true) $name = "<span class=\"mod-highlight\">".htmlsc(stripslashes($entrydata["name"]))."</span>";
-else $name = htmlsc(stripslashes($entrydata["name"]));
+if ($mark_admin==true) $name = "<span class=\"admin-highlight\">".htmlsc($entrydata["name"])."</span>";
+elseif ($mark_mod==true) $name = "<span class=\"mod-highlight\">".htmlsc($entrydata["name"])."</span>";
+else $name = htmlsc($entrydata["name"]);
 
 if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $entrydata["user_id"] > 0 && $settings['show_registered'] ==1)
  {
-  $lang['show_userdata_linktitle'] = str_replace("[name]", htmlsc(stripslashes($entrydata["name"])), $lang['show_userdata_linktitle']);
+  $lang['show_userdata_linktitle'] = str_replace("[name]", htmlsc($entrydata["name"]), $lang['show_userdata_linktitle']);
   $lang['forum_author_marking'] = str_replace("[name]", "<a href=\"user.php?id=".$entrydata["user_id"]."\" title=\"".$lang['show_userdata_linktitle']."\"><b>".$name."</b><img src=\"img/registered.gif\" alt=\"(R)\" width=\"10\" height=\"10\" title=\"".$lang['registered_user_title']."\" /></a>", $lang['forum_author_marking']);
  }
 elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && $entrydata["user_id"] > 0 && $settings['show_registered'] !=1)
  {
-  $lang['show_userdata_linktitle'] = str_replace("[name]", htmlsc(stripslashes($entrydata["name"])), $lang['show_userdata_linktitle']);
+  $lang['show_userdata_linktitle'] = str_replace("[name]", htmlsc($entrydata["name"]), $lang['show_userdata_linktitle']);
   $lang['forum_author_marking'] = str_replace("[name]", "<a href=\"user.php?id=".$entrydata["user_id"]."\" title=\"".$lang['show_userdata_linktitle']."\"><b>".$name."</b></a>", $lang['forum_author_marking']);
  }
 elseif (!isset($_SESSION[$settings['session_prefix'].'user_id']) && $entrydata["user_id"] > 0 && $settings['show_registered'] ==1)
@@ -153,7 +153,7 @@ else
    $lang['forum_author_marking'] = str_replace("[place, ]", $place_c, $lang['forum_author_marking']);
    $lang['forum_author_marking'] = str_replace("[place]", $place, $lang['forum_author_marking']);
    $lang['forum_author_marking'] = str_replace("[time]", strftime($lang['time_format'],$entrydata["p_time"]), $lang['forum_author_marking']);
-   $lang['forum_edited_marking'] = str_replace("[name]", htmlsc(stripslashes($entrydata["edited_by"])), $lang['forum_edited_marking']);
+   $lang['forum_edited_marking'] = str_replace("[name]", htmlsc($entrydata["edited_by"]), $lang['forum_edited_marking']);
    $lang['forum_edited_marking'] = str_replace("[time]", strftime($lang['time_format'],$entrydata["e_time"]), $lang['forum_edited_marking']);
    ?><p class="author"><?php
    echo $lang['forum_author_marking'];
@@ -167,7 +167,7 @@ else
                        else
                         {
                          $ftext=$entrydata["text"];
-                         $ftext = htmlsc(stripslashes($ftext));
+                         $ftext = htmlsc($ftext);
                          $ftext = nl2br($ftext);
                          $ftext = zitat($ftext);
                          if ($settings['autolink'] == 1) $ftext = make_link($ftext);
@@ -177,7 +177,7 @@ else
                         }
                        if (isset($signature) && $signature != "")
                         {
-                         $signature = htmlsc(stripslashes($signature));
+                         $signature = htmlsc($signature);
                          $signature = nl2br($signature);
                          #$signature = zitat($signature);
                          if ($settings['autolink'] == 1) $signature = make_link($signature);

@@ -67,7 +67,6 @@ if(isset($_GET['id']) && isset($_GET['key']) && trim($_GET['key'])!='')
       $lang['new_user_notif_txt'] = str_replace("[name]", $data['user_name'], $lang['new_user_notif_txt']);
       $lang['new_user_notif_txt'] = str_replace("[email]", $data['user_email'], $lang['new_user_notif_txt']);
       $lang['new_user_notif_txt'] = str_replace("[user_link]", $settings['forum_address']."user.php?id=".$user_id, $lang['new_user_notif_txt']);
-      $lang['new_user_notif_txt'] = stripslashes($lang['new_user_notif_txt']);
       $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
       $header .= "X-Mailer: Php/" . phpversion(). "\n";
       $header .= "X-Sender-ip: $ip\n";
@@ -123,7 +122,7 @@ if(isset($_POST['register_submit']))
     if (strlen($new_user_email) > $settings['email_maxlength']) $errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
     // word in username too long?
     $text_arr = explode(" ",$new_user_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-    $error_nwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['name_word_maxlength'])))."...", $lang['error_name_word_too_long']);
+    $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
     $errors[] = $error_nwtl; } }
     // look if name already exists:
     $name_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_name = '". mysqli_real_escape_string($connid, $new_user_name) ."' LIMIT 1");
@@ -132,7 +131,7 @@ if(isset($_POST['register_submit']))
     mysqli_free_result($name_result);
     if (strtolower($field["user_name"]) == strtolower($new_user_name) && $new_user_name != "")
      {
-      $lang['error_name_reserved'] = str_replace("[name]", htmlsc(stripslashes($new_user_name)), $lang['error_name_reserved']);
+      $lang['error_name_reserved'] = str_replace("[name]", htmlsc($new_user_name), $lang['error_name_reserved']);
       $errors[] = $lang['error_name_reserved'];
      }
     // look, if e-mail already exists:
@@ -142,7 +141,7 @@ if(isset($_POST['register_submit']))
     mysqli_free_result($email_result);
     if (strtolower($field["user_email"]) == strtolower($new_user_email) && $new_user_email != "")
      {
-      $errors[] = str_replace("[e-mail]", htmlsc(stripslashes($new_user_email)), $lang['error_email_reserved']);
+      $errors[] = str_replace("[e-mail]", htmlsc($new_user_email), $lang['error_email_reserved']);
      }
     // e-mail correct?
     if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $new_user_email)) $errors[] = $lang['error_email_wrong'];
@@ -202,7 +201,6 @@ if(isset($_POST['register_submit']))
      $lang['new_user_email_txt'] = str_replace("[name]", $new_user_name, $lang['new_user_email_txt']);
      #$lang['new_user_email_txt'] = str_replace("[password]", $new_user_pw, $lang['new_user_email_txt']);
      $lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$new_user_id."&key=".$activate_code, $lang['new_user_email_txt']);
-     $lang['new_user_email_txt'] = stripslashes($lang['new_user_email_txt']);
      $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
      $header .= "X-Mailer: Php/" . phpversion(). "\n";
      $header .= "X-Sender-ip: $ip\n";
@@ -218,7 +216,7 @@ if(isset($_POST['register_submit']))
        if(@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header)) $sent = true;
       }
 
-     // Best‰tigung anzeigen:
+     // Best√§tigung anzeigen:
      $action = "registered";
     }
    else
@@ -253,9 +251,9 @@ switch($action)
       <form action="register.php" method="post"><div>
       <?php if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_register']==1) { ?><input type="hidden" name="<?php echo session_name(); ?>" value="<?php echo session_id(); ?>" /><?php } ?>
       <p><b><?php echo $lang['username_marking']; ?></b><br />
-      <input type="text" size="25" name="new_user_name" value="<?php if (isset($new_user_name)) echo htmlsc(stripslashes($new_user_name)); ?>" maxlength="<?php echo $settings['name_maxlength']; ?>" /></p>
+      <input type="text" size="25" name="new_user_name" value="<?php if (isset($new_user_name)) echo htmlsc($new_user_name); ?>" maxlength="<?php echo $settings['name_maxlength']; ?>" /></p>
       <p><b><?php echo $lang['user_email_marking']; ?></b><br />
-      <input type="text" size="25" name="new_user_email" value="<?php if (isset($new_user_email)) echo htmlsc(stripslashes($new_user_email)); ?>" maxlength="<?php echo $settings['email_maxlength']; ?>" /></p>
+      <input type="text" size="25" name="new_user_email" value="<?php if (isset($new_user_email)) echo htmlsc($new_user_email); ?>" maxlength="<?php echo $settings['email_maxlength']; ?>" /></p>
       <p><b><?php echo $lang['reg_pw']; ?></b><br />
       <input type="password" size="25" name="reg_pw" /></p>
       <p><b><?php echo $lang['reg_pw_conf']; ?></b><br />
@@ -291,8 +289,8 @@ switch($action)
   case 'registered':
    if (isset($sent))
      {
-      $lang['registered_ok'] = str_replace("[name]", htmlsc(stripslashes($new_user_name)), $lang['registered_ok']);
-      $lang['registered_ok'] = str_replace("[email]", htmlsc(stripslashes($new_user_email)), $lang['registered_ok']);
+      $lang['registered_ok'] = str_replace("[name]", htmlsc($new_user_name), $lang['registered_ok']);
+      $lang['registered_ok'] = str_replace("[email]", htmlsc($new_user_email), $lang['registered_ok']);
       ?>
       <p class="normal"><?php echo $lang['registered_ok']; ?></p><p>&nbsp;</p>
       <?php

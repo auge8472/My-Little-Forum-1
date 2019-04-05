@@ -59,7 +59,7 @@ $settings['profile_maxlength'] = 5000;
 $settings['signature_maxlength'] = 255;
 $settings['text_word_maxlength'] = 70;
 $settings['signature_separator'] = "---<br />";
-$settings['quote_symbol'] = "»";
+$settings['quote_symbol'] = "Â»";
 $settings['count_users_online'] = 1;
 $settings['last_reply_link'] = 0;
 $settings['time_difference'] = 0;
@@ -136,7 +136,7 @@ function update13to14()
   $i=1;
   while ($data = mysqli_fetch_assoc($categories_result))
    {
-    @mysqli_query($connid, "INSERT INTO ". $db_settings['category_table'] ." (category_order, category, accession) VALUES (". $i .", '". mysqli_real_escape_string($connid, $data['category']) ."',0)") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+    @mysqli_query($connid, "INSERT INTO ". $db_settings['category_table'] ." (category_order, category, accession) VALUES (". intval($i) .", '". mysqli_real_escape_string($connid, $data['category']) ."',0)") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
     $i++;
    }
   if(isset($errors)) return $errors; else return false;
@@ -365,7 +365,7 @@ if (isset($_POST['form_submitted']))
     // select database:
     if (empty($errors))
      {
-      @mysqli_select_db($connid, $db_settings['db']) or $errors[] = $lang_add['db_inexistent_error']." (MySQL: ".mysqli_error($connid).")";
+      @mysqli_select_db($connid, $db_settings['db']) or $errors[] = $lang_add['db_inexistent_error']." (MySQL: ". mysqli_error($connid) .")";
      }
 
      // create tables:
@@ -570,7 +570,7 @@ if(empty($installed))
        </tr>
        <tr>
        <td class="admintab-l"><b><?php echo $lang_add['forum_name']; ?></b><br /><span class="small"><?php echo $lang_add['forum_name_d']; ?></span></td>
-       <td class="admintab-r"><input type="text" name="forum_name" value="<?php if (isset($_POST['forum_name'])) echo stripslashes($_POST['forum_name']); else echo $settings['forum_name']; ?>" size="40" /></td>
+       <td class="admintab-r"><input type="text" name="forum_name" value="<?php if (isset($_POST['forum_name'])) echo htmlsc($_POST['forum_name']); else echo $settings['forum_name']; ?>" size="40" /></td>
        </tr>
        <tr>
        <td class="admintab-l"><b><?php echo $lang_add['forum_address']; ?></b><br /><span class="small"><?php echo $lang_add['forum_address_d']; ?></span></td>

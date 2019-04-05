@@ -49,17 +49,17 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
   // database request
   if ($categories == false) // no categories defined
    {
-    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ". $db_settings['forum_table'] ." WHERE pid = 0 ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". $ul .", ". intval($settings['topics_per_page']));
+    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ". $db_settings['forum_table'] ." WHERE pid = 0 ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
     if(!$result) die($lang['db_error']);
    }
   elseif (is_array($categories) && $category == 0) // there are categories and all categories should be shown
    {
-    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ". $db_settings['forum_table'] ." WHERE pid = 0 AND category IN (". $category_ids_query .") ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". $ul .", ". intval($settings['topics_per_page']));
+    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ". $db_settings['forum_table'] ." WHERE pid = 0 AND category IN (". $category_ids_query .") ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
     if (!$result) die($lang['db_error']);
    }
   elseif (is_array($categories) && $category != 0 && in_array($category, $category_ids)) // there are categories and only one category should be shown
    {
-    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ". $db_settings['forum_table'] ." WHERE category = ". intval($category) ." AND pid = 0 ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". $ul .", ". intval($settings['topics_per_page']));
+    $result=mysqli_query($connid, "SELECT id, pid, tid FROM ". $db_settings['forum_table'] ." WHERE category = ". intval($category) ." AND pid = 0 ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
     if(!$result) die($lang['db_error']);
     // how many entries?
     $pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE pid = 0 AND category = ". intval($category));

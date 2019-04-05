@@ -74,7 +74,7 @@ function get_categories()
     $categories[0]='';
     while ($line = mysqli_fetch_assoc($result))
      {
-      $categories[$line['id']] = stripslashes($line['category']);
+      $categories[$line['id']] = $line['category'];
      }
     mysqli_free_result($result);
     return $categories;
@@ -107,7 +107,7 @@ function category_accession()
   if (isset($category_accession)) return $category_accession; else return false;
  }
 
-function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category, $action="") // Seiten-Navigation für forum.php, board.php und mix.php
+function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category, $action="") // Seiten-Navigation fÃ¼r forum.php, board.php und mix.php
   {
    global $lang, $select_submit_button;
    $output = "";
@@ -244,7 +244,7 @@ function smilies($string)
   $result = mysqli_query($connid, "SELECT file, code_1, code_2, code_3, code_4, code_5, title FROM ".$db_settings['smilies_table']);
   while($data = mysqli_fetch_assoc($result))
    {
-    if($data['title']!='') $title = ' title="'.stripslashes($data['title']).'"'; else $title='';
+    if($data['title']!='') $title = ' title="'. htmlsc($data['title']) .'"'; else $title='';
     if($data['code_1']!='') $string = str_replace($data['code_1'], "<img src=\"img/smilies/".$data['file']."\" alt=\"".$data['code_1']."\"".$title." />", $string);
     if($data['code_2']!='') $string = str_replace($data['code_2'], "<img src=\"img/smilies/".$data['file']."\" alt=\"".$data['code_2']."\"".$title." />", $string);
     if($data['code_3']!='') $string = str_replace($data['code_3'], "<img src=\"img/smilies/".$data['file']."\" alt=\"".$data['code_3']."\"".$title." />", $string);
@@ -290,10 +290,11 @@ function user_online()
   $diff = time()-($user_online_period*60);
   if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $ip = "uid_".$_SESSION[$settings['session_prefix'].'user_id'];
   else $ip = $_SERVER['REMOTE_ADDR'];
-  @mysqli_query($connid, "DELETE FROM ".$db_settings['useronline_table']." WHERE time < ".$diff);
-  list($is_online) = @mysqli_fetch_row(@mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE ip= '".$ip."'"));
-  if ($is_online > 0) @mysqli_query($connid, "UPDATE ".$db_settings['useronline_table']." SET time='".time()."', user_id='".$user_id."' WHERE ip='".$ip."'");
-  else @mysqli_query($connid, "INSERT INTO ".$db_settings['useronline_table']." SET time='".time()."', ip='".$ip."', user_id='".$user_id."'");
+  @mysqli_query($connid, "DELETE FROM ". $db_settings['useronline_table'] ." WHERE time < ". intval($diff));
+  list($is_online) = @mysqli_fetch_row(@mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['useronline_table'] ." WHERE ip= '". mysqli_real_escape_string($connid, $ip) ."'"));
+  if ($is_online > 0) @mysqli_query($connid, "UPDATE ". $db_settings['useronline_table'] ." SET time='".time()."', user_id='". intval($user_id) ."' WHERE ip='". mysqli_real_escape_string($connid, $ip) ."'");
+  else @mysqli_query($connid, "INSERT INTO ". $db_settings['useronline_table'] ." SET time='". time() ."', ip='". mysqli_real_escape_string($connid, $ip) ."', user_id=". intval($user_id));
+  #return $user_online;
  }
 
  // displays the thread tree:
@@ -305,7 +306,7 @@ function user_online()
   $mark_admin = false; $mark_mod = false;
   if ($settings['admin_mod_highlight'] == 1 && $parent_array[$id]["user_id"] > 0)
   {
-   $userdata_result=mysqli_query($connid, "SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = '".$parent_array[$id]["user_id"]."'");
+   $userdata_result=mysqli_query($connid, "SELECT user_type FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($parent_array[$id]["user_id"]));
    if (!$userdata_result) die($lang['db_error']);
    $userdata = mysqli_fetch_assoc($userdata_result);
    mysqli_free_result($userdata_result);
@@ -313,12 +314,12 @@ function user_online()
    elseif ($userdata['user_type'] == "mod") $mark_mod = true;
   }
 
-  if ($mark_admin==true) $name = "<span class=\"admin-highlight\">".htmlsc(stripslashes($parent_array[$id]["name"]))."</span>";
-  elseif ($mark_mod==true) $name = "<span class=\"mod-highlight\">".htmlsc(stripslashes($parent_array[$id]["name"]))."</span>";
-  else $name=htmlsc(stripslashes($parent_array[$id]["name"]));
+  if ($mark_admin==true) $name = "<span class=\"admin-highlight\">".htmlsc($parent_array[$id]["name"])."</span>";
+  elseif ($mark_mod==true) $name = "<span class=\"mod-highlight\">".htmlsc($parent_array[$id]["name"])."</span>";
+  else $name=htmlsc($parent_array[$id]["name"]);
   if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1)
    {
-    $sult = str_replace("[name]", htmlsc(stripslashes($parent_array[$id]["name"])), $lang['show_userdata_linktitle']);
+    $sult = str_replace("[name]", htmlsc($parent_array[$id]["name"]), $lang['show_userdata_linktitle']);
     $thread_info_a = str_replace("[name]", $name."<a href=\"user.php?id=".$parent_array[$id]["user_id"]."\" title=\"".$sult."\"><img src=\"img/registered.gif\" alt=\"(R)\" width=\"10\" height=\"10\" /></a>", $lang['thread_info']);
    }
   elseif (!isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1) $thread_info_a = str_replace("[name]", $name."<img src=\"img/registered.gif\" alt=\"(R)\" width=\"10\" height=\"10\" title=\"".$lang['registered_user_title']."\" />", $lang['thread_info']);
@@ -328,11 +329,11 @@ function user_online()
   ?><li><?php
   if ($id == $aktuellerEintrag && $parent_array[$id]["pid"]==0)
    {
-    ?><span class="actthread"><?php echo htmlsc(stripslashes($parent_array[$id]["subject"])); ?></span><?php
+    ?><span class="actthread"><?php echo htmlsc($parent_array[$id]["subject"]); ?></span><?php
    }
   elseif ($id == $aktuellerEintrag && $parent_array[$id]["pid"]!=0)
    {
-    ?><span class="actreply"><?php echo htmlsc(stripslashes($parent_array[$id]["subject"])); ?></span><?php
+    ?><span class="actreply"><?php echo htmlsc($parent_array[$id]["subject"]); ?></span><?php
    }
   else
    {
@@ -340,7 +341,7 @@ function user_online()
     if ((($parent_array[$id]["pid"]==0) && isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $parent_array[$id]["last_answer"]) || (($parent_array[$id]["pid"]==0) && empty($_SESSION[$settings['session_prefix'].'newtime']) && $parent_array[$id]["last_answer"] > $last_visit)) echo "threadnew";
     elseif ($parent_array[$id]["pid"]==0) echo "thread";
     elseif ((($parent_array[$id]["pid"]!=0) && isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $parent_array[$id]["time"]) || (($parent_array[$id]["pid"]!=0) && empty($_SESSION[$settings['session_prefix'].'newtime']) && $parent_array[$id]["time"] > $last_visit)) echo "replynew";
-    else echo "reply"; ?>" href="forum_entry.php?id=<?php echo $parent_array[$id]["id"]; if ($page != 0 || $category != 0 || $order != "time") echo '&amp;page='.$page.'&amp;category='.urlencode(stripslashes($category)).'&amp;order='.$order; ?>"><?php echo htmlsc(stripslashes($parent_array[$id]["subject"])); ?></a><?php
+    else echo "reply"; ?>" href="forum_entry.php?id=<?php echo $parent_array[$id]["id"]; if ($page != 0 || $category != 0 || $order != "time") echo '&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order; ?>"><?php echo htmlsc($parent_array[$id]["subject"]); ?></a><?php
    }
   echo " " . $thread_info_b;
   if ($parent_array[$id]["pid"]==0 && $category==0 && isset($categories[$parent_array[$id]["category"]]) && $categories[$parent_array[$id]["category"]]!='') { ?> <a title="<?php echo str_replace("[category]", $categories[$parent_array[$id]["category"]], $lang['choose_category_linktitle']); if (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 2) echo " ".$lang['admin_mod_category']; elseif (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 1) echo " ".$lang['registered_users_category']; ?>" href="forum.php?category=<?php echo $parent_array[$id]["category"]; ?>"><span class="<?php if (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 2) echo "category-adminmod"; elseif (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 1) echo "category-regusers"; else echo "category"; ?>">(<?php echo $categories[$parent_array[$id]["category"]]; ?>)</span></a><?php }
@@ -378,9 +379,9 @@ function parse_template()
 
   $template = str_replace("{LANGUAGE}",$lang['language'],$template);
   $template = str_replace("{CHARSET}",$lang['charset'],$template);
-  $title = stripslashes($settings['forum_name']); if (isset($wo)) $title .= " - ". htmlsc(stripslashes($wo));
+  $title = $settings['forum_name']; if (isset($wo)) $title .= " - ". htmlsc($wo);
   $template = str_replace("{TITLE}",$title,$template);
-  $template = str_replace("{FORUM-NAME}",stripslashes($settings['forum_name']),$template);
+  $template = str_replace("{FORUM-NAME}", $settings['forum_name'],$template);
   $template = str_replace('{HOME-ADDRESS}',$settings['home_linkaddress'],$template);
   $template = str_replace('{HOME-LINK}',$settings['home_linkname'],$template);
   $template = str_replace('{FORUM-INDEX-LINK}',$lang['forum_home_linkname'],$template);
@@ -389,14 +390,14 @@ function parse_template()
   $template = str_replace('{CONTACT}',$lang['contact_linkname'],$template);
 
   // User menu:
-  if (isset($_SESSION[$settings['session_prefix']."user_name"])) { if (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=="admin") $user_menu_admin = ' | <a href="admin.php" title="'.$lang['admin_area_linktitle'].'">'.$lang['admin_area_linkname'].'</a>'; else $user_menu_admin = ""; $user_menu = '<a href="user.php?id='.$_SESSION[$settings['session_prefix'].'user_id'].'" title="'.$lang['own_userdata_linktitle'].'"><b>'.htmlsc(stripslashes($_SESSION[$settings['session_prefix'].'user_name'])).'</b></a> | <a href="user.php" title="'.$lang['user_area_linktitle'].'">'.$lang['user_area_linkname'].'</a>'.$user_menu_admin.' | <a href="login.php" title="'.$lang['logout_linktitle'].'">'.$lang['logout_linkname'].'</a>'; }
+  if (isset($_SESSION[$settings['session_prefix']."user_name"])) { if (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=="admin") $user_menu_admin = ' | <a href="admin.php" title="'.$lang['admin_area_linktitle'].'">'.$lang['admin_area_linkname'].'</a>'; else $user_menu_admin = ""; $user_menu = '<a href="user.php?id='.$_SESSION[$settings['session_prefix'].'user_id'].'" title="'.$lang['own_userdata_linktitle'].'"><b>'.htmlsc($_SESSION[$settings['session_prefix'].'user_name']).'</b></a> | <a href="user.php" title="'.$lang['user_area_linktitle'].'">'.$lang['user_area_linkname'].'</a>'.$user_menu_admin.' | <a href="login.php" title="'.$lang['logout_linktitle'].'">'.$lang['logout_linkname'].'</a>'; }
   else $user_menu = '<a href="login.php" title="'.$lang['login_linktitle'].'">'.$lang['login_linkname'].'</a> | <a href="register.php" title="'.$lang['register_linktitle'].'">'.$lang['register_linkname'].'</a>';
   $template = str_replace("{USER-MENU}",$user_menu,$template);
 
   // Search:
   $search_dump = '<form action="search.php" method="get" title="'.$lang['search_formtitle'].'"><div class="search">';
   $search_dump .= $lang['search_marking'];
-  # if (isset($search)) $search_match = htmlsc(stripslashes($search)); else $search_match = "";
+  # if (isset($search)) $search_match = htmlsc($search); else $search_match = "";
   $search_dump .= '<span class="normal">&nbsp;</span><input class="searchfield" type="text" name="search" value="" size="20" /><span class="normal">&nbsp;</span><input type="image" name="" src="img/submit.gif" alt="&raquo;" /></div></form>';
   $template = str_replace("{SEARCH}",$search_dump,$template);
 
