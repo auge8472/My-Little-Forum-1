@@ -57,7 +57,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
   if (isset($_COOKIE['user_email']) && empty($_POST["form_submitted"])) $sender_email = $_COOKIE['user_email'];
   if (isset($_SESSION[$settings['session_prefix'].'user_id']) && empty($_POST["form_submitted"]))
    {
-    $ue_result = mysqli_query($connid, "SELECT user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
+    $ue_result = mysqli_query($connid, "SELECT user_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
     if (!$ue_result) die($lang['db_error']);
     $ue_field = mysqli_fetch_assoc($ue_result);
     mysqli_free_result($ue_result);
@@ -67,7 +67,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 
   if (isset($id))
   {
-   $result = mysqli_query($connid, "SELECT tid, user_id, name, email, subject FROM ".$db_settings['forum_table']." WHERE id = '". intval($id) ."' LIMIT 1");
+   $result = mysqli_query($connid, "SELECT tid, user_id, name, email, subject FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($id) ." LIMIT 1");
    if (!$result) die($lang['db_error']);
    $field = mysqli_fetch_assoc($result);
    mysqli_free_result($result);
@@ -76,7 +76,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
   }
   elseif (isset($uid))
   {
-   $result = mysqli_query($connid, "SELECT user_id, user_name, user_email, hide_email FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($uid) ." LIMIT 1");
+   $result = mysqli_query($connid, "SELECT user_id, user_name, user_email, hide_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($uid) ." LIMIT 1");
    if (!$result) die($lang['db_error']);
    $field = mysqli_fetch_assoc($result);
    mysqli_free_result($result);
@@ -100,13 +100,13 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 
   if (isset($_POST["form_submitted"]))
    {
-    // übergebene Variablen ermitteln:
+    // Ã¼bergebene Variablen ermitteln:
     $sender_name = trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_name'])));
     $sender_email = trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_email'])));
     $subject = trim($_POST['subject']);
     $text = $_POST['text'];
 
-    // Überprüfungen der Daten:
+    // ÃœberprÃ¼fungen der Daten:
     unset($errors);
     if ($sender_name == "") $errors[] = $lang['error_no_name'];
     if ($sender_email == "") $errors[] = $lang['error_no_email'];
@@ -114,7 +114,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
     if ($text == "") $errors[] = $lang['error_no_text'];
 
      // check for not accepted words:
-     $result=mysqli_query($connid, "SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1");
+     $result=mysqli_query($connid, "SELECT list FROM ". $db_settings['banlists_table'] ." WHERE name = 'words' LIMIT 1");
      if(!$result) die($lang['db_error']);
      $data = mysqli_fetch_assoc($result);
      mysqli_free_result($result);
@@ -168,7 +168,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
        {
         if(@mail($mailto, $mail_subject, $mail_text, $header)) $sent = true; else $errors[] = $lang['error_meilserv'];
        }
-      // Bestätigung:
+      // BestÃ¤tigung:
       if (isset($sent))
       {
        $lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['conf_email_txt']);

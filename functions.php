@@ -107,7 +107,7 @@ function category_accession()
   if (isset($category_accession)) return $category_accession; else return false;
  }
 
-function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category, $action="") // Seiten-Navigation für forum.php, board.php und mix.php
+function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category, $action="") // Seiten-Navigation fÃ¼r forum.php, board.php und mix.php
   {
    global $lang, $select_submit_button;
    $output = "";
@@ -273,17 +273,16 @@ function zitat($string)
   return $string;
  }
 
- // connects to the database:
- function connect_db($host,$user,$pw,$db)
- {
-  global $lang;
-  $connid = @mysqli_connect($host, $user, $pw, $db);  // Datenbankverbindung herstellen
-  if (!$connid) die($lang['db_error']);
-  return $connid;
- }
+// connects to the database:
+function connect_db($host,$user,$pw,$db) {
+	global $lang;
+	$connid = @mysqli_connect($host, $user, $pw, $db);  // open database connection
+	if (!$connid) die($lang['db_error']);
+	return $connid;
+}
 
- // counts the users which are online:
- function user_online()
+// counts the users which are online:
+function user_online()
  {
   $user_online_period = 10;
   global $connid, $db_settings, $settings;
@@ -291,11 +290,10 @@ function zitat($string)
   $diff = time()-($user_online_period*60);
   if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $ip = "uid_".$_SESSION[$settings['session_prefix'].'user_id'];
   else $ip = $_SERVER['REMOTE_ADDR'];
-  @mysqli_query($connid, "DELETE FROM ".$db_settings['useronline_table']." WHERE time < ". intval($diff));
-  list($is_online) = @mysqli_fetch_row(@mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE ip= '". mysqli_real_escape_string($connid, $ip) ."'"));
-  if ($is_online > 0) @mysqli_query($connid, "UPDATE ".$db_settings['useronline_table']." SET time='". time() ."', user_id= ". intval($user_id) ." WHERE ip = '". mysqli_real_escape_string($connid, $ip) ."'");
-  else @mysqli_query($connid, "INSERT INTO ".$db_settings['useronline_table']." SET time='". time() ."', ip='". mysqli_real_escape_string($connid, $ip) ."', user_id='". intval($user_id) ."'");
-  #list($user_online) = @mysqli_fetch_row(@mysqli_query($connid, "SELECT COUNT(*) FROM ".$db_settings['useronline_table']));
+  @mysqli_query($connid, "DELETE FROM ". $db_settings['useronline_table'] ." WHERE time < ". intval($diff));
+  list($is_online) = @mysqli_fetch_row(@mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['useronline_table'] ." WHERE ip= '". mysqli_real_escape_string($connid, $ip) ."'"));
+  if ($is_online > 0) @mysqli_query($connid, "UPDATE ". $db_settings['useronline_table'] ." SET time='".time()."', user_id='". intval($user_id) ."' WHERE ip='". mysqli_real_escape_string($connid, $ip) ."'");
+  else @mysqli_query($connid, "INSERT INTO ". $db_settings['useronline_table'] ." SET time='". time() ."', ip='". mysqli_real_escape_string($connid, $ip) ."', user_id=". intval($user_id));
   #return $user_online;
  }
 
@@ -308,7 +306,7 @@ function zitat($string)
   $mark_admin = false; $mark_mod = false;
   if ($settings['admin_mod_highlight'] == 1 && $parent_array[$id]["user_id"] > 0)
   {
-   $userdata_result=mysqli_query($connid, "SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($parent_array[$id]["user_id"]));
+   $userdata_result=mysqli_query($connid, "SELECT user_type FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($parent_array[$id]["user_id"]));
    if (!$userdata_result) die($lang['db_error']);
    $userdata = mysqli_fetch_assoc($userdata_result);
    mysqli_free_result($userdata_result);

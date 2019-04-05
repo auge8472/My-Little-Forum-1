@@ -4,12 +4,12 @@ include("inc.php");
 // database request
  if ($categories == false)
   {
-   $result=mysqli_query($connid, "SELECT id, pid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS xtime, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS rss_time, name, subject, text FROM ".$db_settings['forum_table']." ORDER BY time DESC LIMIT 15");
+   $result=mysqli_query($connid, "SELECT id, pid, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS xtime, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS rss_time, name, subject, text FROM ". $db_settings['forum_table'] ." ORDER BY time DESC LIMIT 15");
    if(!$result) die($lang['db_error']);
    }
  elseif (is_array($categories))
   {
-   $result=mysqli_query($connid, "SELECT id, pid, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS xtime, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS rss_time, name, subject, text FROM ".$db_settings['forum_table']." WHERE category IN (". $category_ids_query .") ORDER BY time DESC LIMIT 15");
+   $result=mysqli_query($connid, "SELECT id, pid, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS xtime, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS rss_time, name, subject, text FROM ". $db_settings['forum_table'] ." WHERE category IN (". $category_ids_query .") ORDER BY time DESC LIMIT 15");
    if(!$result) die($lang['db_error']);
   }
 $result_count = mysqli_num_rows($result);
