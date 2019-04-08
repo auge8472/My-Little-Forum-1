@@ -103,6 +103,10 @@ array('sleeping.gif', ':sleeping:'),
 array('wink2.gif', ':wink:'),
 array('flower.gif', ':flower:'),
 );
+function htmlsc($string) {
+	global $lang;
+	return htmlspecialchars($string, ENT_QUOTES, "ISO-8859-1", false);
+}
 
 // update functions:
 function update13to14()
