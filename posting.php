@@ -791,7 +791,7 @@ switch ($show)
           if ($pr_email != ""  && $hide_email != 1 && $pr_hp != "") { $email_hp .= " "; }
           if ($pr_email != "" && $hide_email != 1) { $email_hp .= '<a href="contact.php"><img src="img/email.gif" alt="'.$lang['email_alt'].'" title="'.str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']).'" width="13" height="10" /></a>'; }
           if ($pr_place != "") { $place_c = htmlsc($pr_place) . ", "; $place_wc = htmlsc($pr_place); }
-          $lang['forum_author_marking'] = str_replace("[name]", htmlsc(($pr_name), $lang['forum_author_marking']);
+          $lang['forum_author_marking'] = str_replace("[name]", htmlsc($pr_name), $lang['forum_author_marking']);
           $lang['forum_author_marking'] = str_replace("[email_hp]", $email_hp, $lang['forum_author_marking']);
           $lang['forum_author_marking'] = str_replace("[place, ]", $place_c, $lang['forum_author_marking']);
           $lang['forum_author_marking'] = str_replace("[place]", $place_wc, $lang['forum_author_marking']);
