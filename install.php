@@ -371,17 +371,100 @@ if (isset($_POST['form_submitted']))
      {
       @mysqli_select_db($connid, $db_settings['db']) or $errors[] = $lang_add['db_inexistent_error']." (MySQL: ". mysqli_error($connid) .")";
      }
-
+     $tabledef['settings'] = "CREATE TABLE ". $db_settings['settings_table'] ." (
+     name varchar(255) NOT NULL default '',
+     value varchar(255) NOT NULL default '')";
+     $tabledef['entries'] = "CREATE TABLE ". $db_settings['forum_table'] ." (
+     id int(11) NOT NULL auto_increment,
+     pid int(11) NOT NULL default '0',
+     tid int(11) NOT NULL default '0',
+     uniqid varchar(255) NOT NULL default '',
+     time timestamp NULL default NULL,
+     last_answer timestamp NULL default NULL,
+     edited timestamp NULL default NULL,
+     edited_by varchar(255) NOT NULL default '',
+     user_id int(11) default '0',
+     name varchar(255) NOT NULL default '',
+     subject varchar(255) NOT NULL default '',
+     category int(11) NOT NULL default '0',
+     email varchar(255) NOT NULL default '',
+     hp varchar(255) NOT NULL default '',
+     place varchar(255) NOT NULL default '',
+     ip varchar(255) NOT NULL default '',
+     text text NOT NULL,
+     show_signature tinyint(4) default '0',
+     email_notify tinyint(4) default '0',
+     marked tinyint(4) default '0',
+     locked tinyint(4) default '0',
+     fixed tinyint(4) default '0',
+     views int(11) default '0',
+     PRIMARY KEY (id),
+     UNIQUE KEY id (id),
+     KEY tid (tid),
+     KEY category (category),
+     KEY pid (pid),
+     KEY fixed (fixed))";
+     $tabledef['categories'] = "CREATE TABLE ". $db_settings['category_table'] ." (
+     id int(11) NOT NULL auto_increment,
+     category_order int(11) NOT NULL,
+     category varchar(255) NOT NULL default '',
+     description varchar(255) NOT NULL default '',
+     accession tinyint(4) NOT NULL default '0',
+     PRIMARY KEY (id))";
+     $tabledef['userdata'] = "CREATE TABLE ". $db_settings['userdata_table'] ." (
+     user_id int(11) NOT NULL auto_increment,
+     user_type varchar(255) NOT NULL default '',
+     user_name varchar(255) NOT NULL default '',
+     user_real_name varchar(255) NOT NULL default '',
+     user_pw varchar(255) NOT NULL default '',
+     user_email varchar(255) NOT NULL default '',
+     hide_email tinyint(4) default '0',
+     user_hp varchar(255) NOT NULL default '',
+     user_place varchar(255) NOT NULL default '',
+     signature varchar(255) NOT NULL default '',
+     profile text NOT NULL,
+     logins int(11) NOT NULL default '0',
+     last_login timestamp NULL default NULL,
+     last_logout timestamp NULL default NULL,
+     user_ip varchar(255) NOT NULL default '',
+     registered timestamp NULL default NULL,
+     user_view varchar(255) NOT NULL default '',
+     new_posting_notify tinyint(4) default '0',
+     new_user_notify tinyint(4) default '0',
+     personal_messages tinyint(4) default '0',
+     time_difference tinyint(4) default '0',
+     user_lock tinyint(4) default '0',
+     pwf_code varchar(255) NOT NULL default '',
+     activate_code varchar(255) NOT NULL default '',
+     PRIMARY KEY (user_id))";
+     $tabledef['smilies'] = "CREATE TABLE ". $db_settings['smilies_table'] ." (
+     id int(11) NOT NULL auto_increment,
+     order_id int(11) NOT NULL default '0',
+     file varchar(100) NOT NULL default '',
+     code_1 varchar(50) NOT NULL default '',
+     code_2 varchar(50) NOT NULL default '',
+     code_3 varchar(50) NOT NULL default '',
+     code_4 varchar(50) NOT NULL default '',
+     code_5 varchar(50) NOT NULL default '',
+     title varchar(255) NOT NULL default '',
+     PRIMARY KEY (id))";
+     $tabledef['banlists'] = "CREATE TABLE ". $db_settings['banlists_table'] ." (
+     name varchar(255) NOT NULL default '',
+     list text NOT NULL)";
+     $tabledef['uonline'] = "CREATE TABLE ". $db_settings['useronline_table'] ." (
+     ip char(15) NOT NULL default '',
+     time int(14) NOT NULL default '0',
+     user_id int(11) default '0')";
      // create tables:
      if (empty($errors))
       {
-       @mysqli_query($connid, "CREATE TABLE ". $db_settings['settings_table'] ." (name varchar(255) NOT NULL default '', value varchar(255) NOT NULL default '')") or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, "CREATE TABLE ". $db_settings['forum_table'] ." (id int(11) NOT NULL auto_increment, pid int(11) NOT NULL default '0', tid int(11) NOT NULL default '0', uniqid varchar(255) NOT NULL default '', time timestamp NULL default NULL, last_answer timestamp NULL default NULL, edited timestamp NULL default NULL, edited_by varchar(255) NOT NULL default '', user_id int(11) default '0', name varchar(255) NOT NULL default '', subject varchar(255) NOT NULL default '', category int(11) NOT NULL default '0', email varchar(255) NOT NULL default '', hp varchar(255) NOT NULL default '', place varchar(255) NOT NULL default '', ip varchar(255) NOT NULL default '', text text NOT NULL, show_signature tinyint(4) default '0', email_notify tinyint(4) default '0', marked tinyint(4) default '0', locked tinyint(4) default '0', fixed tinyint(4) default '0', views int(11) default '0', PRIMARY KEY (id), UNIQUE KEY id (id), KEY tid (tid), KEY category (category), KEY pid (pid), KEY fixed (fixed))") or $errors[] = str_replace("[table]",$db_settings['forum_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, "CREATE TABLE ". $db_settings['category_table'] ." (id int(11) NOT NULL auto_increment, category_order int(11) NOT NULL, category varchar(255) NOT NULL default '', description varchar(255) NOT NULL default '', accession tinyint(4) NOT NULL default '0', PRIMARY KEY (id))") or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, "CREATE TABLE ". $db_settings['userdata_table'] ." (user_id int(11) NOT NULL auto_increment, user_type varchar(255) NOT NULL default '', user_name varchar(255) NOT NULL default '', user_real_name varchar(255) NOT NULL default '', user_pw varchar(255) NOT NULL default '', user_email varchar(255) NOT NULL default '', hide_email tinyint(4) default '0', user_hp varchar(255) NOT NULL default '', user_place varchar(255) NOT NULL default '', signature varchar(255) NOT NULL default '', profile text NOT NULL, logins int(11) NOT NULL default '0', last_login timestamp NULL default NULL, last_logout timestamp NULL default NULL, user_ip varchar(255) NOT NULL default '', registered timestamp NULL default NULL, user_view varchar(255) NOT NULL default '', new_posting_notify tinyint(4) default '0', new_user_notify tinyint(4) default '0', personal_messages tinyint(4) default '0', time_difference tinyint(4) default '0', user_lock tinyint(4) default '0', pwf_code varchar(255) NOT NULL default '', activate_code varchar(255) NOT NULL default '', PRIMARY KEY (user_id))") or $errors[] = str_replace("[table]",$db_settings['userdata_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, "CREATE TABLE ". $db_settings['smilies_table'] ." (id int(11) NOT NULL auto_increment, order_id int(11) NOT NULL default '0', file varchar(100) NOT NULL default '', code_1 varchar(50) NOT NULL default '', code_2 varchar(50) NOT NULL default '', code_3 varchar(50) NOT NULL default '', code_4 varchar(50) NOT NULL default '', code_5 varchar(50) NOT NULL default '', title varchar(255) NOT NULL default '', PRIMARY KEY (id))") or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, "CREATE TABLE ". $db_settings['banlists_table'] ." (name varchar(255) NOT NULL default '', list text NOT NULL)") or $errors[] = str_replace("[table]",$db_settings['banlists_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, "CREATE TABLE ". $db_settings['useronline_table'] ." (ip char(15) NOT NULL default '', time int(14) NOT NULL default '0', user_id int(11) default '0')") or $errors[] = str_replace("[table]",$db_settings['useronline_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+       @mysqli_query($connid, $tabledef['settings']) or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+       @mysqli_query($connid, $tabledef['entries']) or $errors[] = str_replace("[table]",$db_settings['forum_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+       @mysqli_query($connid, $tabledef['categories']) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+       @mysqli_query($connid, $tabledef['userdata']) or $errors[] = str_replace("[table]",$db_settings['userdata_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+       @mysqli_query($connid, $tabledef['smilies']) or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+       @mysqli_query($connid, $tabledef['banlists']) or $errors[] = str_replace("[table]",$db_settings['banlists_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+       @mysqli_query($connid, $tabledef['uonline']) or $errors[] = str_replace("[table]",$db_settings['useronline_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
       }
 
      // insert admin in userdata table:
