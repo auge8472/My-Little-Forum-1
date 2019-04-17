@@ -612,7 +612,7 @@ if (isset($_POST['form_submitted']))
 <style type="text/css">
 body                { font-family: Verdana,Arial,Helvetica,sans-serif; color: #000; font-size:13px; background-color: #fffff3; margin: 0px; padding: 20px; }
 h1                  { margin: 0px 0px 20px 0px; font-size: 18px; font-weight: bold; }
-table.admintab      { border: 1px solid #bacbdf; }
+table.admintab      { border: 1px solid #bacbdf; border-collapse: collapse; }
 td.admintab-hl      { width: 100%; vertical-align: top; background: #d2ddea; }
 td.admintab-hl h2   { margin: 3px 0px 3px 0px; font-size: 15px; font-weight: bold; }
 td.admintab-hl p    { font-size: 11px; line-height: 16px; margin: 0px 0px 3px 0px; padding: 0px; }
