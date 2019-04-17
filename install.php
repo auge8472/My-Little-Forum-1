@@ -620,10 +620,9 @@ td.admintab-l       { width: 50%; vertical-align: top; font-family: verdana, ari
 td.admintab-r       { width: 50%; vertical-align: top; font-family: verdana, arial, sans-serif; font-size: 13px; background: #f5f5f5; }
 .caution            { color: red; font-weight: bold; }
 .small              { font-size: 11px; line-height:16px; }
-a:link              { color: #0000cc; text-decoration: none; }
-a:visited           { color: #0000cc; text-decoration: none; }
-a:hover             { color: #0000ff; text-decoration: underline; }
-a:active            { color: #ff0000; text-decoration: none; }
+a                   { color: #00c; text-decoration: none; }
+a:focus, a:hover    { color: #00f; text-decoration: underline; }
+a:active            { color: #f00; }
 </style>
 </head>
 <body>
