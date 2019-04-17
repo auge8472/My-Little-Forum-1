@@ -657,7 +657,7 @@ if(empty($installed))
        ?><p><?php echo $lang_add['installation_instructions']; ?></p><br /><?php
        if(isset($errors))
         {
-         ?><p class="caution" style="margin-top: 10px;"><?php echo $lang['error_headline']; ?><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><p>&nbsp;</p><?php
+         ?><p class="caution"><?php echo $lang['error_headline']; ?><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><?php
         }
        ?><form action="install.php" method="post">
        <input type="hidden" name="language" value="<?php echo $language; ?>">
@@ -730,7 +730,7 @@ if(empty($installed))
        ?><p><?php echo $lang_add['update_instructions']; ?></p><br /><?php
        if(isset($errors))
         {
-         ?><p class="caution" style="margin-top: 10px;"><?php echo $lang['error_headline']; ?><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><p>&nbsp;</p><?php
+         ?><p class="caution"><?php echo $lang['error_headline']; ?><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><?php
         }
        ?><form action="install.php" method="post">
        <input type="hidden" name="language" value="<?php echo $language; ?>">
