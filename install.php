@@ -610,7 +610,7 @@ if (isset($_POST['form_submitted']))
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
 <title><?php echo $settings['forum_name']." - ".$lang_add['install_title']; ?></title>
 <style type="text/css">
-body                { font-family: Verdana,Arial,Helvetica,sans-serif; color: #000000; font-size:13px; background-color: #fffff3; margin: 0px; padding: 20px; }
+body                { font-family: Verdana,Arial,Helvetica,sans-serif; color: #000; font-size:13px; background-color: #fffff3; margin: 0px; padding: 20px; }
 h1                  { margin: 0px 0px 20px 0px; font-size: 18px; font-weight: bold; }
 table.admintab      { border: 1px solid #bacbdf; }
 td.admintab-hl      { width: 100%; vertical-align: top; background: #d2ddea; }
