@@ -557,6 +557,8 @@ if (isset($_POST['form_submitted']))
          if($errors==false) unset($errors);
          if(empty($errors)) $errors = update16to17();
          if($errors==false) unset($errors);
+         if(empty($errors)) $errors = update17();
+         if($errors==false) unset($errors);
         break;
         case 1.4:
          $errors = update14to15();
@@ -567,6 +569,8 @@ if (isset($_POST['form_submitted']))
          if($errors==false) unset($errors);
          if(empty($errors)) $errors = update16to17();
          if($errors==false) unset($errors);
+         if(empty($errors)) $errors = update17();
+         if($errors==false) unset($errors);
         break;
         case 1.5:
          $errors = update15to16();
@@ -575,11 +579,15 @@ if (isset($_POST['form_submitted']))
          if($errors==false) unset($errors);
          if(empty($errors)) $errors = update16to17();
          if($errors==false) unset($errors);
+         if(empty($errors)) $errors = update17();
+         if($errors==false) unset($errors);
         break;
         case 1.6:
          $errors = update16();
          if($errors==false) unset($errors);
          if(empty($errors)) $errors = update16to17();
+         if($errors==false) unset($errors);
+         if(empty($errors)) $errors = update17();
          if($errors==false) unset($errors);
         break;
         case 1.7:
