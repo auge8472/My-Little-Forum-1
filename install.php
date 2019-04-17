@@ -604,8 +604,8 @@ if (isset($_POST['form_submitted']))
    }
  }
 
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+?><!DOCTYPE html>
+<html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
 <title><?php echo $settings['forum_name']." - ".$lang_add['install_title']; ?></title>
