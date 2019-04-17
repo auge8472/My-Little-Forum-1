@@ -780,7 +780,7 @@ if(empty($installed))
  }
 else
  {
-  ?><p class="caution" style="background-image:url(http://www.mylittlehomepage.net/mylittleforum/install/x.gif);"><?php echo $lang_add['installation_complete']; ?></p>
+  ?><p class="caution"><?php echo $lang_add['installation_complete']; ?></p>
   <p><?php echo $lang_add['installation_complete_exp']; ?></p>
   <p><a href="index.php"><?php echo $lang_add['installation_complete_link']; ?></a></p><?php
  }
