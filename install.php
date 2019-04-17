@@ -619,7 +619,7 @@ td.admintab-hl p    { font-size: 11px; line-height: 16px; margin: 0px 0px 3px 0p
 td.admintab-l       { width: 50%; vertical-align: top; font-family: verdana, arial, sans-serif; font-size: 13px; background: #f5f5f5; }
 td.admintab-r       { width: 50%; vertical-align: top; font-family: verdana, arial, sans-serif; font-size: 13px; background: #f5f5f5; }
 .caution            { color: red; font-weight: bold; }
-.small              { font-size: 11px; line-height:16px; }
+.small              { font-size: 12px; line-height:17px; }
 a                   { color: #00c; text-decoration: none; }
 a:focus, a:hover    { color: #00f; text-decoration: underline; }
 a:active            { color: #f00; }
