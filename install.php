@@ -613,11 +613,11 @@ if (isset($_POST['form_submitted']))
 body                { font-family: Verdana,Arial,Helvetica,sans-serif; color: #000000; font-size:13px; background-color: #fffff3; margin: 0px; padding: 20px; }
 h1                  { margin: 0px 0px 20px 0px; font-size: 18px; font-weight: bold; }
 table.admintab      { border: 1px solid #bacbdf; }
-td.admintab-hl      { width: 100%; vertical-align: top; font-family: verdana, arial, sans-serif; font-size: 13px; background: #d2ddea; }
+td.admintab-hl      { width: 100%; vertical-align: top; background: #d2ddea; }
 td.admintab-hl h2   { margin: 3px 0px 3px 0px; font-size: 15px; font-weight: bold; }
 td.admintab-hl p    { font-size: 11px; line-height: 16px; margin: 0px 0px 3px 0px; padding: 0px; }
-td.admintab-l       { width: 50%; vertical-align: top; font-family: verdana, arial, sans-serif; font-size: 13px; background: #f5f5f5; }
-td.admintab-r       { width: 50%; vertical-align: top; font-family: verdana, arial, sans-serif; font-size: 13px; background: #f5f5f5; }
+td.admintab-l       { width: 50%; vertical-align: top; background: #f5f5f5; }
+td.admintab-r       { width: 50%; vertical-align: top; background: #f5f5f5; }
 .caution            { color: red; font-weight: bold; }
 .small              { font-size: 12px; line-height:17px; }
 a                   { color: #00c; text-decoration: none; }
