@@ -660,6 +660,8 @@ if(empty($installed))
          ?><p class="caution" style="margin-top: 10px;"><?php echo $lang['error_headline']; ?><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><p>&nbsp;</p><?php
         }
        ?><form action="install.php" method="post">
+       <input type="hidden" name="language" value="<?php echo $language; ?>">
+       <input type="hidden" name="installation_mode" value="installation">
        <table class="admintab" border="0" cellpadding="5" cellspacing="1">
        <tr>
        <td class="admintab-hl" colspan="2"><h2><?php echo $lang_add['inst_basic_settings']; ?></h2><p><?php echo $lang_add['inst_main_settings_d']; ?></p></td>
@@ -718,12 +720,10 @@ if(empty($installed))
        </tr>
        <tr>
        <td class="admintab-l"><b><?php echo $lang_add['inst_table_prefix']; ?></b><br /><span class="small"><?php echo $lang_add['inst_table_prefix_d']; ?></span></td>
-       </tr>
-       <tr>
-       <td class="admintab-hl" colspan="2"><input type="submit" name="form_submitted" value="<?php echo $lang_add['forum_install_ok']; ?>" /><input type="hidden" name="language" value="<?php echo $language; ?>" /><input type="hidden" name="installation_mode" value="installation" /></td>
        <td class="admintab-r"><input type="text" name="table_prefix" value="<?php if (isset($_POST['table_prefix'])) echo $_POST['table_prefix']; else echo $table_prefix; ?>" size="40"></td>
        </tr>
        </table>
+       <p><button name="form_submitted" value="<?php echo $lang_add['forum_install_ok']; ?>"><?php echo $lang_add['forum_install_ok']; ?></button></p>
        </form><?php
       break;
       case 'update':
@@ -732,7 +732,10 @@ if(empty($installed))
         {
          ?><p class="caution" style="margin-top: 10px;"><?php echo $lang['error_headline']; ?><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><p>&nbsp;</p><?php
         }
-       ?><form action="install.php" method="post"><?php if(isset($select_version))
+       ?><form action="install.php" method="post">
+       <input type="hidden" name="language" value="<?php echo $language; ?>">
+       <input type="hidden" name="installation_mode" value="update">
+       <?php if(isset($select_version))
         {
          ?><p><?php echo $lang_add['select_version']; ?>
          <select name="old_version" size="1">
@@ -766,12 +769,10 @@ if(empty($installed))
        </tr>
        <tr>
        <td class="admintab-l"><b><?php echo $lang_add['inst_table_prefix']; ?></b><br /><span class="small"><?php echo $lang_add['inst_table_prefix_d']; ?></span></td>
-       </tr>
-       <tr>
-       <td class="admintab-hl" colspan="2"><input type="submit" name="form_submitted" value="<?php echo $lang_add['forum_update_ok']; ?>" /><input type="hidden" name="language" value="<?php echo $language; ?>" /><input type="hidden" name="installation_mode" value="update" /></td>
        <td class="admintab-r"><input type="text" name="table_prefix" value="<?php if (isset($_POST['table_prefix'])) echo $_POST['table_prefix']; else echo $table_prefix; ?>" size="40"></td>
        </tr>
        </table>
+       <p><button name="form_submitted" value="<?php echo $lang_add['forum_update_ok']; ?>"><?php echo $lang_add['forum_update_ok']; ?></button></p>
        </form><?php
       break;
      }
