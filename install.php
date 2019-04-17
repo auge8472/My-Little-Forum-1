@@ -617,10 +617,10 @@ td, th              { vertical-align: top; padding: 5px; }
 td.admintab-hl      { width: 100%; background: #d2ddea; }
 td.admintab-hl h2   { margin: 3px 0px 3px 0px; font-size: 15px; font-weight: bold; }
 td.admintab-hl p    { font-size: 13px; line-height: 145%; margin: 0px 0px 3px 0px; padding: 0px; }
-th.admintab-l       { width: 50%; background: #f5f5f5; }
+th                  { width: 50%; background: #f5f5f5; }
 td.admintab-r       { width: 50%; background: #f5f5f5; }
 .caution            { color: red; font-weight: bold; }
-.small              { font-size: 12px; line-height:17px; }
+.small              { font-size: 12px; line-height:17px; font-weight: normal; }
 a                   { color: #00c; text-decoration: none; }
 a:focus, a:hover    { color: #00f; text-decoration: underline; }
 a:active            { color: #f00; }
@@ -668,34 +668,34 @@ if(empty($installed))
        <td class="admintab-hl" colspan="2"><h2><?php echo $lang_add['inst_basic_settings']; ?></h2><p><?php echo $lang_add['inst_main_settings_d']; ?></p></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['forum_name']; ?></b><br><span class="small"><?php echo $lang_add['forum_name_d']; ?></span></th>
+       <th><?php echo $lang_add['forum_name']; ?><br><span class="small"><?php echo $lang_add['forum_name_d']; ?></span></th>
        <td class="admintab-r"><input type="text" name="forum_name" value="<?php if (isset($_POST['forum_name'])) echo htmlsc($_POST['forum_name']); else echo $settings['forum_name']; ?>" size="40"></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['forum_address']; ?></b><br><span class="small"><?php echo $lang_add['forum_address_d']; ?></span></th>
+       <th><?php echo $lang_add['forum_address']; ?><br><span class="small"><?php echo $lang_add['forum_address_d']; ?></span></th>
        <td class="admintab-r"><input type="text" name="forum_address" value="<?php if (isset($_POST['forum_address'])) echo $_POST['forum_address']; else { if ($settings['forum_address'] != "") echo $settings['forum_address']; else echo "http://".$_SERVER['SERVER_NAME'].str_replace("install.php","",$_SERVER['SCRIPT_NAME']); } ?>" size="40"></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['forum_email']; ?></b><br><span class="small"><?php echo $lang_add['forum_email_d']; ?></span></th>
+       <th><?php echo $lang_add['forum_email']; ?><br><span class="small"><?php echo $lang_add['forum_email_d']; ?></span></th>
        <td class="admintab-r"><input type="text" name="forum_email" value="<?php if (isset($_POST['forum_email'])) echo $_POST['forum_email']; else echo "@"; ?>" size="40"></td>
        </tr>
        <tr>
        <td class="admintab-hl" colspan="2"><h2><?php echo $lang_add['inst_admin_settings']; ?></h2><p><?php echo $lang_add['inst_admin_settings_d']; ?></p></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['inst_admin_name']; ?></b><br><span class="small"><?php echo $lang_add['inst_admin_name_d']; ?></span></th>
+       <th><?php echo $lang_add['inst_admin_name']; ?><br><span class="small"><?php echo $lang_add['inst_admin_name_d']; ?></span></th>
        <td class="admintab-r"><input type="text" name="admin_name" value="<?php if (isset($_POST['admin_name'])) echo $_POST['admin_name']; ?>" size="40"></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['inst_admin_email']; ?></b><br><span class="small"><?php echo $lang_add['inst_admin_email_d']; ?></span></th>
+       <th><?php echo $lang_add['inst_admin_email']; ?><br><span class="small"><?php echo $lang_add['inst_admin_email_d']; ?></span></th>
        <td class="admintab-r"><input type="text" name="admin_email" value="<?php if (isset($_POST['admin_email'])) echo $_POST['admin_email']; else echo "@"; ?>" size="40"></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['inst_admin_pw']; ?></b><br><span class="small"><?php echo $lang_add['inst_admin_pw_d']; ?></span></th>
+       <th><?php echo $lang_add['inst_admin_pw']; ?><br><span class="small"><?php echo $lang_add['inst_admin_pw_d']; ?></span></th>
        <td class="admintab-r"><input type="password" name="admin_pw" value="<?php if (isset($_POST['admin_pw'])) echo $_POST['admin_pw']; ?>" size="40"></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['inst_admin_pw_conf']; ?></b><br><span class="small"><?php echo $lang_add['inst_admin_pw_conf_d']; ?></span></th>
+       <th><?php echo $lang_add['inst_admin_pw_conf']; ?><br><span class="small"><?php echo $lang_add['inst_admin_pw_conf_d']; ?></span></th>
        <td class="admintab-r"><input type="password" name="admin_pw_conf" value="<?php if (isset($_POST['admin_pw_conf'])) echo $_POST['admin_pw_conf']; ?>" size="40"></td>
        </tr>
        <tr>
@@ -704,23 +704,23 @@ if(empty($installed))
        <input type="checkbox" name="dont_overwrite_settings" value="true"<?php if (isset($_POST['dont_overwrite_settings'])) echo ' checked="checked"'; ?>> <?php echo $lang_add['dont_overwrite_settings']; ?></p></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['inst_db_host']; ?></b><br><span class="small"><?php echo $lang_add['inst_db_host_d']; ?></span></th>
+       <th><?php echo $lang_add['inst_db_host']; ?><br><span class="small"><?php echo $lang_add['inst_db_host_d']; ?></span></th>
        <td class="admintab-r"><input type="text" name="host" value="<?php if (isset($_POST['host'])) echo $_POST['host']; else echo $db_settings['host']; ?>" size="40"></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['inst_db_name']; ?></b><br><span class="small"><?php echo $lang_add['inst_db_name_d']; ?></span></th>
+       <th><?php echo $lang_add['inst_db_name']; ?><br><span class="small"><?php echo $lang_add['inst_db_name_d']; ?></span></th>
        <td class="admintab-r"><input type="text" name="db" value="<?php if (isset($_POST['db'])) echo $_POST['db']; else echo $db_settings['db']; ?>" size="40"></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['inst_db_user']; ?></b><br><span class="small"><?php echo $lang_add['inst_db_user_d']; ?></span></th>
+       <th><?php echo $lang_add['inst_db_user']; ?><br><span class="small"><?php echo $lang_add['inst_db_user_d']; ?></span></th>
        <td class="admintab-r"><input type="text" name="user" value="<?php if (isset($_POST['user'])) echo $_POST['user']; else echo $db_settings['user']; ?>" size="40"></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['inst_db_pw']; ?></b><br><span class="small"><?php echo $lang_add['inst_db_pw_d']; ?></span></th>
+       <th><?php echo $lang_add['inst_db_pw']; ?><br><span class="small"><?php echo $lang_add['inst_db_pw_d']; ?></span></th>
        <td class="admintab-r"><input type="password" name="pw" value="<?php if (isset($_POST['pw'])) echo $_POST['pw']; ?>" size="40"></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['inst_table_prefix']; ?></b><br><span class="small"><?php echo $lang_add['inst_table_prefix_d']; ?></span></th>
+       <th><?php echo $lang_add['inst_table_prefix']; ?><br><span class="small"><?php echo $lang_add['inst_table_prefix_d']; ?></span></th>
        <td class="admintab-r"><input type="text" name="table_prefix" value="<?php if (isset($_POST['table_prefix'])) echo $_POST['table_prefix']; else echo $table_prefix; ?>" size="40"></td>
        </tr>
        </table>
@@ -753,23 +753,23 @@ if(empty($installed))
        <p><input type="checkbox" name="dont_overwrite_settings" value="true"<?php if (isset($_POST['dont_overwrite_settings'])) echo ' checked="checked"'; ?>> <?php echo $lang_add['dont_overwrite_settings']; ?></p></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['inst_db_host']; ?></b><br><span class="small"><?php echo $lang_add['inst_db_host_d']; ?></span></th>
+       <th><?php echo $lang_add['inst_db_host']; ?><br><span class="small"><?php echo $lang_add['inst_db_host_d']; ?></span></th>
        <td class="admintab-r"><input type="text" name="host" value="<?php if (isset($_POST['host'])) echo $_POST['host']; else echo $db_settings['host']; ?>" size="40"></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['inst_db_name']; ?></b><br><span class="small"><?php echo $lang_add['inst_db_name_d']; ?></span></th>
+       <th><?php echo $lang_add['inst_db_name']; ?><br><span class="small"><?php echo $lang_add['inst_db_name_d']; ?></span></th>
        <td class="admintab-r"><input type="text" name="db" value="<?php if (isset($_POST['db'])) echo $_POST['db']; else echo $db_settings['db']; ?>" size="40"></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['inst_db_user']; ?></b><br><span class="small"><?php echo $lang_add['inst_db_user_d']; ?></span></th>
+       <th><?php echo $lang_add['inst_db_user']; ?><br><span class="small"><?php echo $lang_add['inst_db_user_d']; ?></span></th>
        <td class="admintab-r"><input type="text" name="user" value="<?php if (isset($_POST['user'])) echo $_POST['user']; else echo $db_settings['user']; ?>" size="40"></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['inst_db_pw']; ?></b><br><span class="small"><?php echo $lang_add['inst_db_pw_d']; ?></span></th>
+       <th><?php echo $lang_add['inst_db_pw']; ?><br><span class="small"><?php echo $lang_add['inst_db_pw_d']; ?></span></th>
        <td class="admintab-r"><input type="password" name="pw" value="<?php if (isset($_POST['pw'])) echo $_POST['pw']; ?>" size="40"></td>
        </tr>
        <tr>
-       <th class="admintab-l"><b><?php echo $lang_add['inst_table_prefix']; ?></b><br><span class="small"><?php echo $lang_add['inst_table_prefix_d']; ?></span></th>
+       <th><?php echo $lang_add['inst_table_prefix']; ?><br><span class="small"><?php echo $lang_add['inst_table_prefix_d']; ?></span></th>
        <td class="admintab-r"><input type="text" name="table_prefix" value="<?php if (isset($_POST['table_prefix'])) echo $_POST['table_prefix']; else echo $table_prefix; ?>" size="40"></td>
        </tr>
        </table>
