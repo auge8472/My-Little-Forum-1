@@ -614,6 +614,7 @@ body                { font-family: Verdana,Arial,Helvetica,sans-serif; color: #0
 h1                  { margin: 0px 0px 20px 0px; font-size: 18px; font-weight: bold; }
 table.admintab      { border: 1px solid #bacbdf; border-collapse: collapse; }
 td.admintab-hl      { width: 100%; vertical-align: top; background: #d2ddea; }
+td, th              { padding: 5px; }
 td.admintab-hl h2   { margin: 3px 0px 3px 0px; font-size: 15px; font-weight: bold; }
 td.admintab-hl p    { font-size: 13px; line-height: 145%; margin: 0px 0px 3px 0px; padding: 0px; }
 td.admintab-l       { width: 50%; vertical-align: top; background: #f5f5f5; }
@@ -662,7 +663,7 @@ if(empty($installed))
        ?><form action="install.php" method="post">
        <input type="hidden" name="language" value="<?php echo $language; ?>">
        <input type="hidden" name="installation_mode" value="installation">
-       <table class="admintab" border="0" cellpadding="5" cellspacing="1">
+       <table class="admintab">
        <tr>
        <td class="admintab-hl" colspan="2"><h2><?php echo $lang_add['inst_basic_settings']; ?></h2><p><?php echo $lang_add['inst_main_settings_d']; ?></p></td>
        </tr>
@@ -746,7 +747,7 @@ if(empty($installed))
          <option value="1.7" selected="selected">1.7</option>
          </select></p><?php
         }
-       ?><table class="admintab" border="0" cellpadding="5" cellspacing="1">
+       ?><table class="admintab">
        <tr>
        <td class="admintab-hl" colspan="2"><h2><?php echo $lang_add['inst_db_settings']; ?></h2>
        <p><input type="checkbox" name="dont_overwrite_settings" value="true"<?php if (isset($_POST['dont_overwrite_settings'])) echo ' checked="checked"'; ?>> <?php echo $lang_add['dont_overwrite_settings']; ?></p></td>
