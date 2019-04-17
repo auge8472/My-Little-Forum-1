@@ -615,7 +615,7 @@ h1                  { margin: 0px 0px 20px 0px; font-size: 18px; font-weight: bo
 table.admintab      { border: 1px solid #bacbdf; border-collapse: collapse; }
 td.admintab-hl      { width: 100%; vertical-align: top; background: #d2ddea; }
 td.admintab-hl h2   { margin: 3px 0px 3px 0px; font-size: 15px; font-weight: bold; }
-td.admintab-hl p    { font-size: 11px; line-height: 16px; margin: 0px 0px 3px 0px; padding: 0px; }
+td.admintab-hl p    { font-size: 13px; line-height: 145%; margin: 0px 0px 3px 0px; padding: 0px; }
 td.admintab-l       { width: 50%; vertical-align: top; background: #f5f5f5; }
 td.admintab-r       { width: 50%; vertical-align: top; background: #f5f5f5; }
 .caution            { color: red; font-weight: bold; }
