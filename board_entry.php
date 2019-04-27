@@ -1,8 +1,10 @@
 <?php
 ###############################################################################
 # my little forum                                                             #
-# Copyright (C) 2005 Alex                                                     #
+# Copyright (C) 2004-2008 Alex                                                #
 # http://www.mylittlehomepage.net/                                            #
+# Copyright (C) 2009-2019 H. August                                           #
+# https://www.projekt-mlf.de/                                                 #
 #                                                                             #
 # This program is free software; you can redistribute it and/or               #
 # modify it under the terms of the GNU General Public License                 #
