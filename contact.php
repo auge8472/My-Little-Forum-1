@@ -1,8 +1,10 @@
 <?php
 ###############################################################################
 # my little forum                                                             #
-# Copyright (C) 2005 Alex                                                     #
+# Copyright (C) 2004-2008 Alex                                                #
 # http://www.mylittlehomepage.net/                                            #
+# Copyright (C) 2009-2019 H. August                                           #
+# https://www.projekt-mlf.de/                                                 #
 #                                                                             #
 # This program is free software; you can redistribute it and/or               #
 # modify it under the terms of the GNU General Public License                 #
@@ -26,7 +28,7 @@ if (isset($_POST['uid'])) $uid = $_POST['uid'];
 if (isset($_GET['view'])) $view = $_GET['view'];
 if (isset($_GET['page'])) $page = $_GET['page'];
 if (isset($_GET['order'])) $order = $_GET['order'];
-if (isset($_GET['category'])) $category = stripslashes(urldecode($_GET['category']));
+if (isset($_GET['category'])) $category = urldecode($_GET['category']);
 if (isset($_GET['descasc'])) $descasc = $_GET['descasc'];
 if (isset($_GET['forum_contact'])) $forum_contact = htmlsc($_GET['forum_contact']);
 if (isset($_POST['forum_contact'])) $forum_contact = $_POST['forum_contact'];
@@ -57,29 +59,29 @@ if (isset($id) || isset($uid) || isset($forum_contact))
   if (isset($_COOKIE['user_email']) && empty($_POST["form_submitted"])) $sender_email = $_COOKIE['user_email'];
   if (isset($_SESSION[$settings['session_prefix'].'user_id']) && empty($_POST["form_submitted"]))
    {
-    $ue_result = mysql_query("SELECT user_email FROM ".$db_settings['userdata_table']." WHERE user_id = '".$_SESSION[$settings['session_prefix'].'user_id']."' LIMIT 1", $connid);
+    $ue_result = mysqli_query($connid, "SELECT user_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
     if (!$ue_result) die($lang['db_error']);
-    $ue_field = mysql_fetch_assoc($ue_result);
-    mysql_free_result($ue_result);
+    $ue_field = mysqli_fetch_assoc($ue_result);
+    mysqli_free_result($ue_result);
     $sender_name = $_SESSION[$settings['session_prefix'].'user_name'];
     $sender_email = $ue_field['user_email'];
    }
 
   if (isset($id))
   {
-   $result = mysql_query("SELECT tid, user_id, name, email, subject FROM ".$db_settings['forum_table']." WHERE id = '".$id."' LIMIT 1", $connid);
+   $result = mysqli_query($connid, "SELECT tid, user_id, name, email, subject FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($id) ." LIMIT 1");
    if (!$result) die($lang['db_error']);
-   $field = mysql_fetch_assoc($result);
-   mysql_free_result($result);
+   $field = mysqli_fetch_assoc($result);
+   mysqli_free_result($result);
    $name = $field['name'];
    $email = $field['email'];
   }
   elseif (isset($uid))
   {
-   $result = mysql_query("SELECT user_id, user_name, user_email, hide_email FROM ".$db_settings['userdata_table']." WHERE user_id = '".$uid."' LIMIT 1", $connid);
+   $result = mysqli_query($connid, "SELECT user_id, user_name, user_email, hide_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($uid) ." LIMIT 1");
    if (!$result) die($lang['db_error']);
-   $field = mysql_fetch_assoc($result);
-   mysql_free_result($result);
+   $field = mysqli_fetch_assoc($result);
+   mysqli_free_result($result);
    $name = $field['user_name'];
    $email = $field['user_email'];
    $hide_email = $field['hide_email'];
@@ -87,10 +89,10 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 
   if (isset($field['user_id']) && $field['user_id'] > 0 && empty($uid))
   {
-  $user_result = mysql_query("SELECT user_email, hide_email FROM ".$db_settings['userdata_table']." WHERE user_id = '".$field['user_id']."' LIMIT 1", $connid);
+  $user_result = mysqli_query($connid, "SELECT user_email, hide_email FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($field['user_id']) ." LIMIT 1");
   if (!$user_result) die($lang['db_error']);
-  $user_field = mysql_fetch_assoc($user_result);
-  mysql_free_result($user_result);
+  $user_field = mysqli_fetch_assoc($user_result);
+  mysqli_free_result($user_result);
   $email = $user_field['user_email'];
   $hide_email = $user_field['hide_email'];
   }
@@ -100,13 +102,13 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 
   if (isset($_POST["form_submitted"]))
    {
-    // übergebene Variablen ermitteln:
-    $sender_name = stripslashes(trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_name']))));
-    $sender_email = stripslashes(trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_email']))));
-    $subject = trim(stripslashes($_POST['subject']));
+    // Ã¼bergebene Variablen ermitteln:
+    $sender_name = trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_name'])));
+    $sender_email = trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_email'])));
+    $subject = trim($_POST['subject']);
     $text = $_POST['text'];
 
-    // Überprüfungen der Daten:
+    // ÃœberprÃ¼fungen der Daten:
     unset($errors);
     if ($sender_name == "") $errors[] = $lang['error_no_name'];
     if ($sender_email == "") $errors[] = $lang['error_no_email'];
@@ -114,10 +116,10 @@ if (isset($id) || isset($uid) || isset($forum_contact))
     if ($text == "") $errors[] = $lang['error_no_text'];
 
      // check for not accepted words:
-     $result=mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'words' LIMIT 1", $connid);
+     $result=mysqli_query($connid, "SELECT list FROM ". $db_settings['banlists_table'] ." WHERE name = 'words' LIMIT 1");
      if(!$result) die($lang['db_error']);
-     $data = mysql_fetch_assoc($result);
-     mysql_free_result($result);
+     $data = mysqli_fetch_assoc($result);
+     mysqli_free_result($result);
      if(trim($data['list']) != '')
       {
        $not_accepted_words = explode(',',trim($data['list']));
@@ -154,8 +156,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
       if (isset($forum_contact)) { $name = $settings['forum_name']; $email = $settings['forum_email']; }
       $mailto = $name." <".$email.">";
       $ip = $_SERVER["REMOTE_ADDR"];
-      $mail_text = stripslashes($text);
-      $mail_text .= "\n\n".str_replace("[forum_address]", $settings['forum_address'], $lang['msg_add']);
+      $mail_text = $text ."\n\n".str_replace("[forum_address]", $settings['forum_address'], $lang['msg_add']);
       $header = "From: ".$sender_name." <".$sender_email.">\n";
       $header .= "Reply-To: ".$sender_name." <".$sender_email.">\n";
       $header .= "X-Mailer: PHP/" . phpversion(). "\n";
@@ -169,14 +170,14 @@ if (isset($id) || isset($uid) || isset($forum_contact))
        {
         if(@mail($mailto, $mail_subject, $mail_text, $header)) $sent = true; else $errors[] = $lang['error_meilserv'];
        }
-      // Bestätigung:
+      // BestÃ¤tigung:
       if (isset($sent))
       {
        $lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['conf_email_txt']);
        $lang['conf_email_txt'] = str_replace("[sender_name]", $sender_name, $lang['conf_email_txt']);
        $lang['conf_email_txt'] = str_replace("[recipient_name]", $name, $lang['conf_email_txt']);
        $lang['conf_email_txt'] = str_replace("[subject]", $mail_subject, $lang['conf_email_txt']);
-       $lang['conf_email_txt'] .= "\n\n".stripslashes($text);
+       $lang['conf_email_txt'] .= "\n\n". $text;
        $conf_mailto = $sender_name." <".$sender_email.">";
        $ip = $_SERVER["REMOTE_ADDR"];
        $conf_header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
@@ -205,7 +206,7 @@ else
  {
   if (empty($view))
    {
-    $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.str_replace("[name]", htmlsc(stripslashes($field["name"])), $lang['back_to_posting_linkname']).'</a>';
+    $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.str_replace("[name]", htmlsc($field["name"]), $lang['back_to_posting_linkname']).'</a>';
    }
   else
    {
@@ -226,7 +227,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
  {
   if (empty($no_message))
    {
-    ?><h2><?php if (isset($forum_contact)) echo $lang['forum_contact_hl']; else echo str_replace("[name]", htmlsc(stripslashes($name)), $lang['message_to']); ?></h2><?php
+    ?><h2><?php if (isset($forum_contact)) echo $lang['forum_contact_hl']; else echo str_replace("[name]", htmlsc($name), $lang['message_to']); ?></h2><?php
    }
   if (empty($sent) && empty($no_message))
    {
@@ -250,18 +251,18 @@ if (isset($id) || isset($uid) || isset($forum_contact))
     <table border="0" cellpadding="3" cellspacing="0">
     <tr>
     <td><b><?php echo $lang['name_marking_msg']; ?></b></td>
-    <td><input type="text" name="sender_name" value="<?php if (isset($sender_name)) echo htmlsc(stripslashes($sender_name)); else echo ""; ?>" size="40" /></td>
+    <td><input type="text" name="sender_name" value="<?php if (isset($sender_name)) echo htmlsc($sender_name); else echo ""; ?>" size="40" /></td>
     </tr>
     <tr>
     <td><b><?php echo $lang['email_marking_msg']; ?></b></td>
-    <td><input type="text" name="sender_email" value="<?php if (isset($sender_email)) echo htmlsc(stripslashes($sender_email)); else echo ""; ?>" size="40" /></td>
+    <td><input type="text" name="sender_email" value="<?php if (isset($sender_email)) echo htmlsc($sender_email); else echo ""; ?>" size="40" /></td>
     </tr>
     <tr>
     <td><b><?php echo $lang['subject_marking']; ?></b></td>
-    <td><input type="text" name="subject" value="<?php if (isset($subject)) echo htmlsc(stripslashes($subject)); else echo ""; ?>" size="40" /></td>
+    <td><input type="text" name="subject" value="<?php if (isset($subject)) echo htmlsc($subject); else echo ""; ?>" size="40" /></td>
     </tr>
     <tr>
-    <td colspan="2"><br /><textarea name="text" cols="60" rows="15"><?php if (isset($text)) echo htmlsc(stripslashes($text)); else echo ""; ?></textarea></td>
+    <td colspan="2"><br /><textarea name="text" cols="60" rows="15"><?php if (isset($text)) echo htmlsc($text); else echo ""; ?></textarea></td>
     </tr><?php
     if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_contact']==1)
     {
@@ -302,7 +303,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
    }
   else
    {
-    ?><p><?php if (isset($forum_contact)) echo $lang['forum_contact_sent']; else echo str_replace("[name]", htmlsc(stripslashes($name)), $lang['msg_sent']); ?><p>&nbsp;</p></p><?php
+    ?><p><?php if (isset($forum_contact)) echo $lang['forum_contact_sent']; else echo str_replace("[name]", htmlsc($name), $lang['msg_sent']); ?><p>&nbsp;</p></p><?php
    }
  }
 

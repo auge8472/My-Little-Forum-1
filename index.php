@@ -1,8 +1,10 @@
 <?php
 ###############################################################################
 # my little forum                                                             #
-# Copyright (C) 2004 Alex                                                     #
+# Copyright (C) 2004-2008 Alex                                                #
 # http://www.mylittlehomepage.net/                                            #
+# Copyright (C) 2009-2019 H. August                                           #
+# https://www.projekt-mlf.de/                                                 #
 #                                                                             #
 # This program is free software; you can redistribute it and/or               #
 # modify it under the terms of the GNU General Public License                 #
@@ -30,9 +32,9 @@ include("inc.php");
  if (isset($_GET['update']) && isset($_SESSION[$settings['session_prefix'].'newtime']))
   {
    $_SESSION[$settings['session_prefix'].'newtime'] = time();
-   $update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET last_login=last_login, last_logout=NOW(), registered=registered WHERE user_id='".$_SESSION[$settings['session_prefix'].'user_id']."'", $connid);
+   $update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET last_login=last_login, last_logout=NOW(), registered=registered WHERE user_id=". intval($_SESSION[$settings['session_prefix'].'user_id']));
 
-   if (isset($_GET['category'])) $qs = "?category=".urlencode(stripslashes($_GET['category'])); else $qs = "";
+   if (isset($_GET['category'])) $qs = "?category=".urlencode($_GET['category']); else $qs = "";
    if (empty($_GET['view'])) { header("location: forum.php".$qs); die("<a href=\"forum.php".$qs."\">further...</a>"); }
    elseif (isset($_GET['view']) && $_GET['view']=="board") { header("location: board.php".$qs); die("<a href=\"board.php".$qs."\">further...</a>"); }
    elseif (isset($_GET['view']) && $_GET['view']=="mix") { header("location: mix.php".$qs); die("<a href=\"mix.php".$qs."\">further...</a>"); }

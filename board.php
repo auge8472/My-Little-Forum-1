@@ -1,8 +1,10 @@
 <?php
 ###############################################################################
 # my little forum                                                             #
-# Copyright (C) 2004 Alex                                                     #
+# Copyright (C) 2004-2008 Alex                                                #
 # http://www.mylittlehomepage.net/                                            #
+# Copyright (C) 2009-2019 H. August                                           #
+# https://www.projekt-mlf.de/                                                 #
 #                                                                             #
 # This program is free software; you can redistribute it and/or               #
 # modify it under the terms of the GNU General Public License                 #
@@ -48,31 +50,29 @@ if ($settings['remember_userstandard']  == 1 && !isset($_SESSION[$settings['sess
  // database request
  if ($categories == false) // no categories defined
   {
-   $result=mysql_query("SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS xtime,
-                        UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_time,
-                        UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ".$db_settings['forum_table']." WHERE pid = 0 ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page'], $connid);
+   $result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS xtime,
+                        UNIX_TIMESTAMP(last_answer + INTERVAL ". $time_difference ." HOUR) AS la_time,
+                        UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ". $db_settings['forum_table'] ." WHERE pid = 0 ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
    if(!$result) die($lang['db_error']);
   }
  elseif (is_array($categories) && $category == 0) // there are categories and all categories should be shown
   {
-   $result=mysql_query("SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS xtime,
-                        UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_time,
-                        UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category IN (".$category_ids_query.") ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page'], $connid);
+   $result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS xtime,
+                        UNIX_TIMESTAMP(last_answer + INTERVAL ". $time_difference ." HOUR) AS la_time,
+                        UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ". $db_settings['forum_table'] ." WHERE pid = 0 AND category IN (". $category_ids_query .") ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
    if(!$result) die($lang['db_error']);
   }
  elseif (is_array($categories) && $category != 0 && in_array($category, $category_ids)) // there are categories and only one category should be shown
   {
-   $result=mysql_query("SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ".$time_difference." HOUR) AS xtime,
-                        UNIX_TIMESTAMP(last_answer + INTERVAL ".$time_difference." HOUR) AS la_time,
-                        UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ".$db_settings['forum_table']." WHERE category = '".mysql_escape_string($category)."' AND pid = 0 ORDER BY fixed DESC, ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['topics_per_page'], $connid);
+   $result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS xtime,
+                        UNIX_TIMESTAMP(last_answer + INTERVAL ". $time_difference ." HOUR) AS la_time,
+                        UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ". $db_settings['forum_table'] ." WHERE category = ". intval($category) ." AND pid = 0 ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
    if(!$result) die($lang['db_error']);
    // how many entries?
-   $pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category = '".mysql_escape_string($category)."'", $connid);
-   list($thread_count) = mysql_fetch_row($pid_result);
-   mysql_free_result($pid_result);
+   $pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE pid = 0 AND category = ". intval($category));
+   list($thread_count) = mysqli_fetch_row($pid_result);
+   mysqli_free_result($pid_result);
   }
-
-$category = stripslashes($category);
 
 $subnav_1='<a class="textlink" href="posting.php?view=board&amp;category='.$category.'" title="'.$lang['new_entry_linktitle'].'">'.$lang['new_entry_linkname'].'</a>';
 $subnav_2 = '';
@@ -118,19 +118,19 @@ if($thread_count > 0 && isset($result))
   </tr>
   <?php
   $i=0;
-  while ($zeile = mysql_fetch_assoc($result)) {
+  while ($zeile = mysqli_fetch_assoc($result)) {
   // count replies:
-  $pid_resultc = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"], $connid);
-  list($answers_count) = mysql_fetch_row($pid_resultc);
+  $pid_resultc = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE tid = ". intval($zeile["tid"]));
+  list($answers_count) = mysqli_fetch_row($pid_resultc);
   $answers_count = $answers_count - 1;
-  mysql_free_result($pid_resultc);
+  mysqli_free_result($pid_resultc);
 
   // data for link to last reply:
   if ($settings['last_reply_link'] == 1)
   {
-   $last_answer_result = mysql_query("SELECT name, id FROM ".$db_settings['forum_table']." WHERE tid = ".$zeile["tid"]." ORDER BY time DESC LIMIT 1", $connid);
-   $last_answer = mysql_fetch_assoc($last_answer_result);
-   mysql_free_result($last_answer_result);
+   $last_answer_result = mysqli_query($connid, "SELECT name, id FROM ". $db_settings['forum_table'] ." WHERE tid = ". intval($zeile["tid"]) ." ORDER BY time DESC LIMIT 1");
+   $last_answer = mysqli_fetch_assoc($last_answer_result);
+   mysqli_free_result($last_answer_result);
   }
 
   // highlight mods and admins:
@@ -138,17 +138,17 @@ if($thread_count > 0 && isset($result))
   $mark_mod = false;
   if ($settings['admin_mod_highlight'] == 1 && $zeile["user_id"] > 0)
    {
-    $userdata_result=mysql_query("SELECT user_type FROM ".$db_settings['userdata_table']." WHERE user_id = '".$zeile["user_id"]."'", $connid);
+    $userdata_result=mysqli_query($connid, "SELECT user_type FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($zeile["user_id"]));
     if (!$userdata_result) die($lang['db_error']);
-    $userdata = mysql_fetch_assoc($userdata_result);
-    mysql_free_result($userdata_result);
+    $userdata = mysqli_fetch_assoc($userdata_result);
+    mysqli_free_result($userdata_result);
     if ($userdata['user_type'] == "admin") $mark_admin = true;
     elseif ($userdata['user_type'] == "mod") $mark_mod = true;
    }
   ?>
   <tr>
   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php
-  ?><a class="<?php if ((isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $zeile["last_answer"]) || (($zeile["pid"]==0) && empty($_SESSION[$settings['session_prefix'].'newtime']) && $zeile["last_answer"] > $last_visit)) echo "threadnew"; else echo "thread"; ?>" href="board_entry.php?id=<?php echo $zeile["tid"]; if ($page != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC") echo '&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc; ?>"><?php echo htmlsc(stripslashes($zeile["subject"])); ?></a><?php
+  ?><a class="<?php if ((isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $zeile["last_answer"]) || (($zeile["pid"]==0) && empty($_SESSION[$settings['session_prefix'].'newtime']) && $zeile["last_answer"] > $last_visit)) echo "threadnew"; else echo "thread"; ?>" href="board_entry.php?id=<?php echo $zeile["tid"]; if ($page != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC") echo '&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc; ?>"><?php echo htmlsc($zeile["subject"]); ?></a><?php
   if ($zeile["fixed"] == 1) { ?> <img src="img/fixed.gif" width="9" height="9" title="<?php echo $lang['fixed']; ?>" alt="*" /><?php }
   if ($settings['all_views_direct'] == 1) { echo " <span class=\"small\">"; if ($settings['thread_view']==1) {?><a href="forum_entry.php?id=<?php echo $zeile["tid"]; ?>"><img src="img/thread_d.gif" alt="[Thread]" title="<?php echo $lang['open_in_thread_linktitle']; ?>" width="12" height="9" onmouseover="this.src='img/thread_mo.gif';" onmouseout="this.src='img/thread_d.gif';" /></a><?php } if ($settings['mix_view'] == 1) { ?><a href="mix_entry.php?id=<?php echo $zeile["tid"]; ?>"><img src="img/mix_d.gif" alt="[Mix]" title="<?php echo $lang['open_in_mix_linktitle']; ?>" width="12" height="9" onmouseover="this.src='img/mix_mo.gif';" onmouseout="this.src='img/mix_d.gif';" /></a>&nbsp;<?php }echo "</span>"; } ?></td>
   <?php if ($categories!=false && $category == 0) { ?>
@@ -157,9 +157,9 @@ if($thread_count > 0 && isset($result))
   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php
   if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
    {
-    $sult = str_replace("[name]", htmlsc(stripslashes($zeile["name"])), $lang['show_userdata_linktitle']); ?><a href="user.php?id=<?php echo $zeile["user_id"]; ?>" title="<?php echo $sult; ?>"><?php
+    $sult = str_replace("[name]", htmlsc($zeile["name"]), $lang['show_userdata_linktitle']); ?><a href="user.php?id=<?php echo $zeile["user_id"]; ?>" title="<?php echo $sult; ?>"><?php
    }
-  ?><span class="small"><?php if ($mark_admin==true) { ?><span class="admin-highlight"><?php } elseif ($mark_mod==true) { ?><span class="mod-highlight"><?php } echo htmlsc(stripslashes($zeile["name"])); if ($mark_admin==true || $mark_mod=="true") { ?></span><?php } ?></span><?php
+  ?><span class="small"><?php if ($mark_admin==true) { ?><span class="admin-highlight"><?php } elseif ($mark_mod==true) { ?><span class="mod-highlight"><?php } echo htmlsc($zeile["name"]); if ($mark_admin==true || $mark_mod=="true") { ?></span><?php } ?></span><?php
 
   if ($zeile["user_id"] > 0 && $settings['show_registered'] ==1)
    {
@@ -184,7 +184,7 @@ if($thread_count > 0 && isset($result))
    <?php $i++;
    }
   ?></table><?php
-  mysql_free_result($result);
+  mysqli_free_result($result);
   if(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=='admin')
    {
     ?><p class="marked-threads-board"><img src="img/marked.gif" alt="[x]" width="9" height="9" /> <?php echo $lang['marked_threads_actions']; ?> <a href="admin.php?action=delete_marked_threads&amp;refer=board"><?php echo $lang['delete_marked_threads']; ?></a> - <a href="admin.php?action=lock_marked_threads&amp;refer=board"><?php echo $lang['lock_marked_threads']; ?></a> - <a href="admin.php?action=unlock_marked_threads&amp;refer=board"><?php echo $lang['unlock_marked_threads']; ?></a> - <a href="admin.php?action=unmark&amp;refer=board"><?php echo $lang['unmark_threads']; ?></a> - <a href="admin.php?action=invert_markings&amp;refer=board"><?php echo $lang['invert_markings']; ?></a> - <a href="admin.php?action=mark_threads&amp;refer=board"><?php echo $lang['mark_threads']; ?></a></p><?php

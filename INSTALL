@@ -3,12 +3,14 @@ INSTALLATION
 The script requires PHP > 4.1 and a MySQL database.
 
 * The file forum.zip contains a folder with the script files ("forum").
-* Load up the complete folder on your server.
+* Load up the complete folder to your server.
 * The file db_settings.php requires write permission! Set this with your FTP programm
   (CHMOD 666).
-* Start install.php on your server (http://www.domain.tld/forum/install.php).
+* Start install.php on your server (http://www.example.net/forum/install.php).
 * Fill in the form completely.
 * After installing, remove the file install.php from the server!
-* You can now log in with the name and password you specefied at the installation.
+* The file db_settings.php doesn't require write permission anymore! Remove it with your FTP programm
+  (CHMOD 444 or 644).
+* You can now log in with the name and password you specified during the installation.
   In the "admin area" you can then customize the forum.
 * To customize the layout, edit the files template.html and style.css.

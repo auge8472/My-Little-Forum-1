@@ -1,8 +1,10 @@
 <?php
 ###############################################################################
 # my little forum                                                             #
-# Copyright (C) 2005 Alex                                                     #
+# Copyright (C) 2004-2008 Alex                                                #
 # http://www.mylittlehomepage.net/                                            #
+# Copyright (C) 2009-2019 H. August                                           #
+# https://www.projekt-mlf.de/                                                 #
 #                                                                             #
 # This program is free software; you can redistribute it and/or               #
 # modify it under the terms of the GNU General Public License                 #
@@ -69,22 +71,22 @@ if (empty($category)) $category = "all";
 unset($errors);
 
 // Check if user locked:
-$lock_result = mysql_query("SELECT user_lock FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_SESSION[$settings['session_prefix'].'user_id'])." LIMIT 1", $connid);
+$lock_result = mysqli_query($connid, "SELECT user_lock FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
 if (!$lock_result) die($lang['db_error']);
-$lock_result_array = mysql_fetch_assoc($lock_result);
-mysql_free_result($lock_result);
+$lock_result_array = mysqli_fetch_assoc($lock_result);
+mysqli_free_result($lock_result);
 if ($lock_result_array['user_lock'] > 0) $action = "locked";
 
 if (isset($_GET['user_lock']) && isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
  {
-  $lock_result = mysql_query("SELECT user_lock, user_type FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_GET['user_lock'])." LIMIT 1", $connid);
+  $lock_result = mysqli_query($connid, "SELECT user_lock, user_type FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_GET['user_lock']) ." LIMIT 1");
   if (!$lock_result) die($lang['db_error']);
-  $field = mysql_fetch_assoc($lock_result);
-  mysql_free_result($lock_result);
+  $field = mysqli_fetch_assoc($lock_result);
+  mysqli_free_result($lock_result);
   if ($field['user_type'] == "user")
    {
-    if ($field['user_lock'] == 0) $new_lock = 1; else $new_lock = 0;
-    $update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_lock='".$new_lock."', last_login=last_login, registered=registered WHERE user_id='".$_GET['user_lock']."' LIMIT 1", $connid);
+    $new_lock = ($field['user_lock'] == 0) ? 1 : 0;
+    $update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_lock=". intval($new_lock) .", last_login=last_login, registered=registered WHERE user_id=". intval($_GET['user_lock']) ." LIMIT 1");
    }
   $action="show users";
  }
@@ -94,10 +96,10 @@ if(isset($_POST['change_email_submit']))
     $new_email = trim($_POST['new_email']);
     $pw_new_email = $_POST['pw_new_email'];
     // Check data:
-    $email_result = mysql_query("SELECT user_id, user_name, user_pw, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+    $email_result = mysqli_query($connid, "SELECT user_id, user_name, user_pw, user_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($user_id) ." LIMIT 1");
     if (!$email_result) die($lang['db_error']);
-    $field = mysql_fetch_assoc($email_result);
-    mysql_free_result($email_result);
+    $field = mysqli_fetch_assoc($email_result);
+    mysqli_free_result($email_result);
     if ($pw_new_email=='' || $new_email=='') $errors[] = $lang['error_form_uncompl'];
     if (empty($errors))
      {
@@ -114,7 +116,6 @@ if(isset($_POST['change_email_submit']))
       $lang['new_user_email_txt'] = str_replace("[name]", $field['user_name'], $lang['change_email_txt']);
       #$lang['new_user_email_txt'] = str_replace("[password]", $new_user_pw, $lang['new_user_email_txt']);
       $lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$field['user_id']."&key=".$activate_code, $lang['new_user_email_txt']);
-      $lang['new_user_email_txt'] = stripslashes($lang['new_user_email_txt']);
       $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
       $header .= "X-Mailer: Php/" . phpversion(). "\n";
       $header .= "X-Sender-ip: $ip\n";
@@ -130,7 +131,7 @@ if(isset($_POST['change_email_submit']))
        }
       if(empty($errors))
        {
-        @mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_email='".mysql_escape_string($new_email)."', last_login=last_login, registered=registered, activate_code = '".mysql_escape_string($activate_code)."' WHERE user_id='".$user_id."'", $connid) or die($lang['db_error']);
+        @mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_email='". mysqli_real_escape_string($connid, $new_email) ."', last_login=last_login, registered=registered, activate_code = '". mysqli_real_escape_string($connid, $activate_code) ."' WHERE user_id=". intval($user_id)) or die($lang['db_error']);
         header("location: login.php"); die("<a href=\"login.php\">further...</a>");
        }
       else $action="email";
@@ -176,22 +177,22 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
      }
 
      $text_arr = explode(" ",$user_real_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-     $error_nwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['name_word_maxlength'])))."...", $lang['error_name_word_too_long']);
+     $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
      $errors[] = $error_nwtl; } }
      $text_arr = explode(" ",$user_place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
-     $error_pwtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['place_word_maxlength'])))."...", $lang['error_place_word_too_long']);
+     $error_pwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
      $errors[] = $error_pwtl; } }
      $text_arr = str_replace("\n", " ", $profile);
      if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
      if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
      $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-     $error_twtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['text_word_maxlength'])))."...", $lang['err_prof_word_too_long']);
+     $error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['err_prof_word_too_long']);
      $errors[] = $error_twtl; } }
      $text_arr = str_replace("\n", " ", $signature);
      if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
      if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
      $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-     $error_twtl = str_replace("[word]", htmlsc(stripslashes(substr($text_arr[$i],0,$settings['text_word_maxlength'])))."...", $lang['err_sig_word_too_long']);
+     $error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['err_sig_word_too_long']);
      $errors[] = $error_twtl; } }
     // End of checking
 
@@ -199,7 +200,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     if (empty($hide_email)) $hide_email = 0;
     if (empty($errors))
      {
-      $update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_real_name='".mysql_escape_string($user_real_name)."', hide_email='".$hide_email."', user_hp='".mysql_escape_string($user_hp)."', user_place='".mysql_escape_string($user_place)."', profile='".mysql_escape_string($profile)."', signature='".mysql_escape_string($signature)."', last_login=last_login, registered=registered, user_view='".$user_view."', new_posting_notify='".$new_posting_notify."', new_user_notify='".$new_user_notify."', personal_messages='".$personal_messages."', time_difference='".$user_time_difference."' WHERE user_id='".$user_id."' LIMIT 1", $connid);
+      $update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_real_name='". mysqli_real_escape_string($connid, $user_real_name) ."', hide_email=". intval($hide_email) .", user_hp='". mysqli_real_escape_string($connid, $user_hp) ."', user_place='". mysqli_real_escape_string($connid, $user_place) ."', profile='". mysqli_real_escape_string($connid, $profile) ."', signature='". mysqli_real_escape_string($connid, $signature) ."', last_login=last_login, registered=registered, user_view='". mysqli_real_escape_string($connid, $user_view) ."', new_posting_notify=". intval($new_posting_notify) .", new_user_notify=". intval($new_user_notify) .", personal_messages=". intval($personal_messages) .", time_difference=". intval($user_time_difference) ." WHERE user_id=". intval($user_id) ." LIMIT 1");
       $_SESSION[$settings['session_prefix'].'user_view'] = $user_view;
       $_SESSION[$settings['session_prefix'].'user_time_difference'] = $user_time_difference;
 
@@ -209,10 +210,10 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
    break;
 
    case "pw submited":
-    $pw_result = mysql_query("SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+    $pw_result = mysqli_query($connid, "SELECT user_pw FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($user_id) ." LIMIT 1");
     if (!$pw_result) die($lang['db_error']);
-    $field = mysql_fetch_assoc($pw_result);
-    mysql_free_result($pw_result);
+    $field = mysqli_fetch_assoc($pw_result);
+    mysqli_free_result($pw_result);
 
     trim($old_pw);
     trim($new_pw);
@@ -227,18 +228,18 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     // Update, if no errors:
     if (empty($errors))
      {
-      $pw_update_result = mysql_query("UPDATE ".$db_settings['userdata_table']." SET user_pw='".md5($new_pw)."', last_login=last_login, registered=registered WHERE user_id='".$user_id."'", $connid);
+      $pw_update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_pw='". mysqli_real_escape_string($connid, md5($new_pw)) ."', last_login=last_login, registered=registered WHERE user_id=". intval($user_id));
       header("location: user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
      }
     else $action="pw";
    break;
    /* self-delete of user:
    case "delete submited":
-    // Überprüfungen:
-    $pw_result = mysql_query("SELECT user_pw FROM ".$db_settings['userdata_table']." WHERE user_id = '".$user_id."' LIMIT 1", $connid);
+    // ÃœberprÃ¼fungen:
+    $pw_result = mysqli_query($connid, "SELECT user_pw FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($user_id) ." LIMIT 1");
     if (!$pw_result) die($lang['db_error']);
-    $field = mysql_fetch_assoc($pw_result);
-    mysql_free_result($pw_result);
+    $field = mysqli_fetch_assoc($pw_result);
+    mysqli_free_result($pw_result);
     if ($pw_delete=="") $errors[] = $lang['error_form_uncompl'];
     else
      {
@@ -247,8 +248,8 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     // DB-Update, falls keine Fehler:
     if (empty($errors))
      {
-      $delete_result = mysql_query("DELETE FROM ".$db_settings['userdata_table']." WHERE user_id='".$user_id."' LIMIT 1", $connid);
-      $update_result = mysql_query("UPDATE ".$db_settings['forum_table']." SET time=time, user_id='0', email_notify='0' WHERE user_id = '".$user_id."'", $connid);
+      $delete_result = mysqli_query($connid, "DELETE FROM ". $db_settings['userdata_table'] ." WHERE user_id=". intval($user_id)." LIMIT 1");
+      $update_result = mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, user_id=0, email_notify=0 WHERE user_id = ". intval($user_id));
       session_destroy();
       header("location: index.php"); die("<a href=\"index.php\">further...</a>");
      }
@@ -257,15 +258,15 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
    */
 
    case "pm_sent":
-    $pms_result = mysql_query("SELECT user_name, user_email FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id)." LIMIT 1", $connid);
+    $pms_result = mysqli_query($connid, "SELECT user_name, user_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($user_id) ." LIMIT 1");
     if (!$pms_result) die($lang['db_error']);
-    $sender = mysql_fetch_assoc($pms_result);
-    mysql_free_result($pms_result);
+    $sender = mysqli_fetch_assoc($pms_result);
+    mysqli_free_result($pms_result);
 
-    $pmr_result = mysql_query("SELECT user_name, user_email, personal_messages FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($_POST['recipient_id'])." LIMIT 1", $connid);
+    $pmr_result = mysqli_query($connid, "SELECT user_name, user_email, personal_messages FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_POST['recipient_id']) ." LIMIT 1");
     if (!$pmr_result) die($lang['db_error']);
-    $recipient = mysql_fetch_assoc($pmr_result);
-    mysql_free_result($pmr_result);
+    $recipient = mysqli_fetch_assoc($pmr_result);
+    mysqli_free_result($pmr_result);
 
     if ($_POST['pm_text'] == "") $errors[] = $lang['error_pers_msg_no_text'];
     if ($recipient['personal_messages'] == "") $errors[] = $lang['error_pers_msg_deactivated'];
@@ -274,8 +275,8 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
      {
       $lang['pers_msg_mail_add'] = str_replace("[forum_address]", $settings['forum_address'], $lang['pers_msg_mail_add']);
       $ip = $_SERVER["REMOTE_ADDR"];
-      $mail_subject = stripslashes($_POST['pm_subject']);
-      $mail_text = stripslashes($_POST['pm_text']);
+      $mail_subject = $_POST['pm_subject'];
+      $mail_text = $_POST['pm_text'];
       $mail_text .= "\n\n".$lang['pers_msg_mail_add'];
       $header= "From: ".$sender['user_name']." <".$sender['user_email'].">\n";
       $header .= "Reply-To: ".$sender['user_name']." <".$sender['user_email'].">\n";
@@ -297,7 +298,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
        $lang['conf_email_txt'] = str_replace("[sender_name]", $sender['user_name'], $lang['conf_email_txt']);
        $lang['conf_email_txt'] = str_replace("[recipient_name]", $recipient['user_name'], $lang['conf_email_txt']);
        $lang['conf_email_txt'] = str_replace("[subject]", $_POST['pm_subject'], $lang['conf_email_txt']);
-       $lang['conf_email_txt'] .= "\n\n".stripslashes($_POST['pm_text']);
+       $lang['conf_email_txt'] .= "\n\n". $_POST['pm_text'];
        $conf_mailto = $sender['user_name']." <".$sender['user_email'].">";
        $ip = $_SERVER["REMOTE_ADDR"];
        $conf_header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
@@ -337,13 +338,13 @@ if ($action == "show users")
   if (empty($descasc)) $descasc="ASC";
   if (empty($order)) $order="user_name";
   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['reg_users_hl'].'</b>';
-  if (isset($_GET['letter']) && $_GET['letter']!="") $pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table']." WHERE user_name LIKE '".$_GET['letter']."%'", $connid);
-  else $pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
-  list($thread_count) = mysql_fetch_row($pid_result);
-  mysql_free_result($pid_result);
-  $abs_pid_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
-  list($abs_thread_count) = mysql_fetch_row($abs_pid_result);
-  mysql_free_result($abs_pid_result);
+  if (isset($_GET['letter']) && $_GET['letter']!="") $pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['userdata_table'] ." WHERE user_name LIKE '". mysqli_real_escape_string($connid, $_GET['letter']) ."%'");
+  else $pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['userdata_table']);
+  list($thread_count) = mysqli_fetch_row($pid_result);
+  mysqli_free_result($pid_result);
+  $abs_pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['userdata_table']);
+  list($abs_thread_count) = mysqli_fetch_row($abs_pid_result);
+  mysqli_free_result($abs_pid_result);
   $lang['num_reg_users'] = str_replace("[number]", $abs_thread_count, $lang['num_reg_users']);
   if (isset($_GET['letter']) && $_GET['letter'] == "A") $la = ' selected="selected"'; else $la = '';
   if (isset($_GET['letter']) && $_GET['letter'] == "B") $lb = ' selected="selected"'; else $lb = '';
@@ -409,40 +410,40 @@ switch ($action)
  {
   case "get userdata":
    if (empty($id)) $id = $user_id;
-   else $result = mysql_query("SELECT user_id, user_type, user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, UNIX_TIMESTAMP(registered + INTERVAL ".$time_difference." HOUR) AS since_date FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($id), $connid);
+   else $result = mysqli_query($connid, "SELECT user_id, user_type, user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, UNIX_TIMESTAMP(registered + INTERVAL ". $time_difference ." HOUR) AS since_date FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($id));
    if (!$result) die($lang['db_error']);
-   $field = mysql_fetch_assoc($result);
-   mysql_free_result($result);
+   $field = mysqli_fetch_assoc($result);
+   mysqli_free_result($result);
    // count postings:
-   $count_postings_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE user_id = ".intval($id), $connid);
-   list($postings_count) = mysql_fetch_row($count_postings_result);
-   mysql_free_result($count_postings_result);
+   $count_postings_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE user_id = ". intval($id));
+   list($postings_count) = mysqli_fetch_row($count_postings_result);
+   mysqli_free_result($count_postings_result);
 
    if ($field["user_name"] != "")
    {
-   $lang['user_info_hl'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['user_info_hl']);
+   $lang['user_info_hl'] = str_replace("[name]", htmlsc($field["user_name"]), $lang['user_info_hl']);
    ?>
    <h2><?php echo $lang['user_info_hl']; ?></h2>
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['username_marking']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php echo htmlsc(stripslashes($field["user_name"])); if ($field["user_type"]=="admin") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_admin'].")</span>"; elseif ($field["user_type"]=="mod") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_mod'].")</span>";?></p></td>
+     <td class="d"><p class="userdata"><?php echo htmlsc($field["user_name"]); if ($field["user_type"]=="admin") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_admin'].")</span>"; elseif ($field["user_type"]=="mod") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_mod'].")</span>";?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_real_name']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php if ($field["user_real_name"]!="") echo htmlsc(stripslashes($field["user_real_name"])); else echo "-" ?></p></td>
+     <td class="d"><p class="userdata"><?php if ($field["user_real_name"]!="") echo htmlsc($field["user_real_name"]); else echo "-" ?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_email_marking']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo $field['user_id']; ?>"><img src="img/email.gif" alt="'<?php echo $lang['email_alt']; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "-"; ?></p></td>
+     <td class="d"><p class="userdata"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo $field['user_id']; ?>"><img src="img/email.gif" alt="'<?php echo $lang['email_alt']; ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "-"; ?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_hp']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php if ($field["user_hp"]!="") { if (substr($field["user_hp"],0,7) != "http://" && substr($field["user_hp"],0,8) != "https://" && substr($field["user_hp"],0,6) != "ftp://" && substr($field["user_hp"],0,9) != "gopher://" && substr($field["user_hp"],0,7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo $field["user_hp"]; ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlsc(stripslashes($field["user_hp"])); ?>" width="13" height="13" /></a><?php } else echo "-" ?></p></td>
+     <td class="d"><p class="userdata"><?php if ($field["user_hp"]!="") { if (substr($field["user_hp"],0,7) != "http://" && substr($field["user_hp"],0,8) != "https://" && substr($field["user_hp"],0,6) != "ftp://" && substr($field["user_hp"],0,9) != "gopher://" && substr($field["user_hp"],0,7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo $field["user_hp"]; ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlsc($field["user_hp"]); ?>" width="13" height="13" /></a><?php } else echo "-" ?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_place']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php if ($field["user_place"]!="") echo htmlsc(stripslashes($field["user_place"])); else echo "-" ?></p></td>
+     <td class="d"><p class="userdata"><?php if ($field["user_place"]!="") echo htmlsc($field["user_place"]); else echo "-" ?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_since']; ?></b></p></td>
@@ -462,7 +463,7 @@ switch ($action)
           else
            {
             $ftext=$field["profile"];
-            $ftext = htmlsc(stripslashes($ftext));
+            $ftext = htmlsc($ftext);
             $ftext = nl2br($ftext);
             $ftext = zitat($ftext);
             if ($settings['autolink'] == 1) $ftext = make_link($ftext);
@@ -482,7 +483,7 @@ switch ($action)
           else
            {
             $ftext=$field["signature"];
-            $ftext = htmlsc(stripslashes($ftext));
+            $ftext = htmlsc($ftext);
             $ftext = nl2br($ftext);
             $ftext = zitat($ftext);
             if ($settings['autolink'] == 1) $ftext = make_link($ftext);
@@ -504,7 +505,7 @@ switch ($action)
     }
    else
     {
-     $lang['pers_msg_ln'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['pers_msg_ln']);
+     $lang['pers_msg_ln'] = str_replace("[name]", htmlsc($field["user_name"]), $lang['pers_msg_ln']);
      ?><p><br />
      <a class="textlink" href="user.php?action=personal_message&amp;id=<?php echo $id; ?>"><?php echo $lang['pers_msg_ln']; ?></a></p>
      <?php
@@ -518,20 +519,20 @@ switch ($action)
    if (empty($order)) $order="user_name";
    if (empty($descasc)) $descasc="ASC";
    $ul = $page * $settings['users_per_page'];
-   if (isset($_GET['letter'])) $result = mysql_query("SELECT user_id, user_name, user_type, user_email, hide_email, user_hp, user_lock FROM ".$db_settings['userdata_table']." WHERE user_name LIKE '".$_GET['letter']."%' ORDER BY ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['users_per_page'], $connid);
-   else $result = mysql_query("SELECT user_id, user_name, user_type, user_email, hide_email, user_hp, user_lock FROM ".$db_settings['userdata_table']." ORDER BY ".$order." ".$descasc." LIMIT ".$ul.", ".$settings['users_per_page'], $connid);
+   if (isset($_GET['letter'])) $result = mysqli_query($connid, "SELECT user_id, user_name, user_type, user_email, hide_email, user_hp, user_lock FROM ". $db_settings['userdata_table'] ." WHERE user_name LIKE '". mysqli_real_escape_string($connid, $_GET['letter']) ."%' ORDER BY ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['users_per_page']));
+   else $result = mysqli_query($connid, "SELECT user_id, user_name, user_type, user_email, hide_email, user_hp, user_lock FROM ". $db_settings['userdata_table'] ." ORDER BY ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['users_per_page']));
    if (!$result) die($lang['db_error']);
 
    // Schauen, wer online ist:
    if ($settings['count_users_online'] == 1)
     {
-     $useronline_result = mysql_query("SELECT user_id FROM ".$db_settings['useronline_table'], $connid);
+     $useronline_result = mysqli_query($connid, "SELECT user_id FROM ". $db_settings['useronline_table']);
      if (!$useronline_result) die($lang['db_error']);
-     while ($uid_field = mysql_fetch_assoc($useronline_result))
+     while ($uid_field = mysqli_fetch_assoc($useronline_result))
       {
        $useronline_array[] = $uid_field['user_id'];
       }
-     mysql_free_result($useronline_result);
+     mysqli_free_result($useronline_result);
     }
 
     if ($thread_count > 0)
@@ -547,15 +548,15 @@ switch ($action)
       </tr>
       <?php
       $i=0;
-      while ($field = mysql_fetch_assoc($result))
+      while ($field = mysqli_fetch_assoc($result))
        {
         ?><tr>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo $field['user_id']; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['show_userdata_linktitle']); ?>"><b><?php echo htmlsc(stripslashes($field['user_name'])); ?></b></a></td>
+        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo $field['user_id']; ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['show_userdata_linktitle']); ?>"><b><?php echo htmlsc($field['user_name']); ?></b></a></td>
         <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_type"] == "admin") echo $lang['ud_admin']; elseif ($field["user_type"] == "mod") echo $lang['ud_mod']; else echo $lang['ud_user']; ?></span></td>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo $field['user_id']; ?>"><img src="img/email.gif" alt="'<?php echo $lang['email_alt']; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "&nbsp;"; ?></span></td>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_hp"]!="") { if (substr($field["user_hp"],0,7) != "http://" && substr($field["user_hp"],0,8) != "https://" && substr($field["user_hp"],0,6) != "ftp://" && substr($field["user_hp"],0,9) != "gopher://" && substr($field["user_hp"],0,7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo htmlsc(stripslashes($field["user_hp"])); ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlsc(stripslashes($field["user_hp"])); ?>" width="13" height="13" /></a><?php } else echo "&nbsp;" ?></span></td>
+        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo $field['user_id']; ?>"><img src="img/email.gif" alt="'<?php echo $lang['email_alt']; ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "&nbsp;"; ?></span></td>
+        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_hp"]!="") { if (substr($field["user_hp"],0,7) != "http://" && substr($field["user_hp"],0,8) != "https://" && substr($field["user_hp"],0,6) != "ftp://" && substr($field["user_hp"],0,9) != "gopher://" && substr($field["user_hp"],0,7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo htmlsc($field["user_hp"]); ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlsc($field["user_hp"]); ?>" width="13" height="13" /></a><?php } else echo "&nbsp;" ?></span></td>
         <?php if ($settings['count_users_online'] == 1) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="online"><?php if ($settings['count_users_online'] == 1 && in_array($field['user_id'], $useronline_array)) { echo $lang['online']; } else echo "&nbsp;"; ?></span></td><?php }
-        if (isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod")) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($field["user_type"]=="user") { if ($field["user_lock"] == 0) { ?><span class="small"><a href="user.php?user_lock=<?php echo $field["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;page=<?php echo $page; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['lock_user_lt']); ?>"><?php echo $lang['unlocked']; ?></a></span><?php } else { ?><span class="small"><a style="color: red;" href="user.php?user_lock=<?php echo $field["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;page=<?php echo $page; ?>" title="<?php echo str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['unlock_user_lt']); ?>"><?php echo $lang['locked']; ?></a></span><?php } } else echo "&nbsp;"; ?></td><?php } ?>
+        if (isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod")) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($field["user_type"]=="user") { if ($field["user_lock"] == 0) { ?><span class="small"><a href="user.php?user_lock=<?php echo $field["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;page=<?php echo $page; ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['lock_user_lt']); ?>"><?php echo $lang['unlocked']; ?></a></span><?php } else { ?><span class="small"><a style="color: red;" href="user.php?user_lock=<?php echo $field["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;page=<?php echo $page; ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['unlock_user_lt']); ?>"><?php echo $lang['locked']; ?></a></span><?php } } else echo "&nbsp;"; ?></td><?php } ?>
         </tr>
         <?php $i++;
        }
@@ -568,10 +569,10 @@ switch ($action)
   break;
 
   case "edit":
-   $result = mysql_query("SELECT user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, user_view, new_posting_notify, new_user_notify, personal_messages, time_difference FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($user_id), $connid);
+   $result = mysqli_query($connid, "SELECT user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, user_view, new_posting_notify, new_user_notify, personal_messages, time_difference FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($user_id));
    if (!$result) die($lang['db_error']);
-   $field = mysql_fetch_assoc($result);
-   mysql_free_result($result);
+   $field = mysqli_fetch_assoc($result);
+   mysqli_free_result($result);
 
    if (empty($userdata_submit))
     {
@@ -588,7 +589,7 @@ switch ($action)
      $personal_messages = $field["personal_messages"];
     }
 
-   $lang['edit_userdata_hl'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['edit_userdata_hl']);
+   $lang['edit_userdata_hl'] = str_replace("[name]", htmlsc($field["user_name"]), $lang['edit_userdata_hl']);
    ?>
    <h2><?php echo $lang['edit_userdata_hl']; ?></h2>
    <?php
@@ -599,11 +600,11 @@ switch ($action)
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="c"><b><?php echo $lang['username_marking']; ?></b></td>
-     <td class="d"><?php echo htmlsc(stripslashes($field["user_name"])); ?></td>
+     <td class="d"><?php echo htmlsc($field["user_name"]); ?></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_email_marking']; ?></b></td>
-     <td class="d"><?php echo htmlsc(stripslashes($field["user_email"])); ?>&nbsp;&nbsp;<span class="small">[ <a class="sln" href="user.php?action=email"><?php echo $lang['edit_email_ln']; ?></a> ]</span></td>
+     <td class="d"><?php echo htmlsc($field["user_email"]); ?>&nbsp;&nbsp;<span class="small">[ <a class="sln" href="user.php?action=email"><?php echo $lang['edit_email_ln']; ?></a> ]</span></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_show_email']; ?></b><br /><span class="small"><?php echo $lang['user_show_email_exp']; ?></span></td>
@@ -611,23 +612,23 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_real_name']; ?></b><br /><span class="small"><?php echo $lang['optional_marking']; ?></span></td>
-     <td class="d"><input type="text" size="40" name="user_real_name" value="<?php echo htmlsc(stripslashes($user_real_name)); ?>" maxlength="<?php echo $settings['name_maxlength'] ?>"></td>
+     <td class="d"><input type="text" size="40" name="user_real_name" value="<?php echo htmlsc($user_real_name); ?>" maxlength="<?php echo $settings['name_maxlength'] ?>"></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_hp']; ?></b><br /><span class="small"><?php echo $lang['optional_marking']; ?></span></td>
-     <td class="d"><input type="text" size="40" name="user_hp" value="<?php echo htmlsc(stripslashes($user_hp)); ?>" maxlength="<?php echo $settings['hp_maxlength'] ?>"></td>
+     <td class="d"><input type="text" size="40" name="user_hp" value="<?php echo htmlsc($user_hp); ?>" maxlength="<?php echo $settings['hp_maxlength'] ?>"></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_place']; ?></b><br /><span class="small"><?php echo $lang['optional_marking']; ?></span></td>
-     <td class="d"><input type="text" size="40" name="user_place" value="<?php echo htmlsc(stripslashes($user_place)); ?>" maxlength="<?php echo $settings['place_maxlength'] ?>"></td>
+     <td class="d"><input type="text" size="40" name="user_place" value="<?php echo htmlsc($user_place); ?>" maxlength="<?php echo $settings['place_maxlength'] ?>"></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_profile']; ?></b><br /><span class="small"><?php echo $lang['user_profile_exp'] . "<br />" . $lang['optional_marking']; ?></span></td>
-     <td class="d"><textarea cols="65" rows="10" name="profile"><?php echo htmlsc(stripslashes($profile)); ?></textarea></td>
+     <td class="d"><textarea cols="65" rows="10" name="profile"><?php echo htmlsc($profile); ?></textarea></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang['user_signature']; ?></b><br /><span class="small"><?php echo $lang['user_sig_exp'] . "<br />" . $lang['optional_marking']; ?></span></td>
-     <td class="d"><textarea cols="65" rows="4" name="signature"><?php echo htmlsc(stripslashes($signature)); ?></textarea></td>
+     <td class="d"><textarea cols="65" rows="4" name="signature"><?php echo htmlsc($signature); ?></textarea></td>
     </tr>
     <?php if ($settings['thread_view'] != 0 && $settings['board_view'] != 0 || $settings['board_view'] != 0 && $settings['mix_view'] != 0 || $settings['thread_view'] != 0 && $settings['mix_view'] != 0)
     { ?>
@@ -695,7 +696,7 @@ switch ($action)
    <?php if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php } ?>
    <form action="user.php" method="post"><div>
    <p><b><?php echo $lang['new_email']; ?></b><br />
-   <input type="text" size="25" name="new_email" value="<?php if (isset($new_email)) echo htmlsc(stripslashes($new_email)); ?>" maxlength="<?php echo $settings['email_maxlength']; ?>"></p>
+   <input type="text" size="25" name="new_email" value="<?php if (isset($new_email)) echo htmlsc($new_email); ?>" maxlength="<?php echo $settings['email_maxlength']; ?>"></p>
    <p><b><?php echo $lang['password_marking']; ?></b><br />
    <input type="password" size="25" name="pw_new_email" maxlength="50"></p>
    <p><input type="submit" name="change_email_submit" value="<?php echo $lang['submit_button_ok']; ?>"></p>
@@ -723,12 +724,12 @@ switch ($action)
   */
 
   case "personal_message":
-   $pma_result = mysql_query("SELECT user_name, personal_messages FROM ".$db_settings['userdata_table']." WHERE user_id = ".intval($id)." LIMIT 1", $connid);
+   $pma_result = mysqli_query($connid, "SELECT user_name, personal_messages FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($id) ." LIMIT 1");
    if (!$pma_result) die($lang['db_error']);
-   $field = mysql_fetch_assoc($pma_result);
-   mysql_free_result($pma_result);
+   $field = mysqli_fetch_assoc($pma_result);
+   mysqli_free_result($pma_result);
 
-   $lang['pers_msg_hl'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['pers_msg_hl']);
+   $lang['pers_msg_hl'] = str_replace("[name]", htmlsc($field["user_name"]), $lang['pers_msg_hl']);
    ?><h2><?php echo $lang['pers_msg_hl']; ?></h2><?php
 
    if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php }
@@ -739,22 +740,22 @@ switch ($action)
      <input type="hidden" name="action" value="pm_sent" />
      <input type="hidden" name="recipient_id" value="<?php echo $id; ?>" />
      <b><?php echo $lang['pers_msg_sj']; ?></b><br />
-     <input class="fs" type="text" name="pm_subject" value="<?php if (isset($_POST['pm_subject'])) echo htmlsc(stripslashes($_POST['pm_subject'])); else echo ""; ?>" size="50" /><br /><br />
+     <input class="fs" type="text" name="pm_subject" value="<?php if (isset($_POST['pm_subject'])) echo htmlsc($_POST['pm_subject']); else echo ""; ?>" size="50" /><br /><br />
      <b><?php echo $lang['pers_msg_txt']; ?></b><br />
-     <textarea name="pm_text" cols="60" rows="15"><?php if (isset($_POST['pm_text'])) echo htmlsc(stripslashes($_POST['pm_text'])); else echo ""; ?></textarea><br /><br />
+     <textarea name="pm_text" cols="60" rows="15"><?php if (isset($_POST['pm_text'])) echo htmlsc($_POST['pm_text']); else echo ""; ?></textarea><br /><br />
      <input type="submit" name="pm_ok" value="<?php echo $lang['pers_msg_subm_button']; ?>" /><br /><br />
      </div></form><?php
     }
    else
     {
-     $lang['pers_msg_deactivated'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['pers_msg_deactivated']);
+     $lang['pers_msg_deactivated'] = str_replace("[name]", htmlsc($field["user_name"]), $lang['pers_msg_deactivated']);
      echo $lang['pers_msg_deactivated'] . "<p>&nbsp;</p>";
     }
    break;
 
    case "locked":
     ?><h2 class="caution"><?php echo $lang['user_locked_hl']; ?></h2>
-    <p><?php echo str_replace("[name]", htmlsc(stripslashes($user_name)), $lang['usr_locked_txt']); ?></p>
+    <p><?php echo str_replace("[name]", htmlsc($user_name), $lang['usr_locked_txt']); ?></p>
     <p>&nbsp;</p><?php
    break;
  }

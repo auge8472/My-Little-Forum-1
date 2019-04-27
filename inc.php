@@ -1,8 +1,10 @@
 <?php
 ###############################################################################
 # my little forum                                                             #
-# Copyright (C) 2005 Alex                                                     #
+# Copyright (C) 2004-2008 Alex                                                #
 # http://www.mylittlehomepage.net/                                            #
+# Copyright (C) 2009-2019 H. August                                           #
+# https://www.projekt-mlf.de/                                                 #
 #                                                                             #
 # This program is free software; you can redistribute it and/or               #
 # modify it under the terms of the GNU General Public License                 #
@@ -49,10 +51,10 @@ if(basename($_SERVER['PHP_SELF'])!='login.php' && basename($_SERVER['PHP_SELF'])
  }
 
 // look if IP is banned:
-$ip_result=mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'ips' LIMIT 1", $connid);
+$ip_result=mysqli_query($connid, "SELECT list FROM ". $db_settings['banlists_table'] ." WHERE name = 'ips' LIMIT 1");
 if(!$ip_result) die($lang['db_error']);
-$data = mysql_fetch_assoc($ip_result);
-mysql_free_result($ip_result);
+$data = mysqli_fetch_assoc($ip_result);
+mysqli_free_result($ip_result);
 if(trim($data['list']) != '')
  {
   $banned_ips_array = explode(',',trim($data['list']));
@@ -65,10 +67,10 @@ if(trim($data['list']) != '')
 // look if user is banned:
 if(isset($_SESSION[$settings['session_prefix'].'user_name']))
  {
-  $ban_result=mysql_query("SELECT list FROM ".$db_settings['banlists_table']." WHERE name = 'users' LIMIT 1", $connid);
+  $ban_result=mysqli_query($connid, "SELECT list FROM ". $db_settings['banlists_table'] ." WHERE name = 'users' LIMIT 1");
   if(!$ban_result) die($lang['db_error']);
-  $data = mysql_fetch_assoc($ban_result);
-  mysql_free_result($ban_result);
+  $data = mysqli_fetch_assoc($ban_result);
+  mysqli_free_result($ban_result);
   if(trim($data['list']) != '')
    {
     $banned_users_array = explode(',',strtolower(trim($data['list'])));
@@ -114,36 +116,34 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $category_accession
 // count postings, threads, users and users online:
 if ($categories == false) // no categories defined
   {
-   $count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0", $connid);
-   list($thread_count) = mysql_fetch_row($count_result);
-   mysql_free_result($count_result);
-   $count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table'], $connid);
-   list($posting_count) = mysql_fetch_row($count_result);
-   mysql_free_result($count_result);
+   $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE pid = 0");
+   list($thread_count) = mysqli_fetch_row($count_result);
+   mysqli_free_result($count_result);
+   $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table']);
+   list($posting_count) = mysqli_fetch_row($count_result);
+   mysqli_free_result($count_result);
   }
  elseif (is_array($categories)) // there are categories
   {
-   #foreach($categories as $part) $request_categories[] = "'".mysql_escape_string($part)."'";
-   #$request_categories = implode(", ", $request_categories).", ''";
-   $count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE pid = 0 AND category IN (".$category_ids_query.")", $connid);
-   list($thread_count) = mysql_fetch_row($count_result);
-   mysql_free_result($count_result);
-   $count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['forum_table']." WHERE category IN (".$category_ids_query.")", $connid);
-   list($posting_count) = mysql_fetch_row($count_result);
-   mysql_free_result($count_result);
+   $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE pid = 0 AND category IN (". $category_ids_query .")");
+   list($thread_count) = mysqli_fetch_row($count_result);
+   mysqli_free_result($count_result);
+   $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE category IN (". $category_ids_query .")");
+   list($posting_count) = mysqli_fetch_row($count_result);
+   mysqli_free_result($count_result);
   }
 else { $thread_count = 0; $posting_count = 0; }
 
-$count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['userdata_table'], $connid);
-list($user_count) = mysql_fetch_row($count_result);
+$count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['userdata_table']);
+list($user_count) = mysqli_fetch_row($count_result);
 
 if ($settings['count_users_online'] == 1)
  {
   user_online();
-  $count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE user_id > 0", $connid);
-  list($useronline_count) = mysql_fetch_row($count_result);
-  $count_result = mysql_query("SELECT COUNT(*) FROM ".$db_settings['useronline_table']." WHERE user_id = 0", $connid);
-  list($guestsonline_count) = mysql_fetch_row($count_result);
+  $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['useronline_table'] ." WHERE user_id > 0");
+  list($useronline_count) = mysqli_fetch_row($count_result);
+  $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['useronline_table'] ." WHERE user_id = 0");
+  list($guestsonline_count) = mysqli_fetch_row($count_result);
   $counter = str_replace("[postings]", $posting_count, $lang['counter_uo']);
   $counter = str_replace("[threads]", $thread_count, $counter);
   $counter = str_replace("[users]", $user_count, $counter);
@@ -153,13 +153,13 @@ if ($settings['count_users_online'] == 1)
  }
 else
  {
-  $counter = str_replace("[forum_name]", "<a href=\"".$settings['forum_address']."\">".stripslashes($settings['forum_name'])."</a>", $lang['counter']);
-  $counter = str_replace("[contact]", "<a href=\"contact.php?forum_contact=true\">".$lang['contact_linkname']."</a>", $counter);
+  $counter = str_replace("[forum_name]", "<a href=\"".$settings['forum_address']."\">". htmlsc($settings['forum_name']) ."</a>", $lang['counter']);
+  $counter = str_replace("[contact]", "<a href=\"contact.php?forum_contact=true\">". htmlsc($lang['contact_linkname']) ."</a>", $counter);
   $counter = str_replace("[postings]", $posting_count, $counter);
   $counter = str_replace("[threads]", $thread_count, $counter);
   $counter = str_replace("[users]", $user_count, $counter);
  }
-mysql_free_result($count_result);
+mysqli_free_result($count_result);
 
 if (isset($settings['time_difference'])) $time_difference = $settings['time_difference'];
 else $time_difference = 0;
