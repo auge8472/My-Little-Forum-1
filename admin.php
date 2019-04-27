@@ -24,8 +24,11 @@
 include("inc.php");
 include("lang/".$lang['additional_language_file']);
 
-if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
-{
+# forwarding not allowed visitors to the forums main page
+if (!isset($_SESSION[$settings['session_prefix'].'user_id']) || (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] != "admin")) {
+	header("location: index.php");
+	die('<a href="index.php">further...</a>');
+}
 
 // remove not activated user accounts:
 @mysqli_query($connid, "DELETE FROM ".$db_settings['userdata_table']." WHERE registered < (NOW() - INTERVAL 24 HOUR) AND activate_code != '' AND logins=0");
@@ -2026,6 +2029,4 @@ switch ($action)
 
 echo $footer;
 
- }
-else { header("location: index.php"); die("<a href=\"index.php\">further...</a>"); }
 ?>
