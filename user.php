@@ -235,7 +235,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
    break;
    /* self-delete of user:
    case "delete submited":
-    // �berpr�fungen:
+    // Überprüfungen:
     $pw_result = mysqli_query($connid, "SELECT user_pw FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($user_id) ." LIMIT 1");
     if (!$pw_result) die($lang['db_error']);
     $field = mysqli_fetch_assoc($pw_result);

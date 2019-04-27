@@ -228,9 +228,7 @@ if (isset($_GET['mark']))
   $field = mysqli_fetch_assoc($mark_result);
   mysqli_free_result($mark_result);
   if ($field['marked']==0) $marked = 1; else $marked = 0;
-
   mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked= ". intval($marked) ."' WHERE tid= ". intval($_GET['mark']));
-
   header("location: ".$_GET['refer']."?id=".$_GET['mark']."&category=".$_GET['category']."&page=".$_GET['page']."&order=".$_GET['order']);
   die("<a href=\"".$_GET['refer']."?id=".$_GET['mark']."&amp;category=".$_GET['category']."&amp;page=".$_GET['page']."&amp;order=".$_GET['order']."\">further...</a>");
 
@@ -756,7 +754,7 @@ if (isset($_POST['unlock_marked_threads_submitted']))
 
 if (isset($_POST['ar_username']))
  {
-  // überflüssige Leerzeichen abschneiden:
+  // Ã¼berflÃ¼ssige Leerzeichen abschneiden:
   $ar_username = $_POST['ar_username'];
   $ar_email = $_POST['ar_email'];
   $ar_pw = $_POST['ar_pw'];
@@ -766,19 +764,19 @@ if (isset($_POST['ar_username']))
   $ar_email = trim($ar_email);
   $ar_pw = trim($ar_pw);
   $ar_pw_conf = trim($ar_pw_conf);
-  // Schauen, ob alle Felder ausgefüllt wurden:
+  // Schauen, ob alle Felder ausgefÃ¼llt wurden:
   if ($ar_username=="" or $ar_email=="") $errors[] = $lang['error_form_uncompl'];
   if(empty($errors))
    {
     if (($ar_pw=="" or $ar_pw_conf=="") && !isset($ar_send_userdata)) $errors[] = $lang_add['error_send_userdata'];
    }
-  // wenn alle Felder ausgefüllt wurden, weitere Überprüfungen durchführen:
+  // wenn alle Felder ausgefÃ¼llt wurden, weitere ÃberprÃ¼fungen durchfÃ¼hren:
   if(empty($errors))
    {
-    // Überprüfen, ob der Name zu lang ist:
+    // ÃberprÃ¼fen, ob der Name zu lang ist:
     if (strlen($ar_username) > $settings['name_maxlength'])
     $errors[] = $lang['name_marking'] . " " .$lang['error_input_too_long'];
-    // überprüfen, ob ein Wort im Username zu lang ist:
+    // Ã¼berprÃ¼fen, ob ein Wort im Username zu lang ist:
     $text_arr = explode(" ",$ar_username); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
     $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
     $errors[] = $error_nwtl; } }
@@ -793,7 +791,7 @@ if (isset($_POST['ar_username']))
       $lang['error_name_reserved'] = str_replace("[name]", htmlsc($ar_username), $lang['error_name_reserved']);
       $errors[] = $lang['error_name_reserved'];
      }
-    // Überprüfung ob die Email-Adresse das Format name@domain.tld hat:
+    // ÃberprÃ¼fung ob die Email-Adresse das Format name@domain.tld hat:
     if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $ar_email))
     $errors[] = $lang['error_email_wrong'];
 

@@ -83,15 +83,15 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
  $categories = get_categories();
  if ($categories == "not accessible") { header("location: index.php"); die("<a href=\"index.php\">further...</a>"); }
 
-    unset($errors);  // Array für Fehlermeldungen
+    unset($errors);  // Array fÃ¼r Fehlermeldungen
     unset($Thread);
     if (empty($descasc)) $descasc="DESC";
     $edit_authorization = 0; // erst mal sicherheitshalber keine Berechtigung zum Editieren von Postings
-    $delete_authorization = 0; // erst mal sicherheitshalber keine Berechtigung zum Löschen von Postings
+    $delete_authorization = 0; // erst mal sicherheitshalber keine Berechtigung zum LÃ¶schen von Postings
 
     if (empty($action)) $action = "new";
 
-    // Falls editiert oder gelöscht werden soll, schauen, ob der User dazu berechtigt ist:
+    // Falls editiert oder gelÃ¶scht werden soll, schauen, ob der User dazu berechtigt ist:
     if ($action=="edit" || $action == "delete" || $action == "delete ok")
      {
       $user_id_result = mysqli_query($connid, "SELECT user_id FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($id) ." LIMIT 1");
@@ -113,7 +113,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
           $edit_authorization = 1;
           $delete_authorization = 1;
          }
-        // Moderator darf alles außer Postings von Admins editieren/löschen:
+        // Moderator darf alles auÃer Postings von Admins editieren/lÃ¶schen:
         elseif ($_SESSION[$settings['session_prefix'].'user_type'] == "mod")
          {
           if ($user_result_array["user_type"] != "admin")
@@ -122,7 +122,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
            $delete_authorization = 1;
           }
          }
-        // User darf (falls aktiviert) nur seine eigenen Postings editieren/löschen:
+        // User darf (falls aktiviert) nur seine eigenen Postings editieren/lÃ¶schen:
         elseif ($_SESSION[$settings['session_prefix'].'user_type'] == "user")
          {
           // Schauen, ob es sich um einen eigenen Eintrag handelt:
@@ -138,7 +138,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
         $edit_authorization = 0;
         $delete_authorization = 0;
        }
-     } // Ende Überprüfung der Berechtigung
+     } // Ende ÃberprÃ¼fung der Berechtigung
 
  // wenn das Formular noch nicht abgeschickt wurde:
  if (empty($form))
@@ -372,7 +372,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
             $errors[] = $lang['error_name_reserved'];
            }
          }
-        if (isset($email) && $email != "" and !preg_match("/^[^@]+@.+\.\D{2,5}$/", $email)) // Überprüfung ob die Email-Adresse das Format name@domain.tld hat
+        if (isset($email) && $email != "" and !preg_match("/^[^@]+@.+\.\D{2,5}$/", $email)) // ÃberprÃ¼fung ob die Email-Adresse das Format name@domain.tld hat
          $errors[] = $lang['error_email_wrong'];
         //if(isset($hp) && $hp != "" and !preg_match("[hier fehlt noch die Reg-Ex]", $hp))
         //  $errors[] = $lang['error_hp_wrong'];
@@ -533,7 +533,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                }
                mysqli_free_result($en_result);
 
-              // Cookies setzen, falls gewünscht und Funktion aktiv:
+              // Cookies setzen, falls gewÃ¼nscht und Funktion aktiv:
               if ($settings['remember_userdata'] == 1)
                {
                 if (isset($setcookie) && $setcookie==1)
@@ -545,7 +545,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                  }
                }
 
-             // für Weiterleitung:
+             // fÃ¼r Weiterleitung:
              $further_tid = $neu["tid"];
              $further_id = $neu["id"];
              $refer = 1;
@@ -682,7 +682,7 @@ switch ($show)
      if($settings['captcha_type']==1) $_SESSION['captcha_session'] = $captcha->generate_code();
      else $_SESSION['captcha_session'] = $captcha->generate_math_captcha();
     }
-    // Überschrift:
+    // Ãberschrift:
     switch ($action)
      {
       case "new":
@@ -853,7 +853,7 @@ switch ($show)
     <td style="width:100px;">&nbsp;</td><td>&nbsp;</td>
    </tr>
    <?php
-   // Formularfelder für unbekannte User bzw. wenn Posting unbekannter User editiert wird:
+   // Formularfelder fÃ¼r unbekannte User bzw. wenn Posting unbekannter User editiert wird:
    if (!isset($_SESSION[$settings['session_prefix'].'user_id']) or $action == "edit" && $p_user_id == 0)
    {
    ?>

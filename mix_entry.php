@@ -151,9 +151,9 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
  if (empty($category)) $category="all";
  if (empty($descasc)) $descasc="DESC";
 
- if( isset($id) ) {  // Wenn $id übergeben wurde..
+ if( isset($id) ) {  // Wenn $id Ã¼bergeben wurde..
   $id = (int) $id;   // ... $id erst mal zu einem Integer machen ..
-  if( $id > 0 )      // ... und schauen ob es größer als 0 ist ..
+  if( $id > 0 )      // ... und schauen ob es grÃ¶Ãer als 0 ist ..
    {
     $result=mysqli_query($connid, "SELECT tid, pid, subject, category FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($id));
     if(!$result) die($lang['db_error']);
@@ -192,7 +192,7 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
   // Ergebnisse einlesen
  while($tmp = mysqli_fetch_assoc($result)) {  // Ergebnis holen
   $parent_array[$tmp["id"]] = $tmp;          // Ergebnis im Array ablegen
-  $child_array[$tmp["pid"]][] =  $tmp["id"]; // Vorwärtsbezüge konstruieren
+  $child_array[$tmp["pid"]][] =  $tmp["id"]; // VorwÃ¤rtsbezÃ¼ge konstruieren
  }
 
  mysqli_free_result($result); // Aufräumen
