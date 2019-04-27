@@ -290,7 +290,7 @@ function update17() {
 	return false;
 }
 
-$table_prefix = 'forum_';
+$table_prefix = 'mlf1_';
 
 if(isset($_POST['language']))
  {
