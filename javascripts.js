@@ -35,7 +35,7 @@ function insert(what)
     document.forms['entryform'].elements['text'].focus();
     document.selection.createRange().duplicate().text = what;
    }
-  else if ((typeof document.forms['entryform'].elements['text'].selectionStart) != 'undefined') // für Mozilla
+  else if ((typeof document.forms['entryform'].elements['text'].selectionStart) != 'undefined') // fÃ¼r Mozilla
    {
     var tarea = document.forms['entryform'].elements['text'];
     var selEnd = tarea.selectionEnd;
