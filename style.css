@@ -308,6 +308,18 @@ padding: 0 20px 0 0;
 text-align: right;
 line-height:160%;
 }
+nav div.right ul {
+	list-style: none;
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+nav div.right li {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+
 
 main {
 padding: 2em;
