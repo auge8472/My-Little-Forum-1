@@ -727,6 +727,7 @@ if(empty($installed))
        </form><?php
       break;
       case 'update':
+      $table_prefix = preg_replace('/settings$/u', '', $db_settings['settings_table']);
        ?><p><?php echo $lang_add['update_instructions']; ?></p><br><?php
        if(isset($errors))
         {
