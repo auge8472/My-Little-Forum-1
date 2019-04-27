@@ -69,7 +69,7 @@ $settings['upload_max_img_height'] = 600;
 $settings['mail_parameter'] = "";
 $settings['forum_disabled'] = 0;
 $settings['session_prefix'] = "mlf_";
-$settings['version'] = '1.7.7';
+$settings['version'] = '1.7.8';
 $settings['captcha_posting'] = 0;
 $settings['captcha_contact'] = 0;
 $settings['captcha_register'] = 0;
@@ -276,7 +276,6 @@ function update16to17()
   @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('captcha_contact','". mysqli_real_escape_string($connid, $settings['captcha_contact']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
   @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('captcha_register','". mysqli_real_escape_string($connid, $settings['captcha_register']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
   @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('captcha_type','". mysqli_real_escape_string($connid, $settings['captcha_type']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='1.7.7' WHERE name = 'version'") or $errors[] = $lang_add['update_error']. " (MySQL: ".mysqli_error($connid).")";
   if(isset($errors)) return $errors; else return false;
  }
 
@@ -285,7 +284,7 @@ function update17() {
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['forum_table'] ." CHANGE time time timestamp NULL default NULL, CHANGE last_answer last_answer timestamp NULL default NULL, CHANGE edited edited timestamp NULL default NULL") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['userdata_table'] ." CHANGE last_login last_login timestamp NULL default NULL, CHANGE last_logout last_logout timestamp NULL default NULL, CHANGE registered registered timestamp NULL default NULL") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['smilies_table'] ." CHANGE file file varchar(100) NOT NULL default '', CHANGE title title varchar(255) NOT NULL default ''") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
-	@mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='1.7.7' WHERE name = 'version'") or $errors[] = $lang_add['update_error']. " (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='1.7.8' WHERE name = 'version'") or $errors[] = $lang_add['update_error']. " (MySQL: ".mysqli_error($connid).")";
 	if (isset($errors)) return $errors;
 	return false;
 }
