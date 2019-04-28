@@ -274,16 +274,15 @@ if (isset($_GET['edit_category'])) {
 	$action = "edit_category";
 }
 
-if (isset($_GET['delete_category']))
- {
-  $category_result = mysqli_query($connid, "SELECT id, category FROM ". $db_settings['category_table'] ." WHERE id = ". intval($_GET['delete_category']) ." LIMIT 1");
-  if(!$category_result) die($lang['db_error']);
-  $field = mysqli_fetch_assoc($category_result);
-  mysqli_free_result($category_result);
-  $category_id = $field['id'];
-  $category_name = $field['category'];
-  $action = "delete_category";
- }
+if (isset($_GET['delete_category'])) {
+	$category_result = mysqli_query($connid, "SELECT id, category FROM ". $db_settings['category_table'] ." WHERE id = ". intval($_GET['delete_category']) ." LIMIT 1");
+	if (!$category_result) die($lang['db_error']);
+	$field = mysqli_fetch_assoc($category_result);
+	mysqli_free_result($category_result);
+	$category_id = $field['id'];
+	$category_name = $field['category'];
+	$action = "delete_category";
+}
 
 if (isset($_POST['edit_category_submit']))
  {
