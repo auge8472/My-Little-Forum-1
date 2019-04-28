@@ -284,28 +284,24 @@ if (isset($_GET['delete_category'])) {
 	$action = "delete_category";
 }
 
-if (isset($_POST['edit_category_submit']))
- {
-  $id = intval($_POST['id']);
-  $category = trim($_POST['category']);
-  $category = str_replace('"','\'',$category);
-  $accession = intval($_POST['accession']);
-  // does this category already exist?
-  $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['category_table'] ." WHERE category LIKE '". mysqli_real_escape_string($connid, $category) ."' AND id != ". intval($id));
-  if(!$count_result) die($lang['db_error']);
-  list($category_count) = mysqli_fetch_row($count_result);
-  mysqli_free_result($count_result);
-
-  if($category_count > 0) $errors[] = $lang_add['category_already_exists'];
-
-  if(empty($errors))
-   {
-    mysqli_query($connid, "UPDATE ". $db_settings['category_table'] ." SET category='". mysqli_real_escape_string($connid, $category) ."', accession=". intval($accession) ." WHERE id=". intval($id));
-    header("location: admin.php?action=categories");
-    die();
-   }
-  $action='edit_category';
- }
+if (isset($_POST['edit_category_submit'])) {
+	$id = intval($_POST['id']);
+	$category = trim($_POST['category']);
+	$category = str_replace('"', '\'', $category);
+	$accession = intval($_POST['accession']);
+	# does this category already exist?
+	$count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['category_table'] ." WHERE category LIKE '". mysqli_real_escape_string($connid, $category) ."' AND id != ". intval($id));
+	if (!$count_result) die($lang['db_error']);
+	list($category_count) = mysqli_fetch_row($count_result);
+	mysqli_free_result($count_result);
+	if ($category_count > 0) $errors[] = $lang_add['category_already_exists'];
+	if (empty($errors)) {
+		mysqli_query($connid, "UPDATE ". $db_settings['category_table'] ." SET category='". mysqli_real_escape_string($connid, $category) ."', accession=". intval($accession) ." WHERE id=". intval($id));
+		header("location: admin.php?action=categories");
+		die();
+	}
+	$action = 'edit_category';
+}
 
 if (isset($_POST['not_displayed_entries_submit']))
  {
