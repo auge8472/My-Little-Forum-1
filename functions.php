@@ -442,4 +442,33 @@ function htmlsc($string) {
 	return htmlspecialchars($string, ENT_QUOTES, $lang['charset'], false);
 }
 
+/**
+ * collects all possible URL parameters and builds an array from it
+ *
+ * @param array $parameters
+ * @return array $param
+ */
+function collectURLParameters($parameters = NULL) {
+	if ($parameters == NULL) return NULL;
+	if (isset($parameters['order'])) {
+		if ($parameters['order'] == 'last_answer') {
+			$param[] = 'order=last_answer';
+		} else {
+			$param[] = 'order=time';
+		}
+	} else {
+		$param[] = '';
+	}
+	if (isset($parameters['category']) and is_numeric($parameters['category']) and $parameters['category'] > 0) {
+		$param[] = 'category='. intval($parameters['category']);
+	}
+	if (isset($parameters['page']) and is_numeric($parameters['page']) and $parameters['page'] > 0) {
+		$param[] = 'page='. intval($parameters['page']);
+	}
+	if (isset($parameters['mark']) and is_numeric($parameters['mark']) and $parameters['mark'] > 0) {
+		$param[] = 'id='. intval($parameters['mark']);
+	}
+	return $param;
+}
+
 ?>
