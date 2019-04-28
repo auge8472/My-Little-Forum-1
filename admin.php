@@ -732,26 +732,6 @@ if (isset($_POST['ar_username']))
     die("<a href=\"admin.php?action=user&amp;new_user=".urlencode($ar_username).$send_error."\">further...</a>");
    }
   }
-if (isset($_POST['rename_category_submitted']) && trim($_POST['new_category']) != "")
- {
-  mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, category=". intval($_POST['new_category']) ." WHERE category=". intval($_POST['old_category']));
-
-  $data = file("db_settings.php");
-  $row_count = count($data);
-  $fp = fopen("db_settings.php", "w+");
-  flock($fp, 2);
-  for ($row = 0; $row < $row_count; $row++)
-   {
-    if (substr(trim($data[$row]),1,10) == "categories")
-     { fwrite($fp, trim(str_replace($_POST['old_category'],$_POST['new_category'],$data[$row]))."\n"); }
-    else { fwrite($fp, trim($data[$row])."\n"); }
-   }
-  flock($fp, 3);
-  fclose($fp);
-
-  header("location: admin.php");
-  die("<a href=\"admin.php\">further...</a>");
- }
 
 if (isset($_POST['delete_category_confirmed']) && trim($_POST['delete_category']) != "")
  {
