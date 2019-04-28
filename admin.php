@@ -342,33 +342,23 @@ if (isset($_POST['edit_category_submit'])) {
 	$action = 'edit_category';
 }
 
-if (isset($_POST['not_displayed_entries_submit']))
- {
-  if ($_POST['mode'] == "delete")
-   {
-    if(isset($category_ids_query))
-     {
-      mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE category NOT IN (". $category_ids_query .")");
-     }
-    else
-     {
-      mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE category != 0");
-     }
-   }
-  else
-   {
-    if(isset($category_ids_query))
-     {
-      mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, category=". intval($_POST['move_category']) ." WHERE category NOT IN (". $category_ids_query .")");
-     }
-    else
-     {
-      mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, category=". intval($_POST['move_category']) ." WHERE category != 0");
-     }
-   }
-  header("location: admin.php?action=categories");
-  die();
- }
+if (isset($_POST['not_displayed_entries_submit'])) {
+	if ($_POST['mode'] == "delete") {
+		if (isset($category_ids_query)) {
+			mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE category NOT IN (". $category_ids_query .")");
+		} else {
+			mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE category != 0");
+		}
+	} else {
+		if (isset($category_ids_query)) {
+			mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time = time, last_answer = last_answer, category = ". intval($_POST['move_category']) ." WHERE category NOT IN (". $category_ids_query .")");
+		} else {
+			mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time = time, last_answer = last_answer, category = ". intval($_POST['move_category']) ." WHERE category != 0");
+		}
+	}
+	header("location: admin.php?action=categories");
+	die();
+}
 
 if (isset($_GET['move_up_category']))
  {
