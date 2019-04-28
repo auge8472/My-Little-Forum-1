@@ -507,16 +507,12 @@ function codeblock($string) {
 global $settings;
 
 
-if (preg_match("#<p><code>(.+?)</code></p>#is", $string))
-	{
-	return preg_replace("#<p><code>(.+?)</code></p>#ise", "'<pre><code>'.br2nl('\\1').'</code></pre>'", $string);
-	}
-else
-	{
+if (preg_match("#<p><code>(.+?)</code></p>#is", $string)) {
+	return preg_replace("#<p><code>(.+?)</code></p>#is", "'<pre><code>'.br2nl('\\1').'</code></pre>'", $string);
+	} else {
 	return $string;
 	}
-
-return $string;
+	return $string;
 } # End: codeblock
 
 
