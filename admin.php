@@ -82,35 +82,27 @@ if (isset($_GET['backup'])) {
 	exit;
 }
 
-if(isset($_POST['sql_submit']))
- {
-  $sql = $_POST['sql'];
-
-  $pw_result = mysqli_query($connid, "SELECT user_pw FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
-  if (!$pw_result) die($lang['db_error']);
-  $field = mysqli_fetch_assoc($pw_result);
-  mysqli_free_result($pw_result);
-  if ($_POST['sql_pw']=='') $errors[] = $lang['error_form_uncompl'];
-  else
-   {
-    if ($field['user_pw'] != md5(trim($_POST['sql_pw']))) $errors[] = $lang['pw_wrong'];
-   }
-
-  if(empty($errors))
-   {
-    $sql_querys = split_sql($sql);
-    foreach($sql_querys as $sql_query)
-     {
-      #echo $sql_query.'<br />';
-      mysqli_query($connid, $sql_query) or $errors[] = $lang_add['mysql_error'] . mysqli_error($connid);
-      if(isset($errors)) break;
-     }
-     #die();
-     if(empty($errors)) $action = 'import_sql_ok';
-     else $action='import_sql';
-   }
-  else $action='import_sql';
- }
+if (isset($_POST['sql_submit'])) {
+	$sql = $_POST['sql'];
+	$pw_result = mysqli_query($connid, "SELECT user_pw FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
+	if (!$pw_result) die($lang['db_error']);
+	$field = mysqli_fetch_assoc($pw_result);
+	mysqli_free_result($pw_result);
+	if ($_POST['sql_pw'] == '') {
+		$errors[] = $lang['error_form_uncompl'];
+	} else {
+		if ($field['user_pw'] != md5(trim($_POST['sql_pw']))) $errors[] = $lang['pw_wrong'];
+	}
+	if (empty($errors)) {
+		$sql_querys = split_sql($sql);
+		foreach ($sql_querys as $sql_query) {
+			mysqli_query($connid, $sql_query) or $errors[] = $lang_add['mysql_error'] . mysqli_error($connid);
+			if (isset($errors)) break;
+		}
+		$action = (empty($errors)) ? 'import_sql_ok' : 'import_sql';
+	}
+	else $action = 'import_sql';
+}
 
 if (isset($_GET['mark']))
  {
