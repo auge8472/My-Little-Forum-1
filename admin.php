@@ -104,18 +104,44 @@ if (isset($_POST['sql_submit'])) {
 	else $action = 'import_sql';
 }
 
-if (isset($_GET['mark']))
- {
-  $mark_result = mysqli_query($connid, "SELECT marked FROM ". $db_settings['forum_table'] ." WHERE id=". intval($_GET['mark']) ." LIMIT 1");
-  if (!$mark_result) die($lang['db_error']);
-  $field = mysqli_fetch_assoc($mark_result);
-  mysqli_free_result($mark_result);
-  if ($field['marked']==0) $marked = 1; else $marked = 0;
-  mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked= ". intval($marked) ."' WHERE tid= ". intval($_GET['mark']));
-  header("location: ".$_GET['refer']."?id=".$_GET['mark']."&category=".$_GET['category']."&page=".$_GET['page']."&order=".$_GET['order']);
-  die("<a href=\"".$_GET['refer']."?id=".$_GET['mark']."&amp;category=".$_GET['category']."&amp;page=".$_GET['page']."&amp;order=".$_GET['order']."\">further...</a>");
-
- }
+if (isset($_GET['mark'])) {
+	$mark_result = mysqli_query($connid, "SELECT marked FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($_GET['mark']) ." LIMIT 1");
+	if (!$mark_result) die($lang['db_error']);
+	$field = mysqli_fetch_assoc($mark_result);
+	mysqli_free_result($mark_result);
+	$marked = ($field['marked'] == 0) ? 1 : 0;
+	mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time = time, last_answer = last_answer, edited = edited, marked = ". intval($marked) ."' WHERE tid = ". intval($_GET['mark']));
+	if (isset($_GET['refer'])) {
+		if ($_GET['refer'] == 'board.php' and $settings['board_view'] == 1) {
+			$refer = 'board.php';
+		} else if ($_GET['refer'] == 'mix.php' and $settings['mix_view'] == 1) {
+			$refer = 'mix.php';
+		} else if ($_GET['refer'] == 'forum.php' and $settings['thread_view'] == 1) {
+			$refer = 'forum.php';
+		} else if ($_GET['refer'] == 'forum_entry.php' and $settings['thread_view'] == 1) {
+			$refer = 'forum_entry.php';
+		}
+	} else {
+		if ($settings['standard'] == 'thread') {
+			$refer = 'forum.php';
+		} else if ($settings['standard'] == 'board') {
+			$refer = 'board.php';
+		} else if ($settings['standard'] == 'mix') {
+			$refer = 'mix.php';
+		} else {
+			$refer = 'forum.php';
+		}
+	}
+	$param = collectURLParameters($_GET);
+	$headerParams = implode("&", $param);
+	$headerURL  = $refer;
+	$headerURL .= (!empty($headerParams)) ? "?". $headerParams : '';
+	$linkParams = implode("&amp;", $param);
+	$linkURL  = $refer;
+	$linkURL .= (!empty($linkParams)) ? "?". $linkParams : '';
+	header("location: ". $headerURL);
+	die('<a href="'. $linkURL .'">further …</a>');
+}
 
 if (isset($_POST['new_category']))
  {
