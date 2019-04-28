@@ -190,78 +190,117 @@ if (isset($_GET['edit_user'])) {
 	$action = 'edit_user';
 }
 
-if(isset($_POST['edit_user_submit']))
- {
-  // import posted data:
-  $edit_user_id = intval($_POST['edit_user_id']);
-  $edit_user_name = trim($_POST['edit_user_name']);
-  $edit_user_type = trim($_POST['edit_user_type']);
-  $user_email = trim($_POST['user_email']);
-  $hide_email = trim($_POST["hide_email"]);
-  $user_real_name = trim($_POST['user_real_name']);
-  $user_hp = trim($_POST['user_hp']);
-  $user_place = trim($_POST['user_place']);
-  $profile = trim($_POST['profile']);
-  $signature = trim($_POST['signature']);
-  $user_view = trim($_POST['user_view']);
-  $personal_messages = trim($_POST['personal_messages']);
-  $user_time_difference = trim($_POST['user_time_difference']);
-  if(isset($_POST['new_posting_notify'])) $new_posting_notify = trim($_POST['new_posting_notify']); else $new_posting_notify = 0;
-  if(isset($_POST['new_user_notify'])) $new_user_notify = trim($_POST['new_user_notify']); else $new_user_notify = 0;
+if (isset($_POST['edit_user_submit'])) {
+	// import posted data:
+	$edit_user_id = intval($_POST['edit_user_id']);
+	$edit_user_name = trim($_POST['edit_user_name']);
+	$edit_user_type = trim($_POST['edit_user_type']);
+	$user_email = trim($_POST['user_email']);
+	$hide_email = trim($_POST["hide_email"]);
+	$user_real_name = trim($_POST['user_real_name']);
+	$user_hp = trim($_POST['user_hp']);
+	$user_place = trim($_POST['user_place']);
+	$profile = trim($_POST['profile']);
+	$signature = trim($_POST['signature']);
+	$user_view = trim($_POST['user_view']);
+	$personal_messages = trim($_POST['personal_messages']);
+	$user_time_difference = trim($_POST['user_time_difference']);
+	$new_posting_notify = (isset($_POST['new_posting_notify'])) ? trim($_POST['new_posting_notify']) : 0;
+	$new_user_notify = (isset($_POST['new_user_notify'])) ? trim($_POST['new_user_notify']) : 0;
 
-  // check data:
-  if(empty($user_view) or $user_view == '') $user_view = $standard;
-  // does the name already exist?
-  $name_result = mysqli_query($connid, "SELECT user_id, user_name FROM ". $db_settings['userdata_table'] ." WHERE user_name = '". mysqli_real_escape_string($connid, $edit_user_name) ."'") or die($lang['db_error']);
-  $field = mysqli_fetch_assoc($name_result);
-  mysqli_free_result($name_result);
-  if($edit_user_id != $field['user_id'] && strtolower($field["user_name"]) == strtolower($edit_user_name)) $errors[] = str_replace("[name]", htmlsc(stripslashes($edit_user_name)), $lang['error_name_reserved']);
-  if(strlen($user_real_name) > $settings['name_maxlength']) $errors[] = $lang['user_real_name'] . " " .$lang['error_input_too_long'];
-  if(strlen($user_hp) > $settings['hp_maxlength']) $errors[] = $lang['user_hp'] . " " .$lang['error_input_too_long'];
-  if(strlen($user_place) > $settings['place_maxlength']) $errors[] = $lang['user_place'] . " " .$lang['error_input_too_long'];
-  if(strlen($profile) > $settings['profile_maxlength'])
-   {
-    $lang['err_prof_too_long'] = str_replace("[length]", strlen($profile), $lang['err_prof_too_long']);
-    $lang['err_prof_too_long'] = str_replace("[maxlength]", $settings['profile_maxlength'], $lang['err_prof_too_long']);
-    $errors[] = $lang['err_prof_too_long'];
-   }
-  if (strlen($signature) > $settings['signature_maxlength'])
-   {
-    $lang['err_sig_too_long'] = str_replace("[length]", strlen($signature), $lang['err_sig_too_long']);
-    $lang['err_sig_too_long'] = str_replace("[maxlength]", $settings['signature_maxlength'], $lang['err_sig_too_long']);
-    $errors[] = $lang['err_sig_too_long'];
-   }
+	# check data:
+	if (empty($user_view) or $user_view == '') $user_view = $standard;
+	# does the name already exist?
+	$name_result = mysqli_query($connid, "SELECT user_id, user_name FROM ". $db_settings['userdata_table'] ." WHERE user_name = '". mysqli_real_escape_string($connid, $edit_user_name) ."'") or die($lang['db_error']);
+	$field = mysqli_fetch_assoc($name_result);
+	mysqli_free_result($name_result);
+	if ($edit_user_id != $field['user_id'] && strtolower($field["user_name"]) == strtolower($edit_user_name)) $errors[] = str_replace("[name]", htmlsc(stripslashes($edit_user_name)), $lang['error_name_reserved']);
+	if (strlen($user_real_name) > $settings['name_maxlength']) $errors[] = $lang['user_real_name'] . " " .$lang['error_input_too_long'];
+	if (strlen($user_hp) > $settings['hp_maxlength']) $errors[] = $lang['user_hp'] . " " .$lang['error_input_too_long'];
+	if (strlen($user_place) > $settings['place_maxlength']) $errors[] = $lang['user_place'] . " " .$lang['error_input_too_long'];
+	if (strlen($profile) > $settings['profile_maxlength']) {
+		$lang['err_prof_too_long'] = str_replace("[length]", strlen($profile), $lang['err_prof_too_long']);
+		$lang['err_prof_too_long'] = str_replace("[maxlength]", $settings['profile_maxlength'], $lang['err_prof_too_long']);
+		$errors[] = $lang['err_prof_too_long'];
+	}
+	if (strlen($signature) > $settings['signature_maxlength']) {
+		$lang['err_sig_too_long'] = str_replace("[length]", strlen($signature), $lang['err_sig_too_long']);
+		$lang['err_sig_too_long'] = str_replace("[maxlength]", $settings['signature_maxlength'], $lang['err_sig_too_long']);
+		$errors[] = $lang['err_sig_too_long'];
+	}
+	$text_arr = explode(" ", $user_real_name);
+	for ($i=0; $i<count($text_arr); $i++) {
+		trim($text_arr[$i]);
+		$laenge = strlen($text_arr[$i]);
+		if ($laenge > $settings['name_word_maxlength']) {
+			$error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i], 0, $settings['name_word_maxlength'])) ." …", $lang['error_name_word_too_long']);
+			$errors[] = $error_nwtl;
+		}
+	}
+	$text_arr = explode(" ", $user_place);
+	for ($i=0; $i<count($text_arr); $i++) {
+		trim($text_arr[$i]);
+		$laenge = strlen($text_arr[$i]);
+		if ($laenge > $settings['place_word_maxlength']) {
+			$error_pwtl = str_replace("[word]", htmlsc(substr($text_arr[$i], 0, $settings['place_word_maxlength'])) ." …", $lang['error_place_word_too_long']);
+			$errors[] = $error_pwtl;
+		}
+	}
+	$text_arr = str_replace("\n", " ", $profile);
+	if ($settings['bbcode'] == 1) {
+		$text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr);
+		$text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr);
+		$text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr);
+		$text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr);
+		$text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr);
+	}
+	if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) {
+		$text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr);
+		$text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr);
+		$text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr);
+	}
+	$text_arr = explode(" ", $text_arr);
+	for ($i=0; $i<count($text_arr); $i++) {
+		trim($text_arr[$i]);
+		$laenge = strlen($text_arr[$i]);
+		if ($laenge > $settings['text_word_maxlength']) {
+			$error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i], 0, $settings['text_word_maxlength'])) ." …", $lang['err_prof_word_too_long']);
+			$errors[] = $error_twtl;
+		}
+	}
+	$text_arr = str_replace("\n", " ", $signature);
+	if ($settings['bbcode'] == 1) {
+		$text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr);
+		$text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr);
+		$text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr);
+		$text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr);
+		$text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr);
+	}
+	if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) {
+		$text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr);
+		$text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr);
+		$text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr);
+	}
+	$text_arr = explode(" ",$text_arr);
+	for ($i=0; $i<count($text_arr); $i++) {
+		trim($text_arr[$i]);
+		$laenge = strlen($text_arr[$i]);
+		if ($laenge > $settings['text_word_maxlength']) {
+			$error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i], 0, $settings['text_word_maxlength'])) ." …", $lang['err_sig_word_too_long']);
+			$errors[] = $error_twtl;
+		}
+	}
+	# end of checking
 
-  $text_arr = explode(" ",$user_real_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-  $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
-  $errors[] = $error_nwtl; } }
-  $text_arr = explode(" ",$user_place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
-  $error_pwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
-  $errors[] = $error_pwtl; } }
-  $text_arr = str_replace("\n", " ", $profile);
-  if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
-  if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
-  $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-  $error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['err_prof_word_too_long']);
-  $errors[] = $error_twtl; } }
-  $text_arr = str_replace("\n", " ", $signature);
-  if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
-  if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
-  $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-  $error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['err_sig_word_too_long']);
-  $errors[] = $error_twtl; } }
-  // end of checking
-
-  // save if no errors:
-  if(empty($errors))
-   {
-    @mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_name='". mysqli_real_escape_string($connid, $edit_user_name) ."', user_type='". mysqli_real_escape_string($connid, $edit_user_type) ."', user_email='". mysqli_real_escape_string($connid, $user_email) ."', user_real_name='". mysqli_real_escape_string($connid, $user_real_name) ."', hide_email=". intval($hide_email) .", user_hp='". mysqli_real_escape_string($connid, $user_hp) ."', user_place='". mysqli_real_escape_string($connid, $user_place) ."', profile='". mysqli_real_escape_string($connid, $profile) ."', signature='". mysqli_real_escape_string($connid, $signature) ."', last_login=last_login, registered=registered, user_view='". mysqli_real_escape_string($connid, $user_view) ."', new_posting_notify=". intval($new_posting_notify) .", new_user_notify=". intval($new_user_notify) .", personal_messages=". intval($personal_messages) .", time_difference=". intval($user_time_difference) ."' WHERE user_id=". intval($edit_user_id)) or die($lang['db_error']);
-    @mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, name='". mysqli_real_escape_string($connid, $edit_user_name) ."' WHERE user_id=". intval($edit_user_id));
-    header("location: admin.php?action=user");
-    die("<a href=\"admin.php?action=user\">further...</a>");
-   }
-  $action = 'edit_user';
- }
+	# save if no errors:
+	if (empty($errors)) {
+		@mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_name = '". mysqli_real_escape_string($connid, $edit_user_name) ."', user_type = '". mysqli_real_escape_string($connid, $edit_user_type) ."', user_email = '". mysqli_real_escape_string($connid, $user_email) ."', user_real_name = '". mysqli_real_escape_string($connid, $user_real_name) ."', hide_email = ". intval($hide_email) .", user_hp = '". mysqli_real_escape_string($connid, $user_hp) ."', user_place = '". mysqli_real_escape_string($connid, $user_place) ."', profile = '". mysqli_real_escape_string($connid, $profile) ."', signature = '". mysqli_real_escape_string($connid, $signature) ."', last_login = last_login, registered = registered, user_view = '". mysqli_real_escape_string($connid, $user_view) ."', new_posting_notify = ". intval($new_posting_notify) .", new_user_notify = ". intval($new_user_notify) .", personal_messages = ". intval($personal_messages) .", time_difference = ". intval($user_time_difference) ."' WHERE user_id = ". intval($edit_user_id)) or die($lang['db_error']);
+		@mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time = time, last_answer = last_answer, edited = edited, name = '". mysqli_real_escape_string($connid, $edit_user_name) ."' WHERE user_id = ". intval($edit_user_id));
+		header("location: admin.php?action=user");
+		die('<a href="admin.php?action=user">further...</a>');
+	}
+	$action = 'edit_user';
+}
 
 if (isset($_GET['edit_category'])) {
 	$category_result = mysqli_query($connid, "SELECT id, category_order, category, accession FROM ". $db_settings['category_table'] ." WHERE id = ". intval($_GET['edit_category']) ." LIMIT 1");
