@@ -416,7 +416,9 @@ else
 	$p_class='posting';
 	}
 $string = $string[1];
-$string = str_replace('<br>','',$string);
+$string = str_replace('<br>', '', $string);
+$string = str_replace('<br/>', '', $string);
+$string = str_replace('<br />', '', $string);
 $string = '</p>'."\n".'<pre class="'.$p_class.'"><code>'.$string.'</code></pre>'."\n".'<p class="'.$p_class.'">';
 
 return $string;
@@ -506,25 +508,16 @@ return str_replace('<p>'.$settings['quote_symbol'].' ', '<p class="citation">'.$
 function codeblock($string) {
 global $settings;
 
-
 if (preg_match("#<p><code>(.+?)</code></p>#is", $string)) {
-	return preg_replace("#<p><code>(.+?)</code></p>#is", "'<pre><code>'.br2nl('\\1').'</code></pre>'", $string);
+	$string = str_replace('<br>', '', $string);
+	$string = str_replace('<br/>', '', $string);
+	$string = str_replace('<br />', '', $string);
+	return preg_replace("#<p><code>(.+?)</code></p>#is", '<pre><code>\\1</code></pre>', $string);
 	} else {
 	return $string;
 	}
-	return $string;
+return $string;
 } # End: codeblock
-
-
-
-/**
- *
- * @param string
- * @return string
- */
-function br2nl($data) {
-return preg_replace( '!<br.*>!iU', "", $data );
-}
 
 
 
