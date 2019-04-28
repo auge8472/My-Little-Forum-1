@@ -39,50 +39,48 @@ if (isset($_GET['action'])) $action = $_GET['action'];
 if (isset($_POST['action'])) $action = $_POST['action'];
 
 // SQL-Dump:
-if (isset($_GET['backup']))
- {
-  ?><html>
-  <head>
+if (isset($_GET['backup'])) {
+?><html>
+ <head>
   <title><?php echo $settings['forum_name']; ?> - SQL</title>
-  </head>
-  <body>
-  <?php
-   switch ($_GET['backup'])
-     {
-      case 1:
-       sql_forum();
-       sql_categories();
-       sql_userdata();
-       sql_settings();
-       sql_smilies();
-       sql_banlists();
-      break;
-      case 2:
-       sql_forum();
-      break;
-      case 3:
-       sql_forum_marked();
-      break;
-      case 4:
-       sql_userdata();
-      break;
-      case 5:
-       sql_categories();
-      break;
-      case 6:
-       sql_settings();
-      break;
-      case 7:
-       sql_smilies();
-      break;
-      case 8:
-       sql_banlists();
-      break;
-     }
-  ?></body>
-  </html><?php
-  exit;
- }
+ </head>
+ <body>
+<?php
+	switch ($_GET['backup']) {
+		case 1:
+			sql_forum();
+			sql_categories();
+			sql_userdata();
+			sql_settings();
+			sql_smilies();
+			sql_banlists();
+		break;
+		case 2:
+			sql_forum();
+		break;
+		case 3:
+			sql_forum_marked();
+		break;
+		case 4:
+			sql_userdata();
+		break;
+		case 5:
+			sql_categories();
+		break;
+		case 6:
+			sql_settings();
+		break;
+		case 7:
+			sql_smilies();
+		break;
+		case 8:
+			sql_banlists();
+		break;
+	}
+?></body>
+</html><?php
+	exit;
+}
 
 if(isset($_POST['sql_submit']))
  {
