@@ -168,28 +168,27 @@ if (isset($_POST['new_category'])) {
 	$action = 'categories';
 }
 
-if(isset($_GET['edit_user']))
- {
-  $edit_user_id = intval($_GET['edit_user']);
-  $result = mysqli_query($connid, "SELECT user_type, user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, user_view, new_posting_notify, new_user_notify, personal_messages, time_difference FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($edit_user_id)) or die($lang['db_error']);
-  $field = mysqli_fetch_assoc($result);
-  mysqli_free_result($result);
-  $edit_user_type = $field["user_type"];
-  $user_email = $field["user_email"];
-  $hide_email = $field["hide_email"];
-  $edit_user_name = $field["user_name"];
-  $user_real_name = $field["user_real_name"];
-  $user_hp = $field["user_hp"];
-  $user_place = $field["user_place"];
-  $profile = $field["profile"];
-  $signature = $field["signature"];
-  $user_view = $field["user_view"];
-  $user_time_difference = $field["time_difference"];
-  $new_posting_notify = $field["new_posting_notify"];
-  $new_user_notify = $field["new_user_notify"];
-  $personal_messages = $field["personal_messages"];
-  $action = 'edit_user';
- }
+if (isset($_GET['edit_user'])) {
+	$edit_user_id = intval($_GET['edit_user']);
+	$result = mysqli_query($connid, "SELECT user_type, user_name, user_real_name, user_email, hide_email, user_hp, user_place, signature, profile, user_view, new_posting_notify, new_user_notify, personal_messages, time_difference FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($edit_user_id)) or die($lang['db_error']);
+	$field = mysqli_fetch_assoc($result);
+	mysqli_free_result($result);
+	$edit_user_type = $field["user_type"];
+	$user_email = $field["user_email"];
+	$hide_email = $field["hide_email"];
+	$edit_user_name = $field["user_name"];
+	$user_real_name = $field["user_real_name"];
+	$user_hp = $field["user_hp"];
+	$user_place = $field["user_place"];
+	$profile = $field["profile"];
+	$signature = $field["signature"];
+	$user_view = $field["user_view"];
+	$user_time_difference = $field["time_difference"];
+	$new_posting_notify = $field["new_posting_notify"];
+	$new_user_notify = $field["new_user_notify"];
+	$personal_messages = $field["personal_messages"];
+	$action = 'edit_user';
+}
 
 if(isset($_POST['edit_user_submit']))
  {
