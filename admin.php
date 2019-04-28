@@ -143,36 +143,30 @@ if (isset($_GET['mark'])) {
 	die('<a href="'. $linkURL .'">further …</a>');
 }
 
-if (isset($_POST['new_category']))
- {
-  $new_category = trim($_POST['new_category']);
-  $new_category = str_replace('"','\'',$new_category);
-  $accession = intval($_POST['accession']);
-  if($new_category!='')
-   {
-    #if(preg_match("/\"/i",$new_category) || preg_match("/</i",$new_category) || preg_match("/>/i",$new_category)) $errors[] = $lang_add['category_invalid_chars'];
+if (isset($_POST['new_category'])) {
+	$new_category = trim($_POST['new_category']);
+	$new_category = str_replace('"','\'',$new_category);
+	$accession = intval($_POST['accession']);
+	if($new_category != '') {
+		# does this category already exist?
+		$category_result = mysqli_query($connid, "SELECT category FROM ". $db_settings['category_table'] ." WHERE category = '". mysqli_real_escape_string($connid, $new_category) ."' LIMIT 1");
+		if (!$category_result) die($lang['db_error']);
+		$field = mysqli_fetch_assoc($category_result);
+		mysqli_free_result($category_result);
 
-    // does this category already exist?
-    $category_result = mysqli_query($connid, "SELECT category FROM ". $db_settings['category_table'] ." WHERE category = '". mysqli_real_escape_string($connid, $new_category) ."' LIMIT 1");
-    if(!$category_result) die($lang['db_error']);
-    $field = mysqli_fetch_assoc($category_result);
-    mysqli_free_result($category_result);
-
-    if(strtolower($field["category"]) == strtolower($new_category)) $errors[] = $lang_add['category_already_exists'];
-
-    if(empty($errors))
-     {
-      $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['category_table']);
-      list($category_count) = mysqli_fetch_row($count_result);
-      mysqli_free_result($count_result);
-      mysqli_query($connid, "INSERT INTO ". $db_settings['category_table'] ." (category_order, category, accession)
-      VALUES (". intval($category_count) ."+1,'". mysqli_real_escape_string($connid, $new_category) ."',". intval($accession).")");
-      header("location: admin.php?action=categories");
-      exit();
-     }
-   }
-  $action='categories';
- }
+		if (strtolower($field["category"]) == strtolower($new_category)) $errors[] = $lang_add['category_already_exists'];
+		if (empty($errors)) {
+			$count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['category_table']);
+			list($category_count) = mysqli_fetch_row($count_result);
+			mysqli_free_result($count_result);
+			mysqli_query($connid, "INSERT INTO ". $db_settings['category_table'] ." (category_order, category, accession)
+			VALUES (". intval($category_count) ."+1, '". mysqli_real_escape_string($connid, $new_category) ."', ". intval($accession).")");
+			header("location: admin.php?action=categories");
+			exit();
+		}
+	}
+	$action = 'categories';
+}
 
 if(isset($_GET['edit_user']))
  {
