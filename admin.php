@@ -360,12 +360,6 @@ if (isset($_POST['not_displayed_entries_submit'])) {
 	die();
 }
 
-
-if (isset($_GET['move_down_category']))
- {
-  $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['category_table']);
-  list($category_count) = mysqli_fetch_row($count_result);
-  mysqli_free_result($count_result);
 if (isset($_GET['move_up_category'])) {
 	 $category_result = mysqli_query($connid, "SELECT category_order FROM ". $db_settings['category_table'] ." WHERE id = ". intval($_GET['move_up_category']) ." LIMIT 1");
 	if (!$category_result) die($lang['db_error']);
@@ -380,19 +374,22 @@ if (isset($_GET['move_up_category'])) {
 	die();
 }
 
-  $category_result = mysqli_query($connid, "SELECT category_order FROM ". $db_settings['category_table'] ." WHERE id = ". intval($_GET['move_down_category']) ." LIMIT 1");
-  if(!$category_result) die($lang['db_error']);
-  $field = mysqli_fetch_assoc($category_result);
-  mysqli_free_result($category_result);
-  if ($field['category_order'] < $category_count)
-   {
-    mysqli_query($connid, "UPDATE ". $db_settings['category_table'] ." SET category_order=0 WHERE category_order=". intval($field['category_order']) ."+1");
-    mysqli_query($connid, "UPDATE ". $db_settings['category_table'] ." SET category_order=category_order+1 WHERE category_order=". intval($field['category_order']));
-    mysqli_query($connid, "UPDATE ". $db_settings['category_table'] ." SET category_order=". intval($field['category_order']) ." WHERE category_order=0");
-   }
-  header("location: admin.php?action=categories");
-  die();
- }
+if (isset($_GET['move_down_category'])) {
+	$count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['category_table']);
+	list($category_count) = mysqli_fetch_row($count_result);
+	mysqli_free_result($count_result);
+	$category_result = mysqli_query($connid, "SELECT category_order FROM ". $db_settings['category_table'] ." WHERE id = ". intval($_GET['move_down_category']) ." LIMIT 1");
+	if(!$category_result) die($lang['db_error']);
+	$field = mysqli_fetch_assoc($category_result);
+	mysqli_free_result($category_result);
+	if ($field['category_order'] < $category_count) {
+		mysqli_query($connid, "UPDATE ". $db_settings['category_table'] ." SET category_order = 0 WHERE category_order = ". intval($field['category_order']) ."+1");
+		mysqli_query($connid, "UPDATE ". $db_settings['category_table'] ." SET category_order = category_order+1 WHERE category_order = ". intval($field['category_order']));
+		mysqli_query($connid, "UPDATE ". $db_settings['category_table'] ." SET category_order = ". intval($field['category_order']) ." WHERE category_order = 0");
+	}
+	header("location: admin.php?action=categories");
+	die();
+}
 
 if (isset($_POST['delete_category_submit']))
  {
