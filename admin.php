@@ -750,12 +750,11 @@ if (isset($_POST['ar_username']))
    }
   }
 
-if (isset($_POST['delete_category_confirmed']) && trim($_POST['delete_category']) != "")
- {
-  mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE category = ". intval($_POST['delete_category']));
-  header("location: admin.php");
-  die("<a href=\"admin.php\">further...</a>");
- }
+if (isset($_POST['delete_category_confirmed']) && trim($_POST['delete_category']) != "") {
+	mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE category = ". intval($_POST['delete_category']));
+	header("location: admin.php");
+	die('<a href="admin.php">further …</a>');
+	}
 
 if(isset($_POST['banlists_submit']))
  {
