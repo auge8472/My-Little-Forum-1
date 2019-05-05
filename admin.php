@@ -488,16 +488,15 @@ if (isset($_POST['delete_confirmed'])) {
 	$action = "user";
 }
 
-if (isset($_GET['user_lock']))
- {
-  $lock_result = mysqli_query($connid, "SELECT user_lock FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_GET['user_lock']) ." LIMIT 1");
-  if (!$lock_result) die($lang['db_error']);
-  $field = mysqli_fetch_assoc($lock_result);
-  mysqli_free_result($lock_result);
-  if ($field['user_lock'] == 0) $new_lock = 1; else $new_lock = 0;
-  $update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_lock=". intval($new_lock) .", last_login=last_login, registered=registered WHERE user_id=". intval($_GET['user_lock']) ." LIMIT 1");
-  $action="user";
- }
+if (isset($_GET['user_lock'])) {
+	$lock_result = mysqli_query($connid, "SELECT user_lock FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_GET['user_lock']) ." LIMIT 1");
+	if (!$lock_result) die($lang['db_error']);
+	$field = mysqli_fetch_assoc($lock_result);
+	mysqli_free_result($lock_result);
+	$new_lock = ($field['user_lock'] == 0) ? 1 : 0;
+	$update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_lock = ". intval($new_lock) .", last_login = last_login, registered = registered WHERE user_id = ". intval($_GET['user_lock']) ." LIMIT 1");
+	$action = "user";
+}
 
 if (isset($_POST['delete_all_postings_confirmed']))
  {
