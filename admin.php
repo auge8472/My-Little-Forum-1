@@ -648,21 +648,17 @@ if (isset($_POST['unlock_marked_threads_submitted'])) {
 	die();
 }
 
- if (isset($_POST['settings_submitted']))
- {
-  // not checked checkboxes:
-  if(empty($_POST['captcha_posting'])) $_POST['captcha_posting'] = 0;
-  if(empty($_POST['captcha_contact'])) $_POST['captcha_contact'] = 0;
-  if(empty($_POST['captcha_register'])) $_POST['captcha_register'] = 0;
-
-  while(list($key, $val) = each($_POST))
-   {
-    if($key != "settings_submitted") mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='". mysqli_real_escape_string($connid, $val) ."' WHERE name='". mysqli_real_escape_string($connid, $key) ."' LIMIT 1");
-   }
-
-  header("location: admin.php");
-  die("<a href=\"admin.php\">further...</a>");
- }
+if (isset($_POST['settings_submitted'])) {
+	# not checked checkboxes:
+	if (empty($_POST['captcha_posting'])) $_POST['captcha_posting'] = 0;
+	if (empty($_POST['captcha_contact'])) $_POST['captcha_contact'] = 0;
+	if (empty($_POST['captcha_register'])) $_POST['captcha_register'] = 0;
+	while (list($key, $val) = each($_POST)) {
+		if($key != "settings_submitted") mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value = '". mysqli_real_escape_string($connid, $val) ."' WHERE name = '". mysqli_real_escape_string($connid, $key) ."' LIMIT 1");
+	}
+	header("location: admin.php");
+	die('<a href="admin.php">further …</a>');
+}
 
 if (isset($_POST['ar_username']))
  {
