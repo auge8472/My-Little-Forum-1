@@ -498,25 +498,24 @@ if (isset($_GET['user_lock'])) {
 	$action = "user";
 }
 
-if (isset($_POST['delete_all_postings_confirmed']))
- {
-  $pw_result = mysqli_query($connid, "SELECT user_pw FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
-  if (!$pw_result) die($lang['db_error']);
-  $field = mysqli_fetch_assoc($pw_result);
-  mysqli_free_result($pw_result);
-  if ($_POST['delete_all_postings_confirm_pw']=="") $errors[] = $lang['error_form_uncompl'];
-  else
-   {
-    if ($field['user_pw'] != md5(trim($_POST['delete_all_postings_confirm_pw']))) $errors[] = $lang['pw_wrong'];
-   }
-  if (empty($errors))
-   {
-    $empty_forum_result = mysqli_query($connid, "TRUNCATE TABLE ". $db_settings['forum_table']);
-    if (!$empty_forum_result) die($lang['db_error']);
-    $action="main";
-   }
-  else $action="empty";
- }
+if (isset($_POST['delete_all_postings_confirmed'])) {
+	$pw_result = mysqli_query($connid, "SELECT user_pw FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
+	if (!$pw_result) die($lang['db_error']);
+	$field = mysqli_fetch_assoc($pw_result);
+	mysqli_free_result($pw_result);
+	if ($_POST['delete_all_postings_confirm_pw'] == "") {
+		$errors[] = $lang['error_form_uncompl'];
+	} else {
+		if ($field['user_pw'] != md5(trim($_POST['delete_all_postings_confirm_pw']))) $errors[] = $lang['pw_wrong'];
+	}
+	if (empty($errors)) {
+		$empty_forum_result = mysqli_query($connid, "TRUNCATE TABLE ". $db_settings['forum_table']);
+		if (!$empty_forum_result) die($lang['db_error']);
+		$action = "main";
+	} else {
+		$action = "empty";
+	}
+}
 
 if (isset($_POST['delete_db_confirmed']))
  {
