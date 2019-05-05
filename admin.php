@@ -783,25 +783,21 @@ if(isset($_POST['banlists_submit'])) {
 	die('<a href="admin.php">further …</a>');
 }
 
-if(isset($_POST['smiley_file']))
- {
-  if(!file_exists('img/smilies/'.$_POST['smiley_file'])) $errors[] = $lang_add['smiley_file_doesnt_exist'];
-  if(trim($_POST['smiley_code'])=='') $errors[] = $lang_add['smiley_code_error'];
-
-  if(empty($errors))
-   {
-    $count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['smilies_table']);
-    list($smilies_count) = mysqli_fetch_row($count_result);
-    mysqli_free_result($count_result);
-    $order_id = $smilies_count+1;
-  
-    mysqli_query($connid, "INSERT INTO ". $db_settings['smilies_table'] ." (order_id, file, code_1) VALUES (". intval($order_id) .",'". mysqli_real_escape_string($connid, $_POST['smiley_file']) ."','". mysqli_real_escape_string($connid, trim($_POST['smiley_code'])) ."')") or die(mysqli_error($connid));
-
-    header("location: admin.php?action=smilies");
-    die();
-   }
-  else $action='smilies';
- }
+if (isset($_POST['smiley_file'])) {
+	if (!file_exists('img/smilies/'. $_POST['smiley_file'])) $errors[] = $lang_add['smiley_file_doesnt_exist'];
+	if (trim($_POST['smiley_code']) == '') $errors[] = $lang_add['smiley_code_error'];
+	if (empty($errors)) {
+		$count_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['smilies_table']);
+		list($smilies_count) = mysqli_fetch_row($count_result);
+		mysqli_free_result($count_result);
+		$order_id = $smilies_count + 1;
+		mysqli_query($connid, "INSERT INTO ". $db_settings['smilies_table'] ." (order_id, file, code_1) VALUES (". intval($order_id) .", '". mysqli_real_escape_string($connid, $_POST['smiley_file']) ."', '". mysqli_real_escape_string($connid, trim($_POST['smiley_code'])) ."')") or die(mysqli_error($connid));
+		header("location: admin.php?action=smilies");
+		die();
+	} else {
+		$action = 'smilies';
+	}
+}
 
 if(isset($_GET['delete_smiley']))
  {
