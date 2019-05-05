@@ -641,14 +641,12 @@ if (isset($_POST['lock_marked_threads_submitted'])) {
 	die();
 }
 
-if (isset($_POST['unlock_marked_threads_submitted']))
- {
-  mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, locked=0 WHERE marked=1");
-  if(isset($_POST['refer']) && $_POST['refer'] == 'board') header("location: board.php");
-  elseif(isset($_POST['refer']) && $_POST['refer'] == 'mix') header("location: mix.php");
-  else header("location: forum.php");
-  die();
- }
+if (isset($_POST['unlock_marked_threads_submitted'])) {
+	mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time = time, last_answer = last_answer, edited = edited, locked = 0 WHERE marked = 1");
+	$refer = getStandardReferrer($_POST['refer']);
+	header("location: ". $refer);
+	die();
+}
 
  if (isset($_POST['settings_submitted']))
  {
