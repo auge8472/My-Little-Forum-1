@@ -477,19 +477,16 @@ if (isset($_POST['clear_userdata'])) {
 
 if (isset($_POST['email_list'])) $action="email_list";
 
- if (isset($_POST['delete_confirmed']))
- {
-  if (isset($_POST['selected_confirmed']))
-   {
-    $selected_confirmed = $_POST['selected_confirmed'];
-    for($x=0; $x<count($selected_confirmed); $x++)
-     {
-      $delete_result = mysqli_query($connid, "DELETE FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($selected_confirmed[$x]));
-      $update_result = mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, user_id=0, email_notify=0 WHERE user_id = ". intval($selected_confirmed[$x]));
-     }
-   }
-  $action="user";
- }
+if (isset($_POST['delete_confirmed'])) {
+	if (isset($_POST['selected_confirmed'])) {
+		$selected_confirmed = $_POST['selected_confirmed'];
+		for($x = 0; $x < count($selected_confirmed); $x++) {
+			$delete_result = mysqli_query($connid, "DELETE FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($selected_confirmed[$x]));
+			$update_result = mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time = time, last_answer = last_answer, user_id = 0, email_notify = 0 WHERE user_id = ". intval($selected_confirmed[$x]));
+		}
+	}
+	$action = "user";
+}
 
 if (isset($_GET['user_lock']))
  {
