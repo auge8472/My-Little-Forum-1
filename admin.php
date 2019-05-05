@@ -428,23 +428,20 @@ if (isset($_GET['delete_user'])) {
 }
 
 
-if (isset($_POST['delete_user']))
- {
-  if (isset($_POST['selected']))
-   {
-    $selected = $_POST['selected'];
-    for($x=0; $x<count($selected); $x++)
-    {
-     $user_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_id=". intval($selected[$x]) ." LIMIT 1");
-     if (!$user_result) die($lang['db_error']);
-     $user = mysqli_fetch_assoc($user_result);
-     mysqli_free_result($user_result);
-     $selected_usernames[] = $user["user_name"];
-    }
-   $action="delete_users_sure";
-   }
-  else $action="user";
- }
+if (isset($_POST['delete_user'])) {
+	if (isset($_POST['selected'])) {
+		$selected = $_POST['selected'];
+		for ($x = 0; $x < count($selected); $x++) {
+			$user_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($selected[$x]) ." LIMIT 1");
+			if (!$user_result) die($lang['db_error']);
+			$user = mysqli_fetch_assoc($user_result);
+			mysqli_free_result($user_result);
+			$selected_usernames[] = $user["user_name"];
+		}
+		$action="delete_users_sure";
+	}
+	else $action="user";
+}
 
 if (isset($_POST['clear_userdata']))
  {
