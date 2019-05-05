@@ -745,47 +745,43 @@ if (isset($_POST['delete_category_confirmed']) && trim($_POST['delete_category']
 	die('<a href="admin.php">further …</a>');
 	}
 
-if(isset($_POST['banlists_submit']))
- {
-  if(trim($_POST['banned_users']) != '')
-   {
-    $banned_users_array = explode(',',$_POST['banned_users']);
-    foreach($banned_users_array as $banned_user)
-     {
-      if(trim($banned_user)!='') $banned_users_array_checked[] = trim($banned_user);
-     }
-    $banned_users = implode(",", $banned_users_array_checked);
-   }
-  else $banned_users = '';
-  mysqli_query($connid, "UPDATE ". $db_settings['banlists_table'] ." SET list='". mysqli_real_escape_string($connid, $banned_users) ."' WHERE name='users'");
+if(isset($_POST['banlists_submit'])) {
+	if (trim($_POST['banned_users']) != '') {
+		$banned_users_array = explode(',', $_POST['banned_users']);
+		foreach ($banned_users_array as $banned_user) {
+			if (trim($banned_user) != '') $banned_users_array_checked[] = trim($banned_user);
+		}
+		$banned_users = implode(",", $banned_users_array_checked);
+	} else {
+		$banned_users = '';
+	}
+	mysqli_query($connid, "UPDATE ". $db_settings['banlists_table'] ." SET list = '". mysqli_real_escape_string($connid, $banned_users) ."' WHERE name = 'users'");
 
-  if(trim($_POST['banned_ips']) != '')
-   {
-    $banned_ips_array = explode(',',$_POST['banned_ips']);
-    foreach($banned_ips_array as $banned_ip)
-     {
-      if(trim($banned_ip)!='') $banned_ips_array_checked[] = trim($banned_ip);
-     }
-    $banned_ips = implode(",", $banned_ips_array_checked);
-   }
-  else $banned_ips = '';
-  mysqli_query($connid, "UPDATE ". $db_settings['banlists_table'] ." SET list='". mysqli_real_escape_string($connid, $banned_ips) ."' WHERE name='ips'");
+	if (trim($_POST['banned_ips']) != '') {
+		$banned_ips_array = explode(',', $_POST['banned_ips']);
+		foreach ($banned_ips_array as $banned_ip) {
+			if (trim($banned_ip) != '') $banned_ips_array_checked[] = trim($banned_ip);
+		}
+		$banned_ips = implode(",", $banned_ips_array_checked);
+	} else {
+		$banned_ips = '';
+	}
+	mysqli_query($connid, "UPDATE ". $db_settings['banlists_table'] ." SET list = '". mysqli_real_escape_string($connid, $banned_ips) ."' WHERE name = 'ips'");
 
-  if(trim($_POST['not_accepted_words']) != '')
-   {
-    $not_accepted_words_array = explode(',',$_POST['not_accepted_words']);
-    foreach($not_accepted_words_array as $not_accepted_word)
-     {
-      if(trim($not_accepted_word)!='') $not_accepted_words_array_checked[] = trim($not_accepted_word);
-     }
-    $not_accepted_words = implode(",", $not_accepted_words_array_checked);
-   }
-  else $not_accepted_words = '';
-  mysqli_query($connid, "UPDATE ". $db_settings['banlists_table'] ." SET list='". mysqli_real_escape_string($connid, $not_accepted_words) ."' WHERE name='words'");
+	if (trim($_POST['not_accepted_words']) != '') {
+		$not_accepted_words_array = explode(',', $_POST['not_accepted_words']);
+		foreach ($not_accepted_words_array as $not_accepted_word) {
+			if (trim($not_accepted_word )! ='') $not_accepted_words_array_checked[] = trim($not_accepted_word);
+		}
+		$not_accepted_words = implode(",", $not_accepted_words_array_checked);
+	} else {
+		$not_accepted_words = '';
+	}
+	mysqli_query($connid, "UPDATE ". $db_settings['banlists_table'] ." SET list = '". mysqli_real_escape_string($connid, $not_accepted_words) ."' WHERE name = 'words'");
 
-  header("location: admin.php");
-  die("<a href=\"admin.php\">further...</a>");
- }
+	header("location: admin.php");
+	die('<a href="admin.php">further …</a>');
+}
 
 if(isset($_POST['smiley_file']))
  {
