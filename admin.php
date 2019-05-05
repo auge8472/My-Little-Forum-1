@@ -111,27 +111,7 @@ if (isset($_GET['mark'])) {
 	mysqli_free_result($mark_result);
 	$marked = ($field['marked'] == 0) ? 1 : 0;
 	mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time = time, last_answer = last_answer, edited = edited, marked = ". intval($marked) ."' WHERE tid = ". intval($_GET['mark']));
-	if (isset($_GET['refer'])) {
-		if ($_GET['refer'] == 'board.php' and $settings['board_view'] == 1) {
-			$refer = 'board.php';
-		} else if ($_GET['refer'] == 'mix.php' and $settings['mix_view'] == 1) {
-			$refer = 'mix.php';
-		} else if ($_GET['refer'] == 'forum.php' and $settings['thread_view'] == 1) {
-			$refer = 'forum.php';
-		} else if ($_GET['refer'] == 'forum_entry.php' and $settings['thread_view'] == 1) {
-			$refer = 'forum_entry.php';
-		}
-	} else {
-		if ($settings['standard'] == 'thread') {
-			$refer = 'forum.php';
-		} else if ($settings['standard'] == 'board') {
-			$refer = 'board.php';
-		} else if ($settings['standard'] == 'mix') {
-			$refer = 'mix.php';
-		} else {
-			$refer = 'forum.php';
-		}
-	}
+	$refer = getStandardReferrer($_GET['refer']);
 	$param = collectURLParameters($_GET);
 	$headerParams = implode("&", $param);
 	$headerURL  = $refer;
