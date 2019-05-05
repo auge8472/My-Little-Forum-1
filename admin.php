@@ -606,16 +606,15 @@ if (isset($_POST['unmark_confirmed'])) {
 	die();
 }
 
-if (isset($_POST['invert_markings_confirmed']))
- {
-  $invert_markings_result = mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked=2 WHERE marked=1");
-  $invert_markings_result = mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked=1 WHERE marked=0");
-  $invert_markings_result = mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked=0 WHERE marked=2");
-  if(isset($_POST['refer']) && $_POST['refer'] == 'board') header("location: board.php");
-  elseif(isset($_POST['refer']) && $_POST['refer'] == 'mix') header("location: mix.php");
-  else header("location: forum.php");
-  die();
- }
+if (isset($_POST['invert_markings_confirmed'])) {
+	$invert_markings_result = mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time = time, last_answer = last_answer, edited = edited, marked = 2 WHERE marked = 1");
+	$invert_markings_result = mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time = time, last_answer = last_answer, edited = edited, marked = 1 WHERE marked = 0");
+	$invert_markings_result = mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time = time, last_answer = last_answer, edited = edited, marked = 0 WHERE marked = 2");
+	$refer = getStandardReferrer($_POST['refer']);
+	header("location: ". $refer);
+	die();
+}
+
 if (isset($_POST['mark_threads_submitted']))
  {
   if($_POST['mark_threads'] == 1) $limit = intval($_POST['n1'])-1;
