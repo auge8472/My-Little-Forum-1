@@ -660,95 +660,84 @@ if (isset($_POST['settings_submitted'])) {
 	die('<a href="admin.php">further …</a>');
 }
 
-if (isset($_POST['ar_username']))
- {
-  // Ã¼berflÃ¼ssige Leerzeichen abschneiden:
-  $ar_username = $_POST['ar_username'];
-  $ar_email = $_POST['ar_email'];
-  $ar_pw = $_POST['ar_pw'];
-  $ar_pw_conf = $_POST['ar_pw_conf'];
-  if(isset($_POST['ar_send_userdata']) && $_POST['ar_send_userdata'] != '') $ar_send_userdata = true;
-  $ar_username = trim($ar_username);
-  $ar_email = trim($ar_email);
-  $ar_pw = trim($ar_pw);
-  $ar_pw_conf = trim($ar_pw_conf);
-  // Schauen, ob alle Felder ausgefÃ¼llt wurden:
-  if ($ar_username=="" or $ar_email=="") $errors[] = $lang['error_form_uncompl'];
-  if(empty($errors))
-   {
-    if (($ar_pw=="" or $ar_pw_conf=="") && !isset($ar_send_userdata)) $errors[] = $lang_add['error_send_userdata'];
-   }
-  // wenn alle Felder ausgefÃ¼llt wurden, weitere ÃberprÃ¼fungen durchfÃ¼hren:
-  if(empty($errors))
-   {
-    // ÃberprÃ¼fen, ob der Name zu lang ist:
-    if (strlen($ar_username) > $settings['name_maxlength'])
-    $errors[] = $lang['name_marking'] . " " .$lang['error_input_too_long'];
-    // Ã¼berprÃ¼fen, ob ein Wort im Username zu lang ist:
-    $text_arr = explode(" ",$ar_username); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-    $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
-    $errors[] = $error_nwtl; } }
-    // schauen, ob der Name schon vergeben ist:
-    $name_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_name = '". mysqli_real_escape_string($connid, $ar_username) ."'");
-    if(!$name_result) die($lang['db_error']);
-    $field = mysqli_fetch_assoc($name_result);
-    mysqli_free_result($name_result);
-
-    if (strtolower($field["user_name"]) == strtolower($ar_username) && $ar_username != "")
-     {
-      $lang['error_name_reserved'] = str_replace("[name]", htmlsc($ar_username), $lang['error_name_reserved']);
-      $errors[] = $lang['error_name_reserved'];
-     }
-    // ÃberprÃ¼fung ob die Email-Adresse das Format name@domain.tld hat:
-    if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $ar_email))
-    $errors[] = $lang['error_email_wrong'];
-
-    if ($ar_pw_conf != $ar_pw) $errors[] = $lang_add['error_pw_conf_wrong'];
-   }
-  // wenn keine Fehler, dann neuen User Aufnehmen:
-  if (empty($errors))
-   {
-    // neuen User in die Datenbank eintragen:
-
-    // Passwort generieren, wenn kein Passwort eingegeben wurde:
-    if($ar_pw=='')
-     {
-      $letters="abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
-      mt_srand((double)microtime()*1000000);
-      $ar_pw="";
-      for($i=0;$i<8;$i++) { $ar_pw.=substr($letters,mt_rand(0,strlen($letters)-1),1); }
-     }
-    $encoded_ar_pw = md5($ar_pw);
-    $new_user_result = mysqli_query($connid, "INSERT INTO ". $db_settings['userdata_table'] ." (user_type, user_name, user_pw, user_email, hide_email, profile, last_login, last_logout, user_ip, registered, user_view, personal_messages) VALUES ('user','". mysqli_real_escape_string($connid, $ar_username) ."','". mysqli_real_escape_string($connid, $encoded_ar_pw) ."','". mysqli_real_escape_string($connid, $ar_email) ."','1','',NOW(),NOW(),'". mysqli_real_escape_string($connid, $_SERVER["REMOTE_ADDR"]) ."',NOW(),'". mysqli_real_escape_string($connid, $settings['standard']) ."',1)");
-    if(!$new_user_result) die($lang['db_error']);
-
-    // E-Mail an neuen User versenden:
-    $send_error='';
-    if(isset($ar_send_userdata))
-     {
-      $ip = $_SERVER["REMOTE_ADDR"];
-      $lang['new_user_email_txt_a'] = str_replace("[name]", $ar_username, $lang['new_user_email_txt_a']);
-      $lang['new_user_email_txt_a'] = str_replace("[password]", $ar_pw, $lang['new_user_email_txt_a']);
-      $lang['new_user_email_txt_a'] = str_replace("[login_link]", $settings['forum_address']."login.php?username=".urlencode($ar_username)."&userpw=".$ar_pw, $lang['new_user_email_txt_a']);
-      $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
-      $header .= "X-Mailer: Php/" . phpversion(). "\n";
-      $header .= "X-Sender-ip: ".$_SERVER["REMOTE_ADDR"]."\n";
-      $header .= "Content-Type: text/plain";
-      $new_user_mailto = $ar_username." <".$ar_email.">";
-      if($settings['mail_parameter']!='')
-       {
-        if(!@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt_a'], $header, $settings['mail_parameter'])) $send_error = '&send_error=true';
-       }
-      else
-       {
-        if(!@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt_a'], $header)) $send_error = '&send_error=true';
-       }
-     }
-
-    header("location: admin.php?action=user&new_user=".urlencode($ar_username).$send_error);
-    die("<a href=\"admin.php?action=user&amp;new_user=".urlencode($ar_username).$send_error."\">further...</a>");
-   }
-  }
+if (isset($_POST['ar_username'])) {
+	# trim input:
+	$ar_username = trim($_POST['ar_username']);
+	$ar_email = trim($_POST['ar_email']);
+	$ar_pw = trim($_POST['ar_pw']);
+	$ar_pw_conf = trim($_POST['ar_pw_conf']);
+	if (isset($_POST['ar_send_userdata']) && $_POST['ar_send_userdata'] != '') $ar_send_userdata = true;
+	# got all fields non empty values?
+	if ($ar_username == "" or $ar_email == "") $errors[] = $lang['error_form_uncompl'];
+	if (empty($errors)) {
+		if (($ar_pw == "" or $ar_pw_conf == "") && !isset($ar_send_userdata)) $errors[] = $lang_add['error_send_userdata'];
+	}
+	# all fields are non empty, further checks
+	if (empty($errors)) {
+		# is the username to long?
+		if (strlen($ar_username) > $settings['name_maxlength'])
+		$errors[] = $lang['name_marking'] . " " .$lang['error_input_too_long'];
+		# Is one word in the username to long?
+		$text_arr = explode(" ", $ar_username);
+		for ($i = 0; $i < count($text_arr); $i++) {
+			trim($text_arr[$i]);
+			$laenge = strlen($text_arr[$i]);
+			if ($laenge > $settings['name_word_maxlength']) {
+				$error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i], 0, $settings['name_word_maxlength'])) ." …", $lang['error_name_word_too_long']);
+				$errors[] = $error_nwtl;
+			}
+		}
+		# Is the username already registered?
+		$name_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_name = '". mysqli_real_escape_string($connid, $ar_username) ."'");
+		if (!$name_result) die($lang['db_error']);
+		$field = mysqli_fetch_assoc($name_result);
+		mysqli_free_result($name_result);
+		if (strtolower($field["user_name"]) == strtolower($ar_username) && $ar_username != "") {
+			$lang['error_name_reserved'] = str_replace("[name]", htmlsc($ar_username), $lang['error_name_reserved']);
+			$errors[] = $lang['error_name_reserved'];
+		}
+		# Has the e-mail-address a valid format?
+		if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $ar_email)) {
+			$errors[] = $lang['error_email_wrong'];
+		}
+		if ($ar_pw_conf != $ar_pw) $errors[] = $lang_add['error_pw_conf_wrong'];
+	}
+	# with no error save a new user to the database:
+	if (empty($errors)) {
+		# generate a password if it was not given:
+		if ($ar_pw == '') {
+			$letters = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
+			mt_srand((double)microtime()*1000000);
+			$ar_pw = "";
+			for ($i = 0; $i < 8; $i++) {
+				$ar_pw .= substr($letters, mt_rand(0, strlen($letters)-1), 1);
+			}
+		}
+		$encoded_ar_pw = md5($ar_pw);
+		$new_user_result = mysqli_query($connid, "INSERT INTO ". $db_settings['userdata_table'] ." (user_type, user_name, user_pw, user_email, hide_email, profile, last_login, last_logout, user_ip, registered, user_view, personal_messages) VALUES ('user','". mysqli_real_escape_string($connid, $ar_username) ."','". mysqli_real_escape_string($connid, $encoded_ar_pw) ."','". mysqli_real_escape_string($connid, $ar_email) ."','1','',NOW(),NOW(),'". mysqli_real_escape_string($connid, $_SERVER["REMOTE_ADDR"]) ."',NOW(),'". mysqli_real_escape_string($connid, $settings['standard']) ."',1)");
+		if (!$new_user_result) die($lang['db_error']);
+		# E-Mail an neuen User versenden:
+		$send_error = '';
+		if(isset($ar_send_userdata)) {
+			$ip = $_SERVER["REMOTE_ADDR"];
+			$lang['new_user_email_txt_a'] = str_replace("[name]", $ar_username, $lang['new_user_email_txt_a']);
+			$lang['new_user_email_txt_a'] = str_replace("[password]", $ar_pw, $lang['new_user_email_txt_a']);
+			$lang['new_user_email_txt_a'] = str_replace("[login_link]", $settings['forum_address']."login.php?username=". urlencode($ar_username) ."&userpw=". $ar_pw, $lang['new_user_email_txt_a']);
+			$header = "From: ".$settings['forum_name']." <". $settings['forum_email'] .">\n";
+			$header .= "X-Mailer: Php/" . phpversion(). "\n";
+			$header .= "X-Sender-ip: ". $_SERVER["REMOTE_ADDR"] ."\n";
+			$header .= "Content-Type: text/plain";
+			$new_user_mailto = $ar_username." <". $ar_email .">";
+			if ($settings['mail_parameter'] != '') {
+				if (!@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt_a'], $header, $settings['mail_parameter'])) $send_error = '&send_error=true';
+			} else {
+				if (!@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt_a'], $header)) $send_error = '&send_error=true';
+			}
+		}
+		header("location: admin.php?action=user&new_user=". urlencode($ar_username).$send_error);
+		die('<a href="admin.php?action=user&amp;new_user='. urlencode($ar_username).$send_error .'">further …</a>');
+	}
+}
 
 if (isset($_POST['delete_category_confirmed']) && trim($_POST['delete_category']) != "") {
 	mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE category = ". intval($_POST['delete_category']));
