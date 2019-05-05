@@ -471,4 +471,42 @@ function collectURLParameters($parameters = NULL) {
 	return $param;
 }
 
+/**
+ * selects the page name to redirect with a ruleset for standard actions
+ *
+ * @param string $input
+ * @return string $r
+ */
+function getStandardReferrer($input == NULL) {
+	$r = '';
+	if ($input != NULL) {
+		if ($input == 'board.php' and $settings['board_view'] == 1) {
+			$r = 'board.php';
+		} else if ($input == 'board_entry.php' and $settings['board_view'] == 1) {
+			$r = 'board_entry.php';
+		} else if ($input == 'mix.php' and $settings['mix_view'] == 1) {
+			$r = 'mix.php';
+		} else if ($input == 'mix_entry.php' and $settings['mix_view'] == 1) {
+			$r = 'mix_entry.php';
+		} else if ($input == 'forum.php' and $settings['thread_view'] == 1) {
+			$r = 'forum.php';
+		} else if ($input == 'forum_entry.php' and $settings['thread_view'] == 1) {
+			$r = 'forum_entry.php';
+		} else {
+			$r = 'forum.php';
+		}
+	} else {
+		if ($settings['standard'] == 'thread') {
+			$r = 'forum.php';
+		} else if ($settings['standard'] == 'board') {
+			$r = 'board.php';
+		} else if ($settings['standard'] == 'mix') {
+			$r = 'mix.php';
+		} else {
+			$r = 'forum.php';
+		}
+	}
+	return $r;
+}
+
 ?>
