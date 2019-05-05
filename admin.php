@@ -517,59 +517,98 @@ if (isset($_POST['delete_all_postings_confirmed'])) {
 	}
 }
 
-if (isset($_POST['delete_db_confirmed']))
- {
-  $pw_result = mysqli_query($connid, "SELECT user_pw FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
-  if (!$pw_result) die($lang['db_error']);
-  $field = mysqli_fetch_assoc($pw_result);
-  mysqli_free_result($pw_result);
-  if ($_POST['delete_db_confirm_pw']=="" || empty($_POST['delete_modus'])) $errors[] = $lang['error_form_uncompl'];
-  else
-   {
-    if ($field['user_pw'] != md5(trim($_POST['delete_db_confirm_pw']))) $errors[] = $lang['pw_wrong'];
-   }
-  if (empty($errors))
-   {
-    echo '<pre>';
-    echo 'Deleting table <b>'.$db_settings['forum_table'].'</b>... ';
-    if(mysqli_query($connid, "DROP TABLE ". $db_settings['forum_table'])) echo '<b style="color:green;">OK</b><br />'; else { $errors[] = mysqli_error($connid); echo '<b style="color:red;">FAILED</b> (MySQL: '.mysqli_error($connid).')<br />'; }
-    echo 'Deleting table <b>'.$db_settings['userdata_table'].'</b>... ';
-    if(mysqli_query($connid, "DROP TABLE ". $db_settings['userdata_table'])) echo '<b style="color:green;">OK</b><br />'; else { $errors[] = mysqli_error($connid); echo '<b style="color:red;">FAILED</b> (MySQL: '.mysqli_error($connid).')<br />'; }
-    echo 'Deleting table <b>'.$db_settings['useronline_table'].'</b>... ';
-    if(mysqli_query($connid, "DROP TABLE ". $db_settings['useronline_table'])) echo '<b style="color:green;">OK</b><br />'; else { $errors[] = mysqli_error($connid); echo '<b style="color:red;">FAILED</b> (MySQL: '.mysqli_error($connid).')<br />'; }
-    echo 'Deleting table <b>'.$db_settings['settings_table'].'</b>... ';
-    if(mysqli_query($connid, "DROP TABLE ". $db_settings['settings_table'])) echo '<b style="color:green;">OK</b><br />'; else { $errors[] = mysqli_error($connid); echo '<b style="color:red;">FAILED</b> (MySQL: '.mysqli_error($connid).')<br />'; }
-    echo 'Deleting table <b>'.$db_settings['category_table'].'</b>... ';
-    if(mysqli_query($connid, "DROP TABLE ". $db_settings['category_table'])) echo '<b style="color:green;">OK</b><br />'; else { $errors[] = mysqli_error($connid); echo '<b style="color:red;">FAILED</b> (MySQL: '.mysqli_error($connid).')<br />'; }
-    echo 'Deleting table <b>'.$db_settings['smilies_table'].'</b>... ';
-    if(mysqli_query($connid, "DROP TABLE ". $db_settings['smilies_table'])) echo '<b style="color:green;">OK</b><br />'; else { $errors[] = mysqli_error($connid); echo '<b style="color:red;">FAILED</b> (MySQL: '.mysqli_error($connid).')<br />'; }
-    echo 'Deleting table <b>'.$db_settings['banlists_table'].'</b>... ';
-    if(mysqli_query($connid, "DROP TABLE ". $db_settings['banlists_table'])) echo '<b style="color:green;">OK</b><br />'; else { $errors[] = mysqli_error($connid); echo '<b style="color:red;">FAILED</b> (MySQL: '.mysqli_error($connid).')<br />'; }
-    if (empty($errors)) echo '<br /><b>'.$lang_add['tables_deleted'].'</b>';
-    else echo '<br /><b>'.$lang_add['tables_deleted_error'].'</b>';
-
-    if ($_POST['delete_modus'] == "db")
-     {
-      unset($errors);
-      echo '<br /><br />Deleting database <b>'.$db_settings['db'].'</b>... ';
-      $result = mysqli_query($connid, "SHOW TABLES FROM ". $db_settings['db']);
-      if(mysqli_num_rows($result) == 0)
-       {
-        if(mysqli_query($connid, "DROP DATABASE ". $db_settings['db'])) echo '<b style="color:green;">OK</b><br />'; else { $errors[] = mysqli_error($connid); echo '<b style="color:red;">FAILED</b> (MySQL: '.mysqli_error($connid).')<br />'; }
-       }
-      else
-       {
-        $errors[] = 'DB not empty';
-        echo '<b style="color:red;">FAILED</b> (there are still tables in the database)<br />';
-       }
-      if (empty($errors)) echo '<br /><b>'.$lang_add['db_deleted'].'</b>';
-      else echo '<br /><b>'.$lang_add['db_deleted_error'].'</b>';
-     }
-    echo '</pre>';
-    die();
-   }
-  $action="uninstall";
- }
+if (isset($_POST['delete_db_confirmed'])) {
+	$pw_result = mysqli_query($connid, "SELECT user_pw FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
+	if (!$pw_result) die($lang['db_error']);
+	$field = mysqli_fetch_assoc($pw_result);
+	mysqli_free_result($pw_result);
+	if ($_POST['delete_db_confirm_pw'] == "" || empty($_POST['delete_modus'])) {
+		$errors[] = $lang['error_form_uncompl'];
+	} else {
+		if ($field['user_pw'] != md5(trim($_POST['delete_db_confirm_pw']))) $errors[] = $lang['pw_wrong'];
+	}
+	if (empty($errors)) {
+		echo '<pre>';
+		echo 'Deleting table <b>'.$db_settings['forum_table'].'</b> … ';
+		if (mysqli_query($connid, "DROP TABLE ". $db_settings['forum_table'])) {
+			echo '<b style="color:green;">OK</b><br />';
+		} else {
+			$errors[] = mysqli_error($connid);
+			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysqli_error($connid) .')<br />';
+		}
+		echo 'Deleting table <b>'.$db_settings['userdata_table'].'</b> … ';
+		if (mysqli_query($connid, "DROP TABLE ". $db_settings['userdata_table'])) {
+			echo '<b style="color:green;">OK</b><br />';
+		} else {
+			$errors[] = mysqli_error($connid);
+			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysqli_error($connid) .')<br />';
+		}
+		echo 'Deleting table <b>'.$db_settings['useronline_table'].'</b> … ';
+		if (mysqli_query($connid, "DROP TABLE ". $db_settings['useronline_table'])) {
+			echo '<b style="color:green;">OK</b><br />';
+		} else {
+			$errors[] = mysqli_error($connid);
+			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysqli_error($connid) .')<br />';
+		}
+		echo 'Deleting table <b>'.$db_settings['settings_table'].'</b> … ';
+		if (mysqli_query($connid, "DROP TABLE ". $db_settings['settings_table'])) {
+			echo '<b style="color:green;">OK</b><br />';
+		} else {
+			$errors[] = mysqli_error($connid);
+			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysqli_error($connid) .')<br />';
+		}
+		echo 'Deleting table <b>'.$db_settings['category_table'].'</b> … ';
+		if (mysqli_query($connid, "DROP TABLE ". $db_settings['category_table'])) {
+			echo '<b style="color:green;">OK</b><br />';
+		} else {
+			$errors[] = mysqli_error($connid);
+			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysqli_error($connid) .')<br />';
+		}
+		echo 'Deleting table <b>'.$db_settings['smilies_table'].'</b> … ';
+		if (mysqli_query($connid, "DROP TABLE ". $db_settings['smilies_table'])) {
+			echo '<b style="color:green;">OK</b><br />';
+		} else {
+			$errors[] = mysqli_error($connid);
+			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysqli_error($connid) .')<br />';
+		}
+		echo 'Deleting table <b>'.$db_settings['banlists_table'].'</b> … ';
+		if(mysqli_query($connid, "DROP TABLE ". $db_settings['banlists_table'])) {
+			echo '<b style="color:green;">OK</b><br />';
+		} else {
+			$errors[] = mysqli_error($connid);
+			echo '<b style="color:red;">FAILED</b> (MySQL: '. mysqli_error($connid) .')<br />';
+		}
+		if (empty($errors)) {
+			echo '<br /><b>'.$lang_add['tables_deleted'].'</b>';
+		} else {
+			echo '<br /><b>'.$lang_add['tables_deleted_error'].'</b>';
+		}
+		if ($_POST['delete_modus'] == "db") {
+			unset($errors);
+			echo '<br /><br />Deleting database <b>'. htmlsc($db_settings['db']) .'</b> … ';
+			$result = mysqli_query($connid, "SHOW TABLES FROM ". $db_settings['db']);
+			if (mysqli_num_rows($result) == 0) {
+				if (mysqli_query($connid, "DROP DATABASE ". $db_settings['db'])) {
+					echo '<b style="color:green;">OK</b><br />';
+				} else {
+					$errors[] = mysqli_error($connid);
+					echo '<b style="color:red;">FAILED</b> (MySQL: '. mysqli_error($connid) .')<br />';
+				}
+			} else {
+				$errors[] = 'DB not empty';
+				echo '<b style="color:red;">FAILED</b> (there are still tables in the database)<br />';
+			}
+			if (empty($errors)) {
+				echo '<br /><b>'. htmlsc($lang_add['db_deleted']) .'</b>';
+			} else {
+				echo '<br /><b>'. htmlsc($lang_add['db_deleted_error']) .'</b>';
+			}
+		}
+		echo '</pre>';
+		die();
+	}
+	$action = "uninstall";
+}
 
 if (isset($_POST['delete_marked_threads_confirmed']))
  {
