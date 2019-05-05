@@ -416,17 +416,16 @@ if (isset($_POST['delete_category_submit'])) {
 	$action = 'categories';
 }
 
-if (isset($_GET['delete_user']))
- {
-  $user_id = intval($_GET['delete_user']);
-  $user_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_id= ". intval($user_id) ." LIMIT 1");
-  if (!$user_result) die($lang['db_error']);
-  $user = mysqli_fetch_assoc($user_result);
-  mysqli_free_result($user_result);
-  $selected[] = $user_id;
-  $selected_usernames[] = $user["user_name"];
-  $action="delete_users_sure";
- }
+if (isset($_GET['delete_user'])) {
+	$user_id = intval($_GET['delete_user']);
+	$user_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($user_id) ." LIMIT 1");
+	if (!$user_result) die($lang['db_error']);
+	$user = mysqli_fetch_assoc($user_result);
+	mysqli_free_result($user_result);
+	$selected[] = $user_id;
+	$selected_usernames[] = $user["user_name"];
+	$action="delete_users_sure";
+}
 
 
 if (isset($_POST['delete_user']))
