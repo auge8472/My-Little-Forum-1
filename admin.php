@@ -615,27 +615,25 @@ if (isset($_POST['invert_markings_confirmed'])) {
 	die();
 }
 
-if (isset($_POST['mark_threads_submitted']))
- {
-  if($_POST['mark_threads'] == 1) $limit = intval($_POST['n1'])-1;
-  elseif($_POST['mark_threads'] == 2) $limit = intval($_POST['n2'])-1;
-  if($limit >= 0)
-   {
-    // letzten Thread ermitteln, der nicht markiert werden soll:
-    $mot_result =  mysqli_query($connid, "SELECT tid FROM ". $db_settings['forum_table'] ." WHERE pid = 0 ORDER BY id DESC LIMIT ". intval($limit) .", 1");
-    if (!$mot_result) die($lang['db_error']);
-    $field = mysqli_fetch_assoc($mot_result);
-    $last_thread = $field['tid'];
-    mysqli_free_result($mot_result);
-    // ...und alle älteren markieren:
-    if($_POST['mark_threads'] == 1) mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked=1 WHERE tid < ". intval($last_thread));
-    if($_POST['mark_threads'] == 2) mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked=1 WHERE tid < ". intval($last_thread) ." AND time=last_answer");
-   }
-  if(isset($_POST['refer']) && $_POST['refer'] == 'board') header("location: board.php");
-  elseif(isset($_POST['refer']) && $_POST['refer'] == 'mix') header("location: mix.php");
-  else header("location: forum.php");
-  die();
- }
+if (isset($_POST['mark_threads_submitted'])) {
+	if ($_POST['mark_threads'] == 1) $limit = intval($_POST['n1']) - 1;
+	else if ($_POST['mark_threads'] == 2) $limit = intval($_POST['n2']) - 1;
+	if ($limit >= 0) {
+		# select last thread, that should not get marked …
+		$mot_result =  mysqli_query($connid, "SELECT tid FROM ". $db_settings['forum_table'] ." WHERE pid = 0 ORDER BY id DESC LIMIT ". intval($limit) .", 1");
+		if (!$mot_result) die($lang['db_error']);
+		$field = mysqli_fetch_assoc($mot_result);
+		$last_thread = $field['tid'];
+		mysqli_free_result($mot_result);
+		# … and mark all others
+		if ($_POST['mark_threads'] == 1) mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time = time, last_answer = last_answer, edited = edited, marked = 1 WHERE tid < ". intval($last_thread));
+		if ($_POST['mark_threads'] == 2) mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time = time, last_answer = last_answer, edited = edited, marked = 1 WHERE tid < ". intval($last_thread) ." AND time = last_answer");
+	}
+	$refer = getStandardReferrer($_POST['refer']);
+	header("location: ". $refer);
+	die();
+}
+
 if (isset($_POST['lock_marked_threads_submitted']))
  {
   mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, locked=1 WHERE marked=1");
