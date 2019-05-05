@@ -391,38 +391,30 @@ if (isset($_GET['move_down_category'])) {
 	die();
 }
 
-if (isset($_POST['delete_category_submit']))
- {
-  $category_id = intval($_POST['category_id']);
-  if($category_id > 0)
-   {
-    // delete category from category table:
-    mysqli_query($connid, "DELETE FROM ". $db_settings['category_table'] ." WHERE id=". intval($category_id));
-
-    // reset order:
-    $result = mysqli_query($connid, "SELECT id FROM ". $db_settings['category_table'] ." ORDER BY category_order ASC");
-    $i=1;
-    while ($data = mysqli_fetch_assoc($result))
-     {
-      mysqli_query($connid, "UPDATE ". $db_settings['category_table'] ." SET category_order=". intval($i) ." WHERE id = ". intval($data['id']));
-      $i++;
-     }
-    mysqli_free_result($result);
-
-    // what to to with the entries of deleted category:
-    if ($_POST['delete_mode'] == "complete")
-     {
-      mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE category = ". intval($category_id));
-     }
-    else
-     {
-      mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, category=". intval($_POST['move_category']) ." WHERE category = ". intval($category_id));
-     }
-    header("location: admin.php?action=categories");
-    die();
-   }
-  $action = 'categories';
- }
+if (isset($_POST['delete_category_submit'])) {
+	$category_id = intval($_POST['category_id']);
+	if ($category_id > 0) {
+		# delete category from category table:
+		mysqli_query($connid, "DELETE FROM ". $db_settings['category_table'] ." WHERE id = ". intval($category_id));
+		# reset order:
+		$result = mysqli_query($connid, "SELECT id FROM ". $db_settings['category_table'] ." ORDER BY category_order ASC");
+		$i = 1;
+		while ($data = mysqli_fetch_assoc($result)) {
+			mysqli_query($connid, "UPDATE ". $db_settings['category_table'] ." SET category_order=". intval($i) ." WHERE id = ". intval($data['id']));
+			$i++;
+		}
+		mysqli_free_result($result);
+		# what to to with the entries of deleted category:
+		if ($_POST['delete_mode'] == "complete") {
+			mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE category = ". intval($category_id));
+		} else {
+			mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time = time, last_answer = last_answer, category = ". intval($_POST['move_category']) ." WHERE category = ". intval($category_id));
+		}
+		header("location: admin.php?action=categories");
+		die();
+	}
+	$action = 'categories';
+}
 
 if (isset($_GET['delete_user']))
  {
