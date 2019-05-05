@@ -590,16 +590,13 @@ if (isset($_POST['delete_db_confirmed'])) {
 	$action = "uninstall";
 }
 
-if (isset($_POST['delete_marked_threads_confirmed']))
- {
-  $del_marked_result = mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE marked=1");
-  if (!$del_marked_result) die($lang['db_error']);
-
-  if(isset($_POST['refer']) && $_POST['refer'] == 'board') header("location: board.php");
-  elseif(isset($_POST['refer']) && $_POST['refer'] == 'mix') header("location: mix.php");
-  else header("location: forum.php");
-  die();
- }
+if (isset($_POST['delete_marked_threads_confirmed'])) {
+	$del_marked_result = mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE marked = 1");
+	if (!$del_marked_result) die($lang['db_error']);
+	$refer = getStandardReferrer($_POST['refer']);
+	header("location: ". $refer);
+	die();
+}
 
 if (isset($_POST['unmark_confirmed']))
  {
