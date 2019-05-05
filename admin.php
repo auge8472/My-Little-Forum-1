@@ -598,15 +598,13 @@ if (isset($_POST['delete_marked_threads_confirmed'])) {
 	die();
 }
 
-if (isset($_POST['unmark_confirmed']))
- {
-  $remove_markings_result = mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked=0");
-  if (!$remove_markings_result) die($lang['db_error']);
-
-  if(isset($_POST['refer']) && $_POST['refer'] == 'board') header("location: board.php");
-  elseif(isset($_POST['refer']) && $_POST['refer'] == 'mix') header("location: mix.php");
-  else header("location: forum.php");
-  die(); }
+if (isset($_POST['unmark_confirmed'])) {
+	$remove_markings_result = mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time = time, last_answer = last_answer, edited = edited, marked = 0");
+	if (!$remove_markings_result) die($lang['db_error']);
+	$refer = getStandardReferrer($_POST['refer']);
+	header("location: ". $refer);
+	die();
+}
 
 if (isset($_POST['invert_markings_confirmed']))
  {
