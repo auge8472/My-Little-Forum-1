@@ -443,35 +443,37 @@ if (isset($_POST['delete_user'])) {
 	else $action="user";
 }
 
-if (isset($_POST['clear_userdata']))
- {
-  switch ($_POST['clear_userdata'])
-   {
-    case 1:
-     $clear_result = mysqli_query($connid, "SELECT user_id, user_name FROM ". $db_settings['userdata_table'] ." WHERE user_type != 'admin' AND user_type != 'mod' AND logins=0 AND registered<(NOW()-INTERVAL 2 DAY) ORDER BY user_name");
-    break;
-    case 2:
-     $clear_result = mysqli_query($connid, "SELECT user_id, user_name FROM ". $db_settings['userdata_table'] ." WHERE user_type != 'admin' AND user_type != 'mod' AND ((logins=0 AND registered<(NOW()-INTERVAL 2 DAY)) OR (logins<=1 AND last_login<(NOW()-INTERVAL 30 DAY))) ORDER BY user_name");
-    break;
-    case 3:
-     $clear_result = mysqli_query($connid, "SELECT user_id, user_name FROM ". $db_settings['userdata_table'] ." WHERE user_type != 'admin' AND user_type != 'mod' AND ((logins=0 AND registered<(NOW()-INTERVAL 2 DAY)) OR (logins<=3 AND last_login<(NOW()-INTERVAL 30 DAY))) ORDER BY user_name");
-    break;
-    case 4:
-     $clear_result = mysqli_query($connid, "SELECT user_id, user_name FROM ". $db_settings['userdata_table'] ." WHERE user_type != 'admin' AND user_type != 'mod' AND ((logins=0 AND registered<(NOW()-INTERVAL 2 DAY)) OR (last_login<(NOW()-INTERVAL 60 DAY))) ORDER BY user_name");
-    break;
-    case 5:
-     $clear_result = mysqli_query($connid, "SELECT user_id, user_name FROM ". $db_settings['userdata_table'] ." WHERE user_type != 'admin' AND user_type != 'mod' AND ((logins=0 AND registered<(NOW()-INTERVAL 2 DAY)) OR (last_login<(NOW()-INTERVAL 30 DAY))) ORDER BY user_name");
-    break;
-   }
-  if (!$clear_result) die($lang['db_error']);
-  while ($line = mysqli_fetch_assoc($clear_result))
-   {
-    $selected_usernames[] = $line['user_name'];
-    $selected[] = $line['user_id'];
-   }
-   mysqli_free_result($clear_result);
-   if (isset($selected)) $action="delete_users_sure"; else { $no_users_in_selection = true; $action="user"; }
- }
+if (isset($_POST['clear_userdata'])) {
+	switch ($_POST['clear_userdata']) {
+		case 1:
+			$clear_result = mysqli_query($connid, "SELECT user_id, user_name FROM ". $db_settings['userdata_table'] ." WHERE user_type != 'admin' AND user_type != 'mod' AND logins = 0 AND registered < (NOW() - INTERVAL 2 DAY) ORDER BY user_name");
+		break;
+		case 2:
+			$clear_result = mysqli_query($connid, "SELECT user_id, user_name FROM ". $db_settings['userdata_table'] ." WHERE user_type != 'admin' AND user_type != 'mod' AND ((logins = 0 AND registered < (NOW() - INTERVAL 2 DAY)) OR (logins <= 1 AND last_login < (NOW() - INTERVAL 30 DAY))) ORDER BY user_name");
+		break;
+		case 3:
+			$clear_result = mysqli_query($connid, "SELECT user_id, user_name FROM ". $db_settings['userdata_table'] ." WHERE user_type != 'admin' AND user_type != 'mod' AND ((logins = 0 AND registered < (NOW() - INTERVAL 2 DAY)) OR (logins <= 3 AND last_login < (NOW() - INTERVAL 30 DAY))) ORDER BY user_name");
+		break;
+		case 4:
+			$clear_result = mysqli_query($connid, "SELECT user_id, user_name FROM ". $db_settings['userdata_table'] ." WHERE user_type != 'admin' AND user_type != 'mod' AND ((logins = 0 AND registered < (NOW() - INTERVAL 2 DAY)) OR (last_login < (NOW() - INTERVAL 60 DAY))) ORDER BY user_name");
+		break;
+		case 5:
+			$clear_result = mysqli_query($connid, "SELECT user_id, user_name FROM ". $db_settings['userdata_table'] ." WHERE user_type != 'admin' AND user_type != 'mod' AND ((logins = 0 AND registered < (NOW() - INTERVAL 2 DAY)) OR (last_login < (NOW() - INTERVAL 30 DAY))) ORDER BY user_name");
+		break;
+	}
+	if (!$clear_result) die($lang['db_error']);
+	while ($line = mysqli_fetch_assoc($clear_result)) {
+		$selected_usernames[] = $line['user_name'];
+		$selected[] = $line['user_id'];
+	}
+	mysqli_free_result($clear_result);
+	if (isset($selected)) {
+		$action = "delete_users_sure";
+	} else {
+		$no_users_in_selection = true;
+		$action = "user";
+	}
+}
 
 if (isset($_POST['email_list'])) $action="email_list";
 
