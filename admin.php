@@ -799,22 +799,6 @@ if (isset($_POST['smiley_file'])) {
 	}
 }
 
-if(isset($_GET['delete_smiley']))
- {
-  mysqli_query($connid, "DELETE FROM ". $db_settings['smilies_table'] ." WHERE id = ". intval($_GET['delete_smiley']));
-
-  $result = mysqli_query($connid, "SELECT id FROM ". $db_settings['smilies_table'] ." ORDER BY order_id ASC");
-  $i=1;
-  while ($data = mysqli_fetch_assoc($result))
-   {
-    mysqli_query($connid, "UPDATE ". $db_settings['smilies_table'] ." SET order_id=". intval($i) ." WHERE id = ". intval($data['id']));
-    $i++;
-   }
-  mysqli_free_result($result);
-
-  header("location: admin.php?action=smilies");
-  die();
- }
 
 if(isset($_GET['edit_smiley']))
  {
@@ -831,6 +815,18 @@ if(isset($_GET['edit_smiley']))
   $code_4 = $data['code_4'];
   $code_5 = $data['code_5'];
   $title = $data['title'];
+if (isset($_GET['delete_smiley'])) {
+	mysqli_query($connid, "DELETE FROM ". $db_settings['smilies_table'] ." WHERE id = ". intval($_GET['delete_smiley']));
+	$result = mysqli_query($connid, "SELECT id FROM ". $db_settings['smilies_table'] ." ORDER BY order_id ASC");
+	$i = 1;
+	while ($data = mysqli_fetch_assoc($result)) {
+		mysqli_query($connid, "UPDATE ". $db_settings['smilies_table'] ." SET order_id = ". intval($i) ." WHERE id = ". intval($data['id']));
+		$i++;
+	}
+	mysqli_free_result($result);
+	header("location: admin.php?action=smilies");
+	die();
+}
 
   $action='edit_smiley';
  }
