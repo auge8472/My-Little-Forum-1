@@ -799,22 +799,6 @@ if (isset($_POST['smiley_file'])) {
 	}
 }
 
-
-if(isset($_GET['edit_smiley']))
- {
-  $result = mysqli_query($connid, "SELECT id, file, code_1, code_2, code_3, code_4, code_5, title FROM ". $db_settings['smilies_table'] ." WHERE id = ". intval($_GET['edit_smiley']) ." LIMIT 1");
-  if(!$result) die($lang['db_error']);
-  $data = mysqli_fetch_assoc($result);
-  mysqli_free_result($result);
-
-  $id = $data['id'];
-  $file = $data['file'];
-  $code_1 = $data['code_1'];
-  $code_2 = $data['code_2'];
-  $code_3 = $data['code_3'];
-  $code_4 = $data['code_4'];
-  $code_5 = $data['code_5'];
-  $title = $data['title'];
 if (isset($_GET['delete_smiley'])) {
 	mysqli_query($connid, "DELETE FROM ". $db_settings['smilies_table'] ." WHERE id = ". intval($_GET['delete_smiley']));
 	$result = mysqli_query($connid, "SELECT id FROM ". $db_settings['smilies_table'] ." ORDER BY order_id ASC");
@@ -828,8 +812,21 @@ if (isset($_GET['delete_smiley'])) {
 	die();
 }
 
-  $action='edit_smiley';
- }
+if (isset($_GET['edit_smiley'])) {
+	$result = mysqli_query($connid, "SELECT id, file, code_1, code_2, code_3, code_4, code_5, title FROM ". $db_settings['smilies_table'] ." WHERE id = ". intval($_GET['edit_smiley']) ." LIMIT 1");
+	if (!$result) die($lang['db_error']);
+	$data = mysqli_fetch_assoc($result);
+	mysqli_free_result($result);
+	$id = $data['id'];
+	$file = $data['file'];
+	$code_1 = $data['code_1'];
+	$code_2 = $data['code_2'];
+	$code_3 = $data['code_3'];
+	$code_4 = $data['code_4'];
+	$code_5 = $data['code_5'];
+	$title = $data['title'];
+	$action = 'edit_smiley';
+}
 
 if(isset($_POST['edit_smiley_submit']))
  {
