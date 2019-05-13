@@ -855,12 +855,11 @@ if (isset($_GET['enable_smilies'])) {
 	die();
 }
 
-if(isset($_GET['disable_smilies']))
- {
-  mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value=0 WHERE name='smilies'");
-  header("location: admin.php?action=smilies");
-  die();
- }
+if(isset($_GET['disable_smilies'])) {
+	mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value = 0 WHERE name = 'smilies'");
+	header("location: admin.php?action=smilies");
+	die();
+}
 
 if (isset($_GET['move_up_smiley']))
  {
