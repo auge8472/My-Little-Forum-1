@@ -849,12 +849,11 @@ if (isset($_POST['edit_smiley_submit'])) {
 	}
 }
 
-if(isset($_GET['enable_smilies']))
- {
-  mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value=1 WHERE name='smilies'");
-  header("location: admin.php?action=smilies");
-  die();
- }
+if (isset($_GET['enable_smilies'])) {
+	mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value = 1 WHERE name = 'smilies'");
+	header("location: admin.php?action=smilies");
+	die();
+}
 
 if(isset($_GET['disable_smilies']))
  {
