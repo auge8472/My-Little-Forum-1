@@ -828,27 +828,26 @@ if (isset($_GET['edit_smiley'])) {
 	$action = 'edit_smiley';
 }
 
-if(isset($_POST['edit_smiley_submit']))
- {
-  $id = intval($_POST['id']);
-  $file = trim($_POST['file']);
-  $code_1 = trim($_POST['code_1']);
-  $code_2 = trim($_POST['code_2']);
-  $code_3 = trim($_POST['code_3']);
-  $code_4 = trim($_POST['code_4']);
-  $code_5 = trim($_POST['code_5']);
-  $title = trim($_POST['title']);
+if (isset($_POST['edit_smiley_submit'])) {
+	$id = intval($_POST['id']);
+	$file = trim($_POST['file']);
+	$code_1 = trim($_POST['code_1']);
+	$code_2 = trim($_POST['code_2']);
+	$code_3 = trim($_POST['code_3']);
+	$code_4 = trim($_POST['code_4']);
+	$code_5 = trim($_POST['code_5']);
+	$title = trim($_POST['title']);
 
-  if(!file_exists('img/smilies/'.$file)) $errors[] = $lang_add['smiley_file_doesnt_exist'];
-  if($code_1=='' && $code_2=='' && $code_3=='' && $code_4=='' && $code_5=='') $errors[] = $lang_add['smiley_code_error'];
-  if(empty($errors))
-   {
-    mysqli_query($connid, "UPDATE ". $db_settings['smilies_table'] ." SET file='". mysqli_real_escape_string($connid, $file) ."', code_1='". mysqli_real_escape_string($connid, $code_1) ."', code_2='". mysqli_real_escape_string($connid, $code_2) ."', code_3='". mysqli_real_escape_string($connid, $code_3) ."', code_4='". mysqli_real_escape_string($connid, $code_4) ."', code_5='". mysqli_real_escape_string($connid, $code_5) ."', title='". mysqli_real_escape_string($connid, $title) ."' WHERE id=". intval($id));
-    header("location: admin.php?action=smilies");
-    die();
-   }
-  else $action='edit_smiley';
- }
+	if (!file_exists('img/smilies/'.$file)) $errors[] = $lang_add['smiley_file_doesnt_exist'];
+	if ($code_1 == '' && $code_2 == '' && $code_3 == '' && $code_4 == '' && $code_5 == '') $errors[] = $lang_add['smiley_code_error'];
+	if (empty($errors)) {
+		mysqli_query($connid, "UPDATE ". $db_settings['smilies_table'] ." SET file = '". mysqli_real_escape_string($connid, $file) ."', code_1 = '". mysqli_real_escape_string($connid, $code_1) ."', code_2 = '". mysqli_real_escape_string($connid, $code_2) ."', code_3 = '". mysqli_real_escape_string($connid, $code_3) ."', code_4 = '". mysqli_real_escape_string($connid, $code_4) ."', code_5 = '". mysqli_real_escape_string($connid, $code_5) ."', title = '". mysqli_real_escape_string($connid, $title) ."' WHERE id = ". intval($id));
+		header("location: admin.php?action=smilies");
+		die();
+	} else {
+		$action = 'edit_smiley';
+	}
+}
 
 if(isset($_GET['enable_smilies']))
  {
