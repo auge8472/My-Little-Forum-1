@@ -444,16 +444,16 @@ if (isset($_POST['form_submitted']))
      activate_code varchar(255) COLLATE utf8mb4_unicode_ci NULL default NULL,
      PRIMARY KEY (user_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
      $tabledef['smilies'] = "CREATE TABLE ". $db_settings['smilies_table'] ." (
-     id int(11) NOT NULL auto_increment,
-     order_id int(11) NOT NULL default '0',
-     file varchar(100) NOT NULL default '',
-     code_1 varchar(50) NOT NULL default '',
-     code_2 varchar(50) NOT NULL default '',
-     code_3 varchar(50) NOT NULL default '',
-     code_4 varchar(50) NOT NULL default '',
-     code_5 varchar(50) NOT NULL default '',
-     title varchar(255) NOT NULL default '',
-     PRIMARY KEY (id))";
+     id int(11) NOT NULL AUTO_INCREMENT,
+     order_id int(11) NOT NULL DEFAULT 0,
+     file varchar(100) DEFAULT NULL,
+     code_1 varchar(50) DEFAULT NULL,
+     code_2 varchar(50) DEFAULT NULL,
+     code_3 varchar(50) DEFAULT NULL,
+     code_4 varchar(50) DEFAULT NULL,
+     code_5 varchar(50) DEFAULT NULL,
+     title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+     PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
      $tabledef['banlists'] = "CREATE TABLE ". $db_settings['banlists_table'] ." (
      name varchar(255) NOT NULL default '',
      list text NOT NULL)";
