@@ -861,21 +861,19 @@ if(isset($_GET['disable_smilies'])) {
 	die();
 }
 
-if (isset($_GET['move_up_smiley']))
- {
-  $result = mysqli_query($connid, "SELECT order_id FROM ". $db_settings['smilies_table'] ." WHERE id = ". intval($_GET['move_up_smiley']) ." LIMIT 1");
-  if(!$result) die($lang['db_error']);
-  $field = mysqli_fetch_assoc($result);
-  mysqli_free_result($result);
-  if ($field['order_id'] > 1)
-   {
-    mysqli_query($connid, "UPDATE ". $db_settings['smilies_table'] ." SET order_id=0 WHERE order_id=". intval($field['order_id']) ."-1");
-    mysqli_query($connid, "UPDATE ". $db_settings['smilies_table'] ." SET order_id=order_id-1 WHERE order_id=". intval($field['order_id']));
-    mysqli_query($connid, "UPDATE ". $db_settings['smilies_table'] ." SET order_id=". intval($field['order_id']) ." WHERE order_id=0");
-   }
-  header("location: admin.php?action=smilies");
-  die();
- }
+if (isset($_GET['move_up_smiley'])) {
+	$result = mysqli_query($connid, "SELECT order_id FROM ". $db_settings['smilies_table'] ." WHERE id = ". intval($_GET['move_up_smiley']) ." LIMIT 1");
+	if (!$result) die($lang['db_error']);
+	$field = mysqli_fetch_assoc($result);
+	mysqli_free_result($result);
+	if ($field['order_id'] > 1) {
+		mysqli_query($connid, "UPDATE ". $db_settings['smilies_table'] ." SET order_id = 0 WHERE order_id = ". intval($field['order_id']) ."-1");
+		mysqli_query($connid, "UPDATE ". $db_settings['smilies_table'] ." SET order_id = order_id-1 WHERE order_id = ". intval($field['order_id']));
+		mysqli_query($connid, "UPDATE ". $db_settings['smilies_table'] ." SET order_id = ". intval($field['order_id']) ." WHERE order_id = 0");
+	}
+	header("location: admin.php?action=smilies");
+	die();
+}
 
 if (isset($_GET['move_down_smiley']))
  {
