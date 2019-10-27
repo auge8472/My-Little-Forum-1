@@ -280,6 +280,7 @@ function connect_db($host,$user,$pw,$db) {
 	global $lang;
 	$connid = @mysqli_connect($host, $user, $pw, $db);  // open database connection
 	if (!$connid) die($lang['db_error']);
+	mysqli_set_charset($connid, 'utf8mb4');
 	return $connid;
 }
 
