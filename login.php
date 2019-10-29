@@ -323,7 +323,7 @@ switch ($action)
    <div>
    <b><?php echo $lang['username_marking']; ?></b><br /><input type="text" name="username" /><br /><br />
    <b><?php echo $lang['password_marking']; ?></b><br /><input type="password" name="userpw" /><br /><br />
-   <?php if (isset($settings['autologin']) && $settings['autologin'] == 1) { ?><input type="checkbox" name="autologin_checked" value="true" /><span class="small"> <?php echo $lang['auto_login_marking']; ?></span><br /><br /><?php } ?>
+   <?php if (isset($settings['autologin']) && $settings['autologin'] == 1) { ?><input type="checkbox" name="autologin_checked" id="chbox_autologin" value="true" /><label for="chbox_autologin" class="small"> <?php echo $lang['auto_login_marking']; ?></label><br /><br /><?php } ?>
    <input type="submit" value="<?php echo $lang['login_submit_button']; ?>" />
    </div>
    </form>
