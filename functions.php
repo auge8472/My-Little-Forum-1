@@ -478,7 +478,7 @@ function collectURLParameters($parameters = NULL) {
  * @param string $input
  * @return string $r
  */
-function getStandardReferrer($input == NULL) {
+function getStandardReferrer($input = NULL) {
 	$r = '';
 	if ($input != NULL) {
 		if ($input == 'board.php' and $settings['board_view'] == 1) {
