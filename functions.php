@@ -372,17 +372,17 @@ function user_online()
   ?></li><?php
  }
 
+function getThemeDir($settingTheme = false) {
+	if ($settingTheme === false) return false;
+	$theme = (is_dir('themes/'. $settingTheme .'/templates')) ? 'themes/'. $settingTheme : 'themes/default';
+	return $theme;
+}
+
 function parse_template()
  {
   global $settings, $lang, $header, $footer, $wo, $ao, $topnav, $subnav_1, $subnav_2, $footer_info_dump, $search, $show_postings, $counter;
-  if (is_dir('themes/'. $settings['theme'] .'/templates')) {
-  	$theme = 'themes/'. $settings['theme'];
-  } else {
-  	$theme = 'themes/default';
-  }
-  #echo '<pre>'. print_r($theme, true) .'</pre>';
-  $template = file_get_contents('themes/'. $settings['theme'] .'/templates/main.html');
-  #$template = implode("",file($settings['template']));
+  $theme = getThemeDir($settings['theme']);
+  $template = file_get_contents($theme .'/templates/main.html');
 
   if ($settings['home_linkaddress'] != "" && $settings['home_linkname'] != "") $template = preg_replace("#\{IF:HOME-LINK\}(.+?)\{ENDIF:HOME-LINK\}#is", "\\1", $template);
   else $template = preg_replace("#\{IF:HOME-LINK\}(.+?)\{ENDIF:HOME-LINK\}#is", "", $template);
