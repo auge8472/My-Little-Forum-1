@@ -74,6 +74,7 @@ $settings['captcha_posting'] = 0;
 $settings['captcha_contact'] = 0;
 $settings['captcha_register'] = 0;
 $settings['captcha_type'] = 0;
+$settings['theme'] = "default";
 
 $smilies = array(
 array('smile.gif', ':-)'),

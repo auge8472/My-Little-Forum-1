@@ -375,7 +375,14 @@ function user_online()
 function parse_template()
  {
   global $settings, $lang, $header, $footer, $wo, $ao, $topnav, $subnav_1, $subnav_2, $footer_info_dump, $search, $show_postings, $counter;
-  $template = implode("",file($settings['template']));
+  if (is_dir('themes/'. $settings['theme'] .'/templates')) {
+  	$theme = 'themes/'. $settings['theme'];
+  } else {
+  	$theme = 'themes/default';
+  }
+  #echo '<pre>'. print_r($theme, true) .'</pre>';
+  $template = file_get_contents('themes/'. $settings['theme'] .'/templates/main.html');
+  #$template = implode("",file($settings['template']));
 
   if ($settings['home_linkaddress'] != "" && $settings['home_linkname'] != "") $template = preg_replace("#\{IF:HOME-LINK\}(.+?)\{ENDIF:HOME-LINK\}#is", "\\1", $template);
   else $template = preg_replace("#\{IF:HOME-LINK\}(.+?)\{ENDIF:HOME-LINK\}#is", "", $template);
