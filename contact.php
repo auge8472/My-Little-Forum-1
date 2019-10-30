@@ -50,8 +50,8 @@ if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha
   $captcha = new captcha();
  }
 
-if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($uid)) { header("location: index.php"); die("<a href=\"index.php\">further...</a>"); }
-if (empty($id) && empty($uid) && empty($forum_contact)) { header("location: contact.php?forum_contact=true"); die("<a href=\"contact.php?forum_contact=true\">further...</a>"); }
+if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($uid)) { header("location: index.php"); die('<a href="index.php">further...</a>'); }
+if (empty($id) && empty($uid) && empty($forum_contact)) { header("location: contact.php?forum_contact=true"); die('<a href="contact.php?forum_contact=true">further...</a>'); }
 
 if (isset($id) || isset($uid) || isset($forum_contact))
  {

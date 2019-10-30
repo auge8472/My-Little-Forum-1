@@ -28,7 +28,7 @@ if (isset($_POST['user_time_difference']))
  {
   setcookie("user_time_difference",$_POST['user_time_difference'],time()+(3600*24*30));
   header("location: index.php");
-  die("<a href=\"forum.php\">further...</a>");
+  die('<a href="forum.php">further...</a>');
  }
 if (isset($_COOKIE['user_time_difference'])) $user_time_difference = $_COOKIE['user_time_difference'];
 else $user_time_difference = 0;

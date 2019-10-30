@@ -27,13 +27,13 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
  {
   if (isset($_GET['id'])) header("location: login.php?referer=user.php&id=".$_GET['id']);
   else header("location: login.php?referer=user.php");
-  die("<a href=\"login.php?referer=user.php\">further...</a>");
+  die('<a href="login.php?referer=user.php">further...</a>');
  }
 
 if (!isset($_SESSION[$settings['session_prefix'].'user_id']))
  {
   header("location: login.php");
-  die("<a href=\"login.php\">further...</a>");
+  die('<a href="login.php">further...</a>');
  }
 
 // import vars:
@@ -132,7 +132,7 @@ if(isset($_POST['change_email_submit']))
       if(empty($errors))
        {
         @mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_email='". mysqli_real_escape_string($connid, $new_email) ."', last_login=last_login, registered=registered, activate_code = '". mysqli_real_escape_string($connid, $activate_code) ."' WHERE user_id=". intval($user_id)) or die($lang['db_error']);
-        header("location: login.php"); die("<a href=\"login.php\">further...</a>");
+        header("location: login.php"); die('<a href="login.php">further...</a>');
        }
       else $action="email";
      }
@@ -204,7 +204,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
       $_SESSION[$settings['session_prefix'].'user_view'] = $user_view;
       $_SESSION[$settings['session_prefix'].'user_time_difference'] = $user_time_difference;
 
-      header("location: user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
+      header("location: user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die('<a href="user.php?id='.$_SESSION[$settings['session_prefix'].'user_id'].'">further...</a>');
      }
     else $action="edit";
    break;
@@ -229,7 +229,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     if (empty($errors))
      {
       $pw_update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_pw='". mysqli_real_escape_string($connid, md5($new_pw)) ."', last_login=last_login, registered=registered WHERE user_id=". intval($user_id));
-      header("location: user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
+      header("location: user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die('<a href="user.php?id='.$_SESSION[$settings['session_prefix'].'user_id'].'">further...</a>');
      }
     else $action="pw";
    break;
@@ -251,7 +251,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
       $delete_result = mysqli_query($connid, "DELETE FROM ". $db_settings['userdata_table'] ." WHERE user_id=". intval($user_id)." LIMIT 1");
       $update_result = mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, user_id=0, email_notify=0 WHERE user_id = ". intval($user_id));
       session_destroy();
-      header("location: index.php"); die("<a href=\"index.php\">further...</a>");
+      header("location: index.php"); die('<a href="index.php">further...</a>');
      }
     else $action="delete";
    break;
@@ -318,7 +318,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
       if (empty($errors))
        {
         header("location: user.php?id=".$_POST['recipient_id']);
-        die("<a href=\"user.php?id=".$_POST['recipient_id']."\">further...</a>");
+        die('<a href="user.php?id='.$_POST['recipient_id'].'">further...</a>');
        }
       else { $id = $_POST['recipient_id']; $action="personal_message"; }
      }
@@ -328,7 +328,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
  }
 else
  {
-  header("location: index.php"); die("<a href=\"index.php\">further...</a>");
+  header("location: index.php"); die('<a href="index.php">further...</a>');
  }
 
 $wo = $lang['user_area_title'];
@@ -427,7 +427,7 @@ switch ($action)
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['username_marking']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php echo htmlsc($field["user_name"]); if ($field["user_type"]=="admin") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_admin'].")</span>"; elseif ($field["user_type"]=="mod") echo "<span class=\"xsmall\">&nbsp;(".$lang['ud_mod'].")</span>";?></p></td>
+     <td class="d"><p class="userdata"><?php echo htmlsc($field["user_name"]); if ($field["user_type"]=="admin") echo '<span class="xsmall">&nbsp;('.$lang['ud_admin'].')</span>'; elseif ($field["user_type"]=="mod") echo '<span class="xsmall">&nbsp;('.$lang['ud_mod'].')</span>';?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_real_name']; ?></b></p></td>
@@ -511,7 +511,7 @@ switch ($action)
      <?php
     }
 
-   } else echo "<p class=\"caution\">".$lang['user_doesnt_exist']."</p><p>&nbsp;</p>";
+   } else echo '<p class="caution">'.$lang['user_doesnt_exist'].'</p>';
   break;
 
   case "show users":

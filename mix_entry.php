@@ -31,7 +31,7 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
  {
   if (isset($_GET['id'])) $id = $_GET['id']; else $id = "";
   header("location: login.php?referer=mix_entry.php&id=".$id);
-  die("<a href=\"login.php?referer=mix_entry.php&id=".$id."\">further...</a>");
+  die('<a href="login.php?referer=mix_entry.php&id='.$id.'">further...</a>');
  }
 
 if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['session_prefix'].'user_name']) || $settings['access_for_users_only'] != 1)
@@ -66,8 +66,9 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
    $result_a = mysqli_query($connid, "SELECT name FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($parent_array[$id]["pid"]));
    $posting_a = mysqli_fetch_assoc($result_a);
    mysqli_free_result($result_a);
+   $intendation_width = ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix_topic']/$settings['thread_indent_mix_topic'])) ? 0 : $settings['thread_indent_mix_topic'] ."px";
 
-   ?><div class="mixdivl" style="margin-left: <?php if ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix_topic']/$settings['thread_indent_mix_topic'])) echo "0"; else echo $settings['thread_indent_mix_topic']; ?>px;">
+   ?><div class="mixdivl" style="<?php echo $intendation_width; ?>">
     <table class="mix-entry" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="autorcell" rowspan="2" valign="top"><?php
@@ -86,9 +87,9 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
        }
         if (empty($entrydata["hide_email"])) $entrydata["hide_email"] = 0;
         if (($entrydata["email"]!="" && $entrydata["hide_email"] != 1) or $entrydata["hp"]!="") { echo "<br />"; }
-        if ($entrydata["hp"]!="") { if (substr($entrydata["hp"],0,7) != "http://" && substr($entrydata["hp"],0,8) != "https://" && substr($entrydata["hp"],0,6) != "ftp://" && substr($entrydata["hp"],0,9) != "gopher://" && substr($entrydata["hp"],0,7) != "news://") $entrydata["hp"] = "http://".$entrydata["hp"]; echo "<a href=\"" . $entrydata["hp"] ."\" title=\"".htmlsc($entrydata["hp"])."\"><img src=\"img/homepage.gif\" alt=\"".$lang['homepage_alt']."\" width=\"13\" height=\"13\" /></a>"; }
+        if ($entrydata["hp"]!="") { if (substr($entrydata["hp"],0,7) != "http://" && substr($entrydata["hp"],0,8) != "https://" && substr($entrydata["hp"],0,6) != "ftp://" && substr($entrydata["hp"],0,9) != "gopher://" && substr($entrydata["hp"],0,7) != "news://") $entrydata["hp"] = "http://".$entrydata["hp"]; echo '<a href="' . $entrydata["hp"] .'" title="'.htmlsc($entrydata["hp"]).'"><img src="img/homepage.gif" alt="'.$lang['homepage_alt'].'" width="13" height="13" /></a>'; }
         if (($entrydata["email"]!="" && $entrydata["hide_email"] != 1) && $entrydata["hp"]!="") { echo "&nbsp;"; }
-        #if ($entrydata["email"]!="" && $entrydata["hide_email"] != 1) { echo "<a href=\"mailto:" . $entrydata["email"] ."\"title=\"".htmlsc($entrydata["email"])."\"><img src=\"img/email.gif\" alt=\"".$lang['email_alt']."\" width=\"14\" height=\"10\" /></a>"; }
+        #if ($entrydata["email"]!="" && $entrydata["hide_email"] != 1) { echo '<a href="mailto:' . $entrydata["email"] .'"title="'.htmlsc($entrydata["email"]).'"><img src="img/email.gif" alt="'.$lang['email_alt'].'" width="14" height="10" /></a>'; }
         if ($entrydata["email"]!="" && $entrydata["hide_email"] != 1 && isset($page) && isset($order) && isset($category)) { echo '<a href="contact.php?id='.$entrydata["id"].'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;view=mix" title="'.str_replace("[name]", htmlsc($entrydata["name"]), $lang['email_to_user_linktitle']).'"><img src="img/email.gif" alt="'.$lang['email_alt'].'" width="13" height="10" /></a>'; }
         elseif ($entrydata["email"]!="" && $entrydata["hide_email"] != 1) { echo '<a href="contact.php?id='.$entrydata["id"].'&amp;view=mix" title="'.str_replace("[name]", htmlsc($entrydata["name"]), $lang['email_to_user_linktitle']).'"><img src="img/email.gif" alt="'.$lang['email_alt'].'" width="13" height="10" /></a>'; }
         if (($entrydata["email"]!="" && $entrydata["hide_email"] != 1) or $entrydata["hp"]!="") { echo "<br />"; }
@@ -101,7 +102,7 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
         if ($settings['user_edit'] == 1 && isset($_SESSION[$settings['session_prefix'].'user_id']) && $entrydata["user_id"] == $_SESSION[$settings['session_prefix']."user_id"] || isset($_SESSION[$settings['session_prefix'].'user_id']) && $_SESSION[$settings['session_prefix']."user_type"] == "admin" || isset($_SESSION[$settings['session_prefix'].'user_id']) && $_SESSION[$settings['session_prefix']."user_type"] == "mod") { ?><br /><br /><span class="small"><a href="posting.php?action=edit&amp;id=<?php echo $entrydata["id"]; ?>&amp;view=mix&amp;back=<?php echo $entrydata["tid"]; ?>&amp;page=<?php echo $page; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;category=<?php echo $category; ?>" title="<?php echo $lang['edit_linktitle']; ?>"><img src="img/edit.gif" alt="" width="15" height="10" /><?php echo $lang['edit_linkname']; ?></a></span><?php } if ($settings['user_delete'] == 1 && isset($_SESSION[$settings['session_prefix'].'user_id']) && $entrydata["user_id"] == $_SESSION[$settings['session_prefix']."user_id"] || isset($_SESSION[$settings['session_prefix'].'user_id']) && $_SESSION[$settings['session_prefix']."user_type"] == "admin" || isset($_SESSION[$settings['session_prefix'].'user_id']) && $_SESSION[$settings['session_prefix']."user_type"] == "mod") { ?><br /><span class="small"><a href="posting.php?action=delete&amp;id=<?php echo $entrydata["id"]; ?>&amp;back=<?php echo $entrydata["tid"]; ?>&amp;view=mix&amp;page=<?php echo $page; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;category=<?php echo $category; ?>" title="<?php echo $lang['delete_linktitle']; ?>"><img src="img/delete.gif" alt="" width="12" height="9" /><?php echo $lang['delete_linkname']; ?></a></span><?php }
         if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $_SESSION[$settings['session_prefix']."user_type"] == "admin" && $entrydata['pid'] == 0 || isset($_SESSION[$settings['session_prefix'].'user_id']) && $_SESSION[$settings['session_prefix']."user_type"] == "mod" && $entrydata['pid'] == 0) { ?><br /><span class="small"><a href="posting.php?lock=true&amp;view=mix&amp;id=<?php echo $entrydata["id"]; ?>&amp;page=<?php echo $page; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;category=<?php echo $category; ?>" title="<?php if ($entrydata['locked'] == 0) echo $lang['lock_linktitle']; else echo $lang['unlock_linktitle']; ?>"><img src="img/lock.gif" alt="" width="12" height="12" /><?php if ($entrydata['locked'] == 0) echo $lang['lock_linkname']; else echo $lang['unlock_linkname']; ?></a></span><?php }
         ?><div class="autorcellwidth">&nbsp;</div></td>
-     <td class="titlecell" valign="top"><div class="left"><h2><?php echo htmlsc($entrydata["subject"]); if(isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='' && $entrydata["pid"]==0) echo "&nbsp;<span class=\"category\">(".$categories[$entrydata["category"]].")</span>"; ?></h2></div><div class="right"><?php if ($entrydata['locked'] == 0) { ?><a class="textlink" href="posting.php?id=<?php echo $entrydata["id"]; if (isset($page) && isset($order) && isset($descasc) && isset($category)) { ?>&amp;page=<?php echo $page; ?>&amp;category=<?php echo $category; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; } ?>&amp;view=mix" title="<?php echo $lang['board_answer_linktitle']; ?>"><?php echo $lang['board_answer_linkname']; ?></a><?php } else { if ($entrydata['pid']==0) { ?><span class="xsmall"><img src="img/lock.gif" alt="" width="12" height="12" /><?php echo $lang['thread_locked']; ?></span><?php } else echo "&nbsp;"; } ?></div></td>
+     <td class="titlecell" valign="top"><div class="left"><h2><?php echo htmlsc($entrydata["subject"]); if(isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='' && $entrydata["pid"]==0) echo '&nbsp;<span class="category">('.$categories[$entrydata["category"]].')</span>'; ?></h2></div><div class="right"><?php if ($entrydata['locked'] == 0) { ?><a class="textlink" href="posting.php?id=<?php echo $entrydata["id"]; if (isset($page) && isset($order) && isset($descasc) && isset($category)) { ?>&amp;page=<?php echo $page; ?>&amp;category=<?php echo $category; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; } ?>&amp;view=mix" title="<?php echo $lang['board_answer_linktitle']; ?>"><?php echo $lang['board_answer_linkname']; ?></a><?php } else { if ($entrydata['pid']==0) { ?><span class="xsmall"><img src="img/lock.gif" alt="" width="12" height="12" /><?php echo $lang['thread_locked']; ?></span><?php } else echo "&nbsp;"; } ?></div></td>
     </tr>
     <tr>
      <td class="postingcell" valign="top"><?php
@@ -211,5 +212,5 @@ thread($thread, $id);
 echo $footer;
 
 }
-else { header("location: login.php?msg=noaccess"); die("<a href=\"login.php?msg=noaccess\">further...</a>"); }
+else { header("location: login.php?msg=noaccess"); die('<a href="login.php?msg=noaccess">further...</a>'); }
 ?>

@@ -1269,7 +1269,7 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['language_file']; ?></b><br /><span class="small"><?php echo $lang_add['language_file_d']; ?></span></td>
-     <td class="d"><select name="language_file" size="1"><?php $handle=opendir('./lang/'); while ($file = readdir($handle)) { if (strrchr($file, ".")==".php" && strrchr($file, "_")!="_add.php") { ?><option value="<?php echo $file; ?>"<?php if ($settings['language_file'] ==$file) echo " selected=\"selected\""; ?>><?php echo ucfirst(str_replace(".php","",$file)); ?></option><?php } } closedir($handle); ?></select></td>
+     <td class="d"><select name="language_file" size="1"><?php $handle=opendir('./lang/'); while ($file = readdir($handle)) { if (strrchr($file, ".")==".php" && strrchr($file, "_")!="_add.php") { ?><option value="<?php echo $file; ?>"<?php if ($settings['language_file'] ==$file) echo ' selected="selected"'; ?>><?php echo ucfirst(str_replace(".php","",$file)); ?></option><?php } } closedir($handle); ?></select></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['topics_per_page']; ?></b><br /><span class="small"><?php echo $lang_add['topics_per_page_d']; ?></span></td>
@@ -1428,7 +1428,7 @@ switch ($action)
    <?php
    for($x=0; $x<count($selected); $x++)
    {
-    echo "<input type=\"hidden\" name=\"selected_confirmed[]\" value=\"".$selected[$x]."\" />";
+    echo '<input type="hidden" name="selected_confirmed[]" value="'.$selected[$x].'" />';
    }
    ?>
    <input type="submit" name="delete_confirmed" value="<?php echo $lang['user_del_subm_b']; ?>" />
@@ -1461,7 +1461,7 @@ switch ($action)
   <?php
   break;
   case "delete_marked_threads":
-  $lang_add['del_marked_note'] = str_replace("[marked_symbol]", "<img src=\"img/marked.gif\" alt=\"[x]\" width=\"9\" height=\"9\" />", $lang_add['del_marked_note']);
+  $lang_add['del_marked_note'] = str_replace("[marked_symbol]", '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['del_marked_note']);
   ?><p class="caution"><?php echo $lang['caution']; ?></p>
   <p><?php echo $lang_add['del_marked_note']; ?></p>
   <form action="admin.php" method="post"><div>
@@ -1491,15 +1491,15 @@ switch ($action)
   break;
   case "mark_threads":
    ?><form action="admin.php" method="post"><div style="display: inline;"><?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php }
-   $lang_add['mark_old_threads'] = str_replace("[number]", "<input type=\"text\" name=\"n1\" value=\"\" size=\"4\" />", $lang_add['mark_old_threads']);
-   $lang_add['mark_old_threads_no_replies'] = str_replace("[number]", "<input type=\"text\" name=\"n2\" value=\"\" size=\"4\" />", $lang_add['mark_old_threads_no_replies']);
+   $lang_add['mark_old_threads'] = str_replace("[number]", '<input type="text" name="n1" value="" size="4" />', $lang_add['mark_old_threads']);
+   $lang_add['mark_old_threads_no_replies'] = str_replace("[number]", '<input type="text" name="n2" value="" size="4" />', $lang_add['mark_old_threads_no_replies']);
    ?><p><input type="radio" name="mark_threads" value="1" checked="checked" /> <?php echo $lang_add['mark_old_threads']; ?></p>
    <p><input type="radio" name="mark_threads" value="2" /> <?php echo $lang_add['mark_old_threads_no_replies']; ?></p>
    <p><input type="submit" name="mark_threads_submitted" value="<?php echo $lang['submit_button_ok']; ?>" /></p>
    </div></form><p>&nbsp;</p><?php
   break;
   case "lock_marked_threads":
-   $lang_add['lock_marked_conf'] = str_replace("[marked_symbol]", "<img src=\"img/marked.gif\" alt=\"[x]\" width=\"9\" height=\"9\" />", $lang_add['lock_marked_conf']);
+   $lang_add['lock_marked_conf'] = str_replace("[marked_symbol]", '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['lock_marked_conf']);
    ?><p><?php echo $lang_add['lock_marked_conf']; ?></p>
    <form action="admin.php" method="post"><div>
    <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
@@ -1507,7 +1507,7 @@ switch ($action)
    </div></form><p>&nbsp;</p><?php
   break;
   case "unlock_marked_threads":
-   $lang_add['unlock_marked_conf'] = str_replace("[marked_symbol]", "<img src=\"img/marked.gif\" alt=\"[x]\" width=\"9\" height=\"9\" />", $lang_add['unlock_marked_conf']);
+   $lang_add['unlock_marked_conf'] = str_replace("[marked_symbol]", '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['unlock_marked_conf']);
    ?><p><?php echo $lang_add['unlock_marked_conf']; ?></p>
    <form action="admin.php" method="post"><div>
    <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
@@ -1542,9 +1542,9 @@ switch ($action)
    <b><?php echo $lang_add['edit_category']; ?></b><br />
    <input type="text" name="category" value="<?php echo htmlsc($category); ?>" size="25" /><br /><br />
    <b><?php echo $lang_add['accessible_for']; ?></b><br />
-   <input type="radio" name="accession" value="0"<?php if ($accession==0) echo " checked=\"ckecked\""; ?> /><?php echo $lang_add['cat_accession_all']; ?><br />
-   <input type="radio" name="accession" value="1"<?php if ($accession==1) echo " checked=\"ckecked\""; ?> /><?php echo $lang_add['cat_accession_reg_users']; ?><br />
-   <input type="radio" name="accession" value="2"<?php if ($accession==2) echo " checked=\"ckecked\""; ?> /><?php echo $lang_add['cat_accession_mod_admin']; ?><br /><br />
+   <input type="radio" name="accession" value="0"<?php if ($accession==0) echo ' checked="ckecked"'; ?> /><?php echo $lang_add['cat_accession_all']; ?><br />
+   <input type="radio" name="accession" value="1"<?php if ($accession==1) echo ' checked="ckecked"'; ?> /><?php echo $lang_add['cat_accession_reg_users']; ?><br />
+   <input type="radio" name="accession" value="2"<?php if ($accession==2) echo ' checked="ckecked"'; ?> /><?php echo $lang_add['cat_accession_mod_admin']; ?><br /><br />
    <input type="submit" name="edit_category_submit" value="<?php echo $lang['submit_button_ok']; ?>" /></div></form><?php
   break;
   case "backup":

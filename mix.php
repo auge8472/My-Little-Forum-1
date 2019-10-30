@@ -30,7 +30,7 @@ include("inc.php");
 if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
  {
   header("location: login.php?referer=mix.php");
-  die("<a href=\"login.php?referer=mix.php\">further...</a>");
+  die('<a href="login.php?referer=mix.php">further...</a>');
  }
 
  if ($settings['access_for_users_only']  == 1 && isset($_SESSION[$settings['session_prefix'].'user_name']) || $settings['access_for_users_only']  != 1)
@@ -165,7 +165,7 @@ if($thread_count > 0 && isset($result))
   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php
   ?><a class="<?php if ((isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $zeile["last_answer"]) || (($zeile["pid"]==0) && empty($_SESSION[$settings['session_prefix'].'newtime']) && $zeile["last_answer"] > $last_visit)) echo "threadnew"; else echo "thread"; ?>" href="mix_entry.php?id=<?php echo $zeile["tid"]; if ($page != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC") echo '&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc; ?>"><?php echo htmlsc($zeile["subject"]); ?></a><?php
   if ($zeile["fixed"] == 1) { ?> <img src="img/fixed.gif" width="9" height="9" title="<?php echo $lang['fixed']; ?>" alt="*" /><?php }
-  if ($settings['all_views_direct'] == 1) { echo " <span class=\"small\">"; if ($settings['board_view'] == 1) { ?><a href="board_entry.php?id=<?php echo $zeile["tid"]; ?>"><img src="img/board_d.gif" alt="[Board]" title="<?php echo $lang['open_in_board_linktitle']; ?>" width="12" height="9" onmouseover="this.src='img/board_mo.gif';" onmouseout="this.src='img/board_d.gif';" /></a><?php } if ($settings['thread_view']==1) {?><a href="forum_entry.php?id=<?php echo $zeile["tid"]; ?>"><img src="img/thread_d.gif" alt="[Thread]" title="<?php echo $lang['open_in_thread_linktitle']; ?>" width="12" height="9" onmouseover="this.src='img/thread_mo.gif';" onmouseout="this.src='img/thread_d.gif';" /></a><?php } echo "</span>"; }
+  if ($settings['all_views_direct'] == 1) { echo ' <span class="small">'; if ($settings['board_view'] == 1) { ?><a href="board_entry.php?id=<?php echo $zeile["tid"]; ?>"><img src="img/board_d.gif" alt="[Board]" title="<?php echo $lang['open_in_board_linktitle']; ?>" width="12" height="9" onmouseover="this.src='img/board_mo.gif';" onmouseout="this.src='img/board_d.gif';" /></a><?php } if ($settings['thread_view']==1) {?><a href="forum_entry.php?id=<?php echo $zeile["tid"]; ?>"><img src="img/thread_d.gif" alt="[Thread]" title="<?php echo $lang['open_in_thread_linktitle']; ?>" width="12" height="9" onmouseover="this.src='img/thread_mo.gif';" onmouseout="this.src='img/thread_d.gif';" /></a><?php } echo "</span>"; }
       $thread_result=mysqli_query($connid, "SELECT id, pid, tid, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
                      name, subject, category FROM ". $db_settings['forum_table'] ."
                      WHERE tid = ". intval($zeile["tid"]) ." ORDER BY time ASC");
@@ -189,7 +189,7 @@ if($thread_count > 0 && isset($result))
      <?php }
      if (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin") { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?mark=<?php echo $zeile["tid"]; ?>&amp;refer=<?php echo basename($_SERVER["PHP_SELF"]); ?>&amp;page=<?php echo $page; ?>&amp;category=<?php echo $category; ?>&amp;order=<?php echo $order; ?>"><?php
      if ($zeile['marked']==1) { ?><img src="img/marked.gif" alt="[x]" width="9" height="9" title="<?php echo $lang['unmark_linktitle']; ?>" /><?php }
-     else { echo "<img src=\"img/mark.gif\" alt=\"[-]\" title=\"".$lang['mark_linktitle']."\" width=\"9\" height=\"9\" />"; }
+     else { echo '<img src="img/mark.gif" alt="[-]" title="'.$lang['mark_linktitle'].'" width="9" height="9" />'; }
      ?></a></td><?php } ?>
      </tr>
      <?php $i++; } ?></table><?php
@@ -210,5 +210,5 @@ if($thread_count > 0 && isset($result))
 echo $footer;
 
 }
-else { header("location: login.php?msg=noaccess"); die("<a href=\"login.php?msg=noaccess\">further...</a>"); }
+else { header("location: login.php?msg=noaccess"); die('<a href="login.php?msg=noaccess">further...</a>'); }
 ?>

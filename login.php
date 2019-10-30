@@ -48,7 +48,7 @@ elseif (empty($_SESSION[$settings['session_prefix'].'user_id']) && isset($userna
  }
 elseif (empty($_SESSION[$settings['session_prefix'].'user_id']) && isset($username) && isset($userpw) && ($username == ""  || $userpw == ""))
  {
-  header("location: ".basename($_SERVER['PHP_SELF'])."?msg=login_failed"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=login_failed\">further...</a>");
+  header("location: ".basename($_SERVER['PHP_SELF'])."?msg=login_failed"); die('<a href="'.basename($_SERVER['PHP_SELF']).'?msg=login_failed">further...</a>');
  }
 elseif (empty($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
  {
@@ -80,7 +80,7 @@ switch ($action)
        if (trim($feld["activate_code"]) != '')
         {
          header("location: ".basename($_SERVER['PHP_SELF'])."?msg=account_not_activated");
-         die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=account_not_activated\">further...</a>");
+         die('<a href="'.basename($_SERVER['PHP_SELF']).'?msg=account_not_activated">further...</a>');
         }
 
        if (isset($_POST['autologin_checked']) && isset($settings['autologin']) && $settings['autologin'] == 1)
@@ -109,13 +109,13 @@ switch ($action)
         {
          @mysqli_query($connid, "DELETE FROM ". $db_settings['useronline_table'] ." WHERE ip = '". mysqli_real_escape_string($connid, $_SERVER['REMOTE_ADDR']) ."'");
         }
-       header("location: index.php"); die("<a href=\"index.php\">further...</a>");
+       header("location: index.php"); die('<a href="index.php">further...</a>');
       }
-     else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=login_failed"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=login_failed\">further...</a>"); }
+     else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=login_failed"); die('<a href="'.basename($_SERVER['PHP_SELF']).'?msg=login_failed">further...</a>'); }
     }
-   else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=login_failed"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=login_failed\">further...</a>"); }
+   else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=login_failed"); die('<a href="'.basename($_SERVER['PHP_SELF']).'?msg=login_failed">further...</a>'); }
    }
-   else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=login_failed"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=login_failed\">further...</a>"); }
+   else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=login_failed"); die('<a href="'.basename($_SERVER['PHP_SELF']).'?msg=login_failed">further...</a>'); }
   break;
 
   case "auto_login":
@@ -157,7 +157,7 @@ switch ($action)
    if (isset($_GET['referer']) && isset($_GET['id'])) header("location: ".$_GET['referer']."?id=".$_GET['id']);
    elseif (isset($_GET['referer'])) header("location: ".$_GET['referer']);
    else header("location: ".basename($_SERVER['PHP_SELF']));
-   die("<a href=\"".basename($_SERVER['PHP_SELF'])."\">further...</a>");
+   die('<a href="'.basename($_SERVER['PHP_SELF']).'">further...</a>');
   break;
 
   case "logout":
@@ -168,7 +168,7 @@ switch ($action)
     {
      @mysqli_query($connid, "DELETE FROM ". $db_settings['useronline_table'] ." WHERE ip = 'uid_". intval($user_id) ."'");
     }
-   header("location: index.php"); die("<a href=\"index.php\">further...</a>");
+   header("location: index.php"); die('<a href="index.php">further...</a>');
   break;
 
   case "pw_forgotten_ok":
@@ -197,7 +197,7 @@ switch ($action)
        {
         if (@mail($pwf_mailto, $lang['pwf_activating_email_sj'], $lang['pwf_activating_email_txt'], $header,$settings['mail_parameter']))
          {
-          header("location: ".basename($_SERVER['PHP_SELF'])."?msg=mail_sent"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=mail_sent\">further...</a>");
+          header("location: ".basename($_SERVER['PHP_SELF'])."?msg=mail_sent"); die('<a href="'.basename($_SERVER['PHP_SELF']).'?msg=mail_sent">further...</a>');
          }
         else die($lang['mail_error']);
        }
@@ -205,14 +205,14 @@ switch ($action)
        {
         if (@mail($pwf_mailto, $lang['pwf_activating_email_sj'], $lang['pwf_activating_email_txt'], $header))
          {
-          header("location: ".basename($_SERVER['PHP_SELF'])."?msg=mail_sent"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=mail_sent\">further...</a>");
+          header("location: ".basename($_SERVER['PHP_SELF'])."?msg=mail_sent"); die('<a href="'.basename($_SERVER['PHP_SELF']).'?msg=mail_sent">further...</a>');
          }
         else die($lang['mail_error']);
        }
      }
-    else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pwf_failed"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pwf_failed\">further...</a>"); }
+    else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pwf_failed"); die('<a href="'.basename($_SERVER['PHP_SELF']).'?msg=pwf_failed">further...</a>'); }
    }
-   else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pwf_failed"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pwf_failed\">further...</a>"); }
+   else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pwf_failed"); die('<a href="'.basename($_SERVER['PHP_SELF']).'?msg=pwf_failed">further...</a>'); }
 
   break;
 
@@ -248,7 +248,7 @@ switch ($action)
         if (@mail($new_pw_mailto, $lang['new_pw_email_sj'], $lang['new_pw_email_txt'], $header,$settings['mail_parameter']))
          {
           header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pw_sent");
-          die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pw_sent\">further...</a>");
+          die('<a href="'.basename($_SERVER['PHP_SELF']).'?msg=pw_sent">further...</a>');
          }
         else die($lang['mail_error']);
        }
@@ -257,7 +257,7 @@ switch ($action)
         if (@mail($new_pw_mailto, $lang['new_pw_email_sj'], $lang['new_pw_email_txt'], $header))
          {
           header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pw_sent");
-          die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pw_sent\">further...</a>");
+          die('<a href="'.basename($_SERVER['PHP_SELF']).'?msg=pw_sent">further...</a>');
          }
         else die($lang['mail_error']);
        }
@@ -265,10 +265,10 @@ switch ($action)
     else
      {
       header("location: ".basename($_SERVER['PHP_SELF'])."?msg=code_invalid");
-      die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=code_invalid\">further...</a>");
+      die('<a href="'.basename($_SERVER['PHP_SELF']).'?msg=code_invalid">further...</a>');
      }
    }
-   else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=code_invalid"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=code_invalid\">further...</a>"); }
+   else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=code_invalid"); die('<a href="'.basename($_SERVER['PHP_SELF']).'?msg=code_invalid">further...</a>'); }
 
   break;
  }
@@ -287,31 +287,31 @@ switch ($action)
      switch ($msg)
       {
        case "noaccess":
-        echo "<p class=\"caution\">" . $lang['no_access_marking'] . "<br /><br /></p>";
+        ?><p class="caution"><?php echo $lang['no_access_marking']; ?></p><?php
        break;
        case "noentry":
-        echo "<p class=\"caution\">" . $lang['no_entry_marking'] . "<br /><br /></p>";
+        ?><p class="caution"><?php echo $lang['no_entry_marking']; ?></p><?php
        break;
        case "mail_sent":
-        echo "<p class=\"caution\">" . $lang['pwf_mail_sent_marking'] . "<br /><br /></p>";
+        ?><p class="caution"><?php echo $lang['pwf_mail_sent_marking']; ?></p><?php
        break;
        case "pw_sent":
-        echo "<p class=\"caution\">" . $lang['new_pw_ok'] . "<br /><br /></p>";
+        ?><p class="caution"><?php echo $lang['new_pw_ok']; ?></p><?php
        break;
        case "code_invalid":
-        echo "<p class=\"caution\">" . $lang['new_pw_failed'] . "<br /><br /></p>";
+        ?><p class="caution"><?php echo $lang['new_pw_failed']; ?></p><?php
        break;
        case "login_failed":
-        echo "<p class=\"caution\">" . $lang['login_failed_marking'] . "<br /><br /></p>";
+        ?><p class="caution"><?php echo $lang['login_failed_marking']; ?></p><?php
        break;
        case "account_not_activated":
-        echo "<p class=\"caution\">" . $lang['account_not_activated'] . "<br /><br /></p>";
+        ?><p class="caution"><?php echo $lang['account_not_activated']; ?></p><?php
        break;
        case "pwf_failed":
-        echo "<p class=\"caution\">" . $lang['pwf_failed_marking'] . "<br /><br /></p>";
+        ?><p class="caution"><?php echo $lang['pwf_failed_marking']; ?></p><?php
        break;
        case "user_banned":
-        echo "<p class=\"caution\">" . $lang['user_banned'] . "<br /><br /></p>";
+        ?><p class="caution"><?php echo $lang['user_banned']; ?></p><?php
        break;
        case "user_activated":
         ?><p class="normal"><?php echo $lang['user_activated']; ?></p><?php
