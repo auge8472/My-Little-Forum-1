@@ -22,20 +22,21 @@
 ###############################################################################
 
 include("inc.php");
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $lang['language']; ?>">
-<head>
-<title>Smilies</title>
-<meta http-equiv="content-type" content="text/html; charset=<?php echo $lang['charset']; ?>" />
-</head>
-<body>
-<?php
+
 $result = mysqli_query($connid, "SELECT file, code_1, title FROM ". $db_settings['smilies_table'] ." ORDER BY order_id ASC");
-while ($data = mysqli_fetch_assoc($result))
- {
-  ?><a href="#" title="<?php echo $lang['smiley_title']; ?>" onclick="opener.insert('<?php echo $data['code_1']; ?> '); window.close();"><img style="margin: 0px 10px 10px 0px; border: 0px;" src="img/smilies/<?php echo $data['file']; ?>" alt="<?php echo $data['code_1']; ?>" /></a><?php
- }
+
+?><!DOCTYPE html>
+<html lang="<?php echo $lang['language']; ?>">
+ <head>
+  <meta charset="utf-8">
+  <title>Smilies</title>
+ </head>
+ <body>
+<?php
+while ($data = mysqli_fetch_assoc($result)) {
+?><a href="#" title="<?php echo $lang['smiley_title']; ?>" onclick="opener.insert('<?php echo $data['code_1']; ?> '); window.close();"><img style="margin: 0px 10px 10px 0px; border: 0px;" src="img/smilies/<?php echo $data['file']; ?>" alt="<?php echo $data['code_1']; ?>" /></a><?php
+}
 mysqli_free_result($result);
 ?>
-</body>
+ </body>
 </html>
