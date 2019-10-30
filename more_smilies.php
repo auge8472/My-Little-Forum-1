@@ -23,20 +23,31 @@
 
 include("inc.php");
 
-$result = mysqli_query($connid, "SELECT file, code_1, title FROM ". $db_settings['smilies_table'] ." ORDER BY order_id ASC");
+$templateButton = '   <li><button onclick="opener.insert(\'{$scode}\'); window.close();"><img src="img/smilies/{$filename}" alt="{$scode}"></button></li>';
+$buttonItem = '';
+$buttonList = array();
+$theme = getThemeDir($settings['theme']);
+$template = file_get_contents($theme .'/templates/more-smilies.html');
 
-?><!DOCTYPE html>
-<html lang="<?php echo $lang['language']; ?>">
- <head>
-  <meta charset="utf-8">
-  <title>Smilies</title>
- </head>
- <body>
-<?php
+$result = mysqli_query($connid, "SELECT file, code_1, title FROM ". $db_settings['smilies_table'] ." ORDER BY order_id ASC");
 while ($data = mysqli_fetch_assoc($result)) {
-?><a href="#" title="<?php echo $lang['smiley_title']; ?>" onclick="opener.insert('<?php echo $data['code_1']; ?> '); window.close();"><img style="margin: 0px 10px 10px 0px; border: 0px;" src="img/smilies/<?php echo $data['file']; ?>" alt="<?php echo $data['code_1']; ?>" /></a><?php
+	$buttonItem = $templateButton;
+	$buttonItem = str_replace('{$scode}', htmlsc($data['code_1']), $buttonItem);
+	$buttonItem = str_replace('{$filename}', htmlsc($data['file']), $buttonItem);
+	$buttonList[] = $buttonItem;
 }
 mysqli_free_result($result);
+
+$template = str_replace('{$language}', htmlsc($lang['language']), $template);
+if (!empty($buttonList)) {
+	array_unshift($buttonList, "  <ul>");
+	$buttonList[] = "  </ul>";
+} else  {
+	$buttonList[] = "  <p>No smilies</p>";
+}
+
+$template = str_replace('{$smileylist}', implode("\n", $buttonList), $template);
+
+echo $template;
+
 ?>
- </body>
-</html>
