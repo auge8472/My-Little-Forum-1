@@ -299,6 +299,7 @@ function update17to18() {
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['smilies_table'] ." ENGINE=InnoDB") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['banlists_table'] ." ENGINE=InnoDB") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['useronline_table'] ." ENGINE=InnoDB") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "ALTER TABLE ". $db_settings['settings_table'] ." CONVERT TO CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
 	if (isset($errors)) return $errors;
 	return false;
 }
