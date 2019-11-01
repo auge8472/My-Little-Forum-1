@@ -411,11 +411,11 @@ if (isset($_POST['form_submitted']))
      KEY fixed (fixed))";
      $tabledef['categories'] = "CREATE TABLE ". $db_settings['category_table'] ." (
      id int(11) NOT NULL auto_increment,
-     category_order int(11) NOT NULL,
-     category varchar(255) NOT NULL default '',
-     description varchar(255) NOT NULL default '',
-     accession tinyint(4) NOT NULL default '0',
-     PRIMARY KEY (id))";
+     category_order int(11) NOT NULL default 0,
+     category varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '',
+     description varchar(255) COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+     accession tinyint(4) NOT NULL default 0,
+     PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
      $tabledef['userdata'] = "CREATE TABLE ". $db_settings['userdata_table'] ." (
      user_id int(11) NOT NULL auto_increment,
      user_type varchar(255) NOT NULL default '',
