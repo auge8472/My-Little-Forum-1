@@ -41,7 +41,7 @@ function nav_b($be_page, $entries_per_page, $entry_count, $id, $da, $nr, $page, 
     if ($new_index_before >= 0 && $new_index_after < $site_count)$output .= '&nbsp;';
     if ($new_index_after < $site_count) $output .= '<a href="'.basename($_SERVER["PHP_SELF"]).'?&amp;id='.$id.'&amp;be_page='.$new_index_after.'&amp;da='.$da.'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'" title="'.$lang['next_page_linktitle'].'"><img src="img/next.gif" alt="&laquo;" width="12" height="9" onmouseover="this.src=\'img/next_mo.gif\';" onmouseout="this.src=\'img/next.gif\';" /></a>';
     $page_count = ceil($entry_count/$entries_per_page);
-    $output .= '&nbsp;&nbsp;<form method="get" action="'.basename($_SERVER["PHP_SELF"]).'" title="'.$lang['choose_page_formtitle'].'"><div style="display: inline;">';
+    $output .= '&nbsp;&nbsp;<form method="get" action="'.basename($_SERVER["PHP_SELF"]).'" title="'.$lang['choose_page_formtitle'].'" accept-charset="UTF-8"><div style="display: inline;">';
     if (isset($id)) $output .= '<input type="hidden" name="id" value="'.$id.'">';
     if (isset($da)) $output .= '<input type="hidden" name="da" value="'.$da.'">';
     $output .= '<input type="hidden" name="page" value="'.$page.'"><input type="hidden" name="category" value="'.$category.'"><input type="hidden" name="order" value="'.$order.'"><input type="hidden" name="descasc" value ="'.$descasc.'">';

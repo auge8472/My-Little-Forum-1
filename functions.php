@@ -126,7 +126,7 @@ function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category
      if ($new_index_before >= 0) $output .= "<a href=\"". basename($_SERVER["PHP_SELF"]) ."?page=".$new_index_before."&amp;order=".$order."&amp;descasc=".$descasc.$ic."\"><img src=\"img/prev.gif\" alt=\"&laquo;\" title=\"".$lang['previous_page_linktitle']."\" width=\"12\" height=\"9\" onmouseover=\"this.src='img/prev_mo.gif';\" onmouseout=\"this.src='img/prev.gif';\" /></a>&nbsp;";
      //if ($new_index_before >= 0 && $new_index_after < $site_count) $output .= " ";
      $page_count = ceil($entry_count/$entries_per_page);
-     $output .= '<form action="'.basename($_SERVER["PHP_SELF"]).'" method="get" title="'.$lang['choose_page_formtitle'].'"><div style="display: inline;">';
+     $output .= '<form action="'.basename($_SERVER["PHP_SELF"]).'" method="get" title="'.$lang['choose_page_formtitle'].'" accept-charset="UTF-8"><div style="display: inline;">';
      if (isset($order)) $output .= '<input type="hidden" name="order" value="'.$order.'" />';
      if (isset($descasc)) $output .= '<input type="hidden" name="descasc" value="'.$descasc.'" />';
      if (isset($category)) $output .= '<input type="hidden" name="category" value="'.$category.'" />';
@@ -398,7 +398,7 @@ function parse_template()
   $template = str_replace("{USER-MENU}",$user_menu,$template);
 
   // Search:
-  $search_dump = '<form action="search.php" method="get" title="'.$lang['search_formtitle'].'"><div class="search">';
+  $search_dump = '<form action="search.php" method="get" title="'.$lang['search_formtitle'].'" accept-charset="UTF-8"><div class="search">';
   $search_dump .= $lang['search_marking'];
   # if (isset($search)) $search_match = htmlsc($search); else $search_match = "";
   $search_dump .= '<span class="normal">&nbsp;</span><input class="searchfield" type="text" name="search" value="" size="20" /><span class="normal">&nbsp;</span><input type="image" name="" src="img/submit.gif" alt="&raquo;" /></div></form>';

@@ -204,7 +204,7 @@ echo $header;
 
 if (isset($search)) $search_match = htmlsc($search); else $search_match = "";
 if (isset($search) && empty($show_postings))
-{ ?><form action="search.php" method="get" title="<?php echo $lang['search_formtitle']; ?>"><div class="search">
+{ ?><form action="search.php" method="get" title="<?php echo $lang['search_formtitle']; ?>" accept-charset="UTF-8"><div class="search">
 <input type="text" name="search" value="<?php echo $search_match; ?>" size="30" />
 <?php
 if ($categories!=false)

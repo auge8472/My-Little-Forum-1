@@ -372,7 +372,7 @@ if ($action == "show users")
   if (isset($_GET['letter']) && $_GET['letter'] == "X") $lx = ' selected="selected"'; else $lx = '';
   if (isset($_GET['letter']) && $_GET['letter'] == "Y") $ly = ' selected="selected"'; else $ly = '';
   if (isset($_GET['letter']) && $_GET['letter'] == "Z") $lz = ' selected="selected"'; else $lz = '';
-  $subnav_2 = $lang['num_reg_users'] . '&nbsp;&nbsp;<form action="'.basename($_SERVER["PHP_SELF"]).'" method="get" title=""><div style="display: inline;"><select class="kat" size="1" name="letter" onchange="this.form.submit();">
+  $subnav_2 = $lang['num_reg_users'] . '&nbsp;&nbsp;<form action="'.basename($_SERVER["PHP_SELF"]).'" method="get" accept-charset="UTF-8"><div style="display: inline;"><select class="kat" size="1" name="letter" onchange="this.form.submit();">
   <option value="">A-Z</option>
   <option value="A"'.$la.'>A</option>
   <option value="B"'.$lb.'>B</option>
@@ -595,7 +595,7 @@ switch ($action)
    <?php
    if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php }
    ?>
-   <form action="user.php" method="post">
+   <form action="user.php" method="post" accept-charset="UTF-8">
    <input type="hidden" name="action" value="edit submited">
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
@@ -674,7 +674,7 @@ switch ($action)
    ?>
    <h2><?php echo $lang['change_pw_hl']; ?></h2>
    <?php if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php } ?>
-   <form action="user.php" method="post">
+   <form action="user.php" method="post" accept-charset="UTF-8">
    <input type="hidden" name="action" value="pw submited">
    <b><?php echo $lang['old_pw']; ?></b><br />
    <input type="password" size="25" name="old_pw" maxlength="50"><br /><br />
@@ -694,7 +694,7 @@ switch ($action)
    <p class="caution"><?php echo $lang['caution']; ?></p>
    <p class="normal"><?php echo $lang['change_email_exp']; ?></p>
    <?php if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php } ?>
-   <form action="user.php" method="post"><div>
+   <form action="user.php" method="post" accept-charset="UTF-8"><div>
    <p><b><?php echo $lang['new_email']; ?></b><br />
    <input type="text" size="25" name="new_email" value="<?php if (isset($new_email)) echo htmlsc($new_email); ?>" maxlength="<?php echo $settings['email_maxlength']; ?>"></p>
    <p><b><?php echo $lang['password_marking']; ?></b><br />
@@ -712,7 +712,7 @@ switch ($action)
     }
    ?><h2 class="caution"><?php echo $lang['caution']; ?></h2>
    <p><?php echo $lang['user_del_conf']; ?></p>
-   <form action="user.php" method="post"><div>
+   <form action="user.php" method="post" accept-charset="UTF-8"><div>
    <input type="hidden" name="action" value="delete submited">
    <b><?php echo $lang['password_marking']; ?></b><br />
    <input type="password" size="25" name="pw_delete" maxlength="50"><br /><br />
@@ -736,7 +736,7 @@ switch ($action)
 
    if ($field["personal_messages"] == 1)
     {
-     ?><form action="<?php echo basename($_SERVER["PHP_SELF"]); ?>" method="post"><div style="margin-top: 20px;">
+     ?><form action="<?php echo basename($_SERVER["PHP_SELF"]); ?>" method="post" accept-charset="UTF-8"><div style="margin-top: 20px;">
      <input type="hidden" name="action" value="pm_sent" />
      <input type="hidden" name="recipient_id" value="<?php echo $id; ?>" />
      <b><?php echo $lang['pers_msg_sj']; ?></b><br />

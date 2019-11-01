@@ -43,7 +43,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
 else
  {
   ?><p class="posting"><?php echo $lang_add['td_desc']; ?></p>
-  <form action="<?php echo basename($_SERVER["PHP_SELF"]); ?>" method="post"><div></div>
+  <form action="<?php echo basename($_SERVER["PHP_SELF"]); ?>" method="post" accept-charset="UTF-8"><div></div>
   <select name="user_time_difference"><?php for ($h = -24; $h <= 24; $h++) { ?><option value="<?php echo $h; ?>"<?php if ($user_time_difference==$h) echo ' selected="selected"'; ?>><?php echo $h; ?></option><?php } ?></select></td>
   <input type="submit" name="ok" value="<?php echo $lang['submit_button_ok']; ?>" />
   </div></form><?php

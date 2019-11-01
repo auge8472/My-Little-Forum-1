@@ -82,7 +82,7 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
 
   if($categories!=false)
    {
-    $subnav_2 .= '&nbsp;&nbsp;<form method="get" action="forum.php" title="'.$lang['choose_category_formtitle'].'"><div style="display: inline;"><select class="kat" size="1" name="category" onchange="this.form.submit();">';
+    $subnav_2 .= '&nbsp;&nbsp;<form method="get" action="forum.php" title="'.$lang['choose_category_formtitle'].'" accept-charset="UTF-8"><div style="display: inline;"><select class="kat" size="1" name="category" onchange="this.form.submit();">';
     if (isset($category) && $category==0) $subnav_2 .= '<option value="0" selected="selected">'.$lang['show_all_categories'].'</option>';
     else $subnav_2 .= '<option value="0">'.$lang['show_all_categories'].'</option>';
     while(list($key, $val) = each($categories))

@@ -250,7 +250,7 @@ switch($action)
       // Wenn Fehler, dann Fehlermeldungen ausgeben:
       if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php }
       ?>
-      <form action="register.php" method="post"><div>
+      <form action="register.php" method="post" accept-charset="UTF-8"><div>
       <?php if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_register']==1) { ?><input type="hidden" name="<?php echo session_name(); ?>" value="<?php echo session_id(); ?>" /><?php } ?>
       <p><b><?php echo $lang['username_marking']; ?></b><br />
       <input type="text" size="25" name="new_user_name" value="<?php if (isset($new_user_name)) echo htmlsc($new_user_name); ?>" maxlength="<?php echo $settings['name_maxlength']; ?>" /></p>

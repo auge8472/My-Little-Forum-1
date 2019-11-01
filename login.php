@@ -319,7 +319,7 @@ switch ($action)
       }
     }
    ?>
-   <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post">
+   <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post" accept-charset="UTF-8">
    <div>
    <b><?php echo $lang['username_marking']; ?></b><br /><input type="text" name="username" /><br /><br />
    <b><?php echo $lang['password_marking']; ?></b><br /><input type="password" name="userpw" /><br /><br />
@@ -335,7 +335,7 @@ switch ($action)
 
   case "pw_forgotten":
   ?><h2><?php echo $lang['pw_forgotten_hl']; ?></h2><p class="normal"><?php echo $lang['pw_forgotten_exp']; ?></p>
-    <form action="login.php" method="post">
+    <form action="login.php" method="post" accept-charset="UTF-8">
     <div>
     <input type="hidden" name="action" value="pw_forgotten_ok" />
     <b><?php echo $lang['username_marking']; ?></b><br /><input type="text" name="pwf_username" /><br /><br />

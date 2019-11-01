@@ -640,7 +640,7 @@ if(empty($installed))
   if(empty($language))
    {
     ?><p><?php echo $lang_add['language_file_inst']; ?></p>
-    <form action="install.php" method="post">
+    <form action="install.php" method="post" accept-charset="UTF-8">
     <p><select name="language" size="1"><?php $handle=opendir('./lang/'); while ($file = readdir($handle)) { if (strrchr($file, ".")==".php" && strrchr($file, "_")!="_add.php") { ?><option value="<?php echo $file; ?>"<?php if ($settings['language_file'] ==$file) echo ' selected="selected"'; ?>><?php echo ucfirst(str_replace(".php","",$file)); ?></option><?php } } closedir($handle); ?></select>
     <input type="submit" value="<?php echo $lang['submit_button_ok']; ?>"></p>
     </form><?php
@@ -648,7 +648,7 @@ if(empty($installed))
   elseif(empty($installation_mode))
    {
     ?><p><?php echo $lang_add['installation_mode_inst']; ?></p>
-    <form action="install.php" method="post"><div>
+    <form action="install.php" method="post" accept-charset="UTF-8"><div>
     <input type="hidden" name="language" value="<?php echo $language; ?>">
     <p><input type="radio" name="installation_mode" value="installation" checked="checked"><?php echo $lang_add['installation_mode_installation']; ?><br>
     <input type="radio" name="installation_mode" value="update"><?php echo $lang_add['installation_mode_update']; ?></p>
@@ -665,7 +665,7 @@ if(empty($installed))
         {
          ?><p class="caution"><?php echo $lang['error_headline']; ?><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><?php
         }
-       ?><form action="install.php" method="post">
+       ?><form action="install.php" method="post" accept-charset="UTF-8">
        <input type="hidden" name="language" value="<?php echo $language; ?>">
        <input type="hidden" name="installation_mode" value="installation">
        <table class="admintab">
@@ -739,7 +739,7 @@ if(empty($installed))
         {
          ?><p class="caution"><?php echo $lang['error_headline']; ?><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><?php
         }
-       ?><form action="install.php" method="post">
+       ?><form action="install.php" method="post" accept-charset="UTF-8">
        <input type="hidden" name="language" value="<?php echo $language; ?>">
        <input type="hidden" name="installation_mode" value="update">
        <?php if(isset($select_version))
