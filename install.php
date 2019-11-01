@@ -292,6 +292,13 @@ function update17() {
 function update17to18() {
 	global $db_settings, $settings, $connid, $lang_add;
 	if (!extension_loaded('mbstring')) $errors[] = "The MB-extension of PHP is mandatory to update the forum scriupt to version 1.8 but is not present in the PHP-installation on your webserver. Please contact your hosting provider for further informations.";
+	@mysqli_query($connid, "ALTER TABLE ". $db_settings['settings_table'] ." ENGINE=InnoDB") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "ALTER TABLE ". $db_settings['forum_table'] ." ENGINE=InnoDB") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "ALTER TABLE ". $db_settings['category_table'] ." ENGINE=InnoDB") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "ALTER TABLE ". $db_settings['userdata_table'] ." ENGINE=InnoDB") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "ALTER TABLE ". $db_settings['smilies_table'] ." ENGINE=InnoDB") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "ALTER TABLE ". $db_settings['banlists_table'] ." ENGINE=InnoDB") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "ALTER TABLE ". $db_settings['useronline_table'] ." ENGINE=InnoDB") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
 	if (isset($errors)) return $errors;
 	return false;
 }
