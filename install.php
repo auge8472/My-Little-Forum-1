@@ -418,7 +418,7 @@ if (isset($_POST['form_submitted']))
      subject varchar(255) DEFAULT NULL,
      category int(11) NOT NULL default 0,
      email varchar(255) CHARACTER SET utf8mb3 DEFAULT NULL,
-     hp varchar(255) DEFAULT NULL,
+     hp varchar(255) CHARACTER SET utf8mb3 DEFAULT NULL,
      place varchar(255) DEFAULT NULL,
      ip varchar(255) CHARACTER SET utf8mb3 DEFAULT NULL,
      text text NOT NULL,
