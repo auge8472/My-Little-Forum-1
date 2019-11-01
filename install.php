@@ -378,7 +378,7 @@ if (isset($_POST['form_submitted']))
      name varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
      value varchar(255) COLLATE utf8_unicode_ci NULL default NULL,
      PRIMARY KEY (name),
-     UNIQUE KEY name (name)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+     UNIQUE KEY name (name)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3";
      $tabledef['entries'] = "CREATE TABLE ". $db_settings['forum_table'] ." (
      id int(11) NOT NULL auto_increment,
      pid int(11) NOT NULL default '0',
