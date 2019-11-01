@@ -461,8 +461,9 @@ if (isset($_POST['form_submitted']))
      PRIMARY KEY (name)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
      $tabledef['uonline'] = "CREATE TABLE ". $db_settings['useronline_table'] ." (
      ip char(15) NOT NULL default '',
-     time int(14) NOT NULL default '0',
-     user_id int(11) default '0')";
+     time int(14) NOT NULL default 0,
+     user_id int(11) default 0),
+     UNIQUE KEY ip_user (ip, user_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci";
      // create tables:
      if (empty($errors))
       {
