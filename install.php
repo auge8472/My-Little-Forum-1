@@ -456,8 +456,9 @@ if (isset($_POST['form_submitted']))
      title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
      PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
      $tabledef['banlists'] = "CREATE TABLE ". $db_settings['banlists_table'] ." (
-     name varchar(255) NOT NULL default '',
-     list text NOT NULL)";
+     name varchar(255) CHARACTER SET utf8 NOT NULL,
+     list text NOT NULL,
+     PRIMARY KEY (name)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
      $tabledef['uonline'] = "CREATE TABLE ". $db_settings['useronline_table'] ." (
      ip char(15) NOT NULL default '',
      time int(14) NOT NULL default '0',
