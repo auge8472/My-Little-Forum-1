@@ -289,6 +289,13 @@ function update17() {
 	return false;
 }
 
+function update17to18() {
+	global $db_settings, $settings, $connid, $lang_add;
+	if (!extension_loaded('mbstring')) $errors[] = "The MB-extension of PHP is mandatory to update the forum scriupt to version 1.8 but is not present in the PHP-installation on your webserver. Please contact your hosting provider for further informations.";
+	if (isset($errors)) return $errors;
+	return false;
+}
+
 $table_prefix = 'mlf1_';
 
 if(isset($_POST['language']))
@@ -564,6 +571,8 @@ if (isset($_POST['form_submitted']))
          if($errors==false) unset($errors);
          if(empty($errors)) $errors = update17();
          if($errors==false) unset($errors);
+         if(empty($errors)) $errors = update17to18();
+         if($errors==false) unset($errors);
         break;
         case 1.4:
          $errors = update14to15();
@@ -576,6 +585,8 @@ if (isset($_POST['form_submitted']))
          if($errors==false) unset($errors);
          if(empty($errors)) $errors = update17();
          if($errors==false) unset($errors);
+         if(empty($errors)) $errors = update17to18();
+         if($errors==false) unset($errors);
         break;
         case 1.5:
          $errors = update15to16();
@@ -586,6 +597,8 @@ if (isset($_POST['form_submitted']))
          if($errors==false) unset($errors);
          if(empty($errors)) $errors = update17();
          if($errors==false) unset($errors);
+         if(empty($errors)) $errors = update17to18();
+         if($errors==false) unset($errors);
         break;
         case 1.6:
          $errors = update16();
@@ -594,9 +607,17 @@ if (isset($_POST['form_submitted']))
          if($errors==false) unset($errors);
          if(empty($errors)) $errors = update17();
          if($errors==false) unset($errors);
+         if(empty($errors)) $errors = update17to18();
+         if($errors==false) unset($errors);
         break;
         case 1.7:
          $errors = update17();
+         if($errors==false) unset($errors);
+         if(empty($errors)) $errors = update17to18();
+         if($errors==false) unset($errors);
+        break;
+        case 1.8:
+         $errors = update17to18();
          if($errors==false) unset($errors);
         break;
         default:
