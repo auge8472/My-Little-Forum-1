@@ -242,7 +242,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
       else $_SESSION['captcha_session'] = $captcha->generate_math_captcha();
      }
 
-    ?><form method="post" action="<?php echo basename($_SERVER["PHP_SELF"]); ?>"><div style="margin-top: 20px;">
+    ?><form method="post" action="<?php echo basename($_SERVER["PHP_SELF"]); ?>" accept-charset="UTF-8"><div style="margin-top: 20px;">
     <?php if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_contact']==1) { ?><input type="hidden" name="<?php echo session_name(); ?>" value="<?php echo session_id(); ?>" /><?php } ?>
     <?php if (isset($id)) { ?><input type="hidden" name="id" value="<?php echo $id; ?>" /><?php } elseif (isset($uid)) { ?><input type="hidden" name="uid" value="<?php echo $uid; ?>" /><?php }
     if (isset($view)) { ?><input type="hidden" name="view" value="<?php echo $view; ?>" /><?php }

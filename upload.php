@@ -194,7 +194,7 @@ switch($action)
      ?><p class="caution"><?php echo $lang['error_headline']; ?></p><ul><?php foreach($errors as $f) { ?><li><?php echo $f; ?></li><?php } ?></ul><?php
     }
    ?><p><?php echo $lang['upload_exp']; ?></p>
-   <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post" enctype="multipart/form-data">
+   <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
    <input type="file" name="probe" /><br><br>
    <input type="submit" value="<?php echo $lang['upload_subm_button']; ?>">
    </form>

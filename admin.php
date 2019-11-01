@@ -1165,7 +1165,7 @@ switch ($action)
       $cat_select .= '<option value="0">-</option>';
      }
     $cat_select .= '</select>';
-    ?><form action="admin.php" method="post"><div style="margin:0px 0px 20px 0px; padding:10px; border:1px dotted red;">
+    ?><form action="admin.php" method="post" accept-charset="UTF-8"><div style="margin:0px 0px 20px 0px; padding:10px; border:1px dotted red;">
     <p><?php echo $lang_add['entries_in_not_ex_cat']; ?></p>
     <p><input type="radio" name="mode" value="delete" checked="checked" /><?php echo $lang_add['entries_in_not_ex_cat_delete']; ?><br />
     <input type="radio" name="mode" value="move" /><?php echo str_replace("[category]",$cat_select,$lang_add['entries_in_not_ex_cat_move']); ?></p>
@@ -1222,7 +1222,7 @@ switch ($action)
     ?><p><i><?php echo $lang_add['no_categories']; ?></i></p><?php
    }
    ?><br />
-   <form action="admin.php" method="post"><div style="display: inline;">
+   <form action="admin.php" method="post" accept-charset="UTF-8"><div style="display: inline;">
    <b><?php echo $lang_add['new_category']; ?></b><br />
    <input type="text" name="new_category" size="25" value="<?php if(isset($new_category)) echo htmlsc($new_category); ?>" /><br /><br />
    <b><?php echo $lang_add['accessible_for']; ?></b><br />
@@ -1274,14 +1274,14 @@ switch ($action)
    ?><table style="margin:0px 0px 10px 0px; padding:0px; width:100%;" cellspacing="0" cellpadding="0" border="0">
    <tr>
    <td><?php echo str_replace("[number]", $user_count, $lang['num_reg_users']); ?></td>
-   <td style="text-align:right;"><?php echo $lang_add['search_user']; ?><form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="get"><div style="display:inline">
+   <td style="text-align:right;"><?php echo $lang_add['search_user']; ?><form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="get" accept-charset="UTF-8"><div style="display:inline">
    <input type="hidden" name="action" value="user" />
    <input type="text" name="search_user" value="<?php if(isset($search_user)) echo htmlsc($search_user); ?>" size="25">&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" />
    </div></form><?php
    if(empty($serach_user) || trim($search_user==''))
    {
    ?>&nbsp;
-   <form action="<?php echo basename($_SERVER["PHP_SELF"]); ?>" method="get" title=""><div style="display:inline">
+   <form action="<?php echo basename($_SERVER["PHP_SELF"]); ?>" method="get" accept-charset="UTF-8"><div style="display:inline">
    <input type="hidden" name="action" value="user" />
    <select class="kat" size="1" name="letter" onchange="this.form.submit();">
    <option value="">A-Z</option>
@@ -1321,7 +1321,7 @@ switch ($action)
    {
    if (isset($_GET['new_user'])) { ?><p class="caution"><?php echo str_replace("[name]", htmlsc(urldecode($_GET['new_user'])), $lang_add['new_user_registered']); if(isset($_GET['send_error'])) { ?><br /><?php echo $lang_add['userdata_send_error']; } ?></p><p><a class="textlink" href="admin.php?action=register"><?php echo $lang_add['reg_another_user']; ?></a></p><?php }
    if (isset($no_users_in_selection)) { ?><p class="caution"><?php echo $lang_add['no_users_in_sel']; ?></p><?php } ?>
-   <form action="admin.php" method="post">
+   <form action="admin.php" method="post" accept-charset="UTF-8">
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
    <tr>
    <th>&nbsp;</th>
@@ -1370,7 +1370,7 @@ switch ($action)
   case "register":
    ?><p><?php echo $lang_add['register_exp']; ?></p><?php
    if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php } ?>
-   <form action="admin.php" method="post">
+   <form action="admin.php" method="post" accept-charset="UTF-8">
    <input type="hidden" name="action" value="register">
    <b><?php echo $lang['username_marking']; ?></b><br />
    <input type="text" size="25" name="ar_username" value="<?php if (isset($ar_username)) echo htmlsc($ar_username); ?>" maxlength="<?php echo $name_maxlength; ?>" /><br /><br />
@@ -1388,7 +1388,7 @@ switch ($action)
   break;
   case "settings":
    if (isset($settings['time_difference'])) $std = $settings['time_difference']; else $std = 0;
-   ?><form action="admin.php" method="post">
+   ?><form action="admin.php" method="post" accept-charset="UTF-8">
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="c"><b><?php echo $lang_add['forum_name']; ?></b><br /><span class="small"><?php echo $lang_add['forum_name_d']; ?></span></td>
@@ -1543,7 +1543,7 @@ switch ($action)
    <?php
   break;
   case "advanced_settings":
-   ?><form action="admin.php" method="post">
+   ?><form action="admin.php" method="post" accept-charset="UTF-8">
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1"><?php
    ksort($settings);
    while(list($key, $val) = each($settings))
@@ -1571,7 +1571,7 @@ switch ($action)
    ?>
    </ul>
    <br />
-   <form action="admin.php" method="post"><div>
+   <form action="admin.php" method="post" accept-charset="UTF-8"><div>
    <?php
    for($x=0; $x<count($selected); $x++)
    {
@@ -1587,7 +1587,7 @@ switch ($action)
   if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><?php } ?>
   <p class="caution"><?php echo $lang['caution']; ?></p>
   <p><?php echo $lang_add['empty_forum_note']; ?></p>
-  <form action="admin.php" method="post"><div>
+  <form action="admin.php" method="post" accept-charset="UTF-8"><div>
   <b><?php echo $lang['password_marking']; ?></b><br /><input type="password" size="25" name="delete_all_postings_confirm_pw" /><br /><br />
   <input type="submit" name="delete_all_postings_confirmed" value="<?php echo $lang_add['empty_forum_sb']; ?>" />
   </div></form>
@@ -1598,7 +1598,7 @@ switch ($action)
   if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><?php } ?>
   <p class="caution"><?php echo $lang['caution']; ?></p>
   <p><?php echo $lang_add['delete_db_note']; ?></p>
-  <form action="admin.php" method="post"><div>
+  <form action="admin.php" method="post" accept-charset="UTF-8"><div>
   <input type="radio" name="delete_modus" value="tables" checked="checked" /> <?php echo $lang_add['delete_tables']; ?><br />
   <input type="radio" name="delete_modus" value="db" /> <?php echo str_replace("[database]",$db_settings['db'],$lang_add['delete_db']); ?><br /><br />
   <b><?php echo $lang['password_marking']; ?></b><br /><input type="password" size="25" name="delete_db_confirm_pw" /><br /><br />
@@ -1611,7 +1611,7 @@ switch ($action)
   $lang_add['del_marked_note'] = str_replace("[marked_symbol]", "<img src=\"img/marked.gif\" alt=\"[x]\" width=\"9\" height=\"9\" />", $lang_add['del_marked_note']);
   ?><p class="caution"><?php echo $lang['caution']; ?></p>
   <p><?php echo $lang_add['del_marked_note']; ?></p>
-  <form action="admin.php" method="post"><div>
+  <form action="admin.php" method="post" accept-charset="UTF-8"><div>
   <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
   <input type="submit" name="delete_marked_threads_confirmed" value="<?php echo $lang_add['del_marked_sb']; ?>" />
   </div></form>
@@ -1620,7 +1620,7 @@ switch ($action)
   break;
   case "unmark":
   ?><p><?php echo $lang_add['unmark_threads_note']; ?></p>
-  <form action="admin.php" method="post"><div>
+  <form action="admin.php" method="post" accept-charset="UTF-8"><div>
   <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
   <input type="submit" name="unmark_confirmed" value="<?php echo $lang['submit_button_ok']; ?>" />
   </div></form>
@@ -1629,7 +1629,7 @@ switch ($action)
   break;
   case "invert_markings":
   ?><p><?php echo $lang_add['invert_markings_note']; ?></p>
-  <form action="admin.php" method="post"><div>
+  <form action="admin.php" method="post" accept-charset="UTF-8"><div>
   <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
   <input type="submit" name="invert_markings_confirmed" value="<?php echo $lang['submit_button_ok']; ?>" />
   </div></form>
@@ -1637,7 +1637,7 @@ switch ($action)
   <?php
   break;
   case "mark_threads":
-   ?><form action="admin.php" method="post"><div style="display: inline;"><?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php }
+   ?><form action="admin.php" method="post" accept-charset="UTF-8"><div style="display: inline;"><?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php }
    $lang_add['mark_old_threads'] = str_replace("[number]", "<input type=\"text\" name=\"n1\" value=\"\" size=\"4\" />", $lang_add['mark_old_threads']);
    $lang_add['mark_old_threads_no_replies'] = str_replace("[number]", "<input type=\"text\" name=\"n2\" value=\"\" size=\"4\" />", $lang_add['mark_old_threads_no_replies']);
    ?><p><input type="radio" name="mark_threads" value="1" checked="checked" /> <?php echo $lang_add['mark_old_threads']; ?></p>
@@ -1648,7 +1648,7 @@ switch ($action)
   case "lock_marked_threads":
    $lang_add['lock_marked_conf'] = str_replace("[marked_symbol]", "<img src=\"img/marked.gif\" alt=\"[x]\" width=\"9\" height=\"9\" />", $lang_add['lock_marked_conf']);
    ?><p><?php echo $lang_add['lock_marked_conf']; ?></p>
-   <form action="admin.php" method="post"><div>
+   <form action="admin.php" method="post" accept-charset="UTF-8"><div>
    <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
    <input type="submit" name="lock_marked_threads_submitted" value="<?php echo $lang['submit_button_ok']; ?>" />
    </div></form><p>&nbsp;</p><?php
@@ -1656,7 +1656,7 @@ switch ($action)
   case "unlock_marked_threads":
    $lang_add['unlock_marked_conf'] = str_replace("[marked_symbol]", "<img src=\"img/marked.gif\" alt=\"[x]\" width=\"9\" height=\"9\" />", $lang_add['unlock_marked_conf']);
    ?><p><?php echo $lang_add['unlock_marked_conf']; ?></p>
-   <form action="admin.php" method="post"><div>
+   <form action="admin.php" method="post" accept-charset="UTF-8"><div>
    <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
    <input type="submit" name="unlock_marked_threads_submitted" value="<?php echo $lang['submit_button_ok']; ?>" />
    </div></form><p>&nbsp;</p><?php
@@ -1674,7 +1674,7 @@ switch ($action)
    }
   ?><h2><?php echo str_replace("[category]", htmlsc($category_name), $lang_add['del_cat_hl']); ?></h2>
   <p class="caution"><?php echo $lang['caution']; ?></p>
-  <form action="admin.php" method="post"><div style="display: inline;">
+  <form action="admin.php" method="post" accept-charset="UTF-8"><div style="display: inline;">
   <input type="hidden" name="category_id" value="<?php echo $category_id; ?>" />
   <?php if (count($categories) <= 1) { ?><input type="hidden" name="move_category" value="0" /><?php } ?>
   <p><input type="radio" name="delete_mode" value="complete" checked="checked" /> <?php echo $lang_add['del_cat_completely']; ?></p></td>
@@ -1684,7 +1684,7 @@ switch ($action)
   break;
   case "edit_category":
    if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul><br /></p><?php }
-   ?><form action="admin.php" method="post"><div style="display: inline;">
+   ?><form action="admin.php" method="post" accept-charset="UTF-8"><div style="display: inline;">
    <input type="hidden" name="id" value="<?php echo $id; ?>" />
    <b><?php echo $lang_add['edit_category']; ?></b><br />
    <input type="text" name="category" value="<?php echo htmlsc($category); ?>" size="25" /><br /><br />
@@ -1715,7 +1715,7 @@ switch ($action)
    ?><p class="caution"><?php echo $lang['caution']; ?></p>
    <p class="normal"><?php echo $lang_add['import_sql_note']; ?></p><?php
    if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><?php }
-   ?><form action="admin.php" method="post"><div>
+   ?><form action="admin.php" method="post" accept-charset="UTF-8"><div>
    <b><?php echo $lang_add['sql_dump']; ?></b><br />
    <textarea name="sql" cols="70" rows="15"><?php if(isset($sql)) echo htmlsc($sql); ?></textarea><br /><br />
    <p><b><?php echo $lang['password_marking']; ?></b><br />
@@ -1739,7 +1739,7 @@ switch ($action)
   break;
   case "clear_userdata":
    ?><p><?php echo $lang_add['clear_userdata_expl']; ?></p>
-   <form action="admin.php" method="post">
+   <form action="admin.php" method="post" accept-charset="UTF-8">
    <table border="0" cellpadding="5" cellspacing="0">
     <tr>
      <td style="vertical-align: top;"><input type="radio" name="clear_userdata" value="1" checked="checked" /></td>
@@ -1786,7 +1786,7 @@ switch ($action)
    $data = mysqli_fetch_assoc($result);
    $not_accepted_words = str_replace(',',', ',$data['list']);
    mysqli_free_result($result);
-   ?><form action="admin.php" method="post"><div>
+   ?><form action="admin.php" method="post" accept-charset="UTF-8"><div>
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="c"><b><?php echo $lang_add['banned_users']; ?></b><br /><span class="small"><?php echo $lang_add['banned_users_d']; ?></span></td>
@@ -1883,7 +1883,7 @@ switch ($action)
    else $smiley_count = 0;
    if($smiley_count > 0)
    {
-    ?><form action="admin.php" method="post"><div>
+    ?><form action="admin.php" method="post" accept-charset="UTF-8"><div>
     <table >
      <tr>
       <td><?php echo $lang_add['add_smiley_file']; ?></td>
@@ -1916,7 +1916,7 @@ switch ($action)
   break;
   case 'edit_smiley':
    if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><?php }
-   ?><form action="admin.php" method="post">
+   ?><form action="admin.php" method="post" accept-charset="UTF-8">
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="c"><b><?php echo $lang_add['edit_smilies_smiley']; ?></b></td>
@@ -1949,7 +1949,7 @@ switch ($action)
   break;
   case 'edit_user':
    if (isset($errors)) { ?><p><span class="caution"><?php echo $lang['error_headline']; ?></span><ul><?php foreach($errors as $error) { ?><li><?php echo $error; ?></li><?php } ?></ul></p><?php }
-   ?><form action="admin.php" method="post"><div>
+   ?><form action="admin.php" method="post" accept-charset="UTF-8"><div>
    <input type="hidden" name="edit_user_id" value="<?php echo $edit_user_id; ?>" />
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
     <tr>

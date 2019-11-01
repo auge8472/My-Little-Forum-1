@@ -111,7 +111,7 @@ $subnav_2 .= nav($page, $settings['topics_per_page'], $thread_count, $order, $de
 $categories = get_categories();
 if ($categories!=false && $categories != "not accessible")
  {
-  $subnav_2 .= '&nbsp;&nbsp;<form method="get" action="mix.php" title="'.$lang['choose_category_formtitle'].'"><div style="display: inline;"><select class="kat" size="1" name="category" onchange="this.form.submit();">';
+  $subnav_2 .= '&nbsp;&nbsp;<form method="get" action="mix.php" title="'.$lang['choose_category_formtitle'].'" accept-charset="UTF-8"><div style="display: inline;"><select class="kat" size="1" name="category" onchange="this.form.submit();">';
   if (isset($category) && $category==0) $subnav_2 .= '<option value="0" selected="selected">'.$lang['show_all_categories'].'</option>';
   else $subnav_2 .= '<option value="0">'.$lang['show_all_categories'].'</option>';
   while(list($key, $val) = each($categories))

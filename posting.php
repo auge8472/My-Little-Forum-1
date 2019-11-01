@@ -831,7 +831,7 @@ switch ($show)
      }
    }
    // Ende Vorschau
-  ?><form action="posting.php" method="post" id="entryform"><div style="margin-top: 10px;">
+  ?><form action="posting.php" method="post" id="entryform" accept-charset="UTF-8"><div style="margin-top: 10px;">
   <?php if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_posting']==1) { ?><input type="hidden" name="<?php echo session_name(); ?>" value="<?php echo session_id(); ?>" /><?php } ?>
   <input type="hidden" name="form" value="true" />
   <input type="hidden" name="id" value="<?php echo $id; ?>" />
@@ -1013,7 +1013,7 @@ switch ($show)
     <h2><?php echo $lang['delete_marking']; ?></h2>
     <p><?php echo $lang['delete_posting_sure']; if ($field["pid"]==0) echo "<br />".$lang['delete_whole_thread']; ?></p>
     <p><b><?php echo htmlsc($field["subject"]); ?></b>&nbsp;<?php echo $lang['thread_info']; ?></p>
-    <form action="posting.php" method="post"><div>
+    <form action="posting.php" method="post" accept-charset="UTF-8"><div>
     <input type="hidden" name="action" value="delete ok" />
     <input type="hidden" name="id" value="<?php echo $id; ?>" />
     <?php if (isset($view)) { ?><input type="hidden" name="view" value="<?php echo $view; ?>" /><?php } ?>
