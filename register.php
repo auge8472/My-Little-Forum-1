@@ -74,7 +74,7 @@ if(isset($_GET['id']) && isset($_GET['key']) && trim($_GET['key'])!='')
       while ($admin_array = mysqli_fetch_assoc($admin_result))
        {
         $ind_reg_emailbody = str_replace("[admin]", $admin_array['user_name'], $lang['new_user_notif_txt']);
-        $admin_mailto = $admin_array['user_name'] ." <". $admin_array['user_email'] .">";
+        $admin_mailto = encodeMailName($admin_array['user_name'], "\n") ." <". $admin_array['user_email'] .">";
         $sent = processEmail($admin_mailto, $lang['new_user_notif_sj'], $ind_reg_emailbody);
         if ($sent === true) {
           $sent = "ok";
@@ -191,7 +191,7 @@ if(isset($_POST['register_submit']))
      // send e-mail with activation key to new user:
      $lang['new_user_email_txt'] = str_replace("[name]", $new_user_name, $lang['new_user_email_txt']);
      $lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$new_user_id."&key=".$activate_code, $lang['new_user_email_txt']);
-     $new_user_mailto = $new_user_name ." <". $new_user_email .">";
+     $new_user_mailto = encodeMailName($new_user_name, "\n") ." <". $new_user_email .">";
      $sent = processEmail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt']);
      // Bestätigung anzeigen:
      $action = "registered";

@@ -187,7 +187,7 @@ switch ($action)
       $lang['pwf_activating_email_txt'] = str_replace("[name]", $field["user_name"], $lang['pwf_activating_email_txt']);
       $lang['pwf_activating_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['pwf_activating_email_txt']);
       $lang['pwf_activating_email_txt'] = str_replace("[activating_link]", $settings['forum_address'].basename($_SERVER['PHP_SELF'])."?activate=".$field["user_id"]."&code=".$pwf_code, $lang['pwf_activating_email_txt']);
-      $pwf_mailto = $field["user_name"] ." <". $field["user_email"] .">";
+      $pwf_mailto = encodeMailName($field["user_name"], "\n") ." <". $field["user_email"] .">";
       $sent = processEmail($pwf_mailto, $lang['pwf_activating_email_sj'], $lang['pwf_activating_email_txt']);
       if ($sent === true) {
         header("location: ".basename($_SERVER['PHP_SELF'])."?msg=mail_sent"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=mail_sent\">further...</a>");
@@ -222,7 +222,7 @@ switch ($action)
       $lang['new_pw_email_txt'] = str_replace("[name]", $field['user_name'], $lang['new_pw_email_txt']);
       $lang['new_pw_email_txt'] = str_replace("[password]", $new_user_pw, $lang['new_pw_email_txt']);
       $lang['new_pw_email_txt'] = str_replace("[login_link]", $settings['forum_address'].basename($_SERVER['PHP_SELF'])."?username=".urlencode($field['user_name'])."&userpw=".$new_user_pw, $lang['new_pw_email_txt']);
-      $new_pw_mailto = $field['user_name'] ." <". $field['user_email'] .">";
+      $new_pw_mailto = encodeMailName($field['user_name'], "\n") ." <". $field['user_email'] .">";
       $sent = processEmail($new_pw_mailto, $lang['new_pw_email_sj'], $lang['new_pw_email_txt']);
       if ($sent === true) {
         header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pw_sent"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pw_sent\">further...</a>");

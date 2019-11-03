@@ -153,7 +153,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
      {
       $mail_subject = (isset($_POST['subject']) and !empty(isset($_POST['subject'])) ? $_POST['subject'] : $lang['email_no_subject'];
       if (isset($forum_contact)) { $name = $settings['forum_name']; $email = $settings['forum_email']; }
-      $mailto = $name ." <". $email .">";
+      $mailto = encodeMailName($name, "\n") ." <". $email .">";
       $mailtext = $text ."\n\n".str_replace("[forum_address]", $settings['forum_address'], $lang['msg_add']);
       $sender_email = array("name" => $sender_name, "email" => $sender_email);
       $sent = processEmail($mailto, $mail_subject, $mailtext, $sender_email);
@@ -169,7 +169,7 @@ if (isset($id) || isset($uid) || isset($forum_contact))
        $lang['conf_email_txt'] = str_replace("[recipient_name]", $name, $lang['conf_email_txt']);
        $lang['conf_email_txt'] = str_replace("[subject]", $mail_subject, $lang['conf_email_txt']);
        $lang['conf_email_txt'] .= "\n\n". $text;
-       $conf_mailto = $sender_name ." <". $sender_email .">";
+       $conf_mailto = encodeMailName($sender_name, "\n") ." <". $sender_email .">";
        $sent = processEmail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt']);
        }
      }
