@@ -27,6 +27,7 @@ header('Content-Type: text/html; charset=UTF-8');
 #ini_set("session.use_trans_sid","0");
 session_start();
 
+if (!extension_loaded('mbstring')) die('The PHP-extension for multibyte support is mandatory. The script will not work without the extension.');
 include("db_settings.php");
 include("functions.php");
 
