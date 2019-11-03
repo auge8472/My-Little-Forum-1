@@ -249,7 +249,7 @@ if (isset($_POST['new_category']))
     $field = mysqli_fetch_assoc($category_result);
     mysqli_free_result($category_result);
 
-    if(strtolower($field["category"]) == strtolower($new_category)) $errors[] = $lang_add['category_already_exists'];
+    if(mb_strtolower($field["category"]) == mb_strtolower($new_category)) $errors[] = $lang_add['category_already_exists'];
 
     if(empty($errors))
      {
@@ -313,7 +313,7 @@ if(isset($_POST['edit_user_submit']))
   $name_result = mysqli_query($connid, "SELECT user_id, user_name FROM ". $db_settings['userdata_table'] ." WHERE user_name = '". mysqli_real_escape_string($connid, $edit_user_name) ."'") or die($lang['db_error']);
   $field = mysqli_fetch_assoc($name_result);
   mysqli_free_result($name_result);
-  if($edit_user_id != $field['user_id'] && strtolower($field["user_name"]) == strtolower($edit_user_name)) $errors[] = str_replace("[name]", htmlsc(stripslashes($edit_user_name)), $lang['error_name_reserved']);
+  if($edit_user_id != $field['user_id'] && mb_strtolower($field["user_name"]) == mb_strtolower($edit_user_name)) $errors[] = str_replace("[name]", htmlsc(stripslashes($edit_user_name)), $lang['error_name_reserved']);
   if(strlen($user_real_name) > $settings['name_maxlength']) $errors[] = $lang['user_real_name'] . " " .$lang['error_input_too_long'];
   if(strlen($user_hp) > $settings['hp_maxlength']) $errors[] = $lang['user_hp'] . " " .$lang['error_input_too_long'];
   if(strlen($user_place) > $settings['place_maxlength']) $errors[] = $lang['user_place'] . " " .$lang['error_input_too_long'];
@@ -786,7 +786,7 @@ if (isset($_POST['ar_username']))
     $field = mysqli_fetch_assoc($name_result);
     mysqli_free_result($name_result);
 
-    if (strtolower($field["user_name"]) == strtolower($ar_username) && $ar_username != "")
+    if (mb_strtolower($field["user_name"]) == mb_strtolower($ar_username) && $ar_username != "")
      {
       $lang['error_name_reserved'] = str_replace("[name]", htmlsc($ar_username), $lang['error_name_reserved']);
       $errors[] = $lang['error_name_reserved'];

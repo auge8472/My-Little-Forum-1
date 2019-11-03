@@ -121,7 +121,7 @@ if(isset($_POST['register_submit']))
     if(!$name_result) die($lang['db_error']);
     $field = mysqli_fetch_assoc($name_result);
     mysqli_free_result($name_result);
-    if (strtolower($field["user_name"]) == strtolower($new_user_name) && $new_user_name != "")
+    if (mb_strtolower($field["user_name"]) == mb_strtolower($new_user_name) && $new_user_name != "")
      {
       $lang['error_name_reserved'] = str_replace("[name]", htmlsc($new_user_name), $lang['error_name_reserved']);
       $errors[] = $lang['error_name_reserved'];
@@ -131,7 +131,7 @@ if(isset($_POST['register_submit']))
     if(!$email_result) die($lang['db_error']);
     $field = mysqli_fetch_assoc($email_result);
     mysqli_free_result($email_result);
-    if (strtolower($field["user_email"]) == strtolower($new_user_email) && $new_user_email != "")
+    if (mb_strtolower($field["user_email"]) == mb_strtolower($new_user_email) && $new_user_email != "")
      {
       $errors[] = str_replace("[e-mail]", htmlsc($new_user_email), $lang['error_email_reserved']);
      }

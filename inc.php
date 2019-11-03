@@ -76,8 +76,8 @@ if(isset($_SESSION[$settings['session_prefix'].'user_name']))
   mysqli_free_result($ban_result);
   if(trim($data['list']) != '')
    {
-    $banned_users_array = explode(',',strtolower(trim($data['list'])));
-    if(in_array(strtolower($_SESSION[$settings['session_prefix'].'user_name']),$banned_users_array) && $_SESSION[$settings['session_prefix'].'user_type']!='admin')
+    $banned_users_array = explode(',', mb_strtolower(trim($data['list'])));
+    if(in_array(mb_strtolower($_SESSION[$settings['session_prefix'].'user_name']),$banned_users_array) && $_SESSION[$settings['session_prefix'].'user_type']!='admin')
      {
       session_destroy();
       setcookie("auto_login","",0);
