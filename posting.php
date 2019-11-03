@@ -481,7 +481,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                  $emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
                  $emailbody = str_replace(htmlsc($settings['quote_symbol']), ">", $emailbody);
                  $emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
-                 $an = $parent["name"] ." <". $parent["email"] .">";
+                 $an = encodeMailName($parent["name"], "\n") ." <". $parent["email"] .">";
                  $sent = processEmail($an, $lang['email_subject'], $emailbody);
                  if ($sent === true) {
                    $sent = "ok";
@@ -507,7 +507,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                while ($admin_array = mysqli_fetch_assoc($en_result))
                {
                 $ind_emailbody = str_replace("[admin]", $admin_array['user_name'], $emailbody);
-                $an = $admin_array['user_name'] ." <". $admin_array['user_email'] .">";
+                $an = encodeMailName($admin_array['user_name'], "\n") ." <". $admin_array['user_email'] .">";
                 $sent = processEmail($an, str_replace("[subject]", $subject, $lang['admin_email_subject']), $ind_emailbody);
                 if ($sent === true) {
                   $sent2 = "ok";

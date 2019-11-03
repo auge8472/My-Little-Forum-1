@@ -114,7 +114,7 @@ if(isset($_POST['change_email_submit']))
       // send mail with activation key:
       $lang['new_user_email_txt'] = str_replace("[name]", $field['user_name'], $lang['change_email_txt']);
       $lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$field['user_id']."&key=".$activate_code, $lang['new_user_email_txt']);
-      $new_user_mailto = $field['user_name']." <".$new_email.">";
+      $new_user_mailto = encodeMailName($field['user_name'], "\n") ." <". $new_email .">";
       $sent = processEmail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt']);
       if ($sent === false) {
         $errors[] = $lang['error_meilserv'];
@@ -267,7 +267,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
       $mail_subject = $_POST['pm_subject'];
       $mail_text = $_POST['pm_text'];
       $mail_text .= "\n\n".$lang['pers_msg_mail_add'];
-      $conf_mailto = $recipient['user_name'] ." <". $recipient['user_email'] .">";
+      $conf_mailto = encodeMailName($recipient['user_name'], "\n") ." <". $recipient['user_email'] .">";
       $sender_email = array("name" => $sender['user_name'], "email" => $sender['user_email']);
       $sent = processEmail($conf_mailto, $mail_subject, $mail_text, $sender_email);
       if ($sent === false) {
@@ -281,7 +281,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
        $lang['conf_email_txt'] = str_replace("[recipient_name]", $recipient['user_name'], $lang['conf_email_txt']);
        $lang['conf_email_txt'] = str_replace("[subject]", $_POST['pm_subject'], $lang['conf_email_txt']);
        $lang['conf_email_txt'] .= "\n\n". $_POST['pm_text'];
-       $conf_mailto = $sender['user_name'] ." <". $sender['user_email'] .">";
+       $conf_mailto = encodeMailName($sender['user_name'], "\n") ." <". $sender['user_email'] .">";
        $sent = processEmail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt']);
       }
 

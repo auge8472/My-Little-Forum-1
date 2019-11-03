@@ -821,7 +821,7 @@ if (isset($_POST['ar_username']))
       $lang['new_user_email_txt_a'] = str_replace("[name]", $ar_username, $lang['new_user_email_txt_a']);
       $lang['new_user_email_txt_a'] = str_replace("[password]", $ar_pw, $lang['new_user_email_txt_a']);
       $lang['new_user_email_txt_a'] = str_replace("[login_link]", $settings['forum_address']."login.php?username=".urlencode($ar_username)."&userpw=".$ar_pw, $lang['new_user_email_txt_a']);
-      $new_user_mailto = $ar_username ." <". $ar_email .">";
+      $new_user_mailto = encodeMailName($ar_username, "\n") ." <". $ar_email .">";
       $sent = processEmail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt_a']);
       if ($sent === false) {
         $send_error = '&send_error=true'
