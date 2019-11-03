@@ -681,7 +681,7 @@ if(empty($installed))
    {
     ?><p><?php echo $lang_add['language_file_inst']; ?></p>
     <form action="install.php" method="post" accept-charset="UTF-8">
-    <p><select name="language" size="1"><?php $handle=opendir('./lang/'); while ($file = readdir($handle)) { if (strrchr($file, ".")==".php" && strrchr($file, "_")!="_add.php") { ?><option value="<?php echo $file; ?>"<?php if ($settings['language_file'] ==$file) echo ' selected="selected"'; ?>><?php echo ucfirst(str_replace(".php","",$file)); ?></option><?php } } closedir($handle); ?></select>
+    <p><select name="language" size="1"><?php $handle=opendir('./lang/'); while ($file = readdir($handle)) { if (mb_strrchr($file, ".")==".php" && mb_strrchr($file, "_")!="_add.php") { ?><option value="<?php echo $file; ?>"<?php if ($settings['language_file'] ==$file) echo ' selected="selected"'; ?>><?php echo ucfirst(str_replace(".php","",$file)); ?></option><?php } } closedir($handle); ?></select>
     <input type="submit" value="<?php echo $lang['submit_button_ok']; ?>"></p>
     </form><?php
    }

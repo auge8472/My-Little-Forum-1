@@ -1407,7 +1407,7 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['language_file']; ?></b><br /><span class="small"><?php echo $lang_add['language_file_d']; ?></span></td>
-     <td class="d"><select name="language_file" size="1"><?php $handle=opendir('./lang/'); while ($file = readdir($handle)) { if (strrchr($file, ".")==".php" && strrchr($file, "_")!="_add.php") { ?><option value="<?php echo $file; ?>"<?php if ($settings['language_file'] ==$file) echo " selected=\"selected\""; ?>><?php echo ucfirst(str_replace(".php","",$file)); ?></option><?php } } closedir($handle); ?></select></td>
+     <td class="d"><select name="language_file" size="1"><?php $handle=opendir('./lang/'); while ($file = readdir($handle)) { if (mb_strrchr($file, ".")==".php" && mb_strrchr($file, "_")!="_add.php") { ?><option value="<?php echo $file; ?>"<?php if ($settings['language_file'] ==$file) echo " selected=\"selected\""; ?>><?php echo ucfirst(str_replace(".php","",$file)); ?></option><?php } } closedir($handle); ?></select></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['topics_per_page']; ?></b><br /><span class="small"><?php echo $lang_add['topics_per_page_d']; ?></span></td>
