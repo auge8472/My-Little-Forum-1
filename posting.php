@@ -866,7 +866,7 @@ switch ($show)
      <?php
      if (empty($id) || $id == 0 || $action=="edit" && isset($pid) && $pid == 0)
       {
-       while(list($key, $val) = each($categories))
+       foreach ($categories as $key => $val)
         {
          if($key!=0)
           {

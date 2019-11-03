@@ -212,7 +212,7 @@ if ($categories!=false)
   ?><select size="1" name="category"><?php
   if (isset($category) && $category==0) { ?><option value="0" selected="selected"><?php echo $lang['show_all_categories']; ?></option><?php }
   else { ?><option value="0"><?php echo $lang['show_all_categories']; ?></option><?php }
-  while(list($key, $val) = each($categories))
+  foreach ($categories as $key => $val)
    {
     if($key!=0)
      {

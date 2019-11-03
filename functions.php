@@ -88,7 +88,7 @@ function get_category_ids($categories)
  {
   if($categories!=false)
    {
-    while(list($key) = each($categories))
+    foreach ($categories as $key => $val)
      {
       $category_ids[] = $key;
      }
