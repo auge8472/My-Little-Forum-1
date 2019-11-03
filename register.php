@@ -109,11 +109,11 @@ if(isset($_POST['register_submit']))
     // password and repeatet Password equal?
     if($reg_pw != $reg_pw_conf) $errors[] = $lang['reg_pw_conf_wrong'];
     // name too long?
-    if (strlen($new_user_name) > $settings['name_maxlength']) $errors[] = $lang['name_marking'] . " " .$lang['error_input_too_long'];
+    if (mb_strlen($new_user_name) > $settings['name_maxlength']) $errors[] = $lang['name_marking'] . " " .$lang['error_input_too_long'];
     // e-mail address too long?
-    if (strlen($new_user_email) > $settings['email_maxlength']) $errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
+    if (mb_strlen($new_user_email) > $settings['email_maxlength']) $errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
     // word in username too long?
-    $text_arr = explode(" ",$new_user_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
+    $text_arr = explode(" ",$new_user_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = mb_strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
     $error_nwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
     $errors[] = $error_nwtl; } }
     // look if name already exists:
