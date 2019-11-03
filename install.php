@@ -105,7 +105,7 @@ array('flower.gif', ':flower:'),
 );
 function htmlsc($string) {
 	global $lang;
-	return htmlspecialchars($string, ENT_QUOTES, "ISO-8859-1", false);
+	return htmlspecialchars($string, ENT_QUOTES, $lang['charset'], false);
 }
 
 // update functions:
