@@ -114,7 +114,7 @@ if(isset($_POST['register_submit']))
     if (strlen($new_user_email) > $settings['email_maxlength']) $errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
     // word in username too long?
     $text_arr = explode(" ",$new_user_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-    $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
+    $error_nwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
     $errors[] = $error_nwtl; } }
     // look if name already exists:
     $name_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_name = '". mysqli_real_escape_string($connid, $new_user_name) ."' LIMIT 1");

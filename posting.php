@@ -321,7 +321,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
       #if (empty($hide_email)) $hide_email = 0;
       if (empty($show_signature)) $show_signature = 0;
       if (empty($user_id)) $user_id = 0;
-      #if (isset($hp) && substr($hp,0,7) == "http://") $hp = substr($hp,7);
+      #if (isset($hp) && mb_substr($hp, 0, 7) == "http://") $hp = mb_substr($hp, 7);
       if (empty($email_notify)) $email_notify = 0;
       if (empty($p_category)) $p_category = 0;
       if (isset($name)) $name = trim($name);
@@ -402,20 +402,20 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
           $errors[] = $lang['error_text_too_long'];
          }
         $text_arr = explode(" ",$name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-        $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
+        $error_nwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
         $errors[] = $error_nwtl; } }
         $text_arr = explode(" ",$place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
-        $error_pwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
+        $error_pwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
         $errors[] = $error_pwtl; } }
         $text_arr = explode(" ",$subject); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['subject_word_maxlength']) {
-        $error_swtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['subject_word_maxlength']))."...", $lang['error_subject_word_too_long']);
+        $error_swtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['subject_word_maxlength']))."...", $lang['error_subject_word_too_long']);
         $errors[] = $error_swtl; } }
         $text_arr = str_replace("\n", " ", $text);
         if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); $text_arr = preg_replace("#\[url\](.+?)\[/url\]#is", "", $text_arr); $text_arr = preg_replace("#\[url=(.+?)\](.+?)\[/url\]#is", "\\2", $text_arr); }
         if ($settings['bbcode_img'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
         if ($settings['autolink'] == 1) $text_arr = text_check_link($text_arr);
         $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-        $error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['error_text_word_too_long']);
+        $error_twtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['text_word_maxlength']))."...", $lang['error_text_word_too_long']);
         $errors[] = $error_twtl; } }
 
         // CAPTCHA check:
@@ -721,7 +721,7 @@ switch ($show)
          <?php if (($pr_email != "" && $hide_email != 1) or $pr_hp != "") { echo "<br />"; }
          if ($pr_hp != "")
           {
-           if (substr($pr_hp,0,7) != "http://" && substr($pr_hp,0,8) != "https://" && substr($pr_hp,0,6) != "ftp://" && substr($pr_hp,0,9) != "gopher://" && substr($pr_hp,0,7) != "news://") $pr_hp = "http://".$pr_hp;
+           if (mb_substr($pr_hp, 0, 7) != "http://" && mb_substr($pr_hp, 0, 8) != "https://" && mb_substr($pr_hp, 0, 6) != "ftp://" && mb_substr($pr_hp, 0, 9) != "gopher://" && mb_substr($pr_hp, 0, 7) != "news://") $pr_hp = "http://".$pr_hp;
            echo "<a href=\"" . $pr_hp . "\"><img src=\"img/homepage.gif\" alt=\"".$lang['homepage_alt']."\" width=\"13\" height=\"13\" /></a>";
           }
          if (($pr_email != ""  && $hide_email != 1) && $pr_hp != "") { echo "&nbsp;"; }
@@ -771,7 +771,7 @@ switch ($show)
           <?php
           $email_hp = ""; $place_wc = ""; $place_c = "";
           if (($pr_email != "" && $hide_email != 1) or $pr_hp != "") $email_hp = " ";
-          if ($pr_hp != "") { if (substr($pr_hp,0,7) != "http://" && substr($pr_hp,0,8) != "https://" && substr($pr_hp,0,6) != "ftp://" && substr($pr_hp,0,9) != "gopher://" && substr($pr_hp,0,7) != "news://") $pr_hp = "http://".$pr_hp; $email_hp .= "<a href=\"" . $pr_hp . "\" title=\"".htmlsc($pr_hp)."\"><img src=\"img/homepage.gif\" alt=\"".$lang['homepage_alt']."\" width=\"13\" height=\"13\" /></a>"; }
+          if ($pr_hp != "") { if (mb_substr($pr_hp, 0, 7) != "http://" && mb_substr($pr_hp, 0, 8) != "https://" && mb_substr($pr_hp, 0, 6) != "ftp://" && mb_substr($pr_hp, 0, 9) != "gopher://" && mb_substr($pr_hp, 0, 7) != "news://") $pr_hp = "http://".$pr_hp; $email_hp .= "<a href=\"" . $pr_hp . "\" title=\"".htmlsc($pr_hp)."\"><img src=\"img/homepage.gif\" alt=\"".$lang['homepage_alt']."\" width=\"13\" height=\"13\" /></a>"; }
           if ($pr_email != ""  && $hide_email != 1 && $pr_hp != "") { $email_hp .= " "; }
           if ($pr_email != "" && $hide_email != 1) { $email_hp .= '<a href="contact.php"><img src="img/email.gif" alt="'.$lang['email_alt'].'" title="'.str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']).'" width="13" height="10" /></a>'; }
           if ($pr_place != "") { $place_c = htmlsc($pr_place) . ", "; $place_wc = htmlsc($pr_place); }

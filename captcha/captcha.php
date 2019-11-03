@@ -13,7 +13,7 @@ class captcha
     $code='';
     for($i=0;$i<5;$i++)
      {
-      $code.=substr($letters,mt_rand(0,strlen($letters)-1),1);
+      $code .= mb_substr($letters, mt_rand(0, strlen($letters) - 1), 1);
      }
     return $code;
    }
@@ -50,7 +50,7 @@ class captcha
     $code_length = strlen($code);
       for($i=0;$i<$code_length;$i++)
        {
-        $code_chars_array[] = substr($code,$i,1);
+        $code_chars_array[] = mb_substr($code, $i, 1);
        }
 
     // if background images are available, craete image from one of them:

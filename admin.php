@@ -42,13 +42,13 @@ function split_sql($sql)
   foreach($lines as $line)
    {
     $line = trim($line);
-    if($line != '' && substr($line,0,1)!='#') $cleared_lines[] = $line;
+    if($line != '' && mb_substr($line, 0, 1)!='#') $cleared_lines[] = $line;
    }
   unset($lines);
   $lines2 = $cleared_lines;
   foreach($lines2 as $line)
    {
-    if(substr($line, -1)==';') $lines[] = substr($line,0,-1);
+    if (mb_substr($line, -1) == ';') $lines[] = mb_substr($line, 0, -1);
    }
   return $lines;
  }
@@ -331,22 +331,22 @@ if(isset($_POST['edit_user_submit']))
    }
 
   $text_arr = explode(" ",$user_real_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-  $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
+  $error_nwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
   $errors[] = $error_nwtl; } }
   $text_arr = explode(" ",$user_place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
-  $error_pwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
+  $error_pwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
   $errors[] = $error_pwtl; } }
   $text_arr = str_replace("\n", " ", $profile);
   if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
   if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
   $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-  $error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['err_prof_word_too_long']);
+  $error_twtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['text_word_maxlength']))."...", $lang['err_prof_word_too_long']);
   $errors[] = $error_twtl; } }
   $text_arr = str_replace("\n", " ", $signature);
   if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
   if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
   $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-  $error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['err_sig_word_too_long']);
+  $error_twtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['text_word_maxlength']))."...", $lang['err_sig_word_too_long']);
   $errors[] = $error_twtl; } }
   // end of checking
 
@@ -778,7 +778,7 @@ if (isset($_POST['ar_username']))
     $errors[] = $lang['name_marking'] . " " .$lang['error_input_too_long'];
     // Ã¼berprÃ¼fen, ob ein Wort im Username zu lang ist:
     $text_arr = explode(" ",$ar_username); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-    $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
+    $error_nwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
     $errors[] = $error_nwtl; } }
     // schauen, ob der Name schon vergeben ist:
     $name_result = mysqli_query($connid, "SELECT user_name FROM ". $db_settings['userdata_table'] ." WHERE user_name = '". mysqli_real_escape_string($connid, $ar_username) ."'");
@@ -808,7 +808,7 @@ if (isset($_POST['ar_username']))
       $letters="abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789";
       mt_srand((double)microtime()*1000000);
       $ar_pw="";
-      for($i=0;$i<8;$i++) { $ar_pw.=substr($letters,mt_rand(0,strlen($letters)-1),1); }
+      for($i=0;$i<8;$i++) { $ar_pw .= mb_substr($letters, mt_rand(0, strlen($letters) - 1), 1); }
      }
     $encoded_ar_pw = md5($ar_pw);
     $new_user_result = mysqli_query($connid, "INSERT INTO ". $db_settings['userdata_table'] ." (user_type, user_name, user_pw, user_email, hide_email, profile, last_login, last_logout, user_ip, registered, user_view, personal_messages) VALUES ('user','". mysqli_real_escape_string($connid, $ar_username) ."','". mysqli_real_escape_string($connid, $encoded_ar_pw) ."','". mysqli_real_escape_string($connid, $ar_email) ."','1','',NOW(),NOW(),'". mysqli_real_escape_string($connid, $_SERVER["REMOTE_ADDR"]) ."',NOW(),'". mysqli_real_escape_string($connid, $settings['standard']) ."',1)");
@@ -842,7 +842,7 @@ if (isset($_POST['rename_category_submitted']) && trim($_POST['new_category']) !
   flock($fp, 2);
   for ($row = 0; $row < $row_count; $row++)
    {
-    if (substr(trim($data[$row]),1,10) == "categories")
+    if (mb_substr(trim($data[$row]), 1, 10) == "categories")
      { fwrite($fp, trim(str_replace($_POST['old_category'],$_POST['new_category'],$data[$row]))."\n"); }
     else { fwrite($fp, trim($data[$row])."\n"); }
    }

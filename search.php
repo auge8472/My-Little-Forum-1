@@ -106,7 +106,7 @@ include("inc.php");
 
  unset($entrydata);
 
- if (substr($search, 1, 1) == "\"") $ao="phrase";
+ if (mb_substr($search, 1, 1) == "\"") $ao="phrase";
  $search = str_replace("\"", "", $search);
  $search = trim($search);
  $search = mysqli_real_escape_string($connid, $search);
