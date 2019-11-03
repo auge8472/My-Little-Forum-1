@@ -443,4 +443,15 @@ function htmlsc($string) {
 	return htmlspecialchars($string, ENT_QUOTES, $lang['charset'], false);
 }
 
+/**
+ * unifies all possible line breaks into unixoid break
+ *
+ * @param string $string
+ * @param string $to
+ * @return string $string
+ */
+function convertLineBreaks($string, $to = "\n") {
+	return preg_replace("/\015\012|\015|\012/", $to, $string);
+} # End: convertLineBreaks
+
 ?>
