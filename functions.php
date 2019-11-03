@@ -471,6 +471,59 @@ function encodeMailName($name, $lf = "\r\n") {
 } # End: encodeMailName
 
 /**
+ * Encode string to quoted-printable.
+ * Original written by Andy Prevost http://phpmailer.sourceforge.net
+ * and distributed under the Lesser General Public License (LGPL) http://www.gnu.org/copyleft/lesser.html
+ *
+ * @return string
+ */
+function myQuotedPrintableEncode($input, $line_max = 76, $space_conv = false ) {
+	$hex = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F');
+	$lines = preg_split('/(?:\r\n|\r|\n)/', $input);
+	$eol = "\n";
+	$escape = '=';
+	$output = '';
+	foreach ($lines as $line) {
+		$linlen = strlen($line);
+		$newline = '';
+		for ($i = 0; $i < $linlen; $i++) {
+			$c = substr($line, $i, 1);
+			$dec = ord( $c );
+			# convert first point in the line into =2E
+			if (($i == 0) && ($dec == 46)) {
+				$c = '=2E';
+			}
+			if ($dec == 32) {
+				# convert space at eol only
+				if ($i == ($linlen-1)) {
+					$c = '=20';
+				} else if ($space_conv) {
+					$c = '=20';
+				}
+			} else if (($dec == 61) || ($dec < 32) || ($dec > 126)) {
+				# always encode "\t", which is *not* required
+				$h2 = floor($dec/16);
+				$h1 = floor($dec%16);
+				$c = $escape . $hex[$h2] . $hex[$h1];
+			}
+			# CRLF is not counted
+			if ((strlen($newline) + strlen($c)) >= $line_max) {
+				# soft line break; " =\r\n" is okay
+				$output .= $newline . $escape . $eol;
+				$newline = '';
+				# check if newline first character will be point or not
+				if ($dec == 46) {
+					$c = '=2E';
+				}
+			}
+			$newline .= $c;
+		} # end of for
+		$output .= $newline . $eol;
+	} # end of while
+	return $output;
+} # End: myQuotedPrintableEncode
+
+/**
  * formats and sends an email
  *
  * @param string $to
