@@ -31,6 +31,8 @@ if (!extension_loaded('mbstring')) die('The PHP-extension for multibyte support 
 include("db_settings.php");
 include("functions.php");
 
+mb_internal_encoding('UTF-8');
+
 # for details see: http://de.php.net/manual/en/security.magicquotes.disabling.php
 if (get_magic_quotes_gpc()) {
 	$_POST = array_map('stripslashes_deep', $_POST);
