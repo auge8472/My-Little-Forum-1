@@ -538,10 +538,9 @@ function processEmail($to, $subject, $message, $from = '') {
 	$to = convertLineBreaks($to, '');
 	$subject = mb_encode_mimeheader(convertLineBreaks($subject, ''), 'UTF-8', "Q", $mhs);
 	$message = myQuotedPrintableEncode($message);
-	if ($from == '') {
-		$headers = "From: ". encodeMailName($settings['forum_name'], $mhs) ." <". $settings['forum_email'] .">". $mhs;
-	} else {
-		$headers  = "From: ". convertLineBreaks($from, '') . $mhs;
+	$headers = "From: ". encodeMailName($settings['forum_name'], $mhs) ." <". $settings['forum_email'] .">". $mhs;
+	if ($from !== '') {
+		$headers = "Reply-To: ". encodeMailName($from['name'], $mhs) ." <". $from['email'] .">". $mhs;
 	}
 	$headers .= "MIME-Version: 1.0". $mhs;
 	$headers .= "X-Mailer: Php/". phpversion() . $mhs;
