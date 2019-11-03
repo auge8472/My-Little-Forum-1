@@ -366,7 +366,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
           if(!$result) die($lang['db_error']);
           $field = mysqli_fetch_assoc($result);
           mysqli_free_result($result);
-          if (strtolower($field["user_name"]) == strtolower($name) && $name != "")
+          if (mb_strtolower($field["user_name"]) == mb_strtolower($name) && $name != "")
            {
             $lang['error_name_reserved'] = str_replace("[name]", htmlsc($name), $lang['error_name_reserved']);
             $errors[] = $lang['error_name_reserved'];

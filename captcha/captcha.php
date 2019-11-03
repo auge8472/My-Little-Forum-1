@@ -3,7 +3,7 @@ class captcha
  {
   function check_captcha($code,$entered_code)
    {
-    if(strtolower($entered_code) == strtolower($code)) return TRUE; else return FALSE;
+    if(mb_strtolower($entered_code) == mb_strtolower($code)) return TRUE; else return FALSE;
    }
 
   function generate_code()
