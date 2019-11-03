@@ -470,4 +470,44 @@ function encodeMailName($name, $lf = "\r\n") {
 	}
 } # End: encodeMailName
 
+/**
+ * formats and sends an email
+ *
+ * @param string $to
+ * @param string $subject
+ * @param string $message
+ * @param string $from
+ * @return bool
+ */
+function processEmail($to, $subject, $message, $from = '') {
+	global $settings;
+	$mhs = "\n";
+	$to = convertLineBreaks($to, '');
+	$subject = mb_encode_mimeheader(convertLineBreaks($subject, ''), 'UTF-8', "Q", $mhs);
+	$message = myQuotedPrintableEncode($message);
+	if ($from == '') {
+		$headers = "From: ". encodeMailName($settings['forum_name'], $mhs) ." <". $settings['forum_email'] .">". $mhs;
+	} else {
+		$headers  = "From: ". convertLineBreaks($from, '') . $mhs;
+	}
+	$headers .= "MIME-Version: 1.0". $mhs;
+	$headers .= "X-Mailer: Php/". phpversion() . $mhs;
+	$headers .= "X-Sender-IP: ". $_SERVER['REMOTE_ADDR'] . $mhs;
+	$headers .= "Content-Type: text/plain; charset=UTF-8; format=flowed". $mhs;
+	$headers .= "Content-Transfer-Encoding: quoted-printable";
+	if ($settings['mail_parameter']!='') {
+		if (@mail($to, $subject, $message, $headers, $settings['mail_parameter'])) {
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		if (@mail($to, $subject, $message, $headers)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+} # End: processEmail
+
 ?>
