@@ -818,23 +818,14 @@ if (isset($_POST['ar_username']))
     $send_error='';
     if(isset($ar_send_userdata))
      {
-      $ip = $_SERVER["REMOTE_ADDR"];
       $lang['new_user_email_txt_a'] = str_replace("[name]", $ar_username, $lang['new_user_email_txt_a']);
       $lang['new_user_email_txt_a'] = str_replace("[password]", $ar_pw, $lang['new_user_email_txt_a']);
       $lang['new_user_email_txt_a'] = str_replace("[login_link]", $settings['forum_address']."login.php?username=".urlencode($ar_username)."&userpw=".$ar_pw, $lang['new_user_email_txt_a']);
-      $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
-      $header .= "X-Mailer: Php/" . phpversion(). "\n";
-      $header .= "X-Sender-ip: ".$_SERVER["REMOTE_ADDR"]."\n";
-      $header .= "Content-Type: text/plain";
-      $new_user_mailto = $ar_username." <".$ar_email.">";
-      if($settings['mail_parameter']!='')
-       {
-        if(!@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt_a'], $header, $settings['mail_parameter'])) $send_error = '&send_error=true';
-       }
-      else
-       {
-        if(!@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt_a'], $header)) $send_error = '&send_error=true';
-       }
+      $new_user_mailto = $ar_username ." <". $ar_email .">";
+      $sent = processEmail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt_a']);
+      if ($sent === false) {
+        $send_error = '&send_error=true'
+      }
      }
 
     header("location: admin.php?action=user&new_user=".urlencode($ar_username).$send_error);

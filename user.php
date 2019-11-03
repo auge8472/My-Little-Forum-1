@@ -112,23 +112,13 @@ if(isset($_POST['change_email_submit']))
      {
       $activate_code = md5(uniqid(rand()));
       // send mail with activation key:
-      $ip = $_SERVER["REMOTE_ADDR"];
       $lang['new_user_email_txt'] = str_replace("[name]", $field['user_name'], $lang['change_email_txt']);
-      #$lang['new_user_email_txt'] = str_replace("[password]", $new_user_pw, $lang['new_user_email_txt']);
       $lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$field['user_id']."&key=".$activate_code, $lang['new_user_email_txt']);
-      $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
-      $header .= "X-Mailer: Php/" . phpversion(). "\n";
-      $header .= "X-Sender-ip: $ip\n";
-      $header .= "Content-Type: text/plain";
       $new_user_mailto = $field['user_name']." <".$new_email.">";
-      if($settings['mail_parameter']!='')
-       {
-        @mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header, $settings['mail_parameter']) or $errors[] = $lang['error_meilserv'];
-       }
-      else
-       {
-        @mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header) or $errors[] = $lang['error_meilserv'];
-       }
+      $sent = processEmail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt']);
+      if ($sent === false) {
+        $errors[] = $lang['error_meilserv'];
+      }
       if(empty($errors))
        {
         @mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_email='". mysqli_real_escape_string($connid, $new_email) ."', last_login=last_login, registered=registered, activate_code = '". mysqli_real_escape_string($connid, $activate_code) ."' WHERE user_id=". intval($user_id)) or die($lang['db_error']);
@@ -274,23 +264,15 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     if (empty($errors))
      {
       $lang['pers_msg_mail_add'] = str_replace("[forum_address]", $settings['forum_address'], $lang['pers_msg_mail_add']);
-      $ip = $_SERVER["REMOTE_ADDR"];
       $mail_subject = $_POST['pm_subject'];
       $mail_text = $_POST['pm_text'];
       $mail_text .= "\n\n".$lang['pers_msg_mail_add'];
-      $header= "From: ".$sender['user_name']." <".$sender['user_email'].">\n";
-      $header .= "Reply-To: ".$sender['user_name']." <".$sender['user_email'].">\n";
-      $header .= "X-Mailer: PHP/" . phpversion(). "\n";
-      $header .= "X-Sender-IP: $ip\n";
-      $header .= "Content-Type: text/plain";
-      if($settings['mail_parameter']!='')
-       {
-        if(!@mail($recipient['user_name']." <".$recipient['user_email'].">", $mail_subject, $mail_text, $header, $settings['mail_parameter'])) { $errors[] = $lang['error_meilserv']; }
-       }
-      else
-       {
-        if(!@mail($recipient['user_name']." <".$recipient['user_email'].">", $mail_subject, $mail_text, $header)) { $errors[] = $lang['error_meilserv']; }
-       }
+      $conf_mailto = $recipient['user_name'] ." <". $recipient['user_email'] .">";
+      $sender_email = array("name" => $sender['user_name'], "email" => $sender['user_email']);
+      $sent = processEmail($conf_mailto, $mail_subject, $mail_text, $sender_email);
+      if ($sent === false) {
+        $errors[] = $lang['error_meilserv'];
+      }
 
       if(empty($errors))
       {
@@ -299,20 +281,8 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
        $lang['conf_email_txt'] = str_replace("[recipient_name]", $recipient['user_name'], $lang['conf_email_txt']);
        $lang['conf_email_txt'] = str_replace("[subject]", $_POST['pm_subject'], $lang['conf_email_txt']);
        $lang['conf_email_txt'] .= "\n\n". $_POST['pm_text'];
-       $conf_mailto = $sender['user_name']." <".$sender['user_email'].">";
-       $ip = $_SERVER["REMOTE_ADDR"];
-       $conf_header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
-       $conf_header .= "X-Mailer: PHP/" . phpversion(). "\n";
-       $conf_header .= "X-Sender-IP: $ip\n";
-       $conf_header .= "Content-Type: text/plain";
-       if($settings['mail_parameter']!='')
-        {
-         @mail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt'], $conf_header, $settings['mail_parameter']);
-        }
-       else
-        {
-         @mail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt'], $conf_header);
-        }
+       $conf_mailto = $sender['user_name'] ." <". $sender['user_email'] .">";
+       $sent = processEmail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt']);
       }
 
       if (empty($errors))

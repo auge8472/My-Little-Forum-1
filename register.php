@@ -65,31 +65,21 @@ if(isset($_GET['id']) && isset($_GET['key']) && trim($_GET['key'])!='')
 
       // E-Mail-Benachrichtigung an Admins und Moderatoren:
       // E-Mail erstellen:
-      $ip = $_SERVER["REMOTE_ADDR"];
       $lang['new_user_notif_txt'] = str_replace("[name]", $data['user_name'], $lang['new_user_notif_txt']);
       $lang['new_user_notif_txt'] = str_replace("[email]", $data['user_email'], $lang['new_user_notif_txt']);
       $lang['new_user_notif_txt'] = str_replace("[user_link]", $settings['forum_address']."user.php?id=".$user_id, $lang['new_user_notif_txt']);
-      $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
-      $header .= "X-Mailer: Php/" . phpversion(). "\n";
-      $header .= "X-Sender-ip: $ip\n";
-      $header .= "Content-Type: text/plain";
       // Schauen, wer eine E-Mail-Benachrichtigung will:
-      $admin_result=mysqli_query($connid, "SELECT user_name, user_email FROM ". $db_settings['userdata_table'] ." WHERE new_user_notify=1");
-      if(!$admin_result) die($lang['db_error']);
+      $admin_result = mysqli_query($connid, "SELECT user_name, user_email FROM ". $db_settings['userdata_table'] ." WHERE new_user_notify = 1");
+      if (!$admin_result) die($lang['db_error']);
       while ($admin_array = mysqli_fetch_assoc($admin_result))
        {
         $ind_reg_emailbody = str_replace("[admin]", $admin_array['user_name'], $lang['new_user_notif_txt']);
-        $admin_mailto = $admin_array['user_name']." <".$admin_array['user_email'].">";
-        if($settings['mail_parameter']!='')
-         {
-          if(@mail($admin_mailto, $lang['new_user_notif_sj'], $ind_reg_emailbody, $header, $settings['mail_parameter'])) { $sent = "ok"; }
-         }
-        else
-         {
-          if(@mail($admin_mailto, $lang['new_user_notif_sj'], $ind_reg_emailbody, $header)) { $sent = "ok"; }
-         }
+        $admin_mailto = $admin_array['user_name'] ." <". $admin_array['user_email'] .">";
+        $sent = processEmail($admin_mailto, $lang['new_user_notif_sj'], $ind_reg_emailbody);
+        if ($sent === true) {
+          $sent = "ok";
+        }
        }
-
       header("location: login.php?msg=user_activated");
       exit();
      }
@@ -199,25 +189,10 @@ if(isset($_POST['register_submit']))
      mysqli_free_result($new_user_id_result);
 
      // send e-mail with activation key to new user:
-     $ip = $_SERVER["REMOTE_ADDR"];
      $lang['new_user_email_txt'] = str_replace("[name]", $new_user_name, $lang['new_user_email_txt']);
-     #$lang['new_user_email_txt'] = str_replace("[password]", $new_user_pw, $lang['new_user_email_txt']);
      $lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$new_user_id."&key=".$activate_code, $lang['new_user_email_txt']);
-     $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
-     $header .= "X-Mailer: Php/" . phpversion(). "\n";
-     $header .= "X-Sender-ip: $ip\n";
-     $header .= "Content-Type: text/plain";
-     $new_user_mailto = $new_user_name." <".$new_user_email.">";
-
-     if($settings['mail_parameter']!='')
-      {
-       if(@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header, $settings['mail_parameter'])) $sent = true;
-      }
-     else
-      {
-       if(@mail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt'], $header)) $sent = true;
-      }
-
+     $new_user_mailto = $new_user_name ." <". $new_user_email .">";
+     $sent = processEmail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt']);
      // Bestätigung anzeigen:
      $action = "registered";
     }

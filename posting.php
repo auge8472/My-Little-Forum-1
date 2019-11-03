@@ -481,26 +481,16 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                  $emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
                  $emailbody = str_replace(htmlsc($settings['quote_symbol']), ">", $emailbody);
                  $emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
-                 $header  = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
-                 //$header .= "Reply-To: $name <$absender>\n";
-                 //$header .= "Reply-To: <".$forum_email.">\n";
-                 $header .= "X-Mailer: Php/" . phpversion(). "\n";
-                 $header .= "X-Sender-ip: $ip\n";
-                 $header .= "Content-Type: text/plain";
-                 $an = $parent["name"]." <".$parent["email"].">";
-                 if($settings['mail_parameter']!='')
-                  {
-                   if(@mail($an, $lang['email_subject'], $emailbody, $header,$settings['mail_parameter'])) { $sent = "ok"; }
-                  }
-                 else
-                  {
-                   if(@mail($an, $lang['email_subject'], $emailbody, $header)) { $sent = "ok"; }
-                  }
+                 $an = $parent["name"] ." <". $parent["email"] .">";
+                 $sent = processEmail($an, $lang['email_subject'], $emailbody);
+                 if ($sent === true) {
+                   $sent = "ok";
+                 }
                  unset($header); unset($emailbody);
                 }
               }
              // E-Mail-Benachrichtigung an Admins und Moderatoren:
-               $ip = $_SERVER["REMOTE_ADDR"];
+               #$ip = $_SERVER["REMOTE_ADDR"];
                $mail_text = unbbcode($text);
                if ($id > 0) $emailbody = str_replace("[name]", $name, $lang['admin_email_text_reply']); else $emailbody = str_replace("[name]", $name, $lang['admin_email_text']);
                $emailbody = str_replace("[subject]", $subject, $emailbody);
@@ -511,25 +501,17 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
                $emailbody = str_replace("[forum_address]", $settings['forum_address'], $emailbody);
                $emailbody = str_replace(htmlsc($settings['quote_symbol']), ">", $emailbody);
                $emailbody = str_replace($settings['quote_symbol'], ">", $emailbody);
-               $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
-               $header .= "X-Mailer: Php/" . phpversion(). "\n";
-               $header .= "X-Sender-ip: $ip\n";
-               $header .= "Content-Type: text/plain";
                // Schauen, wer eine E-Mail-Benachrichtigung will:
                $en_result=mysqli_query($connid, "SELECT user_name, user_email FROM ". $db_settings['userdata_table'] ." WHERE new_posting_notify=1");
                if(!$en_result) die($lang['db_error']);
                while ($admin_array = mysqli_fetch_assoc($en_result))
                {
                 $ind_emailbody = str_replace("[admin]", $admin_array['user_name'], $emailbody);
-                $an = $admin_array['user_name']." <".$admin_array['user_email'].">";
-                if($settings['mail_parameter']!='')
-                 {
-                  if(@mail($an, str_replace("[subject]", $subject, $lang['admin_email_subject']), $ind_emailbody, $header, $settings['mail_parameter'])) { $sent2 = "ok"; }
-                 }
-                else
-                 {
-                  if(@mail($an, str_replace("[subject]", $subject, $lang['admin_email_subject']), $ind_emailbody, $header)) { $sent2 = "ok"; }
-                 }
+                $an = $admin_array['user_name'] ." <". $admin_array['user_email'] .">";
+                $sent = processEmail($an, str_replace("[subject]", $subject, $lang['admin_email_subject']), $ind_emailbody);
+                if ($sent === true) {
+                  $sent2 = "ok";
+                }
                }
                mysqli_free_result($en_result);
 
