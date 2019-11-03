@@ -184,31 +184,16 @@ switch ($action)
       $update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET last_login=last_login, registered=registered, pwf_code='". mysqli_real_escape_string($connid, $pwf_code) ."' WHERE user_id=". intval($field["user_id"]) ."' LIMIT 1");
 
       // send mail with activating link:
-      $ip = $_SERVER["REMOTE_ADDR"];
       $lang['pwf_activating_email_txt'] = str_replace("[name]", $field["user_name"], $lang['pwf_activating_email_txt']);
       $lang['pwf_activating_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['pwf_activating_email_txt']);
       $lang['pwf_activating_email_txt'] = str_replace("[activating_link]", $settings['forum_address'].basename($_SERVER['PHP_SELF'])."?activate=".$field["user_id"]."&code=".$pwf_code, $lang['pwf_activating_email_txt']);
-      $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
-      $header .= "X-Mailer: Php/" . phpversion(). "\n";
-      $header .= "X-Sender-ip: $ip\n";
-      $header .= "Content-Type: text/plain";
-      $pwf_mailto = $field["user_name"]." <".$field["user_email"].">";
-      if($settings['mail_parameter']!='')
-       {
-        if (@mail($pwf_mailto, $lang['pwf_activating_email_sj'], $lang['pwf_activating_email_txt'], $header,$settings['mail_parameter']))
-         {
-          header("location: ".basename($_SERVER['PHP_SELF'])."?msg=mail_sent"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=mail_sent\">further...</a>");
-         }
+      $pwf_mailto = $field["user_name"] ." <". $field["user_email"] .">";
+      $sent = processEmail($pwf_mailto, $lang['pwf_activating_email_sj'], $lang['pwf_activating_email_txt']);
+      if ($sent === true) {
+        header("location: ".basename($_SERVER['PHP_SELF'])."?msg=mail_sent"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=mail_sent\">further...</a>");
+      } else {
         else die($lang['mail_error']);
-       }
-      else
-       {
-        if (@mail($pwf_mailto, $lang['pwf_activating_email_sj'], $lang['pwf_activating_email_txt'], $header))
-         {
-          header("location: ".basename($_SERVER['PHP_SELF'])."?msg=mail_sent"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=mail_sent\">further...</a>");
-         }
-        else die($lang['mail_error']);
-       }
+      }
      }
     else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pwf_failed"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pwf_failed\">further...</a>"); }
    }
@@ -234,33 +219,16 @@ switch ($action)
       $update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET last_login=last_login, registered=registered, user_pw='". mysqli_real_escape_string($connid, $encoded_new_user_pw) ."', pwf_code='' WHERE user_id=". intval($field["user_id"]) ." LIMIT 1");
 
       // send new password:
-      $ip = $_SERVER["REMOTE_ADDR"];
       $lang['new_pw_email_txt'] = str_replace("[name]", $field['user_name'], $lang['new_pw_email_txt']);
       $lang['new_pw_email_txt'] = str_replace("[password]", $new_user_pw, $lang['new_pw_email_txt']);
       $lang['new_pw_email_txt'] = str_replace("[login_link]", $settings['forum_address'].basename($_SERVER['PHP_SELF'])."?username=".urlencode($field['user_name'])."&userpw=".$new_user_pw, $lang['new_pw_email_txt']);
-      $header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
-      $header .= "X-Mailer: Php/" . phpversion(). "\n";
-      $header .= "X-Sender-ip: $ip\n";
-      $header .= "Content-Type: text/plain";
-      $new_pw_mailto = $field['user_name']." <".$field['user_email'].">";
-      if($settings['mail_parameter']!='')
-       {
-        if (@mail($new_pw_mailto, $lang['new_pw_email_sj'], $lang['new_pw_email_txt'], $header,$settings['mail_parameter']))
-         {
-          header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pw_sent");
-          die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pw_sent\">further...</a>");
-         }
+      $new_pw_mailto = $field['user_name'] ." <". $field['user_email'] .">";
+      $sent = processEmail($new_pw_mailto, $lang['new_pw_email_sj'], $lang['new_pw_email_txt']);
+      if ($sent === true) {
+        header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pw_sent"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pw_sent\">further...</a>");
+      } else {
         else die($lang['mail_error']);
-       }
-      else
-       {
-        if (@mail($new_pw_mailto, $lang['new_pw_email_sj'], $lang['new_pw_email_txt'], $header))
-         {
-          header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pw_sent");
-          die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pw_sent\">further...</a>");
-         }
-        else die($lang['mail_error']);
-       }
+      }
      }
     else
      {

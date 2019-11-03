@@ -149,50 +149,29 @@ if (isset($id) || isset($uid) || isset($forum_contact))
          }
        }
      }
-    
     if(empty($errors))
      {
-      if ($_POST['subject'] != "") $mail_subject = $subject; else $mail_subject = $lang['email_no_subject'];
+      $mail_subject = (isset($_POST['subject']) and !empty(isset($_POST['subject'])) ? $_POST['subject'] : $lang['email_no_subject'];
       if (isset($forum_contact)) { $name = $settings['forum_name']; $email = $settings['forum_email']; }
-      $mailto = $name." <".$email.">";
-      $ip = $_SERVER["REMOTE_ADDR"];
-      $mail_text = $text ."\n\n".str_replace("[forum_address]", $settings['forum_address'], $lang['msg_add']);
-      $header = "From: ".$sender_name." <".$sender_email.">\n";
-      $header .= "Reply-To: ".$sender_name." <".$sender_email.">\n";
-      $header .= "X-Mailer: PHP/" . phpversion(). "\n";
-      $header .= "X-Sender-IP: $ip\n";
-      $header .= "Content-Type: text/plain";
-      if($settings['mail_parameter']!='')
-       {
-        if(@mail($mailto, $mail_subject, $mail_text, $header, $settings['mail_parameter'])) $sent = true; else $errors[] = $lang['error_meilserv'];
-       }
-      else
-       {
-        if(@mail($mailto, $mail_subject, $mail_text, $header)) $sent = true; else $errors[] = $lang['error_meilserv'];
-       }
+      $mailto = $name ." <". $email .">";
+      $mailtext = $text ."\n\n".str_replace("[forum_address]", $settings['forum_address'], $lang['msg_add']);
+      $sender_email = array("name" => $sender_name, "email" => $sender_email);
+      $sent = processEmail($mailto, $mail_subject, $mailtext, $sender_email);
+      if ($sent === false) {
+        $errors[] = $lang['error_meilserv'];
+        unset($sent);
+      }
       // Bestätigung:
       if (isset($sent))
-      {
+       {
        $lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['conf_email_txt']);
        $lang['conf_email_txt'] = str_replace("[sender_name]", $sender_name, $lang['conf_email_txt']);
        $lang['conf_email_txt'] = str_replace("[recipient_name]", $name, $lang['conf_email_txt']);
        $lang['conf_email_txt'] = str_replace("[subject]", $mail_subject, $lang['conf_email_txt']);
        $lang['conf_email_txt'] .= "\n\n". $text;
-       $conf_mailto = $sender_name." <".$sender_email.">";
-       $ip = $_SERVER["REMOTE_ADDR"];
-       $conf_header = "From: ".$settings['forum_name']." <".$settings['forum_email'].">\n";
-       $conf_header .= "X-Mailer: PHP/" . phpversion(). "\n";
-       $conf_header .= "X-Sender-IP: $ip\n";
-       $conf_header .= "Content-Type: text/plain";
-       if($settings['mail_parameter']!='')
-        {
-         @mail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt'], $conf_header, $settings['mail_parameter']);
-        }
-       else
-        {
-         @mail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt'], $conf_header);
-        }
-      }
+       $conf_mailto = $sender_name ." <". $sender_email .">";
+       $sent = processEmail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt']);
+       }
      }
    }
  }
