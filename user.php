@@ -103,7 +103,7 @@ if(isset($_POST['change_email_submit']))
     if ($pw_new_email=='' || $new_email=='') $errors[] = $lang['error_form_uncompl'];
     if (empty($errors))
      {
-      if (strlen($new_email) > $settings['email_maxlength']) $errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
+      if (mb_strlen($new_email) > $settings['email_maxlength']) $errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
       if ($new_email == $field["user_email"]) $errors[] = $lang['error_email_equal'];
       if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $new_email)) $errors[] = $lang['error_email_wrong'];
       if ($field["user_pw"] != md5(trim($pw_new_email))) $errors[] = $lang['pw_wrong'];
@@ -150,38 +150,38 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     if (empty($new_posting_notify)) $new_posting_notify = 0;
     if (empty($new_user_notify)) $new_user_notify = 0;
     #if (isset($user_hp) && $user_hp != "" && !ereg(".",$user_hp)) $errors[] = $lang['error_hp_wrong'];
-    if (strlen($user_real_name) > $settings['name_maxlength']) $errors[] = $lang['user_real_name'] . " " .$lang['error_input_too_long'];
-    if (strlen($user_hp) > $settings['hp_maxlength']) $errors[] = $lang['user_hp'] . " " .$lang['error_input_too_long'];
-    if (strlen($user_place) > $settings['place_maxlength']) $errors[] = $lang['user_place'] . " " .$lang['error_input_too_long'];
-    if (strlen($profile) > $settings['profile_maxlength'])
+    if (mb_strlen($user_real_name) > $settings['name_maxlength']) $errors[] = $lang['user_real_name'] . " " .$lang['error_input_too_long'];
+    if (mb_strlen($user_hp) > $settings['hp_maxlength']) $errors[] = $lang['user_hp'] . " " .$lang['error_input_too_long'];
+    if (mb_strlen($user_place) > $settings['place_maxlength']) $errors[] = $lang['user_place'] . " " .$lang['error_input_too_long'];
+    if (mb_strlen($profile) > $settings['profile_maxlength'])
      {
-      $lang['err_prof_too_long'] = str_replace("[length]", strlen($profile), $lang['err_prof_too_long']);
+      $lang['err_prof_too_long'] = str_replace("[length]", mb_strlen($profile), $lang['err_prof_too_long']);
       $lang['err_prof_too_long'] = str_replace("[maxlength]", $settings['profile_maxlength'], $lang['err_prof_too_long']);
       $errors[] = $lang['err_prof_too_long'];
      }
-    if (strlen($signature) > $settings['signature_maxlength'])
+    if (mb_strlen($signature) > $settings['signature_maxlength'])
      {
-      $lang['err_sig_too_long'] = str_replace("[length]", strlen($signature), $lang['err_sig_too_long']);
+      $lang['err_sig_too_long'] = str_replace("[length]", mb_strlen($signature), $lang['err_sig_too_long']);
       $lang['err_sig_too_long'] = str_replace("[maxlength]", $settings['signature_maxlength'], $lang['err_sig_too_long']);
       $errors[] = $lang['err_sig_too_long'];
      }
 
-     $text_arr = explode(" ",$user_real_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
+     $text_arr = explode(" ",$user_real_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = mb_strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
      $error_nwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
      $errors[] = $error_nwtl; } }
-     $text_arr = explode(" ",$user_place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
+     $text_arr = explode(" ",$user_place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = mb_strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
      $error_pwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
      $errors[] = $error_pwtl; } }
      $text_arr = str_replace("\n", " ", $profile);
      if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
      if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
-     $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
+     $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = mb_strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
      $error_twtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['text_word_maxlength']))."...", $lang['err_prof_word_too_long']);
      $errors[] = $error_twtl; } }
      $text_arr = str_replace("\n", " ", $signature);
      if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
      if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
-     $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
+     $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = mb_strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
      $error_twtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['text_word_maxlength']))."...", $lang['err_sig_word_too_long']);
      $errors[] = $error_twtl; } }
     // End of checking

@@ -202,7 +202,7 @@ function shorten_link($string)
   if(count($string) == 2) { $pre = ""; $url = $string[1]; }
   else { $pre = $string[1]; $url = $string[2]; }
   $shortened_url = $url;
-  if (strlen($url) > $settings['text_word_maxlength']) $shortened_url = mb_substr($url, 0, ($settings['text_word_maxlength']/2)) . "..." . mb_substr($url, - ($settings['text_word_maxlength']-3-$settings['text_word_maxlength']/2));
+  if (mb_strlen($url) > $settings['text_word_maxlength']) $shortened_url = mb_substr($url, 0, ($settings['text_word_maxlength']/2)) . "..." . mb_substr($url, - ($settings['text_word_maxlength']-3-$settings['text_word_maxlength']/2));
   return $pre."<a href=\"".$url."\">".$shortened_url."</a>";
  }
 
@@ -484,7 +484,7 @@ function myQuotedPrintableEncode($input, $line_max = 76, $space_conv = false ) {
 	$escape = '=';
 	$output = '';
 	foreach ($lines as $line) {
-		$linlen = strlen($line);
+		$linlen = mb_strlen($line);
 		$newline = '';
 		for ($i = 0; $i < $linlen; $i++) {
 			$c = mb_substr($line, $i, 1);
@@ -507,7 +507,7 @@ function myQuotedPrintableEncode($input, $line_max = 76, $space_conv = false ) {
 				$c = $escape . $hex[$h2] . $hex[$h1];
 			}
 			# CRLF is not counted
-			if ((strlen($newline) + strlen($c)) >= $line_max) {
+			if ((mb_strlen($newline) + mb_strlen($c)) >= $line_max) {
 				# soft line break; " =\r\n" is okay
 				$output .= $newline . $escape . $eol;
 				$newline = '';

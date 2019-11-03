@@ -13,7 +13,7 @@ class captcha
     $code='';
     for($i=0;$i<5;$i++)
      {
-      $code .= mb_substr($letters, mt_rand(0, strlen($letters) - 1), 1);
+      $code .= mb_substr($letters, mt_rand(0, mb_strlen($letters) - 1), 1);
      }
     return $code;
    }
@@ -47,7 +47,7 @@ class captcha
      }
 
     // split code into chars:
-    $code_length = strlen($code);
+    $code_length = mb_strlen($code);
       for($i=0;$i<$code_length;$i++)
        {
         $code_chars_array[] = mb_substr($code, $i, 1);

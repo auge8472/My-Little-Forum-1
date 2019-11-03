@@ -385,36 +385,36 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
           if (!isset($text) || $text == "")
           $errors[] = $lang['error_no_text'];
          }
-        if (strlen($name) > $settings['name_maxlength'])
+        if (mb_strlen($name) > $settings['name_maxlength'])
          $errors[] = $lang['name_marking'] . " " .$lang['error_input_too_long'];
-        if (strlen($email) > $settings['email_maxlength'])
+        if (mb_strlen($email) > $settings['email_maxlength'])
          $errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
-        if (strlen($hp) > $settings['hp_maxlength'])
+        if (mb_strlen($hp) > $settings['hp_maxlength'])
          $errors[] = $lang['hp_marking'] . " " .$lang['error_input_too_long'];
-        if (strlen($place) > $settings['place_maxlength'])
+        if (mb_strlen($place) > $settings['place_maxlength'])
          $errors[] = $lang['place_marking'] . " " .$lang['error_input_too_long'];
-        if (strlen($subject) > $settings['subject_maxlength'])
+        if (mb_strlen($subject) > $settings['subject_maxlength'])
          $errors[] = $lang['subject_marking'] . " " .$lang['error_input_too_long'];
-        if (strlen($text) > $settings['text_maxlength'])
+        if (mb_strlen($text) > $settings['text_maxlength'])
          {
-          $lang['error_text_too_long'] = str_replace("[length]", strlen($text), $lang['error_text_too_long']);
+          $lang['error_text_too_long'] = str_replace("[length]", mb_strlen($text), $lang['error_text_too_long']);
           $lang['error_text_too_long'] = str_replace("[maxlength]", $settings['text_maxlength'], $lang['error_text_too_long']);
           $errors[] = $lang['error_text_too_long'];
          }
-        $text_arr = explode(" ",$name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
+        $text_arr = explode(" ",$name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = mb_strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
         $error_nwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
         $errors[] = $error_nwtl; } }
-        $text_arr = explode(" ",$place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
+        $text_arr = explode(" ",$place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = mb_strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
         $error_pwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
         $errors[] = $error_pwtl; } }
-        $text_arr = explode(" ",$subject); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['subject_word_maxlength']) {
+        $text_arr = explode(" ",$subject); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = mb_strlen($text_arr[$i]); if ($laenge > $settings['subject_word_maxlength']) {
         $error_swtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['subject_word_maxlength']))."...", $lang['error_subject_word_too_long']);
         $errors[] = $error_swtl; } }
         $text_arr = str_replace("\n", " ", $text);
         if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); $text_arr = preg_replace("#\[url\](.+?)\[/url\]#is", "", $text_arr); $text_arr = preg_replace("#\[url=(.+?)\](.+?)\[/url\]#is", "\\2", $text_arr); }
         if ($settings['bbcode_img'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
         if ($settings['autolink'] == 1) $text_arr = text_check_link($text_arr);
-        $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
+        $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = mb_strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
         $error_twtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['text_word_maxlength']))."...", $lang['error_text_word_too_long']);
         $errors[] = $error_twtl; } }
 
