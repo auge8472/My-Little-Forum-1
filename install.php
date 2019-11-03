@@ -118,7 +118,7 @@ function update13to14()
   @mysqli_query($connid, "ALTER TABLE ". $db_settings['forum_table'] ." ADD fixed tinyint(4) NOT NULL default '0' AFTER locked") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
   @mysqli_query($connid, "CREATE TABLE ". $db_settings['settings_table'] ." (name varchar(255) NOT NULL default '', value varchar(255) NOT NULL default '')") or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
   $settings['forum_address'] = 'http://'.$_SERVER['SERVER_NAME'].str_replace("install.php","",$_SERVER['SCRIPT_NAME']);
-  while(list($key, $val) = each($settings))
+  foreach ($settings as $key => $val)
    {
     @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('". mysqli_real_escape_string($connid, $key) ."','". mysqli_real_escape_string($connid, $val) ."')") or $errors[] = str_replace("[setting]",$setting,$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
    }
@@ -512,7 +512,7 @@ if (isset($_POST['form_submitted']))
      if (empty($errors))
       {
        // insert default settings:
-       while(list($key, $val) = each($settings))
+       foreach ($settings as $key => $val)
         {
          @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('". mysqli_real_escape_string($connid, $key) ."','". mysqli_real_escape_string($connid, $val) ."')") or $errors[] = str_replace("[setting]",$setting,$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
         }

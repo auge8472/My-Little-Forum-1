@@ -743,7 +743,7 @@ if (isset($_POST['unlock_marked_threads_submitted']))
   if(empty($_POST['captcha_contact'])) $_POST['captcha_contact'] = 0;
   if(empty($_POST['captcha_register'])) $_POST['captcha_register'] = 0;
 
-  while(list($key, $val) = each($_POST))
+  foreach ($_POST as $key => $val)
    {
     if($key != "settings_submitted") mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='". mysqli_real_escape_string($connid, $val) ."' WHERE name='". mysqli_real_escape_string($connid, $key) ."' LIMIT 1");
    }
@@ -1146,7 +1146,7 @@ switch ($action)
     $cat_select = '<select class="kat" size="1" name="move_category">';
     if ($categories!=false)
      {
-      while(list($key, $val) = each($categories))
+      foreach ($categories as $key => $val)
        {
         if($key!=0) $cat_select .= '<option value="'.$key.'">'.$val.'</option>';
        }
@@ -1537,7 +1537,7 @@ switch ($action)
    ?><form action="admin.php" method="post" accept-charset="UTF-8">
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1"><?php
    ksort($settings);
-   while(list($key, $val) = each($settings))
+   foreach ($settings as $key => $val)
     {
      ?><tr>
      <td class="c"><b><?php echo $key; ?></b></td>
@@ -1657,7 +1657,7 @@ switch ($action)
   if (count($categories) > 1)
    {
     $cat_select = '<select class="kat" size="1" name="move_category">';
-    while(list($key, $val) = each($categories))
+    foreach ($categories as $key => $val)
      {
       if ($key!= $category_id) $cat_select .= '<option value="'. htmlsc($key) .'">'. htmlsc($val) .'</option>';
      }
