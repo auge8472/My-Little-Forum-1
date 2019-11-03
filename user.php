@@ -145,7 +145,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     $user_place = trim($user_place);
     $profile = trim($profile);
     $signature = trim($signature);
-    #if (isset($user_hp) && substr($user_hp,0,7) == "http://") $user_hp = substr($user_hp,7);
+    #if (isset($user_hp) && mb_substr($user_hp, 0, 7) == "http://") $user_hp = mb_substr($user_hp, 7);
     if (empty($user_view) or $user_view == "") $user_view = $standard;
     if (empty($new_posting_notify)) $new_posting_notify = 0;
     if (empty($new_user_notify)) $new_user_notify = 0;
@@ -167,26 +167,26 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
      }
 
      $text_arr = explode(" ",$user_real_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-     $error_nwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
+     $error_nwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
      $errors[] = $error_nwtl; } }
      $text_arr = explode(" ",$user_place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
-     $error_pwtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
+     $error_pwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
      $errors[] = $error_pwtl; } }
      $text_arr = str_replace("\n", " ", $profile);
      if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
      if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
      $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-     $error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['err_prof_word_too_long']);
+     $error_twtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['text_word_maxlength']))."...", $lang['err_prof_word_too_long']);
      $errors[] = $error_twtl; } }
      $text_arr = str_replace("\n", " ", $signature);
      if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
      if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
      $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-     $error_twtl = str_replace("[word]", htmlsc(substr($text_arr[$i],0,$settings['text_word_maxlength']))."...", $lang['err_sig_word_too_long']);
+     $error_twtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['text_word_maxlength']))."...", $lang['err_sig_word_too_long']);
      $errors[] = $error_twtl; } }
     // End of checking
 
-    #if (isset($hp) && substr($hp,0,7) == "http://") { $hp = substr($hp,7); }
+    #if (isset($hp) && mb_substr($hp, 0, 7) == "http://") { $hp = mb_substr($hp, 7); }
     if (empty($hide_email)) $hide_email = 0;
     if (empty($errors))
      {
@@ -409,7 +409,7 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_hp']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php if ($field["user_hp"]!="") { if (substr($field["user_hp"],0,7) != "http://" && substr($field["user_hp"],0,8) != "https://" && substr($field["user_hp"],0,6) != "ftp://" && substr($field["user_hp"],0,9) != "gopher://" && substr($field["user_hp"],0,7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo $field["user_hp"]; ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlsc($field["user_hp"]); ?>" width="13" height="13" /></a><?php } else echo "-" ?></p></td>
+     <td class="d"><p class="userdata"><?php if ($field["user_hp"]!="") { if (mb_substr($field["user_hp"], 0, 7) != "http://" && mb_substr($field["user_hp"], 0, 8) != "https://" && mb_substr($field["user_hp"], 0, 6) != "ftp://" && mb_substr($field["user_hp"], 0, 9) != "gopher://" && mb_substr($field["user_hp"], 0, 7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo $field["user_hp"]; ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlsc($field["user_hp"]); ?>" width="13" height="13" /></a><?php } else echo "-" ?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_place']; ?></b></p></td>
@@ -524,7 +524,7 @@ switch ($action)
         <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo $field['user_id']; ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['show_userdata_linktitle']); ?>"><b><?php echo htmlsc($field['user_name']); ?></b></a></td>
         <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_type"] == "admin") echo $lang['ud_admin']; elseif ($field["user_type"] == "mod") echo $lang['ud_mod']; else echo $lang['ud_user']; ?></span></td>
         <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo $field['user_id']; ?>"><img src="img/email.gif" alt="'<?php echo $lang['email_alt']; ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "&nbsp;"; ?></span></td>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_hp"]!="") { if (substr($field["user_hp"],0,7) != "http://" && substr($field["user_hp"],0,8) != "https://" && substr($field["user_hp"],0,6) != "ftp://" && substr($field["user_hp"],0,9) != "gopher://" && substr($field["user_hp"],0,7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo htmlsc($field["user_hp"]); ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlsc($field["user_hp"]); ?>" width="13" height="13" /></a><?php } else echo "&nbsp;" ?></span></td>
+        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_hp"]!="") { if (mb_substr($field["user_hp"], 0, 7) != "http://" && mb_substr($field["user_hp"], 0, 8) != "https://" && mb_substr($field["user_hp"], 0, 6) != "ftp://" && mb_substr($field["user_hp"], 0, 9) != "gopher://" && mb_substr($field["user_hp"], 0, 7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo htmlsc($field["user_hp"]); ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlsc($field["user_hp"]); ?>" width="13" height="13" /></a><?php } else echo "&nbsp;" ?></span></td>
         <?php if ($settings['count_users_online'] == 1) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="online"><?php if ($settings['count_users_online'] == 1 && in_array($field['user_id'], $useronline_array)) { echo $lang['online']; } else echo "&nbsp;"; ?></span></td><?php }
         if (isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod")) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($field["user_type"]=="user") { if ($field["user_lock"] == 0) { ?><span class="small"><a href="user.php?user_lock=<?php echo $field["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;page=<?php echo $page; ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['lock_user_lt']); ?>"><?php echo $lang['unlocked']; ?></a></span><?php } else { ?><span class="small"><a style="color: red;" href="user.php?user_lock=<?php echo $field["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;page=<?php echo $page; ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['unlock_user_lt']); ?>"><?php echo $lang['locked']; ?></a></span><?php } } else echo "&nbsp;"; ?></td><?php } ?>
         </tr>

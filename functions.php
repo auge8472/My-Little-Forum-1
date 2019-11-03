@@ -157,7 +157,7 @@ function make_link($string)
   $string = preg_replace_callback("#(^|[\n ])([\w]+?://.*?[^ \"\n\r\t<]*)#is", "shorten_link", $string);
   $string = preg_replace("#(^|[\n ])((www|ftp)\.[\w\-]+\.[\w\-.\~]+(?:/[^ \"\t\n\r<]*)?)#is", "\\1<a href=\"http://\\2\">\\2</a>", $string);
   $string = preg_replace("#(^|[\n ])([a-z0-9&\-_.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)#i", "\\1<a href=\"mailto:\\2@\\3\">\\2@\\3</a>", $string);
-  $string = substr($string, 1);
+  $string = mb_substr($string, 1);
 
   return $string;
  }
@@ -167,7 +167,7 @@ function text_check_link($string)
  {
   $string = ' ' . $string;
   $string = preg_replace("#(^|[\n ])([\w]+?://.*?[^ \"\n\r\t<]*)#is", "", $string);
-  $string = substr($string, 1);
+  $string = mb_substr($string, 1);
   return $string;
  }
 
@@ -202,7 +202,7 @@ function shorten_link($string)
   if(count($string) == 2) { $pre = ""; $url = $string[1]; }
   else { $pre = $string[1]; $url = $string[2]; }
   $shortened_url = $url;
-  if (strlen($url) > $settings['text_word_maxlength']) $shortened_url = substr($url, 0, ($settings['text_word_maxlength']/2)) . "..." . substr($url, - ($settings['text_word_maxlength']-3-$settings['text_word_maxlength']/2));
+  if (strlen($url) > $settings['text_word_maxlength']) $shortened_url = mb_substr($url, 0, ($settings['text_word_maxlength']/2)) . "..." . mb_substr($url, - ($settings['text_word_maxlength']-3-$settings['text_word_maxlength']/2));
   return $pre."<a href=\"".$url."\">".$shortened_url."</a>";
  }
 
@@ -487,7 +487,7 @@ function myQuotedPrintableEncode($input, $line_max = 76, $space_conv = false ) {
 		$linlen = strlen($line);
 		$newline = '';
 		for ($i = 0; $i < $linlen; $i++) {
-			$c = substr($line, $i, 1);
+			$c = mb_substr($line, $i, 1);
 			$dec = ord( $c );
 			# convert first point in the line into =2E
 			if (($i == 0) && ($dec == 46)) {
