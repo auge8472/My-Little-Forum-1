@@ -66,8 +66,13 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
    $result_a = mysqli_query($connid, "SELECT name FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($parent_array[$id]["pid"]));
    $posting_a = mysqli_fetch_assoc($result_a);
    mysqli_free_result($result_a);
+   if ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix_topic']/$settings['thread_indent_mix_topic'])) {
+     $intendation = 0;
+   } else {
+     $intendation = intval($settings['thread_indent_mix_topic']);
+   }
 
-   ?><div class="mixdivl" style="margin-left: <?php if ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix_topic']/$settings['thread_indent_mix_topic'])) echo "0"; else echo $settings['thread_indent_mix_topic']; ?>px;">
+   ?><div class="mixdivl" id="p<?php echo intval($entrydata['id']); ?>" style="margin-left: <?php echo $intendation; ?>px;">
     <table class="mix-entry" border="0" cellpadding="5" cellspacing="1">
     <tr>
      <td class="autorcell" rowspan="2" valign="top"><?php
