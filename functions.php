@@ -454,4 +454,20 @@ function convertLineBreaks($string, $to = "\n") {
 	return preg_replace("/\015\012|\015|\012/", $to, $string);
 } # End: convertLineBreaks
 
+/**
+ * puts a name into a formatted string for mail header
+ *
+ * @param string $name
+ * @param string $linefeed
+ * @return string $name
+ */
+function encodeMailName($name, $lf = "\r\n") {
+	$name = str_replace('"', '\\"', $name);
+	if (preg_match("/(\.|\;|\")/", $name)) {
+		return '"'.mb_encode_mimeheader($name, 'UTF-8', "Q", $lf).'"';
+	} else {
+		return mb_encode_mimeheader($name, 'UTF-8', "Q", $lf);
+	}
+} # End: encodeMailName
+
 ?>
