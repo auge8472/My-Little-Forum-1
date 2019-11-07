@@ -174,7 +174,6 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
           $p_category = $field["category"];
           $text = $field["text"];
           $aname = $field["name"];
-          $text = wordwrap($text);
           // Zitatzeichen an den Anfang jeder Zeile stellen:
           $text = preg_replace("/^/m", $settings['quote_symbol']." ", $text);
          }
