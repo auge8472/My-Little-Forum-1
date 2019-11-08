@@ -74,8 +74,24 @@ switch ($action)
      if (mysqli_num_rows($result) == 1)
       {
        $feld = mysqli_fetch_assoc($result);
-
-     if ($feld["user_pw"] == md5($userpw))
+      if (mb_strlen($feld["user_pw"]) == 32) {
+        if ($feld["user_pw"] == md5($userpw)) {
+          $positive = true;
+        } else {
+          $positive = false;
+        }
+        if ($positive === true) {
+          $new_hash = password_hash($userpw, PASSWORD_DEFAULT);
+          $qNewPassword = "UPDATE ". $db_settings['userdata_table'] ." SET last_login=last_login, registered=registered, user_pw = '". mysqli_real_escape_string($connid, $new_hash) ."' WHERE user_id = ". intval($feld["user_id"]);
+          $rNewPassword = mysqli_query($connid, $qNewPassword);
+          if ($rNewPassword === true) {
+            $feld["user_pw"] = $new_hash;
+          }
+        }
+      } else {
+        $positive = password_verify($userpw, $feld["user_pw"]);
+      }
+     if ($positive === true)
       {
        if (trim($feld["activate_code"]) != '')
         {
