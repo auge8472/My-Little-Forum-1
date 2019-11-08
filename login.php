@@ -192,7 +192,7 @@ switch ($action)
       if ($sent === true) {
         header("location: ".basename($_SERVER['PHP_SELF'])."?msg=mail_sent"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=mail_sent\">further...</a>");
       } else {
-        else die($lang['mail_error']);
+        die($lang['mail_error']);
       }
      }
     else { header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pwf_failed"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pwf_failed\">further...</a>"); }
@@ -227,7 +227,7 @@ switch ($action)
       if ($sent === true) {
         header("location: ".basename($_SERVER['PHP_SELF'])."?msg=pw_sent"); die("<a href=\"".basename($_SERVER['PHP_SELF'])."?msg=pw_sent\">further...</a>");
       } else {
-        else die($lang['mail_error']);
+        die($lang['mail_error']);
       }
      }
     else
