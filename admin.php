@@ -202,7 +202,24 @@ if(isset($_POST['sql_submit']))
   if ($_POST['sql_pw']=='') $errors[] = $lang['error_form_uncompl'];
   else
    {
-    if ($field['user_pw'] != md5(trim($_POST['sql_pw']))) $errors[] = $lang['pw_wrong'];
+    if (mb_strlen($field["user_pw"]) == 32) {
+      if ($field["user_pw"] == md5($_POST['sql_pw'])) {
+        $positive = true;
+      } else {
+        $positive = false;
+      }
+      if ($positive === true) {
+        $new_hash = password_hash($_POST['sql_pw'], PASSWORD_DEFAULT);
+        $qNewPassword = "UPDATE ". $db_settings['userdata_table'] ." SET last_login=last_login, registered=registered, user_pw = '". mysqli_real_escape_string($connid, $new_hash) ."' WHERE user_id = ". intval($feld["user_id"]);
+        $rNewPassword = mysqli_query($connid, $qNewPassword);
+        if ($rNewPassword === true) {
+          $field["user_pw"] = $new_hash;
+        }
+      }
+    } else {
+      $positive = password_verify($_POST['sql_pw'], $field["user_pw"]);
+    }
+    if ($positive === false) $errors[] = $lang['pw_wrong'];
    }
 
   if(empty($errors))
@@ -601,7 +618,24 @@ if (isset($_POST['delete_all_postings_confirmed']))
   if ($_POST['delete_all_postings_confirm_pw']=="") $errors[] = $lang['error_form_uncompl'];
   else
    {
-    if ($field['user_pw'] != md5(trim($_POST['delete_all_postings_confirm_pw']))) $errors[] = $lang['pw_wrong'];
+    if (mb_strlen($field["user_pw"]) == 32) {
+      if ($field["user_pw"] == md5($_POST['delete_all_postings_confirm_pw'])) {
+        $positive = true;
+      } else {
+        $positive = false;
+      }
+      if ($positive === true) {
+        $new_hash = password_hash($_POST['delete_all_postings_confirm_pw'], PASSWORD_DEFAULT);
+        $qNewPassword = "UPDATE ". $db_settings['userdata_table'] ." SET last_login=last_login, registered=registered, user_pw = '". mysqli_real_escape_string($connid, $new_hash) ."' WHERE user_id = ". intval($feld["user_id"]);
+        $rNewPassword = mysqli_query($connid, $qNewPassword);
+        if ($rNewPassword === true) {
+          $field["user_pw"] = $new_hash;
+        }
+      }
+    } else {
+      $positive = password_verify($_POST['delete_all_postings_confirm_pw'], $field["user_pw"]);
+    }
+    if ($positive === false) $errors[] = $lang['pw_wrong'];
    }
   if (empty($errors))
    {
@@ -621,7 +655,16 @@ if (isset($_POST['delete_db_confirmed']))
   if ($_POST['delete_db_confirm_pw']=="" || empty($_POST['delete_modus'])) $errors[] = $lang['error_form_uncompl'];
   else
    {
-    if ($field['user_pw'] != md5(trim($_POST['delete_db_confirm_pw']))) $errors[] = $lang['pw_wrong'];
+    if (mb_strlen($field["user_pw"]) == 32) {
+      if ($field["user_pw"] == md5($_POST['delete_db_confirm_pw'])) {
+        $positive = true;
+      } else {
+        $positive = false;
+      }
+    } else {
+      $positive = password_verify($_POST['delete_db_confirm_pw'], $field["user_pw"]);
+    }
+    if ($positive === false) $errors[] = $lang['pw_wrong'];
    }
   if (empty($errors))
    {
@@ -810,7 +853,7 @@ if (isset($_POST['ar_username']))
       $ar_pw="";
       for($i=0;$i<8;$i++) { $ar_pw .= mb_substr($letters, mt_rand(0, mb_strlen($letters) - 1), 1); }
      }
-    $encoded_ar_pw = md5($ar_pw);
+    $encoded_ar_pw = password_hash($ar_pw, PASSWORD_DEFAULT);
     $new_user_result = mysqli_query($connid, "INSERT INTO ". $db_settings['userdata_table'] ." (user_type, user_name, user_pw, user_email, hide_email, profile, last_login, last_logout, user_ip, registered, user_view, personal_messages) VALUES ('user','". mysqli_real_escape_string($connid, $ar_username) ."','". mysqli_real_escape_string($connid, $encoded_ar_pw) ."','". mysqli_real_escape_string($connid, $ar_email) ."','1','',NOW(),NOW(),'". mysqli_real_escape_string($connid, $_SERVER["REMOTE_ADDR"]) ."',NOW(),'". mysqli_real_escape_string($connid, $settings['standard']) ."',1)");
     if(!$new_user_result) die($lang['db_error']);
 

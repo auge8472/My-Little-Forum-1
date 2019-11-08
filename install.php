@@ -505,7 +505,7 @@ if (isset($_POST['form_submitted']))
      // insert admin in userdata table:
      if (empty($errors))
       {
-       @mysqli_query($connid, "INSERT INTO ". $db_settings['userdata_table'] ." (user_type, user_name, user_real_name, user_pw, user_email, hide_email, profile, registered, user_view, personal_messages) VALUES ('admin','". mysqli_real_escape_string($connid, $_POST['admin_name']) ."','','". mysqli_real_escape_string($connid, md5(trim($_POST['admin_pw'])))."','". mysqli_real_escape_string($connid, $_POST['admin_email']) ."','1','',NOW(),'". mysqli_real_escape_string($connid, $settings['standard']) ."','1')") or $errors[] = $lang_add['insert_admin_error']." (MySQL: ".mysqli_error($connid).")";
+       @mysqli_query($connid, "INSERT INTO ". $db_settings['userdata_table'] ." (user_type, user_name, user_real_name, user_pw, user_email, hide_email, profile, registered, user_view, personal_messages) VALUES ('admin','". mysqli_real_escape_string($connid, $_POST['admin_name']) ."','','". mysqli_real_escape_string($connid, password_hash(trim($_POST['admin_pw']), PASSWORD_DEFAULT))."','". mysqli_real_escape_string($connid, $_POST['admin_email']) ."','1','',NOW(),'". mysqli_real_escape_string($connid, $settings['standard']) ."','1')") or $errors[] = $lang_add['insert_admin_error']." (MySQL: ".mysqli_error($connid).")";
       }
 
      // insert settings in settings table:

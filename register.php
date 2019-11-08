@@ -177,7 +177,7 @@ if(isset($_POST['register_submit']))
    // save user if no errors:
    if (empty($errors))
     {
-     $encoded_new_user_pw = md5($reg_pw);
+     $encoded_new_user_pw = password_hash($reg_pw, PASSWORD_DEFAULT);
      $activate_code = md5(uniqid(rand()));
      @mysqli_query($connid, "INSERT INTO ". $db_settings['userdata_table'] ." (user_type, user_name, user_pw, user_email, hide_email, profile, last_login, last_logout, user_ip, registered, user_view, personal_messages, activate_code) VALUES ('user','". mysqli_real_escape_string($connid, $new_user_name) ."','". mysqli_real_escape_string($connid, $encoded_new_user_pw) ."','". mysqli_real_escape_string($connid, $new_user_email) ."','1','',NOW(),NOW(),'". mysqli_real_escape_string($connid, $_SERVER["REMOTE_ADDR"]) ."',NOW(),'". mysqli_real_escape_string($connid, $settings['standard']) ."','1', '". mysqli_real_escape_string($connid, $activate_code) ."')") or die($lang['db_error']);
 
