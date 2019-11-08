@@ -231,7 +231,7 @@ switch ($action)
       mt_srand ((double)microtime()*1000000);
       $new_user_pw="";
       for($i=0;$i<8;$i++) { $new_user_pw .= mb_substr($letters, mt_rand(0, mb_strlen($letters) - 1), 1); }
-      $encoded_new_user_pw = md5($new_user_pw);
+      $encoded_new_user_pw = password_hash($new_user_pw, PASSWORD_DEFAULT);
       $update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET last_login=last_login, registered=registered, user_pw='". mysqli_real_escape_string($connid, $encoded_new_user_pw) ."', pwf_code='' WHERE user_id=". intval($field["user_id"]) ." LIMIT 1");
 
       // send new password:

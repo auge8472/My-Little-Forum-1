@@ -106,7 +106,24 @@ if(isset($_POST['change_email_submit']))
       if (mb_strlen($new_email) > $settings['email_maxlength']) $errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
       if ($new_email == $field["user_email"]) $errors[] = $lang['error_email_equal'];
       if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $new_email)) $errors[] = $lang['error_email_wrong'];
-      if ($field["user_pw"] != md5(trim($pw_new_email))) $errors[] = $lang['pw_wrong'];
+      if ($field["user_pw"] == 32) {
+        if ($field["user_pw"] == md5($pw_new_email)) {
+          $positive = true;
+        } else {
+          $positive = false;
+        }
+        if ($positive === true) {
+          $new_hash = password_hash($pw_new_email, PASSWORD_DEFAULT);
+          $qNewPassword = "UPDATE ". $db_settings['userdata_table'] ." SET last_login=last_login, registered=registered, user_pw = '". mysqli_real_escape_string($connid, $new_hash) ."' WHERE user_id = ". intval($field["user_id"]);
+          $rNewPassword = mysqli_query($connid, $qNewPassword);
+          if ($rNewPassword === true) {
+            $field["user_pw"] = $new_hash;
+          }
+        }
+      } else {
+        $positive = password_verify($userpw, $field["user_pw"]);
+      }
+      if ($positive === false) $errors[] = $lang['pw_wrong'];
      }
     if (empty($errors))
      {
@@ -212,13 +229,22 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     if ($old_pw=="" or $new_pw=="" or $new_pw_conf =="") $errors[] = $lang['error_form_uncompl'];
     else
      {
-      if ($field["user_pw"] != md5($old_pw)) $errors[] = $lang['error_old_pw_wrong'];
+      if (mb_strlen($field["user_pw"]) == 32) {
+        if ($field["user_pw"] == md5($old_pw)) {
+          $positive = true;
+        } else {
+          $positive = false;
+        }
+      } else {
+        $positive = password_verify($old_pw, $field["user_pw"]);
+      }
+      if ($positive === false) $errors[] = $lang['error_old_pw_wrong'];
       if ($new_pw_conf != $new_pw) $errors[] = $lang['error_pw_conf_wrong'];
      }
     // Update, if no errors:
     if (empty($errors))
      {
-      $pw_update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_pw='". mysqli_real_escape_string($connid, md5($new_pw)) ."', last_login=last_login, registered=registered WHERE user_id=". intval($user_id));
+      $pw_update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_pw='". mysqli_real_escape_string($connid, password_hash($new_pw, PASSWORD_DEFAULT)) ."', last_login=last_login, registered=registered WHERE user_id=". intval($user_id));
       header("location: user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die("<a href=\"user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']."\">further...</a>");
      }
     else $action="pw";
