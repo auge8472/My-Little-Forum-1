@@ -171,7 +171,7 @@ function text_check_link($string)
   return $string;
  }
 
-function bbcode($string)
+function bbcode($string, $rss = false)
  {
   global $settings;
   $string = preg_replace("#\[b\](.+?)\[/b\]#is", "<b>\\1</b>", $string);

@@ -54,7 +54,7 @@ $ftext = htmlsc($ftext);
 $ftext = make_link($ftext);
 $ftext = preg_replace("#\[msg\](.+?)\[/msg\]#is", "\\1", $ftext);
 $ftext = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", "\\2 --> \\1", $ftext);
-$ftext = bbcode($ftext);
+$ftext = bbcode($ftext, true);
 $ftext = nl2br($ftext);
 #$ftext = str_replace("&raquo;", "&gt;", $ftext);
 #$ftext = str_replace("&laquo;", "&lt;", $ftext);
