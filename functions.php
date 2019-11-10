@@ -188,9 +188,14 @@ function bbcode($string, $rss = false)
   $string = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", "<a href=\"".basename($_SERVER['PHP_SELF'])."?id=\\1\">\\2</a>", $string);
   if ($settings['bbcode_img'] == 1)
    {
-    $string = preg_replace("#\[img\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"margin: 5px 0px 5px 0px\" />", $string);
-    $string = preg_replace("#\[img\|left\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"float: left; margin: 0px 5px 5px 0px\" />", $string);
-    $string = preg_replace("#\[img\|right\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"float: right; margin: 0px 0px 5px 5px\" />", $string);
+    if ($rss === true) {
+     $string = preg_replace("#\[img\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" />", $string);
+     $string = str_replace('<img src="img/uploaded', '<img src="'. htmlsc($settings['forum_address']) .'img/uploaded', $string);
+    } else {
+     $string = preg_replace("#\[img\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"margin: 5px 0px 5px 0px\" />", $string);
+     $string = preg_replace("#\[img\|left\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"float: left; margin: 0px 5px 5px 0px\" />", $string);
+     $string = preg_replace("#\[img\|right\](.+?)\[/img\]#is", "<img src=\"\\1\" alt=\"[image]\" style=\"float: right; margin: 0px 0px 5px 5px\" />", $string);
+    }
    }
   $string=str_replace('javascript','javascr***',$string);
   return $string;
