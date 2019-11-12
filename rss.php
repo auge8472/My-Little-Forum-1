@@ -55,22 +55,11 @@ $ftext = preg_replace("#\[msg\](.+?)\[/msg\]#is", "\\1", $ftext);
 $ftext = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", "\\2 --> \\1", $ftext);
 $ftext = bbcode($ftext, true);
 $ftext = nl2br($ftext);
-#$ftext = str_replace("&raquo;", "&gt;", $ftext);
-#$ftext = str_replace("&laquo;", "&lt;", $ftext);
 $ftext = rss_quote($ftext);
-#$ftext = str_replace("&", "&amp;", $ftext);
-#$ftext = str_replace("<", "&lt;", $ftext);
-#$ftext = str_replace(">", "&gt;", $ftext);
 $title = $zeile['subject'];
 $title = htmlsc($title);
-#$title = str_replace("&raquo;", "&gt;", $title);
-#$title = str_replace("&laquo;", "&lt;", $title);
-#$title = str_replace("&", "&amp;", $title);
 $name = $zeile['name'];
 $name = htmlsc($name);
-#$name = str_replace("&raquo;", "&gt;", $name);
-#$name = str_replace("&laquo;", "&lt;", $name);
-#$name = str_replace("&", "&amp;", $name);
 ?><item>
 <title><?php echo $title; ?></title>
 <content:encoded><![CDATA[<i><?php if ($zeile['pid']==0) { $rss_author_info = str_replace("[name]", $name, $lang['rss_posting_by']); echo str_replace("[time]", strftime($lang['time_format'],$zeile["xtime"]), $rss_author_info); } else { $rss_author_info = str_replace("[name]", $name, $lang['rss_reply_by']); echo str_replace("[time]", strftime($lang['time_format'],$zeile["xtime"]), $rss_author_info); } ?></i><br /><br /><?php echo $ftext; ?>]]></content:encoded>
