@@ -373,8 +373,8 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
          }
         if (isset($email) && $email != "" and !preg_match("/^[^@]+@.+\.\D{2,5}$/", $email)) // ÃberprÃ¼fung ob die Email-Adresse das Format name@domain.tld hat
          $errors[] = $lang['error_email_wrong'];
-        //if(isset($hp) && $hp != "" and !preg_match("[hier fehlt noch die Reg-Ex]", $hp))
-        //  $errors[] = $lang['error_hp_wrong'];
+        if(isset($hp) && filter_var($hp, FILTER_VALIDATE_URL) === false)
+          $errors[] = $lang['error_hp_wrong'];
         if ($email == "" && isset($email_notify) && $email_notify == 1 && !isset($_SESSION[$settings['session_prefix'].'user_id']) || $email == "" && isset($email_notify) && $email_notify == 1 && isset($p_user_id) && $p_user_id == 0)
          $errors[] = $lang['error_no_email_to_notify'];
         if (!isset($subject) || $subject == "")
