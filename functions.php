@@ -345,11 +345,16 @@ function user_online()
    }
   else
    {
-    ?><a class="<?php
-    if ((($parent_array[$id]["pid"]==0) && isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $parent_array[$id]["last_answer"]) || (($parent_array[$id]["pid"]==0) && empty($_SESSION[$settings['session_prefix'].'newtime']) && $parent_array[$id]["last_answer"] > $last_visit)) echo "threadnew";
-    elseif ($parent_array[$id]["pid"]==0) echo "thread";
-    elseif ((($parent_array[$id]["pid"]!=0) && isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $parent_array[$id]["time"]) || (($parent_array[$id]["pid"]!=0) && empty($_SESSION[$settings['session_prefix'].'newtime']) && $parent_array[$id]["time"] > $last_visit)) echo "replynew";
-    else echo "reply"; ?>" href="forum_entry.php?id=<?php echo $parent_array[$id]["id"]; if ($page != 0 || $category != 0 || $order != "time") echo '&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order; ?>"><?php echo htmlsc($parent_array[$id]["subject"]); ?></a><?php
+     if ((($parent_array[$id]["pid"]==0) && isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $parent_array[$id]["last_answer"]) || (($parent_array[$id]["pid"]==0) && empty($_SESSION[$settings['session_prefix'].'newtime']) && $parent_array[$id]["last_answer"] > $last_visit)) {
+        $treeClass = "threadnew";
+     } else if ($parent_array[$id]["pid"]==0) {
+        $treeClass = "thread";
+     } else if ((($parent_array[$id]["pid"]!=0) && isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $parent_array[$id]["time"]) || (($parent_array[$id]["pid"]!=0) && empty($_SESSION[$settings['session_prefix'].'newtime']) && $parent_array[$id]["time"] > $last_visit)) {
+        $treeClass = "replynew";
+     } else {
+        $treeClass = "reply";
+     }
+    ?><a class="<?php echo $treeClass; ?>" href="forum_entry.php?id=<?php echo $parent_array[$id]["id"]; if ($page != 0 || $category != 0 || $order != "time") echo '&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order; ?>"><?php echo htmlsc($parent_array[$id]["subject"]); ?></a><?php
    }
   echo " " . $thread_info_b;
   if ($parent_array[$id]["pid"]==0 && $category==0 && isset($categories[$parent_array[$id]["category"]]) && $categories[$parent_array[$id]["category"]]!='') { ?> <a title="<?php echo str_replace("[category]", $categories[$parent_array[$id]["category"]], $lang['choose_category_linktitle']); if (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 2) echo " ".$lang['admin_mod_category']; elseif (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 1) echo " ".$lang['registered_users_category']; ?>" href="forum.php?category=<?php echo $parent_array[$id]["category"]; ?>"><span class="<?php if (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 2) echo "category-adminmod"; elseif (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 1) echo "category-regusers"; else echo "category"; ?>">(<?php echo $categories[$parent_array[$id]["category"]]; ?>)</span></a><?php }

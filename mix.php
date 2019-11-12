@@ -39,15 +39,22 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
  function mix_tree($id, $aktuellerEintrag = 0, $tiefe = 0)
  {
   global $settings, $parent_array, $child_array, $page, $order, $category, $descasc, $last_visit, $lang;
-  //for($i = 0; $i < $tiefe; $i++) echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-  ?><div class="threadkl" style="margin-left: <?php if ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix']/$settings['thread_indent_mix'])) echo "0"; else echo $settings['thread_indent_mix']; ?>px;"><?php
+  $intendation = 20;
+  if ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix']/$settings['thread_indent_mix'])) {
+    $intendation = 0;
+  } else {
+    $intendation = intval($settings['thread_indent_mix']);
+  }
+  ?><div class="threadkl" style="margin-left: <?php echo $intendation; ?>px;"><?php
   //[... Zeile mit den Eintragsdaten oder einem Link ausgeben ...]
   if ($parent_array[$id]["pid"]!=0)
    {
-    ?><a class="<?php
-    if (($aktuellerEintrag == 0 && isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $parent_array[$id]["time"]) || ($aktuellerEintrag == 0 && empty($_SESSION[$settings['session_prefix'].'newtime']) && $parent_array[$id]["time"] > $last_visit)) echo "replynew";
-    else echo "reply";
-    ?>" href="mix_entry.php?id=<?php echo $parent_array[$id]["tid"]; if ($page != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC") echo '&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc; ?>#p<?php echo $parent_array[$id]["id"]; ?>" title="<?php echo htmlsc($parent_array[$id]["name"]); echo ", ".strftime($lang['time_format'],$parent_array[$id]["Uhrzeit"]); ?>"><?php echo htmlsc($parent_array[$id]["subject"]); ?></a><?php
+    if (($aktuellerEintrag == 0 && isset($_SESSION[$settings['session_prefix'].'newtime']) && $_SESSION[$settings['session_prefix'].'newtime'] < $parent_array[$id]["time"]) || ($aktuellerEintrag == 0 && empty($_SESSION[$settings['session_prefix'].'newtime']) && $parent_array[$id]["time"] > $last_visit)) {
+      $treeClass = "replynew";
+    } else {
+      $treeClass = "reply";
+    }
+    ?><a class="<?php echo $treeClass; ?>" href="mix_entry.php?id=<?php echo $parent_array[$id]["tid"]; if ($page != 0 || $category != 0 || $order != "last_answer" || $descasc != "DESC") echo '&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc; ?>#p<?php echo $parent_array[$id]["id"]; ?>" title="<?php echo htmlsc($parent_array[$id]["name"]); echo ", ".strftime($lang['time_format'],$parent_array[$id]["Uhrzeit"]); ?>"><?php echo htmlsc($parent_array[$id]["subject"]); ?></a><?php
    }
 
   // Anfang der Schleife über alle Kinder ...
