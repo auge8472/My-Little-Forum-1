@@ -136,7 +136,7 @@ if(isset($_POST['register_submit']))
       $errors[] = str_replace("[e-mail]", htmlsc($new_user_email), $lang['error_email_reserved']);
      }
     // e-mail correct?
-    if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $new_user_email)) $errors[] = $lang['error_email_wrong'];
+    if (!preg_match("/^[^@]+@.+\.\D{2,}$/", $new_user_email)) $errors[] = $lang['error_email_wrong'];
 
     // CAPTCHA check:
     if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_register']==1)

@@ -371,7 +371,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
             $errors[] = $lang['error_name_reserved'];
            }
          }
-        if (isset($email) && $email != "" and !preg_match("/^[^@]+@.+\.\D{2,5}$/", $email)) // ÃberprÃ¼fung ob die Email-Adresse das Format name@domain.tld hat
+        if (isset($email) && $email != "" and !preg_match("/^[^@]+@.+\.\D{2,}$/", $email)) // ÃberprÃ¼fung ob die Email-Adresse das Format name@domain.tld hat
          $errors[] = $lang['error_email_wrong'];
         if(isset($hp) && filter_var($hp, FILTER_VALIDATE_URL) === false)
           $errors[] = $lang['error_hp_wrong'];
