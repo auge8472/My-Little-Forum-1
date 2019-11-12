@@ -284,7 +284,6 @@ function update17() {
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['forum_table'] ." CHANGE time time timestamp NULL default NULL, CHANGE last_answer last_answer timestamp NULL default NULL, CHANGE edited edited timestamp NULL default NULL") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['userdata_table'] ." CHANGE last_login last_login timestamp NULL default NULL, CHANGE last_logout last_logout timestamp NULL default NULL, CHANGE registered registered timestamp NULL default NULL") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['smilies_table'] ." CHANGE file file varchar(100) NOT NULL default '', CHANGE title title varchar(255) NOT NULL default ''") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
-	@mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='1.7.8' WHERE name = 'version'") or $errors[] = $lang_add['update_error']. " (MySQL: ".mysqli_error($connid).")";
 	if (isset($errors)) return $errors;
 	return false;
 }
@@ -311,6 +310,7 @@ function update17to18() {
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['banlists_table'] ." CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['banlists_table'] ." CHANGE name name varchar(32) CHARACTER SET utf8mb3 NOT NULL, ADD PRIMARY KEY (name)") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['useronline_table'] ." CHANGE time time int(14) NOT NULL default 0, CHANGE user_id user_id int(11) default 0, CONVERT TO CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='1.8' WHERE name = 'version'") or $errors[] = $lang_add['update_error']. " (MySQL: ".mysqli_error($connid).")";
 	if (isset($errors)) return $errors;
 	return false;
 }
