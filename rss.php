@@ -48,8 +48,7 @@ if ($result_count > 0 && $settings['provide_rssfeed'] == 1 && $settings['access_
 {
 while ($zeile = mysqli_fetch_assoc($result))
 {
-$ftext = $zeile["text"];
-$ftext = htmlsc($ftext);
+$ftext = htmlsc($zeile["text"]);
 $ftext = make_link($ftext);
 $ftext = preg_replace("#\[msg\](.+?)\[/msg\]#is", "\\1", $ftext);
 $ftext = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", "\\2 --> \\1", $ftext);
