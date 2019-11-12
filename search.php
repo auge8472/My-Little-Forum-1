@@ -237,16 +237,21 @@ $i=0;
 while ($entrydata = mysqli_fetch_assoc($result)) {
 $search_author_info_x = str_replace("[name]", htmlsc(stripslashes($entrydata["name"])), $lang['search_author_info']);
 $search_author_info_x = str_replace("[time]", strftime($lang['time_format'],$entrydata["Uhrzeit"]), $search_author_info_x);
-?><p class="searchresults"><a class="<?php if ($entrydata["pid"] == 0) echo "thread"; else echo "reply-search"; ?>" href="<?php
-if (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="board") echo "board_entry.php?id=".$entrydata["tid"]."#p".$entrydata["id"];
-elseif (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="thread") echo "forum_entry.php?id=".$entrydata["id"];
-elseif (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="mix") echo "mix_entry.php?id=".$entrydata["tid"]."#p".$entrydata["id"];
-elseif (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="board") echo "board_entry.php?id=".$entrydata["tid"]."#p".$entrydata["id"];
-elseif (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="thread") echo "forum_entry.php?id=".$entrydata["id"];
-elseif (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="mix") echo "mix_entry.php?id=".$entrydata["tid"]."#p".$entrydata["id"];
-elseif (isset($standard) && $standard=="board") echo "board_entry.php?id=".$entrydata["tid"]."#p".$entrydata["id"];
-elseif (isset($standard) && $standard=="mix") echo "mix_entry.php?id=".$entrydata["tid"]."#p".$entrydata["id"];
-else echo "forum_entry.php?id=".$entrydata["id"]; ?>"><?php echo htmlsc($entrydata["subject"]); ?></a> <?php echo $search_author_info_x; if(isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='') echo " <span class=\"category\">(".$categories[$entrydata["category"]].")</span>"; ?></p><?php }
+$treeClass = ($entrydata["pid"] == 0) ? "thread" : "reply-search";
+if ((isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="board") || (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="board") || (isset($standard) && $standard=="board")) {
+  $userView = "board_entry.php";
+  $itemFragment = "#p". intval($entrydata["id"]);
+} else if ((isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="mix") || (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="mix") || (isset($standard) && $standard=="mix")) {
+  $userView = "mix_entry.php";
+  $itemFragment = "#p". intval($entrydata["id"]);
+} else if (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="thread" || (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="thread")) {
+  $userView = "forum_entry.php";
+  $itemFragment = "";
+} else {
+  $userView = "forum_entry.php";
+  $itemFragment = "";
+}
+?><p class="searchresults"><a class="<?php echo $treeClass; ?>" href="<?php echo $userView ."?id=". intval($entrydata["tid"]) . $itemFragment; ?>"><?php echo htmlsc($entrydata["subject"]); ?></a> <?php echo $search_author_info_x; if(isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='') echo " <span class=\"category\">(".$categories[$entrydata["category"]].")</span>"; ?></p><?php }
 }
 ?>
 <br />
