@@ -105,7 +105,7 @@ if(isset($_POST['change_email_submit']))
      {
       if (mb_strlen($new_email) > $settings['email_maxlength']) $errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
       if ($new_email == $field["user_email"]) $errors[] = $lang['error_email_equal'];
-      if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $new_email)) $errors[] = $lang['error_email_wrong'];
+      if (!preg_match("/^[^@]+@.+\.\D{2,}$/", $new_email)) $errors[] = $lang['error_email_wrong'];
       if ($field["user_pw"] == 32) {
         if ($field["user_pw"] == md5($pw_new_email)) {
           $positive = true;

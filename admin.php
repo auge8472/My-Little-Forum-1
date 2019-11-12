@@ -833,7 +833,7 @@ if (isset($_POST['ar_username']))
       $errors[] = $lang['error_name_reserved'];
      }
     // ÃberprÃ¼fung ob die Email-Adresse das Format name@domain.tld hat:
-    if (!preg_match("/^[^@]+@.+\.\D{2,5}$/", $ar_email))
+    if (!preg_match("/^[^@]+@.+\.\D{2,}$/", $ar_email))
     $errors[] = $lang['error_email_wrong'];
 
     if ($ar_pw_conf != $ar_pw) $errors[] = $lang_add['error_pw_conf_wrong'];
