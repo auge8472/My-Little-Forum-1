@@ -258,8 +258,6 @@ if (isset($_POST['new_category']))
   $accession = intval($_POST['accession']);
   if($new_category!='')
    {
-    #if(preg_match("/\"/i",$new_category) || preg_match("/</i",$new_category) || preg_match("/>/i",$new_category)) $errors[] = $lang_add['category_invalid_chars'];
-
     // does this category already exist?
     $category_result = mysqli_query($connid, "SELECT category FROM ". $db_settings['category_table'] ." WHERE category = '". mysqli_real_escape_string($connid, $new_category) ."' LIMIT 1");
     if(!$category_result) die($lang['db_error']);
