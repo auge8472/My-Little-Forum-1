@@ -97,7 +97,6 @@ if (isset($id) || isset($uid) || isset($forum_contact))
   $hide_email = $user_field['hide_email'];
   }
 
-  #if (empty($_POST["form_submitted"])) $subject = $field['subject'];
   if (empty($forum_contact) && $field['user_id'] == 0 && $email == "" || empty($forum_contact) && $field['user_id'] > 0 && $hide_email == 1) $no_message = true;
 
   if (isset($_POST["form_submitted"]))

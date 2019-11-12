@@ -405,13 +405,11 @@ function parse_template()
   // Search:
   $search_dump = '<form action="search.php" method="get" title="'.$lang['search_formtitle'].'" accept-charset="UTF-8"><div class="search">';
   $search_dump .= $lang['search_marking'];
-  # if (isset($search)) $search_match = htmlsc($search); else $search_match = "";
   $search_dump .= '<span class="normal">&nbsp;</span><input class="searchfield" type="text" name="search" value="" size="20" /><span class="normal">&nbsp;</span><input type="image" name="" src="img/submit.gif" alt="&raquo;" /></div></form>';
   $template = str_replace("{SEARCH}",$search_dump,$template);
 
   // Sub navigation:
   if (isset($topnav)) $tnd = $topnav; else $tnd = ""; $template = str_replace("{LOCATION}",$tnd,$template);
-  #if (isset($topnav)) $subnav_1_dump = $topnav; elseif (isset($subnav_1)) $subnav_1_dump = $subnav_1; else $subnav_1_dump = "&nbsp;";
   if (isset($subnav_1)) $subnav_1_dump = $subnav_1; else $subnav_1_dump = "&nbsp;";
   $template = str_replace("{SUB-NAVIGATION-1}",$subnav_1_dump,$template);
   if (isset($subnav_2)) $subnav_2_dump = $subnav_2; else $subnav_2_dump = "&nbsp;";
