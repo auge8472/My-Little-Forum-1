@@ -126,7 +126,7 @@ function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category
      if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?page='. intval($new_index_before) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) . $ic .'"><img src="img/prev.gif" alt="&laquo;" title="'. htmlsc($lang['previous_page_linktitle']) .'" width="12" height="9" onmouseover="this.src=\'img/prev_mo.gif\';" onmouseout="this.src=\'img/prev.gif\';" /></a>&nbsp;';
      //if ($new_index_before >= 0 && $new_index_after < $site_count) $output .= " ";
      $page_count = ceil($entry_count/$entries_per_page);
-     $output .= '<form action="'. basename($_SERVER["SCRIPT_NAME"]) .'" method="get" title="'. htmlsc($lang['choose_page_formtitle']) .'" accept-charset="UTF-8"><div style="display: inline;">';
+     $output .= '<form action="'. basename($_SERVER["SCRIPT_NAME"]) .'" method="get" accept-charset="UTF-8"><div style="display: inline;">';
      if (isset($order)) $output .= '<input type="hidden" name="order" value="'. htmlsc($order).'" />';
      if (isset($descasc)) $output .= '<input type="hidden" name="descasc" value="'. htmlsc($descasc) .'" />';
      if (isset($category)) $output .= '<input type="hidden" name="category" value="'. intval($category) .'" />';
@@ -251,12 +251,11 @@ function smilies($string)
   $result = mysqli_query($connid, "SELECT file, code_1, code_2, code_3, code_4, code_5, title FROM ".$db_settings['smilies_table']);
   while($data = mysqli_fetch_assoc($result))
    {
-    if($data['title']!='') $title = ' title="'. htmlsc($data['title']) .'"'; else $title='';
-    if($data['code_1']!='') $string = str_replace($data['code_1'], '<img src="img/smilies/'. $data['file'] .'" alt="'. $data['code_1'] .'"'. $title .' />', $string);
-    if($data['code_2']!='') $string = str_replace($data['code_2'], '<img src="img/smilies/'. $data['file'] .'" alt="'. $data['code_2'] .'"'. $title .' />', $string);
-    if($data['code_3']!='') $string = str_replace($data['code_3'], '<img src="img/smilies/'. $data['file'] .'" alt="'. $data['code_3'] .'"'. $title .' />', $string);
-    if($data['code_4']!='') $string = str_replace($data['code_4'], '<img src="img/smilies/'. $data['file'] .'" alt="'. $data['code_4'] .'"'. $title .' />', $string);
-    if($data['code_5']!='') $string = str_replace($data['code_5'], '<img src="img/smilies/'. $data['file'] .'" alt="'. $data['code_5'] .'"'. $title .' />', $string);
+    if($data['code_1']!='') $string = str_replace($data['code_1'], '<img src="img/smilies/'. $data['file'] .'" alt="'. $data['code_1'] .'" />', $string);
+    if($data['code_2']!='') $string = str_replace($data['code_2'], '<img src="img/smilies/'. $data['file'] .'" alt="'. $data['code_2'] .'" />', $string);
+    if($data['code_3']!='') $string = str_replace($data['code_3'], '<img src="img/smilies/'. $data['file'] .'" alt="'. $data['code_3'] .'" />', $string);
+    if($data['code_4']!='') $string = str_replace($data['code_4'], '<img src="img/smilies/'. $data['file'] .'" alt="'. $data['code_4'] .'" />', $string);
+    if($data['code_5']!='') $string = str_replace($data['code_5'], '<img src="img/smilies/'. $data['file'] .'" alt="'. $data['code_5'] .'" />', $string);
    }
   mysqli_free_result($result);
   return($string);
@@ -327,10 +326,9 @@ function user_online()
   else $name=htmlsc($parent_array[$id]["name"]);
   if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1)
    {
-    $sult = str_replace("[name]", htmlsc($parent_array[$id]["name"]), $lang['show_userdata_linktitle']);
-    $thread_info_a = str_replace("[name]", $name .'<a href="user.php?id='. intval($parent_array[$id]["user_id"]) .'" title="'. htmlsc($sult) .'"><img src="img/registered.gif" alt="(R)" width="10" height="10" /></a>', $lang['thread_info']);
+    $thread_info_a = str_replace("[name]", $name .'<a href="user.php?id='. intval($parent_array[$id]["user_id"]) .'"><img src="img/registered.gif" alt="'. $lang['registered_user_title'] .'" width="10" height="10" /></a>', $lang['thread_info']);
    }
-  elseif (!isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1) $thread_info_a = str_replace("[name]", $name .'<img src="img/registered.gif" alt="(R)" width="10" height="10" title="'. $lang['registered_user_title'] .'" />', $lang['thread_info']);
+  elseif (!isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1) $thread_info_a = str_replace("[name]", $name .'<img src="img/registered.gif" alt="'. $lang['registered_user_title'] .'" width="10" height="10" />', $lang['thread_info']);
   else $thread_info_a = str_replace("[name]", $name, $lang['thread_info']);
   $thread_info_b = str_replace("[time]", strftime($lang['time_format'],$parent_array[$id]["tp_time"]), $thread_info_a);
 
@@ -364,8 +362,8 @@ function user_online()
       if ($parent_array[$id]["pid"]==0 && isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
      {
       ?> <a href="admin.php?mark=<?php echo intval($parent_array[$id]["tid"]); ?>&amp;refer=<?php echo urlencode(basename($_SERVER["SCRIPT_NAME"])); ?>&amp;page=<?php echo intval($page); ?>&amp;category=<?php echo intval($category); ?>&amp;order=<?php echo urlencode($order); ?>"><?php
-      if ($parent_array[$id]['marked']==1) { ?><img src="img/marked.gif" alt="[x]" width="9" height="9" title="<?php echo htmlsc($lang['demark_linktitle']); ?>" /><?php }
-      else { echo '<img src="img/mark.gif" alt="[-]" title="'. htmlsc($lang['mark_linktitle']) .'" width="9" height="9" />'; }
+      if ($parent_array[$id]['marked']==1) { ?><img src="img/marked.gif" alt="<?php echo htmlsc($lang['demark_linktitle']); ?>" width="9" height="9" /><?php }
+      else { echo '<img src="img/mark.gif" alt="'. htmlsc($lang['mark_linktitle']) .'" width="9" height="9" />'; }
       ?></a><?php
      }
 
@@ -403,12 +401,12 @@ function parse_template()
   $template = str_replace('{CONTACT}',$lang['contact_linkname'],$template);
 
   // User menu:
-  if (isset($_SESSION[$settings['session_prefix']."user_name"])) { if (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=="admin") $user_menu_admin = ' | <a href="admin.php" title="'. htmlsc($lang['admin_area_linktitle']) .'">'.$lang['admin_area_linkname'].'</a>'; else $user_menu_admin = ""; $user_menu = '<a href="user.php?id='. intval($_SESSION[$settings['session_prefix'].'user_id']) .'" title="'. htmlsc($lang['own_userdata_linktitle']) .'"><b>'. htmlsc($_SESSION[$settings['session_prefix'].'user_name']) .'</b></a> | <a href="user.php" title="'. htmlsc($lang['user_area_linktitle']) .'">'.$lang['user_area_linkname'].'</a>'.$user_menu_admin.' | <a href="login.php" title="'. htmlsc($lang['logout_linktitle']) .'">'.$lang['logout_linkname'].'</a>'; }
-  else $user_menu = '<a href="login.php" title="'. htmlsc($lang['login_linktitle']) .'">'.$lang['login_linkname'].'</a> | <a href="register.php" title="'. htmlsc($lang['register_linktitle']) .'">'.$lang['register_linkname'].'</a>';
+  if (isset($_SESSION[$settings['session_prefix']."user_name"])) { if (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=="admin") $user_menu_admin = ' | <a href="admin.php">'.$lang['admin_area_linkname'].'</a>'; else $user_menu_admin = ""; $user_menu = '<a href="user.php?id='. intval($_SESSION[$settings['session_prefix'].'user_id']) .'"><b>'. htmlsc($_SESSION[$settings['session_prefix'].'user_name']) .'</b></a> | <a href="user.php">'.$lang['user_area_linkname'].'</a>'.$user_menu_admin.' | <a href="login.php">'.$lang['logout_linkname'].'</a>'; }
+  else $user_menu = '<a href="login.php">'.$lang['login_linkname'].'</a> | <a href="register.php">'.$lang['register_linkname'].'</a>';
   $template = str_replace("{USER-MENU}",$user_menu,$template);
 
   // Search:
-  $search_dump = '<form action="search.php" method="get" title="'. htmlsc($lang['search_formtitle']) .'" accept-charset="UTF-8"><div class="search">';
+  $search_dump = '<form action="search.php" method="get" accept-charset="UTF-8"><div class="search">';
   $search_dump .= $lang['search_marking'];
   $search_dump .= '<span class="normal">&nbsp;</span><input class="searchfield" type="text" name="search" value="" size="20" /><span class="normal">&nbsp;</span><input type="image" name="" src="img/submit.gif" alt="&raquo;" /></div></form>';
   $template = str_replace("{SEARCH}",$search_dump,$template);

@@ -39,7 +39,7 @@ include("inc.php");
    $new_index_before = $page - 1;
    $new_index_after = $page + 1;
    $site_count = ceil($count / $suchergebnisse);
-   if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. urlencode($search) .'&amp;category='. intval($category) .'&amp;ao='. urlencode($ao) .'&amp;page='. intval($new_index_before) .'" title="'. htmlsc($lang['previous_page_linktitle']) .'"><b>&laquo;</b></a>&nbsp;';
+   if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. urlencode($search) .'&amp;category='. intval($category) .'&amp;ao='. urlencode($ao) .'&amp;page='. intval($new_index_before) .'"><b>&laquo;</b></a>&nbsp;';
    if ($page == 3) { $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. urlencode($search) .'&amp;category='. intval($category) .'&amp;ao='. urlencode($ao) .'&amp;page=0"><b>1</b></a>&nbsp;'; }
    elseif ($page > 3) { $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. urlencode($search) .'&amp;category='. intval($category) .'&amp;ao='. urlencode($ao) .'&amp;page=0"><b>1</b></a>&nbsp;<b>...</b>&nbsp;'; }
    for ($i = 0; $i < $site_count; $i++) {
@@ -50,7 +50,7 @@ include("inc.php");
    else {
    $output .= '<span style="color: red; font-weight: bold;"><b>'. ($pagen_nr+1) .'</b></span>&nbsp;';
    } } }
-   if ($new_index_after < $site_count) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. urlencode($search) .'&amp;category='. intval($category) .'&amp;ao='. urlencode($ao) .'&amp;page='. intval($new_index_after) .'" title="'. htmlsc($lang['next_page_linktitle']) .'"><b>&raquo;</b></a>';
+   if ($new_index_after < $site_count) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. urlencode($search) .'&amp;category='. intval($category) .'&amp;ao='. urlencode($ao) .'&amp;page='. intval($new_index_after) .'"><b>&raquo;</b></a>';
    }
   return $output;
   }
@@ -195,7 +195,7 @@ elseif (isset($show_postings) && empty($search))
   $field = mysqli_fetch_assoc($user_name_result);
   mysqli_free_result($user_name_result);
   $lang['show_userdata_linktitle'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['show_userdata_linktitle']);
-  $lang['postings_by_user'] = str_replace("[name]", '<a href="user.php?id='. intval($show_postings) .'" title="'. htmlsc($lang['show_userdata_linktitle']) .'">'. htmlsc(stripslashes($field["user_name"])) .'</a>', $lang['postings_by_user']);
+  $lang['postings_by_user'] = str_replace("[name]", '<a href="user.php?id='. intval($show_postings) .'">'. htmlsc(stripslashes($field["user_name"])) .'</a>', $lang['postings_by_user']);
   $subnav_1 .= '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'. $lang['postings_by_user'] .'</b>';
  }
 if (isset($search) && $search != "") { $subnav_2 = snav($page, $settings['search_results_per_page'], $count, $search, $ao, $category); } elseif (isset($show_postings) && $show_postings !="") { $subnav_2 = pnav($page, $settings['search_results_per_page'], $count, $show_postings); }
@@ -204,7 +204,7 @@ echo $header;
 
 if (isset($search)) $search_match = htmlsc($search); else $search_match = "";
 if (isset($search) && empty($show_postings))
-{ ?><form action="search.php" method="get" title="<?php echo $lang['search_formtitle']; ?>" accept-charset="UTF-8"><div class="search">
+{ ?><form action="search.php" method="get" accept-charset="UTF-8"><div class="search">
 <input type="text" name="search" value="<?php echo $search_match; ?>" size="30" />
 <?php
 if ($categories!=false)

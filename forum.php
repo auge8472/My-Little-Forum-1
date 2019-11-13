@@ -69,20 +69,20 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
     mysqli_free_result($pid_result);
    }
 
-  $subnav_1='<a class="textlink" href="posting.php?category='. intval($category) .'" title="'. htmlsc($lang['new_entry_linktitle']) .'">'.$lang['new_entry_linkname'].'</a>';
+  $subnav_1='<a class="textlink" href="posting.php?category='. intval($category) .'">'.$lang['new_entry_linkname'].'</a>';
   $subnav_2 = '';
-  if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $subnav_2 .= '<a href="index.php?update=1&amp;category='. intval($category) .'"><img src="img/update.gif" alt="" title="'. htmlsc($lang['update_time_linktitle']) .'" width="9" height="9" onmouseover="this.src=\'img/update_mo.gif\';" onmouseout="this.src=\'img/update.gif\';" /></a>';
-  if ($order=="time") $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?order=last_answer&amp;category='. intval($category) .'" title="'. htmlsc($lang['order_linktitle_1']) .'"><img src="img/order.gif" alt="" width="12" height="9" />'.$lang['order_linkname'].'</a></span>';
-  else $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?order=time&amp;category='. intval($category) .'" title="'. htmlsc($lang['order_linktitle_2']) .'"><img src="img/order.gif" alt="" width="12" height="9" />'.$lang['order_linkname'].'</a></span>';
-  if ($settings['board_view'] == 1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php" title="'. htmlsc($lang['board_view_linktitle']) .'"><img src="img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';
-  elseif ($settings['board_view'] == 1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php?category='. intval($category) .'" title="'. htmlsc($lang['board_view_linktitle']) .'"><img src="img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';
-  if ($settings['mix_view']==1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php" title="'. htmlsc($lang['mix_view_linktitle']) .'"><img src="img/mix.gif" alt="" width="12" height="9" />'.$lang['mix_view_linkname'].'</a></span>';
-  elseif ($settings['mix_view']==1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php?category='. intval($category ).'" title="'. htmlsc($lang['mix_view_linktitle']) .'"><img src="img/mix.gif" alt="" width="12" height="9" />'.$lang['mix_view_linkname'].'</a></span>';
+  if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $subnav_2 .= '<a href="index.php?update=1&amp;category='. intval($category) .'"><img src="img/update.gif" alt="'. htmlsc($lang['update_time_linktitle']) .'" width="9" height="9" onmouseover="this.src=\'img/update_mo.gif\';" onmouseout="this.src=\'img/update.gif\';" /></a>';
+  if ($order=="time") $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?order=last_answer&amp;category='. intval($category) .'"><img src="img/order.gif" alt="" width="12" height="9" />'.$lang['order_linkname'].'</a></span>';
+  else $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?order=time&amp;category='. intval($category) .'"><img src="img/order.gif" alt="" width="12" height="9" />'.$lang['order_linkname'].'</a></span>';
+  if ($settings['board_view'] == 1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php"><img src="img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';
+  elseif ($settings['board_view'] == 1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php?category='. intval($category) .'"><img src="img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';
+  if ($settings['mix_view']==1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php"><img src="img/mix.gif" alt="" width="12" height="9" />'.$lang['mix_view_linkname'].'</a></span>';
+  elseif ($settings['mix_view']==1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php?category='. intval($category ).'"><img src="img/mix.gif" alt="" width="12" height="9" />'.$lang['mix_view_linkname'].'</a></span>';
   $subnav_2 .= nav($page, (int)$settings['topics_per_page'], $thread_count, $order, $descasc, $category);
 
   if($categories!=false)
    {
-    $subnav_2 .= '&nbsp;&nbsp;<form method="get" action="forum.php" title="'.$lang['choose_category_formtitle'].'" accept-charset="UTF-8"><div style="display: inline;"><select class="kat" size="1" name="category" onchange="this.form.submit();">';
+    $subnav_2 .= '&nbsp;&nbsp;<form method="get" action="forum.php" accept-charset="UTF-8"><div style="display: inline;"><select class="kat" size="1" name="category" onchange="this.form.submit();">';
     if (isset($category) && $category==0) $subnav_2 .= '<option value="0" selected="selected">'.$lang['show_all_categories'].'</option>';
     else $subnav_2 .= '<option value="0">'.$lang['show_all_categories'].'</option>';
     foreach ($categories as $key => $val)
