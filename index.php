@@ -42,20 +42,20 @@ include("inc.php");
 
  if (isset($_SESSION[$settings['session_prefix'].'user_view']))
   {
-   if ($_SESSION[$settings['session_prefix'].'user_view'] == "board") { header("location: board.php".$qs); die('<a href="board.php">further...</a>'); }
-   elseif ($_SESSION[$settings['session_prefix'].'user_view'] == "mix") { header("location: mix.php".$qs); die('<a href="mix.php">further...</a>'); }
-   else { header("location: forum.php".$qs); die('<a href="forum.php">further...</a>'); }
+   if ($_SESSION[$settings['session_prefix'].'user_view'] == "board") { header("location: board.php".$qs); die('<a href="board.php'. $qs .'">further...</a>'); }
+   elseif ($_SESSION[$settings['session_prefix'].'user_view'] == "mix") { header("location: mix.php".$qs); die('<a href="mix.php'. $qs .'">further...</a>'); }
+   else { header("location: forum.php".$qs); die('<a href="forum.php'. $qs .'">further...</a>'); }
   }
  elseif (isset($_COOKIE['user_view']))
   {
-   if ($_COOKIE['user_view'] == "board") { header("location: board.php".$qs); die('<a href="board.php">further...</a>'); }
-   elseif ($_COOKIE['user_view'] == "mix") { header("location: mix.php".$qs); die('<a href="mix.php">further...</a>'); }
-   else { header("location: forum.php".$qs); die('<a href="forum.php">further...</a>'); }
+   if ($_COOKIE['user_view'] == "board") { header("location: board.php".$qs); die('<a href="board.php'. $qs .'">further...</a>'); }
+   elseif ($_COOKIE['user_view'] == "mix") { header("location: mix.php".$qs); die('<a href="mix.php'. $qs .'">further...</a>'); }
+   else { header("location: forum.php".$qs); die('<a href="forum.php'. $qs .'">further...</a>'); }
   }
  else
   {
-   if ($settings['standard'] == "board") { header("location: board.php".$qs); die('<a href="board.php">further...</a>'); }
-   elseif ($settings['standard'] == "mix") { header("location: mix.php".$qs); die('<a href="mix.php">further...</a>'); }
-   else { header("location: forum.php".$qs); die('<a href="forum.php">further...</a>'); }
+   if ($settings['standard'] == "board") { header("location: board.php".$qs); die('<a href="board.php'. $qs .'">further...</a>'); }
+   elseif ($settings['standard'] == "mix") { header("location: mix.php".$qs); die('<a href="mix.php'. $qs .'">further...</a>'); }
+   else { header("location: forum.php".$qs); die('<a href="forum.php'. $qs .'">further...</a>'); }
   }
 ?>
