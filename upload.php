@@ -241,14 +241,14 @@ switch($action)
     }
    else $images_count = 0;
    ?><p><?php
-   if ($p>1) { ?>[ <a href="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>?action=show_uploaded_images&amp;p=<?php echo $p-1; ?>">&laquo;</a> ] <?php } if($p*$images_per_page < $images_count) { ?>[ <a href="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>?action=show_uploaded_images&amp;p=<?php echo $p+1; ?>">&raquo;</a> ] <?php } ?>
+   if ($p>1) { ?>[ <a href="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>?action=show_uploaded_images&amp;p=<?php echo intval($p-1); ?>">&laquo;</a> ] <?php } if($p*$images_per_page < $images_count) { ?>[ <a href="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>?action=show_uploaded_images&amp;p=<?php echo intval($p+1); ?>">&raquo;</a> ] <?php } ?>
    [ <a href="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>"><?php echo $lang['upload_image_title']; ?></a> ]</p>
    <hr /><p><?php
    if($images_count > 0)
     {
      for($i=$show_images_from;$i<$show_images_to;$i++)
       {
-       ?><a href="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>?uploaded_image_selected=<?php echo $images[$i]; ?>"><img style="margin: 0px 15px 15px 0px;" src="<?php echo $uploaded_images_path.$images[$i]; ?>" alt="<?php echo $images[$i]; ?>" height="100" border="0"></a><?php
+       ?><a href="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>?uploaded_image_selected=<?php echo urlencode($images[$i]); ?>"><img style="margin: 0px 15px 15px 0px;" src="<?php echo $uploaded_images_path.$images[$i]; ?>" alt="<?php echo htmlsc($images[$i]); ?>" height="100" border="0"></a><?php
       }
     }
    else

@@ -39,18 +39,18 @@ include("inc.php");
    $new_index_before = $page - 1;
    $new_index_after = $page + 1;
    $site_count = ceil($count / $suchergebnisse);
-   if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page='. $new_index_before .'" title="'. $lang['previous_page_linktitle'] .'"><b>&laquo;</b></a>&nbsp;';
-   if ($page == 3) { $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page=0"><b>1</b></a>&nbsp;'; }
-   elseif ($page > 3) { $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page=0"><b>1</b></a>&nbsp;<b>...</b>&nbsp;'; }
+   if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. urlencode($search) .'&amp;category='. intval($category) .'&amp;ao='. urlencode($ao) .'&amp;page='. intval($new_index_before) .'" title="'. htmlsc($lang['previous_page_linktitle']) .'"><b>&laquo;</b></a>&nbsp;';
+   if ($page == 3) { $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. urlencode($search) .'&amp;category='. intval($category) .'&amp;ao='. urlencode($ao) .'&amp;page=0"><b>1</b></a>&nbsp;'; }
+   elseif ($page > 3) { $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. urlencode($search) .'&amp;category='. intval($category) .'&amp;ao='. urlencode($ao) .'&amp;page=0"><b>1</b></a>&nbsp;<b>...</b>&nbsp;'; }
    for ($i = 0; $i < $site_count; $i++) {
    $pagen_nr = $i;
    if ($page == $pagen_nr or $page == $pagen_nr-1 or $page == $pagen_nr+1 or $page == $pagen_nr-2 or $page == $pagen_nr+2) {
    if ($page != $pagen_nr) {
-   $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page='. $pagen_nr .'"><b>'. ($pagen_nr+1) .'</b></a>&nbsp;'; }
+   $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. urlencode($search) .'&amp;category='. intval($category) .'&amp;ao='. urlencode($ao) .'&amp;page='. intval($pagen_nr) .'"><b>'. ($pagen_nr+1) .'</b></a>&nbsp;'; }
    else {
    $output .= '<span style="color: red; font-weight: bold;"><b>'. ($pagen_nr+1) .'</b></span>&nbsp;';
    } } }
-   if ($new_index_after < $site_count) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page='. $new_index_after .'" title="'. $lang['next_page_linktitle'] .'"><b>&raquo;</b></a>';
+   if ($new_index_after < $site_count) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. urlencode($search) .'&amp;category='. intval($category) .'&amp;ao='. urlencode($ao) .'&amp;page='. intval($new_index_after) .'" title="'. htmlsc($lang['next_page_linktitle']) .'"><b>&raquo;</b></a>';
    }
   return $output;
   }
@@ -61,7 +61,7 @@ include("inc.php");
    $output = "&nbsp;";
    if ($count > $how_many_per_page)
     {
-     if (($page-1) >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?show_postings='.$show_postings.'&amp;page='.($page-1).'" title="'.$lang['previous_page_linktitle'].'"><b>&laquo;</b></a>&nbsp;';
+     if (($page-1) >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?show_postings='. urlencode($show_postings) .'&amp;page='. intval($page-1) .'" title="'. htmlsc($lang['previous_page_linktitle']) .'"><b>&laquo;</b></a>&nbsp;';
      $page_count = ceil($count/$how_many_per_page);
      if (($page+1) == 1)
       {
@@ -69,7 +69,7 @@ include("inc.php");
       }
      else
       {
-       $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?show_postings='.$show_postings.'&amp;page=0"><b>1</b></a>&nbsp;';
+       $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?show_postings='. urlencode($show_postings) .'&amp;page=0"><b>1</b></a>&nbsp;';
       }
 
      for($x=$page; $x<$page+4; $x++)
@@ -78,15 +78,15 @@ include("inc.php");
         {
          if ($x == $page+1)
           {
-           $output .= '<span style="color: red; font-weight: bold;">' . $x . '</span>&nbsp;';
+           $output .= '<span style="color: red; font-weight: bold;">'. intval($x) .'</span>&nbsp;';
           }
          else
           {
-           $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?show_postings='.$show_postings.'&amp;page='.($x-1).'"><b>'.$x.'</b></a>&nbsp;';
+           $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?show_postings='. urlencode($show_postings) .'&amp;page='. intval($x-1) .'"><b>'. intval($x) .'</b></a>&nbsp;';
           }
         }
       }
-     if (($page+1) < $page_count) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?show_postings='.$show_postings.'&amp;page=' .($page+1) .'" title="'.$lang['next_page_linktitle'].'"><b>&raquo;</b></a>';
+     if (($page+1) < $page_count) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?show_postings='. urlencode($show_postings) .'&amp;page='. intval($page+1) .'" title="'. htmlsc($lang['next_page_linktitle']) .'"><b>&raquo;</b></a>';
     }
    return $output;
   }
@@ -195,7 +195,7 @@ elseif (isset($show_postings) && empty($search))
   $field = mysqli_fetch_assoc($user_name_result);
   mysqli_free_result($user_name_result);
   $lang['show_userdata_linktitle'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['show_userdata_linktitle']);
-  $lang['postings_by_user'] = str_replace("[name]", '<a href="user.php?id='. $show_postings .'" title="'. $lang['show_userdata_linktitle'] .'">'. htmlsc(stripslashes($field["user_name"])) .'</a>', $lang['postings_by_user']);
+  $lang['postings_by_user'] = str_replace("[name]", '<a href="user.php?id='. intval($show_postings) .'" title="'. htmlsc($lang['show_userdata_linktitle']) .'">'. htmlsc(stripslashes($field["user_name"])) .'</a>', $lang['postings_by_user']);
   $subnav_1 .= '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'. $lang['postings_by_user'] .'</b>';
  }
 if (isset($search) && $search != "") { $subnav_2 = snav($page, $settings['search_results_per_page'], $count, $search, $ao, $category); } elseif (isset($show_postings) && $show_postings !="") { $subnav_2 = pnav($page, $settings['search_results_per_page'], $count, $show_postings); }
