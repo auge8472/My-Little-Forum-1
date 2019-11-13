@@ -52,7 +52,7 @@ if(basename($_SERVER['PHP_SELF'])!='login.php' && basename($_SERVER['PHP_SELF'])
     setcookie("auto_login","",0);
    }
   header("location: info.php?info=1");
-  die("<a href=\"info.php?info=1\">further...</a>");
+  die('<a href="info.php?info=1">further...</a>');
  }
 
 // look if IP is banned:
@@ -158,8 +158,8 @@ if ($settings['count_users_online'] == 1)
  }
 else
  {
-  $counter = str_replace("[forum_name]", "<a href=\"".$settings['forum_address']."\">". htmlsc($settings['forum_name']) ."</a>", $lang['counter']);
-  $counter = str_replace("[contact]", "<a href=\"contact.php?forum_contact=true\">". htmlsc($lang['contact_linkname']) ."</a>", $counter);
+  $counter = str_replace("[forum_name]", '<a href="'. $settings['forum_address'] .'">'. htmlsc($settings['forum_name']) .'</a>', $lang['counter']);
+  $counter = str_replace("[contact]", '<a href="contact.php?forum_contact=true">'. htmlsc($lang['contact_linkname']) .'</a>', $counter);
   $counter = str_replace("[postings]", $posting_count, $counter);
   $counter = str_replace("[threads]", $thread_count, $counter);
   $counter = str_replace("[users]", $user_count, $counter);

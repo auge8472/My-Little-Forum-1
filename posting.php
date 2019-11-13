@@ -49,7 +49,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']))
   if ($lock_result_array['user_lock'] > 0)
    {
     header("location: user.php");
-    die("<a href=\"user.php\">further...</a>");
+    die('<a href="user.php">further...</a>');
    }
  }
 
@@ -81,7 +81,7 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
 if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['session_prefix'].'user_name']) || $settings['entries_by_users_only'] != 1)
 {
  $categories = get_categories();
- if ($categories == "not accessible") { header("location: index.php"); die("<a href=\"index.php\">further...</a>"); }
+ if ($categories == "not accessible") { header("location: index.php"); die('<a href="index.php">further...</a>'); }
 
     unset($errors);  // Array fÃ¼r Fehlermeldungen
     unset($Thread);
@@ -260,10 +260,10 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
 
          if(isset($view))
           {
-           if ($view=='board') { header("location: board.php".$qs); die("<a href=\"board.php".$qs."\">further...</a>"); }
-           else { header("location: mix.php".$qs); die("<a href=\"mix.php".$qs."\">further...</a>"); }
+           if ($view=='board') { header("location: board.php".$qs); die('<a href="board.php'. $qs .'">further...</a>'); }
+           else { header("location: mix.php".$qs); die('<a href="mix.php'. $qs .'">further...</a>'); }
           }
-         else { header("location: forum.php".$qs); die("<a href=\"forum.php".$qs."\">further...</a>"); }
+         else { header("location: forum.php".$qs); die('<a href="forum.php'. $qs .'">further...</a>'); }
         }
        else $show = "no authorization";
      break;
@@ -337,7 +337,7 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
         list($uniqid_count) = mysqli_fetch_row($uniqid_result);
         mysqli_free_result($uniqid_result);
         if ($uniqid_count > 0)
-          { header("location: index.php"); die("<a href=\"index.php\">further...</a>"); }
+          { header("location: index.php"); die('<a href="index.php">further...</a>'); }
 
         // check for not accepted words:
         $result=mysqli_query($connid, "SELECT list FROM ". $db_settings['banlists_table'] ." WHERE name = 'words' LIMIT 1");
@@ -572,9 +572,9 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
      if (isset($page) && isset($order) && isset($category) && isset($descasc)) { $qs="&page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category; }
      elseif (isset($category)) { $qs="&category=".$category; }
      else $qs = "";
-     if (isset($view) && $view=="board") { header("location: board_entry.php?id=".$further_tid.$qs); die("<a href=\"board_entry.php?id=".$further_tid.$qs."\">further...</a>"); }
-     elseif (isset($view) && $view=="mix") { header("location: mix_entry.php?id=".$further_id.$qs); die("<a href=\"mix_entry.php?id=".$further_tid.$qs."\">further...</a>"); }
-     else { header("location: forum_entry.php?id=".$further_id.$qs); die("<a href=\"forum_entry.php?id=".$further_id.$qs."\">further...</a>"); }
+     if (isset($view) && $view=="board") { header("location: board_entry.php?id=".$further_tid.$qs); die('<a href="board_entry.php?id='. $further_tid . $qs .'">further...</a>'); }
+     elseif (isset($view) && $view=="mix") { header("location: mix_entry.php?id=".$further_id.$qs); die('<a href="mix_entry.php?id='. $further_tid . $qs .'">further...</a>'); }
+     else { header("location: forum_entry.php?id=".$further_id.$qs); die('<a href="forum_entry.php?id='. $further_id . $qs .'">further...</a>'); }
      exit(); // Skript beenden
     }
 
@@ -721,10 +721,10 @@ switch ($show)
          if ($pr_hp != "")
           {
            if (mb_substr($pr_hp, 0, 7) != "http://" && mb_substr($pr_hp, 0, 8) != "https://" && mb_substr($pr_hp, 0, 6) != "ftp://" && mb_substr($pr_hp, 0, 9) != "gopher://" && mb_substr($pr_hp, 0, 7) != "news://") $pr_hp = "http://".$pr_hp;
-           echo "<a href=\"" . $pr_hp . "\"><img src=\"img/homepage.gif\" alt=\"".$lang['homepage_alt']."\" width=\"13\" height=\"13\" /></a>";
+           echo '<a href="'. $pr_hp .'"><img src="img/homepage.gif" alt="'. $lang['homepage_alt'] .'" width="13" height="13" /></a>';
           }
          if (($pr_email != ""  && $hide_email != 1) && $pr_hp != "") { echo "&nbsp;"; }
-         if ($pr_email != "" && $hide_email != 1) { echo '<a href="contact.php"><img src="img/email.gif" alt="'.$lang['email_alt'].'" title="'.str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']).'" width="13" height="10" /></a>'; }
+         if ($pr_email != "" && $hide_email != 1) { echo '<a href="contact.php"><img src="img/email.gif" alt="'. $lang['email_alt'] .'" title="'. str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']) .'" width="13" height="10" /></a>'; }
          if (($pr_email != "" && $hide_email != 1) or $pr_hp !="") { echo "<br />"; }
          echo "<br />";
          if ($pr_place != "") { echo htmlsc($pr_place); echo ", <br />"; }
@@ -770,9 +770,9 @@ switch ($show)
           <?php
           $email_hp = ""; $place_wc = ""; $place_c = "";
           if (($pr_email != "" && $hide_email != 1) or $pr_hp != "") $email_hp = " ";
-          if ($pr_hp != "") { if (mb_substr($pr_hp, 0, 7) != "http://" && mb_substr($pr_hp, 0, 8) != "https://" && mb_substr($pr_hp, 0, 6) != "ftp://" && mb_substr($pr_hp, 0, 9) != "gopher://" && mb_substr($pr_hp, 0, 7) != "news://") $pr_hp = "http://".$pr_hp; $email_hp .= "<a href=\"" . $pr_hp . "\" title=\"".htmlsc($pr_hp)."\"><img src=\"img/homepage.gif\" alt=\"".$lang['homepage_alt']."\" width=\"13\" height=\"13\" /></a>"; }
+          if ($pr_hp != "") { if (mb_substr($pr_hp, 0, 7) != "http://" && mb_substr($pr_hp, 0, 8) != "https://" && mb_substr($pr_hp, 0, 6) != "ftp://" && mb_substr($pr_hp, 0, 9) != "gopher://" && mb_substr($pr_hp, 0, 7) != "news://") $pr_hp = "http://".$pr_hp; $email_hp .= '<a href="'. $pr_hp .'" title="'. htmlsc($pr_hp) .'"><img src="img/homepage.gif" alt="'. $lang['homepage_alt'] .'" width="13" height="13" /></a>'; }
           if ($pr_email != ""  && $hide_email != 1 && $pr_hp != "") { $email_hp .= " "; }
-          if ($pr_email != "" && $hide_email != 1) { $email_hp .= '<a href="contact.php"><img src="img/email.gif" alt="'.$lang['email_alt'].'" title="'.str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']).'" width="13" height="10" /></a>'; }
+          if ($pr_email != "" && $hide_email != 1) { $email_hp .= '<a href="contact.php"><img src="img/email.gif" alt="'. $lang['email_alt'] .'" title="'. str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']) .'" width="13" height="10" /></a>'; }
           if ($pr_place != "") { $place_c = htmlsc($pr_place) . ", "; $place_wc = htmlsc($pr_place); }
           $lang['forum_author_marking'] = str_replace("[name]", htmlsc($pr_name), $lang['forum_author_marking']);
           $lang['forum_author_marking'] = str_replace("[email_hp]", $email_hp, $lang['forum_author_marking']);
@@ -821,13 +821,13 @@ switch ($show)
   <input type="hidden" name="action" value="<?php echo $action; ?>" />
   <?php if (isset($p_user_id)) { ?><input type="hidden" name="p_user_id" value="<?php echo $p_user_id; ?>" /><?php } ?>
   <?php if (isset($aname)) { ?><input type="hidden" name="aname" value="<?php echo htmlsc($aname); ?>" /><?php } ?>
-  <?php if (isset($view)) echo"<input type=\"hidden\" name=\"view\" value=\"".$view."\" />"; ?>
-  <?php if (isset($back)) echo"<input type=\"hidden\" name=\"back\" value=\"".$back."\" />"; ?>
-  <?php if (isset($thema)) echo"<input type=\"hidden\" name=\"thema\" value=\"".$thema."\" />"; ?>
-  <?php if (isset($page)) echo"<input type=\"hidden\" name=\"page\" value=\"".$page."\" />"; ?>
-  <?php if (isset($order)) echo"<input type=\"hidden\" name=\"order\" value=\"".$order."\" />"; ?>
-  <?php if (isset($descasc)) echo"<input type=\"hidden\" name=\"descasc\" value=\"".$descasc."\" />"; ?>
-  <?php if (isset($category)) echo"<input type=\"hidden\" name=\"category\" value=\"".$category."\" />"; ?>
+  <?php if (isset($view)) { ?><input type="hidden" name="view" value="<?php echo htmlsc($view); ?>" /><?php } ?>
+  <?php if (isset($back)) { ?><input type="hidden" name="back" value="<?php echo htmlsc($back); ?>" /><?php } ?>
+  <?php if (isset($thema)) { ?><input type="hidden" name="thema" value="<?php echo htmlsc($thema); ?>" /><?php } ?>
+  <?php if (isset($page)) { ?><input type="hidden" name="page" value="<?php echo htmlsc($page); ?>" /><?php } ?>
+  <?php if (isset($order)) { ?><input type="hidden" name="order" value="<?php echo htmlsc($order); ?>" /><?php } ?>
+  <?php if (isset($descasc)) { ?><input type="hidden" name="descasc" value="<?php echo htmlsc($descasc); ?>" /><?php } ?>
+  <?php if (isset($category)) { ?><input type="hidden" name="category" value="<?php echo htmlsc($category); ?>" /><?php } ?>
   <?php if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_posting']==1) { ?><input type="hidden" name="<?php echo session_name(); ?>" value="<?php echo session_id(); ?>" /><?php } ?>
   <table class="normal" border="0" cellpadding="0" cellspacing="5">
    <tr>
@@ -852,7 +852,7 @@ switch ($show)
    </tr>
    <?php if ($settings['remember_userdata'] == 1 && !isset($_SESSION[$settings['session_prefix'].'user_id'])) { ?>
    <tr>
-    <td>&nbsp;</td><td><span class="small"><input type="checkbox" name="setcookie" value="1"<?php if (isset($setcookie) && $setcookie == 1) echo " checked=\"checked\""; ?> />&nbsp;<?php echo $lang['remember_userdata_cbm']; if (isset($_COOKIE['user_name']) || isset($_COOKIE['user_email']) or isset($_COOKIE['user_hp']) or isset($_COOKIE['user_hp'])) { ?>&nbsp;&nbsp;&nbsp;<a onclick="javascript:delete_cookie(); return false;" href="delete_cookie.php" title="<?php echo $lang['delete_cookies_linktitle']; ?>"><img border="0" src="img/dc.gif" name="dc" alt="" width="12" height="9"><?php echo $lang['delete_cookies_linkname']; ?></a><?php } ?></span></td>
+    <td>&nbsp;</td><td><span class="small"><input type="checkbox" name="setcookie" value="1"<?php if (isset($setcookie) && $setcookie == 1) echo ' checked="checked"'; ?> />&nbsp;<?php echo $lang['remember_userdata_cbm']; if (isset($_COOKIE['user_name']) || isset($_COOKIE['user_email']) or isset($_COOKIE['user_hp']) or isset($_COOKIE['user_hp'])) { ?>&nbsp;&nbsp;&nbsp;<a onclick="javascript:delete_cookie(); return false;" href="delete_cookie.php" title="<?php echo $lang['delete_cookies_linktitle']; ?>"><img border="0" src="img/dc.gif" name="dc" alt="" width="12" height="9"><?php echo $lang['delete_cookies_linkname']; ?></a><?php } ?></span></td>
    </tr>
    <?php } ?>
    <tr>
@@ -935,16 +935,16 @@ switch ($show)
    </tr>
    <?php if ((isset($_SESSION[$settings['session_prefix'].'user_id']) && $action=="new") || (isset($_SESSION[$settings['session_prefix'].'user_id']) && $action=="edit" && $p_user_id > 0)) { ?>
    <tr>
-    <td colspan="2"><input type="checkbox" name="show_signature" value="1"<?php if (isset($show_signature) && $show_signature==1) { echo "checked=\"checked\""; } ?> />&nbsp;<?php echo $lang['show_signature_cbm']; ?></td>
+    <td colspan="2"><input type="checkbox" name="show_signature" value="1"<?php if (isset($show_signature) && $show_signature==1) { echo ' checked="checked"'; } ?> />&nbsp;<?php echo $lang['show_signature_cbm']; ?></td>
    </tr>
    <?php } ?>
    <?php if ($settings['email_notification'] == 1) { ?>
    <tr>
-    <td colspan="2"><input type="checkbox" name="email_notify" value="1"<?php if (isset($email_notify) && $email_notify==1) { echo "checked=\"checked\""; } ?> />&nbsp;<?php echo $lang['email_notification_cbm']; ?></td>
+    <td colspan="2"><input type="checkbox" name="email_notify" value="1"<?php if (isset($email_notify) && $email_notify==1) { echo ' checked="checked"'; } ?> />&nbsp;<?php echo $lang['email_notification_cbm']; ?></td>
    </tr><?php } else { ?><input type="hidden" name="email_b" value="" /><?php } ?>
    <?php if (isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod") && (empty($id) || $id == 0 || $action=="edit" && isset($pid) && $pid == 0)) { ?>
    <tr>
-    <td colspan="2"><input type="checkbox" name="fixed" value="1"<?php if (isset($fixed) && $fixed==1) { echo "checked=\"checked\""; } ?> />&nbsp;<?php echo $lang['fix_thread']; ?></td>
+    <td colspan="2"><input type="checkbox" name="fixed" value="1"<?php if (isset($fixed) && $fixed==1) { echo " checked="checked"'; } ?> />&nbsp;<?php echo $lang['fix_thread']; ?></td>
    </tr><?php } ?>
    <tr>
     <td>&nbsp;</td><td>&nbsp;</td>
@@ -1009,7 +1009,7 @@ switch ($show)
 
 echo $footer;
 }
-else { header("location: login.php?msg=noentry"); die("<a href=\"login.php?msg=noentry\">further...</a>"); }
+else { header("location: login.php?msg=noentry"); die('<a href="login.php?msg=noentry">further...</a>'); }
 }
-else { header("location: login.php?msg=noaccess"); die("<a href=\"login.php?msg=noaccess\">further...</a>"); }
+else { header("location: login.php?msg=noaccess"); die('<a href="login.php?msg=noaccess">further...</a>'); }
 ?>
