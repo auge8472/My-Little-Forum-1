@@ -184,8 +184,8 @@ function bbcode($string, $rss = false)
   $string = preg_replace_callback("#\[url\](.+?)\[/url\]#is", "shorten_link", $string);
   $string = preg_replace("#\[url=(.+?)\](.+?)\[/url\]#is", '<a href="\\1">\\2</a>', $string);
   $string = preg_replace_callback("#\[code\](.+?)\[/code\]#is", "parse_code", $string);
-  $string = preg_replace("#\[msg\](.+?)\[/msg\]#is", '<a href="'. basename($_SERVER['SCRIPT_NAME']) .'?id=\\1">\\1</a>', $string);
-  $string = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", '<a href="'. basename($_SERVER['SCRIPT_NAME']) .'?id=\\1">\\2</a>', $string);
+  $string = preg_replace("#\[msg\](.+?)\[/msg\]#is", '<a href="'. basename($_SERVER['PHP_SELF']) .'?id=\\1">\\1</a>', $string);
+  $string = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", '<a href="'. basename($_SERVER['PHP_SELF']) .'?id=\\1">\\2</a>', $string);
   if ($settings['bbcode_img'] == 1)
    {
     if ($rss === true) {
