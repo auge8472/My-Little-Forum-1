@@ -25,7 +25,7 @@ include("inc.php");
 
 if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
  {
-  if (isset($_GET['id'])) header("location: login.php?referer=user.php&id=".$_GET['id']);
+  if (isset($_GET['id'])) header("location: login.php?referer=user.php&id=". intval($_GET['id']));
   else header("location: login.php?referer=user.php");
   die('<a href="login.php?referer=user.php">further...</a>');
  }
@@ -211,7 +211,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
       $_SESSION[$settings['session_prefix'].'user_view'] = $user_view;
       $_SESSION[$settings['session_prefix'].'user_time_difference'] = $user_time_difference;
 
-      header("location: user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die('<a href="user.php?id='. $_SESSION[$settings['session_prefix'].'user_id'] .'">further...</a>');
+      header("location: user.php?id=". intval($_SESSION[$settings['session_prefix'].'user_id'])); die('<a href="user.php?id='. intval($_SESSION[$settings['session_prefix'].'user_id']) .'">further...</a>');
      }
     else $action="edit";
    break;
@@ -245,7 +245,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     if (empty($errors))
      {
       $pw_update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_pw='". mysqli_real_escape_string($connid, password_hash($new_pw, PASSWORD_DEFAULT)) ."', last_login=last_login, registered=registered WHERE user_id=". intval($user_id));
-      header("location: user.php?id=".$_SESSION[$settings['session_prefix'].'user_id']); die('<a href="user.php?id='. $_SESSION[$settings['session_prefix'].'user_id'] .'">further...</a>');
+      header("location: user.php?id=". intval($_SESSION[$settings['session_prefix'].'user_id'])); die('<a href="user.php?id='. intval($_SESSION[$settings['session_prefix'].'user_id']) .'">further...</a>');
      }
     else $action="pw";
    break;
@@ -314,7 +314,7 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
       if (empty($errors))
        {
         header("location: user.php?id=".$_POST['recipient_id']);
-        die('<a href="user.php?id='. $_POST['recipient_id'] .'">further...</a>');
+        die('<a href="user.php?id='. intval($_POST['recipient_id']) .'">further...</a>');
        }
       else { $id = $_POST['recipient_id']; $action="personal_message"; }
      }
@@ -431,11 +431,11 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_email_marking']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo $field['user_id']; ?>"><img src="img/email.gif" alt="'<?php echo $lang['email_alt']; ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "-"; ?></p></td>
+     <td class="d"><p class="userdata"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo intval($field['user_id']); ?>"><img src="img/email.gif" alt="'<?php echo htmlsc($lang['email_alt']); ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "-"; ?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_hp']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php if ($field["user_hp"]!="") { if (mb_substr($field["user_hp"], 0, 7) != "http://" && mb_substr($field["user_hp"], 0, 8) != "https://" && mb_substr($field["user_hp"], 0, 6) != "ftp://" && mb_substr($field["user_hp"], 0, 9) != "gopher://" && mb_substr($field["user_hp"], 0, 7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo $field["user_hp"]; ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlsc($field["user_hp"]); ?>" width="13" height="13" /></a><?php } else echo "-" ?></p></td>
+     <td class="d"><p class="userdata"><?php if ($field["user_hp"]!="") { if (mb_substr($field["user_hp"], 0, 7) != "http://" && mb_substr($field["user_hp"], 0, 8) != "https://" && mb_substr($field["user_hp"], 0, 6) != "ftp://" && mb_substr($field["user_hp"], 0, 9) != "gopher://" && mb_substr($field["user_hp"], 0, 7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo $field["user_hp"]; ?>"><img src="img/homepage.gif" alt="<?php echo htmlsc($lang['homepage_alt']); ?>" title="<?php echo htmlsc($field["user_hp"]); ?>" width="13" height="13" /></a><?php } else echo "-" ?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_place']; ?></b></p></td>
@@ -447,7 +447,7 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_postings']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php echo $postings_count; if ($postings_count > 0) { ?>&nbsp;&nbsp;<span class="small">[ <a href="search.php?show_postings=<?php echo $field["user_id"]; ?>"><?php echo $lang['show_postings_ln']; ?></a> ]</span><?php } ?></p></td>
+     <td class="d"><p class="userdata"><?php echo $postings_count; if ($postings_count > 0) { ?>&nbsp;&nbsp;<span class="small">[ <a href="search.php?show_postings=<?php echo intval($field["user_id"]); ?>"><?php echo $lang['show_postings_ln']; ?></a> ]</span><?php } ?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_profile']; ?></b></p></td>
@@ -503,7 +503,7 @@ switch ($action)
     {
      $lang['pers_msg_ln'] = str_replace("[name]", htmlsc($field["user_name"]), $lang['pers_msg_ln']);
      ?><p><br />
-     <a class="textlink" href="user.php?action=personal_message&amp;id=<?php echo $id; ?>"><?php echo $lang['pers_msg_ln']; ?></a></p>
+     <a class="textlink" href="user.php?action=personal_message&amp;id=<?php echo intval($id); ?>"><?php echo $lang['pers_msg_ln']; ?></a></p>
      <?php
     }
 
@@ -535,8 +535,8 @@ switch ($action)
      {
       ?><table class="normaltab" border="0" cellpadding="5" cellspacing="1">
       <tr>
-      <th><a href="user.php?action=show+users&amp;order=user_name&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_name") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo $ul; ?>" title="<?php echo $lang['order_linktitle']; ?>"><?php echo $lang['userlist_name']; ?></a><?php if ($order=="user_name" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_name" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
-      <th><a href="user.php?action=show+users&amp;order=user_type&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_type") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo $ul; ?>" title="<?php echo $lang['order_linktitle']; ?>"><?php echo $lang['userlist_type']; ?></a><?php if ($order=="user_type" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_type" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
+      <th><a href="user.php?action=show+users&amp;order=user_name&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_name") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang['userlist_name']; ?></a><?php if ($order=="user_name" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_name" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
+      <th><a href="user.php?action=show+users&amp;order=user_type&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_type") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang['userlist_type']; ?></a><?php if ($order=="user_type" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_type" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
       <th><?php echo $lang['userlist_email']; ?></th>
       <th><?php echo $lang['userlist_hp']; ?></th>
       <?php if ($settings['count_users_online'] == 1) { ?><th><?php echo $lang['userlist_online']; ?></th><?php }
@@ -547,12 +547,12 @@ switch ($action)
       while ($field = mysqli_fetch_assoc($result))
        {
         ?><tr>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo $field['user_id']; ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['show_userdata_linktitle']); ?>"><b><?php echo htmlsc($field['user_name']); ?></b></a></td>
+        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo intval($field['user_id']); ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['show_userdata_linktitle']); ?>"><b><?php echo htmlsc($field['user_name']); ?></b></a></td>
         <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_type"] == "admin") echo $lang['ud_admin']; elseif ($field["user_type"] == "mod") echo $lang['ud_mod']; else echo $lang['ud_user']; ?></span></td>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo $field['user_id']; ?>"><img src="img/email.gif" alt="'<?php echo $lang['email_alt']; ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "&nbsp;"; ?></span></td>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_hp"]!="") { if (mb_substr($field["user_hp"], 0, 7) != "http://" && mb_substr($field["user_hp"], 0, 8) != "https://" && mb_substr($field["user_hp"], 0, 6) != "ftp://" && mb_substr($field["user_hp"], 0, 9) != "gopher://" && mb_substr($field["user_hp"], 0, 7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo htmlsc($field["user_hp"]); ?>"><img src="img/homepage.gif" alt="<?php echo $lang['homepage_alt']; ?>" title="<?php echo htmlsc($field["user_hp"]); ?>" width="13" height="13" /></a><?php } else echo "&nbsp;" ?></span></td>
+        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo intval($field['user_id']); ?>"><img src="img/email.gif" alt="'<?php echo htmlsc($lang['email_alt']); ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "&nbsp;"; ?></span></td>
+        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_hp"]!="") { if (mb_substr($field["user_hp"], 0, 7) != "http://" && mb_substr($field["user_hp"], 0, 8) != "https://" && mb_substr($field["user_hp"], 0, 6) != "ftp://" && mb_substr($field["user_hp"], 0, 9) != "gopher://" && mb_substr($field["user_hp"], 0, 7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo htmlsc($field["user_hp"]); ?>"><img src="img/homepage.gif" alt="<?php echo htmlsc($lang['homepage_alt']); ?>" title="<?php echo htmlsc($field["user_hp"]); ?>" width="13" height="13" /></a><?php } else echo "&nbsp;" ?></span></td>
         <?php if ($settings['count_users_online'] == 1) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="online"><?php if ($settings['count_users_online'] == 1 && in_array($field['user_id'], $useronline_array)) { echo $lang['online']; } else echo "&nbsp;"; ?></span></td><?php }
-        if (isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod")) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($field["user_type"]=="user") { if ($field["user_lock"] == 0) { ?><span class="small"><a href="user.php?user_lock=<?php echo $field["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;page=<?php echo $page; ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['lock_user_lt']); ?>"><?php echo $lang['unlocked']; ?></a></span><?php } else { ?><span class="small"><a style="color: red;" href="user.php?user_lock=<?php echo $field["user_id"]; ?>&amp;order=<?php echo $order; ?>&amp;descasc=<?php echo $descasc; ?>&amp;page=<?php echo $page; ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['unlock_user_lt']); ?>"><?php echo $lang['locked']; ?></a></span><?php } } else echo "&nbsp;"; ?></td><?php } ?>
+        if (isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod")) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($field["user_type"]=="user") { if ($field["user_lock"] == 0) { ?><span class="small"><a href="user.php?user_lock=<?php echo intval($field["user_id"]); ?>&amp;order=<?php echo urlencode($order); ?>&amp;descasc=<?php echo urlencode($descasc); ?>&amp;page=<?php echo intval($page); ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['lock_user_lt']); ?>"><?php echo $lang['unlocked']; ?></a></span><?php } else { ?><span class="small"><a style="color: red;" href="user.php?user_lock=<?php echo intval($field["user_id"]); ?>&amp;order=<?php echo urlencode($order); ?>&amp;descasc=<?php echo urlencode($descasc); ?>&amp;page=<?php echo intval($page); ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['unlock_user_lt']); ?>"><?php echo $lang['locked']; ?></a></span><?php } } else echo "&nbsp;"; ?></td><?php } ?>
         </tr>
         <?php $i++;
        }

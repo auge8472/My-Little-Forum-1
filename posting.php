@@ -255,12 +255,12 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
            $delete_result = mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($id));
           }
 
-         if (isset($page) && isset($order) && isset($category) && isset($descasc)) { $qs="?page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category; }
+         if (isset($page) && isset($order) && isset($category) && isset($descasc)) { $qs="?page=". intval($page)."&order=". urlencode($order) ."&descasc=". urlencode($descasc) ."&category=". intval($category); }
          else $qs = "";
 
          if(isset($view))
           {
-           if ($view=='board') { header("location: board.php".$qs); die('<a href="board.php'. $qs .'">further...</a>'); }
+           if ($view=='board') { header("location: board.php". $qs); die('<a href="board.php'. $qs .'">further...</a>'); }
            else { header("location: mix.php".$qs); die('<a href="mix.php'. $qs .'">further...</a>'); }
           }
          else { header("location: forum.php".$qs); die('<a href="forum.php'. $qs .'">further...</a>'); }
@@ -569,12 +569,12 @@ if ($settings['entries_by_users_only'] == 1 && isset($_SESSION[$settings['sessio
 
    if (isset($refer))
     {
-     if (isset($page) && isset($order) && isset($category) && isset($descasc)) { $qs="&page=".$page."&order=".$order."&descasc=".$descasc."&category=".$category; }
+     if (isset($page) && isset($order) && isset($category) && isset($descasc)) { $qs="&page=". intval($page) ."&order=". urlencode($order) ."&descasc=". urlencode($descasc) ."&category=". intval($category); }
      elseif (isset($category)) { $qs="&category=".$category; }
      else $qs = "";
-     if (isset($view) && $view=="board") { header("location: board_entry.php?id=".$further_tid.$qs); die('<a href="board_entry.php?id='. $further_tid . $qs .'">further...</a>'); }
-     elseif (isset($view) && $view=="mix") { header("location: mix_entry.php?id=".$further_id.$qs); die('<a href="mix_entry.php?id='. $further_tid . $qs .'">further...</a>'); }
-     else { header("location: forum_entry.php?id=".$further_id.$qs); die('<a href="forum_entry.php?id='. $further_id . $qs .'">further...</a>'); }
+     if (isset($view) && $view=="board") { header("location: board_entry.php?id=". intval($further_tid) . $qs); die('<a href="board_entry.php?id='. intval($further_tid) . $qs .'">further...</a>'); }
+     elseif (isset($view) && $view=="mix") { header("location: mix_entry.php?id=". intval($further_id) . $qs); die('<a href="mix_entry.php?id='. intval($further_tid) . $qs .'">further...</a>'); }
+     else { header("location: forum_entry.php?id=". intval($further_id) . $qs); die('<a href="forum_entry.php?id='. intval($further_id) . $qs .'">further...</a>'); }
      exit(); // Skript beenden
     }
 
@@ -607,26 +607,26 @@ if ($action == "new" && $id != 0 || $action == "edit" || $action == "delete")
    {
     if (isset($page) && isset($order) && isset($category) && isset($descasc))
      {
-      if (isset($aname)) $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_posting_linkname'].'</a>';
-      else $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_linkname'].'</a>';
+      if (isset($aname)) $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='. intval($id) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'">'.$lang['back_to_posting_linkname'].'</a>';
+      else $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='. intval($id) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc).'">'.$lang['back_linkname'].'</a>';
      }
     else
      {
-      if (isset($aname)) $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;descasc='.$descasc.'">'.$lang['back_to_posting_linkname'].'</a>';
-      else $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;descasc='.$descasc.'">'.$lang['back_linkname'].'</a>';
+      if (isset($aname)) $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='. intval($id) .'&amp;descasc='. urlencode($descasc) .'">'.$lang['back_to_posting_linkname'].'</a>';
+      else $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='. intval($id) .'&amp;descasc='. urlencode($descasc).'">'.$lang['back_linkname'].'</a>';
      }
    }
   else
    {
     if ($view=="board")
      {
-      if (isset($page) && isset($order) && isset($category) && isset($descasc)) $subnav_1 .= '<a class="textlink" href="board_entry.php?id='.$thema.'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_topic_linkname'].'</a>';
-      else $subnav_1 .= '<a class="textlink" href="board_entry.php?id='.$thema.'&amp;descasc='.$descasc.'">'.$lang['back_to_topic_linkname'].'</a>';
+      if (isset($page) && isset($order) && isset($category) && isset($descasc)) $subnav_1 .= '<a class="textlink" href="board_entry.php?id='. intval($thema) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'">'.$lang['back_to_topic_linkname'].'</a>';
+      else $subnav_1 .= '<a class="textlink" href="board_entry.php?id='. intval($thema) .'&amp;descasc='. urlencode($descasc) .'">'.$lang['back_to_topic_linkname'].'</a>';
      }
     else
      {
-      if (isset($page) && isset($order) && isset($category) && isset($descasc)) $subnav_1 .= '<a class="textlink" href="mix_entry.php?id='.$thema.'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_topic_linkname'].'</a>';
-      else $subnav_1 .= '<a class="textlink" href="mix_entry.php?id='.$thema.'&amp;descasc='.$descasc.'">'.$lang['back_to_topic_linkname'].'</a>';
+      if (isset($page) && isset($order) && isset($category) && isset($descasc)) $subnav_1 .= '<a class="textlink" href="mix_entry.php?id='. intval($thema) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc).'">'.$lang['back_to_topic_linkname'].'</a>';
+      else $subnav_1 .= '<a class="textlink" href="mix_entry.php?id='. intval($thema) .'&amp;descasc='. urlencode($descasc) .'">'.$lang['back_to_topic_linkname'].'</a>';
      }
    }
  }
@@ -634,19 +634,19 @@ elseif ($action == "new" && $id == 0)
  {
   if (empty($view))
    {
-    if (isset($category)) $subnav_1 .= '<a class="textlink" href="forum.php?category='.$category.'">'.$lang['back_to_overview_linkname'].'</a>';
+    if (isset($category)) $subnav_1 .= '<a class="textlink" href="forum.php?category='. intval($category) .'">'.$lang['back_to_overview_linkname'].'</a>';
     else $subnav_1 .= '<a class="textlink" href="forum.php">'.$lang['back_to_overview_linkname'].'</a>';
    }
   elseif (isset($view))
    {
     if ($view=="board")
      {
-      if (isset($category)) $subnav_1 .= '<a class="textlink" href="board.php?category='.$category.'">'.$lang['back_to_overview_linkname'].'</a>';
+      if (isset($category)) $subnav_1 .= '<a class="textlink" href="board.php?category='. intval($category) .'">'.$lang['back_to_overview_linkname'].'</a>';
       else $subnav_1 .= '<a class="textlink" href="board.php">'.$lang['back_to_overview_linkname'].'</a>';
      }
     else
      {
-      if (isset($category)) $subnav_1 .= '<a class="textlink" href="mix.php?category='.$category.'">'.$lang['back_to_overview_linkname'].'</a>';
+      if (isset($category)) $subnav_1 .= '<a class="textlink" href="mix.php?category='. intval($category) .'">'.$lang['back_to_overview_linkname'].'</a>';
       else $subnav_1 .= '<a class="textlink" href="mix.php">'.$lang['back_to_overview_linkname'].'</a>';
      }
    }
@@ -721,10 +721,10 @@ switch ($show)
          if ($pr_hp != "")
           {
            if (mb_substr($pr_hp, 0, 7) != "http://" && mb_substr($pr_hp, 0, 8) != "https://" && mb_substr($pr_hp, 0, 6) != "ftp://" && mb_substr($pr_hp, 0, 9) != "gopher://" && mb_substr($pr_hp, 0, 7) != "news://") $pr_hp = "http://".$pr_hp;
-           echo '<a href="'. $pr_hp .'"><img src="img/homepage.gif" alt="'. $lang['homepage_alt'] .'" width="13" height="13" /></a>';
+           echo '<a href="'. $pr_hp .'"><img src="img/homepage.gif" alt="'. htmlsc($lang['homepage_alt']) .'" width="13" height="13" /></a>';
           }
          if (($pr_email != ""  && $hide_email != 1) && $pr_hp != "") { echo "&nbsp;"; }
-         if ($pr_email != "" && $hide_email != 1) { echo '<a href="contact.php"><img src="img/email.gif" alt="'. $lang['email_alt'] .'" title="'. str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']) .'" width="13" height="10" /></a>'; }
+         if ($pr_email != "" && $hide_email != 1) { echo '<a href="contact.php"><img src="img/email.gif" alt="'. htmlsc($lang['email_alt']) .'" title="'. str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']) .'" width="13" height="10" /></a>'; }
          if (($pr_email != "" && $hide_email != 1) or $pr_hp !="") { echo "<br />"; }
          echo "<br />";
          if ($pr_place != "") { echo htmlsc($pr_place); echo ", <br />"; }
@@ -770,9 +770,9 @@ switch ($show)
           <?php
           $email_hp = ""; $place_wc = ""; $place_c = "";
           if (($pr_email != "" && $hide_email != 1) or $pr_hp != "") $email_hp = " ";
-          if ($pr_hp != "") { if (mb_substr($pr_hp, 0, 7) != "http://" && mb_substr($pr_hp, 0, 8) != "https://" && mb_substr($pr_hp, 0, 6) != "ftp://" && mb_substr($pr_hp, 0, 9) != "gopher://" && mb_substr($pr_hp, 0, 7) != "news://") $pr_hp = "http://".$pr_hp; $email_hp .= '<a href="'. $pr_hp .'" title="'. htmlsc($pr_hp) .'"><img src="img/homepage.gif" alt="'. $lang['homepage_alt'] .'" width="13" height="13" /></a>'; }
+          if ($pr_hp != "") { if (mb_substr($pr_hp, 0, 7) != "http://" && mb_substr($pr_hp, 0, 8) != "https://" && mb_substr($pr_hp, 0, 6) != "ftp://" && mb_substr($pr_hp, 0, 9) != "gopher://" && mb_substr($pr_hp, 0, 7) != "news://") $pr_hp = "http://".$pr_hp; $email_hp .= '<a href="'. $pr_hp .'" title="'. htmlsc($pr_hp) .'"><img src="img/homepage.gif" alt="'. htmlsc($lang['homepage_alt']) .'" width="13" height="13" /></a>'; }
           if ($pr_email != ""  && $hide_email != 1 && $pr_hp != "") { $email_hp .= " "; }
-          if ($pr_email != "" && $hide_email != 1) { $email_hp .= '<a href="contact.php"><img src="img/email.gif" alt="'. $lang['email_alt'] .'" title="'. str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']) .'" width="13" height="10" /></a>'; }
+          if ($pr_email != "" && $hide_email != 1) { $email_hp .= '<a href="contact.php"><img src="img/email.gif" alt="'. htmlsc($lang['email_alt']) .'" title="'. str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']) .'" width="13" height="10" /></a>'; }
           if ($pr_place != "") { $place_c = htmlsc($pr_place) . ", "; $place_wc = htmlsc($pr_place); }
           $lang['forum_author_marking'] = str_replace("[name]", htmlsc($pr_name), $lang['forum_author_marking']);
           $lang['forum_author_marking'] = str_replace("[email_hp]", $email_hp, $lang['forum_author_marking']);
@@ -852,7 +852,7 @@ switch ($show)
    </tr>
    <?php if ($settings['remember_userdata'] == 1 && !isset($_SESSION[$settings['session_prefix'].'user_id'])) { ?>
    <tr>
-    <td>&nbsp;</td><td><span class="small"><input type="checkbox" name="setcookie" value="1"<?php if (isset($setcookie) && $setcookie == 1) echo ' checked="checked"'; ?> />&nbsp;<?php echo $lang['remember_userdata_cbm']; if (isset($_COOKIE['user_name']) || isset($_COOKIE['user_email']) or isset($_COOKIE['user_hp']) or isset($_COOKIE['user_hp'])) { ?>&nbsp;&nbsp;&nbsp;<a onclick="javascript:delete_cookie(); return false;" href="delete_cookie.php" title="<?php echo $lang['delete_cookies_linktitle']; ?>"><img border="0" src="img/dc.gif" name="dc" alt="" width="12" height="9"><?php echo $lang['delete_cookies_linkname']; ?></a><?php } ?></span></td>
+    <td>&nbsp;</td><td><span class="small"><input type="checkbox" name="setcookie" value="1"<?php if (isset($setcookie) && $setcookie == 1) echo ' checked="checked"'; ?> />&nbsp;<?php echo $lang['remember_userdata_cbm']; if (isset($_COOKIE['user_name']) || isset($_COOKIE['user_email']) or isset($_COOKIE['user_hp']) or isset($_COOKIE['user_hp'])) { ?>&nbsp;&nbsp;&nbsp;<a onclick="javascript:delete_cookie(); return false;" href="delete_cookie.php" title="<?php echo htmlsc($lang['delete_cookies_linktitle']); ?>"><img border="0" src="img/dc.gif" name="dc" alt="" width="12" height="9"><?php echo $lang['delete_cookies_linkname']; ?></a><?php } ?></span></td>
    </tr>
    <?php } ?>
    <tr>
@@ -925,7 +925,7 @@ switch ($show)
         }
        mysqli_free_result($result);
 
-       if($smilies_count > $smiley_buttons) { if($i % 2 == 0) { ?><br /><?php } ?><span class="small"><a href="javascript:more_smilies()" title="<?php echo $lang['more_smilies_linktitle']; ?>"><?php echo $lang['more_smilies_linkname']; ?></a></span><?php }
+       if($smilies_count > $smiley_buttons) { if($i % 2 == 0) { ?><br /><?php } ?><span class="small"><a href="javascript:more_smilies()" title="<?php echo htmlsc($lang['more_smilies_linktitle']); ?>"><?php echo $lang['more_smilies_linkname']; ?></a></span><?php }
       }
      ?></td></tr></table>
     </td>

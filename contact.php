@@ -177,24 +177,24 @@ if (isset($id) || isset($uid) || isset($forum_contact))
 
 
 $subnav_1 = '';
-if (isset($uid)) $subnav_1 .= '<a class="textlink" href="user.php?id='.$uid.'">'.$lang['back_linkname'].'</a>';
+if (isset($uid)) $subnav_1 .= '<a class="textlink" href="user.php?id='. intval($uid) .'">'.$lang['back_linkname'].'</a>';
 elseif (isset($forum_contact)) $subnav_1 .= '<a class="textlink" href="index.php">'.$lang['back_linkname'].'</a>';
 elseif ($id == 0 || isset($no_message)) $subnav_1 .= '<a class="textlink" href="javascript:history.back(1)">'.$lang['back_linkname'].'</a>';
 else
  {
   if (empty($view))
    {
-    $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='.$id.'&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.str_replace("[name]", htmlsc($field["name"]), $lang['back_to_posting_linkname']).'</a>';
+    $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='. intval($id) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'">'.str_replace("[name]", htmlsc($field["name"]), $lang['back_to_posting_linkname']).'</a>';
    }
   else
    {
     if ($view=="board")
      {
-      $subnav_1 .= '<a class="textlink" href="board_entry.php?id='.$field['tid'].'&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_topic_linkname'].'</a>';
+      $subnav_1 .= '<a class="textlink" href="board_entry.php?id='. intval($field['tid']) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'">'.$lang['back_to_topic_linkname'].'</a>';
      }
     else
      {
-      $subnav_1 .= '<a class="textlink" href="mix_entry.php?id='.$field['tid'].'&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order.'&amp;descasc='.$descasc.'">'.$lang['back_to_topic_linkname'].'</a>';
+      $subnav_1 .= '<a class="textlink" href="mix_entry.php?id='. intval($field['tid']) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'">'.$lang['back_to_topic_linkname'].'</a>';
      }
    }
  }

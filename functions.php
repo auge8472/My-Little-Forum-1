@@ -120,18 +120,18 @@ function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category
      $new_index_after = $page + 1;
      $site_count = ceil($entry_count / $entries_per_page);
      $ic = "";
-     if (isset($category)) $ic .= "&amp;category=".urlencode($category);
-     if (isset($action) && $action!="") $ic .= "&amp;action=".$action;
-     if (isset($_GET['letter'])) $ic .= "&amp;letter=".urlencode($_GET['letter']);
-     if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?page='. $new_index_before .'&amp;order='. $order .'&amp;descasc='. $descasc . $ic .'"><img src="img/prev.gif" alt="&laquo;" title="'. $lang['previous_page_linktitle'] .'" width="12" height="9" onmouseover="this.src=\'img/prev_mo.gif\';" onmouseout="this.src=\'img/prev.gif\';" /></a>&nbsp;';
+     if (isset($category)) $ic .= "&amp;category=". intval($category);
+     if (isset($action) && $action!="") $ic .= "&amp;action=". urlencode($action);
+     if (isset($_GET['letter'])) $ic .= "&amp;letter=". urlencode($_GET['letter']);
+     if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?page='. intval($new_index_before) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) . $ic .'"><img src="img/prev.gif" alt="&laquo;" title="'. htmlsc($lang['previous_page_linktitle']) .'" width="12" height="9" onmouseover="this.src=\'img/prev_mo.gif\';" onmouseout="this.src=\'img/prev.gif\';" /></a>&nbsp;';
      //if ($new_index_before >= 0 && $new_index_after < $site_count) $output .= " ";
      $page_count = ceil($entry_count/$entries_per_page);
-     $output .= '<form action="'. basename($_SERVER["SCRIPT_NAME"]) .'" method="get" title="'.$lang['choose_page_formtitle'].'" accept-charset="UTF-8"><div style="display: inline;">';
-     if (isset($order)) $output .= '<input type="hidden" name="order" value="'.$order.'" />';
-     if (isset($descasc)) $output .= '<input type="hidden" name="descasc" value="'.$descasc.'" />';
-     if (isset($category)) $output .= '<input type="hidden" name="category" value="'.$category.'" />';
-     if (isset($action) && $action!="") $output .= '<input type="hidden" name="action" value="'.$action.'" />';
-     if (isset($_GET['letter'])) $output .= '<input type="hidden" name="letter" value="'.$_GET['letter'].'" />';
+     $output .= '<form action="'. basename($_SERVER["SCRIPT_NAME"]) .'" method="get" title="'. htmlsc($lang['choose_page_formtitle']) .'" accept-charset="UTF-8"><div style="display: inline;">';
+     if (isset($order)) $output .= '<input type="hidden" name="order" value="'. htmlsc($order).'" />';
+     if (isset($descasc)) $output .= '<input type="hidden" name="descasc" value="'. htmlsc($descasc) .'" />';
+     if (isset($category)) $output .= '<input type="hidden" name="category" value="'. intval($category) .'" />';
+     if (isset($action) && $action!="") $output .= '<input type="hidden" name="action" value="'. htmlsc($action) .'" />';
+     if (isset($_GET['letter'])) $output .= '<input type="hidden" name="letter" value="'. htmlsc($_GET['letter']) .'" />';
      $output .= '<select class="kat" size="1" name="page" onchange="this.form.submit();">';
      if ($page == 0) $output .= '<option value="0" selected="selected">'.str_replace("[number]", "1", $lang['page_number']).'</option>';
      else $output .= '<option value="0">'.str_replace("[number]", "1", $lang['page_number']).'</option>';
@@ -139,12 +139,12 @@ function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category
       {
        if ($x > 0 && $x < $page_count)
         {
-         if ($page == $x) $output .= '<option value="'.$x.'" selected="selected">'.str_replace("[number]", $x+1, $lang['page_number']).'</option>';
-         else $output .= '<option value="'.$x.'">'.str_replace("[number]", $x+1, $lang['page_number']).'</option>';
+         if ($page == $x) $output .= '<option value="'. intval($x) .'" selected="selected">'.str_replace("[number]", intval($x+1), $lang['page_number']).'</option>';
+         else $output .= '<option value="'. intval($x) .'">'.str_replace("[number]", intval($x+1), $lang['page_number']).'</option>';
         }
       }
     $output .= '</select><noscript>&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></noscript></div></form>';
-    if ($new_index_after < $site_count) $output .= '&nbsp;<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?page='. $new_index_after .'&amp;order='. $order .'&amp;descasc='. $descasc . $ic .'"><img src="img/next.gif" alt="&raquo;" title="'. $lang['next_page_linktitle'] .'" width="12" height="9" onmouseover="this.src=\'img/next_mo.gif\';" onmouseout="this.src=\'img/next.gif\';" /></a>';
+    if ($new_index_after < $site_count) $output .= '&nbsp;<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?page='. intval($new_index_after) .'&amp;order='. urlencode($order) .'&amp;descasc='. intval($descasc) . $ic .'"><img src="img/next.gif" alt="&raquo;" title="'. htmlsc($lang['next_page_linktitle']) .'" width="12" height="9" onmouseover="this.src=\'img/next_mo.gif\';" onmouseout="this.src=\'img/next.gif\';" /></a>';
 
     }
    return $output;
@@ -208,7 +208,7 @@ function shorten_link($string)
   else { $pre = $string[1]; $url = $string[2]; }
   $shortened_url = $url;
   if (mb_strlen($url) > $settings['text_word_maxlength']) $shortened_url = mb_substr($url, 0, ($settings['text_word_maxlength']/2)) . "..." . mb_substr($url, - ($settings['text_word_maxlength']-3-$settings['text_word_maxlength']/2));
-  return $pre .'<a href="'. $url .'">'. $shortened_url .'</a>';
+  return $pre .'<a href="'. $url .'">'. htmlsc($shortened_url) .'</a>';
  }
 
 function parse_code($string)
@@ -328,7 +328,7 @@ function user_online()
   if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1)
    {
     $sult = str_replace("[name]", htmlsc($parent_array[$id]["name"]), $lang['show_userdata_linktitle']);
-    $thread_info_a = str_replace("[name]", $name .'<a href="user.php?id='. $parent_array[$id]["user_id"] .'" title="'. $sult .'"><img src="img/registered.gif" alt="(R)" width="10" height="10" /></a>', $lang['thread_info']);
+    $thread_info_a = str_replace("[name]", $name .'<a href="user.php?id='. intval($parent_array[$id]["user_id"]) .'" title="'. htmlsc($sult) .'"><img src="img/registered.gif" alt="(R)" width="10" height="10" /></a>', $lang['thread_info']);
    }
   elseif (!isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1) $thread_info_a = str_replace("[name]", $name .'<img src="img/registered.gif" alt="(R)" width="10" height="10" title="'. $lang['registered_user_title'] .'" />', $lang['thread_info']);
   else $thread_info_a = str_replace("[name]", $name, $lang['thread_info']);
@@ -354,18 +354,18 @@ function user_online()
      } else {
         $treeClass = "reply";
      }
-    ?><a class="<?php echo $treeClass; ?>" href="forum_entry.php?id=<?php echo $parent_array[$id]["id"]; if ($page != 0 || $category != 0 || $order != "time") echo '&amp;page='.$page.'&amp;category='.urlencode($category).'&amp;order='.$order; ?>"><?php echo htmlsc($parent_array[$id]["subject"]); ?></a><?php
+    ?><a class="<?php echo $treeClass; ?>" href="forum_entry.php?id=<?php echo intval($parent_array[$id]["id"]); if ($page != 0 || $category != 0 || $order != "time") echo '&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order); ?>"><?php echo htmlsc($parent_array[$id]["subject"]); ?></a><?php
    }
   echo " " . $thread_info_b;
-  if ($parent_array[$id]["pid"]==0 && $category==0 && isset($categories[$parent_array[$id]["category"]]) && $categories[$parent_array[$id]["category"]]!='') { ?> <a title="<?php echo str_replace("[category]", $categories[$parent_array[$id]["category"]], $lang['choose_category_linktitle']); if (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 2) echo " ".$lang['admin_mod_category']; elseif (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 1) echo " ".$lang['registered_users_category']; ?>" href="forum.php?category=<?php echo $parent_array[$id]["category"]; ?>"><span class="<?php if (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 2) echo "category-adminmod"; elseif (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 1) echo "category-regusers"; else echo "category"; ?>">(<?php echo $categories[$parent_array[$id]["category"]]; ?>)</span></a><?php }
+  if ($parent_array[$id]["pid"]==0 && $category==0 && isset($categories[$parent_array[$id]["category"]]) && $categories[$parent_array[$id]["category"]]!='') { ?> <a title="<?php echo str_replace("[category]", htmlsc($categories[$parent_array[$id]["category"]]), $lang['choose_category_linktitle']); if (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 2) echo " ". htmlsc($lang['admin_mod_category']); elseif (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 1) echo " ". htmlsc($lang['registered_users_category']); ?>" href="forum.php?category=<?php echo intval($parent_array[$id]["category"]); ?>"><span class="<?php if (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 2) echo "category-adminmod"; elseif (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 1) echo "category-regusers"; else echo "category"; ?>">(<?php echo $categories[$parent_array[$id]["category"]]; ?>)</span></a><?php }
   if ($aktuellerEintrag == 0 && $parent_array[$id]["pid"]==0 && $parent_array[$id]["fixed"] == 1) { ?> <img src="img/fixed.gif" width="9" height="9" title="<?php echo $lang['fixed']; ?>" alt="*" /><?php }
-  if ($parent_array[$id]["pid"]==0 && $settings['all_views_direct'] == 1) { echo ' <span class="small">'; if ($settings['board_view']==1) { ?><a href="board_entry.php?id=<?php echo $parent_array[$id]["tid"]; ?>"><img src="img/board_d.gif" alt="[Board]" title="<?php echo $lang['open_in_board_linktitle']; ?>" width="12" height="9" onmouseover="this.src='img/board_mo.gif';" onmouseout="this.src='img/board_d.gif';" /></a><?php } if ($settings['mix_view'] == 1) { ?><a href="mix_entry.php?id=<?php echo $parent_array[$id]["tid"]; ?>"><img src="img/mix_d.gif" alt="[Mix]" title="<?php echo $lang['open_in_mix_linktitle']; ?>" width="12" height="9" onmouseover="this.src='img/mix_mo.gif';" onmouseout="this.src='img/mix_d.gif';" /></a><?php } echo "</span>"; }
+  if ($parent_array[$id]["pid"]==0 && $settings['all_views_direct'] == 1) { echo ' <span class="small">'; if ($settings['board_view']==1) { ?><a href="board_entry.php?id=<?php echo intval($parent_array[$id]["tid"]); ?>"><img src="img/board_d.gif" alt="[Board]" title="<?php echo htmlsc($lang['open_in_board_linktitle']); ?>" width="12" height="9" onmouseover="this.src='img/board_mo.gif';" onmouseout="this.src='img/board_d.gif';" /></a><?php } if ($settings['mix_view'] == 1) { ?><a href="mix_entry.php?id=<?php echo intval($parent_array[$id]["tid"]); ?>"><img src="img/mix_d.gif" alt="[Mix]" title="<?php echo htmlsc($lang['open_in_mix_linktitle']); ?>" width="12" height="9" onmouseover="this.src='img/mix_mo.gif';" onmouseout="this.src='img/mix_d.gif';" /></a><?php } echo "</span>"; }
 
       if ($parent_array[$id]["pid"]==0 && isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
      {
-      ?> <a href="admin.php?mark=<?php echo $parent_array[$id]["tid"]; ?>&amp;refer=<?php echo urlencode(basename($_SERVER["SCRIPT_NAME"])); ?>&amp;page=<?php echo $page; ?>&amp;category=<?php echo urlencode($category); ?>&amp;order=<?php echo $order; ?>"><?php
-      if ($parent_array[$id]['marked']==1) { ?><img src="img/marked.gif" alt="[x]" width="9" height="9" title="<?php echo $lang['demark_linktitle']; ?>" /><?php }
-      else { echo '<img src="img/mark.gif" alt="[-]" title="'. $lang['mark_linktitle'] .'" width="9" height="9" />'; }
+      ?> <a href="admin.php?mark=<?php echo intval($parent_array[$id]["tid"]); ?>&amp;refer=<?php echo urlencode(basename($_SERVER["SCRIPT_NAME"])); ?>&amp;page=<?php echo intval($page); ?>&amp;category=<?php echo intval($category); ?>&amp;order=<?php echo urlencode($order); ?>"><?php
+      if ($parent_array[$id]['marked']==1) { ?><img src="img/marked.gif" alt="[x]" width="9" height="9" title="<?php echo htmlsc($lang['demark_linktitle']); ?>" /><?php }
+      else { echo '<img src="img/mark.gif" alt="[-]" title="'. htmlsc($lang['mark_linktitle']) .'" width="9" height="9" />'; }
       ?></a><?php
      }
 
@@ -403,12 +403,12 @@ function parse_template()
   $template = str_replace('{CONTACT}',$lang['contact_linkname'],$template);
 
   // User menu:
-  if (isset($_SESSION[$settings['session_prefix']."user_name"])) { if (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=="admin") $user_menu_admin = ' | <a href="admin.php" title="'.$lang['admin_area_linktitle'].'">'.$lang['admin_area_linkname'].'</a>'; else $user_menu_admin = ""; $user_menu = '<a href="user.php?id='.$_SESSION[$settings['session_prefix'].'user_id'].'" title="'.$lang['own_userdata_linktitle'].'"><b>'.htmlsc($_SESSION[$settings['session_prefix'].'user_name']).'</b></a> | <a href="user.php" title="'.$lang['user_area_linktitle'].'">'.$lang['user_area_linkname'].'</a>'.$user_menu_admin.' | <a href="login.php" title="'.$lang['logout_linktitle'].'">'.$lang['logout_linkname'].'</a>'; }
-  else $user_menu = '<a href="login.php" title="'.$lang['login_linktitle'].'">'.$lang['login_linkname'].'</a> | <a href="register.php" title="'.$lang['register_linktitle'].'">'.$lang['register_linkname'].'</a>';
+  if (isset($_SESSION[$settings['session_prefix']."user_name"])) { if (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=="admin") $user_menu_admin = ' | <a href="admin.php" title="'. htmlsc($lang['admin_area_linktitle']) .'">'.$lang['admin_area_linkname'].'</a>'; else $user_menu_admin = ""; $user_menu = '<a href="user.php?id='. intval($_SESSION[$settings['session_prefix'].'user_id']) .'" title="'. htmlsc($lang['own_userdata_linktitle']) .'"><b>'. htmlsc($_SESSION[$settings['session_prefix'].'user_name']) .'</b></a> | <a href="user.php" title="'. htmlsc($lang['user_area_linktitle']) .'">'.$lang['user_area_linkname'].'</a>'.$user_menu_admin.' | <a href="login.php" title="'. htmlsc($lang['logout_linktitle']) .'">'.$lang['logout_linkname'].'</a>'; }
+  else $user_menu = '<a href="login.php" title="'. htmlsc($lang['login_linktitle']) .'">'.$lang['login_linkname'].'</a> | <a href="register.php" title="'. htmlsc($lang['register_linktitle']) .'">'.$lang['register_linkname'].'</a>';
   $template = str_replace("{USER-MENU}",$user_menu,$template);
 
   // Search:
-  $search_dump = '<form action="search.php" method="get" title="'.$lang['search_formtitle'].'" accept-charset="UTF-8"><div class="search">';
+  $search_dump = '<form action="search.php" method="get" title="'. htmlsc($lang['search_formtitle']) .'" accept-charset="UTF-8"><div class="search">';
   $search_dump .= $lang['search_marking'];
   $search_dump .= '<span class="normal">&nbsp;</span><input class="searchfield" type="text" name="search" value="" size="20" /><span class="normal">&nbsp;</span><input type="image" name="" src="img/submit.gif" alt="&raquo;" /></div></form>';
   $template = str_replace("{SEARCH}",$search_dump,$template);
