@@ -247,7 +247,7 @@ if (isset($_GET['mark']))
   if ($field['marked']==0) $marked = 1; else $marked = 0;
   mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked= ". intval($marked) ."' WHERE tid= ". intval($_GET['mark']));
   header("location: ".$_GET['refer']."?id=".$_GET['mark']."&category=".$_GET['category']."&page=".$_GET['page']."&order=".$_GET['order']);
-  die("<a href=\"".$_GET['refer']."?id=".$_GET['mark']."&amp;category=".$_GET['category']."&amp;page=".$_GET['page']."&amp;order=".$_GET['order']."\">further...</a>");
+  die('<a href="'. $_GET['refer'] .'?id='. $_GET['mark'] .'&amp;category='. $_GET['category'] .'&amp;page='. $_GET['page'] .'&amp;order='. $_GET['order'] .'">further...</a>');
 
  }
 
@@ -371,7 +371,7 @@ if(isset($_POST['edit_user_submit']))
     @mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_name='". mysqli_real_escape_string($connid, $edit_user_name) ."', user_type='". mysqli_real_escape_string($connid, $edit_user_type) ."', user_email='". mysqli_real_escape_string($connid, $user_email) ."', user_real_name='". mysqli_real_escape_string($connid, $user_real_name) ."', hide_email=". intval($hide_email) .", user_hp='". mysqli_real_escape_string($connid, $user_hp) ."', user_place='". mysqli_real_escape_string($connid, $user_place) ."', profile='". mysqli_real_escape_string($connid, $profile) ."', signature='". mysqli_real_escape_string($connid, $signature) ."', last_login=last_login, registered=registered, user_view='". mysqli_real_escape_string($connid, $user_view) ."', new_posting_notify=". intval($new_posting_notify) .", new_user_notify=". intval($new_user_notify) .", personal_messages=". intval($personal_messages) .", time_difference=". intval($user_time_difference) ." WHERE user_id=". intval($edit_user_id)) or die($lang['db_error']);
     @mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, name='". mysqli_real_escape_string($connid, $edit_user_name) ."' WHERE user_id=". intval($edit_user_id));
     header("location: admin.php?action=user");
-    die("<a href=\"admin.php?action=user\">further...</a>");
+    die('<a href="admin.php?action=user">further...</a>');
    }
   $action = 'edit_user';
  }
@@ -790,7 +790,7 @@ if (isset($_POST['unlock_marked_threads_submitted']))
    }
 
   header("location: admin.php");
-  die("<a href=\"admin.php\">further...</a>");
+  die('<a href="admin.php">further...</a>');
  }
 
 if (isset($_POST['ar_username']))
@@ -870,7 +870,7 @@ if (isset($_POST['ar_username']))
      }
 
     header("location: admin.php?action=user&new_user=".urlencode($ar_username).$send_error);
-    die("<a href=\"admin.php?action=user&amp;new_user=".urlencode($ar_username).$send_error."\">further...</a>");
+    die('<a href="admin.php?action=user&amp;new_user='. urlencode($ar_username) . $send_error .'">further...</a>');
    }
   }
 if (isset($_POST['rename_category_submitted']) && trim($_POST['new_category']) != "")
@@ -891,14 +891,14 @@ if (isset($_POST['rename_category_submitted']) && trim($_POST['new_category']) !
   fclose($fp);
 
   header("location: admin.php");
-  die("<a href=\"admin.php\">further...</a>");
+  die('<a href="admin.php">further...</a>');
  }
 
 if (isset($_POST['delete_category_confirmed']) && trim($_POST['delete_category']) != "")
  {
   mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE category = ". intval($_POST['delete_category']));
   header("location: admin.php");
-  die("<a href=\"admin.php\">further...</a>");
+  die('<a href="admin.php">further...</a>');
  }
 
 if(isset($_POST['banlists_submit']))
@@ -940,7 +940,7 @@ if(isset($_POST['banlists_submit']))
   mysqli_query($connid, "UPDATE ". $db_settings['banlists_table'] ." SET list='". mysqli_real_escape_string($connid, $not_accepted_words) ."' WHERE name='words'");
 
   header("location: admin.php");
-  die("<a href=\"admin.php\">further...</a>");
+  die('<a href="admin.php">further...</a>');
  }
 
 if(isset($_POST['smiley_file']))
@@ -958,7 +958,7 @@ if(isset($_POST['smiley_file']))
     mysqli_query($connid, "INSERT INTO ". $db_settings['smilies_table'] ." (order_id, file, code_1) VALUES (". intval($order_id) .",'". mysqli_real_escape_string($connid, $_POST['smiley_file']) ."','". mysqli_real_escape_string($connid, trim($_POST['smiley_code'])) ."')") or die(mysqli_error($connid));
 
     header("location: admin.php?action=smilies");
-    die();
+    die('<a href="admin.php?action=smilies">further...</a>');
    }
   else $action='smilies';
  }
@@ -1448,7 +1448,7 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['language_file']; ?></b><br /><span class="small"><?php echo $lang_add['language_file_d']; ?></span></td>
-     <td class="d"><select name="language_file" size="1"><?php $handle=opendir('./lang/'); while ($file = readdir($handle)) { if (mb_strrchr($file, ".")==".php" && mb_strrchr($file, "_")!="_add.php") { ?><option value="<?php echo $file; ?>"<?php if ($settings['language_file'] ==$file) echo " selected=\"selected\""; ?>><?php echo ucfirst(str_replace(".php","",$file)); ?></option><?php } } closedir($handle); ?></select></td>
+     <td class="d"><select name="language_file" size="1"><?php $handle=opendir('./lang/'); while ($file = readdir($handle)) { if (mb_strrchr($file, ".")==".php" && mb_strrchr($file, "_")!="_add.php") { ?><option value="<?php echo $file; ?>"<?php if ($settings['language_file'] ==$file) echo ' selected="selected"'; ?>><?php echo ucfirst(str_replace(".php","",$file)); ?></option><?php } } closedir($handle); ?></select></td>
     </tr>
     <tr>
      <td class="c"><b><?php echo $lang_add['topics_per_page']; ?></b><br /><span class="small"><?php echo $lang_add['topics_per_page_d']; ?></span></td>
@@ -1607,7 +1607,7 @@ switch ($action)
    <?php
    for($x=0; $x<count($selected); $x++)
    {
-    echo "<input type=\"hidden\" name=\"selected_confirmed[]\" value=\"".$selected[$x]."\" />";
+    echo '<input type="hidden" name="selected_confirmed[]" value="'. $selected[$x] .'" />';
    }
    ?>
    <input type="submit" name="delete_confirmed" value="<?php echo $lang['user_del_subm_b']; ?>" />
@@ -1640,7 +1640,7 @@ switch ($action)
   <?php
   break;
   case "delete_marked_threads":
-  $lang_add['del_marked_note'] = str_replace("[marked_symbol]", "<img src=\"img/marked.gif\" alt=\"[x]\" width=\"9\" height=\"9\" />", $lang_add['del_marked_note']);
+  $lang_add['del_marked_note'] = str_replace("[marked_symbol]", '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['del_marked_note']);
   ?><p class="caution"><?php echo $lang['caution']; ?></p>
   <p><?php echo $lang_add['del_marked_note']; ?></p>
   <form action="admin.php" method="post" accept-charset="UTF-8"><div>
@@ -1670,15 +1670,15 @@ switch ($action)
   break;
   case "mark_threads":
    ?><form action="admin.php" method="post" accept-charset="UTF-8"><div style="display: inline;"><?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php }
-   $lang_add['mark_old_threads'] = str_replace("[number]", "<input type=\"text\" name=\"n1\" value=\"\" size=\"4\" />", $lang_add['mark_old_threads']);
-   $lang_add['mark_old_threads_no_replies'] = str_replace("[number]", "<input type=\"text\" name=\"n2\" value=\"\" size=\"4\" />", $lang_add['mark_old_threads_no_replies']);
+   $lang_add['mark_old_threads'] = str_replace("[number]", '<input type="text" name="n1" value="" size="4" />', $lang_add['mark_old_threads']);
+   $lang_add['mark_old_threads_no_replies'] = str_replace("[number]", '<input type="text" name="n2" value="" size="4" />', $lang_add['mark_old_threads_no_replies']);
    ?><p><input type="radio" name="mark_threads" value="1" checked="checked" /> <?php echo $lang_add['mark_old_threads']; ?></p>
    <p><input type="radio" name="mark_threads" value="2" /> <?php echo $lang_add['mark_old_threads_no_replies']; ?></p>
    <p><input type="submit" name="mark_threads_submitted" value="<?php echo $lang['submit_button_ok']; ?>" /></p>
    </div></form><p>&nbsp;</p><?php
   break;
   case "lock_marked_threads":
-   $lang_add['lock_marked_conf'] = str_replace("[marked_symbol]", "<img src=\"img/marked.gif\" alt=\"[x]\" width=\"9\" height=\"9\" />", $lang_add['lock_marked_conf']);
+   $lang_add['lock_marked_conf'] = str_replace("[marked_symbol]", '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['lock_marked_conf']);
    ?><p><?php echo $lang_add['lock_marked_conf']; ?></p>
    <form action="admin.php" method="post" accept-charset="UTF-8"><div>
    <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
@@ -1686,7 +1686,7 @@ switch ($action)
    </div></form><p>&nbsp;</p><?php
   break;
   case "unlock_marked_threads":
-   $lang_add['unlock_marked_conf'] = str_replace("[marked_symbol]", "<img src=\"img/marked.gif\" alt=\"[x]\" width=\"9\" height=\"9\" />", $lang_add['unlock_marked_conf']);
+   $lang_add['unlock_marked_conf'] = str_replace("[marked_symbol]", '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['unlock_marked_conf']);
    ?><p><?php echo $lang_add['unlock_marked_conf']; ?></p>
    <form action="admin.php" method="post" accept-charset="UTF-8"><div>
    <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
@@ -1721,9 +1721,9 @@ switch ($action)
    <b><?php echo $lang_add['edit_category']; ?></b><br />
    <input type="text" name="category" value="<?php echo htmlsc($category); ?>" size="25" /><br /><br />
    <b><?php echo $lang_add['accessible_for']; ?></b><br />
-   <input type="radio" name="accession" value="0"<?php if ($accession==0) echo " checked=\"ckecked\""; ?> /><?php echo $lang_add['cat_accession_all']; ?><br />
-   <input type="radio" name="accession" value="1"<?php if ($accession==1) echo " checked=\"ckecked\""; ?> /><?php echo $lang_add['cat_accession_reg_users']; ?><br />
-   <input type="radio" name="accession" value="2"<?php if ($accession==2) echo " checked=\"ckecked\""; ?> /><?php echo $lang_add['cat_accession_mod_admin']; ?><br /><br />
+   <input type="radio" name="accession" value="0"<?php if ($accession==0) echo ' checked="ckecked"'; ?> /><?php echo $lang_add['cat_accession_all']; ?><br />
+   <input type="radio" name="accession" value="1"<?php if ($accession==1) echo ' checked="ckecked"'; ?> /><?php echo $lang_add['cat_accession_reg_users']; ?><br />
+   <input type="radio" name="accession" value="2"<?php if ($accession==2) echo ' checked="ckecked"'; ?> /><?php echo $lang_add['cat_accession_mod_admin']; ?><br /><br />
    <input type="submit" name="edit_category_submit" value="<?php echo $lang['submit_button_ok']; ?>" /></div></form><?php
   break;
   case "backup":
@@ -2059,5 +2059,5 @@ switch ($action)
 echo $footer;
 
  }
-else { header("location: index.php"); die("<a href=\"index.php\">further...</a>"); }
+else { header("location: index.php"); die('<a href="index.php">further...</a>'); }
 ?>

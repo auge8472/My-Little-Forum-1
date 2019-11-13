@@ -32,7 +32,7 @@ include("inc.php");
 if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
  {
   header("location: login.php?referer=forum.php");
-  die("<a href=\"login.php?referer=forum.php\">further...</a>");
+  die('<a href="login.php?referer=forum.php">further...</a>');
  }
 
 // go on if user has access:
@@ -144,6 +144,6 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
 else // no access
  {
   header("location: login.php?msg=noaccess");
-  die("<a href=\"login.php?msg=noaccess\">further...</a>");
+  die('<a href="login.php?msg=noaccess">further...</a>');
  }
 ?>

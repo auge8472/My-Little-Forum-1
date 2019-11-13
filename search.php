@@ -39,18 +39,18 @@ include("inc.php");
    $new_index_before = $page - 1;
    $new_index_after = $page + 1;
    $site_count = ceil($count / $suchergebnisse);
-   if ($new_index_before >= 0) $output .= "<a href=\"". basename($_SERVER["PHP_SELF"]) ."?search=".$search."&amp;category=".$category."&amp;ao=".$ao."&amp;page=".$new_index_before."\" title=\"".$lang['previous_page_linktitle']."\"><b>&laquo;</b></a>&nbsp;";
-   if ($page == 3) { $output .= "<a href=\"". basename($_SERVER["PHP_SELF"]) ."?search=".$search."&amp;category=".$category."&amp;ao=".$ao."&amp;page=0\"><b>1</b></a>&nbsp;"; }
-   elseif ($page > 3) { $output .= "<a href=\"". basename($_SERVER["PHP_SELF"]) ."?search=".$search."&amp;category=".$category."&amp;ao=".$ao."&amp;page=0\"><b>1</b></a>&nbsp;<b>...</b>&nbsp;"; }
+   if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["PHP_SELF"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page='. $new_index_before .'" title="'. $lang['previous_page_linktitle'] .'"><b>&laquo;</b></a>&nbsp;';
+   if ($page == 3) { $output .= '<a href="'. basename($_SERVER["PHP_SELF"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page=0"><b>1</b></a>&nbsp;'; }
+   elseif ($page > 3) { $output .= '<a href="'. basename($_SERVER["PHP_SELF"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page=0"><b>1</b></a>&nbsp;<b>...</b>&nbsp;'; }
    for ($i = 0; $i < $site_count; $i++) {
    $pagen_nr = $i;
    if ($page == $pagen_nr or $page == $pagen_nr-1 or $page == $pagen_nr+1 or $page == $pagen_nr-2 or $page == $pagen_nr+2) {
    if ($page != $pagen_nr) {
-   $output .= "<a href=\"". basename($_SERVER["PHP_SELF"]) ."?search=".$search."&amp;category=".$category."&amp;ao=".$ao."&amp;page=" .$pagen_nr ."\"><b>" . ($pagen_nr+1) ."</b></a>&nbsp;"; }
+   $output .= '<a href="'. basename($_SERVER["PHP_SELF"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page='. $pagen_nr .'"><b>'. ($pagen_nr+1) .'</b></a>&nbsp;'; }
    else {
-   $output .= "<span style=\"color: red; font-weight: bold;\"><b>" . ($pagen_nr+1) . "</b></span>&nbsp;";
+   $output .= '<span style="color: red; font-weight: bold;"><b>'. ($pagen_nr+1) .'</b></span>&nbsp;';
    } } }
-   if ($new_index_after < $site_count) $output .= "<a href=\"". basename($_SERVER["PHP_SELF"]) ."?search=".$search."&amp;category=".$category."&amp;ao=".$ao."&amp;page=" .$new_index_after ."\" title=\"".$lang['next_page_linktitle']."\"><b>&raquo;</b></a>";
+   if ($new_index_after < $site_count) $output .= '<a href="'. basename($_SERVER["PHP_SELF"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page='. $new_index_after .'" title="'. $lang['next_page_linktitle'] .'"><b>&raquo;</b></a>';
    }
   return $output;
   }
@@ -94,7 +94,7 @@ include("inc.php");
  if ($settings['access_for_users_only'] == 1 && !isset($_SESSION[$settings['session_prefix'].'user_id']))
   {
    header("location: login.php?msg=noaccess");
-   die("<a href=\"login.php?msg=noaccess\">further...</a>");
+   die('<a href="login.php?msg=noaccess">further...</a>');
   }
 
  if (empty($page)) $page = 0;
@@ -195,8 +195,8 @@ elseif (isset($show_postings) && empty($search))
   $field = mysqli_fetch_assoc($user_name_result);
   mysqli_free_result($user_name_result);
   $lang['show_userdata_linktitle'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['show_userdata_linktitle']);
-  $lang['postings_by_user'] = str_replace("[name]", "<a href=\"user.php?id=".$show_postings."\" title=\"".$lang['show_userdata_linktitle']."\">".htmlsc(stripslashes($field["user_name"]))."</a>", $lang['postings_by_user']);
-  $subnav_1 .= "<img src=\"img/where.gif\" alt=\"\" width=\"11\" height=\"8\" border=\"0\"><b>".$lang['postings_by_user']."</b>";
+  $lang['postings_by_user'] = str_replace("[name]", '<a href="user.php?id='. $show_postings .'" title="'. $lang['show_userdata_linktitle'] .'">'. htmlsc(stripslashes($field["user_name"])) .'</a>', $lang['postings_by_user']);
+  $subnav_1 .= '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'. $lang['postings_by_user'] .'</b>';
  }
 if (isset($search) && $search != "") { $subnav_2 = snav($page, $settings['search_results_per_page'], $count, $search, $ao, $category); } elseif (isset($show_postings) && $show_postings !="") { $subnav_2 = pnav($page, $settings['search_results_per_page'], $count, $show_postings); }
 parse_template();
@@ -228,10 +228,10 @@ if ($categories!=false)
 <?php }
 
 
-if ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "and") { echo "<p class=\"caution\">".$lang['no_match_and']."</p>"; }
-elseif ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "or") { echo "<p class=\"caution\">".$lang['no_match_or']."</p>"; }
-elseif ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "phrase") { echo "<p class=\"caution\">".$lang['no_match_phrase']."</p>"; }
-elseif ($count == 0 && $search != "") { echo "<p class=\"caution\">".$lang['search_no_match']."</p>"; }
+if ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "and") { echo '<p class="caution">'. $lang['no_match_and'] .'</p>'; }
+elseif ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "or") { echo '<p class="caution">'. $lang['no_match_or'] .'</p>'; }
+elseif ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "phrase") { echo '<p class="caution">'. $lang['no_match_phrase'] .'</p>'; }
+elseif ($count == 0 && $search != "") { echo '<p class="caution">'. $lang['search_no_match'] .'</p>'; }
 if (isset($search) && $search != "" || isset($show_postings) && $show_postings !="") {
 $i=0;
 while ($entrydata = mysqli_fetch_assoc($result)) {
@@ -251,7 +251,7 @@ if ((isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$set
   $userView = "forum_entry.php";
   $itemFragment = "";
 }
-?><p class="searchresults"><a class="<?php echo $treeClass; ?>" href="<?php echo $userView ."?id=". intval($entrydata["tid"]) . $itemFragment; ?>"><?php echo htmlsc($entrydata["subject"]); ?></a> <?php echo $search_author_info_x; if(isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='') echo " <span class=\"category\">(".$categories[$entrydata["category"]].")</span>"; ?></p><?php }
+?><p class="searchresults"><a class="<?php echo $treeClass; ?>" href="<?php echo $userView ."?id=". intval($entrydata["tid"]) . $itemFragment; ?>"><?php echo htmlsc($entrydata["subject"]); ?></a> <?php echo $search_author_info_x; if(isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='') echo ' <span class="category">('. $categories[$entrydata["category"]] .')</span>'; ?></p><?php }
 }
 ?>
 <br />
