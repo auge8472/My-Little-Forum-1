@@ -176,7 +176,7 @@ if($thread_count > 0 && isset($result))
    <?php if ($settings['count_views'] == 1) { ?>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php echo $zeile['views']; ?></span></td>
    <?php }
-    if (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin") { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?mark=<?php echo $zeile["tid"]; ?>&amp;refer=<?php echo basename($_SERVER["PHP_SELF"]); ?>&amp;page=<?php echo $page; ?>&amp;category=<?php echo $category; ?>&amp;order=<?php echo $order; ?>"><?php
+    if (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin") { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?mark=<?php echo $zeile["tid"]; ?>&amp;refer=<?php echo urlencode(basename($_SERVER["SCRIPT_NAME"])); ?>&amp;page=<?php echo $page; ?>&amp;category=<?php echo $category; ?>&amp;order=<?php echo $order; ?>"><?php
     if ($zeile['marked']==1) { ?><img src="img/marked.gif" alt="[x]" width="9" height="9" title="<?php echo $lang['unmark_linktitle']; ?>" /><?php }
     else { echo '<img src="img/mark.gif" alt="[-]" title="'. $lang['mark_linktitle'] .'" width="9" height="9" />'; }
     ?></a></td><?php } ?>

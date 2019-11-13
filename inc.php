@@ -44,7 +44,7 @@ $settings = get_settings();
 include("lang/".$settings['language_file']);
 setlocale(LC_ALL, $lang['locale']);
 
-if(basename($_SERVER['PHP_SELF'])!='login.php' && basename($_SERVER['PHP_SELF'])!='info.php' && (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=='admin')) && $settings['forum_disabled']==1)
+if(basename($_SERVER['SCRIPT_NAME'])!='login.php' && basename($_SERVER['SCRIPT_NAME'])!='info.php' && (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=='admin')) && $settings['forum_disabled']==1)
  {
   if(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] != 'admin')
    {

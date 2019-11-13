@@ -166,7 +166,7 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
     $entrydata = mysqli_fetch_assoc($result); // Und ggbf. aus der Datenbank holen
 
     // Look if id correct:
-    if ($entrydata['pid'] != 0) header("location: ".basename($_SERVER['PHP_SELF'])."?id=".$entrydata['tid']."&page=".$page."&category=".$category."&order=".$order."&descasc=".$descasc."#p".$id);
+    if ($entrydata['pid'] != 0) header("location: ". basename($_SERVER['SCRIPT_NAME']) ."?id=". $entrydata['tid'] ."&page=". $page ."&category=". $category ."&order=". $order ."&descasc=". $descasc ."#p". $id);
 
      // category of this posting accessible by user?
      if (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin"))

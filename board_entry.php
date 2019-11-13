@@ -37,11 +37,11 @@ function nav_b($be_page, $entries_per_page, $entry_count, $id, $da, $nr, $page, 
     $new_index_before = $be_page - 1;
     $new_index_after = $be_page + 1;
     $site_count = ceil($entry_count / $entries_per_page);
-    if ($new_index_before >= 0) $output .= '<a href="'.basename($_SERVER["PHP_SELF"]).'?&amp;id='.$id.'&amp;be_page='.$new_index_before.'&amp;da='.$da.'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'" title="'.$lang['previous_page_linktitle'].'"><img src="img/prev.gif" alt="&laquo;" width="12" height="9" onmouseover="this.src=\'img/prev_mo.gif\';" onmouseout="this.src=\'img/prev.gif\';" /></a>';
+    if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?&amp;id='.$id.'&amp;be_page='.$new_index_before.'&amp;da='.$da.'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'" title="'.$lang['previous_page_linktitle'].'"><img src="img/prev.gif" alt="&laquo;" width="12" height="9" onmouseover="this.src=\'img/prev_mo.gif\';" onmouseout="this.src=\'img/prev.gif\';" /></a>';
     if ($new_index_before >= 0 && $new_index_after < $site_count)$output .= '&nbsp;';
-    if ($new_index_after < $site_count) $output .= '<a href="'.basename($_SERVER["PHP_SELF"]).'?&amp;id='.$id.'&amp;be_page='.$new_index_after.'&amp;da='.$da.'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'" title="'.$lang['next_page_linktitle'].'"><img src="img/next.gif" alt="&laquo;" width="12" height="9" onmouseover="this.src=\'img/next_mo.gif\';" onmouseout="this.src=\'img/next.gif\';" /></a>';
+    if ($new_index_after < $site_count) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?&amp;id='.$id.'&amp;be_page='.$new_index_after.'&amp;da='.$da.'&amp;page='.$page.'&amp;category='.$category.'&amp;order='.$order.'&amp;descasc='.$descasc.'" title="'.$lang['next_page_linktitle'].'"><img src="img/next.gif" alt="&laquo;" width="12" height="9" onmouseover="this.src=\'img/next_mo.gif\';" onmouseout="this.src=\'img/next.gif\';" /></a>';
     $page_count = ceil($entry_count/$entries_per_page);
-    $output .= '&nbsp;&nbsp;<form method="get" action="'.basename($_SERVER["PHP_SELF"]).'" title="'.$lang['choose_page_formtitle'].'" accept-charset="UTF-8"><div style="display: inline;">';
+    $output .= '&nbsp;&nbsp;<form method="get" action="'. basename($_SERVER["SCRIPT_NAME"]) .'" title="'.$lang['choose_page_formtitle'].'" accept-charset="UTF-8"><div style="display: inline;">';
     if (isset($id)) $output .= '<input type="hidden" name="id" value="'.$id.'">';
     if (isset($da)) $output .= '<input type="hidden" name="da" value="'.$da.'">';
     $output .= '<input type="hidden" name="page" value="'.$page.'"><input type="hidden" name="category" value="'.$category.'"><input type="hidden" name="order" value="'.$order.'"><input type="hidden" name="descasc" value ="'.$descasc.'">';
@@ -97,7 +97,7 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
      mysqli_free_result($result_t);
 
      // Look if id correct:
-     if ($thread['pid'] != 0) header("location: ".basename($_SERVER['PHP_SELF'])."?id=".$thread['tid']."&page=".$page."&category=".$category."&order=".$order."&descasc=".$descasc."#p".$id);
+     if ($thread['pid'] != 0) header("location: ". basename($_SERVER['SCRIPT_NAME']) ."?id=". $thread['tid'] ."&page=". $page ."&category=". $category ."&order=". $order ."&descasc=". $descasc ."#p". $id);
 
      // category of this posting accessible by user?
      if (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin"))
