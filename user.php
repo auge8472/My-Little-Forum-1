@@ -368,7 +368,7 @@ if ($action == "show users")
   if (isset($_GET['letter']) && $_GET['letter'] == "X") $lx = ' selected="selected"'; else $lx = '';
   if (isset($_GET['letter']) && $_GET['letter'] == "Y") $ly = ' selected="selected"'; else $ly = '';
   if (isset($_GET['letter']) && $_GET['letter'] == "Z") $lz = ' selected="selected"'; else $lz = '';
-  $subnav_2 = $lang['num_reg_users'] . '&nbsp;&nbsp;<form action="'.basename($_SERVER["PHP_SELF"]).'" method="get" accept-charset="UTF-8"><div style="display: inline;"><select class="kat" size="1" name="letter" onchange="this.form.submit();">
+  $subnav_2 = $lang['num_reg_users'] . '&nbsp;&nbsp;<form action="'. basename($_SERVER["SCRIPT_NAME"]) .'" method="get" accept-charset="UTF-8"><div style="display: inline;"><select class="kat" size="1" name="letter" onchange="this.form.submit();">
   <option value="">A-Z</option>
   <option value="A"'.$la.'>A</option>
   <option value="B"'.$lb.'>B</option>
@@ -732,7 +732,7 @@ switch ($action)
 
    if ($field["personal_messages"] == 1)
     {
-     ?><form action="<?php echo basename($_SERVER["PHP_SELF"]); ?>" method="post" accept-charset="UTF-8"><div style="margin-top: 20px;">
+     ?><form action="<?php echo basename($_SERVER["SCRIPT_NAME"]); ?>" method="post" accept-charset="UTF-8"><div style="margin-top: 20px;">
      <input type="hidden" name="action" value="pm_sent" />
      <input type="hidden" name="recipient_id" value="<?php echo $id; ?>" />
      <b><?php echo $lang['pers_msg_sj']; ?></b><br />

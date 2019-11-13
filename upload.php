@@ -194,11 +194,11 @@ switch($action)
      ?><p class="caution"><?php echo $lang['error_headline']; ?></p><ul><?php foreach($errors as $f) { ?><li><?php echo $f; ?></li><?php } ?></ul><?php
     }
    ?><p><?php echo $lang['upload_exp']; ?></p>
-   <form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
+   <form action="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
    <input type="file" name="probe" /><br><br>
    <input type="submit" value="<?php echo $lang['upload_subm_button']; ?>">
    </form>
-   <p style="font-size:11px;">[ <a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?action=show_uploaded_images"><?php echo $lang['available_images']; ?></a> ]</p><?php
+   <p style="font-size:11px;">[ <a href="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>?action=show_uploaded_images"><?php echo $lang['available_images']; ?></a> ]</p><?php
   break;
   case 'uploaded':
   if (isset($_FILES['probe']))
@@ -241,14 +241,14 @@ switch($action)
     }
    else $images_count = 0;
    ?><p><?php
-   if ($p>1) { ?>[ <a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?action=show_uploaded_images&amp;p=<?php echo $p-1; ?>">&laquo;</a> ] <?php } if($p*$images_per_page < $images_count) { ?>[ <a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?action=show_uploaded_images&amp;p=<?php echo $p+1; ?>">&raquo;</a> ] <?php } ?>
-   [ <a href="<?php echo basename($_SERVER['PHP_SELF']); ?>"><?php echo $lang['upload_image_title']; ?></a> ]</p>
+   if ($p>1) { ?>[ <a href="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>?action=show_uploaded_images&amp;p=<?php echo $p-1; ?>">&laquo;</a> ] <?php } if($p*$images_per_page < $images_count) { ?>[ <a href="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>?action=show_uploaded_images&amp;p=<?php echo $p+1; ?>">&raquo;</a> ] <?php } ?>
+   [ <a href="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>"><?php echo $lang['upload_image_title']; ?></a> ]</p>
    <hr /><p><?php
    if($images_count > 0)
     {
      for($i=$show_images_from;$i<$show_images_to;$i++)
       {
-       ?><a href="<?php echo basename($_SERVER['PHP_SELF']); ?>?uploaded_image_selected=<?php echo $images[$i]; ?>"><img style="margin: 0px 15px 15px 0px;" src="<?php echo $uploaded_images_path.$images[$i]; ?>" alt="<?php echo $images[$i]; ?>" height="100" border="0"></a><?php
+       ?><a href="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>?uploaded_image_selected=<?php echo $images[$i]; ?>"><img style="margin: 0px 15px 15px 0px;" src="<?php echo $uploaded_images_path.$images[$i]; ?>" alt="<?php echo $images[$i]; ?>" height="100" border="0"></a><?php
       }
     }
    else

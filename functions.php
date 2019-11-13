@@ -123,10 +123,10 @@ function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category
      if (isset($category)) $ic .= "&amp;category=".urlencode($category);
      if (isset($action) && $action!="") $ic .= "&amp;action=".$action;
      if (isset($_GET['letter'])) $ic .= "&amp;letter=".urlencode($_GET['letter']);
-     if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["PHP_SELF"]) .'?page='. $new_index_before .'&amp;order='. $order .'&amp;descasc='. $descasc . $ic .'"><img src="img/prev.gif" alt="&laquo;" title="'. $lang['previous_page_linktitle'] .'" width="12" height="9" onmouseover="this.src=\'img/prev_mo.gif\';" onmouseout="this.src=\'img/prev.gif\';" /></a>&nbsp;';
+     if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?page='. $new_index_before .'&amp;order='. $order .'&amp;descasc='. $descasc . $ic .'"><img src="img/prev.gif" alt="&laquo;" title="'. $lang['previous_page_linktitle'] .'" width="12" height="9" onmouseover="this.src=\'img/prev_mo.gif\';" onmouseout="this.src=\'img/prev.gif\';" /></a>&nbsp;';
      //if ($new_index_before >= 0 && $new_index_after < $site_count) $output .= " ";
      $page_count = ceil($entry_count/$entries_per_page);
-     $output .= '<form action="'.basename($_SERVER["PHP_SELF"]).'" method="get" title="'.$lang['choose_page_formtitle'].'" accept-charset="UTF-8"><div style="display: inline;">';
+     $output .= '<form action="'. basename($_SERVER["SCRIPT_NAME"]) .'" method="get" title="'.$lang['choose_page_formtitle'].'" accept-charset="UTF-8"><div style="display: inline;">';
      if (isset($order)) $output .= '<input type="hidden" name="order" value="'.$order.'" />';
      if (isset($descasc)) $output .= '<input type="hidden" name="descasc" value="'.$descasc.'" />';
      if (isset($category)) $output .= '<input type="hidden" name="category" value="'.$category.'" />';
@@ -144,7 +144,7 @@ function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category
         }
       }
     $output .= '</select><noscript>&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></noscript></div></form>';
-    if ($new_index_after < $site_count) $output .= '&nbsp;<a href="'. basename($_SERVER["PHP_SELF"]) .'?page='. $new_index_after .'&amp;order='. $order .'&amp;descasc='. $descasc . $ic .'"><img src="img/next.gif" alt="&raquo;" title="'. $lang['next_page_linktitle'] .'" width="12" height="9" onmouseover="this.src=\'img/next_mo.gif\';" onmouseout="this.src=\'img/next.gif\';" /></a>';
+    if ($new_index_after < $site_count) $output .= '&nbsp;<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?page='. $new_index_after .'&amp;order='. $order .'&amp;descasc='. $descasc . $ic .'"><img src="img/next.gif" alt="&raquo;" title="'. $lang['next_page_linktitle'] .'" width="12" height="9" onmouseover="this.src=\'img/next_mo.gif\';" onmouseout="this.src=\'img/next.gif\';" /></a>';
 
     }
    return $output;
@@ -184,8 +184,8 @@ function bbcode($string, $rss = false)
   $string = preg_replace_callback("#\[url\](.+?)\[/url\]#is", "shorten_link", $string);
   $string = preg_replace("#\[url=(.+?)\](.+?)\[/url\]#is", '<a href="\\1">\\2</a>', $string);
   $string = preg_replace_callback("#\[code\](.+?)\[/code\]#is", "parse_code", $string);
-  $string = preg_replace("#\[msg\](.+?)\[/msg\]#is", '<a href="'. basename($_SERVER['PHP_SELF']) .'?id=\\1">\\1</a>', $string);
-  $string = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", '<a href="'. basename($_SERVER['PHP_SELF']) .'?id=\\1">\\2</a>', $string);
+  $string = preg_replace("#\[msg\](.+?)\[/msg\]#is", '<a href="'. basename($_SERVER['SCRIPT_NAME']) .'?id=\\1">\\1</a>', $string);
+  $string = preg_replace("#\[msg=(.+?)\](.+?)\[/msg\]#is", '<a href="'. basename($_SERVER['SCRIPT_NAME']) .'?id=\\1">\\2</a>', $string);
   if ($settings['bbcode_img'] == 1)
    {
     if ($rss === true) {
@@ -213,7 +213,7 @@ function shorten_link($string)
 
 function parse_code($string)
  {
-  if(basename($_SERVER['PHP_SELF'])=='board_entry.php' || basename($_SERVER['PHP_SELF'])=='mix_entry.php') $p_class='postingboard'; else $p_class='posting';
+  if(basename($_SERVER['SCRIPT_NAME'])=='board_entry.php' || basename($_SERVER['SCRIPT_NAME'])=='mix_entry.php') $p_class='postingboard'; else $p_class='posting';
   $string = $string[1];
   $string = str_replace('<br />','',$string);
   $string = '</p><pre><span class="code">'.$string.'</span></pre><p class="'.$p_class.'">';
@@ -363,7 +363,7 @@ function user_online()
 
       if ($parent_array[$id]["pid"]==0 && isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
      {
-      ?> <a href="admin.php?mark=<?php echo $parent_array[$id]["tid"]; ?>&amp;refer=<?php echo basename($_SERVER["PHP_SELF"]); ?>&amp;page=<?php echo $page; ?>&amp;category=<?php echo urlencode($category); ?>&amp;order=<?php echo $order; ?>"><?php
+      ?> <a href="admin.php?mark=<?php echo $parent_array[$id]["tid"]; ?>&amp;refer=<?php echo urlencode(basename($_SERVER["SCRIPT_NAME"])); ?>&amp;page=<?php echo $page; ?>&amp;category=<?php echo urlencode($category); ?>&amp;order=<?php echo $order; ?>"><?php
       if ($parent_array[$id]['marked']==1) { ?><img src="img/marked.gif" alt="[x]" width="9" height="9" title="<?php echo $lang['demark_linktitle']; ?>" /><?php }
       else { echo '<img src="img/mark.gif" alt="[-]" title="'. $lang['mark_linktitle'] .'" width="9" height="9" />'; }
       ?></a><?php

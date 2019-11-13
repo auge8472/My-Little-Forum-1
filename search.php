@@ -39,18 +39,18 @@ include("inc.php");
    $new_index_before = $page - 1;
    $new_index_after = $page + 1;
    $site_count = ceil($count / $suchergebnisse);
-   if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["PHP_SELF"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page='. $new_index_before .'" title="'. $lang['previous_page_linktitle'] .'"><b>&laquo;</b></a>&nbsp;';
-   if ($page == 3) { $output .= '<a href="'. basename($_SERVER["PHP_SELF"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page=0"><b>1</b></a>&nbsp;'; }
-   elseif ($page > 3) { $output .= '<a href="'. basename($_SERVER["PHP_SELF"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page=0"><b>1</b></a>&nbsp;<b>...</b>&nbsp;'; }
+   if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page='. $new_index_before .'" title="'. $lang['previous_page_linktitle'] .'"><b>&laquo;</b></a>&nbsp;';
+   if ($page == 3) { $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page=0"><b>1</b></a>&nbsp;'; }
+   elseif ($page > 3) { $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page=0"><b>1</b></a>&nbsp;<b>...</b>&nbsp;'; }
    for ($i = 0; $i < $site_count; $i++) {
    $pagen_nr = $i;
    if ($page == $pagen_nr or $page == $pagen_nr-1 or $page == $pagen_nr+1 or $page == $pagen_nr-2 or $page == $pagen_nr+2) {
    if ($page != $pagen_nr) {
-   $output .= '<a href="'. basename($_SERVER["PHP_SELF"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page='. $pagen_nr .'"><b>'. ($pagen_nr+1) .'</b></a>&nbsp;'; }
+   $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page='. $pagen_nr .'"><b>'. ($pagen_nr+1) .'</b></a>&nbsp;'; }
    else {
    $output .= '<span style="color: red; font-weight: bold;"><b>'. ($pagen_nr+1) .'</b></span>&nbsp;';
    } } }
-   if ($new_index_after < $site_count) $output .= '<a href="'. basename($_SERVER["PHP_SELF"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page='. $new_index_after .'" title="'. $lang['next_page_linktitle'] .'"><b>&raquo;</b></a>';
+   if ($new_index_after < $site_count) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?search='. $search .'&amp;category='. $category .'&amp;ao='. $ao .'&amp;page='. $new_index_after .'" title="'. $lang['next_page_linktitle'] .'"><b>&raquo;</b></a>';
    }
   return $output;
   }
@@ -61,7 +61,7 @@ include("inc.php");
    $output = "&nbsp;";
    if ($count > $how_many_per_page)
     {
-     if (($page-1) >= 0) $output .= '<a href="'. basename($_SERVER["PHP_SELF"]) .'?show_postings='.$show_postings.'&amp;page='.($page-1).'" title="'.$lang['previous_page_linktitle'].'"><b>&laquo;</b></a>&nbsp;';
+     if (($page-1) >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?show_postings='.$show_postings.'&amp;page='.($page-1).'" title="'.$lang['previous_page_linktitle'].'"><b>&laquo;</b></a>&nbsp;';
      $page_count = ceil($count/$how_many_per_page);
      if (($page+1) == 1)
       {
@@ -69,7 +69,7 @@ include("inc.php");
       }
      else
       {
-       $output .= '<a href="'.basename($_SERVER["PHP_SELF"]).'?show_postings='.$show_postings.'&amp;page=0"><b>1</b></a>&nbsp;';
+       $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?show_postings='.$show_postings.'&amp;page=0"><b>1</b></a>&nbsp;';
       }
 
      for($x=$page; $x<$page+4; $x++)
@@ -82,11 +82,11 @@ include("inc.php");
           }
          else
           {
-           $output .= '<a href="'.basename($_SERVER["PHP_SELF"]).'?show_postings='.$show_postings.'&amp;page='.($x-1).'"><b>'.$x.'</b></a>&nbsp;';
+           $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?show_postings='.$show_postings.'&amp;page='.($x-1).'"><b>'.$x.'</b></a>&nbsp;';
           }
         }
       }
-     if (($page+1) < $page_count) $output .= '<a href="'. basename($_SERVER["PHP_SELF"]) .'?show_postings='.$show_postings.'&amp;page=' .($page+1) .'" title="'.$lang['next_page_linktitle'].'"><b>&raquo;</b></a>';
+     if (($page+1) < $page_count) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?show_postings='.$show_postings.'&amp;page=' .($page+1) .'" title="'.$lang['next_page_linktitle'].'"><b>&raquo;</b></a>';
     }
    return $output;
   }

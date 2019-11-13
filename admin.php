@@ -1306,14 +1306,14 @@ switch ($action)
    ?><table style="margin:0px 0px 10px 0px; padding:0px; width:100%;" cellspacing="0" cellpadding="0" border="0">
    <tr>
    <td><?php echo str_replace("[number]", $user_count, $lang['num_reg_users']); ?></td>
-   <td style="text-align:right;"><?php echo $lang_add['search_user']; ?><form action="<?php echo basename($_SERVER['PHP_SELF']); ?>" method="get" accept-charset="UTF-8"><div style="display:inline">
+   <td style="text-align:right;"><?php echo $lang_add['search_user']; ?><form action="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>" method="get" accept-charset="UTF-8"><div style="display:inline">
    <input type="hidden" name="action" value="user" />
    <input type="text" name="search_user" value="<?php if(isset($search_user)) echo htmlsc($search_user); ?>" size="25">&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" />
    </div></form><?php
    if(empty($serach_user) || trim($search_user==''))
    {
    ?>&nbsp;
-   <form action="<?php echo basename($_SERVER["PHP_SELF"]); ?>" method="get" accept-charset="UTF-8"><div style="display:inline">
+   <form action="<?php echo basename($_SERVER["SCRIPT_NAME"]); ?>" method="get" accept-charset="UTF-8"><div style="display:inline">
    <input type="hidden" name="action" value="user" />
    <select class="kat" size="1" name="letter" onchange="this.form.submit();">
    <option value="">A-Z</option>
