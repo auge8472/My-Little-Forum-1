@@ -71,7 +71,7 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
 
   $subnav_1='<a class="textlink" href="posting.php?category='. intval($category) .'">'.$lang['new_entry_linkname'].'</a>';
   $subnav_2 = '';
-  if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $subnav_2 .= '<a href="index.php?update=1&amp;category='. intval($category) .'"><img src="img/update.gif" alt="'. htmlsc($lang['update_time_linktitle']) .'" width="9" height="9" onmouseover="this.src=\'img/update_mo.gif\';" onmouseout="this.src=\'img/update.gif\';" /></a>';
+  if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $subnav_2 .= '<a href="index.php?update=1&amp;category='. intval($category) .'"><img src="img/update.gif" alt="'. htmlsc($lang['update_time_linktitle']) .'" width="9" height="9" /></a>';
   if ($order=="time") $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?order=last_answer&amp;category='. intval($category) .'"><img src="img/order.gif" alt="" width="12" height="9" />'.$lang['order_linkname'].'</a></span>';
   else $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?order=time&amp;category='. intval($category) .'"><img src="img/order.gif" alt="" width="12" height="9" />'.$lang['order_linkname'].'</a></span>';
   if ($settings['board_view'] == 1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php"><img src="img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';

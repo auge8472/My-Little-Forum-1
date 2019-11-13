@@ -1241,7 +1241,7 @@ switch ($action)
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo $postings_in_category; ?></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?edit_category=<?php echo intval($line['id']); ?>"><?php echo $lang_add['cat_edit']; ?></a></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?delete_category=<?php echo intval($line['id']); ?>"><?php echo $lang_add['cat_delete']; ?></a></td>
-      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?move_up_category=<?php echo intval($line['id']); ?>"><img src="img/up.gif" alt="up" width="11" height="11" onmouseover="this.src='img/up_mo.gif';" onmouseout="this.src='img/up.gif';" /></a>&nbsp;<a href="admin.php?move_down_category=<?php echo intval($line['id']); ?>"><img src="img/down.gif" alt="down" width="11" height="11" onmouseover="this.src='img/down_mo.gif';" onmouseout="this.src='img/down.gif';" /></a></td>
+      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?move_up_category=<?php echo intval($line['id']); ?>"><img src="img/up.gif" alt="up" width="11" height="11" /></a>&nbsp;<a href="admin.php?move_down_category=<?php echo intval($line['id']); ?>"><img src="img/down.gif" alt="down" width="11" height="11" /></a></td>
       </tr><?php
       $i++;
      }
@@ -1896,7 +1896,7 @@ switch ($action)
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo htmlsc($line['title']); ?></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?edit_smiley=<?php echo intval($line['id']); ?>"><?php echo $lang_add['edit_link']; ?></a></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?delete_smiley=<?php echo intval($line['id']); ?>"><?php echo $lang_add['delete_link']; ?></a></td>
-      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?move_up_smiley=<?php echo intval($line['id']); ?>"><img src="img/up.gif" alt="up" width="11" height="11" onmouseover="this.src='img/up_mo.gif';" onmouseout="this.src='img/up.gif';" /></a>&nbsp;<a href="admin.php?move_down_smiley=<?php echo intval($line['id']); ?>"><img src="img/down.gif" alt="down" width="11" height="11" onmouseover="this.src='img/down_mo.gif';" onmouseout="this.src='img/down.gif';" /></a></td>
+      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?move_up_smiley=<?php echo intval($line['id']); ?>"><img src="img/up.gif" alt="up" width="11" height="11" /></a>&nbsp;<a href="admin.php?move_down_smiley=<?php echo intval($line['id']); ?>"><img src="img/down.gif" alt="down" width="11" height="11" /></a></td>
       </tr><?php
       $i++;
      }
