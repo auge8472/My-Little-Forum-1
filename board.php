@@ -74,17 +74,17 @@ if ($settings['remember_userstandard']  == 1 && !isset($_SESSION[$settings['sess
    mysqli_free_result($pid_result);
   }
 
-$subnav_1='<a class="textlink" href="posting.php?view=board&amp;category='. intval($category) .'" title="'. htmlsc($lang['new_entry_linktitle']) .'">'.$lang['new_entry_linkname'].'</a>';
+$subnav_1='<a class="textlink" href="posting.php?view=board&amp;category='. intval($category) .'">'.$lang['new_entry_linkname'].'</a>';
 $subnav_2 = '';
-if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $subnav_2 .= '<a href="index.php?update=1&amp;view=board&amp;category='. intval($category) .'"><img src="img/update.gif" alt="" title="'. htmlsc($lang['update_time_linktitle']) .'" width="9" height="9" onmouseover="this.src=\'img/update_mo.gif\';" onmouseout="this.src=\'img/update.gif\';" /></a>';
-if ($settings['thread_view'] == 1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php" title="'. htmlsc($lang['thread_view_linktitle']) .'"><img src="img/thread.gif" alt="" width="12" height="9" />'.$lang['thread_view_linkname'].'</a></span>';
-elseif ($settings['thread_view'] == 1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?category='. intval($category) .'" title="'. htmlsc($lang['thread_view_linktitle']) .'"><img src="img/thread.gif" alt="" width="12" height="9" />'.$lang['thread_view_linkname'].'</a></span>';
-if ($settings['mix_view']==1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php" title="'. htmlsc($lang['mix_view_linktitle']) .'"><img src="img/mix.gif" alt="" width="12" height="9" />'.$lang['mix_view_linkname'].'</a></span>';
-elseif ($settings['mix_view']==1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php?category='. intval($category) .'" title="'. htmlsc($lang['mix_view_linktitle']) .'"><img src="img/mix.gif" alt="" width="12" height="9" />'.$lang['mix_view_linkname'].'</a></span>';
+if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $subnav_2 .= '<a href="index.php?update=1&amp;view=board&amp;category='. intval($category) .'"><img src="img/update.gif" alt="'. htmlsc($lang['update_time_linktitle']) .'" width="9" height="9" onmouseover="this.src=\'img/update_mo.gif\';" onmouseout="this.src=\'img/update.gif\';" /></a>';
+if ($settings['thread_view'] == 1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php"><img src="img/thread.gif" alt="" width="12" height="9" />'.$lang['thread_view_linkname'].'</a></span>';
+elseif ($settings['thread_view'] == 1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?category='. intval($category) .'"><img src="img/thread.gif" alt="" width="12" height="9" />'.$lang['thread_view_linkname'].'</a></span>';
+if ($settings['mix_view']==1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php"><img src="img/mix.gif" alt="" width="12" height="9" />'.$lang['mix_view_linkname'].'</a></span>';
+elseif ($settings['mix_view']==1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php?category='. intval($category) .'"><img src="img/mix.gif" alt="" width="12" height="9" />'.$lang['mix_view_linkname'].'</a></span>';
 $subnav_2 .= nav($page, $settings['topics_per_page'], $thread_count, $order, $descasc, $category);
 if ($categories!=false && $categories != "not accessible")
  {
-  $subnav_2 .= '&nbsp;&nbsp;<form method="get" action="board.php" title="'.$lang['choose_category_formtitle'].'" accept-charset="UTF-8"><div style="display: inline;"><select class="kat" size="1" name="category" onchange="this.form.submit();">';
+  $subnav_2 .= '&nbsp;&nbsp;<form method="get" action="board.php" accept-charset="UTF-8"><div style="display: inline;"><select class="kat" size="1" name="category" onchange="this.form.submit();">';
   if (isset($category) && $category==0) $subnav_2 .= '<option value="0" selected="selected">'.$lang['show_all_categories'].'</option>';
   else $subnav_2 .= '<option value="0">'.$lang['show_all_categories'].'</option>';
   foreach ($categories as $key => $val)
@@ -157,13 +157,13 @@ if($thread_count > 0 && isset($result))
   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php
   if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
    {
-    $sult = str_replace("[name]", htmlsc($zeile["name"]), $lang['show_userdata_linktitle']); ?><a href="user.php?id=<?php echo intval($zeile["user_id"]); ?>" title="<?php echo htmlsc($sult); ?>"><?php
+    ?><a href="user.php?id=<?php echo intval($zeile["user_id"]); ?>"><?php
    }
   ?><span class="small"><?php if ($mark_admin==true) { ?><span class="admin-highlight"><?php } elseif ($mark_mod==true) { ?><span class="mod-highlight"><?php } echo htmlsc($zeile["name"]); if ($mark_admin==true || $mark_mod=="true") { ?></span><?php } ?></span><?php
 
   if ($zeile["user_id"] > 0 && $settings['show_registered'] ==1)
    {
-    ?><img src="img/registered.gif" alt="(R)" width="10" height="10" title="<?php echo $lang['registered_user_title']; ?>" /><?php
+    ?><img src="img/registered.gif" alt="<?php echo htmlsc($lang['registered_user_title']); ?>" width="10" height="10" /><?php
    }
   if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $zeile["user_id"] > 0)
    {
@@ -172,13 +172,13 @@ if($thread_count > 0 && isset($result))
    </td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php echo strftime($lang['time_format'],$zeile["xtime"]); ?></span></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php echo $answers_count; ?></span></td>
-   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($answers_count > 0) { if ($settings['last_reply_link']==1) { ?><a href="board_entry.php?id=<?php echo intval($zeile["tid"]); ?>&amp;be_page=<?php echo intval(ceil($answers_count / $settings['answers_per_topic'])-1); ?>&amp;page=<?php echo intval($page); ?>&amp;category=<?php echo intval($category); ?>&amp;order=<?php echo urlencode($order); ?>&amp;descasc=<?php echo urlencode($descasc); ?>#p<?php echo intval($last_answer['id']); ?>" title="<?php echo str_replace("[name]", htmlsc($last_answer['name']), $lang['last_reply_lt']); ?>"><?php } echo strftime($lang['time_format'],$zeile["la_time"]); if ($settings['last_reply_link']==1) { ?></a><?php } } else echo "&nbsp;"; ?></span></td>
+   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($answers_count > 0) { if ($settings['last_reply_link']==1) { ?><a href="board_entry.php?id=<?php echo intval($zeile["tid"]); ?>&amp;be_page=<?php echo intval(ceil($answers_count / $settings['answers_per_topic'])-1); ?>&amp;page=<?php echo intval($page); ?>&amp;category=<?php echo intval($category); ?>&amp;order=<?php echo urlencode($order); ?>&amp;descasc=<?php echo urlencode($descasc); ?>#p<?php echo intval($last_answer['id']); ?>"><?php } echo strftime($lang['time_format'],$zeile["la_time"]); if ($settings['last_reply_link']==1) { ?></a><?php } } else echo "&nbsp;"; ?></span></td>
    <?php if ($settings['count_views'] == 1) { ?>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php echo $zeile['views']; ?></span></td>
    <?php }
     if (isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin") { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?mark=<?php echo intval($zeile["tid"]); ?>&amp;refer=<?php echo urlencode(basename($_SERVER["SCRIPT_NAME"])); ?>&amp;page=<?php echo intval($page); ?>&amp;category=<?php echo intval($category); ?>&amp;order=<?php echo urlencode($order); ?>"><?php
-    if ($zeile['marked']==1) { ?><img src="img/marked.gif" alt="[x]" width="9" height="9" title="<?php echo htmlsc($lang['unmark_linktitle']); ?>" /><?php }
-    else { echo '<img src="img/mark.gif" alt="[-]" title="'. htmlsc($lang['mark_linktitle']) .'" width="9" height="9" />'; }
+    if ($zeile['marked']==1) { ?><img src="img/marked.gif" alt="<?php echo htmlsc($lang['unmark_linktitle']); ?>" width="9" height="9" /><?php }
+    else { echo '<img src="img/mark.gif" alt="'. htmlsc($lang['mark_linktitle']) .'" width="9" height="9" />'; }
     ?></a></td><?php } ?>
    </tr>
    <?php $i++;

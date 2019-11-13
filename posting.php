@@ -770,7 +770,7 @@ switch ($show)
           <?php
           $email_hp = ""; $place_wc = ""; $place_c = "";
           if (($pr_email != "" && $hide_email != 1) or $pr_hp != "") $email_hp = " ";
-          if ($pr_hp != "") { if (mb_substr($pr_hp, 0, 7) != "http://" && mb_substr($pr_hp, 0, 8) != "https://" && mb_substr($pr_hp, 0, 6) != "ftp://" && mb_substr($pr_hp, 0, 9) != "gopher://" && mb_substr($pr_hp, 0, 7) != "news://") $pr_hp = "http://".$pr_hp; $email_hp .= '<a href="'. $pr_hp .'" title="'. htmlsc($pr_hp) .'"><img src="img/homepage.gif" alt="'. htmlsc($lang['homepage_alt']) .'" width="13" height="13" /></a>'; }
+          if ($pr_hp != "") { if (mb_substr($pr_hp, 0, 7) != "http://" && mb_substr($pr_hp, 0, 8) != "https://" && mb_substr($pr_hp, 0, 6) != "ftp://" && mb_substr($pr_hp, 0, 9) != "gopher://" && mb_substr($pr_hp, 0, 7) != "news://") $pr_hp = "http://".$pr_hp; $email_hp .= '<a href="'. $pr_hp .'"><img src="img/homepage.gif" alt="'. htmlsc($lang['homepage_alt']) .'" width="13" height="13" /></a>'; }
           if ($pr_email != ""  && $hide_email != 1 && $pr_hp != "") { $email_hp .= " "; }
           if ($pr_email != "" && $hide_email != 1) { $email_hp .= '<a href="contact.php"><img src="img/email.gif" alt="'. htmlsc($lang['email_alt']) .'" title="'. str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']) .'" width="13" height="10" /></a>'; }
           if ($pr_place != "") { $place_c = htmlsc($pr_place) . ", "; $place_wc = htmlsc($pr_place); }
@@ -852,7 +852,7 @@ switch ($show)
    </tr>
    <?php if ($settings['remember_userdata'] == 1 && !isset($_SESSION[$settings['session_prefix'].'user_id'])) { ?>
    <tr>
-    <td>&nbsp;</td><td><span class="small"><input type="checkbox" name="setcookie" value="1"<?php if (isset($setcookie) && $setcookie == 1) echo ' checked="checked"'; ?> />&nbsp;<?php echo $lang['remember_userdata_cbm']; if (isset($_COOKIE['user_name']) || isset($_COOKIE['user_email']) or isset($_COOKIE['user_hp']) or isset($_COOKIE['user_hp'])) { ?>&nbsp;&nbsp;&nbsp;<a onclick="javascript:delete_cookie(); return false;" href="delete_cookie.php" title="<?php echo htmlsc($lang['delete_cookies_linktitle']); ?>"><img border="0" src="img/dc.gif" name="dc" alt="" width="12" height="9"><?php echo $lang['delete_cookies_linkname']; ?></a><?php } ?></span></td>
+    <td>&nbsp;</td><td><span class="small"><input type="checkbox" name="setcookie" value="1"<?php if (isset($setcookie) && $setcookie == 1) echo ' checked="checked"'; ?> />&nbsp;<?php echo $lang['remember_userdata_cbm']; if (isset($_COOKIE['user_name']) || isset($_COOKIE['user_email']) or isset($_COOKIE['user_hp']) or isset($_COOKIE['user_hp'])) { ?>&nbsp;&nbsp;&nbsp;<a onclick="javascript:delete_cookie(); return false;" href="delete_cookie.php"><img border="0" src="img/dc.gif" name="dc" alt="" width="12" height="9"><?php echo $lang['delete_cookies_linkname']; ?></a><?php } ?></span></td>
    </tr>
    <?php } ?>
    <tr>
@@ -925,7 +925,7 @@ switch ($show)
         }
        mysqli_free_result($result);
 
-       if($smilies_count > $smiley_buttons) { if($i % 2 == 0) { ?><br /><?php } ?><span class="small"><a href="javascript:more_smilies()" title="<?php echo htmlsc($lang['more_smilies_linktitle']); ?>"><?php echo $lang['more_smilies_linkname']; ?></a></span><?php }
+       if($smilies_count > $smiley_buttons) { if($i % 2 == 0) { ?><br /><?php } ?><span class="small"><a href="javascript:more_smilies()"><?php echo $lang['more_smilies_linkname']; ?></a></span><?php }
       }
      ?></td></tr></table>
     </td>
@@ -975,7 +975,7 @@ switch ($show)
     <td>&nbsp;</td><td>&nbsp;</td>
    </tr><?php } ?>
    <tr>
-    <td colspan="2"><input type="submit" name="save_entry" value="<?php echo $lang['submit_button']; ?>" title="<?php echo $lang['submit_button_title']; ?>" />&nbsp;<input type="submit" name="preview" value="<?php echo $lang['preview_button']; ?>" title="<?php echo $lang['preview_button_title']; ?>" />&nbsp;<input type="reset" value="<?php echo $lang['reset_button']; ?>" title="<?php echo $lang['reset_button_title']; ?>" /></td>
+    <td colspan="2"><input type="submit" name="save_entry" value="<?php echo $lang['submit_button']; ?>" />&nbsp;<input type="submit" name="preview" value="<?php echo $lang['preview_button']; ?>" />&nbsp;<input type="reset" value="<?php echo $lang['reset_button']; ?>" /></td>
    </tr>
   </table>
   </div></form>

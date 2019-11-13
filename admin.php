@@ -1374,21 +1374,21 @@ switch ($action)
    <tr>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>" width="10px"><input type="checkbox" name="selected[]" value="<?php echo $zeile["user_id"]; ?>" /></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>" width="10px"><?php echo $zeile["user_id"]; ?></td>
-   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo intval($zeile["user_id"]); ?>" title="<?php echo str_replace("[name]", htmlsc($zeile["user_name"]), $lang['show_userdata_linktitle']); ?>"><b><?php echo htmlsc($zeile["user_name"]); ?></b></a></td>
-   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="mailto:<?php echo $zeile["user_email"]; ?>" title="<?php echo str_replace("[name]", htmlsc($zeile["user_name"]), $lang_add['mailto_user_lt']); ?>"><?php echo htmlsc($zeile["user_email"]); ?></a></td>
+   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo intval($zeile["user_id"]); ?>"><b><?php echo htmlsc($zeile["user_name"]); ?></b></a></td>
+   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="mailto:<?php echo $zeile["user_email"]; ?>"><?php echo htmlsc($zeile["user_email"]); ?></a></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($zeile["user_type"] == "admin") echo $lang['ud_admin']; elseif ($zeile["user_type"] == "mod") echo $lang['ud_mod']; else echo $lang['ud_user']; ?></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo strftime($lang['time_format'],$zeile["registered_time"]); ?></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo $zeile["logins"]; ?></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($zeile["logins"] > 0) echo strftime($lang['time_format'],$zeile["last_login_time"]); else echo "&nbsp;"; ?></td>
-   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($zeile["user_lock"] == 0) { ?><a href="admin.php?user_lock=<?php echo intval($zeile["user_id"]); ?>&amp;order=<?php echo urlencode($order); ?>&amp;descasc=<?php echo urlencode($descasc); ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo str_replace("[name]", htmlsc($zeile["user_name"]), $lang['lock_user_lt']); ?>"><?php echo $lang['unlocked']; ?></a><?php } else { ?><a style="color: red;" href="admin.php?user_lock=<?php echo intval($zeile["user_id"]); ?>&amp;order=<?php echo urlencode($order); ?>&amp;descasc=<?php echo urlencode($descasc); ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo str_replace("[name]", htmlsc($zeile["user_name"]), $lang['unlock_user_lt']); ?>"><?php echo $lang['locked']; ?></a><?php } ?></td>
+   <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($zeile["user_lock"] == 0) { ?><a href="admin.php?user_lock=<?php echo intval($zeile["user_id"]); ?>&amp;order=<?php echo urlencode($order); ?>&amp;descasc=<?php echo urlencode($descasc); ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>"><?php echo $lang['unlocked']; ?></a><?php } else { ?><a style="color: red;" href="admin.php?user_lock=<?php echo intval($zeile["user_id"]); ?>&amp;order=<?php echo urlencode($order); ?>&amp;descasc=<?php echo urlencode($descasc); ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>"><?php echo $lang['locked']; ?></a><?php } ?></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?edit_user=<?php echo intval($zeile["user_id"]); ?>&amp;order=<?php echo urlencode($order); ?>&amp;descasc=<?php echo urlencode($descasc); ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>"><?php echo $lang_add['edit_link']; ?></a></td>
    <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?delete_user=<?php echo intval($zeile["user_id"]); ?>&amp;order=<?php echo urlencode($order); ?>&amp;descasc=<?php echo urlencode($descasc); ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>"><?php echo $lang_add['delete_link']; ?></a></td>
    </tr>
    <?php $i++; } mysqli_free_result($result); ?>
    <!--<tr>
-   <td class="b" colspan="9"><img src="img/selected_arrow.gif" alt="" width="35" height="20" border="0"><input type="submit" name="delete_user" value="<?php echo htmlsc($lang_add['delete_users_sb']); ?>" title="<?php echo htmlsc($lang_add['delete_users_sb_title']); ?>" /></td>
+   <td class="b" colspan="9"><img src="img/selected_arrow.gif" alt="" width="35" height="20" border="0"><input type="submit" name="delete_user" value="<?php echo htmlsc($lang_add['delete_users_sb']); ?>" /></td>
    </tr>--></table>
-   <div style="margin:5px 0px 0px 7px; padding:0px;"><img src="img/selected_arrow.gif" alt="" width="35" height="20" border="0"><input type="submit" name="delete_user" value="<?php echo htmlsc($lang_add['delete_users_sb']); ?>" title="<?php echo htmlsc($lang_add['delete_users_sb_title']); ?>" /></div>
+   <div style="margin:5px 0px 0px 7px; padding:0px;"><img src="img/selected_arrow.gif" alt="" width="35" height="20" border="0"><input type="submit" name="delete_user" value="<?php echo htmlsc($lang_add['delete_users_sb']); ?>" /></div>
    </form><?php
    }
    else
@@ -1413,7 +1413,7 @@ switch ($action)
    <b><?php echo $lang_add['pw_conf_marking']; ?></b><br />
    <input type="password" size="25" name="ar_pw_conf" maxlength="50"><br /><br />
    <input type="checkbox" name="ar_send_userdata" value="true"<?php if(isset($ar_send_userdata)) { ?> checked="checked"<?php } ?> /> <?php echo $lang_add['ar_send_userdata']; ?><br /><br />
-   <input type="submit" name="pw_submit" value="<?php echo $lang['new_pw_subm_button']; ?>" title="<?php echo $lang['new_pw_subm_button_title']; ?>">
+   <input type="submit" name="pw_submit" value="<?php echo $lang['new_pw_subm_button']; ?>">
    </form>
    <p>&nbsp;</p>
    <?php
@@ -1891,7 +1891,7 @@ switch ($action)
       if(trim($line['code_5'])!='') $codes[] = $line['code_5'];
       $codes_disp = implode(' &nbsp;',$codes);
       ?><tr>
-      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><img src="img/smilies/<?php echo rawurlencode($line['file']); ?>" alt="<?php echo htmlsc($line['code_1']); ?>"<?php if($line['title']!='') { ?> title="<?php echo htmlsc($line['title']); ?>"<?php } ?> /></td>
+      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><img src="img/smilies/<?php echo rawurlencode($line['file']); ?>" alt="<?php echo htmlsc($line['code_1']); ?>" /></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo $codes_disp; ?></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo htmlsc($line['title']); ?></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?edit_smiley=<?php echo intval($line['id']); ?>"><?php echo $lang_add['edit_link']; ?></a></td>
