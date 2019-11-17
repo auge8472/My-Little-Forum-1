@@ -74,7 +74,6 @@ a.textlink:active {
 /* template: */
 #top {
 	margin: 0;
-	height: 70px;
 	background-color: #d2ddea;
 	background-image: url(../../img/bg_top.gif);
 	background-repeat: repeat-x;
@@ -127,7 +126,6 @@ input.searchfield {
 #topnav, #bottomnav {
 	margin: 0;
 	padding: 0;
-	height: 30px;
 	background: #f9f9f9;
 	border-top: 1px solid #bacbdf;
 	border-bottom: 1px solid #bacbdf;
