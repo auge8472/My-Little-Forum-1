@@ -43,6 +43,7 @@ $connid = connect_db($db_settings['host'], $db_settings['user'], $db_settings['p
 $settings = get_settings();
 include("lang/".$settings['language_file']);
 setlocale(LC_ALL, $lang['locale']);
+$settings['themepath'] = getThemeDir($settings['theme']);
 
 if(basename($_SERVER['SCRIPT_NAME'])!='login.php' && basename($_SERVER['SCRIPT_NAME'])!='info.php' && (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=='admin')) && $settings['forum_disabled']==1)
  {

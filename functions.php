@@ -389,8 +389,7 @@ function getThemeDir($settingTheme = false) {
 function parse_template()
  {
   global $settings, $lang, $header, $footer, $wo, $ao, $topnav, $subnav_1, $subnav_2, $footer_info_dump, $search, $show_postings, $counter;
-  $theme = getThemeDir($settings['theme']);
-  $template = file_get_contents($theme .'/templates/main.html');
+  $template = file_get_contents($settings['themepath'] .'/templates/main.html');
 
   if ($settings['home_linkaddress'] != "" && $settings['home_linkname'] != "") $template = preg_replace("#\{IF:HOME-LINK\}(.+?)\{ENDIF:HOME-LINK\}#is", "\\1", $template);
   else $template = preg_replace("#\{IF:HOME-LINK\}(.+?)\{ENDIF:HOME-LINK\}#is", "", $template);
