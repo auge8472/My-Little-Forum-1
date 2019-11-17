@@ -1,34 +1,35 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{LANGUAGE}">
+<!DOCTYPE html>
+<html lang="{LANGUAGE}">
 <head>
-<title>{TITLE}</title>
-<meta http-equiv="content-type" content="text/html; charset={CHARSET}" />
-<meta name="description" content="" />
-<meta name="keywords" content="" />
-<link rel="stylesheet" type="text/css" href="style.css" media="all" />
+ <meta charset="utf-8">
+ <title>{TITLE}</title>
+ <meta name="description" content="" />
+ <meta name="keywords" content="" />
+ <link rel="stylesheet" type="text/css" href="style.css" media="all" />
 {RSS-FEED-LINK}
-<script src="javascripts.js" type="text/javascript"></script>
+ <script src="javascripts.js" type="text/javascript"></script>
 </head>
 <body>
-<div id="top">
-<div class="left">
-{IF:HOME-LINK}<p class="home"><a href="{HOME-ADDRESS}">{HOME-LINK}</a></p>{ENDIF:HOME-LINK}
-<h1>{FORUM-NAME}</h1>
-<p class="index"><a href="index.php" title="{FORUM-INDEX-LINKTITLE}" class="textlink">{FORUM-INDEX-LINK}</a></p></div>
-<div class="right"><p class="usermenu">{USER-MENU}</p>{SEARCH}</div>
-</div>
-<div id="topnav">
-<div class="left">{LOCATION}{SUB-NAVIGATION-1}</div>
-<div class="right">{SUB-NAVIGATION-2}</div>
-</div>
-<div id="content">{CONTENT}</div>
-<div id="bottomnav">
-<div class="left">{SUB-NAVIGATION-1}</div>
-<div class="right">{SUB-NAVIGATION-2}</div>
-</div>
-<div id="bottom">
-<div class="left">{COUNTER}<br /><a href="{FORUM-ADDRESS}">{FORUM-NAME}</a> | <a href="contact.php">{CONTACT}</a></div>
-<div class="right">{RSS-FEED-BUTTON}powered by <a href="https://github.com/auge8472/My-Little-Forum-1">my little forum</a></div>
-</div>
+ <header id="top">
+  <div class="left">
+{IF:HOME-LINK}   <p class="home"><a href="{HOME-ADDRESS}">{HOME-LINK}</a></p>{ENDIF:HOME-LINK}
+   <h1>{FORUM-NAME}</h1>
+   <p class="index"><a href="index.php" title="{FORUM-INDEX-LINKTITLE}" class="textlink">{FORUM-INDEX-LINK}</a></p>
+  </div>
+  <div class="right"><p class="usermenu">{USER-MENU}</p>{SEARCH}</div>
+ </header>
+ <div id="topnav">
+  <div class="left">{LOCATION}{SUB-NAVIGATION-1}</div>
+  <div class="right">{SUB-NAVIGATION-2}</div>
+ </div>
+ <main id="content">{CONTENT}</main>
+ <div id="bottomnav">
+  <div class="left">{SUB-NAVIGATION-1}</div>
+  <div class="right">{SUB-NAVIGATION-2}</div>
+ </div>
+ <footer id="bottom">
+  <div class="left">{COUNTER}<br /><a href="{FORUM-ADDRESS}">{FORUM-NAME}</a> | <a href="contact.php">{CONTACT}</a></div>
+  <div class="right">{RSS-FEED-BUTTON}powered by <a href="https://github.com/auge8472/My-Little-Forum-1">my little forum</a></div>
+ </footer>
 </body>
 </html>
