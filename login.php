@@ -316,21 +316,23 @@ switch ($action)
      $templMessage = str_replace('{$message}', $messMess, $templMessage);
      echo $templMessage;
     }
-   ?>
-   <form action="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>" method="post" accept-charset="UTF-8">
-   <div>
-   <b><?php echo $lang['username_marking']; ?></b><br /><input type="text" name="username" /><br /><br />
-   <b><?php echo $lang['password_marking']; ?></b><br /><input type="password" name="userpw" /><br /><br />
-   <?php if (isset($settings['autologin']) && $settings['autologin'] == 1) { ?><input type="checkbox" name="autologin_checked" value="true" /><span class="small"> <?php echo $lang['auto_login_marking']; ?></span><br /><br /><?php } ?>
-   <input type="submit" value="<?php echo $lang['login_submit_button']; ?>" />
-   </div>
-   </form>
-   <p>&nbsp;</p>
-   <p><?php echo $lang['login_advice']; ?></p>
-   <p><span class="small"><a href="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>?action=pw_forgotten"><?php echo $lang['pw_forgotten_linkname']; ?></a></span></p>
-   <?php
+    $templateLogin = file_get_contents($settings['themepath'] .'/templates/form-login.html');
+    $templateLogin = str_replace('{$shd-login}', htmlsc($lang['login_title']), $templateLogin);
+    $templateLogin = str_replace('{$label-username}', htmlsc($lang['username_marking']), $templateLogin);
+    $templateLogin = str_replace('{$label-password}', htmlsc($lang['password_marking']), $templateLogin);
+    if (isset($settings['autologin']) && $settings['autologin'] == 1) {
+      $templateLoginAuto = file_get_contents($settings['themepath'] .'/templates/form-login-auto.html');
+      $templateLoginAuto = str_replace('{$checkbox-autologin}', htmlsc($lang['auto_login_marking']), $templateLoginAuto);
+      $templateLogin = str_replace('{$autologin-block}', $templateLoginAuto, $templateLogin);
+    } else {
+      $templateLogin = str_replace('{$autologin-block}', '', $templateLogin);
+    }
+    $templateLogin = str_replace('{$btn-submit-login}', htmlsc($lang['login_submit_button']), $templateLogin);
+    $templateLogin = str_replace('{$login-advice}', htmlsc($lang['login_advice']), $templateLogin);
+    $templateLogin = str_replace('{$url-password-forgotten}', basename($_SERVER['SCRIPT_NAME']) .'?action=pw_forgotten', $templateLogin);
+    $templateLogin = str_replace('{$link-password-forgotten}', htmlsc($lang['pw_forgotten_linkname']), $templateLogin);
+    echo $templateLogin;
   break;
-
   case "pw_forgotten":
     $templatePWF = file_get_contents($settings['themepath'] .'/templates/form-password-forgotten.html');
     $templatePWF = str_replace('{$shd-password-forgotten}', htmlsc($lang['pw_forgotten_hl']), $templatePWF);
