@@ -381,7 +381,7 @@ function user_online()
  }
 
 function getThemeDir($settingTheme = false) {
-	if ($settingTheme === false) return false;
+	if ($settingTheme === false) $settingTheme = 'mlf1-classic';
 	$theme = (is_dir('themes/'. $settingTheme .'/templates')) ? 'themes/'. $settingTheme : 'themes/mlf1-classic';
 	return $theme;
 }
