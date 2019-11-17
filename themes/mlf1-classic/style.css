@@ -18,15 +18,15 @@ h1 {
 	font-weight: bold;
 }
 h2 {
-	margin-top: 0px;
+	margin-top: 0;
 	font-size: 18px;
 	font-weight: bold;
 }
 p {
-	margin-top: 0px;
+	margin-top: 0;
 }
 img {
-	border: 0px;
+	border: none;
 }
 form {
 	display: inline;
@@ -122,7 +122,7 @@ input.searchfield {
 #content {
 	padding: 20px;
 	color: #000;
-	background:#fff;
+	background: #fff;
 }
 
 #topnav, #bottomnav {
@@ -146,14 +146,14 @@ input.searchfield {
 }
 
 #bottom {
-	height:45px;
+	height: 45px;
 	font-size: 11px;
-	line-height:16px;
+	line-height: 16px;
 	margin: 0;
 	padding: 0;
 	color: #000;
-	background:#d2ddea;
-	background-image:url(../../img/bg_bottom.gif);
+	background: #d2ddea;
+	background-image: url(../../img/bg_bottom.gif);
 	background-repeat: repeat-x;
 }
 #bottom div.left {
@@ -247,10 +247,8 @@ p.postingforma {
 }
 .entryline {
 	margin: 15px 0 15px 0;
+	border: none;
 	border-top: 1px dotted #808080;
-	border-left: 0;
-	border-right: 0;
-	border-bottom: 0;
 	height: 1px;
 }
 .marked-threads {
@@ -349,7 +347,7 @@ td.autorcell {
 	width: 106px;
 	padding: 5px 7px 5px 7px;
 	color: #000;
-	background:#d2ddea;
+	background: #d2ddea;
 	background-image: url(../../img/bg_author.gif);
 	background-repeat: repeat-y;
 	background-position: right;
@@ -384,7 +382,7 @@ td.postingcell {
 	margin: 0;
 	padding: 10px 10px 15px 10px;
 	width: 100%;
-	color: #000000;
+	color: #000;
 	background: #f9f9f9;
 }
 div.autorcellwidth {
@@ -627,7 +625,7 @@ li {
 #deletecookie {
 	color: #000;
 	background: #fff;
-	margin: 0px;
+	margin: 0;
 	padding: 10px;
 }
 #deletecookie h1 {
