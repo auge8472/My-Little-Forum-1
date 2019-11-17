@@ -332,15 +332,13 @@ switch ($action)
   break;
 
   case "pw_forgotten":
-  ?><h2><?php echo $lang['pw_forgotten_hl']; ?></h2><p class="normal"><?php echo $lang['pw_forgotten_exp']; ?></p>
-    <form action="login.php" method="post" accept-charset="UTF-8">
-    <div>
-    <input type="hidden" name="action" value="pw_forgotten_ok" />
-    <b><?php echo $lang['username_marking']; ?></b><br /><input type="text" name="pwf_username" /><br /><br />
-    <b><?php echo $lang['user_email_marking']; ?></b><br /><input type="text" name="pwf_email" /><br /><br />
-    <input type="submit" value="<?php echo $lang['submit_button_ok'] ; ?>" /></div>
-    </form><p>&nbsp;</p>
-   <?php
+    $templatePWF = file_get_contents($settings['themepath'] .'/templates/form-password-forgotten.html');
+    $templatePWF = str_replace('{$shd-password-forgotten}', htmlsc($lang['pw_forgotten_hl']), $templatePWF);
+    $templatePWF = str_replace('{$password-forgotten-explanation}', htmlsc($lang['pw_forgotten_exp']), $templatePWF);
+    $templatePWF = str_replace('{$label-username}', htmlsc($lang['username_marking']), $templatePWF);
+    $templatePWF = str_replace('{$label-e-mail}', htmlsc($lang['user_email_marking']), $templatePWF);
+    $templatePWF = str_replace('{$btn-submit-pw-forgotten}', htmlsc($lang['submit_button_ok']), $templatePWF);
+    echo $templatePWF;
   break;
  }
 echo $footer;
