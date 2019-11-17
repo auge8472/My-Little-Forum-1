@@ -398,6 +398,7 @@ function parse_template()
   $template = str_replace("{CHARSET}",$lang['charset'],$template);
   $title = $settings['forum_name']; if (isset($wo)) $title .= " - ". htmlsc($wo);
   $template = str_replace("{TITLE}",$title,$template);
+  $template = str_replace('{$themepath}', $settings['themepath'], $template);
   $template = str_replace("{FORUM-NAME}", $settings['forum_name'],$template);
   $template = str_replace('{HOME-ADDRESS}',$settings['home_linkaddress'],$template);
   $template = str_replace('{HOME-LINK}',$settings['home_linkname'],$template);
