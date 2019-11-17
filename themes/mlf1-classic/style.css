@@ -162,6 +162,27 @@ input.searchfield {
 	text-align: right;
 }
 
+#login {
+	width: 480px;
+	padding: 10px;
+	border: 1px solid #bacbdf;
+}
+#login form {
+	display: block;
+	margin: 0 0 10px 0;
+}
+#login form div {
+	margin: 0 0 10px 0;
+}
+#login label {
+	display: block;
+	font-weight: bold;
+}
+#login .oneliner label {
+	display: inline;
+	font-weight: normal;
+}
+
 .postingheadline {
 	margin: 0 0 2px 0;
 	padding: 0;
