@@ -21,11 +21,11 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. #
 ###############################################################################
 
+include("inc.php");
+
 if(count($_GET) > 0)
 foreach($_GET as $key => $value)
 $$key = $value;
-
-include("inc.php");
 
 function nav_b($be_page, $entries_per_page, $entry_count, $id, $da, $nr, $page, $category, $order, $descasc)
  {

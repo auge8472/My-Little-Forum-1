@@ -21,6 +21,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. #
 ###############################################################################
 
+include("inc.php");
+
 if (isset($_GET['id'])) $id = $_GET['id'];
 if (isset($_POST['id'])) $id = $_POST['id'];
 if (isset($_GET['uid'])) $uid = $_GET['uid'];
@@ -41,8 +43,6 @@ if (empty($page)) $page=0;
 if (empty($order)) $order="time";
 if (empty($category)) $category="all";
 if (empty($descasc)) $descasc="DESC";
-
-include("inc.php");
 
 if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_contact']==1)
  {

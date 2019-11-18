@@ -21,12 +21,12 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. #
 ###############################################################################
 
+include("inc.php");
+
 // import vars:
 if(count($_GET) > 0)
 foreach($_GET as $key => $value)
 $$key = $value;
-
-include("inc.php");
 
 // log in automatically if cookie is set
 if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
