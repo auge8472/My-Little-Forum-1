@@ -609,20 +609,21 @@ if (isset($_POST['form_submitted']))
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <title><?php echo $settings['forum_name']." - ".$lang_add['install_title']; ?></title>
 <style type="text/css">
-body                { font-family: Verdana,Arial,Helvetica,sans-serif; color: #000; font-size:13px; background-color: #fffff3; margin: 0px; padding: 20px; }
-h1                  { margin: 0px 0px 20px 0px; font-size: 18px; font-weight: bold; }
-table.admintab      { border: 1px solid #bacbdf; border-collapse: collapse; }
-td, th              { vertical-align: top; padding: 5px; }
-td.admintab-hl      { width: 100%; background: #d2ddea; }
-td.admintab-hl h2   { margin: 3px 0px 3px 0px; font-size: 15px; font-weight: bold; }
-td.admintab-hl p    { font-size: 13px; line-height: 145%; margin: 0px 0px 3px 0px; padding: 0px; }
-th                  { width: 50%; background: #f5f5f5; }
-td.admintab-r       { width: 50%; background: #f5f5f5; }
-.caution            { color: red; font-weight: bold; }
-.small              { font-size: 12px; line-height:17px; font-weight: normal; }
-a                   { color: #00c; text-decoration: none; }
-a:focus, a:hover    { color: #00f; text-decoration: underline; }
-a:active            { color: #f00; }
+body              { font-family: Verdana,Arial,Helvetica,sans-serif; color: #000; font-size:14px; background-color: #fffff3; margin: 0px; padding: 20px; }
+h1                { margin: 0 0 20px 0; font-size: 18px; font-weight: bold; }
+table.admintab    { border: 1px solid #bacbdf; border-collapse: collapse; }
+td, th            { vertical-align: top; padding: 5px; }
+td.admintab-hl    { width: 100%; background: #d2ddea; }
+td.admintab-hl h2 { margin: 3px 0; font-size: 15px; font-weight: bold; }
+td.admintab-hl p  { line-height: 145%; margin: 0 0 3px 0; padding: 0; }
+th                { width: 50%; background: #f5f5f5; }
+td.admintab-r     { width: 50%; background: #f5f5f5; }
+.caution          { color: red; font-weight: bold; }
+.small            { font-size: 12px; line-height:17px; font-weight: normal; }
+a                 { color: #00c; text-decoration: none; }
+a:focus, a:hover  { color: #00f; text-decoration: underline; }
+a:active          { color: #f00; }
+label             { cursor: pointer; }
 </style>
 </head>
 <body>
