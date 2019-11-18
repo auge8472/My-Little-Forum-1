@@ -21,14 +21,14 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA. #
 ###############################################################################
 
+include("inc.php");
+
 if(count($_GET) > 0)
 foreach($_GET as $key => $value)
 $$key = $value;
 if(count($_POST) > 0)
 foreach($_POST as $key => $value)
 $$key = $value;
-
-include("inc.php");
 
 if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_posting']==1)
  {
