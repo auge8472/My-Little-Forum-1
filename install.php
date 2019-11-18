@@ -624,6 +624,7 @@ a                 { color: #00c; text-decoration: none; }
 a:focus, a:hover  { color: #00f; text-decoration: underline; }
 a:active          { color: #f00; }
 label             { cursor: pointer; }
+ul                { margin: 10px 0; padding: 0; list-style-type: none; }
 </style>
 </head>
 <body>
@@ -645,8 +646,10 @@ if(empty($installed))
     ?><p><?php echo $lang_add['installation_mode_inst']; ?></p>
     <form action="install.php" method="post"><div>
     <input type="hidden" name="language" value="<?php echo $language; ?>">
-    <p><input type="radio" name="installation_mode" value="installation" checked="checked"><?php echo $lang_add['installation_mode_installation']; ?><br>
-    <input type="radio" name="installation_mode" value="update"><?php echo $lang_add['installation_mode_update']; ?></p>
+    <ul>
+     <li><input type="radio" name="installation_mode" id="id-im-install" value="installation" checked="checked"> <label for="id-im-install"><?php echo $lang_add['installation_mode_installation']; ?></label></li>
+     <li><input type="radio" name="installation_mode" id="id-im-update" value="update"> <label for="id-im-update"><?php echo $lang_add['installation_mode_update']; ?></label></li>
+    </ul>
     <p><input type="submit" value="<?php echo $lang['submit_button_ok']; ?>"></p>
     </div></form><?php
    }
