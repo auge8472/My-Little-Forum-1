@@ -202,30 +202,61 @@ if (isset($search) && $search != "") { $subnav_2 = snav($page, $settings['search
 parse_template();
 echo $header;
 
-if (isset($search)) $search_match = htmlsc($search); else $search_match = "";
-if (isset($search) && empty($show_postings))
-{ ?><form action="search.php" method="get" accept-charset="UTF-8"><div class="search">
-<input type="text" name="search" value="<?php echo $search_match; ?>" size="30" />
-<?php
-if ($categories!=false)
- {
-  ?><select size="1" name="category"><?php
-  if (isset($category) && $category==0) { ?><option value="0" selected="selected"><?php echo $lang['show_all_categories']; ?></option><?php }
-  else { ?><option value="0"><?php echo $lang['show_all_categories']; ?></option><?php }
-  foreach ($categories as $key => $val)
-   {
-    if($key!=0)
-     {
-      if($key==$category) { ?><option value="<?php echo $key; ?>" selected="selected"><?php echo $val; ?></option><?php }
-      else { ?><option value="<?php echo $key; ?>"><?php echo $val; ?></option><?php }
-     }
-   }
-  ?></select> <?php
- }
-?><input type="submit" name="" value="<?php echo $lang['search_submit']; ?>" /><br />
-<input type="radio" name="ao" value="and"<?php if ($ao == "and") echo 'checked="checked"'; ?> /><?php echo $lang['search_and']; ?>&nbsp;<input type="radio" class="search-radio" name="ao" value="or"<?php if ($ao == "or") echo 'checked="checked"'; ?> /><?php echo $lang['search_or']; ?>&nbsp;<input type="radio" class="search-radio" name="ao" value="phrase"<?php if ($ao == "phrase") echo 'checked="checked"'; ?> /><?php echo $lang['search_phrase']; ?></div></form>
-<p>&nbsp;</p>
-<?php }
+$search_match = (isset($search)) ? $search : '';
+if (isset($search) && empty($show_postings)) {
+	$ao_and = ($ao == "and") ? ' checked="checked"' : '';
+	$ao_or = ($ao == "or") ? ' checked="checked"' : '';
+	$ao_phrase = ($ao == "phrase") ? ' checked="checked"' : '';
+	$templateAdvSearch = file_get_contents($settings['themepath'] .'/templates/form-advanced-search.html');
+	$templateAdvSearch = str_replace('{$shd-advanced-search}', htmlsc($lang['search_title']), $templateAdvSearch);
+	$templateAdvSearch = str_replace('{$label-search-term}', htmlsc($lang['search_term']), $templateAdvSearch);
+	$templateAdvSearch = str_replace('{$search-terms}', htmlsc($search_match), $templateAdvSearch);
+	$templateAdvSearch = str_replace('{$chckd-search-and}', $ao_and, $templateAdvSearch);
+	$templateAdvSearch = str_replace('{$label-search-and}', htmlsc($lang['search_and']), $templateAdvSearch);
+	$templateAdvSearch = str_replace('{$chckd-search-or}', $ao_or, $templateAdvSearch);
+	$templateAdvSearch = str_replace('{$label-search-or}', htmlsc($lang['search_or']), $templateAdvSearch);
+	$templateAdvSearch = str_replace('{$chckd-search-phrase}', $ao_phrase, $templateAdvSearch);
+	$templateAdvSearch = str_replace('{$label-search-phrase}', htmlsc($lang['search_phrase']), $templateAdvSearch);
+	$templateAdvSearch = str_replace('{$btn-submit-search}', htmlsc($lang['search_submit']), $templateAdvSearch);
+	if ($categories !== false) {
+		$xmlSel = simplexml_load_file($settings['themepath'] .'/templates/general-select.xml', null, LIBXML_NOCDATA);
+		$selAll = $xmlSel->wholeselect;
+		$selBody = $xmlSel->item;
+		$r = array();
+		$uType = $selBody;
+		$uType = str_replace('{$formValue}', 0, $uType);
+		$uType = str_replace('{$formText}', htmlsc($lang['show_all_categories']), $uType);
+		if (isset($category) and $category == 0) {
+			$uType = str_replace('{$checked}', ' selected="selected"', $uType);
+		} else {
+			$uType = str_replace('{$checked}', '', $uType);
+		}
+		$r[] = $uType;
+		foreach ($categories as $key => $val) {
+			if ($key > 0) {
+				$uType = $selBody;
+				$uType = str_replace('{$formValue}', htmlsc($key), $uType);
+				$checktype = ($field['user_type'] == $type) ? ' selected="selected"' : '';
+				$uType = str_replace('{Check}', $checktype, $uType);
+				$uType = str_replace('{$formText}', htmlsc($val), $uType);
+				if ($key == $category) {
+					$uType = str_replace('{$checked}', ' selected="selected"', $uType);
+				} else {
+					$uType = str_replace('{$checked}', '', $uType);
+				}
+				$r[] = $uType;
+			}
+		}#'{$options}'
+		$uTypeList = str_replace('{$options}', join("", $r), $selAll);
+		$uTypeList = str_replace('{$selName}', 'search', $uTypeList);
+		$uTypeList = str_replace('{$selID}', 'id-search', $uTypeList);
+		$uTypeList = str_replace('{$selSize}', '1', $uTypeList);
+		$templateAdvSearch = str_replace('{$categories-list}', $uTypeList, $templateAdvSearch);
+	} else {
+		$templateAdvSearch = str_replace('{$categories-list}', '', $templateAdvSearch);
+	}
+	echo $templateAdvSearch;
+}
 
 
 if ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "and") { echo '<p class="caution">'. $lang['no_match_and'] .'</p>'; }
@@ -254,5 +285,4 @@ if ((isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$set
 ?><p class="searchresults"><a class="<?php echo $treeClass; ?>" href="<?php echo $userView ."?id=". intval($entrydata["tid"]) . $itemFragment; ?>"><?php echo htmlsc($entrydata["subject"]); ?></a> <?php echo $search_author_info_x; if(isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='') echo ' <span class="category">('. $categories[$entrydata["category"]] .')</span>'; ?></p><?php }
 }
 ?>
-<br />
 <?php echo $footer; ?>

@@ -1,0 +1,19 @@
+
+  <section>
+   <h2>{$shd-advanced-search}</h2>
+   <form action="search.php" method="get" accept-charset="UTF-8">
+    <div>
+     <label for="id-search">{$label-search-term}</label>
+     <input type="text" name="search" id="id-search" value="{$search-terms}" size="30">
+    </div>
+{$categories-list}
+    <div>
+     <ul>
+      <li><input type="radio" name="ao" id="id-and" value="and"{$chckd-search-and}><label for="id-and">{$label-search-and}</label></li>
+      <li><input type="radio" name="ao" id="id-or" value="or"{$chckd-search-or}><label for="id-or">{$label-search-or}</label></li>
+      <li><input type="radio" name="ao" id="id-phrase" value="phrase"{$chckd-search-phrase}><label for="id-phrase">{$label-search-phrase}</label></li>
+     </ul>
+    </div>
+    <button>{$btn-submit-search}</button>
+   </form>
+  </section>
