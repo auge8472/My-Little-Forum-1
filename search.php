@@ -226,24 +226,16 @@ if (isset($search) && empty($show_postings)) {
 		$uType = $selBody;
 		$uType = str_replace('{$formValue}', 0, $uType);
 		$uType = str_replace('{$formText}', htmlsc($lang['show_all_categories']), $uType);
-		if (isset($category) and $category == 0) {
-			$uType = str_replace('{$checked}', ' selected="selected"', $uType);
-		} else {
-			$uType = str_replace('{$checked}', '', $uType);
-		}
+		$checkValue = (isset($category) and $category == 0) ? ' selected="selected"' : '';
+		$uType = str_replace('{$checked}', $checkValue, $uType);
 		$r[] = $uType;
 		foreach ($categories as $key => $val) {
 			if ($key > 0) {
 				$uType = $selBody;
 				$uType = str_replace('{$formValue}', htmlsc($key), $uType);
-				$checktype = ($field['user_type'] == $type) ? ' selected="selected"' : '';
-				$uType = str_replace('{Check}', $checktype, $uType);
 				$uType = str_replace('{$formText}', htmlsc($val), $uType);
-				if ($key == $category) {
-					$uType = str_replace('{$checked}', ' selected="selected"', $uType);
-				} else {
-					$uType = str_replace('{$checked}', '', $uType);
-				}
+				$checkValue = (isset($category) and $category == $key) ? ' selected="selected"' : '';
+				$uType = str_replace('{$checked}', $checkValue, $uType);
 				$r[] = $uType;
 			}
 		}#'{$options}'
