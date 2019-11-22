@@ -245,7 +245,7 @@ if (isset($_GET['mark']))
   $field = mysqli_fetch_assoc($mark_result);
   mysqli_free_result($mark_result);
   if ($field['marked']==0) $marked = 1; else $marked = 0;
-  mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked= ". intval($marked) ."' WHERE tid= ". intval($_GET['mark']));
+  mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, marked= ". intval($marked) ." WHERE tid= ". intval($_GET['mark']));
   header("location: ". rawurlencode($_GET['refer']) ."?id=". intval($_GET['mark']) ."&category=". intval($_GET['category']) ."&page=". intval($_GET['page']) ."&order=". urlencode($_GET['order']));
   die('<a href="'. rawurlencode($_GET['refer']) .'?id='. intval($_GET['mark']) .'&amp;category='. intval($_GET['category']) .'&amp;page='. intval($_GET['page']) .'&amp;order='. urlencode($_GET['order']) .'">further...</a>');
 
