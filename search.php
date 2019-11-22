@@ -244,6 +244,7 @@ if (isset($search) && empty($show_postings)) {
 		$uTypeList = str_replace('{$selID}', 'id-search', $uTypeList);
 		$uTypeList = str_replace('{$selSize}', '1', $uTypeList);
 		$templateAdvSearch = str_replace('{$categories-list}', $uTypeList, $templateAdvSearch);
+		$selAll = str_replace('{$label-select}', $lang['choose_category_formtitle'], $selAll);
 	} else {
 		$templateAdvSearch = str_replace('{$categories-list}', '', $templateAdvSearch);
 	}
