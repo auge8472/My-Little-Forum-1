@@ -238,13 +238,13 @@ if (isset($search) && empty($show_postings)) {
 				$uType = str_replace('{$checked}', $checkValue, $uType);
 				$r[] = $uType;
 			}
-		}#'{$options}'
-		$uTypeList = str_replace('{$options}', join("", $r), $selAll);
-		$uTypeList = str_replace('{$selName}', 'search', $uTypeList);
-		$uTypeList = str_replace('{$selID}', 'id-search', $uTypeList);
-		$uTypeList = str_replace('{$selSize}', '1', $uTypeList);
-		$templateAdvSearch = str_replace('{$categories-list}', $uTypeList, $templateAdvSearch);
+		}
+		$selAll = str_replace('{$options}', join("", $r), $selAll);
 		$selAll = str_replace('{$label-select}', $lang['choose_category_formtitle'], $selAll);
+		$selAll = str_replace('{$selName}', 'search', $selAll);
+		$selAll = str_replace('{$selID}', 'id-search', $selAll);
+		$selAll = str_replace('{$selSize}', '1', $selAll);
+		$templateAdvSearch = str_replace('{$categories-list}', "   <div>\n". $selAll ."   </div>", $templateAdvSearch);
 	} else {
 		$templateAdvSearch = str_replace('{$categories-list}', '', $templateAdvSearch);
 	}
