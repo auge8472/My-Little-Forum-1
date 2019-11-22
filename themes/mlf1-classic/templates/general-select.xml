@@ -1,8 +1,9 @@
 <?xml version='1.0' standalone='yes'?>
 <template>
- <wholeselect><![CDATA[ <select name="{$selName}" id="{$selID}" size="{$selSize}">
+ <wholeselect><![CDATA[  <label for="{$selID}">{$label-select}</label>
+  <select name="{$selName}" id="{$selID}" size="{$selSize}">
 {$options}</select>]]>
  </wholeselect>
- <item><![CDATA[  <option value="{$formValue}"{$checked}>{$formText}</option>]]>
+ <item><![CDATA[   <option value="{$formValue}"{$checked}>{$formText}</option>]]>
  </item>
 </template>
