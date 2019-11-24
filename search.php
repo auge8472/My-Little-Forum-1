@@ -274,7 +274,7 @@ if (!empty($notification)) {
 	echo $noteAll;
 }
 
-if ((isset($search) && $search != "") || (isset($show_postings) && $show_postings !="")) {
+if (((isset($search) && $search != "") || (isset($show_postings) && $show_postings !="")) and $count > 0) {
 	$xmlResultList = simplexml_load_file($settings['themepath'] .'/templates/general-ul-list.xml', null, LIBXML_NOCDATA);
 	$listAll = $xmlResultList->wholelist;
 	$listBody = $xmlResultList->item;
