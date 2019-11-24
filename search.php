@@ -256,26 +256,44 @@ if ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "and") { 
 elseif ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "or") { echo '<p class="caution">'. $lang['no_match_or'] .'</p>'; }
 elseif ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "phrase") { echo '<p class="caution">'. $lang['no_match_phrase'] .'</p>'; }
 elseif ($count == 0 && $search != "") { echo '<p class="caution">'. $lang['search_no_match'] .'</p>'; }
-if (isset($search) && $search != "" || isset($show_postings) && $show_postings !="") {
-$i=0;
-while ($entrydata = mysqli_fetch_assoc($result)) {
-$search_author_info_x = str_replace("[name]", htmlsc(stripslashes($entrydata["name"])), $lang['search_author_info']);
-$search_author_info_x = str_replace("[time]", strftime($lang['time_format'],$entrydata["Uhrzeit"]), $search_author_info_x);
-$treeClass = ($entrydata["pid"] == 0) ? "thread" : "reply-search";
-if ((isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="board") || (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="board") || (isset($standard) && $standard=="board")) {
-  $userView = "board_entry.php";
-  $itemFragment = "#p". intval($entrydata["id"]);
-} else if ((isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="mix") || (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="mix") || (isset($standard) && $standard=="mix")) {
-  $userView = "mix_entry.php";
-  $itemFragment = "#p". intval($entrydata["id"]);
-} else if (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="thread" || (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="thread")) {
-  $userView = "forum_entry.php";
-  $itemFragment = "";
-} else {
-  $userView = "forum_entry.php";
-  $itemFragment = "";
-}
-?><p class="searchresults"><a class="<?php echo $treeClass; ?>" href="<?php echo $userView ."?id=". intval($entrydata["tid"]) . $itemFragment; ?>"><?php echo htmlsc($entrydata["subject"]); ?></a> <?php echo $search_author_info_x; if(isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='') echo ' <span class="category">('. $categories[$entrydata["category"]] .')</span>'; ?></p><?php }
+
+if ((isset($search) && $search != "") || (isset($show_postings) && $show_postings !="")) {
+	$xmlResultList = simplexml_load_file($settings['themepath'] .'/templates/general-ul-list.xml', null, LIBXML_NOCDATA);
+	$listAll = $xmlResultList->wholelist;
+	$listBody = $xmlResultList->item;
+	$r = array();
+	while ($entrydata = mysqli_fetch_assoc($result)) {
+		$search_author_info_x = str_replace("[name]", htmlsc(stripslashes($entrydata["name"])), $lang['search_author_info']);
+		$search_author_info_x = str_replace("[time]", strftime($lang['time_format'],$entrydata["Uhrzeit"]), $search_author_info_x);
+		$treeClass = ($entrydata["pid"] == 0) ? "thread" : "reply-search";
+		if ((isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="board") || (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="board") || (isset($standard) && $standard=="board")) {
+			$userView = "board_entry.php";
+			$itemFragment = "#p". intval($entrydata["id"]);
+		} else if ((isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="mix") || (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="mix") || (isset($standard) && $standard=="mix")) {
+			$userView = "mix_entry.php";
+			$itemFragment = "#p". intval($entrydata["id"]);
+		} else if (isset($_SESSION[$settings['session_prefix'].'user_view']) && $_SESSION[$settings['session_prefix'].'user_view']=="thread" || (isset($_COOKIE['user_view']) && $_COOKIE['user_view']=="thread")) {
+			$userView = "forum_entry.php";
+			$itemFragment = "";
+		} else {
+			$userView = "forum_entry.php";
+			$itemFragment = "";
+		}
+		if (isset($categories[$entrydata["category"]]) && $categories[$entrydata["category"]]!='') {
+			$catOutput = ' <span class="category">('. $categories[$entrydata["category"]] .')</span>';
+		} else {
+			$catOutput = '';
+		}
+		$listItem = $listBody;
+		$listItem = str_replace('{$itemClass}', '', $listItem);
+		$listItem = str_replace('{$itemID}', '', $listItem);
+		$listItem = str_replace('{$itemText}', '<a class="'.  $treeClass .'" href="'. $userView .'?id='. intval($entrydata["tid"]) . $itemFragment .'">'. htmlsc($entrydata["subject"]) .'</a> '. $search_author_info_x . $catOutput, $listItem);
+		$r[] = $listItem;
+	}
+	$listAll = str_replace('{$listitems}', join("", $r), $listAll);
+	$listAll = str_replace('{$listClass}', '', $listAll);
+	$listAll = str_replace('{$listID}', ' id="searchresults"', $listAll);
+	echo $listAll;
 }
 ?>
 <?php echo $footer; ?>
