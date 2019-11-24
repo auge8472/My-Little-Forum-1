@@ -251,11 +251,28 @@ if (isset($search) && empty($show_postings)) {
 	echo $templateAdvSearch;
 }
 
+if ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "and") { $notification = $lang['no_match_and']; }
+elseif ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "or") { $notification = $lang['no_match_or']; }
+elseif ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "phrase") { $notification = $lang['no_match_phrase']; }
+elseif ($count == 0 && $search != "") { $notification = $lang['search_no_match']; }
 
-if ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "and") { echo '<p class="caution">'. $lang['no_match_and'] .'</p>'; }
-elseif ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "or") { echo '<p class="caution">'. $lang['no_match_or'] .'</p>'; }
-elseif ($count == 0 && $search != "" && count($search_array) > 1 && $ao == "phrase") { echo '<p class="caution">'. $lang['no_match_phrase'] .'</p>'; }
-elseif ($count == 0 && $search != "") { echo '<p class="caution">'. $lang['search_no_match'] .'</p>'; }
+if (!empty($notification)) {
+	$xmlNote = simplexml_load_file($settings['themepath'] .'/templates/general-notification.xml', null, LIBXML_NOCDATA);
+	$noteAll = $xmlNote->wholenote;
+	$noteItem = $xmlNote->paragraph;
+	$r = array();
+	if (is_array($notification)) {
+		foreach ($notification as $note) {
+			$r[] = str_replace('{$noteText}', htmlsc($note), $noteItem);
+		}
+	} else {
+		$r[] = str_replace('{$noteText}', htmlsc($notification), $noteItem);
+	}
+	$noteAll = str_replace('{$noteContent}', join("", $r), $noteAll);
+	$noteAll = str_replace('{$shd-notification}', htmlsc($lang['caution']), $noteAll);
+	$noteAll = str_replace('{$noteClass}', 'caution', $noteAll);
+	echo $noteAll;
+}
 
 if ((isset($search) && $search != "") || (isset($show_postings) && $show_postings !="")) {
 	$xmlResultList = simplexml_load_file($settings['themepath'] .'/templates/general-ul-list.xml', null, LIBXML_NOCDATA);
