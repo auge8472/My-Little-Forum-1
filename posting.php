@@ -721,10 +721,10 @@ switch ($show)
          if ($pr_hp != "")
           {
            if (mb_substr($pr_hp, 0, 7) != "http://" && mb_substr($pr_hp, 0, 8) != "https://" && mb_substr($pr_hp, 0, 6) != "ftp://" && mb_substr($pr_hp, 0, 9) != "gopher://" && mb_substr($pr_hp, 0, 7) != "news://") $pr_hp = "http://".$pr_hp;
-           echo '<a href="'. $pr_hp .'"><img src="img/homepage.gif" alt="'. htmlsc($lang['homepage_alt']) .'" width="13" height="13" /></a>';
+           echo '<a href="'. $pr_hp .'"><img src="'. $settings['themepath'] .'/img/homepage.gif" alt="'. htmlsc($lang['homepage_alt']) .'" width="13" height="13" /></a>';
           }
          if (($pr_email != ""  && $hide_email != 1) && $pr_hp != "") { echo "&nbsp;"; }
-         if ($pr_email != "" && $hide_email != 1) { echo '<a href="contact.php"><img src="img/email.gif" alt="'. htmlsc($lang['email_alt']) .'" title="'. str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']) .'" width="13" height="10" /></a>'; }
+         if ($pr_email != "" && $hide_email != 1) { echo '<a href="contact.php"><img src="'. $settings['themepath'] .'/img/email.gif" alt="'. htmlsc($lang['email_alt']) .'" title="'. str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']) .'" width="13" height="10" /></a>'; }
          if (($pr_email != "" && $hide_email != 1) or $pr_hp !="") { echo "<br />"; }
          echo "<br />";
          if ($pr_place != "") { echo htmlsc($pr_place); echo ", <br />"; }
@@ -770,9 +770,9 @@ switch ($show)
           <?php
           $email_hp = ""; $place_wc = ""; $place_c = "";
           if (($pr_email != "" && $hide_email != 1) or $pr_hp != "") $email_hp = " ";
-          if ($pr_hp != "") { if (mb_substr($pr_hp, 0, 7) != "http://" && mb_substr($pr_hp, 0, 8) != "https://" && mb_substr($pr_hp, 0, 6) != "ftp://" && mb_substr($pr_hp, 0, 9) != "gopher://" && mb_substr($pr_hp, 0, 7) != "news://") $pr_hp = "http://".$pr_hp; $email_hp .= '<a href="'. $pr_hp .'"><img src="img/homepage.gif" alt="'. htmlsc($lang['homepage_alt']) .'" width="13" height="13" /></a>'; }
+          if ($pr_hp != "") { if (mb_substr($pr_hp, 0, 7) != "http://" && mb_substr($pr_hp, 0, 8) != "https://" && mb_substr($pr_hp, 0, 6) != "ftp://" && mb_substr($pr_hp, 0, 9) != "gopher://" && mb_substr($pr_hp, 0, 7) != "news://") $pr_hp = "http://".$pr_hp; $email_hp .= '<a href="'. $pr_hp .'"><img src="'. $settings['themepath'] .'/img/homepage.gif" alt="'. htmlsc($lang['homepage_alt']) .'" width="13" height="13" /></a>'; }
           if ($pr_email != ""  && $hide_email != 1 && $pr_hp != "") { $email_hp .= " "; }
-          if ($pr_email != "" && $hide_email != 1) { $email_hp .= '<a href="contact.php"><img src="img/email.gif" alt="'. htmlsc($lang['email_alt']) .'" title="'. str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']) .'" width="13" height="10" /></a>'; }
+          if ($pr_email != "" && $hide_email != 1) { $email_hp .= '<a href="contact.php"><img src="'. $settings['themepath'] .'/img/email.gif" alt="'. htmlsc($lang['email_alt']) .'" title="'. str_replace("[name]", htmlsc($pr_name), $lang['email_to_user_linktitle']) .'" width="13" height="10" /></a>'; }
           if ($pr_place != "") { $place_c = htmlsc($pr_place) . ", "; $place_wc = htmlsc($pr_place); }
           $lang['forum_author_marking'] = str_replace("[name]", htmlsc($pr_name), $lang['forum_author_marking']);
           $lang['forum_author_marking'] = str_replace("[email_hp]", $email_hp, $lang['forum_author_marking']);
@@ -852,7 +852,7 @@ switch ($show)
    </tr>
    <?php if ($settings['remember_userdata'] == 1 && !isset($_SESSION[$settings['session_prefix'].'user_id'])) { ?>
    <tr>
-    <td>&nbsp;</td><td><span class="small"><input type="checkbox" name="setcookie" value="1"<?php if (isset($setcookie) && $setcookie == 1) echo ' checked="checked"'; ?> />&nbsp;<?php echo $lang['remember_userdata_cbm']; if (isset($_COOKIE['user_name']) || isset($_COOKIE['user_email']) or isset($_COOKIE['user_hp']) or isset($_COOKIE['user_hp'])) { ?>&nbsp;&nbsp;&nbsp;<a onclick="javascript:delete_cookie(); return false;" href="delete_cookie.php"><img border="0" src="img/dc.gif" name="dc" alt="" width="12" height="9"><?php echo $lang['delete_cookies_linkname']; ?></a><?php } ?></span></td>
+    <td>&nbsp;</td><td><span class="small"><input type="checkbox" name="setcookie" value="1"<?php if (isset($setcookie) && $setcookie == 1) echo ' checked="checked"'; ?> />&nbsp;<?php echo $lang['remember_userdata_cbm']; if (isset($_COOKIE['user_name']) || isset($_COOKIE['user_email']) or isset($_COOKIE['user_hp']) or isset($_COOKIE['user_hp'])) { ?>&nbsp;&nbsp;&nbsp;<a onclick="javascript:delete_cookie(); return false;" href="delete_cookie.php"><img border="0" src="<?php echo $settings['themepath']; ?>/img/dc.gif" name="dc" alt="" width="12" height="9"><?php echo $lang['delete_cookies_linkname']; ?></a><?php } ?></span></td>
    </tr>
    <?php } ?>
    <tr>

@@ -33,7 +33,7 @@ if (isset($_POST['user_time_difference']))
 if (isset($_COOKIE['user_time_difference'])) $user_time_difference = $_COOKIE['user_time_difference'];
 else $user_time_difference = 0;
 $wo = $lang_add['td_title'];
-$topnav = '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang_add['td_title'].'</b>';
+$topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang_add['td_title'].'</b>';
 parse_template();
 echo $header;
 if (isset($_SESSION[$settings['session_prefix'].'user_id']))

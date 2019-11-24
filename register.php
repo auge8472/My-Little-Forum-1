@@ -204,7 +204,7 @@ if(isset($_POST['register_submit']))
  }
 
 $wo = $lang['register_hl'];
-$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'.$lang['register_hl'].'</b>';
+$topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><b>'.$lang['register_hl'].'</b>';
 parse_template();
 echo $header;
 

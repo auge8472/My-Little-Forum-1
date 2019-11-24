@@ -333,7 +333,7 @@ if ($action == "show users")
  {
   if (empty($descasc)) $descasc="ASC";
   if (empty($order)) $order="user_name";
-  $topnav = '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['reg_users_hl'].'</b>';
+  $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['reg_users_hl'].'</b>';
   if (isset($_GET['letter']) && $_GET['letter']!="") $pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['userdata_table'] ." WHERE user_name LIKE '". mysqli_real_escape_string($connid, $_GET['letter']) ."%'");
   else $pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['userdata_table']);
   list($thread_count) = mysqli_fetch_row($pid_result);
@@ -396,9 +396,9 @@ if ($action == "show users")
   <option value="X"'.$lx.'>X</option>
   <option value="Y"'.$ly.'>Y</option>
   <option value="Z"'.$lz.'>Z</option>
-  </select>&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></div></form>' . nav($page, $settings['users_per_page'], $thread_count, $order, $descasc, $category);
+  </select>&nbsp;<input type="image" name="" value="" src="'. $settings['themepath'] .'/img/submit.gif" alt="&raquo;" /></div></form>' . nav($page, $settings['users_per_page'], $thread_count, $order, $descasc, $category);
  }
-else $topnav = '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['user_area_title'].'</b>';
+else $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" border="0"><b>'.$lang['user_area_title'].'</b>';
 
 parse_template();
 echo $header;
@@ -431,11 +431,11 @@ switch ($action)
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_email_marking']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo intval($field['user_id']); ?>"><img src="img/email.gif" alt="'<?php echo htmlsc($lang['email_alt']); ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "-"; ?></p></td>
+     <td class="d"><p class="userdata"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo intval($field['user_id']); ?>"><img src="<?php echo $settings['themepath']; ?>/img/email.gif" alt="'<?php echo htmlsc($lang['email_alt']); ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "-"; ?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_hp']; ?></b></p></td>
-     <td class="d"><p class="userdata"><?php if ($field["user_hp"]!="") { if (mb_substr($field["user_hp"], 0, 7) != "http://" && mb_substr($field["user_hp"], 0, 8) != "https://" && mb_substr($field["user_hp"], 0, 6) != "ftp://" && mb_substr($field["user_hp"], 0, 9) != "gopher://" && mb_substr($field["user_hp"], 0, 7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo $field["user_hp"]; ?>"><img src="img/homepage.gif" alt="<?php echo htmlsc($lang['homepage_alt']); ?>" width="13" height="13" /></a><?php } else echo "-" ?></p></td>
+     <td class="d"><p class="userdata"><?php if ($field["user_hp"]!="") { if (mb_substr($field["user_hp"], 0, 7) != "http://" && mb_substr($field["user_hp"], 0, 8) != "https://" && mb_substr($field["user_hp"], 0, 6) != "ftp://" && mb_substr($field["user_hp"], 0, 9) != "gopher://" && mb_substr($field["user_hp"], 0, 7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo $field["user_hp"]; ?>"><img src="<?php echo $settings['themepath']; ?>/img/homepage.gif" alt="<?php echo htmlsc($lang['homepage_alt']); ?>" width="13" height="13" /></a><?php } else echo "-" ?></p></td>
     </tr>
     <tr>
      <td class="c"><p class="userdata"><b><?php echo $lang['user_place']; ?></b></p></td>
@@ -535,8 +535,8 @@ switch ($action)
      {
       ?><table class="normaltab" border="0" cellpadding="5" cellspacing="1">
       <tr>
-      <th><a href="user.php?action=show+users&amp;order=user_name&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_name") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang['userlist_name']; ?></a><?php if ($order=="user_name" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_name" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
-      <th><a href="user.php?action=show+users&amp;order=user_type&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_type") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang['userlist_type']; ?></a><?php if ($order=="user_type" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_type" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
+      <th><a href="user.php?action=show+users&amp;order=user_name&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_name") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang['userlist_name']; ?></a><?php if ($order=="user_name" && $descasc=="ASC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_name" && $descasc=="DESC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
+      <th><a href="user.php?action=show+users&amp;order=user_type&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_type") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang['userlist_type']; ?></a><?php if ($order=="user_type" && $descasc=="ASC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_type" && $descasc=="DESC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
       <th><?php echo $lang['userlist_email']; ?></th>
       <th><?php echo $lang['userlist_hp']; ?></th>
       <?php if ($settings['count_users_online'] == 1) { ?><th><?php echo $lang['userlist_online']; ?></th><?php }
@@ -549,8 +549,8 @@ switch ($action)
         ?><tr>
         <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="user.php?id=<?php echo intval($field['user_id']); ?>"><b><?php echo htmlsc($field['user_name']); ?></b></a></td>
         <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_type"] == "admin") echo $lang['ud_admin']; elseif ($field["user_type"] == "mod") echo $lang['ud_mod']; else echo $lang['ud_user']; ?></span></td>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo intval($field['user_id']); ?>"><img src="img/email.gif" alt="'<?php echo htmlsc($lang['email_alt']); ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "&nbsp;"; ?></span></td>
-        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_hp"]!="") { if (mb_substr($field["user_hp"], 0, 7) != "http://" && mb_substr($field["user_hp"], 0, 8) != "https://" && mb_substr($field["user_hp"], 0, 6) != "ftp://" && mb_substr($field["user_hp"], 0, 9) != "gopher://" && mb_substr($field["user_hp"], 0, 7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo htmlsc($field["user_hp"]); ?>"><img src="img/homepage.gif" alt="<?php echo htmlsc($lang['homepage_alt']); ?>" width="13" height="13" /></a><?php } else echo "&nbsp;" ?></span></td>
+        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["hide_email"]!=1) { ?><a href="contact.php?uid=<?php echo intval($field['user_id']); ?>"><img src="<?php echo $settings['themepath']; ?>/img/email.gif" alt="'<?php echo htmlsc($lang['email_alt']); ?>" title="<?php echo str_replace("[name]", htmlsc($field["user_name"]), $lang['email_to_user_linktitle']); ?>" width="13" height="10" /></a><?php } else echo "&nbsp;"; ?></span></td>
+        <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="small"><?php if ($field["user_hp"]!="") { if (mb_substr($field["user_hp"], 0, 7) != "http://" && mb_substr($field["user_hp"], 0, 8) != "https://" && mb_substr($field["user_hp"], 0, 6) != "ftp://" && mb_substr($field["user_hp"], 0, 9) != "gopher://" && mb_substr($field["user_hp"], 0, 7) != "news://") $field["user_hp"] = "http://".$field["user_hp"]; ?><a href="<?php echo htmlsc($field["user_hp"]); ?>"><img src="<?php echo $settings['themepath']; ?>/img/homepage.gif" alt="<?php echo htmlsc($lang['homepage_alt']); ?>" width="13" height="13" /></a><?php } else echo "&nbsp;" ?></span></td>
         <?php if ($settings['count_users_online'] == 1) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><span class="online"><?php if ($settings['count_users_online'] == 1 && in_array($field['user_id'], $useronline_array)) { echo $lang['online']; } else echo "&nbsp;"; ?></span></td><?php }
         if (isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod")) { ?><td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php if ($field["user_type"]=="user") { if ($field["user_lock"] == 0) { ?><span class="small"><a href="user.php?user_lock=<?php echo intval($field["user_id"]); ?>&amp;order=<?php echo urlencode($order); ?>&amp;descasc=<?php echo urlencode($descasc); ?>&amp;page=<?php echo intval($page); ?>"><?php echo $lang['unlocked']; ?></a></span><?php } else { ?><span class="small"><a style="color: red;" href="user.php?user_lock=<?php echo intval($field["user_id"]); ?>&amp;order=<?php echo urlencode($order); ?>&amp;descasc=<?php echo urlencode($descasc); ?>&amp;page=<?php echo intval($page); ?>"><?php echo $lang['locked']; ?></a></span><?php } } else echo "&nbsp;"; ?></td><?php } ?>
         </tr>

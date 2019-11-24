@@ -71,13 +71,13 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
 
   $subnav_1='<a class="textlink" href="posting.php?category='. intval($category) .'">'.$lang['new_entry_linkname'].'</a>';
   $subnav_2 = '';
-  if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $subnav_2 .= '<a href="index.php?update=1&amp;category='. intval($category) .'"><img src="img/update.gif" alt="'. htmlsc($lang['update_time_linktitle']) .'" width="9" height="9" /></a>';
-  if ($order=="time") $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?order=last_answer&amp;category='. intval($category) .'"><img src="img/order.gif" alt="" width="12" height="9" />'.$lang['order_linkname'].'</a></span>';
-  else $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?order=time&amp;category='. intval($category) .'"><img src="img/order.gif" alt="" width="12" height="9" />'.$lang['order_linkname'].'</a></span>';
-  if ($settings['board_view'] == 1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php"><img src="img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';
-  elseif ($settings['board_view'] == 1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php?category='. intval($category) .'"><img src="img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';
-  if ($settings['mix_view']==1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php"><img src="img/mix.gif" alt="" width="12" height="9" />'.$lang['mix_view_linkname'].'</a></span>';
-  elseif ($settings['mix_view']==1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php?category='. intval($category ).'"><img src="img/mix.gif" alt="" width="12" height="9" />'.$lang['mix_view_linkname'].'</a></span>';
+  if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $subnav_2 .= '<a href="index.php?update=1&amp;category='. intval($category) .'"><img src="'. $settings['themepath'] .'/img/update.gif" alt="'. htmlsc($lang['update_time_linktitle']) .'" width="9" height="9" /></a>';
+  if ($order=="time") $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?order=last_answer&amp;category='. intval($category) .'"><img src="'. $settings['themepath'] .'/img/order.gif" alt="" width="12" height="9" />'.$lang['order_linkname'].'</a></span>';
+  else $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?order=time&amp;category='. intval($category) .'"><img src="'. $settings['themepath'] .'/img/order.gif" alt="" width="12" height="9" />'.$lang['order_linkname'].'</a></span>';
+  if ($settings['board_view'] == 1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php"><img src="'. $settings['themepath'] .'/img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';
+  elseif ($settings['board_view'] == 1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php?category='. intval($category) .'"><img src="'. $settings['themepath'] .'/img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';
+  if ($settings['mix_view']==1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php"><img src="'. $settings['themepath'] .'/img/mix.gif" alt="" width="12" height="9" />'.$lang['mix_view_linkname'].'</a></span>';
+  elseif ($settings['mix_view']==1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="mix.php?category='. intval($category ).'"><img src="'. $settings['themepath'] .'/img/mix.gif" alt="" width="12" height="9" />'.$lang['mix_view_linkname'].'</a></span>';
   $subnav_2 .= nav($page, (int)$settings['topics_per_page'], $thread_count, $order, $descasc, $category);
 
   if($categories!=false)
@@ -93,7 +93,7 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
         else $subnav_2 .= '<option value="'.$key.'">'.$val.'</option>';
        }
      }
-    $subnav_2 .= '</select><noscript> <input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></noscript></div></form>';
+    $subnav_2 .= '</select><noscript> <input type="image" name="" value="" src="'. $settings['themepath'] .'/img/submit.gif" alt="&raquo;" /></noscript></div></form>';
    }
 
   parse_template();
@@ -123,7 +123,7 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
 
     if(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=='admin')
      {
-      ?><p class="marked-threads"><img src="img/marked.gif" alt="[x]" width="9" height="9" /> <?php echo $lang['marked_threads_actions']; ?> <a href="admin.php?action=delete_marked_threads"><?php echo $lang['delete_marked_threads']; ?></a> - <a href="admin.php?action=lock_marked_threads"><?php echo $lang['lock_marked_threads']; ?></a> - <a href="admin.php?action=unlock_marked_threads"><?php echo $lang['unlock_marked_threads']; ?></a> - <a href="admin.php?action=unmark"><?php echo $lang['unmark_threads']; ?></a> - <a href="admin.php?action=invert_markings"><?php echo $lang['invert_markings']; ?></a> - <a href="admin.php?action=mark_threads"><?php echo $lang['mark_threads']; ?></a></p><?php
+      ?><p class="marked-threads"><img src="<?php echo $settings['themepath']; ?>/img/marked.gif" alt="[x]" width="9" height="9" /> <?php echo $lang['marked_threads_actions']; ?> <a href="admin.php?action=delete_marked_threads"><?php echo $lang['delete_marked_threads']; ?></a> - <a href="admin.php?action=lock_marked_threads"><?php echo $lang['lock_marked_threads']; ?></a> - <a href="admin.php?action=unlock_marked_threads"><?php echo $lang['unlock_marked_threads']; ?></a> - <a href="admin.php?action=unmark"><?php echo $lang['unmark_threads']; ?></a> - <a href="admin.php?action=invert_markings"><?php echo $lang['invert_markings']; ?></a> - <a href="admin.php?action=mark_threads"><?php echo $lang['mark_threads']; ?></a></p><?php
      }
    }
   else
