@@ -295,5 +295,6 @@ if ((isset($search) && $search != "") || (isset($show_postings) && $show_posting
 	$listAll = str_replace('{$listID}', ' id="searchresults"', $listAll);
 	echo $listAll;
 }
+
+echo $footer;
 ?>
-<?php echo $footer; ?>
