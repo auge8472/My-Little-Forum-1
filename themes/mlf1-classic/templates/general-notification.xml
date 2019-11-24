@@ -1,0 +1,10 @@
+<?xml version='1.0' standalone='yes'?>
+<template>
+ <wholenote><![CDATA[  <section class="{$noteClass}">
+   <h2>{$shd-notification}</h2>
+{$noteContent}
+  </section>]]>
+ </wholenote>
+ <paragraph><![CDATA[   <p>{$noteText}</p>]]>
+ </paragraph>
+</template>
