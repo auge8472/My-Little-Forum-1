@@ -1,0 +1,9 @@
+<?xml version='1.0' standalone='yes'?>
+<template>
+ <wholelist><![CDATA[  <ul{$listClass}{$listID}>
+{$listitems}
+  </ul>]]>
+ </wholelist>
+ <item><![CDATA[   <li{$itemClass}{$itemID}>{$itemText}</li>]]>
+ </item>
+</template>
