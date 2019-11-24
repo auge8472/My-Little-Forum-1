@@ -55,7 +55,7 @@ a.textlink {
 	padding-left: 8px;
 	text-decoration: none;
 	font-weight: bold;
-	background-image: url(../../img/link.gif);
+	background-image: url(img/link.gif);
 	background-repeat: no-repeat;
 	background-position: top left;
 }
@@ -65,7 +65,7 @@ a.textlink:link, a.textlink:visited {
 a.textlink:focus, a.textlink:hover {
 	color: #00f;
 	text-decoration: underline;
-	background-image: url(../../img/link_mo.gif);
+	background-image: url(img/link_mo.gif);
 }
 a.textlink:active {
 	color: #f00;
@@ -75,7 +75,7 @@ a.textlink:active {
 #top {
 	margin: 0;
 	background-color: #d2ddea;
-	background-image: url(../../img/bg_top.gif);
+	background-image: url(img/bg_top.gif);
 	background-repeat: repeat-x;
 }
 #top div.left {
@@ -148,7 +148,7 @@ input.searchfield {
 	margin: 0;
 	padding: 0;
 	background: #d2ddea;
-	background-image: url(../../img/bg_bottom.gif);
+	background-image: url(img/bg_bottom.gif);
 	background-repeat: repeat-x;
 }
 #bottom div.left {
@@ -232,7 +232,7 @@ p.postingforma {
 	padding-left: 18px;
 	color: #f00;
 	font-weight: bold;
-	background-image: url(../../img/topic.gif);
+	background-image: url(img/topic.gif);
 	background-repeat: no-repeat;
 	background-position: top left;
 }
@@ -240,7 +240,7 @@ p.postingforma {
 	padding-left: 16px;
 	color: #f00;
 	font-weight: bold;
-	background-image: url(../../img/reply.gif);
+	background-image: url(img/reply.gif);
 	background-repeat: no-repeat;
 	background-position: top left;
 }
@@ -366,7 +366,7 @@ td.autorcell {
 	width: 106px;
 	padding: 5px 7px 5px 7px;
 	background: #d2ddea;
-	background-image: url(../../img/bg_author.gif);
+	background-image: url(img/bg_author.gif);
 	background-repeat: repeat-y;
 	background-position: right;
 }
@@ -375,7 +375,7 @@ td.titlecell {
 	padding: 5px 10px 5px 10px;
 	height: 15px;
 	background: #d2ddea;
-	background-image: url(../../img/bg_th.gif);
+	background-image: url(img/bg_th.gif);
 	background-repeat: repeat-x;
 	background-position: bottom;
 }
@@ -429,7 +429,7 @@ table.normaltab th {
 	font-weight: bold;
 	text-align: left;
 	background: #d2ddea;
-	background-image: url(../../img/bg_th.gif);
+	background-image: url(img/bg_th.gif);
 	background-repeat: repeat-x;
 	background-position: bottom;
 }
@@ -448,7 +448,7 @@ table.normaltab td.c {
 	vertical-align: top;
 	font-weight: normal;
 	background: #d2ddea;
-	background-image: url(../../img/bg_author.gif);
+	background-image: url(img/bg_author.gif);
 	background-repeat: repeat-y;
 	background-position: right;
 }
@@ -501,7 +501,7 @@ a.thread {
 	padding-left: 18px;
 	text-decoration: none;
 	font-weight: bold;
-	background-image: url(../../img/topic.gif);
+	background-image: url(img/topic.gif);
 	background-repeat: no-repeat;
 	background-position: top left;
 }
@@ -524,7 +524,7 @@ a.threadnew {
 	padding-left: 18px;
 	text-decoration: none;
 	font-weight: bold;
-	background-image: url(../../img/topic_new.gif);
+	background-image: url(img/topic_new.gif);
 	background-repeat: no-repeat;
 	background-position: top left;
 }
@@ -547,7 +547,7 @@ a.reply {
 	padding-left: 16px;
 	text-decoration: none;
 	font-weight: normal;
-	background-image: url(../../img/reply.gif);
+	background-image: url(img/reply.gif);
 	background-repeat: no-repeat;
 	background-position: top left;
 }
@@ -569,7 +569,7 @@ a.replynew:link {
 	padding-left: 16px;
 	text-decoration: none;
 	font-weight: normal;
-	background-image: url(../../img/reply_new.gif);
+	background-image: url(img/reply_new.gif);
 	background-repeat: no-repeat;
 	background-position: top left;
 }
@@ -592,7 +592,7 @@ a.reply-search {
 	padding-left: 18px;
 	text-decoration: none;
 	font-weight: bold;
-	background-image: url(../../img/reply_s.gif);
+	background-image: url(img/reply_s.gif);
 	background-repeat: no-repeat;
 	background-position: top left;
 }

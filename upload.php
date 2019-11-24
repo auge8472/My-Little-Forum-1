@@ -215,9 +215,9 @@ switch($action)
    }
   ?><img src="img/uploaded/<?php echo $filename; ?>" alt="" height="100" border="1">
   <p><?php echo $lang['paste_image']; ?></p>
-  <p><button style="width:25px; height:25px;" title="<?php echo $lang['insert_image_normal']; ?>" onclick="opener.insert('[img]<?php echo $uploaded_images_path.$filename; ?>[/img]'); window.close()"><img src="img/img_normal.gif" alt="<?php echo $lang['insert_image_normal']; ?>" wifth="11" height="11" /></button>&nbsp;
-  <button style="width:25px; height:25px;" title="<?php echo $lang['insert_image_left']; ?>" onclick="opener.insert('[img|left]<?php echo $uploaded_images_path.$filename; ?>[/img]'); window.close()"><img src="img/img_left.gif" alt="<?php echo $lang['insert_image_left']; ?>" wifth="11" height="11" /></button>&nbsp;
-  <button style="width:25px; height:25px;" title="<?php echo $lang['insert_image_right']; ?>" onclick="opener.insert('[img|right]<?php echo $uploaded_images_path.$filename; ?>[/img]'); window.close()"><img src="img/img_right.gif" alt="<?php echo $lang['insert_image_right']; ?>" wifth="11" height="11" /></button></p><?php
+  <p><button style="width:25px; height:25px;" title="<?php echo $lang['insert_image_normal']; ?>" onclick="opener.insert('[img]<?php echo $uploaded_images_path.$filename; ?>[/img]'); window.close()"><img src="<?php echo $settings['themepath']; ?>/img/img_normal.gif" alt="<?php echo $lang['insert_image_normal']; ?>" wifth="11" height="11" /></button>&nbsp;
+  <button style="width:25px; height:25px;" title="<?php echo $lang['insert_image_left']; ?>" onclick="opener.insert('[img|left]<?php echo $uploaded_images_path.$filename; ?>[/img]'); window.close()"><img src="<?php echo $settings['themepath']; ?>/img/img_left.gif" alt="<?php echo $lang['insert_image_left']; ?>" wifth="11" height="11" /></button>&nbsp;
+  <button style="width:25px; height:25px;" title="<?php echo $lang['insert_image_right']; ?>" onclick="opener.insert('[img|right]<?php echo $uploaded_images_path.$filename; ?>[/img]'); window.close()"><img src="<?php echo $settings['themepath']; ?>/img/img_right.gif" alt="<?php echo $lang['insert_image_right']; ?>" wifth="11" height="11" /></button></p><?php
   break;
   case 'show_uploaded_images':
    if (isset($_GET['p'])) $p = intval($_GET['p']); else $p = 1;

@@ -1076,82 +1076,82 @@ if (empty($action)) $action="main";
 switch ($action)
  {
   case "settings":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['forum_settings'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['forum_settings'] .'</b>';
   break;
   case "advanced_settings":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=settings"><b>'. $lang_add['forum_settings'] .'</b></a> / <b>'. $lang_add['advanced_settings'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=settings"><b>'. $lang_add['forum_settings'] .'</b></a> / <b>'. $lang_add['advanced_settings'] .'</b>';
   break;
   case "categories":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['category_administr'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['category_administr'] .'</b>';
   break;
   case "delete_category":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=categories"><b>'. $lang_add['category_administr'] .'</b></a> / <b>'. $lang_add['delete_category'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=categories"><b>'. $lang_add['category_administr'] .'</b></a> / <b>'. $lang_add['delete_category'] .'</b>';
   break;
   case "edit_category":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=categories"><b>'. $lang_add['category_administr'] .'</b></a> / <b>'. $lang_add['cat_edit_hl'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=categories"><b>'. $lang_add['category_administr'] .'</b></a> / <b>'. $lang_add['cat_edit_hl'] .'</b>';
   break;
   case "user":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['user_administr'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['user_administr'] .'</b>';
   break;
   case "edit_user":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a>  / <b>'. $lang_add['edit_user'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a>  / <b>'. $lang_add['edit_user'] .'</b>';
   break;
   case "delete_users_sure":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a>  / <b>'. $lang_add['delete_user'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a>  / <b>'. $lang_add['delete_user'] .'</b>';
   break;
   case "register":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a> / <b>'. $lang_add['reg_user'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a> / <b>'. $lang_add['reg_user'] .'</b>';
   break;
   case "email_list":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a> / <b>'. $lang_add['email_list'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a> / <b>'. $lang_add['email_list'] .'</b>';
   break;
   case "clear_userdata":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a> / <b>'. $lang_add['clear_userdata'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=user"><b>'. $lang_add['user_administr'] .'</b></a> / <b>'. $lang_add['clear_userdata'] .'</b>';
   break;
   case "banlists":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['banlists'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['banlists'] .'</b>';
   break;
   case "empty":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['empty_forum'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['empty_forum'] .'</b>';
   break;
   case "backup":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['backup_restore'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['backup_restore'] .'</b>';
   break;
   case "import_sql":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=backup"><b>'. $lang_add['backup_restore'] .'</b></a> / <b>'. $lang_add['import_sql'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=backup"><b>'. $lang_add['backup_restore'] .'</b></a> / <b>'. $lang_add['import_sql'] .'</b>';
   break;
   case "import_sql_ok":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=backup"><b>'. $lang_add['backup_restore'] .'</b></a> / <b>'. $lang_add['import_sql'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=backup"><b>'. $lang_add['backup_restore'] .'</b></a> / <b>'. $lang_add['import_sql'] .'</b>';
   break;
   case "uninstall":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['uninstall'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['uninstall'] .'</b>';
   break;
   case "smilies":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['smilies'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <b>'. $lang_add['smilies'] .'</b>';
   break;
   case "edit_smiley":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=smilies"><b>'. $lang_add['smilies'] .'</b></a> / <b>'. $lang_add['edit_smiley_hl'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><a href="admin.php"><b>'.$lang_add['admin_area'].'</b></a> / <a href="admin.php?action=smilies"><b>'. $lang_add['smilies'] .'</b></a> / <b>'. $lang_add['edit_smiley_hl'] .'</b>';
   break;
   case "delete_marked_threads":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['del_marked'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['del_marked'] .'</b>';
   break;
   case "unmark":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['unmark_threads'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['unmark_threads'] .'</b>';
   break;
   case "lock_marked_threads":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['lock_marked'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['lock_marked'] .'</b>';
   break;
   case "unlock_marked_threads":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['unlock_marked'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['unlock_marked'] .'</b>';
   break;
   case "invert_markings":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['invert_markings'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['invert_markings'] .'</b>';
   break;
   case "mark_threads":
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['mark_threads'] .'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><b>'. $lang_add['mark_threads'] .'</b>';
   break;
   default:
-   $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'.$lang_add['admin_area'].'</b>';
+   $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><b>'.$lang_add['admin_area'].'</b>';
   break;
  }
 
@@ -1241,7 +1241,7 @@ switch ($action)
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo $postings_in_category; ?></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?edit_category=<?php echo intval($line['id']); ?>"><?php echo $lang_add['cat_edit']; ?></a></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?delete_category=<?php echo intval($line['id']); ?>"><?php echo $lang_add['cat_delete']; ?></a></td>
-      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?move_up_category=<?php echo intval($line['id']); ?>"><img src="img/up.gif" alt="up" width="11" height="11" /></a>&nbsp;<a href="admin.php?move_down_category=<?php echo intval($line['id']); ?>"><img src="img/down.gif" alt="down" width="11" height="11" /></a></td>
+      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?move_up_category=<?php echo intval($line['id']); ?>"><img src="<?php echo $settings['themepath']; ?>/img/up.gif" alt="up" width="11" height="11" /></a>&nbsp;<a href="admin.php?move_down_category=<?php echo intval($line['id']); ?>"><img src="<?php echo $settings['themepath']; ?>/img/down.gif" alt="down" width="11" height="11" /></a></td>
       </tr><?php
       $i++;
      }
@@ -1308,7 +1308,7 @@ switch ($action)
    <td><?php echo str_replace("[number]", $user_count, $lang['num_reg_users']); ?></td>
    <td style="text-align:right;"><?php echo $lang_add['search_user']; ?><form action="<?php echo basename($_SERVER['SCRIPT_NAME']); ?>" method="get" accept-charset="UTF-8"><div style="display:inline">
    <input type="hidden" name="action" value="user" />
-   <input type="text" name="search_user" value="<?php if(isset($search_user)) echo htmlsc($search_user); ?>" size="25">&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" />
+   <input type="text" name="search_user" value="<?php if(isset($search_user)) echo htmlsc($search_user); ?>" size="25">&nbsp;<input type="image" name="" value="" src="<?php echo $settings['themepath']; ?>/img/submit.gif" alt="&raquo;" />
    </div></form><?php
    if(empty($serach_user) || trim($search_user==''))
    {
@@ -1343,7 +1343,7 @@ switch ($action)
    <option value="X"<?php echo $lx; ?>>X</option>
    <option value="Y"<?php echo $ly; ?>>Y</option>
    <option value="Z"<?php echo $lz; ?>>Z</option>
-   </select>&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></div></form>
+   </select>&nbsp;<input type="image" name="" value="" src="<?php echo $settings['themepath']; ?>/img/submit.gif" alt="&raquo;" /></div></form>
    <?php echo nav($page, $settings['users_per_page'], $sel_user_count, $order, $descasc, $category, $action);
    } ?></td>
    </tr>
@@ -1357,14 +1357,14 @@ switch ($action)
    <table class="normaltab" border="0" cellpadding="5" cellspacing="1">
    <tr>
    <th>&nbsp;</th>
-   <th><a href="admin.php?action=user&amp;order=user_id&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_id") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang_add['user_id']; ?></a><?php if ($order=="user_id" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_id" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
-   <th><a href="admin.php?action=user&amp;order=user_name&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_name") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang_add['user_name']; ?></a><?php if ($order=="user_name" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_name" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
-   <th><a href="admin.php?action=user&amp;order=user_email&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_email") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang_add['user_email']; ?></a><?php if ($order=="user_email" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_email" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
-   <th><a href="admin.php?action=user&amp;order=user_type&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_type") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang_add['user_type']; ?></a><?php if ($order=="user_type" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_type" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
-   <th><a href="admin.php?action=user&amp;order=registered&amp;descasc=<?php if ($descasc=="ASC" && $order=="registered") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang_add['user_registered']; ?></a><?php if ($order=="registered" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="registered" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
-   <th><a href="admin.php?action=user&amp;order=logins&amp;descasc=<?php if ($descasc=="ASC" && $order=="logins") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang_add['user_logins']; ?></a><?php if ($order=="logins" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="logins" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
-   <th><a href="admin.php?action=user&amp;order=last_login&amp;descasc=<?php if ($descasc=="ASC" && $order=="last_login") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang_add['last_login']; ?></a><?php if ($order=="last_login" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="last_login" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
-   <th><a href="admin.php?action=user&amp;order=user_lock&amp;descasc=<?php if ($descasc=="DESC" && $order=="user_lock") echo "ASC"; else echo "DESC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang['lock']; ?></a><?php if ($order=="user_lock" && $descasc=="ASC") { ?>&nbsp;<img src="img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_lock" && $descasc=="DESC") { ?>&nbsp;<img src="img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
+   <th><a href="admin.php?action=user&amp;order=user_id&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_id") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang_add['user_id']; ?></a><?php if ($order=="user_id" && $descasc=="ASC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_id" && $descasc=="DESC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
+   <th><a href="admin.php?action=user&amp;order=user_name&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_name") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang_add['user_name']; ?></a><?php if ($order=="user_name" && $descasc=="ASC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_name" && $descasc=="DESC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
+   <th><a href="admin.php?action=user&amp;order=user_email&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_email") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang_add['user_email']; ?></a><?php if ($order=="user_email" && $descasc=="ASC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_email" && $descasc=="DESC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
+   <th><a href="admin.php?action=user&amp;order=user_type&amp;descasc=<?php if ($descasc=="ASC" && $order=="user_type") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang_add['user_type']; ?></a><?php if ($order=="user_type" && $descasc=="ASC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_type" && $descasc=="DESC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
+   <th><a href="admin.php?action=user&amp;order=registered&amp;descasc=<?php if ($descasc=="ASC" && $order=="registered") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang_add['user_registered']; ?></a><?php if ($order=="registered" && $descasc=="ASC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="registered" && $descasc=="DESC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
+   <th><a href="admin.php?action=user&amp;order=logins&amp;descasc=<?php if ($descasc=="ASC" && $order=="logins") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang_add['user_logins']; ?></a><?php if ($order=="logins" && $descasc=="ASC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="logins" && $descasc=="DESC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
+   <th><a href="admin.php?action=user&amp;order=last_login&amp;descasc=<?php if ($descasc=="ASC" && $order=="last_login") echo "DESC"; else echo "ASC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang_add['last_login']; ?></a><?php if ($order=="last_login" && $descasc=="ASC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="last_login" && $descasc=="DESC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
+   <th><a href="admin.php?action=user&amp;order=user_lock&amp;descasc=<?php if ($descasc=="DESC" && $order=="user_lock") echo "ASC"; else echo "DESC"; ?>&amp;ul=<?php echo urlencode($ul); ?>&amp;sam=<?php echo urlencode($sam); ?>" title="<?php echo htmlsc($lang['order_linktitle']); ?>"><?php echo $lang['lock']; ?></a><?php if ($order=="user_lock" && $descasc=="ASC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/asc.gif" alt="[asc]" width="5" height="9" border="0"><?php } elseif ($order=="user_lock" && $descasc=="DESC") { ?>&nbsp;<img src="<?php echo $settings['themepath']; ?>/img/desc.gif" alt="[desc]" width="5" height="9" border="0"><?php } ?></th>
    <th colspan="2">&nbsp;</th>
    </tr>
    <?php
@@ -1388,7 +1388,7 @@ switch ($action)
    <!--<tr>
    <td class="b" colspan="9"><img src="img/selected_arrow.gif" alt="" width="35" height="20" border="0"><input type="submit" name="delete_user" value="<?php echo htmlsc($lang_add['delete_users_sb']); ?>" /></td>
    </tr>--></table>
-   <div style="margin:5px 0px 0px 7px; padding:0px;"><img src="img/selected_arrow.gif" alt="" width="35" height="20" border="0"><input type="submit" name="delete_user" value="<?php echo htmlsc($lang_add['delete_users_sb']); ?>" /></div>
+   <div style="margin:5px 0px 0px 7px; padding:0px;"><img src="<?php echo $settings['themepath']; ?>/img/selected_arrow.gif" alt="" width="35" height="20" border="0"><input type="submit" name="delete_user" value="<?php echo htmlsc($lang_add['delete_users_sb']); ?>" /></div>
    </form><?php
    }
    else
@@ -1640,7 +1640,7 @@ switch ($action)
   <?php
   break;
   case "delete_marked_threads":
-  $lang_add['del_marked_note'] = str_replace("[marked_symbol]", '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['del_marked_note']);
+  $lang_add['del_marked_note'] = str_replace("[marked_symbol]", '<img src="'. $settings['themepath'] .'/img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['del_marked_note']);
   ?><p class="caution"><?php echo $lang['caution']; ?></p>
   <p><?php echo $lang_add['del_marked_note']; ?></p>
   <form action="admin.php" method="post" accept-charset="UTF-8"><div>
@@ -1678,7 +1678,7 @@ switch ($action)
    </div></form><p>&nbsp;</p><?php
   break;
   case "lock_marked_threads":
-   $lang_add['lock_marked_conf'] = str_replace("[marked_symbol]", '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['lock_marked_conf']);
+   $lang_add['lock_marked_conf'] = str_replace("[marked_symbol]", '<img src="'. $settings['themepath'] .'/img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['lock_marked_conf']);
    ?><p><?php echo $lang_add['lock_marked_conf']; ?></p>
    <form action="admin.php" method="post" accept-charset="UTF-8"><div>
    <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
@@ -1686,7 +1686,7 @@ switch ($action)
    </div></form><p>&nbsp;</p><?php
   break;
   case "unlock_marked_threads":
-   $lang_add['unlock_marked_conf'] = str_replace("[marked_symbol]", '<img src="img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['unlock_marked_conf']);
+   $lang_add['unlock_marked_conf'] = str_replace("[marked_symbol]", '<img src="'. $settings['themepath'] .'/img/marked.gif" alt="[x]" width="9" height="9" />', $lang_add['unlock_marked_conf']);
    ?><p><?php echo $lang_add['unlock_marked_conf']; ?></p>
    <form action="admin.php" method="post" accept-charset="UTF-8"><div>
    <?php if(isset($_GET['refer'])) { ?><input type="hidden" name="refer" value="<?php echo htmlsc($_GET['refer']); ?>" /><?php } ?>
@@ -1891,12 +1891,12 @@ switch ($action)
       if(trim($line['code_5'])!='') $codes[] = $line['code_5'];
       $codes_disp = implode(' &nbsp;',$codes);
       ?><tr>
-      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><img src="img/smilies/<?php echo rawurlencode($line['file']); ?>" alt="<?php echo htmlsc($line['code_1']); ?>" /></td>
+      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><img src="<?php echo $settings['themepath']; ?>/img/smilies/<?php echo rawurlencode($line['file']); ?>" alt="<?php echo htmlsc($line['code_1']); ?>" /></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo $codes_disp; ?></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><?php echo htmlsc($line['title']); ?></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?edit_smiley=<?php echo intval($line['id']); ?>"><?php echo $lang_add['edit_link']; ?></a></td>
       <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?delete_smiley=<?php echo intval($line['id']); ?>"><?php echo $lang_add['delete_link']; ?></a></td>
-      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?move_up_smiley=<?php echo intval($line['id']); ?>"><img src="img/up.gif" alt="up" width="11" height="11" /></a>&nbsp;<a href="admin.php?move_down_smiley=<?php echo intval($line['id']); ?>"><img src="img/down.gif" alt="down" width="11" height="11" /></a></td>
+      <td class="<?php if($i % 2 == 0) echo "a"; else echo "b"; ?>"><a href="admin.php?move_up_smiley=<?php echo intval($line['id']); ?>"><img src="<?php echo $settings['themepath']; ?>/img/up.gif" alt="up" width="11" height="11" /></a>&nbsp;<a href="admin.php?move_down_smiley=<?php echo intval($line['id']); ?>"><img src="<?php echo $settings['themepath']; ?>/img/down.gif" alt="down" width="11" height="11" /></a></td>
       </tr><?php
       $i++;
      }

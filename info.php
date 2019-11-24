@@ -26,7 +26,7 @@ include("inc.php");
 if(isset($_GET['info'])) $info = intval($_GET['info']);
 if(empty($info)) $info = 0;
 
-$topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'.$lang['info'].'</b>';
+$topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><b>'.$lang['info'].'</b>';
 
 parse_template();
 echo $header;

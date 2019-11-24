@@ -165,7 +165,7 @@ if (isset($search) && empty($show_postings))
   else
    {
     $subnav_1 .= "&nbsp;";
-    $topnav = '<img src="img/where.gif" alt="" width="11" height="8" /><b>'.$lang['search_title'].'</b>';
+    $topnav = '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" /><b>'.$lang['search_title'].'</b>';
    }
   if ($count > 0 && $search != "")
    {
@@ -196,7 +196,7 @@ elseif (isset($show_postings) && empty($search))
   mysqli_free_result($user_name_result);
   $lang['show_userdata_linktitle'] = str_replace("[name]", htmlsc(stripslashes($field["user_name"])), $lang['show_userdata_linktitle']);
   $lang['postings_by_user'] = str_replace("[name]", '<a href="user.php?id='. intval($show_postings) .'">'. htmlsc(stripslashes($field["user_name"])) .'</a>', $lang['postings_by_user']);
-  $subnav_1 .= '<img src="img/where.gif" alt="" width="11" height="8" border="0"><b>'. $lang['postings_by_user'] .'</b>';
+  $subnav_1 .= '<img src="'. $settings['themepath'] .'/img/where.gif" alt="" width="11" height="8" border="0"><b>'. $lang['postings_by_user'] .'</b>';
  }
 if (isset($search) && $search != "") { $subnav_2 = snav($page, $settings['search_results_per_page'], $count, $search, $ao, $category); } elseif (isset($show_postings) && $show_postings !="") { $subnav_2 = pnav($page, $settings['search_results_per_page'], $count, $show_postings); }
 parse_template();

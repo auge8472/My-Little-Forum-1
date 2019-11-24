@@ -123,7 +123,7 @@ function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category
      if (isset($category)) $ic .= "&amp;category=". intval($category);
      if (isset($action) && $action!="") $ic .= "&amp;action=". urlencode($action);
      if (isset($_GET['letter'])) $ic .= "&amp;letter=". urlencode($_GET['letter']);
-     if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?page='. intval($new_index_before) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) . $ic .'"><img src="img/prev.gif" alt="&laquo;" title="'. htmlsc($lang['previous_page_linktitle']) .'" width="12" height="9" /></a>&nbsp;';
+     if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?page='. intval($new_index_before) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) . $ic .'"><img src="'. $settings['themepath'] .'/img/prev.gif" alt="&laquo;" title="'. htmlsc($lang['previous_page_linktitle']) .'" width="12" height="9" /></a>&nbsp;';
      //if ($new_index_before >= 0 && $new_index_after < $site_count) $output .= " ";
      $page_count = ceil($entry_count/$entries_per_page);
      $output .= '<form action="'. basename($_SERVER["SCRIPT_NAME"]) .'" method="get" accept-charset="UTF-8"><div style="display: inline;">';
@@ -143,8 +143,8 @@ function nav($page, $entries_per_page, $entry_count, $order, $descasc, $category
          else $output .= '<option value="'. intval($x) .'">'.str_replace("[number]", intval($x+1), $lang['page_number']).'</option>';
         }
       }
-    $output .= '</select><noscript>&nbsp;<input type="image" name="" value="" src="img/submit.gif" alt="&raquo;" /></noscript></div></form>';
-    if ($new_index_after < $site_count) $output .= '&nbsp;<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?page='. intval($new_index_after) .'&amp;order='. urlencode($order) .'&amp;descasc='. intval($descasc) . $ic .'"><img src="img/next.gif" alt="&raquo;" title="'. htmlsc($lang['next_page_linktitle']) .'" width="12" height="9" /></a>';
+    $output .= '</select><noscript>&nbsp;<input type="image" name="" value="" src="'. $settings['themepath'] .'/img/submit.gif" alt="&raquo;" /></noscript></div></form>';
+    if ($new_index_after < $site_count) $output .= '&nbsp;<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?page='. intval($new_index_after) .'&amp;order='. urlencode($order) .'&amp;descasc='. intval($descasc) . $ic .'"><img src="'. $settings['themepath'] .'/img/next.gif" alt="&raquo;" title="'. htmlsc($lang['next_page_linktitle']) .'" width="12" height="9" /></a>';
 
     }
    return $output;
@@ -326,9 +326,9 @@ function user_online()
   else $name=htmlsc($parent_array[$id]["name"]);
   if (isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1)
    {
-    $thread_info_a = str_replace("[name]", $name .'<a href="user.php?id='. intval($parent_array[$id]["user_id"]) .'"><img src="img/registered.gif" alt="'. $lang['registered_user_title'] .'" width="10" height="10" /></a>', $lang['thread_info']);
+    $thread_info_a = str_replace("[name]", $name .'<a href="user.php?id='. intval($parent_array[$id]["user_id"]) .'"><img src="'. $settings['themepath'] .'/img/registered.gif" alt="'. $lang['registered_user_title'] .'" width="10" height="10" /></a>', $lang['thread_info']);
    }
-  elseif (!isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1) $thread_info_a = str_replace("[name]", $name .'<img src="img/registered.gif" alt="'. $lang['registered_user_title'] .'" width="10" height="10" />', $lang['thread_info']);
+  elseif (!isset($_SESSION[$settings['session_prefix'].'user_id']) && $parent_array[$id]["user_id"] > 0 && $settings['show_registered']==1) $thread_info_a = str_replace("[name]", $name .'<img src="'. $settings['themepath'] .'/img/registered.gif" alt="'. $lang['registered_user_title'] .'" width="10" height="10" />', $lang['thread_info']);
   else $thread_info_a = str_replace("[name]", $name, $lang['thread_info']);
   $thread_info_b = str_replace("[time]", strftime($lang['time_format'],$parent_array[$id]["tp_time"]), $thread_info_a);
 
@@ -356,14 +356,14 @@ function user_online()
    }
   echo " " . $thread_info_b;
   if ($parent_array[$id]["pid"]==0 && $category==0 && isset($categories[$parent_array[$id]["category"]]) && $categories[$parent_array[$id]["category"]]!='') { ?> <a title="<?php echo str_replace("[category]", htmlsc($categories[$parent_array[$id]["category"]]), $lang['choose_category_linktitle']); if (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 2) echo " ". htmlsc($lang['admin_mod_category']); elseif (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 1) echo " ". htmlsc($lang['registered_users_category']); ?>" href="forum.php?category=<?php echo intval($parent_array[$id]["category"]); ?>"><span class="<?php if (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 2) echo "category-adminmod"; elseif (isset($category_accession[$parent_array[$id]["category"]]) && $category_accession[$parent_array[$id]["category"]] == 1) echo "category-regusers"; else echo "category"; ?>">(<?php echo $categories[$parent_array[$id]["category"]]; ?>)</span></a><?php }
-  if ($aktuellerEintrag == 0 && $parent_array[$id]["pid"]==0 && $parent_array[$id]["fixed"] == 1) { ?> <img src="img/fixed.gif" width="9" height="9" title="<?php echo $lang['fixed']; ?>" alt="*" /><?php }
-  if ($parent_array[$id]["pid"]==0 && $settings['all_views_direct'] == 1) { echo ' <span class="small">'; if ($settings['board_view']==1) { ?><a href="board_entry.php?id=<?php echo intval($parent_array[$id]["tid"]); ?>"><img src="img/board_d.gif" alt="[Board]" title="<?php echo htmlsc($lang['open_in_board_linktitle']); ?>" width="12" height="9" /></a><?php } if ($settings['mix_view'] == 1) { ?><a href="mix_entry.php?id=<?php echo intval($parent_array[$id]["tid"]); ?>"><img src="img/mix_d.gif" alt="[Mix]" title="<?php echo htmlsc($lang['open_in_mix_linktitle']); ?>" width="12" height="9" /></a><?php } echo "</span>"; }
+  if ($aktuellerEintrag == 0 && $parent_array[$id]["pid"]==0 && $parent_array[$id]["fixed"] == 1) { ?> <img src="<?php echo $settings['themepath']; ?>/img/fixed.gif" width="9" height="9" title="<?php echo $lang['fixed']; ?>" alt="*" /><?php }
+  if ($parent_array[$id]["pid"]==0 && $settings['all_views_direct'] == 1) { echo ' <span class="small">'; if ($settings['board_view']==1) { ?><a href="board_entry.php?id=<?php echo intval($parent_array[$id]["tid"]); ?>"><img src="<?php echo $settings['themepath']; ?>/img/board_d.gif" alt="[Board]" title="<?php echo htmlsc($lang['open_in_board_linktitle']); ?>" width="12" height="9" /></a><?php } if ($settings['mix_view'] == 1) { ?><a href="mix_entry.php?id=<?php echo intval($parent_array[$id]["tid"]); ?>"><img src="<?php echo $settings['themepath']; ?>/img/mix_d.gif" alt="[Mix]" title="<?php echo htmlsc($lang['open_in_mix_linktitle']); ?>" width="12" height="9" /></a><?php } echo "</span>"; }
 
       if ($parent_array[$id]["pid"]==0 && isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin")
      {
       ?> <a href="admin.php?mark=<?php echo intval($parent_array[$id]["tid"]); ?>&amp;refer=<?php echo urlencode(basename($_SERVER["SCRIPT_NAME"])); ?>&amp;page=<?php echo intval($page); ?>&amp;category=<?php echo intval($category); ?>&amp;order=<?php echo urlencode($order); ?>"><?php
-      if ($parent_array[$id]['marked']==1) { ?><img src="img/marked.gif" alt="<?php echo htmlsc($lang['demark_linktitle']); ?>" width="9" height="9" /><?php }
-      else { echo '<img src="img/mark.gif" alt="'. htmlsc($lang['mark_linktitle']) .'" width="9" height="9" />'; }
+      if ($parent_array[$id]['marked']==1) { ?><img src="<?php echo $settings['themepath']; ?>/img/marked.gif" alt="<?php echo htmlsc($lang['demark_linktitle']); ?>" width="9" height="9" /><?php }
+      else { echo '<img src="'. $settings['themepath'] .'/img/mark.gif" alt="'. htmlsc($lang['mark_linktitle']) .'" width="9" height="9" />'; }
       ?></a><?php
      }
 
@@ -415,7 +415,7 @@ function parse_template()
   // Search:
   $search_dump = '<form action="search.php" method="get" accept-charset="UTF-8"><div class="search">';
   $search_dump .= $lang['search_marking'];
-  $search_dump .= '<span class="normal">&nbsp;</span><input class="searchfield" type="text" name="search" value="" size="20" /><span class="normal">&nbsp;</span><input type="image" name="" src="img/submit.gif" alt="&raquo;" /></div></form>';
+  $search_dump .= '<span class="normal">&nbsp;</span><input class="searchfield" type="text" name="search" value="" size="20" /><span class="normal">&nbsp;</span><input type="image" name="" src="'. $settings['themepath'] .'/img/submit.gif" alt="&raquo;" /></div></form>';
   $template = str_replace("{SEARCH}",$search_dump,$template);
 
   // Sub navigation:
@@ -430,7 +430,7 @@ function parse_template()
   if ($settings['provide_rssfeed'] == 1 && $settings['access_for_users_only'] == 0) 
    { 
     $rss_feed_link = '<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="rss.php" />';
-    $rss_feed_button = '<a href="rss.php"><img src="img/rss.png" width="14" height="14" alt="RSS Feed" /></a><br />'; 
+    $rss_feed_button = '<a href="rss.php"><img src="'. $settings['themepath'] .'/img/rss.png" width="14" height="14" alt="RSS Feed" /></a><br />'; 
    }
   else 
    {
