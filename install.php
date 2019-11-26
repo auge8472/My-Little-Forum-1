@@ -110,175 +110,159 @@ function htmlsc($string) {
 }
 
 // update functions:
-function update13to14()
- {
-  global $db_settings, $settings, $connid, $lang_add;
-  @mysqli_query($connid, "ALTER TABLE forum_table RENAME ". $db_settings['forum_table']) or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "ALTER TABLE userdata_table RENAME ". $db_settings['userdata_table']) or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "ALTER TABLE useronline_table RENAME ". $db_settings['useronline_table']) or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "ALTER TABLE ". $db_settings['forum_table'] ." ADD fixed tinyint(4) NOT NULL default '0' AFTER locked") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "CREATE TABLE ". $db_settings['settings_table'] ." (name varchar(255) NOT NULL default '', value varchar(255) NOT NULL default '')") or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-  $settings['forum_address'] = 'http://'.$_SERVER['SERVER_NAME'].str_replace("install.php","",$_SERVER['SCRIPT_NAME']);
-  foreach ($settings as $key => $val)
-   {
-    @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('". mysqli_real_escape_string($connid, $key) ."','". mysqli_real_escape_string($connid, $val) ."')") or $errors[] = str_replace("[setting]",$setting,$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
-   }
-  @mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'template'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'thread_depth_indent'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'edit_period'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'mail_parameter'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'forum_disabled'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'version'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'forum_disabled'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'captcha_posting'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'captcha_contact'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'captcha_register'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'captcha_type'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
+function update13to14() {
+	global $db_settings, $settings, $connid, $lang_add;
+	@mysqli_query($connid, "ALTER TABLE forum_table RENAME ". $db_settings['forum_table']) or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "ALTER TABLE userdata_table RENAME ". $db_settings['userdata_table']) or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "ALTER TABLE useronline_table RENAME ". $db_settings['useronline_table']) or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "ALTER TABLE ". $db_settings['forum_table'] ." ADD fixed tinyint(4) NOT NULL default '0' AFTER locked") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "CREATE TABLE ". $db_settings['settings_table'] ." (name varchar(255) NOT NULL default '', value varchar(255) NOT NULL default '')") or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+	$settings['forum_address'] = 'http://'.$_SERVER['SERVER_NAME'].str_replace("install.php","",$_SERVER['SCRIPT_NAME']);
+	foreach ($settings as $key => $val) {
+		@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('". mysqli_real_escape_string($connid, $key) ."','". mysqli_real_escape_string($connid, $val) ."')") or $errors[] = str_replace("[setting]",$setting,$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
+	}
+	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'template'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'thread_depth_indent'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'edit_period'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'mail_parameter'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'forum_disabled'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'version'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'forum_disabled'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'captcha_posting'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'captcha_contact'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'captcha_register'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'captcha_type'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
 
-  @mysqli_query($connid, "CREATE TABLE ". $db_settings['category_table'] ." (category_order int(11) NOT NULL, category varchar(255) NOT NULL default '', accession tinyint(4) NOT NULL default '0')") or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-  $categories_result = mysqli_query($connid, "SELECT DISTINCT category FROM ". $db_settings['forum_table'] ." ORDER BY category ASC");
-  if(!$categories_result) die($comment_lang['db_error']);
-  $i=1;
-  while ($data = mysqli_fetch_assoc($categories_result))
-   {
-    @mysqli_query($connid, "INSERT INTO ". $db_settings['category_table'] ." (category_order, category, accession) VALUES (". intval($i) .", '". mysqli_real_escape_string($connid, $data['category']) ."',0)") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-    $i++;
-   }
-  if(isset($errors)) return $errors; else return false;
- }
+	@mysqli_query($connid, "CREATE TABLE ". $db_settings['category_table'] ." (category_order int(11) NOT NULL, category varchar(255) NOT NULL default '', accession tinyint(4) NOT NULL default '0')") or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+	$categories_result = mysqli_query($connid, "SELECT DISTINCT category FROM ". $db_settings['forum_table'] ." ORDER BY category ASC");
+	if (!$categories_result) die($comment_lang['db_error']);
+	$i = 1;
+	while ($data = mysqli_fetch_assoc($categories_result)) {
+		@mysqli_query($connid, "INSERT INTO ". $db_settings['category_table'] ." (category_order, category, accession) VALUES (". intval($i) .", '". mysqli_real_escape_string($connid, $data['category']) ."',0)") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+		$i++;
+	}
+	if (isset($errors)) return $errors;
+	return false;
+}
 
-function update14to15()
- {
-  global $db_settings, $settings, $connid, $lang_add;
-  $settings_result = mysqli_query($connid, "SELECT value FROM ". $db_settings['settings_table'] ." WHERE name = 'upload_max_img_size' LIMIT 1") or die(mysqli_error($connid));
-  if(!$settings_result) die($lang['db_error']);
-  $settings_count = mysqli_num_rows($settings_result);
-  mysqli_free_result($settings_result);
-  if($settings_count != 1)
-   {
-    @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('upload_max_img_size','60')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-    @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('upload_max_img_width','600')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-    @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('upload_max_img_height','600')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-   }
-  @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('template','template.html')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('thread_depth_indent','15')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('not_accepted_words_file','')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('edit_period','180')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'thread_indent'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'max_thread_indent'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
-  if(isset($errors)) return $errors; else return false;
- }
+function update14to15() {
+	global $db_settings, $settings, $connid, $lang_add;
+	$settings_result = mysqli_query($connid, "SELECT value FROM ". $db_settings['settings_table'] ." WHERE name = 'upload_max_img_size' LIMIT 1") or die(mysqli_error($connid));
+	if (!$settings_result) die($lang['db_error']);
+	$settings_count = mysqli_num_rows($settings_result);
+	mysqli_free_result($settings_result);
+	if($settings_count != 1) {
+		@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('upload_max_img_size','60')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+		@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('upload_max_img_width','600')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+		@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('upload_max_img_height','600')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	}
+	@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('template','template.html')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('thread_depth_indent','15')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('not_accepted_words_file','')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('edit_period','180')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'thread_indent'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'max_thread_indent'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
+	if (isset($errors)) return $errors;
+	return false;
+}
 
-function update15to16()
- {
-  global $db_settings, $settings, $connid, $smilies, $lang_add;
-  // add settings:
-  @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('mail_parameter','".  mysqli_real_escape_string($connid, $settings['mail_parameter']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('forum_disabled','".  mysqli_real_escape_string($connid, $settings['forum_disabled']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('session_prefix','mlf_')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('version','".  mysqli_real_escape_string($connid, $settings['version']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('users_per_page','40')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='".  mysqli_real_escape_string($connid, $settings['language_file']) ."' WHERE name = 'language_file'") or $errors[] = $lang_add['update_error']. " (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='".  mysqli_real_escape_string($connid, $settings['template']) ."' WHERE name = 'template'") or $errors[] = $lang_add['update_error']. " (MySQL: ".mysqli_error($connid).")";
+function update15to16() {
+	global $db_settings, $settings, $connid, $smilies, $lang_add;
+	// add settings:
+	@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('mail_parameter','".  mysqli_real_escape_string($connid, $settings['mail_parameter']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('forum_disabled','".  mysqli_real_escape_string($connid, $settings['forum_disabled']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('session_prefix','mlf_')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('version','".  mysqli_real_escape_string($connid, $settings['version']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('users_per_page','40')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='".  mysqli_real_escape_string($connid, $settings['language_file']) ."' WHERE name = 'language_file'") or $errors[] = $lang_add['update_error']. " (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='".  mysqli_real_escape_string($connid, $settings['template']) ."' WHERE name = 'template'") or $errors[] = $lang_add['update_error']. " (MySQL: ".mysqli_error($connid).")";
 
-  $settings_result = mysqli_query($connid, "SELECT value FROM ". $db_settings['settings_table'] ." WHERE name = 'edit_period' LIMIT 1") or die(mysqli_error($connid));
-  if(!$settings_result) die($lang['db_error']);
-  $settings_count = mysqli_num_rows($settings_result);
-  mysqli_free_result($settings_result);
-  if($settings_count != 1)
-   {
-    @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('edit_period','180')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-   }
-  @mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'not_accepted_words_file'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
+	$settings_result = mysqli_query($connid, "SELECT value FROM ". $db_settings['settings_table'] ." WHERE name = 'edit_period' LIMIT 1") or die(mysqli_error($connid));
+	if (!$settings_result) die($lang['db_error']);
+	$settings_count = mysqli_num_rows($settings_result);
+	mysqli_free_result($settings_result);
+	if ($settings_count != 1) {
+		@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('edit_period','180')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	}
+	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'not_accepted_words_file'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
 
-  // alter category table:
-  if(empty($errors))
-   {
-    @mysqli_query($connid, "ALTER TABLE ". $db_settings['category_table'] ." ADD id INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
-    @mysqli_query($connid, "ALTER TABLE ". $db_settings['category_table'] ." ADD description varchar(255) NOT NULL default '' AFTER category") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
-   }
-  // alter forum table:
-  if(empty($errors))
-   {
-    @mysqli_query($connid, "ALTER TABLE ". $db_settings['forum_table'] ." ADD category_int INT NOT NULL default '0' AFTER category") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
-    if(empty($errors))
-     {
-      $category_result = mysqli_query($connid, "SELECT id, category FROM ". $db_settings['category_table']);
-      if(!$category_result) die($lang['db_error']);
-      while($data = mysqli_fetch_assoc($category_result))
-       {
-        @mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, category_int=". intval($data['id']) ." WHERE category = '". mysqli_real_escape_string($connid, $data["category"]) ."'") or $errors[] = $lang_add['update_error']. " (MySQL: ".mysqli_error($connid).")";
-        if(isset($errors)) break;
-       }
-      mysqli_free_result($category_result);
-     }
-    if(empty($errors)) @mysqli_query($connid, "ALTER TABLE ". $db_settings['forum_table'] ." DROP category") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
-    if(empty($errors)) @mysqli_query($connid, "ALTER TABLE ". $db_settings['forum_table'] ." CHANGE category_int category INT(11) DEFAULT '0' NOT NULL") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
-    if(empty($errors)) @mysqli_query($connid, "ALTER TABLE ". $db_settings['forum_table'] ." ADD INDEX category (category), ADD INDEX pid (pid), ADD INDEX fixed (fixed)") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
-   }
-  if(empty($errors))
-   {
-    @mysqli_query($connid, "ALTER TABLE ". $db_settings['userdata_table'] ." ADD activate_code varchar(255) NOT NULL default ''") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
-   }
-   // create smilies table:
-   if(empty($errors))
-    {
-     @mysqli_query($connid, "CREATE TABLE ". $db_settings['smilies_table'] ." (id int(11) NOT NULL auto_increment, order_id int(11) NOT NULL default '0', file varchar(100) NOT NULL, code_1 varchar(50) NOT NULL, code_2 varchar(50) NOT NULL, code_3 varchar(50) NOT NULL, code_4 varchar(50) NOT NULL, code_5 varchar(50) NOT NULL, title varchar(255) NOT NULL, PRIMARY KEY (id))") or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-    }
-   // insert smilies:
-   if(empty($errors))
-    {
-     $order_id = 1;
-     foreach($smilies as $smiley)
-      {
-       @mysqli_query($connid, "INSERT INTO ". $db_settings['smilies_table'] ." (order_id, file, code_1) VALUES (". intval($order_id) .",'". mysqli_real_escape_string($connid, $smiley[0]) ."','". mysqli_real_escape_string($connid, $smiley[1]) ."')") or $errors[] = str_replace("[setting]",$db_settings['settings_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
-       $order_id++;
-      }
-    }
-   if(empty($errors))
-    {
-     @mysqli_query($connid, "CREATE TABLE ". $db_settings['banlists_table'] ." (name varchar(255) NOT NULL default '', list text NOT NULL)") or $errors[] = str_replace("[table]",$db_settings['banlists_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-    }
-   if (empty($errors))
-    {
-     @mysqli_query($connid, "INSERT INTO ". $db_settings['banlists_table'] ." VALUES ('users', '')") or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
-     @mysqli_query($connid, "INSERT INTO ". $db_settings['banlists_table'] ." VALUES ('ips', '')") or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
-     @mysqli_query($connid, "INSERT INTO ". $db_settings['banlists_table'] ." VALUES ('words', '')") or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
-    }
-   if(isset($errors)) return $errors; else return false;
- }
+	// alter category table:
+	if (empty($errors)) {
+		@mysqli_query($connid, "ALTER TABLE ". $db_settings['category_table'] ." ADD id INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
+		@mysqli_query($connid, "ALTER TABLE ". $db_settings['category_table'] ." ADD description varchar(255) NOT NULL default '' AFTER category") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
+	}
+	// alter forum table:
+	if (empty($errors)) {
+		@mysqli_query($connid, "ALTER TABLE ". $db_settings['forum_table'] ." ADD category_int INT NOT NULL default '0' AFTER category") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
+		if(empty($errors)) {
+			$category_result = mysqli_query($connid, "SELECT id, category FROM ". $db_settings['category_table']);
+			if (!$category_result) die($lang['db_error']);
+			while ($data = mysqli_fetch_assoc($category_result)) {
+				@mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, category_int=". intval($data['id']) ." WHERE category = '". mysqli_real_escape_string($connid, $data["category"]) ."'") or $errors[] = $lang_add['update_error']. " (MySQL: ".mysqli_error($connid).")";
+				if(isset($errors)) break;
+			}
+			mysqli_free_result($category_result);
+		}
+		if (empty($errors)) @mysqli_query($connid, "ALTER TABLE ". $db_settings['forum_table'] ." DROP category") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
+		if (empty($errors)) @mysqli_query($connid, "ALTER TABLE ". $db_settings['forum_table'] ." CHANGE category_int category INT(11) DEFAULT '0' NOT NULL") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
+		if (empty($errors)) @mysqli_query($connid, "ALTER TABLE ". $db_settings['forum_table'] ." ADD INDEX category (category), ADD INDEX pid (pid), ADD INDEX fixed (fixed)") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
+	}
+	if (empty($errors)) {
+		@mysqli_query($connid, "ALTER TABLE ". $db_settings['userdata_table'] ." ADD activate_code varchar(255) NOT NULL default ''") or $errors[] = $lang_add['alter_table_error']." (MySQL: ".mysqli_error($connid).")";
+	}
+	// create smilies table:
+	if (empty($errors)) {
+		@mysqli_query($connid, "CREATE TABLE ". $db_settings['smilies_table'] ." (id int(11) NOT NULL auto_increment, order_id int(11) NOT NULL default '0', file varchar(100) NOT NULL, code_1 varchar(50) NOT NULL, code_2 varchar(50) NOT NULL, code_3 varchar(50) NOT NULL, code_4 varchar(50) NOT NULL, code_5 varchar(50) NOT NULL, title varchar(255) NOT NULL, PRIMARY KEY (id))") or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+	}
+	// insert smilies:
+	if (empty($errors)) {
+		$order_id = 1;
+		foreach ($smilies as $smiley) {
+			@mysqli_query($connid, "INSERT INTO ". $db_settings['smilies_table'] ." (order_id, file, code_1) VALUES (". intval($order_id) .",'". mysqli_real_escape_string($connid, $smiley[0]) ."','". mysqli_real_escape_string($connid, $smiley[1]) ."')") or $errors[] = str_replace("[setting]",$db_settings['settings_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
+			$order_id++;
+		}
+	}
+	if (empty($errors)) {
+		@mysqli_query($connid, "CREATE TABLE ". $db_settings['banlists_table'] ." (name varchar(255) NOT NULL default '', list text NOT NULL)") or $errors[] = str_replace("[table]",$db_settings['banlists_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+	}
+	if (empty($errors)) {
+		@mysqli_query($connid, "INSERT INTO ". $db_settings['banlists_table'] ." VALUES ('users', '')") or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
+		@mysqli_query($connid, "INSERT INTO ". $db_settings['banlists_table'] ." VALUES ('ips', '')") or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
+		@mysqli_query($connid, "INSERT INTO ". $db_settings['banlists_table'] ." VALUES ('words', '')") or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
+	}
+	if(isset($errors)) return $errors;
+	return false;
+}
 
-function update16()
- {
-  global $db_settings, $settings, $connid, $smilies, $lang_add;
-  $settings_result = mysqli_query($connid, "SELECT value FROM ". $db_settings['settings_table'] ." WHERE name = 'session_prefix' LIMIT 1") or die(mysqli_error($connid));
-  if(!$settings_result) die($lang['db_error']);
-  $settings_count = mysqli_num_rows($settings_result);
-  mysqli_free_result($settings_result);
-  if($settings_count != 1)
-   {
-    @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('session_prefix','mlf_')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-   }
-  $settings_result = mysqli_query($connid, "SELECT value FROM ". $db_settings['settings_table'] ." WHERE name = 'users_per_page' LIMIT 1") or die(mysqli_error($connid));
-  if(!$settings_result) die($lang['db_error']);
-  $settings_count = mysqli_num_rows($settings_result);
-  mysqli_free_result($settings_result);
-  if($settings_count != 1)
-   {
-    @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('users_per_page','40')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-   }
-  if(isset($errors)) return $errors; else return false;
- }
+function update16() {
+	global $db_settings, $settings, $connid, $smilies, $lang_add;
+	$settings_result = mysqli_query($connid, "SELECT value FROM ". $db_settings['settings_table'] ." WHERE name = 'session_prefix' LIMIT 1") or die(mysqli_error($connid));
+	if (!$settings_result) die($lang['db_error']);
+	$settings_count = mysqli_num_rows($settings_result);
+	mysqli_free_result($settings_result);
+	if ($settings_count != 1) {
+		@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('session_prefix','mlf_')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	}
+	$settings_result = mysqli_query($connid, "SELECT value FROM ". $db_settings['settings_table'] ." WHERE name = 'users_per_page' LIMIT 1") or die(mysqli_error($connid));
+	if (!$settings_result) die($lang['db_error']);
+	$settings_count = mysqli_num_rows($settings_result);
+	mysqli_free_result($settings_result);
+	if ($settings_count != 1) {
+		@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('users_per_page','40')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	}
+	if (isset($errors)) return $errors;
+	return false;
+}
 
-function update16to17()
- {
-  global $db_settings, $settings, $connid, $lang_add;
-  @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('captcha_posting','". mysqli_real_escape_string($connid, $settings['captcha_posting']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('captcha_contact','". mysqli_real_escape_string($connid, $settings['captcha_contact']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('captcha_register','". mysqli_real_escape_string($connid, $settings['captcha_register']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-  @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('captcha_type','". mysqli_real_escape_string($connid, $settings['captcha_type']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
-  if(isset($errors)) return $errors; else return false;
- }
+function update16to17() {
+	global $db_settings, $settings, $connid, $lang_add;
+	@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('captcha_posting','". mysqli_real_escape_string($connid, $settings['captcha_posting']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('captcha_contact','". mysqli_real_escape_string($connid, $settings['captcha_contact']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('captcha_register','". mysqli_real_escape_string($connid, $settings['captcha_register']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('captcha_type','". mysqli_real_escape_string($connid, $settings['captcha_type']) ."')") or $errors[] = $lang_add['insert_settings_error']." (MySQL: ".mysqli_error($connid).")";
+	if (isset($errors)) return $errors;
+	return false;
+}
 
 function update17() {
 	global $db_settings, $settings, $connid, $lang_add;
@@ -318,13 +302,11 @@ function update17to18() {
 
 $table_prefix = 'mlf1_';
 
-if(isset($_POST['language']))
- {
-  $language = $_POST['language'];
-  $settings['language_file'] = $language;
- }
+if (isset($_POST['language'])) {
+	$settings['language_file'] = $_POST['language'];
+}
 
-if(isset($_POST['installation_mode'])) $installation_mode = $_POST['installation_mode'];
+if (isset($_POST['installation_mode'])) $installation_mode = $_POST['installation_mode'];
 
 include("lang/".$settings['language_file'] );
 include("lang/".$lang['additional_language_file']);
@@ -332,81 +314,76 @@ include("db_settings.php");
 
 unset($errors);
 
-if (isset($_POST['form_submitted']))
- {
-  // all fields filled out?
-  foreach ($_POST as $post)
-   {
-    if (trim($post) == "") { $errors[] = $lang['error_form_uncompl']; break; }
-   }
+if (isset($_POST['form_submitted'])) {
+	// all fields filled out?
+	foreach ($_POST as $post) {
+		if (trim($post) == "") {
+			$errors[] = $lang['error_form_uncompl'];
+			break;
+		}
+	}
 
-  if (empty($errors) && $installation_mode=='installation')
-   {
-    if($_POST['admin_pw'] != $_POST['admin_pw_conf']) $errors[] = $lang_add['inst_pw_conf_error'];
-   }
+	if (empty($errors) && $installation_mode=='installation') {
+		if ($_POST['admin_pw'] != $_POST['admin_pw_conf']) $errors[] = $lang_add['inst_pw_conf_error'];
+	}
 
-  // try to connect the database with posted access data:
-  if (empty($errors))
-   {
-    $connid = @mysqli_connect($_POST['host'], $_POST['user'], $_POST['pw']);
-    if(!$connid) $errors[] = $lang_add['db_connection_error']." (MySQL: ".mysqli_connect_error().")";
-   }
-  // overwrite database settings file:
-  if (empty($errors) && empty($_POST['dont_overwrite_settings']))
-   {
-    clearstatcache();
-    $chmod = decoct(fileperms("db_settings.php"));
+	// try to connect the database with posted access data:
+	if (empty($errors)) {
+		$connid = @mysqli_connect($_POST['host'], $_POST['user'], $_POST['pw']);
+		if (!$connid) $errors[] = $lang_add['db_connection_error']." (MySQL: ".mysqli_connect_error().")";
+	}
+	// overwrite database settings file:
+	if (empty($errors) && empty($_POST['dont_overwrite_settings'])) {
+		clearstatcache();
+		$chmod = decoct(fileperms("db_settings.php"));
 
-    $db_settings['host'] = $_POST['host'];
-    $db_settings['user'] = $_POST['user'];
-    $db_settings['pw'] = $_POST['pw'];
-    $db_settings['db'] = $_POST['db'];
-    $db_settings['settings_table'] = $_POST['table_prefix'].'settings';
-    $db_settings['forum_table'] = $_POST['table_prefix'].'entries';
-    $db_settings['category_table'] = $_POST['table_prefix'].'categories';
-    $db_settings['userdata_table'] = $_POST['table_prefix'].'userdata';
-    $db_settings['smilies_table'] = $_POST['table_prefix'].'smilies';
-    $db_settings['banlists_table'] = $_POST['table_prefix'].'banlists';
-    $db_settings['useronline_table'] = $_POST['table_prefix'].'useronline';
+		$db_settings['host'] = $_POST['host'];
+		$db_settings['user'] = $_POST['user'];
+		$db_settings['pw'] = $_POST['pw'];
+		$db_settings['db'] = $_POST['db'];
+		$db_settings['settings_table'] = $_POST['table_prefix'].'settings';
+		$db_settings['forum_table'] = $_POST['table_prefix'].'entries';
+		$db_settings['category_table'] = $_POST['table_prefix'].'categories';
+		$db_settings['userdata_table'] = $_POST['table_prefix'].'userdata';
+		$db_settings['smilies_table'] = $_POST['table_prefix'].'smilies';
+		$db_settings['banlists_table'] = $_POST['table_prefix'].'banlists';
+		$db_settings['useronline_table'] = $_POST['table_prefix'].'useronline';
 
-    $db_settings_file = @fopen("db_settings.php", "w") or $errors[] = str_replace("CHMOD",$chmod,$lang_add['no_writing_permission']);
-    flock($db_settings_file, 2);
-    fwrite($db_settings_file, "<?php\n");
-    fwrite($db_settings_file, "\$db_settings['host'] = \"".$db_settings['host']."\";\n");
-    fwrite($db_settings_file, "\$db_settings['user'] = \"".$db_settings['user']."\";\n");
-    fwrite($db_settings_file, "\$db_settings['pw'] = \"".$db_settings['pw']."\";\n");
-    fwrite($db_settings_file, "\$db_settings['db'] = \"".$db_settings['db']."\";\n");
-    fwrite($db_settings_file, "\$db_settings['settings_table'] = \"".$db_settings['settings_table']."\";\n");
-    fwrite($db_settings_file, "\$db_settings['forum_table'] = \"".$db_settings['forum_table']."\";\n");
-    fwrite($db_settings_file, "\$db_settings['category_table'] = \"".$db_settings['category_table']."\";\n");
-    fwrite($db_settings_file, "\$db_settings['userdata_table'] = \"".$db_settings['userdata_table']."\";\n");
-    fwrite($db_settings_file, "\$db_settings['smilies_table'] = \"".$db_settings['smilies_table']."\";\n");
-    fwrite($db_settings_file, "\$db_settings['banlists_table'] = \"".$db_settings['banlists_table']."\";\n");
-    fwrite($db_settings_file, "\$db_settings['useronline_table'] = \"".$db_settings['useronline_table']."\";\n");
-    fwrite($db_settings_file, "?>\n");
-    flock($db_settings_file, 3);
-    fclose($db_settings_file);
-   }
+		$db_settings_file = @fopen("db_settings.php", "w") or $errors[] = str_replace("CHMOD",$chmod,$lang_add['no_writing_permission']);
+		flock($db_settings_file, 2);
+		fwrite($db_settings_file, "<?php\n");
+		fwrite($db_settings_file, "\$db_settings['host'] = \"".$db_settings['host']."\";\n");
+		fwrite($db_settings_file, "\$db_settings['user'] = \"".$db_settings['user']."\";\n");
+		fwrite($db_settings_file, "\$db_settings['pw'] = \"".$db_settings['pw']."\";\n");
+		fwrite($db_settings_file, "\$db_settings['db'] = \"".$db_settings['db']."\";\n");
+		fwrite($db_settings_file, "\$db_settings['settings_table'] = \"".$db_settings['settings_table']."\";\n");
+		fwrite($db_settings_file, "\$db_settings['forum_table'] = \"".$db_settings['forum_table']."\";\n");
+		fwrite($db_settings_file, "\$db_settings['category_table'] = \"".$db_settings['category_table']."\";\n");
+		fwrite($db_settings_file, "\$db_settings['userdata_table'] = \"".$db_settings['userdata_table']."\";\n");
+		fwrite($db_settings_file, "\$db_settings['smilies_table'] = \"".$db_settings['smilies_table']."\";\n");
+		fwrite($db_settings_file, "\$db_settings['banlists_table'] = \"".$db_settings['banlists_table']."\";\n");
+		fwrite($db_settings_file, "\$db_settings['useronline_table'] = \"".$db_settings['useronline_table']."\";\n");
+		fwrite($db_settings_file, "?>\n");
+		flock($db_settings_file, 3);
+		fclose($db_settings_file);
+	}
 
-  if($installation_mode=='installation' && empty($errors))
-   {
-    // create database if desired:
-    if(isset($_POST['create_database']))
-     {
-      @mysqli_query($connid, "CREATE DATABASE ". $db_settings['db']) or $errors[] = $lang_add['create_db_error']." (MySQL: ".mysqli_error($connid).")";
-     }
+	if ($installation_mode == 'installation' && empty($errors)) {
+		// create database if desired:
+		if(isset($_POST['create_database'])) {
+			@mysqli_query($connid, "CREATE DATABASE ". $db_settings['db']) or $errors[] = $lang_add['create_db_error']." (MySQL: ".mysqli_error($connid).")";
+		}
 
-    // select database:
-    if (empty($errors))
-     {
-      @mysqli_select_db($connid, $db_settings['db']) or $errors[] = $lang_add['db_inexistent_error']." (MySQL: ". mysqli_error($connid) .")";
-     }
-     $tabledef['settings'] = "CREATE TABLE ". $db_settings['settings_table'] ." (
+		// select database:
+		if (empty($errors)) {
+			@mysqli_select_db($connid, $db_settings['db']) or $errors[] = $lang_add['db_inexistent_error']." (MySQL: ". mysqli_error($connid) .")";
+		}
+		$tabledef['settings'] = "CREATE TABLE ". $db_settings['settings_table'] ." (
      name varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
      value varchar(255) COLLATE utf8_unicode_ci NULL default NULL,
      PRIMARY KEY (name),
      UNIQUE KEY name (name)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3";
-     $tabledef['entries'] = "CREATE TABLE ". $db_settings['forum_table'] ." (
+		$tabledef['entries'] = "CREATE TABLE ". $db_settings['forum_table'] ." (
      id int(11) NOT NULL auto_increment,
      pid int(11) NOT NULL default 0,
      tid int(11) NOT NULL default 0,
@@ -438,14 +415,14 @@ if (isset($_POST['form_submitted']))
      KEY fixed (fixed),
      KEY username (name),
      KEY userid (user_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
-     $tabledef['categories'] = "CREATE TABLE ". $db_settings['category_table'] ." (
+		$tabledef['categories'] = "CREATE TABLE ". $db_settings['category_table'] ." (
      id int(11) NOT NULL auto_increment,
      category_order int(11) NOT NULL default 0,
      category varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '',
      description varchar(255) COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
      accession tinyint(4) NOT NULL default 0,
      PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
-     $tabledef['userdata'] = "CREATE TABLE ". $db_settings['userdata_table'] ." (
+		$tabledef['userdata'] = "CREATE TABLE ". $db_settings['userdata_table'] ." (
      user_id int(11) NOT NULL auto_increment,
      user_type varchar(32) CHARACTER SET utf8mb3 NOT NULL DEFAULT 'user',
      user_name varchar(64) NOT NULL default '',
@@ -471,7 +448,7 @@ if (isset($_POST['form_submitted']))
      pwf_code varchar(255) CHARACTER SET utf8mb3 NULL default NULL,
      activate_code varchar(255) CHARACTER SET utf8mb3 NULL default NULL,
      PRIMARY KEY (user_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
-     $tabledef['smilies'] = "CREATE TABLE ". $db_settings['smilies_table'] ." (
+		$tabledef['smilies'] = "CREATE TABLE ". $db_settings['smilies_table'] ." (
      id int(11) NOT NULL AUTO_INCREMENT,
      order_id int(11) NOT NULL DEFAULT 0,
      file varchar(100) DEFAULT NULL,
@@ -482,173 +459,155 @@ if (isset($_POST['form_submitted']))
      code_5 varchar(50) DEFAULT NULL,
      title varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
      PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8";
-     $tabledef['banlists'] = "CREATE TABLE ". $db_settings['banlists_table'] ." (
+		$tabledef['banlists'] = "CREATE TABLE ". $db_settings['banlists_table'] ." (
      name varchar(32) CHARACTER SET utf8mb3 NOT NULL,
      list text NOT NULL,
      PRIMARY KEY (name)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
-     $tabledef['uonline'] = "CREATE TABLE ". $db_settings['useronline_table'] ." (
+		$tabledef['uonline'] = "CREATE TABLE ". $db_settings['useronline_table'] ." (
      ip char(15) NOT NULL default '',
      time int(14) NOT NULL default 0,
      user_id int(11) default 0),
      UNIQUE KEY ip_user (ip, user_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci";
      // create tables:
-     if (empty($errors))
-      {
-       @mysqli_query($connid, $tabledef['settings']) or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, $tabledef['entries']) or $errors[] = str_replace("[table]",$db_settings['forum_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, $tabledef['categories']) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, $tabledef['userdata']) or $errors[] = str_replace("[table]",$db_settings['userdata_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, $tabledef['smilies']) or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, $tabledef['banlists']) or $errors[] = str_replace("[table]",$db_settings['banlists_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, $tabledef['uonline']) or $errors[] = str_replace("[table]",$db_settings['useronline_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
-      }
+		if (empty($errors)) {
+			@mysqli_query($connid, $tabledef['settings']) or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+			@mysqli_query($connid, $tabledef['entries']) or $errors[] = str_replace("[table]",$db_settings['forum_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+			@mysqli_query($connid, $tabledef['categories']) or $errors[] = str_replace("[table]",$db_settings['category_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+			@mysqli_query($connid, $tabledef['userdata']) or $errors[] = str_replace("[table]",$db_settings['userdata_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+			@mysqli_query($connid, $tabledef['smilies']) or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+			@mysqli_query($connid, $tabledef['banlists']) or $errors[] = str_replace("[table]",$db_settings['banlists_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+			@mysqli_query($connid, $tabledef['uonline']) or $errors[] = str_replace("[table]",$db_settings['useronline_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+		}
 
-     // insert admin in userdata table:
-     if (empty($errors))
-      {
-       @mysqli_query($connid, "INSERT INTO ". $db_settings['userdata_table'] ." (user_type, user_name, user_real_name, user_pw, user_email, hide_email, profile, registered, user_view, personal_messages) VALUES ('admin','". mysqli_real_escape_string($connid, $_POST['admin_name']) ."','','". mysqli_real_escape_string($connid, password_hash(trim($_POST['admin_pw']), PASSWORD_DEFAULT))."','". mysqli_real_escape_string($connid, $_POST['admin_email']) ."','1','',NOW(),'". mysqli_real_escape_string($connid, $settings['standard']) ."','1')") or $errors[] = $lang_add['insert_admin_error']." (MySQL: ".mysqli_error($connid).")";
-      }
+		// insert admin in userdata table:
+		if (empty($errors)) {
+			@mysqli_query($connid, "INSERT INTO ". $db_settings['userdata_table'] ." (user_type, user_name, user_real_name, user_pw, user_email, hide_email, profile, registered, user_view, personal_messages) VALUES ('admin','". mysqli_real_escape_string($connid, $_POST['admin_name']) ."','','". mysqli_real_escape_string($connid, password_hash(trim($_POST['admin_pw']), PASSWORD_DEFAULT))."','". mysqli_real_escape_string($connid, $_POST['admin_email']) ."','1','',NOW(),'". mysqli_real_escape_string($connid, $settings['standard']) ."','1')") or $errors[] = $lang_add['insert_admin_error']." (MySQL: ".mysqli_error($connid).")";
+		}
 
-     // insert settings in settings table:
-     if (empty($errors))
-      {
-       // insert default settings:
-       foreach ($settings as $key => $val)
-        {
-         @mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('". mysqli_real_escape_string($connid, $key) ."','". mysqli_real_escape_string($connid, $val) ."')") or $errors[] = str_replace("[setting]",$setting,$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
-        }
-       // update posted settings:
-       @mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='". mysqli_real_escape_string($connid, $_POST['forum_name'])."' WHERE name='forum_name' LIMIT 1") or $errors[] = str_replace("[setting]",$setting,$lang_add['update_settings_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='". mysqli_real_escape_string($connid, $_POST['forum_address']) ."' WHERE name='forum_address' LIMIT 1") or $errors[] = str_replace("[setting]",$setting,$lang_add['update_settings_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='". mysqli_real_escape_string($connid, $_POST['forum_email']) ."' WHERE name='forum_email' LIMIT 1") or $errors[] = str_replace("[setting]",$setting,$lang_add['update_settings_error'])." (MySQL: ".mysqli_error($connid).")";
-      }
+		// insert settings in settings table:
+		if (empty($errors)) {
+			// insert default settings:
+			foreach ($settings as $key => $val) {
+				@mysqli_query($connid, "INSERT INTO ". $db_settings['settings_table'] ." (name, value) VALUES ('". mysqli_real_escape_string($connid, $key) ."','". mysqli_real_escape_string($connid, $val) ."')") or $errors[] = str_replace("[setting]",$setting,$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
+			}
+			// update posted settings:
+			@mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='". mysqli_real_escape_string($connid, $_POST['forum_name'])."' WHERE name='forum_name' LIMIT 1") or $errors[] = str_replace("[setting]",$setting,$lang_add['update_settings_error'])." (MySQL: ".mysqli_error($connid).")";
+			@mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='". mysqli_real_escape_string($connid, $_POST['forum_address']) ."' WHERE name='forum_address' LIMIT 1") or $errors[] = str_replace("[setting]",$setting,$lang_add['update_settings_error'])." (MySQL: ".mysqli_error($connid).")";
+			@mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='". mysqli_real_escape_string($connid, $_POST['forum_email']) ."' WHERE name='forum_email' LIMIT 1") or $errors[] = str_replace("[setting]",$setting,$lang_add['update_settings_error'])." (MySQL: ".mysqli_error($connid).")";
+		}
 
-     // insert smilies in smilies table:
-     if (empty($errors))
-      {
-       $order_id = 1;
-       foreach($smilies as $smiley)
-        {
-         @mysqli_query($connid, "INSERT INTO ". $db_settings['smilies_table'] ." (order_id, file, code_1) VALUES (". intval($order_id) .",'". mysqli_real_escape_string($connid, $smiley[0])."','". mysqli_real_escape_string($connid, $smiley[1])."')") or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
-         $order_id++;
-        }
-      }
+		// insert smilies in smilies table:
+		if (empty($errors)) {
+			$order_id = 1;
+			foreach ($smilies as $smiley) {
+				@mysqli_query($connid, "INSERT INTO ". $db_settings['smilies_table'] ." (order_id, file, code_1) VALUES (". intval($order_id) .",'". mysqli_real_escape_string($connid, $smiley[0])."','". mysqli_real_escape_string($connid, $smiley[1])."')") or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
+				$order_id++;
+			}
+		}
 
-     // insert banlists:
-     if (empty($errors))
-      {
-       @mysqli_query($connid, "INSERT INTO ". $db_settings['banlists_table'] ." VALUES ('users', '')") or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, "INSERT INTO ". $db_settings['banlists_table'] ." VALUES ('ips', '')") or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
-       @mysqli_query($connid, "INSERT INTO ". $db_settings['banlists_table'] ." VALUES ('words', '')") or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
-      }
+		// insert banlists:
+		if (empty($errors)) {
+			@mysqli_query($connid, "INSERT INTO ". $db_settings['banlists_table'] ." VALUES ('users', '')") or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
+			@mysqli_query($connid, "INSERT INTO ". $db_settings['banlists_table'] ." VALUES ('ips', '')") or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
+			@mysqli_query($connid, "INSERT INTO ". $db_settings['banlists_table'] ." VALUES ('words', '')") or $errors[] = str_replace("[setting]",$db_settings['smilies_table'],$lang_add['insert_settings_error'])." (MySQL: ".mysqli_error($connid).")";
+		}
 
-    // still no errors, so the installation should have been successful!
-    if(empty($errors)) $installed = true;
-   }
-  elseif($installation_mode=='update' && empty($errors))
-   {
-    @mysqli_select_db($connid, $db_settings['db']) or $errors[] = $lang_add['db_inexistent_error']." (MySQL: ".mysqli_error($connid).")";
+		// still no errors, so the installation should have been successful!
+		if (empty($errors)) $installed = true;
+	} else if ($installation_mode == 'update' && empty($errors)) {
+		@mysqli_select_db($connid, $db_settings['db']) or $errors[] = $lang_add['db_inexistent_error']." (MySQL: ".mysqli_error($connid).")";
 
-    if(empty($errors))
-     {
-      // search version number of old forum:
-      $version_result = @mysqli_query($connid, "SELECT value FROM ". $db_settings['settings_table'] ." WHERE name = 'version' LIMIT 1");
-      if($version_result)
-       {
-        $field = mysqli_fetch_assoc($version_result);
-        $version_count = mysqli_num_rows($version_result);
-        mysqli_free_result($version_result);
-       }
-      if(empty($version_count) || $version_count != 1)
-       {
-        if(isset($_POST['old_version'])) $old_version = $_POST['old_version'];
-        else
-         {
-          $errors[] = $lang_add['no_version_found'];
-          $select_version = true;
-         }
-       }
-      else
-       {
-        $old_version = $field['value'];
-       }
-     }
+		if (empty($errors)) {
+			// search version number of old forum:
+			$version_result = @mysqli_query($connid, "SELECT value FROM ". $db_settings['settings_table'] ." WHERE name = 'version' LIMIT 1");
+			if ($version_result) {
+				$field = mysqli_fetch_assoc($version_result);
+				$version_count = mysqli_num_rows($version_result);
+				mysqli_free_result($version_result);
+			}
+			if(empty($version_count) || $version_count != 1) {
+				if (isset($_POST['old_version'])) $old_version = $_POST['old_version'];
+				else {
+					$errors[] = $lang_add['no_version_found'];
+					$select_version = true;
+				}
+			} else {
+				$old_version = $field['value'];
+			}
+		}
 
-    if(empty($errors))
-     {
-      switch($old_version)
-       {
-        case 1.3:
-         $errors = update13to14();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update14to15();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update15to16();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update16();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update16to17();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update17();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update17to18();
-         if($errors==false) unset($errors);
-        break;
-        case 1.4:
-         $errors = update14to15();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update15to16();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update16();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update16to17();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update17();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update17to18();
-         if($errors==false) unset($errors);
-        break;
-        case 1.5:
-         $errors = update15to16();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update16();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update16to17();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update17();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update17to18();
-         if($errors==false) unset($errors);
-        break;
-        case 1.6:
-         $errors = update16();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update16to17();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update17();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update17to18();
-         if($errors==false) unset($errors);
-        break;
-        case 1.7:
-         $errors = update17();
-         if($errors==false) unset($errors);
-         if(empty($errors)) $errors = update17to18();
-         if($errors==false) unset($errors);
-        break;
-        case 1.8:
-         $errors = update17to18();
-         if($errors==false) unset($errors);
-        break;
-        default:
-         $errors[] = $lang_add['version_not_supported'];
-        break;
-       }
-     }
-
-    if(empty($errors)) $installed = true;
-   }
- }
+		if (empty($errors)) {
+			switch($old_version) {
+				case 1.3:
+					$errors = update13to14();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update14to15();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update15to16();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update16();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update16to17();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update17();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update17to18();
+					if ($errors === false) unset($errors);
+				break;
+				case 1.4:
+					$errors = update14to15();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update15to16();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update16();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update16to17();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update17();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update17to18();
+					if ($errors === false) unset($errors);
+				break;
+				case 1.5:
+					$errors = update15to16();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update16();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update16to17();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update17();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update17to18();
+					if ($errors === false) unset($errors);
+				break;
+				case 1.6:
+					$errors = update16();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update16to17();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update17();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update17to18();
+					if ($errors === false) unset($errors);
+				break;
+				case 1.7:
+					$errors = update1if ($errors === false)7();
+					if ($errors === false) unset($errors);
+					if (empty($errors)) $errors = update17to18();
+					if ($errors === false) unset($errors);
+				break;
+				case 1.8:
+					$errors = update17to18();
+					if ($errors === false) unset($errors);
+				break;
+				default:
+					$errors[] = $lang_add['version_not_supported'];
+				break;
+			}
+		}
+		if(empty($errors)) $installed = true;
+	}
+}
 
 ?><!DOCTYPE html>
 <html>
