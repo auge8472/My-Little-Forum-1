@@ -44,160 +44,144 @@ if (empty($order)) $order="time";
 if (empty($category)) $category="all";
 if (empty($descasc)) $descasc="DESC";
 
-if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_contact']==1)
- {
-  require('captcha/captcha.php');
-  $captcha = new captcha();
- }
+if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_contact']==1) {
+	require('captcha/captcha.php');
+	$captcha = new captcha();
+}
 
-if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($uid)) { header("location: index.php"); die('<a href="index.php">further...</a>'); }
-if (empty($id) && empty($uid) && empty($forum_contact)) { header("location: contact.php?forum_contact=true"); die('<a href="contact.php?forum_contact=true">further...</a>'); }
+if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($uid)) {
+	header("location: index.php");
+	die('<a href="index.php">further...</a>');
+}
+if (empty($id) && empty($uid) && empty($forum_contact)) {
+	header("location: contact.php?forum_contact=true");
+	die('<a href="contact.php?forum_contact=true">further...</a>');
+}
 
-if (isset($id) || isset($uid) || isset($forum_contact))
- {
-  if (isset($_COOKIE['user_name']) && empty($_POST["form_submitted"])) $sender_name = $_COOKIE['user_name'];
-  if (isset($_COOKIE['user_email']) && empty($_POST["form_submitted"])) $sender_email = $_COOKIE['user_email'];
-  if (isset($_SESSION[$settings['session_prefix'].'user_id']) && empty($_POST["form_submitted"]))
-   {
-    $ue_result = mysqli_query($connid, "SELECT user_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
-    if (!$ue_result) die($lang['db_error']);
-    $ue_field = mysqli_fetch_assoc($ue_result);
-    mysqli_free_result($ue_result);
-    $sender_name = $_SESSION[$settings['session_prefix'].'user_name'];
-    $sender_email = $ue_field['user_email'];
-   }
+if (isset($id) || isset($uid) || isset($forum_contact)) {
+	if (isset($_COOKIE['user_name']) && empty($_POST["form_submitted"])) $sender_name = $_COOKIE['user_name'];
+	if (isset($_COOKIE['user_email']) && empty($_POST["form_submitted"])) $sender_email = $_COOKIE['user_email'];
+	if (isset($_SESSION[$settings['session_prefix'].'user_id']) && empty($_POST["form_submitted"])) {
+		$ue_result = mysqli_query($connid, "SELECT user_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_SESSION[$settings['session_prefix'].'user_id']) ." LIMIT 1");
+		if (!$ue_result) die($lang['db_error']);
+		$ue_field = mysqli_fetch_assoc($ue_result);
+		mysqli_free_result($ue_result);
+		$sender_name = $_SESSION[$settings['session_prefix'].'user_name'];
+		$sender_email = $ue_field['user_email'];
+	}
 
-  if (isset($id))
-  {
-   $result = mysqli_query($connid, "SELECT tid, user_id, name, email, subject FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($id) ." LIMIT 1");
-   if (!$result) die($lang['db_error']);
-   $field = mysqli_fetch_assoc($result);
-   mysqli_free_result($result);
-   $name = $field['name'];
-   $email = $field['email'];
-  }
-  elseif (isset($uid))
-  {
-   $result = mysqli_query($connid, "SELECT user_id, user_name, user_email, hide_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($uid) ." LIMIT 1");
-   if (!$result) die($lang['db_error']);
-   $field = mysqli_fetch_assoc($result);
-   mysqli_free_result($result);
-   $name = $field['user_name'];
-   $email = $field['user_email'];
-   $hide_email = $field['hide_email'];
-  }
+	if (isset($id)) {
+		$result = mysqli_query($connid, "SELECT tid, user_id, name, email, subject FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($id) ." LIMIT 1");
+		if (!$result) die($lang['db_error']);
+		$field = mysqli_fetch_assoc($result);
+		mysqli_free_result($result);
+		$name = $field['name'];
+		$email = $field['email'];
+	} else if (isset($uid)) {
+		$result = mysqli_query($connid, "SELECT user_id, user_name, user_email, hide_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($uid) ." LIMIT 1");
+		if (!$result) die($lang['db_error']);
+		$field = mysqli_fetch_assoc($result);
+		mysqli_free_result($result);
+		$name = $field['user_name'];
+		$email = $field['user_email'];
+		$hide_email = $field['hide_email'];
+	}
 
-  if (isset($field['user_id']) && $field['user_id'] > 0 && empty($uid))
-  {
-  $user_result = mysqli_query($connid, "SELECT user_email, hide_email FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($field['user_id']) ." LIMIT 1");
-  if (!$user_result) die($lang['db_error']);
-  $user_field = mysqli_fetch_assoc($user_result);
-  mysqli_free_result($user_result);
-  $email = $user_field['user_email'];
-  $hide_email = $user_field['hide_email'];
-  }
+	if (isset($field['user_id']) && $field['user_id'] > 0 && empty($uid)) {
+		$user_result = mysqli_query($connid, "SELECT user_email, hide_email FROM ".$db_settings['userdata_table']." WHERE user_id = ". intval($field['user_id']) ." LIMIT 1");
+		if (!$user_result) die($lang['db_error']);
+		$user_field = mysqli_fetch_assoc($user_result);
+		mysqli_free_result($user_result);
+		$email = $user_field['user_email'];
+		$hide_email = $user_field['hide_email'];
+	}
 
-  if (empty($forum_contact) && $field['user_id'] == 0 && $email == "" || empty($forum_contact) && $field['user_id'] > 0 && $hide_email == 1) $no_message = true;
+	if (empty($forum_contact) && $field['user_id'] == 0 && $email == "" || empty($forum_contact) && $field['user_id'] > 0 && $hide_email == 1) $no_message = true;
 
-  if (isset($_POST["form_submitted"]))
-   {
-    // übergebene Variablen ermitteln:
-    $sender_name = trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_name'])));
-    $sender_email = trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_email'])));
-    $subject = trim($_POST['subject']);
-    $text = $_POST['text'];
+	if (isset($_POST["form_submitted"])) {
+		// übergebene Variablen ermitteln:
+		$sender_name = trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_name'])));
+		$sender_email = trim(preg_replace("/\n/", "", preg_replace("/\r/", "", $_POST['sender_email'])));
+		$subject = trim($_POST['subject']);
+		$text = $_POST['text'];
 
-    // Überprüfungen der Daten:
-    unset($errors);
-    if ($sender_name == "") $errors[] = $lang['error_no_name'];
-    if ($sender_email == "") $errors[] = $lang['error_no_email'];
-    if ($sender_email != "" and !preg_match("/^[^@]+@.+\.\D{2,}$/", $sender_email)) $errors[] = $lang['error_email_wrong'];
-    if ($text == "") $errors[] = $lang['error_no_text'];
+		// Überprüfungen der Daten:
+		unset($errors);
+		if ($sender_name == "") $errors[] = $lang['error_no_name'];
+		if ($sender_email == "") $errors[] = $lang['error_no_email'];
+		if ($sender_email != "" and !preg_match("/^[^@]+@.+\.\D{2,}$/", $sender_email)) $errors[] = $lang['error_email_wrong'];
+		if ($text == "") $errors[] = $lang['error_no_text'];
 
-     // check for not accepted words:
-     $result=mysqli_query($connid, "SELECT list FROM ". $db_settings['banlists_table'] ." WHERE name = 'words' LIMIT 1");
-     if(!$result) die($lang['db_error']);
-     $data = mysqli_fetch_assoc($result);
-     mysqli_free_result($result);
-     if(trim($data['list']) != '')
-      {
-       $not_accepted_words = explode(',',trim($data['list']));
-       foreach($not_accepted_words as $not_accepted_word)
-        {
-         if($not_accepted_word!='' && (preg_match("/".$not_accepted_word."/i",$sender_name) || preg_match("/".$not_accepted_word."/i",$sender_email) || preg_match("/".$not_accepted_word."/i",$subject) || preg_match("/".$not_accepted_word."/i",$text)))
-          {
-           $errors[] = $lang['err_mail_not_accepted_word'];
-           break;
-          }
-        }
-      }
+		// check for not accepted words:
+		$result = mysqli_query($connid, "SELECT list FROM ". $db_settings['banlists_table'] ." WHERE name = 'words' LIMIT 1");
+		if (!$result) die($lang['db_error']);
+		$data = mysqli_fetch_assoc($result);
+		mysqli_free_result($result);
+		if (trim($data['list']) != '') {
+			$not_accepted_words = explode(',', trim($data['list']));
+			foreach ($not_accepted_words as $not_accepted_word) {
+				if ($not_accepted_word != '' && (preg_match("/".$not_accepted_word."/i",$sender_name) || preg_match("/".$not_accepted_word."/i",$sender_email) || preg_match("/".$not_accepted_word."/i",$subject) || preg_match("/".$not_accepted_word."/i",$text))) {
+					$errors[] = $lang['err_mail_not_accepted_word'];
+					break;
+				}
+			}
+		}
 
-    // CAPTCHA check:
-    if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_contact']==1)
-     {
-      if(empty($_SESSION['captcha_session'])) $errors[] = $lang['captcha_code_invalid'];
-      if(empty($errors))
-       {
-        if($settings['captcha_type']==1)
-         {
-          if($captcha->check_captcha($_SESSION['captcha_session'],$_POST['captcha_code'])!=TRUE) $errors[] = $lang['captcha_code_invalid'];
-         }
-        else
-         {
-          if($captcha->check_math_captcha($_SESSION['captcha_session'][2],$_POST['captcha_code'])!=TRUE) $errors[] = $lang['captcha_code_invalid'];
-         }
-       }
-     }
-    if(empty($errors))
-     {
-      $mail_subject = (isset($_POST['subject']) and !empty(isset($_POST['subject'])) ? $_POST['subject'] : $lang['email_no_subject'];
-      if (isset($forum_contact)) { $name = $settings['forum_name']; $email = $settings['forum_email']; }
-      $mailto = encodeMailName($name, "\n") ." <". $email .">";
-      $mailtext = $text ."\n\n".str_replace("[forum_address]", $settings['forum_address'], $lang['msg_add']);
-      $sender_email = array("name" => $sender_name, "email" => $sender_email);
-      $sent = processEmail($mailto, $mail_subject, $mailtext, $sender_email);
-      if ($sent === false) {
-        $errors[] = $lang['error_meilserv'];
-        unset($sent);
-      }
-      // Bestätigung:
-      if (isset($sent))
-       {
-       $lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['conf_email_txt']);
-       $lang['conf_email_txt'] = str_replace("[sender_name]", $sender_name, $lang['conf_email_txt']);
-       $lang['conf_email_txt'] = str_replace("[recipient_name]", $name, $lang['conf_email_txt']);
-       $lang['conf_email_txt'] = str_replace("[subject]", $mail_subject, $lang['conf_email_txt']);
-       $lang['conf_email_txt'] .= "\n\n". $text;
-       $conf_mailto = encodeMailName($sender_name, "\n") ." <". $sender_email .">";
-       $sent = processEmail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt']);
-       }
-     }
-   }
- }
+		// CAPTCHA check:
+		if (empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha_contact'] == 1) {
+			if (empty($_SESSION['captcha_session'])) $errors[] = $lang['captcha_code_invalid'];
+			if (empty($errors)) {
+				if ($settings['captcha_type'] == 1) {
+					if ($captcha->check_captcha($_SESSION['captcha_session'], $_POST['captcha_code']) != TRUE) $errors[] = $lang['captcha_code_invalid'];
+				} else {
+					if ($captcha->check_math_captcha($_SESSION['captcha_session'][2], $_POST['captcha_code']) != TRUE) $errors[] = $lang['captcha_code_invalid'];
+				}
+			}
+		}
+		if (empty($errors)) {
+			$mail_subject = (isset($_POST['subject']) and !empty(isset($_POST['subject'])) ? $_POST['subject'] : $lang['email_no_subject'];
+			if (isset($forum_contact)) {
+				$name = $settings['forum_name'];
+				$email = $settings['forum_email'];
+			}
+			$mailto = encodeMailName($name, "\n") ." <". $email .">";
+			$mailtext = $text ."\n\n".str_replace("[forum_address]", $settings['forum_address'], $lang['msg_add']);
+			$sender_email = array("name" => $sender_name, "email" => $sender_email);
+			$sent = processEmail($mailto, $mail_subject, $mailtext, $sender_email);
+			if ($sent === false) {
+				$errors[] = $lang['error_meilserv'];
+				unset($sent);
+			}
+			// Bestätigung:
+			if (isset($sent)) {
+				$lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['conf_email_txt']);
+				$lang['conf_email_txt'] = str_replace("[sender_name]", $sender_name, $lang['conf_email_txt']);
+				$lang['conf_email_txt'] = str_replace("[recipient_name]", $name, $lang['conf_email_txt']);
+				$lang['conf_email_txt'] = str_replace("[subject]", $mail_subject, $lang['conf_email_txt']);
+				$lang['conf_email_txt'] .= "\n\n". $text;
+				$conf_mailto = encodeMailName($sender_name, "\n") ." <". $sender_email .">";
+				$sent = processEmail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt']);
+			}
+		}
+	}
+}
 
 
 $subnav_1 = '';
 if (isset($uid)) $subnav_1 .= '<a class="textlink" href="user.php?id='. intval($uid) .'">'.$lang['back_linkname'].'</a>';
-elseif (isset($forum_contact)) $subnav_1 .= '<a class="textlink" href="index.php">'.$lang['back_linkname'].'</a>';
-elseif ($id == 0 || isset($no_message)) $subnav_1 .= '<a class="textlink" href="javascript:history.back(1)">'.$lang['back_linkname'].'</a>';
-else
- {
-  if (empty($view))
-   {
-    $subnav_1 .= '<a class="textlink" href="forum_entry.php?id='. intval($id) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'">'.str_replace("[name]", htmlsc($field["name"]), $lang['back_to_posting_linkname']).'</a>';
-   }
-  else
-   {
-    if ($view=="board")
-     {
-      $subnav_1 .= '<a class="textlink" href="board_entry.php?id='. intval($field['tid']) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'">'.$lang['back_to_topic_linkname'].'</a>';
-     }
-    else
-     {
-      $subnav_1 .= '<a class="textlink" href="mix_entry.php?id='. intval($field['tid']) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'">'.$lang['back_to_topic_linkname'].'</a>';
-     }
-   }
- }
+else if (isset($forum_contact)) $subnav_1 .= '<a class="textlink" href="index.php">'.$lang['back_linkname'].'</a>';
+else if ($id == 0 || isset($no_message)) $subnav_1 .= '<a class="textlink" href="javascript:history.back(1)">'.$lang['back_linkname'].'</a>';
+else {
+	if (empty($view)) {
+		$subnav_1 .= '<a class="textlink" href="forum_entry.php?id='. intval($id) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'">'.str_replace("[name]", htmlsc($field["name"]), $lang['back_to_posting_linkname']).'</a>';
+	} else {
+		if ($view == "board") {
+			$subnav_1 .= '<a class="textlink" href="board_entry.php?id='. intval($field['tid']) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'">'.$lang['back_to_topic_linkname'].'</a>';
+		} else {
+			$subnav_1 .= '<a class="textlink" href="mix_entry.php?id='. intval($field['tid']) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'">'.$lang['back_to_topic_linkname'].'</a>';
+		}
+	}
+}
 $wo = $email_headline;
 parse_template();
 echo $header;
