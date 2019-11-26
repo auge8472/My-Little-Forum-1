@@ -23,124 +23,105 @@
 
 include("inc.php");
 
-if(count($_GET) > 0)
-foreach($_GET as $key => $value)
+if (count($_GET) > 0)
+foreach ($_GET as $key => $value)
 $$key = $value;
 
-function nav_b($be_page, $entries_per_page, $entry_count, $id, $da, $nr, $page, $category, $order, $descasc)
- {
-  global $lang, $page_navigation_pd_menu, $page_navigation_arrows, $select_submit_button;
-  $output = '';
-  if ($entry_count > $entries_per_page)
-   {
-    $output .= '&nbsp;&nbsp;';
-    $new_index_before = $be_page - 1;
-    $new_index_after = $be_page + 1;
-    $site_count = ceil($entry_count / $entries_per_page);
-    if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?&amp;id='. intval($id) .'&amp;be_page='. intval($new_index_before) .'&amp;da='. urlencode($da) .'&amp;page='. intval($page) .'&amp;category='. intval($category).'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'" title="'. htmlsc($lang['previous_page_linktitle']) .'"><img src="'. $settings['themepath'] .'/img/prev.gif" alt="&laquo;" width="12" height="9" /></a>';
-    if ($new_index_before >= 0 && $new_index_after < $site_count)$output .= '&nbsp;';
-    if ($new_index_after < $site_count) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?&amp;id='. intval($id) .'&amp;be_page='. intval($new_index_after) .'&amp;da='. urlencode($da) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'" title="'. htmlsc($lang['next_page_linktitle']) .'"><img src="'. $settings['themepath'] .'/img/next.gif" alt="&laquo;" width="12" height="9" /></a>';
-    $page_count = ceil($entry_count/$entries_per_page);
-    $output .= '&nbsp;&nbsp;<form method="get" action="'. basename($_SERVER["SCRIPT_NAME"]) .'" accept-charset="UTF-8"><div style="display: inline;">';
-    if (isset($id)) $output .= '<input type="hidden" name="id" value="'.$id.'">';
-    if (isset($da)) $output .= '<input type="hidden" name="da" value="'.$da.'">';
-    $output .= '<input type="hidden" name="page" value="'.$page.'"><input type="hidden" name="category" value="'.$category.'"><input type="hidden" name="order" value="'.$order.'"><input type="hidden" name="descasc" value ="'.$descasc.'">';
-    $output .= '<select class="kat" size="1" name="be_page" onchange="this.form.submit();">';
-    if ($be_page == 0) $output .= '<option value="0" selected="selected">1</option>';
-    else $output .= '<option value="0">1</option>';
-    for($x=$be_page-9; $x<$be_page+9; $x++)
-     {
-      if ($x > 0 && $x < $page_count-1)
-       {
-        if ($be_page == $x) $output .= '<option value="'.$x.'" selected="selected">'.($x+1).'</option>';
-        else $output .= '<option value="'.$x.'">'.($x+1).'</option>';
-       }
-     }
-    if ($be_page+1 == $page_count) $output .= '<option value="'.($page_count-1).'" selected="selected">'.$page_count.'</option>';
-    else $output .= '<option value="'.($page_count-1).'">'.$page_count.'</option>';
-    $output .= '</select>&nbsp;<input type="image" name="" value="" src="'. $settings['themepath'] .'/img/submit.gif" alt="&raquo;" /></div></form>';
-   }
-  return $output;
- }
+function nav_b($be_page, $entries_per_page, $entry_count, $id, $da, $nr, $page, $category, $order, $descasc) {
+	global $lang, $page_navigation_pd_menu, $page_navigation_arrows, $select_submit_button;
+	$output = '';
+	if ($entry_count > $entries_per_page) {
+		$output .= '&nbsp;&nbsp;';
+		$new_index_before = $be_page - 1;
+		$new_index_after = $be_page + 1;
+		$site_count = ceil($entry_count / $entries_per_page);
+		if ($new_index_before >= 0) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?&amp;id='. intval($id) .'&amp;be_page='. intval($new_index_before) .'&amp;da='. urlencode($da) .'&amp;page='. intval($page) .'&amp;category='. intval($category).'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'" title="'. htmlsc($lang['previous_page_linktitle']) .'"><img src="'. $settings['themepath'] .'/img/prev.gif" alt="&laquo;" width="12" height="9" /></a>';
+		if ($new_index_before >= 0 && $new_index_after < $site_count)$output .= '&nbsp;';
+		if ($new_index_after < $site_count) $output .= '<a href="'. basename($_SERVER["SCRIPT_NAME"]) .'?&amp;id='. intval($id) .'&amp;be_page='. intval($new_index_after) .'&amp;da='. urlencode($da) .'&amp;page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'" title="'. htmlsc($lang['next_page_linktitle']) .'"><img src="'. $settings['themepath'] .'/img/next.gif" alt="&laquo;" width="12" height="9" /></a>';
+		$page_count = ceil($entry_count/$entries_per_page);
+		$output .= '&nbsp;&nbsp;<form method="get" action="'. basename($_SERVER["SCRIPT_NAME"]) .'" accept-charset="UTF-8"><div style="display: inline;">';
+		if (isset($id)) $output .= '<input type="hidden" name="id" value="'.$id.'">';
+		if (isset($da)) $output .= '<input type="hidden" name="da" value="'.$da.'">';
+		$output .= '<input type="hidden" name="page" value="'.$page.'"><input type="hidden" name="category" value="'.$category.'"><input type="hidden" name="order" value="'.$order.'"><input type="hidden" name="descasc" value ="'.$descasc.'">';
+		$output .= '<select class="kat" size="1" name="be_page" onchange="this.form.submit();">';
+		if ($be_page == 0) $output .= '<option value="0" selected="selected">1</option>';
+		else $output .= '<option value="0">1</option>';
+		for($x = $be_page - 9; $x < $be_page + 9; $x++) {
+			if ($x > 0 && $x < $page_count-1) {
+				if ($be_page == $x) $output .= '<option value="'.$x.'" selected="selected">'.($x+1).'</option>';
+				else $output .= '<option value="'.$x.'">'.($x+1).'</option>';
+			}
+		}
+		if ($be_page+1 == $page_count) $output .= '<option value="'.($page_count-1).'" selected="selected">'.$page_count.'</option>';
+		else $output .= '<option value="'.($page_count-1).'">'.$page_count.'</option>';
+		$output .= '</select>&nbsp;<input type="image" name="" value="" src="'. $settings['themepath'] .'/img/submit.gif" alt="&raquo;" /></div></form>';
+	}
+	return $output;
+}
 
-if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
- {
-  if (isset($_GET['id'])) $id = $_GET['id']; else $id = "";
-  header("location: login.php?referer=board_entry.php&id=". intval($id));
-  die('<a href="login.php?referer=board_entry.php&id='. intval($id) .'">further...</a>');
- }
+if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1) {
+	if (isset($_GET['id'])) $id = $_GET['id']; else $id = "";
+	header("location: login.php?referer=board_entry.php&id=". intval($id));
+	die('<a href="login.php?referer=board_entry.php&id='. intval($id) .'">further...</a>');
+}
 
- if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['session_prefix'].'user_name']) || $settings['access_for_users_only'] != 1)
-{
+if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['session_prefix'].'user_name']) || $settings['access_for_users_only'] != 1) {
+	if (empty($page)) $page = 0;
+	if (empty($order)) $order="last_answer";
+	if (empty($descasc)) $descasc="DESC";
+	if (empty($category)) $category="all";
+	if (empty($be_page)) $be_page = 0;
+	if (empty($da)) $da="ASC";
+	$ul = $be_page * $settings['answers_per_topic'];
 
- if (empty($page)) $page = 0;
- if (empty($order)) $order="last_answer";
- if (empty($descasc)) $descasc="DESC";
- if (empty($category)) $category="all";
- if (empty($be_page)) $be_page = 0;
- if (empty($da)) $da="ASC";
- $ul = $be_page * $settings['answers_per_topic'];
+	unset($entrydata);
+	unset($thread);
 
- unset($entrydata);
- unset($thread);
+	if (isset($id)) {
+		$id = (int) $id;
+		if ($id > 0) {
+			$result_t = mysqli_query($connid, "SELECT id, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_Uhrzeit, UNIX_TIMESTAMP(edited - INTERVAL ". $settings['edit_delay'] ." MINUTE) AS edited_diff, edited_by, user_id, name, email, subject, hp, place, text, show_signature, category, locked, ip FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($id) ." LIMIT 1");
+			$thread = mysqli_fetch_assoc($result_t);
+			mysqli_free_result($result_t);
 
- if(isset($id))
-  {
-   $id = (int) $id;
-   if( $id > 0 )
-    {
-     $result_t=mysqli_query($connid, "SELECT id, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
-                        UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_Uhrzeit,
-                        UNIX_TIMESTAMP(edited - INTERVAL ". $settings['edit_delay'] ." MINUTE) AS edited_diff, edited_by, user_id, name, email,
-                        subject, hp, place, text, show_signature, category, locked, ip FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($id) ." LIMIT 1");
-     $thread = mysqli_fetch_assoc($result_t);
-     mysqli_free_result($result_t);
+			// Look if id correct:
+			if ($thread['pid'] != 0) header("location: ". basename($_SERVER['SCRIPT_NAME']) ."?id=". $thread['tid'] ."&page=". $page ."&category=". $category ."&order=". $order ."&descasc=". $descasc ."#p". $id);
 
-     // Look if id correct:
-     if ($thread['pid'] != 0) header("location: ". basename($_SERVER['SCRIPT_NAME']) ."?id=". $thread['tid'] ."&page=". $page ."&category=". $category ."&order=". $order ."&descasc=". $descasc ."#p". $id);
+			// category of this posting accessible by user?
+			if (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin")) {
+				if (is_array($category_ids) && !in_array($thread['category'], $category_ids)) {
+					header("location: board.php");
+					die();
+				}
+			}
 
-     // category of this posting accessible by user?
-     if (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin"))
-      {
-       if(is_array($category_ids) && !in_array($thread['category'], $category_ids))
-        {
-         header("location: board.php");
-         die();
-        }
-      }
+			// count views:
+			if (isset($settings['count_views']) && $settings['count_views'] == 1) mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=". intval($id));
 
-     // count views:
-     if (isset($settings['count_views']) && $settings['count_views'] == 1) mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=". intval($id));
+			$mark_admin = false;
+			$mark_mod = false;
+			if ($thread["user_id"] > 0) {
+				$userdata_result_t=mysqli_query($connid, "SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($thread["user_id"]));
+				if (!$userdata_result_t) die($lang['db_error']);
+				$userdata = mysqli_fetch_assoc($userdata_result_t);
+				mysqli_free_result($userdata_result_t);
+				$thread["email"] = $userdata["user_email"];
+				$thread["hide_email"] = $userdata["hide_email"];
+				$thread["place"] = $userdata["user_place"];
+				$thread["hp"] = $userdata["user_hp"];
+				if ($userdata["user_type"] == "admin" && $settings['admin_mod_highlight'] == 1) $mark_admin = true;
+				else if ($userdata["user_type"] == "mod" && $settings['admin_mod_highlight'] == 1) $mark_mod = true;
+				if ($thread["show_signature"]==1) $signature = $userdata["signature"];
+			}
+			$result=mysqli_query($connid, "SELECT id, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit, UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_Uhrzeit, UNIX_TIMESTAMP(edited - INTERVAL ". $settings['edit_delay'] ." MINUTE) AS edited_diff, edited_by, user_id, name, email, subject, hp, place, text, show_signature, category, locked, ip FROM ". $db_settings['forum_table'] ." WHERE tid = ". intval($id) ." AND id != ". intval($id) ." ORDER BY time ". $da ." LIMIT ". intval($ul) .", ". intval($settings['answers_per_topic']));
 
-     $mark_admin = false;
-     $mark_mod = false;
-     if ($thread["user_id"] > 0)
-      {
-       $userdata_result_t=mysqli_query($connid, "SELECT user_name, user_type, user_email, hide_email, user_hp, user_place, signature FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($thread["user_id"]));
-       if (!$userdata_result_t) die($lang['db_error']);
-       $userdata = mysqli_fetch_assoc($userdata_result_t);
-       mysqli_free_result($userdata_result_t);
-       $thread["email"] = $userdata["user_email"];
-       $thread["hide_email"] = $userdata["hide_email"];
-       $thread["place"] = $userdata["user_place"];
-       $thread["hp"] = $userdata["user_hp"];
-       if ($userdata["user_type"] == "admin" && $settings['admin_mod_highlight'] == 1) $mark_admin = true;
-       elseif ($userdata["user_type"] == "mod" && $settings['admin_mod_highlight'] == 1) $mark_mod = true;
-       if ($thread["show_signature"]==1) $signature = $userdata["signature"];
-      }
-     $result=mysqli_query($connid, "SELECT id, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
-                        UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_Uhrzeit,
-                        UNIX_TIMESTAMP(edited - INTERVAL ". $settings['edit_delay'] ." MINUTE) AS edited_diff, edited_by, user_id, name, email,
-                        subject, hp, place, text, show_signature, category, locked, ip FROM ". $db_settings['forum_table'] ." WHERE tid = ". intval($id) ." AND id != ". intval($id) ." ORDER BY time ". $da ." LIMIT ". intval($ul) .", ". intval($settings['answers_per_topic']));
-
-     $result_c = mysqli_query($connid, "SELECT tid FROM ". $db_settings['forum_table'] ." WHERE tid = ". intval($id) ." AND id != ". intval($id));
-     $thread_count = mysqli_num_rows($result_c);
-     mysqli_free_result($result_c);
-
-     if(!$result or !$result_t) die($lang['db_error']);
-    }
-  }
-  else { header("location: board.php"); }
+			$result_c = mysqli_query($connid, "SELECT tid FROM ". $db_settings['forum_table'] ." WHERE tid = ". intval($id) ." AND id != ". intval($id));
+			$thread_count = mysqli_num_rows($result_c);
+			mysqli_free_result($result_c);
+			if (!$result or !$result_t) die($lang['db_error']);
+		}
+	}
+	else { header("location: board.php"); }
 
 if (empty($thread)) header("location: board.php");
 
@@ -281,31 +262,27 @@ echo $header;
     </tr>
     <tr>
      <td class="postingcell" valign="top"><?php
-                                          if ($entrydata["text"]=="")
-                                           {
-                                            echo $lang['no_text'];
-                                           }
-                                          else
-                                           {
-                                            $ftext=$entrydata["text"];
-                                            $ftext = htmlsc($ftext);
-                                            $ftext = nl2br($ftext);
-                                            $ftext = zitat($ftext);
-                                            if ($settings['autolink'] == 1) $ftext = make_link($ftext);
-                                            if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
-                                            if ($settings['smilies'] == 1) $ftext = smilies($ftext);
-                                            echo '<p class="postingboard">'.$ftext.'</p>';
-                                           }
-                                          if (isset($signature) && $signature != "")
-                                           {
-                                            $signature = htmlsc($signature);
-                                            $signature = nl2br($signature);
-                                            if ($settings['autolink'] == 1) $signature = make_link($signature);
-                                            if ($settings['bbcode'] == 1) $signature = bbcode($signature);
-                                            if ($settings['smilies'] == 1) $signature = smilies($signature);
-                                            echo '<p class="signature">'.$settings['signature_separator'].$signature.'</p>';
-                                           }
-                                          ?></td>
+     if ($entrydata["text"]=="") {
+       echo $lang['no_text'];
+     } else {
+       $ftext = $entrydata["text"];
+       $ftext = htmlsc($ftext);
+       $ftext = nl2br($ftext);
+       $ftext = zitat($ftext);
+       if ($settings['autolink'] == 1) $ftext = make_link($ftext);
+       if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
+       if ($settings['smilies'] == 1) $ftext = smilies($ftext);
+       echo '<p class="postingboard">'.$ftext.'</p>';
+     }
+     if (isset($signature) && $signature != "") {
+       $signature = htmlsc($signature);
+       $signature = nl2br($signature);
+       if ($settings['autolink'] == 1) $signature = make_link($signature);
+       if ($settings['bbcode'] == 1) $signature = bbcode($signature);
+       if ($settings['smilies'] == 1) $signature = smilies($signature);
+       echo '<p class="signature">'.$settings['signature_separator'].$signature.'</p>';
+     }
+     ?></td>
      </tr>
      <?php }  mysqli_free_result($result); ?>
     </table><?php
