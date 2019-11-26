@@ -24,55 +24,45 @@
 include("inc.php");
 
 if (count($_GET) > 0)
-foreach($_GET as $key => $value)
+foreach ($_GET as $key => $value)
 $$key = $value;
 
-if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
- {
-  header("location: login.php?referer=board.php");
-  die('<a href="login.php?referer=board.php">further...</a>');
- }
+if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1) {
+	header("location: login.php?referer=board.php");
+	die('<a href="login.php?referer=board.php">further...</a>');
+}
 
- if($settings['access_for_users_only']  == 1 && isset($_SESSION[$settings['session_prefix'].'user_name']) || $settings['access_for_users_only']  != 1)
-{
+if ($settings['access_for_users_only']  == 1 && isset($_SESSION[$settings['session_prefix'].'user_name']) || $settings['access_for_users_only']  != 1) {
+	if ($settings['remember_userstandard']  == 1 && !isset($_SESSION[$settings['session_prefix'].'newtime'])) {
+		setcookie("user_view","board",time()+(3600*24*30));
+	}
 
-if ($settings['remember_userstandard']  == 1 && !isset($_SESSION[$settings['session_prefix'].'newtime'])) { setcookie("user_view","board",time()+(3600*24*30)); }
+	unset($zeile);
+	if (empty($page)) $page = 0;
+	if (empty($order)) $order="last_answer";
+	if (empty($descasc)) $descasc="DESC";
+	if (isset($descasc) && $descasc=="ASC") $descasc = "ASC";
+	else $descasc = "DESC";
+	$ul = $page * $settings['topics_per_page'];
 
- unset($zeile);
-
- if (empty($page)) $page = 0;
- if (empty($order)) $order="last_answer";
- if (empty($descasc)) $descasc="DESC";
- if (isset($descasc) && $descasc=="ASC") $descasc = "ASC";
- else $descasc = "DESC";
- $ul = $page * $settings['topics_per_page'];
-
- // database request
- if ($categories == false) // no categories defined
-  {
-   $result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS xtime,
-                        UNIX_TIMESTAMP(last_answer + INTERVAL ". $time_difference ." HOUR) AS la_time,
-                        UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ". $db_settings['forum_table'] ." WHERE pid = 0 ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
-   if(!$result) die($lang['db_error']);
-  }
- elseif (is_array($categories) && $category == 0) // there are categories and all categories should be shown
-  {
-   $result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS xtime,
-                        UNIX_TIMESTAMP(last_answer + INTERVAL ". $time_difference ." HOUR) AS la_time,
-                        UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ". $db_settings['forum_table'] ." WHERE pid = 0 AND category IN (". $category_ids_query .") ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
-   if(!$result) die($lang['db_error']);
-  }
- elseif (is_array($categories) && $category != 0 && in_array($category, $category_ids)) // there are categories and only one category should be shown
-  {
-   $result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS xtime,
-                        UNIX_TIMESTAMP(last_answer + INTERVAL ". $time_difference ." HOUR) AS la_time,
-                        UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ". $db_settings['forum_table'] ." WHERE category = ". intval($category) ." AND pid = 0 ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
-   if(!$result) die($lang['db_error']);
-   // how many entries?
-   $pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE pid = 0 AND category = ". intval($category));
-   list($thread_count) = mysqli_fetch_row($pid_result);
-   mysqli_free_result($pid_result);
-  }
+	// database request
+	if ($categories == false) {
+		// no categories defined
+		$result = mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS xtime, UNIX_TIMESTAMP(last_answer + INTERVAL ". $time_difference ." HOUR) AS la_time, UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ". $db_settings['forum_table'] ." WHERE pid = 0 ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
+		if (!$result) die($lang['db_error']);
+	} else if (is_array($categories) && $category == 0) {
+		// there are categories and all categories should be shown
+		$result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS xtime, UNIX_TIMESTAMP(last_answer + INTERVAL ". $time_difference ." HOUR) AS la_time, UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ". $db_settings['forum_table'] ." WHERE pid = 0 AND category IN (". $category_ids_query .") ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
+		if(!$result) die($lang['db_error']);
+	} else if (is_array($categories) && $category != 0 && in_array($category, $category_ids)) {
+		// there are categories and only one category should be shown
+		$result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS xtime, UNIX_TIMESTAMP(last_answer + INTERVAL ". $time_difference ." HOUR) AS la_time, UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ". $db_settings['forum_table'] ." WHERE category = ". intval($category) ." AND pid = 0 ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
+		if (!$result) die($lang['db_error']);
+		// how many entries?
+		$pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE pid = 0 AND category = ". intval($category));
+		list($thread_count) = mysqli_fetch_row($pid_result);
+		mysqli_free_result($pid_result);
+	}
 
 $subnav_1='<a class="textlink" href="posting.php?view=board&amp;category='. intval($category) .'">'.$lang['new_entry_linkname'].'</a>';
 $subnav_2 = '';
