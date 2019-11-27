@@ -23,28 +23,24 @@
 
 include("inc.php");
 
-if(count($_GET) > 0)
-foreach($_GET as $key => $value)
+if (count($_GET) > 0)
+foreach ($_GET as $key => $value)
 $$key = $value;
 
-if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
- {
-  header("location: login.php?referer=mix.php");
-  die('<a href="login.php?referer=mix.php">further...</a>');
- }
+if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1) {
+	header("location: login.php?referer=mix.php");
+	die('<a href="login.php?referer=mix.php">further...</a>');
+}
 
- if ($settings['access_for_users_only']  == 1 && isset($_SESSION[$settings['session_prefix'].'user_name']) || $settings['access_for_users_only']  != 1)
-{
-
- function mix_tree($id, $aktuellerEintrag = 0, $tiefe = 0)
- {
-  global $settings, $parent_array, $child_array, $page, $order, $category, $descasc, $last_visit, $lang;
-  $intendation = 20;
-  if ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix']/$settings['thread_indent_mix'])) {
-    $intendation = 0;
-  } else {
-    $intendation = intval($settings['thread_indent_mix']);
-  }
+if ($settings['access_for_users_only']  == 1 && isset($_SESSION[$settings['session_prefix'].'user_name']) || $settings['access_for_users_only']  != 1) {
+	function mix_tree($id, $aktuellerEintrag = 0, $tiefe = 0) {
+		global $settings, $parent_array, $child_array, $page, $order, $category, $descasc, $last_visit, $lang;
+		$intendation = 20;
+		if ($tiefe == 0 or $tiefe >= ($settings['max_thread_indent_mix']/$settings['thread_indent_mix'])) {
+			$intendation = 0;
+		} else {
+			$intendation = intval($settings['thread_indent_mix']);
+		}
   ?><div class="threadkl" style="margin-left: <?php echo $intendation; ?>px;"><?php
   //[... Zeile mit den Eintragsdaten oder einem Link ausgeben ...]
   if ($parent_array[$id]["pid"]!=0)
@@ -64,76 +60,73 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
     }
   }
  ?></div><?php
- }
+	}
 
- if ($settings['remember_userstandard']  == 1 && !isset($_SESSION[$settings['session_prefix'].'newtime'])) { setcookie("user_view","mix",time()+(3600*24*30)); }
+	if ($settings['remember_userstandard']  == 1 && !isset($_SESSION[$settings['session_prefix'].'newtime'])) {
+		setcookie("user_view", "mix", time() + (3600 * 24 * 30));
+	}
 
- unset($zeile);
+	unset($zeile);
 
- if (empty($page)) $page = 0;
- if (empty($order)) $order="last_answer";
- if (empty($descasc)) $descasc="DESC";
- if (isset($descasc) && $descasc=="ASC") $descasc = "ASC";
- else $descasc = "DESC";
- $ul = $page * $settings['topics_per_page'];
+	if (empty($page)) $page = 0;
+	if (empty($order)) $order="last_answer";
+	if (empty($descasc)) $descasc="DESC";
+	if (isset($descasc) && $descasc=="ASC") $descasc = "ASC";
+	else $descasc = "DESC";
+	$ul = $page * $settings['topics_per_page'];
 
- unset($parent_array); // Variablen korrekt (de)initialisieren
- unset($child_array);
+	unset($parent_array);
+	unset($child_array);
 
- // database request
- if ($categories == false) // no categories defined
-  {
-   $result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
+	// database request
+	if ($categories == false) {
+		// no categories defined
+		$result = mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
                         UNIX_TIMESTAMP(last_answer + INTERVAL ". $time_difference ." HOUR) AS la_Uhrzeit,
                         UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ". $db_settings['forum_table'] ." WHERE pid = 0 ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
-   if(!$result) die($lang['db_error']);
-  }
- elseif (is_array($categories) && $category == 0) // there are categories and all categories should be shown
-  {
-   $result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
+		if (!$result) die($lang['db_error']);
+	} else if (is_array($categories) && $category == 0) {
+		// there are categories and all categories should be shown
+		$result = mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
                         UNIX_TIMESTAMP(last_answer + INTERVAL ". $time_difference ." HOUR) AS la_Uhrzeit,
                         UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ". $db_settings['forum_table'] ." WHERE pid = 0 AND category IN (". $category_ids_query .") ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
-   if(!$result) die($lang['db_error']);
- }
- elseif (is_array($categories) && $category != 0 && in_array($category, $category_ids)) // there are categories and only one category should be shown
-  {
-   $result=mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
+		if (!$result) die($lang['db_error']);
+	} else if (is_array($categories) && $category != 0 && in_array($category, $category_ids)) {
+		// there are categories and only one category should be shown
+		$result = mysqli_query($connid, "SELECT id, pid, tid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
                         UNIX_TIMESTAMP(last_answer + INTERVAL ". $time_difference ." HOUR) AS la_Uhrzeit,
                         UNIX_TIMESTAMP(last_answer) AS last_answer, name, subject, category, marked, fixed, views FROM ". $db_settings['forum_table'] ." WHERE category = ". intval($category) ." AND pid = 0 ORDER BY fixed DESC, ". $order ." ". $descasc ." LIMIT ". intval($ul) .", ". intval($settings['topics_per_page']));
-   if(!$result) die($lang['db_error']);
-   // how many entries?
-   $pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE pid = '0' AND category = '". intval($category));
-   list($thread_count) = mysqli_fetch_row($pid_result);
-   mysqli_free_result($pid_result);
-  }
+		if(!$result) die($lang['db_error']);
+		// how many entries?
+		$pid_result = mysqli_query($connid, "SELECT COUNT(*) FROM ". $db_settings['forum_table'] ." WHERE pid = '0' AND category = ". intval($category));
+		list($thread_count) = mysqli_fetch_row($pid_result);
+		mysqli_free_result($pid_result);
+	}
 
-$subnav_1 = '<a class="textlink" href="posting.php?view=mix&amp;category='. intval($category) .'">'.$lang['new_entry_linkname'].'</a>';
-$subnav_2 = '';
-if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $subnav_2 .= '<a href="index.php?update=1&amp;view=mix&amp;category='. intval($category) .'"><img src="'. $settings['themepath'] .'/img/update.gif" alt="'. htmlsc($lang['update_time_linktitle']) .'" width="9" height="9" /></a>';
-if ($settings['thread_view'] == 1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php"><img src="'. $settings['themepath'] .'/img/thread.gif" alt="" width="12" height="9" />'.$lang['thread_view_linkname'].'</a></span>';
-elseif ($settings['thread_view'] == 1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?category='. intval($category) .'"><img src="'. $settings['themepath'] .'/img/thread.gif" alt="" width="12" height="9" />'.$lang['thread_view_linkname'].'</a></span>';
-if ($settings['board_view']==1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php"><img src="'. $settings['themepath'] .'/img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';
-elseif ($settings['board_view']==1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php?category='. intval($category) .'"><img src="'. $settings['themepath'] .'/img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';
-$subnav_2 .= nav($page, $settings['topics_per_page'], $thread_count, $order, $descasc, $category);
-$categories = get_categories();
-if ($categories!=false && $categories != "not accessible")
- {
-  $subnav_2 .= '&nbsp;&nbsp;<form method="get" action="mix.php" accept-charset="UTF-8"><div style="display: inline;"><select class="kat" size="1" name="category" onchange="this.form.submit();">';
-  if (isset($category) && $category==0) $subnav_2 .= '<option value="0" selected="selected">'.$lang['show_all_categories'].'</option>';
-  else $subnav_2 .= '<option value="0">'.$lang['show_all_categories'].'</option>';
-  foreach ($categories as $key => $val)
-   {
-    if($key!=0)
-     {
-      if($key==$category) $subnav_2 .= '<option value="'.$key.'" selected="selected">'.$val.'</option>';
-      else $subnav_2 .= '<option value="'.$key.'">'.$val.'</option>';
-     }
-   }
-  $subnav_2 .= '</select><noscript> <input type="image" name="" value="" src="'. $settings['themepath'] .'/img/submit.gif" alt="&raquo;" /></noscript></div></form>';
- }
+	$subnav_1 = '<a class="textlink" href="posting.php?view=mix&amp;category='. intval($category) .'">'.$lang['new_entry_linkname'].'</a>';
+	$subnav_2 = '';
+	if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $subnav_2 .= '<a href="index.php?update=1&amp;view=mix&amp;category='. intval($category) .'"><img src="'. $settings['themepath'] .'/img/update.gif" alt="'. htmlsc($lang['update_time_linktitle']) .'" width="9" height="9" /></a>';
+	if ($settings['thread_view'] == 1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php"><img src="'. $settings['themepath'] .'/img/thread.gif" alt="" width="12" height="9" />'.$lang['thread_view_linkname'].'</a></span>';
+	elseif ($settings['thread_view'] == 1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="forum.php?category='. intval($category) .'"><img src="'. $settings['themepath'] .'/img/thread.gif" alt="" width="12" height="9" />'.$lang['thread_view_linkname'].'</a></span>';
+	if ($settings['board_view']==1 && $category == 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php"><img src="'. $settings['themepath'] .'/img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';
+	elseif ($settings['board_view']==1 && $category != 0) $subnav_2 .= ' &nbsp;<span class="small"><a href="board.php?category='. intval($category) .'"><img src="'. $settings['themepath'] .'/img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';
+	$subnav_2 .= nav($page, $settings['topics_per_page'], $thread_count, $order, $descasc, $category);
+	$categories = get_categories();
+	if ($categories !== false && $categories != "not accessible") {
+		$subnav_2 .= '&nbsp;&nbsp;<form method="get" action="mix.php" accept-charset="UTF-8"><div style="display: inline;"><select class="kat" size="1" name="category" onchange="this.form.submit();">';
+		if (isset($category) && $category==0) $subnav_2 .= '<option value="0" selected="selected">'.$lang['show_all_categories'].'</option>';
+		else $subnav_2 .= '<option value="0">'.$lang['show_all_categories'].'</option>';
+		foreach ($categories as $key => $val) {
+			if ($key != 0) {
+				if ($key == $category) $subnav_2 .= '<option value="'.$key.'" selected="selected">'.$val.'</option>';
+				else $subnav_2 .= '<option value="'.$key.'">'.$val.'</option>';
+			}
+		}
+		$subnav_2 .= '</select><noscript> <input type="image" name="" value="" src="'. $settings['themepath'] .'/img/submit.gif" alt="&raquo;" /></noscript></div></form>';
+	}
 
-parse_template();
-echo $header;
+	parse_template();
+	echo $header;
 
 if($thread_count > 0 && isset($result))
  {
@@ -200,22 +193,20 @@ if($thread_count > 0 && isset($result))
      ?></a></td><?php } ?>
      </tr>
      <?php $i++; } ?></table><?php
-     mysqli_free_result($result);
+		mysqli_free_result($result);
 
-     if(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=='admin')
-      {
+		if(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type']=='admin') {
        ?><p class="marked-threads-board"><img src="'. $settings['themepath'] .'/img/marked.gif" alt="[x]" width="9" height="9" /> <?php echo $lang['marked_threads_actions']; ?> <a href="admin.php?action=delete_marked_threads&amp;refer=mix"><?php echo $lang['delete_marked_threads']; ?></a> - <a href="admin.php?action=lock_marked_threads&amp;refer=mix"><?php echo $lang['lock_marked_threads']; ?></a> - <a href="admin.php?action=unlock_marked_threads&amp;refer=mix"><?php echo $lang['unlock_marked_threads']; ?></a> - <a href="admin.php?action=unmark&amp;refer=mix"><?php echo $lang['unmark_threads']; ?></a> - <a href="admin.php?action=invert_markings&amp;refer=mix"><?php echo $lang['invert_markings']; ?></a> - <a href="admin.php?action=mark_threads&amp;refer=mix"><?php echo $lang['mark_threads']; ?></a></p><?php
-      }
+		}
+	} else {
+		if ($category != 0) echo "<p>".$lang['no_messages_in_category']."</p><p>&nbsp;</p>";
+		else echo "<p>".$lang['no_messages']."</p><p>&nbsp;</p>";
+	}
 
-     }
-     else
-     {
-      if ($category!=0) echo "<p>".$lang['no_messages_in_category']."</p><p>&nbsp;</p>";
-      else echo "<p>".$lang['no_messages']."</p><p>&nbsp;</p>";
-     }
+	echo $footer;
 
-echo $footer;
-
+} else {
+	header("location: login.php?msg=noaccess");
+	die('<a href="login.php?msg=noaccess">further...</a>');
 }
-else { header("location: login.php?msg=noaccess"); die('<a href="login.php?msg=noaccess">further...</a>'); }
 ?>
