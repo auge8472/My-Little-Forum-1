@@ -1,6 +1,6 @@
 INSTALLATION
 
-The script requires PHP > 4.1 and a MySQL database.
+The script requires PHP 5.2 or newer and a MySQL database of version 5.5 or newer.
 
 * The file forum.zip contains a folder with the script files ("forum").
 * Load up the complete folder to your server.
