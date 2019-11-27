@@ -435,7 +435,7 @@ if (isset($_POST['edit_category_submit'])) {
 
 if (isset($_POST['not_displayed_entries_submit'])) {
 	if ($_POST['mode'] == "delete") {
-		if (isset($category_ids_query) {
+		if (isset($category_ids_query)) {
 			mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE category NOT IN (". $category_ids_query .")");
 		} else {
 			mysqli_query($connid, "DELETE FROM ". $db_settings['forum_table'] ." WHERE category != 0");
