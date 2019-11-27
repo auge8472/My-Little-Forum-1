@@ -23,54 +23,49 @@
 
 include("inc.php");
 
-if(count($_GET) > 0)
-foreach($_GET as $key => $value)
+if (count($_GET) > 0)
+foreach ($_GET as $key => $value)
 $$key = $value;
 
-if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
- {
-  if (isset($_GET['id'])) $id = $_GET['id']; else $id = "";
-  header("location: login.php?referer=mix_entry.php&id=".$id);
-  die('<a href="login.php?referer=mix_entry.php&id='. intval($id) .'">further...</a>');
- }
+if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1) {
+	if (isset($_GET['id'])) $id = $_GET['id']; else $id = "";
+	header("location: login.php?referer=mix_entry.php&id=".$id);
+	die('<a href="login.php?referer=mix_entry.php&id='. intval($id) .'">further...</a>');
+}
 
-if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['session_prefix'].'user_name']) || $settings['access_for_users_only'] != 1)
-{
+if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['session_prefix'].'user_name']) || $settings['access_for_users_only'] != 1) {
+	function thread($id, $aktuellerEintrag = 0, $tiefe = 0) {
+		global $settings, $connid, $lang, $db_settings, $parent_array, $child_array, $user_delete, $page, $category, $order, $descasc, $time_difference, $categories;
+		$posting_result = mysqli_query($connid, "SELECT id, pid, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
+                      UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_Uhrzeit,
+                      UNIX_TIMESTAMP(edited - INTERVAL ". $settings['edit_delay'] ." MINUTE) AS edited_diff, edited_by, name, email,
+                      subject, hp, place, text, category, show_signature, locked FROM ". $db_settings['forum_table'] ."
+                      WHERE id = ". intval($parent_array[$id]["id"]) ." ORDER BY time ASC");
+		if(!$posting_result) die($lang['db_error']);
+		$entrydata = mysqli_fetch_assoc($posting_result);
+		mysqli_free_result($posting_result);
 
-function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
- {
-  global $settings, $connid, $lang, $db_settings, $parent_array, $child_array, $user_delete, $page, $category, $order, $descasc, $time_difference, $categories;
-  $posting_result = mysqli_query($connid, "SELECT id, pid, tid, pid, user_id, UNIX_TIMESTAMP(time + INTERVAL ". $time_difference ." HOUR) AS Uhrzeit,
-                        UNIX_TIMESTAMP(time) AS time, UNIX_TIMESTAMP(edited + INTERVAL ". $time_difference ." HOUR) AS e_Uhrzeit,
-                        UNIX_TIMESTAMP(edited - INTERVAL ". $settings['edit_delay'] ." MINUTE) AS edited_diff, edited_by, name, email,
-                        subject, hp, place, text, category, show_signature, locked FROM ". $db_settings['forum_table'] ."
-                        WHERE id = ". intval($parent_array[$id]["id"]) ." ORDER BY time ASC");
-  if(!$posting_result) die($lang['db_error']);
-  $entrydata = mysqli_fetch_assoc($posting_result);
-  mysqli_free_result($posting_result);
+		if ($entrydata["user_id"] > 0) {
+			$userdata_result=mysqli_query($connid, "SELECT user_name, user_email, hide_email, user_hp, user_place, signature FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($entrydata["user_id"]));
+			if (!$userdata_result) die($lang['db_error']);
+			$userdata = mysqli_fetch_assoc($userdata_result);
+			mysqli_free_result($userdata_result);
+			$entrydata["email"] = $userdata["user_email"];
+			$entrydata["hide_email"] = $userdata["hide_email"];
+			$entrydata["place"] = $userdata["user_place"];
+			$entrydata["hp"] = $userdata["user_hp"];
+			if ($entrydata["show_signature"]==1) $signature = $userdata["signature"];
+		}
 
-  if ($entrydata["user_id"] > 0)
-   {
-    $userdata_result=mysqli_query($connid, "SELECT user_name, user_email, hide_email, user_hp, user_place, signature FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($entrydata["user_id"]));
-    if (!$userdata_result) die($lang['db_error']);
-    $userdata = mysqli_fetch_assoc($userdata_result);
-    mysqli_free_result($userdata_result);
-    $entrydata["email"] = $userdata["user_email"];
-    $entrydata["hide_email"] = $userdata["hide_email"];
-    $entrydata["place"] = $userdata["user_place"];
-    $entrydata["hp"] = $userdata["user_hp"];
-    if ($entrydata["show_signature"]==1) $signature = $userdata["signature"];
-   }
-
-   // Posting heraussuchen, auf das geantwortet wurde:
-   $result_a = mysqli_query($connid, "SELECT name FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($parent_array[$id]["pid"]));
-   $posting_a = mysqli_fetch_assoc($result_a);
-   mysqli_free_result($result_a);
-   if ($tiefe==0 or $tiefe >= ($settings['max_thread_indent_mix_topic']/$settings['thread_indent_mix_topic'])) {
-     $intendation = 0;
-   } else {
-     $intendation = intval($settings['thread_indent_mix_topic']);
-   }
+		// Posting heraussuchen, auf das geantwortet wurde:
+		$result_a = mysqli_query($connid, "SELECT name FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($parent_array[$id]["pid"]));
+		$posting_a = mysqli_fetch_assoc($result_a);
+		mysqli_free_result($result_a);
+		if ($tiefe == 0 or $tiefe >= ($settings['max_thread_indent_mix_topic']/$settings['thread_indent_mix_topic'])) {
+			$intendation = 0;
+		} else {
+			$intendation = intval($settings['thread_indent_mix_topic']);
+		}
 
    ?><div class="mixdivl" id="p<?php echo intval($entrydata['id']); ?>" style="margin-left: <?php echo $intendation; ?>px;">
     <table class="mix-entry" border="0" cellpadding="5" cellspacing="1">
@@ -110,111 +105,102 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
     </tr>
     <tr>
      <td class="postingcell" valign="top"><?php
-                                          if ($entrydata["text"]=="")
-                                           {
-                                            echo $lang['no_text'];
-                                           }
-                                          else
-                                           {
-                                            $ftext=$entrydata["text"];
-                                            $ftext = htmlsc($ftext);
-                                            $ftext = nl2br($ftext);
-                                            $ftext = zitat($ftext);
-                                            if ($settings['autolink'] == 1) $ftext = make_link($ftext);
-                                            if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
-                                            if ($settings['smilies'] == 1) $ftext = smilies($ftext);
-                                            echo '<p class="postingboard">'.$ftext.'</p>';
-                                           }
-                                          if (isset($signature) && $signature != "")
-                                           {
-                                            $signature = htmlsc($signature);
-                                            $signature = nl2br($signature);
-                                            if ($settings['autolink'] == 1) $signature = make_link($signature);
-                                            if ($settings['bbcode'] == 1) $signature = bbcode($signature);
-                                            if ($settings['smilies'] == 1) $signature = smilies($signature);
-                                            echo '<p class="signature">'.$settings['signature_separator'].$signature.'</p>';
-                                           }
-
-                                           ?></td>
+     if ($entrydata["text"]=="") {
+       echo $lang['no_text'];
+     } else {
+       $ftext=$entrydata["text"];
+       $ftext = htmlsc($ftext);
+       $ftext = nl2br($ftext);
+       $ftext = zitat($ftext);
+       if ($settings['autolink'] == 1) $ftext = make_link($ftext);
+       if ($settings['bbcode'] == 1) $ftext = bbcode($ftext);
+       if ($settings['smilies'] == 1) $ftext = smilies($ftext);
+       echo '<p class="postingboard">'.$ftext.'</p>';
+     }
+     if (isset($signature) && $signature != "") {
+       $signature = htmlsc($signature);
+       $signature = nl2br($signature);
+       if ($settings['autolink'] == 1) $signature = make_link($signature);
+       if ($settings['bbcode'] == 1) $signature = bbcode($signature);
+       if ($settings['smilies'] == 1) $signature = smilies($signature);
+       echo '<p class="signature">'.$settings['signature_separator'].$signature.'</p>';
+     }
+   ?></td>
    </tr>
   </table>
   <?php
-  if(isset($child_array[$id]) && is_array($child_array[$id])) {
-    foreach($child_array[$id] as $kind) {
-      thread($kind, $aktuellerEintrag, $tiefe+1);
-    }
-  }
- ?></div><?php
- }
+		if (isset($child_array[$id]) && is_array($child_array[$id])) {
+			foreach ($child_array[$id] as $kind) {
+				thread($kind, $aktuellerEintrag, $tiefe+1);
+			}
+		}
+	?></div><?php
+	}
 
- unset($entrydata); // Benutzte Variablen deinitialisieren
- unset($parent_array);
- unset($child_array);
+	unset($entrydata);
+	unset($parent_array);
+	unset($child_array);
 
- if (empty($page)) $page = 0;
- if (empty($order)) $order="last_answer";
- if (empty($category)) $category="all";
- if (empty($descasc)) $descasc="DESC";
+	if (empty($page)) $page = 0;
+	if (empty($order)) $order="last_answer";
+	if (empty($category)) $category="all";
+	if (empty($descasc)) $descasc="DESC";
 
- if( isset($id) ) {  // Wenn $id Ã¼bergeben wurde..
-  $id = (int) $id;   // ... $id erst mal zu einem Integer machen ..
-  if( $id > 0 )      // ... und schauen ob es grÃ¶Ãer als 0 ist ..
-   {
-    $result=mysqli_query($connid, "SELECT tid, pid, subject, category FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($id));
-    if(!$result) die($lang['db_error']);
-    if(mysqli_num_rows($result) > 0) {  // überprüfen ob ein Eintrag mit dieser id in der Datenbank ist
-    $entrydata = mysqli_fetch_assoc($result); // Und ggbf. aus der Datenbank holen
+	if (isset($id)) {
+		$id = (int) $id;
+		if ($id > 0) {
+			$result=mysqli_query($connid, "SELECT tid, pid, subject, category FROM ". $db_settings['forum_table'] ." WHERE id = ". intval($id));
+			if (!$result) die($lang['db_error']);
+			if (mysqli_num_rows($result) > 0) {
+				// look if an entry with the id exists
+				$entrydata = mysqli_fetch_assoc($result);
+				// Look if id correct:
+				if ($entrydata['pid'] != 0) header("location: ". basename($_SERVER['SCRIPT_NAME']) ."?id=". $entrydata['tid'] ."&page=". $page ."&category=". $category ."&order=". $order ."&descasc=". $descasc ."#p". $id);
+				// category of this posting accessible by user?
+				if (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin")) {
+					if (is_array($category_ids) && !in_array($entrydata['category'], $category_ids)) {
+						header("location: mix.php");
+						die();
+					}
+				}
+				// count views:
+				if (isset($settings['count_views']) && $settings['count_views'] == 1) mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=". intval($id));
+			}
+		}
+	}
 
-    // Look if id correct:
-    if ($entrydata['pid'] != 0) header("location: ". basename($_SERVER['SCRIPT_NAME']) ."?id=". $entrydata['tid'] ."&page=". $page ."&category=". $category ."&order=". $order ."&descasc=". $descasc ."#p". $id);
-
-     // category of this posting accessible by user?
-     if (!(isset($_SESSION[$settings['session_prefix'].'user_type']) && $_SESSION[$settings['session_prefix'].'user_type'] == "admin"))
-      {
-       if(is_array($category_ids) && !in_array($entrydata['category'], $category_ids))
-        {
-         header("location: mix.php");
-         die();
-        }
-      }
-
-    // count views:
-    if (isset($settings['count_views']) && $settings['count_views'] == 1) mysqli_query($connid, "UPDATE ". $db_settings['forum_table'] ." SET time=time, last_answer=last_answer, edited=edited, views=views+1 WHERE tid=". intval($id));
-   }
-  }
- }
-
- if(!isset($entrydata)) {
-  header("Location: mix.php");
-  exit();
- }
+	if (!isset($entrydata)) {
+		header("Location: mix.php");
+		exit();
+	}
 
 
- $thread = $entrydata["tid"];
- $result = mysqli_query($connid, "SELECT id, pid FROM ". $db_settings['forum_table'] ." WHERE tid = ". intval($thread) ." ORDER BY time ASC");
- if(!$result) die($lang['db_error']);
+	$thread = $entrydata["tid"];
+	$result = mysqli_query($connid, "SELECT id, pid FROM ". $db_settings['forum_table'] ." WHERE tid = ". intval($thread) ." ORDER BY time ASC");
+	if (!$result) die($lang['db_error']);
 
-  // Ergebnisse einlesen
- while($tmp = mysqli_fetch_assoc($result)) {  // Ergebnis holen
-  $parent_array[$tmp["id"]] = $tmp;          // Ergebnis im Array ablegen
-  $child_array[$tmp["pid"]][] =  $tmp["id"]; // VorwÃ¤rtsbezÃ¼ge konstruieren
- }
+	// Ergebnisse einlesen
+	while ($tmp = mysqli_fetch_assoc($result)) {
+		// Ergebnis holen
+		$parent_array[$tmp["id"]] = $tmp;          // Ergebnis im Array ablegen
+		$child_array[$tmp["pid"]][] =  $tmp["id"]; // Vorwärtsbezüge konstruieren
+	}
 
- mysqli_free_result($result); // Aufräumen
+	mysqli_free_result($result); // Aufräumen
 
-$wo = $entrydata["subject"];
-$subnav_1 = '<a class="textlink" href="mix.php?page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'">'.$lang['back_to_overview_linkname'].'</a>';
-$subnav_2 = "";
-if ($settings['thread_view']==1) $subnav_2 .= '<span class="small"><a href="forum_entry.php?id='. intval($entrydata["tid"]) .'&amp;page='. intval($page) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'&amp;category='. intval($category) .'"><img src="'. $settings['themepath'] .'/img/thread.gif" alt="" />'.$lang['thread_view_linkname'].'</a></span>';
-if ($settings['board_view']==1) $subnav_2 .= '&nbsp;&nbsp;<span class="small"><a href="board_entry.php?id='. intval($entrydata["tid"]) .'&amp;page='. intval($page) .'&amp;order='. urlencode($order) .'&amp;category='. urlencode($category) .'"><img src="'. $settings['themepath'] .'/img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';
+	$wo = $entrydata["subject"];
+	$subnav_1 = '<a class="textlink" href="mix.php?page='. intval($page) .'&amp;category='. intval($category) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'">'.$lang['back_to_overview_linkname'].'</a>';
+	$subnav_2 = "";
+	if ($settings['thread_view'] == 1) $subnav_2 .= '<span class="small"><a href="forum_entry.php?id='. intval($entrydata["tid"]) .'&amp;page='. intval($page) .'&amp;order='. urlencode($order) .'&amp;descasc='. urlencode($descasc) .'&amp;category='. intval($category) .'"><img src="'. $settings['themepath'] .'/img/thread.gif" alt="" />'.$lang['thread_view_linkname'].'</a></span>';
+	if ($settings['board_view'] == 1) $subnav_2 .= '&nbsp;&nbsp;<span class="small"><a href="board_entry.php?id='. intval($entrydata["tid"]) .'&amp;page='. intval($page) .'&amp;order='. urlencode($order) .'&amp;category='. urlencode($category) .'"><img src="'. $settings['themepath'] .'/img/board.gif" alt="" width="12" height="9" />'.$lang['board_view_linkname'].'</a></span>';
 
-parse_template();
-echo $header;
+	parse_template();
+	echo $header;
+	thread($thread, $id);
+	echo $footer;
 
-thread($thread, $id);
-
-echo $footer;
-
+} else {
+	header("location: login.php?msg=noaccess");
+	die('<a href="login.php?msg=noaccess">further...</a>');
 }
-else { header("location: login.php?msg=noaccess"); die('<a href="login.php?msg=noaccess">further...</a>'); }
 ?>
