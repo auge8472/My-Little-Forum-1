@@ -295,6 +295,7 @@ function update17to18() {
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['banlists_table'] ." CHANGE name name varchar(32) CHARACTER SET utf8mb3 NOT NULL, ADD PRIMARY KEY (name)") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['useronline_table'] ." CHANGE time time int(14) NOT NULL default 0, CHANGE user_id user_id int(11) default 0, CONVERT TO CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
 	@mysqli_query($connid, "ALTER TABLE ". $db_settings['useronline_table'] ." ADD UNIQUE KEY ip_user (ip,user_id)") or $errors[] = $lang_add['alter_table_error']. " (MySQL: ".mysqli_error($connid).")";
+	@mysqli_query($connid, "ALTER TABLE ". $db_settings['settings_table'] ." ADD PRIMARY KEY (name)") or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['alter_table_error']) ." (MySQL: ".mysqli_error($connid).")";
 	@mysqli_query($connid, "DELETE FROM ". $db_settings['settings_table'] ." WHERE name = 'template'") or $errors[] = $lang_add['delete_entry_error']." (MySQL: ".mysqli_error($connid).")";
 	@mysqli_query($connid, "UPDATE ". $db_settings['settings_table'] ." SET value='1.8.beta1' WHERE name = 'version'") or $errors[] = $lang_add['update_error']. " (MySQL: ".mysqli_error($connid).")";
 	if (isset($errors)) return $errors;
