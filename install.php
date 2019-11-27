@@ -467,8 +467,9 @@ if (isset($_POST['form_submitted'])) {
 		$tabledef['uonline'] = "CREATE TABLE ". $db_settings['useronline_table'] ." (
      ip char(15) NOT NULL default '',
      time int(14) NOT NULL default 0,
-     user_id int(11) default 0),
-     UNIQUE KEY ip_user (ip, user_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci";
+     user_id int(11) default 0) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci";
+		$tabledef['uonline_key'] ="ALTER TABLE ". $db_settings['useronline_table'] ."
+     ADD UNIQUE KEY ip_user (ip,user_id)";
      // create tables:
 		if (empty($errors)) {
 			@mysqli_query($connid, $tabledef['settings']) or $errors[] = str_replace("[table]",$db_settings['settings_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
@@ -478,6 +479,7 @@ if (isset($_POST['form_submitted'])) {
 			@mysqli_query($connid, $tabledef['smilies']) or $errors[] = str_replace("[table]",$db_settings['smilies_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
 			@mysqli_query($connid, $tabledef['banlists']) or $errors[] = str_replace("[table]",$db_settings['banlists_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
 			@mysqli_query($connid, $tabledef['uonline']) or $errors[] = str_replace("[table]",$db_settings['useronline_table'],$lang_add['create_table_error'])." (MySQL: ".mysqli_error($connid).")";
+			@mysqli_query($connid, $tabledef['uonline_key']) or $errors[] = str_replace("[table]",$db_settings['useronline_table'],$lang_add['alter_table_error'])." (MySQL: ".mysqli_error($connid).")";
 		}
 
 		// insert admin in userdata table:
