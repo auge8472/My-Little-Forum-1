@@ -155,7 +155,7 @@ if (isset($_SESSION[$settings['session_prefix'].'user_id']) && empty($action)) {
 			if (empty($user_view) or $user_view == "") $user_view = $standard;
 			if (empty($new_posting_notify)) $new_posting_notify = 0;
 			if (empty($new_user_notify)) $new_user_notify = 0;
-			if (isset($user_hp) && filter_var($user_hp, FILTER_VALIDATE_URL) === false) $errors[] = $lang['error_hp_wrong'];
+			if (!empty($user_hp) && filter_var($user_hp, FILTER_VALIDATE_URL) === false) $errors[] = $lang['error_hp_wrong'];
 			if (mb_strlen($user_real_name) > $settings['name_maxlength']) $errors[] = $lang['user_real_name'] . " " .$lang['error_input_too_long'];
 			if (mb_strlen($user_hp) > $settings['hp_maxlength']) $errors[] = $lang['user_hp'] . " " .$lang['error_input_too_long'];
 			if (mb_strlen($user_place) > $settings['place_maxlength']) $errors[] = $lang['user_place'] . " " .$lang['error_input_too_long'];
