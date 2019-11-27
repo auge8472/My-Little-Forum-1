@@ -193,7 +193,7 @@ function parse_code($string) {
 	else $p_class='posting';
 	$string = $string[1];
 	$string = str_replace('<br />','',$string);
-	$string = '</p><pre><span class="code">'.$string.'</span></pre><p class="'.$p_class.'">';
+	$string = '</p><pre><code>'.$string.'</code></pre><p class="'.$p_class.'">';
 	return $string;
 }
 
