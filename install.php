@@ -592,7 +592,7 @@ if (isset($_POST['form_submitted'])) {
 					if ($errors === false) unset($errors);
 				break;
 				case 1.7:
-					$errors = update1if ($errors === false)7();
+					$errors = update17();
 					if ($errors === false) unset($errors);
 					if (empty($errors)) $errors = update17to18();
 					if ($errors === false) unset($errors);
