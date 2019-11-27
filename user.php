@@ -23,18 +23,16 @@
 
 include("inc.php");
 
-if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
- {
-  if (isset($_GET['id'])) header("location: login.php?referer=user.php&id=". intval($_GET['id']));
-  else header("location: login.php?referer=user.php");
-  die('<a href="login.php?referer=user.php">further...</a>');
- }
+if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1) {
+	if (isset($_GET['id'])) header("location: login.php?referer=user.php&id=". intval($_GET['id']));
+	else header("location: login.php?referer=user.php");
+	die('<a href="login.php?referer=user.php">further...</a>');
+}
 
-if (!isset($_SESSION[$settings['session_prefix'].'user_id']))
- {
-  header("location: login.php");
-  die('<a href="login.php">further...</a>');
- }
+if (!isset($_SESSION[$settings['session_prefix'].'user_id'])) {
+	header("location: login.php");
+	die('<a href="login.php">further...</a>');
+}
 
 // import vars:
 if (isset($_SESSION[$settings['session_prefix'].'user_id'])) $user_id = $_SESSION[$settings['session_prefix'].'user_id'];
@@ -77,178 +75,206 @@ $lock_result_array = mysqli_fetch_assoc($lock_result);
 mysqli_free_result($lock_result);
 if ($lock_result_array['user_lock'] > 0) $action = "locked";
 
-if (isset($_GET['user_lock']) && isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod"))
- {
-  $lock_result = mysqli_query($connid, "SELECT user_lock, user_type FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_GET['user_lock']) ." LIMIT 1");
-  if (!$lock_result) die($lang['db_error']);
-  $field = mysqli_fetch_assoc($lock_result);
-  mysqli_free_result($lock_result);
-  if ($field['user_type'] == "user")
-   {
-    $new_lock = ($field['user_lock'] == 0) ? 1 : 0;
-    $update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_lock=". intval($new_lock) .", last_login=last_login, registered=registered WHERE user_id=". intval($_GET['user_lock']) ." LIMIT 1");
-   }
-  $action="show users";
- }
+if (isset($_GET['user_lock']) && isset($_SESSION[$settings['session_prefix'].'user_type']) && ($_SESSION[$settings['session_prefix'].'user_type'] == "admin" || $_SESSION[$settings['session_prefix'].'user_type'] == "mod")) {
+	$lock_result = mysqli_query($connid, "SELECT user_lock, user_type FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_GET['user_lock']) ." LIMIT 1");
+	if (!$lock_result) die($lang['db_error']);
+	$field = mysqli_fetch_assoc($lock_result);
+	mysqli_free_result($lock_result);
+	if ($field['user_type'] == "user") {
+		$new_lock = ($field['user_lock'] == 0) ? 1 : 0;
+		$update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_lock=". intval($new_lock) .", last_login=last_login, registered=registered WHERE user_id=". intval($_GET['user_lock']) ." LIMIT 1");
+	}
+	$action="show users";
+}
 
-if(isset($_POST['change_email_submit']))
- {
-    $new_email = trim($_POST['new_email']);
-    $pw_new_email = $_POST['pw_new_email'];
-    // Check data:
-    $email_result = mysqli_query($connid, "SELECT user_id, user_name, user_pw, user_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($user_id) ." LIMIT 1");
-    if (!$email_result) die($lang['db_error']);
-    $field = mysqli_fetch_assoc($email_result);
-    mysqli_free_result($email_result);
-    if ($pw_new_email=='' || $new_email=='') $errors[] = $lang['error_form_uncompl'];
-    if (empty($errors))
-     {
-      if (mb_strlen($new_email) > $settings['email_maxlength']) $errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
-      if ($new_email == $field["user_email"]) $errors[] = $lang['error_email_equal'];
-      if (!preg_match("/^[^@]+@.+\.\D{2,}$/", $new_email)) $errors[] = $lang['error_email_wrong'];
-      if ($field["user_pw"] == 32) {
-        if ($field["user_pw"] == md5($pw_new_email)) {
-          $positive = true;
-        } else {
-          $positive = false;
-        }
-        if ($positive === true) {
-          $new_hash = password_hash($pw_new_email, PASSWORD_DEFAULT);
-          $qNewPassword = "UPDATE ". $db_settings['userdata_table'] ." SET last_login=last_login, registered=registered, user_pw = '". mysqli_real_escape_string($connid, $new_hash) ."' WHERE user_id = ". intval($field["user_id"]);
-          $rNewPassword = mysqli_query($connid, $qNewPassword);
-          if ($rNewPassword === true) {
-            $field["user_pw"] = $new_hash;
-          }
-        }
-      } else {
-        $positive = password_verify($userpw, $field["user_pw"]);
-      }
-      if ($positive === false) $errors[] = $lang['pw_wrong'];
-     }
-    if (empty($errors))
-     {
-      $activate_code = md5(uniqid(rand()));
-      // send mail with activation key:
-      $lang['new_user_email_txt'] = str_replace("[name]", $field['user_name'], $lang['change_email_txt']);
-      $lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$field['user_id']."&key=".$activate_code, $lang['new_user_email_txt']);
-      $new_user_mailto = encodeMailName($field['user_name'], "\n") ." <". $new_email .">";
-      $sent = processEmail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt']);
-      if ($sent === false) {
-        $errors[] = $lang['error_meilserv'];
-      }
-      if(empty($errors))
-       {
-        @mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_email='". mysqli_real_escape_string($connid, $new_email) ."', last_login=last_login, registered=registered, activate_code = '". mysqli_real_escape_string($connid, $activate_code) ."' WHERE user_id=". intval($user_id)) or die($lang['db_error']);
-        header("location: login.php"); die('<a href="login.php">further...</a>');
-       }
-      else $action="email";
-     }
-    else $action="email";
- }
+if (isset($_POST['change_email_submit'])) {
+	$new_email = trim($_POST['new_email']);
+	$pw_new_email = $_POST['pw_new_email'];
+	// Check data:
+	$email_result = mysqli_query($connid, "SELECT user_id, user_name, user_pw, user_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($user_id) ." LIMIT 1");
+	if (!$email_result) die($lang['db_error']);
+	$field = mysqli_fetch_assoc($email_result);
+	mysqli_free_result($email_result);
+	if ($pw_new_email=='' || $new_email=='') $errors[] = $lang['error_form_uncompl'];
+	if (empty($errors)) {
+		if (mb_strlen($new_email) > $settings['email_maxlength']) $errors[] = $lang['email_marking'] . " " .$lang['error_input_too_long'];
+		if ($new_email == $field["user_email"]) $errors[] = $lang['error_email_equal'];
+		if (!preg_match("/^[^@]+@.+\.\D{2,}$/", $new_email)) $errors[] = $lang['error_email_wrong'];
+		if ($field["user_pw"] == 32) {
+			if ($field["user_pw"] == md5($pw_new_email)) {
+				$positive = true;
+			} else {
+				$positive = false;
+			}
+			if ($positive === true) {
+				$new_hash = password_hash($pw_new_email, PASSWORD_DEFAULT);
+				$qNewPassword = "UPDATE ". $db_settings['userdata_table'] ." SET last_login=last_login, registered=registered, user_pw = '". mysqli_real_escape_string($connid, $new_hash) ."' WHERE user_id = ". intval($field["user_id"]);
+				$rNewPassword = mysqli_query($connid, $qNewPassword);
+				if ($rNewPassword === true) {
+					$field["user_pw"] = $new_hash;
+				}
+			}
+		} else {
+			$positive = password_verify($userpw, $field["user_pw"]);
+		}
+		if ($positive === false) $errors[] = $lang['pw_wrong'];
+	}
+	if (empty($errors)) {
+		$activate_code = md5(uniqid(rand()));
+		// send mail with activation key:
+		$lang['new_user_email_txt'] = str_replace("[name]", $field['user_name'], $lang['change_email_txt']);
+		$lang['new_user_email_txt'] = str_replace("[activate_link]", $settings['forum_address']."register.php?id=".$field['user_id']."&key=".$activate_code, $lang['new_user_email_txt']);
+		$new_user_mailto = encodeMailName($field['user_name'], "\n") ." <". $new_email .">";
+		$sent = processEmail($new_user_mailto, $lang['new_user_email_sj'], $lang['new_user_email_txt']);
+		if ($sent === false) {
+			$errors[] = $lang['error_meilserv'];
+		}
+		if (empty($errors)) {
+			@mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_email='". mysqli_real_escape_string($connid, $new_email) ."', last_login=last_login, registered=registered, activate_code = '". mysqli_real_escape_string($connid, $activate_code) ."' WHERE user_id=". intval($user_id)) or die($lang['db_error']);
+			header("location: login.php");
+			die('<a href="login.php">further...</a>');
+		}
+		else $action="email";
+	}
+	else $action="email";
+}
 
-if (isset($_SESSION[$settings['session_prefix'].'user_id']) && empty($action))
- {
-  if (isset($id)) $action = "get userdata";
-  else $action = "show users";
- }
-elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action))
- {
-  switch ($action) // Aktionen vor der Ausgabe von HTML
-  {
-   case "edit submited":
-    // Check the posted data:
-    $user_real_name = trim($user_real_name);
-    $user_hp = trim($user_hp);
-    $user_place = trim($user_place);
-    $profile = trim($profile);
-    $signature = trim($signature);
-    #if (isset($user_hp) && mb_substr($user_hp, 0, 7) == "http://") $user_hp = mb_substr($user_hp, 7);
-    if (empty($user_view) or $user_view == "") $user_view = $standard;
-    if (empty($new_posting_notify)) $new_posting_notify = 0;
-    if (empty($new_user_notify)) $new_user_notify = 0;
-    if (isset($user_hp) && filter_var($user_hp, FILTER_VALIDATE_URL) === false) $errors[] = $lang['error_hp_wrong'];
-    if (mb_strlen($user_real_name) > $settings['name_maxlength']) $errors[] = $lang['user_real_name'] . " " .$lang['error_input_too_long'];
-    if (mb_strlen($user_hp) > $settings['hp_maxlength']) $errors[] = $lang['user_hp'] . " " .$lang['error_input_too_long'];
-    if (mb_strlen($user_place) > $settings['place_maxlength']) $errors[] = $lang['user_place'] . " " .$lang['error_input_too_long'];
-    if (mb_strlen($profile) > $settings['profile_maxlength'])
-     {
-      $lang['err_prof_too_long'] = str_replace("[length]", mb_strlen($profile), $lang['err_prof_too_long']);
-      $lang['err_prof_too_long'] = str_replace("[maxlength]", $settings['profile_maxlength'], $lang['err_prof_too_long']);
-      $errors[] = $lang['err_prof_too_long'];
-     }
-    if (mb_strlen($signature) > $settings['signature_maxlength'])
-     {
-      $lang['err_sig_too_long'] = str_replace("[length]", mb_strlen($signature), $lang['err_sig_too_long']);
-      $lang['err_sig_too_long'] = str_replace("[maxlength]", $settings['signature_maxlength'], $lang['err_sig_too_long']);
-      $errors[] = $lang['err_sig_too_long'];
-     }
+if (isset($_SESSION[$settings['session_prefix'].'user_id']) && empty($action)) {
+	if (isset($id)) $action = "get userdata";
+	else $action = "show users";
+} else if (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action)) {
+	// Aktionen vor der Ausgabe von HTML
+	switch ($action) {
+		case "edit submited":
+			// Check the posted data:
+			$user_real_name = trim($user_real_name);
+			$user_hp = trim($user_hp);
+			$user_place = trim($user_place);
+			$profile = trim($profile);
+			$signature = trim($signature);
+			if (empty($user_view) or $user_view == "") $user_view = $standard;
+			if (empty($new_posting_notify)) $new_posting_notify = 0;
+			if (empty($new_user_notify)) $new_user_notify = 0;
+			if (isset($user_hp) && filter_var($user_hp, FILTER_VALIDATE_URL) === false) $errors[] = $lang['error_hp_wrong'];
+			if (mb_strlen($user_real_name) > $settings['name_maxlength']) $errors[] = $lang['user_real_name'] . " " .$lang['error_input_too_long'];
+			if (mb_strlen($user_hp) > $settings['hp_maxlength']) $errors[] = $lang['user_hp'] . " " .$lang['error_input_too_long'];
+			if (mb_strlen($user_place) > $settings['place_maxlength']) $errors[] = $lang['user_place'] . " " .$lang['error_input_too_long'];
+			if (mb_strlen($profile) > $settings['profile_maxlength']) {
+				$lang['err_prof_too_long'] = str_replace("[length]", mb_strlen($profile), $lang['err_prof_too_long']);
+				$lang['err_prof_too_long'] = str_replace("[maxlength]", $settings['profile_maxlength'], $lang['err_prof_too_long']);
+				$errors[] = $lang['err_prof_too_long'];
+			}
+			if (mb_strlen($signature) > $settings['signature_maxlength']) {
+				$lang['err_sig_too_long'] = str_replace("[length]", mb_strlen($signature), $lang['err_sig_too_long']);
+				$lang['err_sig_too_long'] = str_replace("[maxlength]", $settings['signature_maxlength'], $lang['err_sig_too_long']);
+				$errors[] = $lang['err_sig_too_long'];
+			}
 
-     $text_arr = explode(" ",$user_real_name); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = mb_strlen($text_arr[$i]); if ($laenge > $settings['name_word_maxlength']) {
-     $error_nwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
-     $errors[] = $error_nwtl; } }
-     $text_arr = explode(" ",$user_place); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = mb_strlen($text_arr[$i]); if ($laenge > $settings['place_word_maxlength']) {
-     $error_pwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
-     $errors[] = $error_pwtl; } }
-     $text_arr = str_replace("\n", " ", $profile);
-     if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
-     if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
-     $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = mb_strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-     $error_twtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['text_word_maxlength']))."...", $lang['err_prof_word_too_long']);
-     $errors[] = $error_twtl; } }
-     $text_arr = str_replace("\n", " ", $signature);
-     if ($settings['bbcode'] == 1) { $text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr); $text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr); }
-     if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) { $text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr); $text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr); $text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr); }
-     $text_arr = explode(" ",$text_arr); for ($i=0;$i<count($text_arr);$i++) { trim($text_arr[$i]); $laenge = mb_strlen($text_arr[$i]); if ($laenge > $settings['text_word_maxlength']) {
-     $error_twtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['text_word_maxlength']))."...", $lang['err_sig_word_too_long']);
-     $errors[] = $error_twtl; } }
-    // End of checking
+			$text_arr = explode(" ", $user_real_name);
+			for ($i = 0; $i < count($text_arr); $i++) {
+				trim($text_arr[$i]);
+				$laenge = mb_strlen($text_arr[$i]);
+				if ($laenge > $settings['name_word_maxlength']) {
+					$error_nwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['name_word_maxlength']))."...", $lang['error_name_word_too_long']);
+					$errors[] = $error_nwtl;
+				}
+			}
+			$text_arr = explode(" ", $user_place);
+			for ($i = 0; $i < count($text_arr); $i++) {
+				trim($text_arr[$i]);
+				$laenge = mb_strlen($text_arr[$i]);
+				if ($laenge > $settings['place_word_maxlength']) {
+					$error_pwtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['place_word_maxlength']))."...", $lang['error_place_word_too_long']);
+					$errors[] = $error_pwtl;
+				}
+			}
+			$text_arr = str_replace("\n", " ", $profile);
+			if ($settings['bbcode'] == 1) {
+				$text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr);
+			}
+			if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) {
+				$text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr);
+				$text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr);
+				$text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr);
+			}
+			$text_arr = explode(" ", $text_arr);
+			for ($i = 0; $i < count($text_arr); $i++) {
+				trim($text_arr[$i]);
+				$laenge = mb_strlen($text_arr[$i]);
+				if ($laenge > $settings['text_word_maxlength']) {
+					$error_twtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['text_word_maxlength']))."...", $lang['err_prof_word_too_long']);
+					$errors[] = $error_twtl;
+				}
+			}
+			$text_arr = str_replace("\n", " ", $signature);
+			if ($settings['bbcode'] == 1) {
+				$text_arr = preg_replace("#\[b\](.+?)\[/b\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[link\](.+?)\[/link\]#is", "\\1", $text_arr);
+				$text_arr = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", "\\2", $text_arr);
+			}
+			if ($settings['bbcode'] == 1 && $settings['bbcode_img'] == 1) {
+				$text_arr = preg_replace("#\[img\](.+?)\[/img\]#is", "[img]", $text_arr);
+				$text_arr = preg_replace("#\[img-l\](.+?)\[/img\]#is", "[img] ", $text_arr);
+				$text_arr = preg_replace("#\[img-r\](.+?)\[/img\]#is", "[img]", $text_arr);
+			}
+			$text_arr = explode(" ",$text_arr);
+			for ($i=0;$i<count($text_arr);$i++) {
+				trim($text_arr[$i]);
+				$laenge = mb_strlen($text_arr[$i]);
+				if ($laenge > $settings['text_word_maxlength']) {
+					$error_twtl = str_replace("[word]", htmlsc(mb_substr($text_arr[$i], 0, $settings['text_word_maxlength']))."...", $lang['err_sig_word_too_long']);
+					$errors[] = $error_twtl;
+				}
+			}
+			// End of checking
 
-    #if (isset($hp) && mb_substr($hp, 0, 7) == "http://") { $hp = mb_substr($hp, 7); }
-    if (empty($hide_email)) $hide_email = 0;
-    if (empty($errors))
-     {
-      $update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_real_name='". mysqli_real_escape_string($connid, $user_real_name) ."', hide_email=". intval($hide_email) .", user_hp='". mysqli_real_escape_string($connid, $user_hp) ."', user_place='". mysqli_real_escape_string($connid, $user_place) ."', profile='". mysqli_real_escape_string($connid, $profile) ."', signature='". mysqli_real_escape_string($connid, $signature) ."', last_login=last_login, registered=registered, user_view='". mysqli_real_escape_string($connid, $user_view) ."', new_posting_notify=". intval($new_posting_notify) .", new_user_notify=". intval($new_user_notify) .", personal_messages=". intval($personal_messages) .", time_difference=". intval($user_time_difference) ." WHERE user_id=". intval($user_id) ." LIMIT 1");
-      $_SESSION[$settings['session_prefix'].'user_view'] = $user_view;
-      $_SESSION[$settings['session_prefix'].'user_time_difference'] = $user_time_difference;
+			if (empty($hide_email)) $hide_email = 0;
+			if (empty($errors)) {
+				$update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_real_name='". mysqli_real_escape_string($connid, $user_real_name) ."', hide_email=". intval($hide_email) .", user_hp='". mysqli_real_escape_string($connid, $user_hp) ."', user_place='". mysqli_real_escape_string($connid, $user_place) ."', profile='". mysqli_real_escape_string($connid, $profile) ."', signature='". mysqli_real_escape_string($connid, $signature) ."', last_login=last_login, registered=registered, user_view='". mysqli_real_escape_string($connid, $user_view) ."', new_posting_notify=". intval($new_posting_notify) .", new_user_notify=". intval($new_user_notify) .", personal_messages=". intval($personal_messages) .", time_difference=". intval($user_time_difference) ." WHERE user_id=". intval($user_id) ." LIMIT 1");
+				$_SESSION[$settings['session_prefix'].'user_view'] = $user_view;
+				$_SESSION[$settings['session_prefix'].'user_time_difference'] = $user_time_difference;
+				header("location: user.php?id=". intval($_SESSION[$settings['session_prefix'].'user_id'])); die('<a href="user.php?id='. intval($_SESSION[$settings['session_prefix'].'user_id']) .'">further...</a>');
+			}
+			else $action="edit";
+		break;
+		case "pw submited":
+			$pw_result = mysqli_query($connid, "SELECT user_pw FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($user_id) ." LIMIT 1");
+			if (!$pw_result) die($lang['db_error']);
+			$field = mysqli_fetch_assoc($pw_result);
+			mysqli_free_result($pw_result);
 
-      header("location: user.php?id=". intval($_SESSION[$settings['session_prefix'].'user_id'])); die('<a href="user.php?id='. intval($_SESSION[$settings['session_prefix'].'user_id']) .'">further...</a>');
-     }
-    else $action="edit";
-   break;
+			trim($old_pw);
+			trim($new_pw);
+			trim($new_pw_conf);
 
-   case "pw submited":
-    $pw_result = mysqli_query($connid, "SELECT user_pw FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($user_id) ." LIMIT 1");
-    if (!$pw_result) die($lang['db_error']);
-    $field = mysqli_fetch_assoc($pw_result);
-    mysqli_free_result($pw_result);
-
-    trim($old_pw);
-    trim($new_pw);
-    trim($new_pw_conf);
-
-    if ($old_pw=="" or $new_pw=="" or $new_pw_conf =="") $errors[] = $lang['error_form_uncompl'];
-    else
-     {
-      if (mb_strlen($field["user_pw"]) == 32) {
-        if ($field["user_pw"] == md5($old_pw)) {
-          $positive = true;
-        } else {
-          $positive = false;
-        }
-      } else {
-        $positive = password_verify($old_pw, $field["user_pw"]);
-      }
-      if ($positive === false) $errors[] = $lang['error_old_pw_wrong'];
-      if ($new_pw_conf != $new_pw) $errors[] = $lang['error_pw_conf_wrong'];
-     }
-    // Update, if no errors:
-    if (empty($errors))
-     {
-      $pw_update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_pw='". mysqli_real_escape_string($connid, password_hash($new_pw, PASSWORD_DEFAULT)) ."', last_login=last_login, registered=registered WHERE user_id=". intval($user_id));
-      header("location: user.php?id=". intval($_SESSION[$settings['session_prefix'].'user_id'])); die('<a href="user.php?id='. intval($_SESSION[$settings['session_prefix'].'user_id']) .'">further...</a>');
-     }
-    else $action="pw";
-   break;
+			if ($old_pw == "" or $new_pw == "" or $new_pw_conf == "") $errors[] = $lang['error_form_uncompl'];
+			else {
+				if (mb_strlen($field["user_pw"]) == 32) {
+					if ($field["user_pw"] == md5($old_pw)) {
+						$positive = true;
+					} else {
+						$positive = false;
+					}
+				} else {
+					$positive = password_verify($old_pw, $field["user_pw"]);
+				}
+				if ($positive === false) $errors[] = $lang['error_old_pw_wrong'];
+				if ($new_pw_conf != $new_pw) $errors[] = $lang['error_pw_conf_wrong'];
+			}
+			// Update, if no errors:
+			if (empty($errors)) {
+				$pw_update_result = mysqli_query($connid, "UPDATE ". $db_settings['userdata_table'] ." SET user_pw='". mysqli_real_escape_string($connid, password_hash($new_pw, PASSWORD_DEFAULT)) ."', last_login=last_login, registered=registered WHERE user_id=". intval($user_id));
+				header("location: user.php?id=". intval($_SESSION[$settings['session_prefix'].'user_id']));
+				die('<a href="user.php?id='. intval($_SESSION[$settings['session_prefix'].'user_id']) .'">further...</a>');
+			}
+			else $action="pw";
+		break;
    /* self-delete of user:
    case "delete submited":
     // Überprüfungen:
@@ -272,60 +298,58 @@ elseif (isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($action
     else $action="delete";
    break;
    */
+		case "pm_sent":
+			$pms_result = mysqli_query($connid, "SELECT user_name, user_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($user_id) ." LIMIT 1");
+			if (!$pms_result) die($lang['db_error']);
+			$sender = mysqli_fetch_assoc($pms_result);
+			mysqli_free_result($pms_result);
 
-   case "pm_sent":
-    $pms_result = mysqli_query($connid, "SELECT user_name, user_email FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($user_id) ." LIMIT 1");
-    if (!$pms_result) die($lang['db_error']);
-    $sender = mysqli_fetch_assoc($pms_result);
-    mysqli_free_result($pms_result);
+			$pmr_result = mysqli_query($connid, "SELECT user_name, user_email, personal_messages FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_POST['recipient_id']) ." LIMIT 1");
+			if (!$pmr_result) die($lang['db_error']);
+			$recipient = mysqli_fetch_assoc($pmr_result);
+			mysqli_free_result($pmr_result);
 
-    $pmr_result = mysqli_query($connid, "SELECT user_name, user_email, personal_messages FROM ". $db_settings['userdata_table'] ." WHERE user_id = ". intval($_POST['recipient_id']) ." LIMIT 1");
-    if (!$pmr_result) die($lang['db_error']);
-    $recipient = mysqli_fetch_assoc($pmr_result);
-    mysqli_free_result($pmr_result);
+			if ($_POST['pm_text'] == "") $errors[] = $lang['error_pers_msg_no_text'];
+			if ($recipient['personal_messages'] == "") $errors[] = $lang['error_pers_msg_deactivated'];
 
-    if ($_POST['pm_text'] == "") $errors[] = $lang['error_pers_msg_no_text'];
-    if ($recipient['personal_messages'] == "") $errors[] = $lang['error_pers_msg_deactivated'];
+			if (empty($errors)) {
+				$lang['pers_msg_mail_add'] = str_replace("[forum_address]", $settings['forum_address'], $lang['pers_msg_mail_add']);
+				$mail_subject = $_POST['pm_subject'];
+				$mail_text = $_POST['pm_text'];
+				$mail_text .= "\n\n".$lang['pers_msg_mail_add'];
+				$conf_mailto = encodeMailName($recipient['user_name'], "\n") ." <". $recipient['user_email'] .">";
+				$sender_email = array("name" => $sender['user_name'], "email" => $sender['user_email']);
+				$sent = processEmail($conf_mailto, $mail_subject, $mail_text, $sender_email);
+				if ($sent === false) {
+					$errors[] = $lang['error_meilserv'];
+				}
 
-    if (empty($errors))
-     {
-      $lang['pers_msg_mail_add'] = str_replace("[forum_address]", $settings['forum_address'], $lang['pers_msg_mail_add']);
-      $mail_subject = $_POST['pm_subject'];
-      $mail_text = $_POST['pm_text'];
-      $mail_text .= "\n\n".$lang['pers_msg_mail_add'];
-      $conf_mailto = encodeMailName($recipient['user_name'], "\n") ." <". $recipient['user_email'] .">";
-      $sender_email = array("name" => $sender['user_name'], "email" => $sender['user_email']);
-      $sent = processEmail($conf_mailto, $mail_subject, $mail_text, $sender_email);
-      if ($sent === false) {
-        $errors[] = $lang['error_meilserv'];
-      }
+				if(empty($errors)) {
+					$lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['conf_email_txt']);
+					$lang['conf_email_txt'] = str_replace("[sender_name]", $sender['user_name'], $lang['conf_email_txt']);
+					$lang['conf_email_txt'] = str_replace("[recipient_name]", $recipient['user_name'], $lang['conf_email_txt']);
+					$lang['conf_email_txt'] = str_replace("[subject]", $_POST['pm_subject'], $lang['conf_email_txt']);
+					$lang['conf_email_txt'] .= "\n\n". $_POST['pm_text'];
+					$conf_mailto = encodeMailName($sender['user_name'], "\n") ." <". $sender['user_email'] .">";
+					$sent = processEmail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt']);
+				}
 
-      if(empty($errors))
-      {
-       $lang['conf_email_txt'] = str_replace("[forum_address]", $settings['forum_address'], $lang['conf_email_txt']);
-       $lang['conf_email_txt'] = str_replace("[sender_name]", $sender['user_name'], $lang['conf_email_txt']);
-       $lang['conf_email_txt'] = str_replace("[recipient_name]", $recipient['user_name'], $lang['conf_email_txt']);
-       $lang['conf_email_txt'] = str_replace("[subject]", $_POST['pm_subject'], $lang['conf_email_txt']);
-       $lang['conf_email_txt'] .= "\n\n". $_POST['pm_text'];
-       $conf_mailto = encodeMailName($sender['user_name'], "\n") ." <". $sender['user_email'] .">";
-       $sent = processEmail($conf_mailto, $lang['conf_sj'], $lang['conf_email_txt']);
-      }
-
-      if (empty($errors))
-       {
-        header("location: user.php?id=".$_POST['recipient_id']);
-        die('<a href="user.php?id='. intval($_POST['recipient_id']) .'">further...</a>');
-       }
-      else { $id = $_POST['recipient_id']; $action="personal_message"; }
-     }
-    else { $id = $_POST['recipient_id']; $action="personal_message"; }
-    break;
-  }
- }
-else
- {
-  header("location: index.php"); die('<a href="index.php">further...</a>');
- }
+				if (empty($errors)) {
+					header("location: user.php?id=".$_POST['recipient_id']);
+					die('<a href="user.php?id='. intval($_POST['recipient_id']) .'">further...</a>');
+				} else {
+					$id = $_POST['recipient_id'];
+					$action="personal_message";
+				}
+			} else {
+				$id = $_POST['recipient_id'];
+				$action="personal_message";
+			}
+		break;
+	}
+} else {
+	header("location: index.php"); die('<a href="index.php">further...</a>');
+}
 
 $wo = $lang['user_area_title'];
 
