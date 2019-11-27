@@ -268,6 +268,7 @@ $lang_add['update_error'] =                   "Erreur de mise à jour d'une entr
 $lang_add['delete_entry_error'] =             "Erreur de suppression d'une entrée";
 $lang_add['no_writing_permission'] =          "Il n'est pas possible d'écraser le fichier <b>db_settings.php</b> (utilisez les droits 666, les droits courants sont [CHMOD])";
 $lang_add['create_table_error'] =             "La table <b>[table]</b> n'a pas pu être créée";
+$lang_add['alter_table_error'] =              "The table <b>[table]</b> couldn't get altered";
 $lang_add['insert_admin_error'] =             "Les données d'administration n'ont pas pu être enregistrées";
 $lang_add['insert_settings_error'] =          "Le paramètre <b>[setting]</b> n'a pas pu être enregistré";
 $lang_add['update_settings_error'] =          "Le paramètre <b>[setting]</b> n'a pas pu être modifié";

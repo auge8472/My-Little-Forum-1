@@ -268,6 +268,7 @@ $lang_add['update_error'] =                   "Ocorreu um erro ao actualizar uma
 $lang_add['delete_entry_error'] =             "Ocorreu um erro ao eliminar uma entrada";
 $lang_add['no_writing_permission'] =          "Sem permissão para escrever no ficheiro <b>db_settings.php</b> (especifique CHMOD 666, o CHMOD actual é [CHMOD])";
 $lang_add['create_table_error'] =             "A tabela <b>[table]</b> não pôde ser criada";
+$lang_add['alter_table_error'] =              "The table <b>[table]</b> couldn't get altered";
 $lang_add['insert_admin_error'] =             "Os dados do Administrador não poderam ser guardados";
 $lang_add['insert_settings_error'] =          "A definição <b>[setting]</b> não pôde ser guardada";
 $lang_add['update_settings_error'] =          "A definição <b>[setting]</b> não pôde ser actualizada";

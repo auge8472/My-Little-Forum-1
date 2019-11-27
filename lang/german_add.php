@@ -268,6 +268,7 @@ $lang_add['update_error'] =                   "Error while updating entry";
 $lang_add['delete_entry_error'] =             "Error while deleting entry";
 $lang_add['no_writing_permission'] =          "Keine Berechtigung, die Datei <b>db_settings.php</b> zu überschreiben (CHMOD 666 einstellen, momentan ist CHMOD auf [CHMOD])";
 $lang_add['create_table_error'] =             "Die Tabelle <b>[table]</b> konnte nicht erstellt werden";
+$lang_add['alter_table_error'] =              "Die Tabelle <b>[table]</b> konnte nicht geändert werden";
 $lang_add['insert_admin_error'] =             "Die Admin-Daten konnten nicht gespeichert werden";
 $lang_add['insert_settings_error'] =          "Die Einstellung <b>[setting]</b> konnte nicht gespeichert werden";
 $lang_add['update_settings_error'] =          "Die Einstellung <b>[setting]</b> konnte nicht aktualisiert werden";
