@@ -263,7 +263,6 @@ $lang_add['inst_table_prefix_d'] =            "Prefix for tables in database";
 $lang_add['create_db_error'] =                "The database couldn't be created";
 $lang_add['db_connection_error'] =            "Database connection error - please check host, user and password";
 $lang_add['db_inexistent_error'] =            "Specified database doesn't exist - please check database name";
-$lang_add['alter_table_error'] =              "Error while altering table";
 $lang_add['update_error'] =                   "Error while updating entry";
 $lang_add['delete_entry_error'] =             "Error while deleting entry";
 $lang_add['no_writing_permission'] =          "No permission to overwrite the file <b>db_settings.php</b> (set CHMOD 666, currently CHMOD is [CHMOD])";
