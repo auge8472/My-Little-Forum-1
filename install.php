@@ -303,7 +303,8 @@ function update17to18() {
 $table_prefix = 'mlf1_';
 
 if (isset($_POST['language'])) {
-	$settings['language_file'] = $_POST['language'];
+	$language = $_POST['language'];
+	$settings['language_file'] = $language;
 }
 
 if (isset($_POST['installation_mode'])) $installation_mode = $_POST['installation_mode'];
