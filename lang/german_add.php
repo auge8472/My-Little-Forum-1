@@ -263,7 +263,6 @@ $lang_add['inst_table_prefix_d'] =            "Präfix für die Namen der Datenb
 $lang_add['create_db_error'] =                "Die Datenbank konnte nicht erstellt werden";
 $lang_add['db_connection_error'] =            "Datenbankverbindungsfehler: bitte Host, Benutzer und Passwort überprüfen";
 $lang_add['db_inexistent_error'] =            "Angegebene Datenbank nicht vorhanden (Datenbankname überprüfen!)";
-$lang_add['alter_table_error'] =              "Error while altering table";
 $lang_add['update_error'] =                   "Error while updating entry";
 $lang_add['delete_entry_error'] =             "Error while deleting entry";
 $lang_add['no_writing_permission'] =          "Keine Berechtigung, die Datei <b>db_settings.php</b> zu überschreiben (CHMOD 666 einstellen, momentan ist CHMOD auf [CHMOD])";
