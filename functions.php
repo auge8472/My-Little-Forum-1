@@ -206,8 +206,8 @@ function parse_code($string) {
 function unbbcode($string) {
 	global $settings;
 	$string = preg_replace("#\[b\](.+?)\[/b\]#is", "*\\1*", $string);
-	$string = preg_replace("#\[i\](.+?)\[/i\]#is", "\\1", $string);
-	$string = preg_replace("#\[u\](.+?)\[/u\]#is", "\\1", $string);
+	$string = preg_replace("#\[i\](.+?)\[/i\]#is", "/\\1/", $string);
+	$string = preg_replace("#\[u\](.+?)\[/u\]#is", "_\\1_", $string);
 	$string = preg_replace("#\[s\](.+?)\[/s\]#is", "\\1", $string);
 	$string = preg_replace("#\[d\](.+?)\[/d\]#is", "\\1", $string);
 	$string = preg_replace("#\[sup\](.+?)\[/sup\]#is", "^\\1", $string);
