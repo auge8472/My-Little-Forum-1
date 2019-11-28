@@ -159,6 +159,7 @@ function bbcode($string, $rss = false) {
 	$string = preg_replace("#\[s\](.+?)\[/s\]#is", "<s>\\1</s>", $string);
 	$string = preg_replace("#\[d\](.+?)\[/d\]#is", "<del>\\1</del>", $string);
 	$string = preg_replace("#\[sup\](.+?)\[/sup\]#is", "<sup>\\1</sup>", $string);
+	$string = preg_replace("#\[sub\](.+?)\[/sub\]#is", "<sub>\\1</sub>", $string);
 	$string = preg_replace("#\[link\]www\.(.+?)\[/link\]#is", '<a href="http://www.\\1">www.\\1</a>', $string);
 	$string = preg_replace_callback("#\[link\](.+?)\[/link\]#is", "shorten_link", $string);
 	$string = preg_replace("#\[link=(.+?)\](.+?)\[/link\]#is", '<a href="\\1">\\2</a>', $string);
