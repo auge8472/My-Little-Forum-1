@@ -617,7 +617,7 @@ if (isset($_POST['form_submitted'])) {
 ?><!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<meta charset="utf-8">
 <title><?php echo $settings['forum_name']." - ".$lang_add['install_title']; ?></title>
 <style type="text/css">
 body                { font-family: Verdana,Arial,Helvetica,sans-serif; color: #000; font-size:13px; background-color: #fffff3; margin: 0px; padding: 20px; }
