@@ -97,12 +97,12 @@ $$key = $value;
    die("<a href=\"login.php?msg=noaccess\">further...</a>");
   }
 
- if (empty($page)) $page = 0;
- //if (empty($da)) $order="time";
+ $page = (isset($_GET['page'])) ? intval($_GET['page']) : 0;
+ $da = (empty($_GET['da']) or $_GET['da']=="ASC") ? "ASC" : "DESC";
  if (empty($search)) $search = "";
- $category = mysqli_real_escape_string($connid, $category);
- if (empty($ao)) $ao = "and";
- $ul = $page * $settings['search_results_per_page'];
+ $category = (empty($_GET['category'])) ? 0 : intval($_GET['category']);
+ $ao = (!empty($_GET['ao']) and in_array($_GET['ao'], array("and", "or", "phrase")) ? $_GET['ao'] : "and";
+ $ul = intval($page * $settings['search_results_per_page']);
 
  unset($entrydata);
 

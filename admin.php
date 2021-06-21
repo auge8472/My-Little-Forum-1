@@ -1232,16 +1232,16 @@ switch ($action)
    <input type="submit" value="<?php echo $lang['submit_button_ok']; ?>" /></div></form><?php
   break;
   case "user":
-   if (isset($_GET['order'])) $order = $_GET['order']; else $order="user_id";
+   $page = (isset($_GET['page'])) ? intval($_GET['page']) : 0;
+   $order = (!empty($_GET['order']) and in_array($_GET['order'], array("user_id", "user_name", "user_email", "user_type", "registered", "logins", "last_login", "user_lock")) ? $_GET['order'] : "user_id";
    if (isset($_GET['sam'])) $sam = (int)$_GET['sam']; else $sam = 50;
-   if (isset($_GET['descasc'])) $descasc = $_GET['descasc']; else $descasc = "ASC";
-   if (isset($_GET['page'])) $page = $_GET['page']; else $page = 0;
-   if (empty($category)) $category="all";
-
+   $descasc = (empty($_GET['descasc']) or $_GET['descasc']=="DESC") ? "DESC" : "ASC";
+   $category = (empty($_GET['category'])) ? 0 : intval($_GET['category']);
+   
    if(isset($_GET['search_user'])) $search_user = $_GET['search_user'];
-   if(isset($_GET['letter'])) $letter = $_GET['letter'];
+   $letter = (isset($_GET['letter']) and in_array($_GET['letter'], range("a", "z")) ? $_GET['letter'] : null;
 
-   $ul = $page * $settings['users_per_page'];
+   $ul = intval($page * $settings['users_per_page']);
 
    if(isset($letter))
     {

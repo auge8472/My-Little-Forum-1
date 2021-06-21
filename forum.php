@@ -39,12 +39,12 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
 if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['session_prefix'].'user_name']) || $settings['access_for_users_only'] != 1)
  {
   if ($settings['remember_userstandard'] == 1 && !isset($_SESSION[$settings['session_prefix'].'newtime'])) { setcookie("user_view","thread",time()+(3600*24*30)); }
-  if (empty($page)) $page = 0;
-  if (empty($order)) $order="time";
-  if (isset($descasc) && $descasc=="ASC") { $descasc="DESC"; $page = 0; }
-  else $descasc="DESC";
+ 	$page = (isset($_GET['page'])) ? intval($_GET['page']) : 0;
+  $order = (empty($_GET['order']) or $_GET['order'] == "time") ? "time" : "last_answer";
+  $descasc = (empty($_GET['descasc']) or $_GET['descasc']=="ASC") ? "ASC" : "DESC";
   if ($order != "time" && $order !="last_answer") { $page = 0; $order="time"; }
-  $ul = $page * $settings['topics_per_page'];
+  $ul = intval($page * $settings['topics_per_page']);
+  
   unset($parent_array);
   unset($child_array);
 

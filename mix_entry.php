@@ -145,11 +145,11 @@ function thread($id, $aktuellerEintrag = 0, $tiefe = 0)
  unset($entrydata); // Benutzte Variablen deinitialisieren
  unset($parent_array);
  unset($child_array);
-
- if (empty($page)) $page = 0;
- if (empty($order)) $order="last_answer";
- if (empty($category)) $category="all";
- if (empty($descasc)) $descasc="DESC";
+ 
+ $page = (isset($_GET['page'])) ? intval($_GET['page']) : 0;
+ $order = (empty($_GET['order']) or $_GET['order'] == "time") ? "time" : "last_answer";
+ $descasc = (empty($_GET['descasc']) or $_GET['descasc']=="DESC") ? "DESC" : "ASC";
+ $category = (empty($_GET['category'])) ? 0 : intval($_GET['category']);
 
  if( isset($id) ) {  // Wenn $id Ã¼bergeben wurde..
   $id = (int) $id;   // ... $id erst mal zu einem Integer machen ..

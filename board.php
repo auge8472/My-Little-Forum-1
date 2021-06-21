@@ -40,12 +40,11 @@ if ($settings['remember_userstandard']  == 1 && !isset($_SESSION[$settings['sess
 
  unset($zeile);
 
- if (empty($page)) $page = 0;
- if (empty($order)) $order="last_answer";
- if (empty($descasc)) $descasc="DESC";
- if (isset($descasc) && $descasc=="ASC") $descasc = "ASC";
- else $descasc = "DESC";
- $ul = $page * $settings['topics_per_page'];
+ $page = (isset($_GET['page'])) ? intval($_GET['page']) : 0;
+ $order = (empty($_GET['order']) or $_GET['order'] == "time") ? "time" : "last_answer";
+ $descasc = (empty($_GET['descasc']) or $_GET['descasc']=="ASC") ? "ASC" : "DESC";
+ $ul = intval($page * $settings['topics_per_page']);
+ $category = (empty($_GET['category'])) ? 0 : intval($_GET['category']);
 
  // database request
  if ($categories == false) // no categories defined

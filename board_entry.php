@@ -73,13 +73,9 @@ if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['
  if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['session_prefix'].'user_name']) || $settings['access_for_users_only'] != 1)
 {
 
- if (empty($page)) $page = 0;
- if (empty($order)) $order="last_answer";
- if (empty($descasc)) $descasc="DESC";
- if (empty($category)) $category="all";
- if (empty($be_page)) $be_page = 0;
- if (empty($da)) $da="ASC";
- $ul = $be_page * $settings['answers_per_topic'];
+ $be_page = (!empty($_GET['be_page'])) ? intval($_GET['be_page']) : 0;
+ $da = (empty($_GET['da']) or $_GET['da']=="DESC") ? "DESC" : "ASC";
+ $ul = intval($be_page * $settings['answers_per_topic']);
 
  unset($entrydata);
  unset($thread);

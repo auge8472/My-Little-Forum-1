@@ -29,7 +29,7 @@ $$key = $value;
 
 if (!isset($_SESSION[$settings['session_prefix'].'user_id']) && isset($_COOKIE['auto_login']) && isset($settings['autologin']) && $settings['autologin'] == 1)
  {
-  if (isset($_GET['id'])) $id = $_GET['id']; else $id = "";
+  $id = (isset($_GET['id'])) ? intval($_GET['id']) : "";
   header("location: login.php?referer=forum_entry.php&id=".$id);
   die("<a href=\"login.php?referer=forum_entry.php&id=".$id."\">further...</a>");
  }
@@ -41,8 +41,8 @@ if ($settings['access_for_users_only'] == 1 && isset($_SESSION[$settings['sessio
  unset($parent_array);
  unset($child_array);
 
- if (empty($page)) $page = 0;
- if (empty($order)) $order="time";
+ $page = (isset($_GET['page'])) ? intval($_GET['page']) : 0;
+ $order = (empty($_GET['order']) or $_GET['order'] == "time") ? "time" : "last_answer";
 
  if (isset($id)) $id = (int)$id;
  if(isset($id) && $id > 0)

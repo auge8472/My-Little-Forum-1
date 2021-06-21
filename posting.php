@@ -36,8 +36,8 @@ if(empty($_SESSION[$settings['session_prefix'].'user_id']) && $settings['captcha
   $captcha = new captcha();
  }
 
-if(isset($_POST['category'])) $category = intval($_POST['category']);
-if(isset($_POST['p_category'])) $p_category = intval($_POST['p_category']);
+$category = (isset($_POST['category'])) ? intval($_POST['category']) : 0;
+$p_category = (isset($_POST['p_category'])) ? intval($_POST['p_category']) : 0;
 
 // Schauen, ob User gesperrt ist:
 if (isset($_SESSION[$settings['session_prefix'].'user_id']))
