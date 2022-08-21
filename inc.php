@@ -33,12 +33,14 @@ include("functions.php");
 mb_internal_encoding('UTF-8');
 
 # for details see: http://de.php.net/manual/en/security.magicquotes.disabling.php
-if (get_magic_quotes_gpc()) {
-	$_POST = array_map('stripslashes_deep', $_POST);
-	$_GET = array_map('stripslashes_deep', $_GET);
-	$_COOKIE = array_map('stripslashes_deep', $_COOKIE);
-}
-
+#################################################################
+#	Magic Quotes Deprecated PHP 7.4	
+#	if (get_magic_quotes_gpc()) {				#
+#	$_POST = array_map('stripslashes_deep', $_POST);	#
+#	$_GET = array_map('stripslashes_deep', $_GET);		#
+#	$_COOKIE = array_map('stripslashes_deep', $_COOKIE);	#
+#}								#
+#################################################################
 $connid = connect_db($db_settings['host'], $db_settings['user'], $db_settings['pw'], $db_settings['db']);
 $settings = get_settings();
 include("lang/".$settings['language_file']);
